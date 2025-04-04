@@ -1,0 +1,65 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-sm-8 offset-sm-2">
+      <div class="card">
+        <div class="card-header">
+          <h5>{% if form.instance.pk %}Editar Endereço{% else %}Cadastrar Endereço{% endif %}</h5>
+        </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-sm-12 mb-4">
+                <div class="form-group">
+                  <label for="street">Logradouro</label>
+                  {{ form.street }}
+                </div>
+              </div>
+              <div class="col-sm-6 mb-4">
+                <div class="form-group">
+                  <label for="number">Número</label>
+                  {{ form.number }}
+                </div>
+              </div>
+              <div class="col-sm-6 mb-4">
+                <div class="form-group">
+                  <label for="complement">Complemento</label>
+                  {{ form.complement }}
+                </div>
+              </div>
+              <div class="col-sm-6 mb-4">
+                <div class="form-group">
+                  <label for="neighborhood">Bairro</label>
+                  {{ form.neighborhood }}
+                </div>
+              </div>
+              <div class="col-sm-6 mb-4">
+                <div class="form-group">
+                  <label for="city">Cidade</label>
+                  {{ form.city }}
+                </div>
+              </div>
+              <div class="col-sm-6 mb-4">
+                <div class="form-group">
+                  <label for="state">Estado</label>
+                  {{ form.state }}
+                </div>
+              </div>
+              <div class="col-sm-6 mb-4">
+                <div class="form-group">
+                  <label for="postal_code">CEP</label>
+                  {{ form.postal_code }}
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <a href="{% url 'profile' %}" class="btn btn-secondary">Cancelar</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

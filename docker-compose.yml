@@ -1,0 +1,46 @@
+services:
+  site-lineage:
+    container_name: site
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - lineage_network
+    volumes:
+      - logs_data:/usr/src/app/logs
+      - static_data:/usr/src/app/staticfiles
+      - media_data:/usr/src/app/media
+    depends_on:
+      - redis
+
+  nginx:
+    container_name: nginx
+    restart: always
+    image: "nginx:latest"
+    ports:
+      - "6085:6085"
+    volumes:
+      - ./nginx/django.conf:/etc/nginx/conf.d/django.conf
+      - static_data:/usr/share/nginx/html/static
+      - media_data:/usr/share/nginx/html/media
+    networks:
+      - lineage_network
+    depends_on: 
+      - site-lineage
+
+  redis:
+    container_name: redis
+    image: "redis:latest"
+    restart: always
+    networks:
+      - lineage_network
+
+networks:
+  lineage_network:
+    driver: bridge
+ 
+volumes:
+  static_data:
+  media_data:
+  logs_data:

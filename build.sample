@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Para parar a execução em caso de erro grave
+set -e
+
+# Atualiza o repositório Git
+echo "Atualizando o repositório Git..."
+git pull suop main || { echo "Falha ao atualizar o repositório Git"; exit 1; }
+
+# Para os contêineres em execução
+echo "Parando os contêineres em execução..."
+docker compose down || { echo "Falha ao parar os contêineres"; }
+
+# Remove todos os contêineres do projeto, se existirem
+containers=$(docker ps -a -q --filter name=proage_suop --filter name=nginx_suop --filter name=redis_suop)
+if [ -n "$containers" ]; then
+  echo "Removendo todos os contêineres do projeto..."
+  docker rm $containers || { echo "Falha ao remover contêineres"; }
+else
+  echo "Nenhum contêiner encontrado para remover."
+fi
+
+# Remove o volume suop_static_data, se existir
+echo "Removendo o volume suop_static_data..."
+docker volume rm $(docker volume ls -q --filter name=suop_static_data) || { echo "Falha ao remover o volume suop_static_data"; }
+
+# Constrói uma nova imagem
+echo "Construindo a nova imagem..."
+docker compose build || { echo "Falha ao construir a imagem"; exit 1; }
+
+# Sobe os contêineres novamente
+echo "Subindo os contêineres..."
+docker compose up -d || { echo "Falha ao subir os contêineres"; exit 1; }
+
+# Limpa os arquivos orfãos
+echo "Limpando imagens e volumes não utilizados..."
+docker image prune -f
+docker volume prune -f
+docker container prune -f
+
+# Finaliza o deploy
+echo "Deploy concluído com sucesso!"

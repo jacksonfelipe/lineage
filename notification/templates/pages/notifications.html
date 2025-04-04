@@ -1,0 +1,135 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block breadcrumbs %}
+    <!-- Adicione breadcrumbs se necessário -->
+{% endblock breadcrumbs %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="display-4 mb-4">Notificações</h1>
+    
+    <!-- Botões de ação -->
+    <div class="mb-4">
+        <button id="mark-all-as-read" class="btn btn-primary">Marcar todas como lidas</button>
+        <button id="clear-all-notifications" class="btn btn-danger">Limpar todas as notificações</button>
+    </div>
+
+    <!-- Notificações Privadas -->
+    <div class="list-group">
+        <h2 class="h4 mb-3">Notificações Privadas</h2>
+        {% if private_notifications %}
+            {% for notification in private_notifications %}
+                <a href="#" class="list-group-item list-group-item-action {% if notification.viewed %}list-group-item-success{% else %}list-group-item-danger{% endif %}" data-toggle="modal" data-target="#notificationModal{{ notification.id }}" data-notification-id="{{ notification.id }}">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h3 class="h5 mb-1">{{ notification.type }}</h3>
+                        <small>{{ notification.created_at }}</small>
+                    </div>
+                    <p class="mb-1">{{ notification.message }}</p>
+                    {% if not notification.viewed %}
+                        <span class="badge badge-danger">Não lida</span>
+                    {% endif %}
+                </a>
+                <!-- Modal -->
+                <div class="modal fade" id="notificationModal{{ notification.id }}" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel{{ notification.id }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="notificationModalLabel{{ notification.id }}">Detalhes da Notificação</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>Tipo:</strong> {{ notification.notification_type }}</p>
+                                <p><strong>Mensagem:</strong> {{ notification.message }}</p>
+                                <p><strong>Criado em:</strong> {{ notification.created_at }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Modal -->
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">Não há notificações privadas.</p>
+        {% endif %}
+    </div>
+
+    <!-- Notificações Públicas -->
+    <div class="list-group mt-4">
+        <h2 class="h4 mb-3">Notificações Públicas</h2>
+        {% if public_notifications %}
+            {% for notification in public_notifications %}
+                <a href="#" class="list-group-item list-group-item-action {% if notification.viewed %}list-group-item-success{% else %}list-group-item-danger{% endif %}" data-toggle="modal" data-target="#notificationModal{{ notification.id }}" data-notification-id="{{ notification.id }}">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h3 class="h5 mb-1">{{ notification.type }}</h3>
+                        <small>{{ notification.created_at }}</small>
+                    </div>
+                    <p class="mb-1">{{ notification.message }}</p>
+                    {% if not notification.viewed %}
+                        <span class="badge badge-danger">Não lida</span>
+                    {% endif %}
+                </a>
+                <!-- Modal -->
+                <div class="modal fade" id="notificationModal{{ notification.id }}" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel{{ notification.id }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="notificationModalLabel{{ notification.id }}">Detalhes da Notificação</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>Tipo:</strong> {{ notification.notification_type }}</p>
+                                <p><strong>Mensagem:</strong> {{ notification.message }}</p>
+                                <p><strong>Criado em:</strong> {{ notification.created_at }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Modal -->
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">Não há notificações públicas.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        // Função para confirmar a leitura da notificação ao fechar o modal
+        $('.modal').on('hidden.bs.modal', function (event) {
+            var modalId = $(this).attr('id');
+            var notificationId = modalId.replace('notificationModal', '');
+            // Chama a URL para confirmar a leitura da notificação
+            $.get(`/app/notifications/confirm_view/${notificationId}/`, function(data) {
+                // Recarrega a página após a confirmação da leitura da notificação
+                location.reload();
+            });
+        });
+
+        // Marcar todas como lidas
+        $('#mark-all-as-read').click(function() {
+            $.get('/app/notifications/mark_all_as_read/', function(data) {
+                if (data.status === 'ok') {
+                    location.reload();
+                }
+            });
+        });
+
+        // Limpar todas as notificações
+        $('#clear-all-notifications').click(function() {
+            if (confirm('Tem certeza que deseja limpar todas as notificações?')) {
+                $.get('/app/notifications/clear_all_notifications/', function(data) {
+                    if (data.status === 'ok') {
+                        location.reload();
+                    }
+                });
+            }
+        });
+    });
+</script>
+{% endblock content %}

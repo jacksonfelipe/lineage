@@ -1,0 +1,59 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Real-time Auditor Middleware Data</h1>
+            <ul id="audit-data-list" class="list-group">
+                <!-- List items will be dynamically added here -->
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Carregar jQuery de um CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        var limit = 10;  // Defina o limite de registros
+
+        // Function to fetch and update auditor data
+        function fetchAuditorData() {
+            $.ajax({
+                url: `/app/auditor/data?limit=${limit}`,  // URL para a view AuditorDataView com o limite
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#audit-data-list').empty();  // Limpa os itens existentes
+                    $.each(data, function(index, item) {
+                        var listItem = `<li class="list-group-item">
+                            <strong>Date:</strong> ${item.date}<br>
+                            <strong>Path:</strong> ${item.path}<br>
+                            <strong>Total Time:</strong> ${item.total_time}<br>
+                            <strong>Python Time:</strong> ${item.python_time}<br>
+                            <strong>DB Time:</strong> ${item.db_time}<br>
+                            <strong>Total Queries:</strong> ${item.total_queries}<br>
+                            <strong>Method:</strong> ${item.method}<br>
+                            <strong>User Agent:</strong> ${item.user_agent}<br>
+                            <strong>Response Status Code:</strong> ${item.response_status_code}
+                        </li>`;
+                        $('#audit-data-list').append(listItem);  // Adiciona novo item à lista
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Erro ao buscar dados de auditoria:', error);
+                }
+            });
+        }
+
+        // Busca dados inicialmente
+        fetchAuditorData();
+
+        // Busca dados a cada 5 segundos (intervalo ajustável conforme necessário)
+        setInterval(fetchAuditorData, 5000);
+    });
+</script>
+{% endblock content %}

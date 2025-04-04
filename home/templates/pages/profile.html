@@ -1,0 +1,140 @@
+]{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block extrahead %}
+    <style>
+      .avatar-container {
+        width: 150px; /* Defina o tamanho desejado */
+        height: 150px; /* Proporção quadrada para a imagem */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden; /* Para garantir que o conteúdo extra da imagem seja cortado */
+      }
+      
+      .avatar-image {
+        width: 100%;
+        height: auto; /* Mantém as proporções da imagem */
+        object-fit: cover; /* Corta a imagem de forma a preencher o contêiner */
+      }      
+
+      .username {
+        margin-top: 15px; /* Ajuste essa margem conforme necessário */
+        font-weight: bold;
+      }
+    </style>
+{% endblock extrahead %}
+
+{% block content %}
+
+  <!-- [ Main Content ] start -->
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="card">
+        <div class="card-header">
+          <h5>Perfil/Biografia</h5>
+        </div>
+        <div class="card-block">
+          <div class="row">
+            <!-- Informações do usuário -->
+            <div class="col-sm-12 mb-4">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Endereço de Email</label>
+                <span class="form-control" id="exampleInputEmail1">{% if user.email %}{{ user.email }}{% else %}N/A{% endif %}</span>
+              </div>
+            </div>
+            <div class="col-sm-6 mb-4">
+              <div class="form-group">
+                <label for="fn">Nome</label>
+                <span class="form-control" id="fn">{% if user.first_name %}{{ user.first_name }}{% else %}N/A{% endif %}</span>
+              </div>
+            </div>
+            <div class="col-sm-6 mb-4">
+              <div class="form-group">
+                <label for="ln">Sobrenome</label>
+                <span class="form-control" id="ln">{% if user.last_name %}{{ user.last_name }}{% else %}N/A{% endif %}</span>
+              </div>
+            </div>
+            <div class="col-sm-12 mb-4">
+              <div class="form-group">
+                <label for="add">Endereço</label>
+                <span class="form-control" id="add">
+                  {% if user.addresses.exists %}
+                    {{ user.addresses.first }}
+                  {% else %}
+                    N/A
+                  {% endif %}
+                </span>
+              </div>
+              <a href="{% url 'add_or_edit_address' %}" class="btn btn-secondary">
+                {% if user.addresses.exists %}
+                  Editar Endereço
+                {% else %}
+                  Cadastrar Endereço
+                {% endif %}
+              </a>
+            </div>
+            <div class="col-sm-12 mb-4">
+              <div class="form-group">
+                <label for="abt">Sobre Você</label>
+                <span class="form-control" id="abt">{% if user.bio %}{{ user.bio }}{% else %}N/A{% endif %}</span>
+              </div>
+            </div>
+            <div class="col-sm-12 mb-4">
+              <div class="form-group">
+                <label for="cpf">CPF</label>
+                <span class="form-control" id="cpf">
+                  {% if user.cpf %}
+                    {{ user.cpf }}
+                  {% else %}
+                    N/A
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-12 mb-4">
+              <div class="form-group">
+                <label for="gender">Gênero</label>
+                <span class="form-control" id="gender">
+                  {% if user.gender %}
+                    {% if user.gender == 'M' %}Masculino{% elif user.gender == 'F' %}Feminino{% elif user.gender == 'O' %}Outro{% else %}Prefiro não dizer{% endif %}
+                  {% else %}
+                    N/A
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a href="{% url 'edit_profile' %}" class="btn btn-primary">Editar Perfil</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-block">
+          <div class="d-flex align-items-center justify-content-center flex-column">
+            <div class="avatar-container">
+              {% if user.avatar %}
+                <img src="{% url 'serve_files:serve_decrypted_file' 'home' 'user' 'avatar' user.uuid %}" alt="profile image" class="avatar-image rounded-circle">
+              {% else %}
+                <img class="avatar-image rounded-circle" alt="default profile image" src="{% static 'assets/img/team/generic_user.png' %}">
+              {% endif %}
+            </div>
+            <div class="text-center">
+              <h4 class="font-weight-bold h6 text-uppercase username">{{ user.username }}</h4>
+              <p class="font-italic text-muted">"O sucesso não é garantido, mas o fracasso é certo se você não tentar."</p>
+            </div>
+          </div>          
+
+          <div class="small font-weight-light mt-4 text-center text-muted">
+            <p>Encontre inspiração em cada desafio e mantenha-se comprometido com o seu crescimento pessoal e profissional. Lembre-se sempre de que o esforço que você coloca hoje moldará o seu amanhã.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- [ Main Content ] end -->
+
+{% endblock content %}
