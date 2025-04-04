@@ -1,7 +1,7 @@
 # Licença MIT
 
 Copyright (c) 2019 - presente [AppSeed](http://appseed.us/)  
-Copyright (c) 2022 - presente [Age](https://age.pe.gov.br/)  
+Copyright (c) 2022 - presente [Denky](https://denky.dev.br/)  
 
 <br />
 
@@ -31,7 +31,7 @@ Copyright (c) 2022 - presente [Age](https://age.pe.gov.br/)
 
 **Informações Adicionais:**
 
-O código adicional desenvolvido pela AGE é proprietário e não está coberto pela licença MIT. Este código inclui todas as edições e funcionalidades exclusivas implementadas no backend e nas modificações privadas do frontend.
+O código adicional desenvolvido por Denky é proprietário e não está coberto pela licença MIT. Este código inclui todas as edições e funcionalidades exclusivas implementadas no backend e nas modificações privadas do frontend.
 
 <br />
 
@@ -39,4 +39,4 @@ O código adicional desenvolvido pela AGE é proprietário e não está coberto 
 
 Para mais informações sobre a licença original, entre em contato com o serviço da AppSeed em: *support@appseed.us*. 
 
-Para questões relacionadas ao código adicional e privado, entre em contato com AGE: *contato@age.pe.gov.br*.
+Para questões relacionadas ao código adicional e privado, entre em contato com Denky: *contato@denky.dev.br*.

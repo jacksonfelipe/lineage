@@ -5,14 +5,14 @@ set -e
 
 # Atualiza o repositório Git
 echo "Atualizando o repositório Git..."
-git pull suop main || { echo "Falha ao atualizar o repositório Git"; exit 1; }
+git pull origin main || { echo "Falha ao atualizar o repositório Git"; exit 1; }
 
 # Para os contêineres em execução
 echo "Parando os contêineres em execução..."
 docker compose down || { echo "Falha ao parar os contêineres"; }
 
 # Remove todos os contêineres do projeto, se existirem
-containers=$(docker ps -a -q --filter name=proage_suop --filter name=nginx_suop --filter name=redis_suop)
+containers=$(docker ps -a -q --filter name=site --filter name=nginx --filter name=redis)
 if [ -n "$containers" ]; then
   echo "Removendo todos os contêineres do projeto..."
   docker rm $containers || { echo "Falha ao remover contêineres"; }
@@ -20,9 +20,9 @@ else
   echo "Nenhum contêiner encontrado para remover."
 fi
 
-# Remove o volume suop_static_data, se existir
-echo "Removendo o volume suop_static_data..."
-docker volume rm $(docker volume ls -q --filter name=suop_static_data) || { echo "Falha ao remover o volume suop_static_data"; }
+# Remove o volume static_data, se existir
+echo "Removendo o volume static_data..."
+docker volume rm $(docker volume ls -q --filter name=static_data) || { echo "Falha ao remover o volume static_data"; }
 
 # Constrói uma nova imagem
 echo "Construindo a nova imagem..."
