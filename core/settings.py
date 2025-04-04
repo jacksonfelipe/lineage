@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     "import_export",
     "corsheaders",
     "auditor",
+    "server"
 ]
 
 # =========================== MIDDLEWARE CONFIGS ===========================
