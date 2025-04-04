@@ -15,7 +15,7 @@ Um painel que nasceu com a missão de oferecer ferramentas poderosas para admini
 
 ### Serviços Definidos no Docker Compose
 
-- **proage**: Serviço principal que roda o Django com Gunicorn.
+- **site**: Serviço principal que roda o Django com Gunicorn.
 - **nginx**: Servidor web que atua como proxy reverso para o serviço Django.
 - **redis**: Banco de dados em memória utilizado como broker de mensagens.
 
@@ -27,7 +27,7 @@ Um painel que nasceu com a missão de oferecer ferramentas poderosas para admini
 
 ### Rede
 
-- **web_network**: Rede criada para interconectar todos os serviços.
+- **lineage_network**: Rede criada para interconectar todos os serviços.
 
 #
 
