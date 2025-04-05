@@ -38,7 +38,7 @@ LOGGING = is_LOGGING
 
 ALLOWED_HOSTS = ['*']
 CORS_ALLOW_ALL_ORIGINS = True
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'http://localhost', 'http://192.168.15.4:6085', 'http://127.0.0.1:6085', 'http://localhost:6085',]
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'http://localhost', 'http://127.0.0.1:6085', 'http://localhost:6085',]
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
