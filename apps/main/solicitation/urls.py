@@ -1,11 +1,11 @@
 from django.urls import path
-from .views import CreditSolicitationDashboardView, CreditSolicitationListView
+from .views import SolicitationDashboardView, SolicitationListView
 
 
 app_name = 'solicitation'
 
 
 urlpatterns = [
-    path('solicitation/', CreditSolicitationListView.as_view(), name='credit_solicitation_list'),
-    path('solicitation/<str:protocol>/dashboard/', CreditSolicitationDashboardView.as_view(), name='credit_solicitation_dashboard'),
+    path('solicitation/', SolicitationListView.as_view(), name='solicitation_list'),
+    path('solicitation/<str:protocol>/dashboard/', SolicitationDashboardView.as_view(), name='solicitation_dashboard'),
 ]

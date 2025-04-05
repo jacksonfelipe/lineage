@@ -1,26 +1,24 @@
-{% extends 'internal/layouts/screen.html' %}
+{% extends 'layouts/base.html' %}
 {% load static %}
 
-{% block extrahead %}
-<link rel="stylesheet" href="{% static 'css/custom.css' %}">
-{% endblock extrahead %}
+{% block title %}Dashboard da Solicitação{% endblock title %}
 
-{% block title_scream %}<!-- CODE HERE -->{% endblock title_scream %}
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/solicitation.css' %}">
+{% endblock extrastyle %}
 
-{% block breadcrumb_scream %}
-    <li class="breadcrumb-item"><a href="javascript: void(0)"><!-- CODE HERE --></a></li>
-    <li class="breadcrumb-item" aria-current="page"><!-- CODE HERE --></li>
-{% endblock breadcrumb_scream %}
+{% block page_title %}Solicitação{% endblock page_title %}
+{% block breadcrumbs %}
+  <li class="breadcrumb-item"><a href="#">Solicitação</a></li>
+  <li class="breadcrumb-item active" aria-current="page">Detalhes</li>
+{% endblock breadcrumbs %}
 
-{% block head_scream %}
-    <h5 class="display-5"><!-- CODE HERE --></h5>
-{% endblock head_scream %}
-
-{% block content_scream %}
+{% block content %}
 <div class="container">
-    <h1 class="mt-4">Dashboard da Solicitação de Crédito</h1>
+    <h1 class="mt-4">Dashboard da Solicitação</h1>
     
     <div class="row mt-4">
+        <!-- Detalhes da Solicitação -->
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
@@ -28,14 +26,13 @@
                 </div>
                 <div class="card-body">
                     <p><strong>Protocolo:</strong> {{ solicitation.protocol }}</p>
-                    <p><strong>Cliente:</strong> {{ solicitation.public_user.name }}</p>
-                    <p><strong>Agente:</strong> {{ solicitation.agent.username }}</p>
                     <p><strong>Status:</strong> {{ solicitation.status }}</p>
                     <p><strong>Data da Solicitação:</strong> {{ solicitation.created_at|date:"d/m/Y" }}</p>
                 </div>
             </div>
         </div>
 
+        <!-- Participantes -->
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
@@ -56,14 +53,15 @@
         </div>
     </div>
 
+    <!-- Botão de Chat -->
     <div class="row mt-4">
         <div class="col-md-12 text-center">
             <a href="{% url 'administrator:chat_room' solicitation.protocol %}" class="btn btn-primary">Ir para o Chat</a>
         </div>
     </div>
 </div>
-{% endblock content_scream %}
+{% endblock content %}
 
 {% block extra_js %}
-<!-- CODE HERE --> 
+<!-- Código JS adicional aqui, se necessário -->
 {% endblock extra_js %}

@@ -98,15 +98,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def user_has_access_to_protocol(self, user, protocol):
-        from apps.main.solicitation.models import CreditSolicitation
+        from apps.main.solicitation.models import Solicitation
         
         try:
             # Tenta encontrar a solicitação com o protocolo correspondente
-            solicitation = CreditSolicitation.objects.get(protocol=protocol)
+            solicitation = Solicitation.objects.get(protocol=protocol)
 
             # Verifica se o usuário é participante da solicitação
             return solicitation.is_participant(user)
-        except CreditSolicitation.DoesNotExist:
+        except Solicitation.DoesNotExist:
             pass
 
         return False

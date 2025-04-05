@@ -11,6 +11,7 @@ from .choices import STATUS_CHOICES, STAGE_CHOICES
 class Solicitation(BaseModel):
     protocol = models.CharField(max_length=30, unique=True, editable=False)  # Protocolo
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')  # Status
+    client = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='solicitations_client', blank=True, null=True)  # cliente
 
     def add_participant(self, user):
         """Adiciona um participante à proposta."""

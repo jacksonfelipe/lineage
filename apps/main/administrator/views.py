@@ -6,7 +6,7 @@ from django.templatetags.static import static
 
 from apps.main.notification.models import Notification
 from apps.main.news.models import News
-from apps.main.solicitation.models import CreditSolicitation, SolicitationParticipant
+from apps.main.solicitation.models import Solicitation, SolicitationParticipant
 
 from .models import *
 
@@ -33,12 +33,12 @@ def chat_room(request, group_name):
 
     try:
         # Primeiro tenta buscar em CreditSolicitation
-        solicitation = CreditSolicitation.objects.get(protocol=group_name)
+        solicitation = Solicitation.objects.get(protocol=group_name)
         # Verificar se o usuário é participante da solicitação
         is_participant = SolicitationParticipant.objects.filter(solicitation=solicitation, user=request.user).exists()
         type_chat = "Solicitação"
 
-    except CreditSolicitation.DoesNotExist:
+    except Solicitation.DoesNotExist:
         # Se não for encontrado em nenhum dos dois, lança um erro 404
         raise Http404(f"Protocolo {group_name} não encontrado.")
 
@@ -50,23 +50,17 @@ def chat_room(request, group_name):
     try:
         avatar_url = request.user.avatar.url
     except (ValueError, AttributeError):
-        avatar_url = static('internal/images/user/GenericAvatar.png')
+        avatar_url = static('assets/img/team/generic_user.png')
 
-    # Tentar carregar a URL do avatar do agente
-    try:
-        agent_avatar = solicitation.agent.avatar.url
-    except (ValueError, AttributeError):
-        agent_avatar = static('internal/images/user/GenericAvatar.png')
+    if solicitation.client is not None:
+        solicitation_name = str(solicitation.client.username).upper() + ' - ' + str(solicitation.client.email)
+    else:
+        solicitation_name = "Solicitação sem usuário..."
 
     # Carregar mensagens anteriores
     messages = ChatGroup.objects.filter(group_name=group_name).order_by('timestamp')
 
-    try:
-        solicitation_name = solicitation.public_user.name
-    except AttributeError:
-        solicitation_name = str(solicitation.agent.username).upper() + ' - ' + str(solicitation.agent.email)
-
-    solicitation_context = 'de Crédito do Agente:' if type_chat == 'Proposta' else 'do Cliente:'
+    solicitation_context = 'do Usuário:'
 
     return render(request, 'pages/group.html', {
         'group_name': group_name,
@@ -75,8 +69,6 @@ def chat_room(request, group_name):
         'messages': messages,
         'solicitation': solicitation_name,
         'solicitation_context': solicitation_context,
-        'agent_name': 'Sem agente no momento...' if solicitation.agent is None else solicitation.agent.username,
-        'agent_avatar': agent_avatar,
         'type_chat': type_chat,
     })
 

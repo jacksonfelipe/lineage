@@ -35,7 +35,7 @@
           <h5>Perfil/Biografia</h5>
         </div>
         <div class="card-block">
-          <div class="row">
+          <div class="row m-3">
             <!-- Informações do usuário -->
             <div class="col-sm-12 mb-4">
               <div class="form-group">
@@ -66,46 +66,49 @@
                   {% endif %}
                 </span>
               </div>
-              <a href="{% url 'add_or_edit_address' %}" class="btn btn-secondary">
-                {% if user.addresses.exists %}
-                  Editar Endereço
-                {% else %}
-                  Cadastrar Endereço
-                {% endif %}
-              </a>
-            </div>
             <div class="col-sm-12 mb-4">
-              <div class="form-group">
-                <label for="abt">Sobre Você</label>
-                <span class="form-control" id="abt">{% if user.bio %}{{ user.bio }}{% else %}N/A{% endif %}</span>
-              </div>
-            </div>
-            <div class="col-sm-12 mb-4">
-              <div class="form-group">
-                <label for="cpf">CPF</label>
-                <span class="form-control" id="cpf">
-                  {% if user.cpf %}
-                    {{ user.cpf }}
+              <div class="form-group m-3">
+                <a href="{% url 'add_or_edit_address' %}" class="btn btn-secondary">
+                  {% if user.addresses.exists %}
+                    Editar Endereço
                   {% else %}
-                    N/A
+                    Cadastrar Endereço
                   {% endif %}
-                </span>
-              </div>
-            </div>
-            <div class="col-sm-12 mb-4">
-              <div class="form-group">
-                <label for="gender">Gênero</label>
-                <span class="form-control" id="gender">
-                  {% if user.gender %}
-                    {% if user.gender == 'M' %}Masculino{% elif user.gender == 'F' %}Feminino{% elif user.gender == 'O' %}Outro{% else %}Prefiro não dizer{% endif %}
-                  {% else %}
-                    N/A
-                  {% endif %}
-                </span>
+                </a>
               </div>
             </div>
           </div>
+          <div class="col-sm-12 mb-4">
+            <div class="form-group">
+              <label for="abt">Sobre Você</label>
+              <span class="form-control" id="abt">{% if user.bio %}{{ user.bio }}{% else %}N/A{% endif %}</span>
+            </div>
+            <div class="form-group">
+              <label for="cpf">CPF</label>
+              <span class="form-control" id="cpf">
+                {% if user.cpf %}
+                  {{ user.cpf }}
+                {% else %}
+                  N/A
+                {% endif %}
+              </span>
+            </div>
+          </div>
+          <div class="col-sm-12 mb-4">
+            <div class="form-group">
+              <label for="gender">Gênero</label>
+              <span class="form-control" id="gender">
+                {% if user.gender %}
+                  {% if user.gender == 'M' %}Masculino{% elif user.gender == 'F' %}Feminino{% elif user.gender == 'O' %}Outro{% else %}Prefiro não dizer{% endif %}
+                {% else %}
+                  N/A
+                {% endif %}
+              </span>
+            </div>
+          </div>
         </div>
+        </div>
+
         <div class="card-footer">
           <a href="{% url 'edit_profile' %}" class="btn btn-primary">Editar Perfil</a>
         </div>
@@ -113,7 +116,7 @@
     </div>
     <div class="col-sm-4">
       <div class="card">
-        <div class="card-block">
+        <div class="card-block m-3">
           <div class="d-flex align-items-center justify-content-center flex-column">
             <div class="avatar-container">
               {% if user.avatar %}
@@ -131,6 +134,12 @@
           <div class="small font-weight-light mt-4 text-center text-muted">
             <p>Encontre inspiração em cada desafio e mantenha-se comprometido com o seu crescimento pessoal e profissional. Lembre-se sempre de que o esforço que você coloca hoje moldará o seu amanhã.</p>
           </div>
+
+          <div class="d-flex align-items-center justify-content-center flex-column">
+            <!-- Botão para ver lista de amigos -->
+            <a href="{% url 'message:friends_list' %}" class="btn btn-secondary mt-3">Ver Lista de Amigos</a>
+          </div>
+
         </div>
       </div>
     </div>

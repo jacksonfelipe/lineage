@@ -26,6 +26,8 @@ urlpatterns = [
     path('app/faq/', include('apps.main.faq.urls')),
     path("app/auditor/", include('apps.main.auditor.urls', namespace='auditor')),
     path("app/notifications/", include('apps.main.notification.urls')),
+    path('app/', include('apps.main.solicitation.urls')),
+    path('', include('apps.main.administrator.urls')),
 
     path("", include('serve_files.urls')),
     path("", include('admin_volt.urls')),
