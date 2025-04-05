@@ -80,3 +80,66 @@ http://127.0.0.1
 **Gestão**
 
 - Daniel Amaral (Desenvolvedor - FullStack/FullCycle)
+
+## Estrutura do Código
+
+O projeto é codificado utilizando uma estrutura simples e intuitiva, apresentada abaixo:
+
+```bash
+< RAIZ DO PROJETO >
+   |
+   |-- apps/
+   |    |
+   |    |-- main/
+   |    |    |-- administrator/              # Administração
+   |    |    |-- auditor/                    # Auditoria do sistema
+   |    |    |-- faq/                        # FAQ (Perguntas Frequentes)
+   |    |    |-- home/                       # App principal - Página inicial
+   |    |    |-- message/                    # Mensagens e Amigos
+   |    |    |-- news/                       # Notícias e Blog
+   |    |    |-- notification/               # Notificações do sistema
+   |    |    |-- solicitation/               # Solicitações e Suporte
+   |    |
+   |    |-- lineage/
+   |    |    |-- server/                     # Gerenciador do Servidor de Linaage 2
+   |
+   |-- core/
+   |    |-- settings.py                      # Configurações do projeto
+   |    |-- urls.py                          # Roteamento do projeto
+   |
+   |-- requirements.txt                      # Dependências do projeto
+   |-- manage.py                             # Script de inicialização do Django
+   |
+   |-- ************************************************************************
+```
+
+<br />
+
+## Como Customizar 
+
+Quando um arquivo de template é carregado no controlador, o `Django` escaneia todos os diretórios de templates, começando pelos definidos pelo usuário, e retorna o primeiro encontrado ou um erro caso o template não seja encontrado. O tema utilizado para estilizar esse projeto inicial fornece os seguintes arquivos:
+
+```bash
+< RAIZ_DA_BIBLIOTECA_UI >                      
+   |
+   |-- templates/                     # Pasta Raiz dos Templates
+   |    |          
+   |    |-- accounts/       
+   |    |    |-- auth-signin.html     # Página de Login
+   |    |    |-- auth-signup.html     # Página de Cadastro
+   |    |
+   |    |-- includes/       
+   |    |    |-- footer.html          # Componente de Rodapé
+   |    |    |-- sidebar.html         # Componente da Barra Lateral
+   |    |    |-- navigation.html      # Barra de Navegação
+   |    |    |-- scripts.html         # Componente de Scripts
+   |    |
+   |    |-- layouts/       
+   |    |    |-- base.html            # Página Mestra
+   |    |    |-- base-auth.html       # Página Mestra para Páginas de Autenticação
+   |    |
+   |    |-- pages/       
+   |         |-- *.html               # Todas as outras páginas
+   |    
+   |-- ************************************************************************
+```
