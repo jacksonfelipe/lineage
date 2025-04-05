@@ -1,0 +1,55 @@
+{% extends 'internal/layouts/screen.html' %}
+{% load static %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/news.css' %}">
+{% endblock extrahead %}
+
+{% block title_scream %}<!-- CODE HERE -->{% endblock title_scream %}
+
+{% block breadcrumb_scream %}
+    <li class="breadcrumb-item"><a href="javascript: void(0)">Noticias</a></li>
+{% endblock breadcrumb_scream %}
+
+{% block head_scream %}
+    <h5 class="display-5"><!-- CODE HERE --></h5>
+{% endblock head_scream %}
+
+{% block content_scream %}
+<div class="header-bg">
+    <h1 class="text-white">Notícias</h1>
+    <p>Fique por dentro das últimas novidades e atualizações exclusivas.</p>
+</div>
+
+{% if user.is_authenticated %}
+<div class="row">
+    {% if private_news_list %}
+        {% for news in private_news_list %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm border-0 rounded">
+                    {% if news.image %}
+                        <img class="card-img-top rounded-top" src="{{ news.image.url }}" alt="{{ news.title }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h3 class="card-title text-dark">{{ news.title }}</h3>
+                        <p class="card-text text-muted">{{ news.content|truncatewords:30 }}</p>
+                        <p class="card-text">
+                            <small class="text-muted">Autor: {{ news.author.username }} | Data: {{ news.pub_date }}</small>
+                        </p>
+                        <a href="{% url 'news:detail' news.slug %}" class="btn btn-primary mt-3">Leia mais</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12">
+            <p class="text-muted">Não há notícias privadas disponíveis no momento.</p>
+        </div>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock content_scream %}
+
+{% block extra_js %}
+<!-- CODE HERE --> 
+{% endblock extra_js %}

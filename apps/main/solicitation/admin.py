@@ -1,0 +1,45 @@
+from django.contrib import admin
+from core.admin import BaseModelAdmin
+from .models import (
+    Solicitation,
+    SolicitationHistory,
+    SolicitationTask,
+    SolicitationParticipant,
+)
+
+
+@admin.register(Solicitation)
+class SolicitationAdmin(BaseModelAdmin):
+    list_display = ('protocol', 'status')
+    search_fields = ('protocol',)
+    list_filter = ('status',)
+    ordering = ('-created_at',)
+
+
+@admin.register(SolicitationHistory)
+class SolicitationHistoryAdmin(BaseModelAdmin):
+    list_display = ('solicitation', 'action', 'timestamp')
+    search_fields = ('solicitation__protocol', 'action')
+    list_filter = ('timestamp',)
+
+
+@admin.register(SolicitationTask)
+class SolicitationTaskAdmin(BaseModelAdmin):
+    list_display = ('solicitation', 'description', 'stage', 'sequence', 'is_completed')
+    search_fields = ('solicitation__protocol', 'description', 'stage')
+    list_filter = ('is_completed', 'stage')
+
+
+@admin.register(SolicitationParticipant)
+class SolicitationParticipantAdmin(BaseModelAdmin):
+    list_display = ('user', 'solicitation', 'solicitation_protocol', 'user_email')
+    search_fields = ('user__username', 'solicitation__protocol')
+    list_filter = ('solicitation__protocol',)
+
+    def solicitation_protocol(self, obj):
+        return obj.solicitation.protocol
+    solicitation_protocol.short_description = 'Protocolo da Solicitação'
+
+    def user_email(self, obj):
+        return obj.user.email
+    user_email.short_description = 'Email do Usuário'

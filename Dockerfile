@@ -30,6 +30,3 @@ COPY . .
 
 # Execute o collectstatic para coletar arquivos estáticos (se aplicável)
 RUN python manage.py collectstatic --noinput || echo "Static collection skipped"
-
-# Comando para iniciar o Gunicorn e executar a aplicação
-CMD ["gunicorn", "--config", "gunicorn-cfg.py", "core.wsgi"]

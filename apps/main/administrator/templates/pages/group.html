@@ -1,0 +1,79 @@
+{% extends 'internal/layouts/screen.html' %}
+{% load static %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-button@4.6.0/dist/index.min.css">
+<link rel="stylesheet" href="{% static 'group.css' %}">
+{% endblock extrahead %}
+
+{% block title_scream %}<!-- CODE HERE -->{% endblock title_scream %}
+
+{% block breadcrumb_scream %}
+    <li class="breadcrumb-item"><a href="javascript: void(0)"><!-- CODE HERE --></a></li>
+    <li class="breadcrumb-item" aria-current="page"><!-- CODE HERE --></li>
+{% endblock breadcrumb_scream %}
+
+{% block head_scream %}
+    <h5 class="display-5"><!-- CODE HERE --></h5>
+{% endblock head_scream %}
+
+{% block content_scream %}
+<!-- Chat Room Header -->
+<div class="chat-header">
+    <h1 class="chat-title">Conversa sobre a {{ type_chat }} {{ solicitation_context }} <strong>{{ solicitation }}</strong></h1>
+    <div class="chat-info">
+        <span class="chat-protocol">Protocolo: <strong>{{ group_name }}</strong></span><br>
+        <span class="chat-description">Converse com o agente, backoffice e cliente sobre a {{ type_chat }}.</span>
+    </div>
+    <div class="chat-agent" style="display: flex; align-items: center; gap: 5px;"> <!-- Adicione display: flex e gap aqui -->
+        <img src="{{ agent_avatar }}" alt="Agente" class="participant-avatar">
+        <span class="agent-name">{{ agent_name }}</span>
+        <span class="chat-description">Agente da {{ type_chat }}.</span>
+    </div>
+</div>
+
+
+<!-- Chat Log -->
+<div id="chat-log">
+    <div id="messages-container">
+        {% for message in messages %}
+            <div class="chat-message {% if message.sender.username == username %}sent{% else %}received{% endif %}">
+                <img src="{% if message.sender.avatar %}{{ message.sender.avatar.url }}{% else %}{% static 'internal/images/user/GenericAvatar.png' %}{% endif %}" 
+                class="message-avatar" 
+                alt="{{ message.sender.username }}" 
+                width="40" 
+                height="40">                  
+                <div class="message-content">
+                    <div class="message-header">
+                        <strong class="sender-name">{{ message.sender.username }}</strong>
+                        <span class="message-time">{{ message.timestamp|date:"d/m/Y, H:i:s" }}</span>
+                    </div>
+                    <div class="message-text">{{ message.message }}</div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Input for Chat Message -->
+<div class="input-group">
+    <input id="chat-message-input" type="text" class="form-control" placeholder="Digite sua mensagem aqui...">
+    <button id="emoji-button" type="button" class="btn btn-outline-secondary">&#x1F60A;</button> <!-- Botão de Emoji -->
+    <input id="chat-message-submit" type="button" class="btn btn-primary" value="Enviar">
+</div>
+{% endblock content_scream %}
+
+{% block extra_js %}
+<!-- Emoji Button Script -->
+<script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.2/dist/index.min.js"></script>
+
+<script>
+
+    const groupName = "{{ group_name }}";
+    const currentUser = "{{ username }}"; 
+    const currentUserAvatar = "{{ avatar_url }}";
+
+</script>
+
+<script src="{% static 'group.js' %}"></script>
+{% endblock extra_js %}

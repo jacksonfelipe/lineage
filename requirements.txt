@@ -1,7 +1,9 @@
+# Core
 django
 python-dotenv
 str2bool
 
+# django libs extensions
 django-admin-volt
 django-cors-headers
 django-redis
@@ -9,15 +11,28 @@ django_ratelimit
 django-import-export
 django-encrypted-fields-and-files
 django-auditlog
+django-celery-beat
 
+# Deployment
 whitenoise
 gunicorn
 
+# DB Layer
 psycopg2-binary
 redis
 
+# especials
 cryptography
 pillow
 tablib
 diff_match_patch
 python-ipware
+
+# celery
+celery
+flower
+
+# websockets
+channels
+channels-redis
+daphne

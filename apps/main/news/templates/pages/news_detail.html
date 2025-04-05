@@ -1,0 +1,56 @@
+{% extends 'internal/layouts/screen.html' %}
+{% load static %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/news_detail.css' %}">
+{% endblock extrahead %}
+
+{% block title_scream %}Detalhes da noticia{% endblock title_scream %}
+
+{% block breadcrumb_scream %}
+    <li class="breadcrumb-item" aria-current="page">
+        <a href="{% url 'news:index' %}">
+            Noticias
+        </a>
+    </li>
+    <li class="breadcrumb-item"><a href="javascript: void(0)">Detalhes</a></li>
+{% endblock breadcrumb_scream %}
+
+{% block head_scream %}
+    <h5 class="display-5"><!-- CODE HERE --></h5>
+{% endblock head_scream %}
+
+{% block content_scream %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Título da notícia com estilo -->
+            <h1 class="news-title">{{ news.title }}</h1>
+
+            <!-- Imagem da notícia, caso exista -->
+            {% if news.image %}
+                <img class="news-image" src="{{ news.image.url }}" alt="{{ news.title }}">
+            {% endif %}
+
+            <!-- Conteúdo da notícia com um estilo mais agradável -->
+            <div class="news-content">
+                <p>{{ news.content }}</p>
+            </div>
+
+            <!-- Informações do autor e data -->
+            <div class="news-meta">
+                <small>Autor: {{ news.author.username }} | Data de Publicação: {{ news.pub_date }}</small>
+            </div>
+
+            <!-- Botão de navegação para voltar ou continuar -->
+            <div class="news-navigation">
+                <a href="{% url 'news:index' %}" class="btn btn-primary mt-4">Voltar para as notícias</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content_scream %}
+
+{% block extra_js %}
+<!-- CODE HERE --> 
+{% endblock extra_js %}

@@ -19,10 +19,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path("", include('home.urls')),
+    path("", include('apps.main.home.urls')),
+    path('', include('apps.main.message.urls')),
     
-    path('app/auditor/', include('auditor.urls', namespace='auditor')),
-    path("app/notifications/", include('notification.urls')),
+    path('app/news/', include('apps.main.news.urls')),
+    path('app/faq/', include('apps.main.faq.urls')),
+    path("app/auditor/", include('apps.main.auditor.urls', namespace='auditor')),
+    path("app/notifications/", include('apps.main.notification.urls')),
 
     path("", include('serve_files.urls')),
     path("", include('admin_volt.urls')),
@@ -34,6 +37,6 @@ urlpatterns = [
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Error handlers
-handler400 = 'home.views.custom_400_view'
-handler404 = 'home.views.custom_404_view'
-handler500 = 'home.views.custom_500_view'
+handler400 = 'apps.main.home.views.custom_400_view'
+handler404 = 'apps.main.home.views.custom_404_view'
+handler500 = 'apps.main.home.views.custom_500_view'

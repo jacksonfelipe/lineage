@@ -1,0 +1,432 @@
+{% extends 'internal/layouts/screen.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block extrahead %}
+    <style>
+        .grid-stack {
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .grid-stack-item-content {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Ajustes para telas pequenas */
+        @media (max-width: 768px) {
+            .grid-stack {
+                display: none;
+            }
+            .row.d-none.d-md-flex {
+                display: flex !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .row.d-none.d-md-flex {
+                display: none;
+            }
+        }
+
+        .grid-stack.grid-stack-animate, .grid-stack.grid-stack-animate .grid-stack-item {
+            -webkit-transition: left .3s, top .3s, height .3s, width .3s;
+            -moz-transition: left .3s, top .3s, height .3s, width .3s;
+            -ms-transition: left .3s, top .3s, height .3s, width .3s;
+            -o-transition: left .3s, top .3s, height .3s, width .3s;
+            transition: left .3s, top .3s, height .3s, width .3s;
+        }
+        
+        /* Estilo do loader */
+        .loader {
+            text-align: center;
+            font-size: 16px;
+            color: #007bff;
+            margin: 10px 0;
+        }
+    </style>
+{% endblock extrahead %}
+
+{% block title_scream %}Dashboard{% endblock title_scream %}
+
+{% block breadcrumb_scream %}
+    <li class="breadcrumb-item"><a href="javascript: void(0)">Admin</a></li>
+    <li class="breadcrumb-item" aria-current="page">Dashboard</li>
+{% endblock breadcrumb_scream %}
+
+{% block head_scream %}
+    <h5 class="display-5">Dashboard</h5>
+    <!-- Botão de salvar -->
+    <button id="save-layout-btn" class="btn btn-primary" style="display: none; margin-left: 30px;">Salvar</button>
+{% endblock head_scream %}
+
+{% block content_scream %}
+
+    <div class="grid-stack">
+        <div class="grid-stack-item" gs-x="0" gs-y="0" gs-w="5" gs-h="5" id="grid-latest-news">
+            <div class="grid-stack-item-content card" id="latest-news">
+                <div class="card-header">
+                    <h2 class="h4">Últimas Notícias</h2>
+                </div>
+                <div class="loader" style="display: none;">Carregando...</div>
+                <ul class="list-group list-group-flush">
+                    <!-- Conteúdo será preenchido via AJAX -->
+                </ul>
+            </div>
+        </div>
+        
+        <div class="grid-stack-item" gs-x="6" gs-y="0" gs-w="5" gs-h="5" id="grid-credit-lines">
+            <div class="grid-stack-item-content card" id="credit-lines">
+                <div class="card-header">
+                    <h2 class="h4">Últimas Linhas de Crédito</h2>
+                </div>
+                <div class="loader" style="display: none;">Carregando...</div>
+                <ul class="list-group list-group-flush">
+                    <!-- Conteúdo será preenchido via AJAX -->
+                </ul>
+            </div>
+        </div>
+        
+        <div class="grid-stack-item" gs-x="0" gs-y="6" gs-w="5" gs-h="5" id="grid-additional-rates">
+            <div class="grid-stack-item-content card" id="additional-rates">
+                <div class="card-header">
+                    <h2 class="h4">Últimas Taxas Complementares</h2>
+                </div>
+                <div class="loader" style="display: none;">Carregando...</div>
+                <ul class="list-group list-group-flush">
+                    <!-- Conteúdo será preenchido via AJAX -->
+                </ul>
+            </div>
+        </div>
+
+        <div class="grid-stack-item" gs-x="6" gs-y="6" gs-w="5" gs-h="5" id="grid-summary-grid">
+            <div class="grid-stack-item-content card" id="summary-grid">
+                <div class="card-header">
+                    <h2 class="h4">Resumo</h2>
+                </div>
+                <div class="loader" style="display: none;">Carregando...</div>
+                <ul class="list-group list-group-flush">
+                    <!-- Conteúdo será preenchido via AJAX -->
+                </ul>
+            </div>
+        </div>
+        
+        <div class="grid-stack-item" gs-x="0" gs-y="13" gs-w="5" gs-h="5" id="grid-latest-notifications">
+            <div class="grid-stack-item-content card" id="latest-notifications">
+                <div class="card-header">
+                    <h2 class="h4">Últimas Notificações</h2>
+                </div>
+                <div class="loader" style="display: none;">Carregando...</div>
+                <ul class="list-group list-group-flush">
+                    <!-- Conteúdo será preenchido via AJAX -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Layout alternativo para dispositivos móveis -->
+    <div class="row d-md-none"> <!-- Esconder em dispositivos maiores -->
+        <div class="col-md-6 mb-3">
+            <div class="card" data-type="summary">
+                <div class="card-header">
+                    <h2 class="h4">Resumo</h2>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" data-type="user_count">Total de Usuários: {{ user_count }}</li>
+                    <li class="list-group-item" data-type="news_count">Total de Notícias: {{ news_count }}</li>
+                    <li class="list-group-item" data-type="credit_lines">Total de Linhas de Crédito: {{ credit_lines.count }}</li>
+                    <li class="list-group-item" data-type="additional_rates">Total de Taxas Complementares: {{ additional_rates.count }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card" data-type="latest_news">
+                <div class="card-header">
+                    <h2 class="h4">Últimas Notícias</h2>
+                </div>
+                {% if latest_news %}
+                    <ul class="list-group list-group-flush">
+                        {% for news in latest_news %}
+                            <li class="list-group-item">
+                                <a href="{% url 'news:detail' news.slug %}">{{ news.title }}</a>
+                                <p>{{ news.content|truncatewords:30 }}</p>
+                                <p>Publicado em: {{ news.pub_date }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="card-body">
+                        <div class="alert alert-info" role="alert">
+                            Não há notícias disponíveis.
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card" data-type="credit_lines">
+                <div class="card-header">
+                    <h2 class="h4">Últimas Linhas de Crédito</h2>
+                </div>
+                {% if credit_lines %}
+                    <ul class="list-group list-group-flush">
+                        {% for line in credit_lines %}
+                            <li class="list-group-item">
+                                <strong>{{ line.name }}</strong><br>
+                                <p>{{ line.description }}</p>
+                                <p>Período de financiamento: {{ line.min_financing_months }} a {{ line.max_financing_months }} meses</p>
+                                <p>Taxa de juros: {{ line.interest_rate }}%</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="card-body">
+                        <div class="alert alert-info" role="alert">
+                            Não há linhas de crédito disponíveis.
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="h4">Últimas Taxas Complementares</h2>
+                </div>
+                {% if additional_rates %}
+                    <ul class="list-group list-group-flush">
+                        {% for rate in additional_rates %}
+                            <li class="list-group-item">
+                                <strong>{{ rate.name }}</strong><br>
+                                <p>Percentual: {{ rate.percentage }}%</p>
+                                <p>Mês de referência: {{ rate.month }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="card-body">
+                        <div class="alert alert-info" role="alert">
+                            Não há taxas complementares disponíveis.
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card" data-type="latest_notifications">
+                <div class="card-header">
+                    <h2 class="h4">Últimas Notificações</h2>
+                </div>
+                {% if latest_notifications %}
+                    <ul class="list-group list-group-flush">
+                        {% for notification in latest_notifications %}
+                            <li class="list-group-item">{{ notification.notification_type }} - {{ notification.message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="card-body">
+                        <div class="alert alert-info" role="alert">
+                            Não há notificações disponíveis.
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock content_scream %}
+
+{% block extra_js %}
+
+    <!-- Inclua os arquivos CSS e JS do gridstack.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@4.3.1/dist/gridstack.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gridstack@4.3.1/dist/gridstack-h5.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            function initializeGridStack() {
+                try {
+                    const grid = GridStack.init({
+                        cellHeight: '70px',
+                        verticalMargin: 10,
+                        disableOneColumnMode: true,
+                        staticGrid: false,
+                        float: true,
+                        resizable: { handles: 'e, se, s, sw, w' },
+                    });
+                
+                    const saveButton = document.getElementById('save-layout-btn');
+                
+                    // Função para carregar dados via AJAX
+                    function fetchData(url, containerId, template) {
+                        const container = document.querySelector(`#${containerId}`);
+                        const loader = container.querySelector('.loader');
+                        loader.style.display = 'block';
+                
+                        fetch(url)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                let html;
+                                if (containerId === 'summary-grid') {
+                                    // Tratar o resumo como um único bloco de HTML
+                                    html = template(data);
+                                } else {
+                                    // Tratar as outras chamadas como listas de itens
+                                    html = data.map(item => template(item)).join('');
+                                }
+                                container.querySelector('.list-group').innerHTML = html;
+                            })
+                            .catch(error => console.error('Fetch error:', error))
+                            .finally(() => loader.style.display = 'none');
+                    }
+                
+                    // Templates para os dados
+                    const newsTemplate = item => `
+                        <li class="list-group-item">
+                            <a href="/app/news/${item.slug}">${item.title}</a>
+                            <p>${item.content}</p>
+                            <p>Publicado em: ${item.pub_date}</p>
+                        </li>
+                    `;
+                    
+                    const creditLinesTemplate = item => `
+                        <li class="list-group-item">
+                            <strong>${item.name}</strong><br>
+                            <p>${item.description}</p>
+                            <p>Período de financiamento: ${item.min_financing_months} a ${item.max_financing_months} meses</p>
+                            <p>Taxa de juros: ${item.interest_rate}%</p>
+                        </li>
+                    `;
+                    
+                    const additionalRatesTemplate = item => `
+                        <li class="list-group-item">
+                            <strong>${item.name}</strong><br>
+                            <p>${item.month}</p>
+                            <p>Taxa: ${item.percentage}%</p>
+                        </li>
+                    `;
+                    
+                    const notificationsTemplate = item => `
+                        <li class="list-group-item">${item.notification_type} - ${item.message}</li>
+                    `;
+                
+                    const summaryTemplate = item => `
+                        <li class="list-group-item">Total de Usuários: ${item.user_count}</li>
+                        <li class="list-group-item">Total de Notícias: ${item.news_count}</li>
+                        <li class="list-group-item">Total de Linhas de Crédito: ${item.credit_lines_count}</li>
+                        <li class="list-group-item">Total de Taxas Complementares: ${item.additional_rates_count}</li>
+                    `;
+                
+                    // URLs para os dados
+                    const urls = {
+                        latestNews: '/app/api/latest-news/',
+                        creditLines: '/app/api/credit-lines/',
+                        additionalRates: '/app/api/additional-rates/',
+                        latestNotifications: '/app/api/latest-notifications/',
+                        summaryDash: '/app/api/summary/'
+                    };
+                
+                    // Carregar dados inicial
+                    fetchData(urls.latestNews, 'latest-news', newsTemplate);
+                    fetchData(urls.creditLines, 'credit-lines', creditLinesTemplate);
+                    fetchData(urls.additionalRates, 'additional-rates', additionalRatesTemplate);
+                    fetchData(urls.latestNotifications, 'latest-notifications', notificationsTemplate);
+                    fetchData(urls.summaryDash, 'summary-grid', summaryTemplate);
+                
+                    // Obter dados de layout
+                    const layoutData = {{ layout_data|safe }};
+                    
+                    if (layoutData) {
+                        layoutData.forEach(item => {
+                            const gridStackItem = document.getElementById(`grid-${item.id}`);
+                            if (gridStackItem) {
+                                gridStackItem.setAttribute('gs-x', item.x);
+                                gridStackItem.setAttribute('gs-y', item.y);
+                                gridStackItem.setAttribute('gs-w', item.w);
+                                gridStackItem.setAttribute('gs-h', item.h);
+                            }
+                        });
+                    }
+            
+                    grid.on('change', function() {
+                        saveButton.style.display = 'block';
+                    });
+            
+                    // Salvar layout
+                    document.getElementById('save-layout-btn').addEventListener('click', function () {
+                        const layout = grid.save();
+                        saveLayout(layout); // Chama a função para salvar o layout via AJAX
+                    });
+                } catch (error) {
+                    console.error('Error initializing GridStack:', error);
+                }
+            }
+            
+            // Função para salvar o layout via AJAX
+            function saveLayout() {
+                document.getElementById('save-layout-btn').style.display = 'none';
+            
+                // Capturar todos os itens grid-stack
+                const items = document.querySelectorAll('.grid-stack-item');
+                const layoutData = Array.from(items).map(item => {
+                    return {
+                        x: item.getAttribute('gs-x'),
+                        y: item.getAttribute('gs-y'),
+                        w: item.getAttribute('gs-w'),
+                        h: item.getAttribute('gs-h'),
+                        id: item.querySelector('.grid-stack-item-content').id,
+                    };
+                });
+            
+                fetch('{% url 'administrator:save_dashboard_layout' %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}' // Adicione o token CSRF para proteção
+                    },
+                    body: JSON.stringify({ layout_data: layoutData })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Layout salvo com sucesso:', data);
+                })
+                .catch(error => console.error('Erro ao salvar layout:', error));
+            }
+            
+            // Função para verificar o tamanho da tela
+            function checkScreenSize() {
+                if (window.matchMedia('(min-width: 769px)').matches) {
+                    initializeGridStack();
+                } else {
+                    document.getElementById('save-layout-btn').style.display = 'none'; // Ocultar o botão em telas pequenas
+                }
+            }
+            
+            // Inicialize o GridStack se a tela já estiver em modo desktop
+            checkScreenSize();
+            
+            // Adicione um listener para ajustar o GridStack quando a tela mudar de tamanho
+            window.addEventListener('resize', checkScreenSize);
+        });    
+    </script>
+
+{% endblock extra_js %}

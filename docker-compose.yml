@@ -1,27 +1,88 @@
 services:
-  site-lineage:
+  site:
     container_name: site
     restart: always
     build:
       context: .
       dockerfile: Dockerfile
+    image: site:latest
+    env_file:
+      - .env
     networks:
       - lineage_network
     volumes:
       - logs_data:/usr/src/app/logs
       - static_data:/usr/src/app/staticfiles
       - media_data:/usr/src/app/media
+    command: daphne -b 0.0.0.0 -p 5005 core.asgi:application
     depends_on:
       - redis
+
+  celery:
+    container_name: celery
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: site:latest
+    env_file:
+      - .env
+    networks:
+      - lineage_network
+    volumes:
+      - logs_data:/usr/src/app/logs
+    command: celery -A core worker
+    depends_on:
+      - redis
+      - site
+
+  celery-beat:
+    container_name: celery_beat
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: site:latest
+    env_file:
+      - .env
+    networks:
+      - lineage_network
+    volumes:
+      - logs_data:/usr/src/app/logs
+    command: celery -A core beat
+    depends_on:
+      - redis
+      - site
+
+  flower:
+    container_name: flower
+    restart: always 
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: site:latest
+    env_file:
+      - .env
+    networks:
+      - lineage_network
+    volumes:
+      - logs_data:/usr/src/app/logs
+    command: celery -A core.celery flower --persistent=True --db="flower_db" --url-prefix=flower
+    depends_on:
+      - redis
+      - site
+      - celery
 
   nginx:
     container_name: nginx
     restart: always
     image: "nginx:latest"
     ports:
-      - "6085:6085"
+      - "80:6085"
     volumes:
       - ./nginx/django.conf:/etc/nginx/conf.d/django.conf
+      - ./nginx/.htpasswd:/etc/nginx/.htpasswd
+      - ./nginx/custom_401.html:/usr/share/nginx/html/custom_401.html
       - static_data:/usr/share/nginx/html/static
       - media_data:/usr/share/nginx/html/media
     networks:

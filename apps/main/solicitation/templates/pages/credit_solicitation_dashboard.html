@@ -1,0 +1,69 @@
+{% extends 'internal/layouts/screen.html' %}
+{% load static %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock extrahead %}
+
+{% block title_scream %}<!-- CODE HERE -->{% endblock title_scream %}
+
+{% block breadcrumb_scream %}
+    <li class="breadcrumb-item"><a href="javascript: void(0)"><!-- CODE HERE --></a></li>
+    <li class="breadcrumb-item" aria-current="page"><!-- CODE HERE --></li>
+{% endblock breadcrumb_scream %}
+
+{% block head_scream %}
+    <h5 class="display-5"><!-- CODE HERE --></h5>
+{% endblock head_scream %}
+
+{% block content_scream %}
+<div class="container">
+    <h1 class="mt-4">Dashboard da Solicitação de Crédito</h1>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Detalhes da Solicitação</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Protocolo:</strong> {{ solicitation.protocol }}</p>
+                    <p><strong>Cliente:</strong> {{ solicitation.public_user.name }}</p>
+                    <p><strong>Agente:</strong> {{ solicitation.agent.username }}</p>
+                    <p><strong>Status:</strong> {{ solicitation.status }}</p>
+                    <p><strong>Data da Solicitação:</strong> {{ solicitation.created_at|date:"d/m/Y" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Participantes</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for participant in participants %}
+                            <li class="list-group-item">
+                                {{ participant.user.username | upper }} - {{ participant.user.email }}
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item">Nenhum participante cadastrado.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12 text-center">
+            <a href="{% url 'administrator:chat_room' solicitation.protocol %}" class="btn btn-primary">Ir para o Chat</a>
+        </div>
+    </div>
+</div>
+{% endblock content_scream %}
+
+{% block extra_js %}
+<!-- CODE HERE --> 
+{% endblock extra_js %}

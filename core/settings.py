@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 from str2bool import str2bool
 from .logger import LOGGING as is_LOGGING
 from urllib.parse import urlparse
-import importlib
 
 # =========================== MAIN CONFIGS ===========================
 
@@ -65,20 +64,26 @@ INSTALLED_APPS = [
 
     "serve_files",
     "auditlog",
-
-    "home",
-    "notification",
     "import_export",
     "corsheaders",
-    "auditor",
-    "server"
+
+    "apps.main.administrator",
+    "apps.main.auditor",
+    "apps.main.faq",
+    "apps.main.home",
+    "apps.main.message",
+    "apps.main.news",
+    "apps.main.notification",
+    "apps.main.solicitation",
+
+    "apps.lineage.server",
 ]
 
 # =========================== MIDDLEWARE CONFIGS ===========================
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "auditor.middleware.AuditorMiddleware",
+    "apps.main.auditor.middleware.AuditorMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
@@ -209,6 +214,44 @@ CACHES = {
         } if not DEBUG else {}
     }
 }
+
+# =========================== CELERY CONFIGS ===========================
+
+# e.g., 'redis://localhost:6379/0'
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URI')
+# e.g., 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = os.getenv('CELERY_BACKEND_URI')
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_IGNORE_RESULT = False  # Altere para True se não precisar dos resultados
+CELERY_TIMEZONE = TIME_ZONE
+# Pode ser definido como False se não precisar de rastreio
+CELERY_TRACK_STARTED = True
+
+# =========================== CHANNELS CONFIGS ===========================
+
+if DEBUG:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        }
+    }
+
+else:
+    channels_backend = os.getenv('CHANNELS_BACKEND')
+    redis_url = urlparse(channels_backend)
+    redis_host = redis_url.hostname
+    redis_port = redis_url.port
+
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [(redis_host, redis_port)],
+            }
+        }
+    }
 
 # =========================== SECURITY CONFIG ===========================
 

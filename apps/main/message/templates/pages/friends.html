@@ -1,0 +1,98 @@
+{% extends 'internal/layouts/screen.html' %}
+{% load static %}
+
+{% block title %}Amigos{% endblock title %}
+
+
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/friends.css' %}">
+{% endblock extrahead %}
+
+{% block title_scream %}Amigos e Conexões{% endblock title_scream %}
+
+{% block breadcrumb_scream %}
+    <li class="breadcrumb-item"><a href="javascript: void(0)" href="{% url 'message:index' %}"><!-- CODE HERE --></a></li>
+    <li class="breadcrumb-item" aria-current="page"><!-- CODE HERE --></li>
+{% endblock breadcrumb_scream %}
+
+{% block head_scream %}
+    <h5 class="display-5"><!-- CODE HERE --></h5>
+{% endblock head_scream %}
+
+{% block content_scream %}
+    <!-- Header Geral -->
+    <div class="header-bg p-4 rounded shadow-sm d-flex align-items-center justify-content-between">
+        <div class="icon-title">
+            <i class="fas fa-users"></i>
+            <h3 class="mb-0">Amigos e Conexões</h3>
+        </div>
+    </div>
+
+    <!-- Lista de Amigos -->
+    <div class="section-header mt-4">
+        <i class="fas fa-users"></i>
+        <h4>Meus Amigos</h4>
+    </div>
+    <ul class="list-group mt-3">
+        {% for friendship in accepted_friendships %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    {% if friendship.friend.avatar %}
+                        <img src="{{ friendship.friend.avatar.url }}" alt="{{ friendship.friend.username }}" class="img-fluid rounded-circle" style="width: 40px; height: 40px; margin-right: 10px;">
+                    {% else %}
+                        <img src="https://via.placeholder.com/60" alt="default profile image" class="img-fluid rounded-circle" style="width: 40px; height: 40px; margin-right: 10px;">
+                    {% endif %}
+                    <span>{{ friendship.friend.username }}</span>
+                </div>
+                <a href="{% url 'message:remove_friend' friendship.id %}" class="btn btn-danger btn-sm">Deixar de Ser Amigo</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item">Nenhum amigo adicionado ainda.</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Adicionar Amigos -->
+    <div class="section-header mt-4">
+        <i class="fas fa-user-plus"></i>
+        <h4>Adicionar Novos Amigos</h4>
+    </div>
+    <ul class="list-group mt-3">
+        {% for user in users %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    {% if user.avatar %}
+                        <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="img-fluid rounded-circle" style="width: 40px; height: 40px; margin-right: 10px;">
+                    {% else %}
+                        <img src="https://via.placeholder.com/60" alt="default profile image" class="img-fluid rounded-circle" style="width: 40px; height: 40px; margin-right: 10px;">
+                    {% endif %}
+                    <span>{{ user.username }}</span>
+                </div>
+            </li>
+        {% empty %}
+            <li class="list-group-item">Nenhum usuário disponível para adicionar.</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Convites de Amizade -->
+    <div class="section-header mt-4">
+        <i class="fas fa-user-friends"></i>
+        <h4>Convites Pendentes</h4>
+    </div>
+    <ul class="list-group mt-3">
+        {% for request in pending_friend_requests %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>{{ request.user.username }}</div>
+                <div>
+                    <a href="{% url 'message:accept_friend_request' request.id %}" class="btn btn-success btn-sm">Aceitar</a>
+                    <a href="{% url 'message:reject_friend_request' request.id %}" class="btn btn-danger btn-sm">Recusar</a>
+                </div>
+            </li>
+        {% empty %}
+            <li class="list-group-item">Nenhum convite de amizade recebido.</li>
+        {% endfor %}
+    </ul>
+{% endblock content_scream %}
+
+{% block extra_js %}
+<!-- CODE HERE --> 
+{% endblock extra_js %}
