@@ -88,7 +88,7 @@ services:
     networks:
       - lineage_network
     depends_on: 
-      - site-lineage
+      - site
 
   redis:
     container_name: redis
