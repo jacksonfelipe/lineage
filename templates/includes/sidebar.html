@@ -62,6 +62,44 @@
 
       <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
 
+      <li class="nav-item {% if 'faq' in segment %}active{% endif %}">
+        <a href="{% url 'faq:faq_list' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M10 2a8 8 0 11-8 8 8 8 0 018-8zm0 2a6 6 0 100 12 6 6 0 000-12z" clip-rule="evenodd"></path>
+              <path d="M10 6a4 4 0 11-4 4 4 4 0 014-4z"></path>
+            </svg>
+          </span>
+          <span class="sidebar-text">Ajuda (FAQ)</span>
+        </a>
+      </li> 
+
+      <li class="nav-item {% if 'faq' in segment %}active{% endif %}">
+        <a href="{% url 'news:index' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M10 2a8 8 0 11-8 8 8 8 0 018-8zm0 2a6 6 0 100 12 6 6 0 000-12z" clip-rule="evenodd"></path>
+              <path d="M10 6a4 4 0 11-4 4 4 4 0 014-4z"></path>
+            </svg>
+          </span>
+          <span class="sidebar-text">Notícias</span>
+        </a>
+      </li> 
+
+      <li class="nav-item {% if 'faq' in segment %}active{% endif %}">
+        <a href="{% url 'message:index' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M10 2a8 8 0 11-8 8 8 8 0 018-8zm0 2a6 6 0 100 12 6 6 0 000-12z" clip-rule="evenodd"></path>
+              <path d="M10 6a4 4 0 11-4 4 4 4 0 014-4z"></path>
+            </svg>
+          </span>
+          <span class="sidebar-text">Mensagens</span>
+        </a>
+      </li> 
+
+      <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
+
       {% admin_get_menu as app_list %}
       {% if app_list %}
         {% for app in app_list %}
