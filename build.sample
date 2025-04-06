@@ -50,7 +50,7 @@ docker compose up -d || { echo "Failed to start containers"; exit 1; }
 
 # Wait for DB
 echo "Waiting for database..."
-docker compose exec postgres bash -c "until pg_isready -h postgres -U $DB_USERNAME; do sleep 2; done"
+docker compose exec postgres bash -c "until pg_isready -h $DB_HOST -U $DB_USERNAME; do sleep 2; done"
 
 # Run migration inside container (applies what was created on host)
 echo "Applying migrations inside container..."
