@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+  <head>
+    {% include 'includes/head.html' %}
+    <style>
+      :root {
+        --bg-dark: #0b0b0b;
+        --bg-section: #1f1f1f;
+        --gold: #d4af37;
+        --ruby: #9b1c31;
+        --light: #f4f4f4;
+      }
+      body {
+        background-color: var(--bg-dark);
+        color: var(--light);
+        font-family: 'Georgia', serif;
+      }
+      a { text-decoration: none; }
+
+      .navbar {
+        padding: 1rem 1.5rem;
+        background-color: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(10px);
+      }
+      .nav-link {
+        color: var(--light);
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+      .nav-link:hover { color: var(--gold); }
+
+      .btn-outline-light {
+        border-color: var(--gold);
+        color: var(--gold);
+        font-weight: bold;
+      }
+      .btn-outline-light:hover {
+        background-color: var(--gold);
+        color: var(--bg-dark);
+      }
+      .btn-ruby {
+        background-color: var(--ruby);
+        color: #fff;
+        border: none;
+        padding: 10px 25px;
+        font-weight: bold;
+        border-radius: 3px;
+        transition: background-color 0.3s;
+      }
+      .btn-ruby:hover {
+        background-color: #c32d4a;
+        color: #fff;
+      }
+
+      footer {
+        background-color: #111;
+        padding: 20px 0;
+        text-align: center;
+        color: #888;
+        font-size: 0.9rem;
+        border-top: 1px solid #333;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">
+          <img src="{% static 'assets/img/l2_logo.png' %}" height="60" alt="Lineage2 Logo" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="#features">Sobre</a></li>
+            <li class="nav-item"><a class="nav-link" href="#download">Download</a></li>
+            <li class="nav-item"><a class="nav-link" href="#comunidade">Comunidade</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'public_news_list' %}">Notícias</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'public_faq_list' %}">FAQ</a></li>
+            {% if request.user.is_authenticated %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Painel</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Sair</a></li>
+            {% else %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+          </ul>
+          <a href="{% url 'register' %}" class="btn btn-outline-light ms-lg-3">Criar Conta</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    {% block content %}{% endblock %}
+
+    <!-- Rodapé -->
+    <footer>
+      <div class="container">
+        <p id="footer-year"></p>
+      </div>
+    </footer>
+
+    {% include 'includes/scripts.html' %}
+    <script>
+      const year = new Date().getFullYear();
+      document.getElementById('footer-year').innerHTML = `&copy; ${year} Lineage 2 [NOME DO SERVIDOR]. Todos os direitos reservados.`;
+    </script>
+  </body>
+</html>

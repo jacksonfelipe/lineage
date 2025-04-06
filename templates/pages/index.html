@@ -1,231 +1,56 @@
-<!DOCTYPE html>
+{% extends 'layouts/public.html' %}
 {% load static %}
-<html lang="pt-br">
-  <head>
-    {% include 'includes/head.html' %}
-    <style>
-      :root {
-        --bg-dark: #0b0b0b;
-        --bg-section: #1f1f1f;
-        --gold: #d4af37;
-        --ruby: #9b1c31;
-        --light: #f4f4f4;
-      }
 
-      body {
-        background-color: var(--bg-dark);
-        color: var(--light);
-        font-family: 'Georgia', serif;
-      }
+{% block content %}
+  <section class="hero" style="
+    background-image: url('{% static 'assets/img/lineage2-bg.jpg' %}');
+    background-size: cover;
+    background-position: center;
+    padding: 120px 0;
+    text-align: center;
+    position: relative;
+  ">
+    <div class="hero-content text-white" style="position: relative; z-index: 1; max-width: 700px; margin: 0 auto;">
+      <h1 style="font-size: 3.5rem; color: var(--gold); margin-bottom: 20px;">Bem-vindo ao Lineage 2 [NOME DO SERVIDOR]</h1>
+      <p style="font-size: 1.2rem; color: var(--light); margin-bottom: 30px;">Explore o mundo de Aden com desafios épicos, PvP frenético e uma comunidade ativa!</p>
+      <a href="#download" class="btn-ruby">Jogar Agora</a>
+    </div>
+    <div style="content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 0;"></div>
+  </section>
 
-      a {
-        text-decoration: none;
-      }
-
-      .navbar {
-        padding: 1rem 1.5rem;
-        background-color: rgba(0, 0, 0, 0.85);
-        backdrop-filter: blur(10px);
-      }
-
-      .nav-link {
-        color: var(--light);
-        font-weight: 500;
-        transition: color 0.3s ease;
-      }
-
-      .nav-link:hover {
-        color: var(--gold);
-      }
-
-      .btn-outline-light {
-        border-color: var(--gold);
-        color: var(--gold);
-        font-weight: bold;
-      }
-
-      .btn-outline-light:hover {
-        background-color: var(--gold);
-        color: var(--bg-dark);
-      }
-
-      .hero {
-        background-image: url("{% static 'assets/img/lineage2-bg.jpg' %}");
-        background-size: cover;
-        background-position: center;
-        padding: 120px 0;
-        text-align: center;
-        position: relative;
-      }
-
-      .hero::after {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0, 0, 0, 0.7);
-        z-index: 0;
-      }
-
-      .hero-content {
-        position: relative;
-        z-index: 1;
-        max-width: 700px;
-        margin: 0 auto;
-      }
-
-      .hero h1 {
-        font-size: 3.5rem;
-        color: var(--gold);
-        margin-bottom: 20px;
-      }
-
-      .hero p {
-        font-size: 1.2rem;
-        color: var(--light);
-        margin-bottom: 30px;
-      }
-
-      .features {
-        padding: 80px 0;
-        background-color: var(--bg-section);
-        text-align: center;
-      }
-
-      .features .feature {
-        margin-bottom: 50px;
-      }
-
-      .features h3 {
-        color: var(--gold);
-        font-size: 1.5rem;
-        margin-bottom: 15px;
-      }
-
-      .features p {
-        color: #cfcfcf;
-      }
-
-      #download, #comunidade {
-        background-color: #121212;
-        padding: 60px 0;
-        text-align: center;
-      }
-
-      #download h2, #comunidade h2 {
-        color: var(--gold);
-        margin-bottom: 20px;
-      }
-
-      #download p, #comunidade p {
-        color: #ccc;
-        margin-bottom: 30px;
-      }
-
-      footer {
-        background-color: #111;
-        padding: 20px 0;
-        text-align: center;
-        color: #888;
-        font-size: 0.9rem;
-        border-top: 1px solid #333;
-      }
-
-      .btn-ruby {
-        background-color: var(--ruby);
-        color: #fff;
-        border: none;
-        padding: 10px 25px;
-        font-weight: bold;
-        border-radius: 3px;
-        transition: background-color 0.3s;
-      }
-
-      .btn-ruby:hover {
-        background-color: #c32d4a;
-        color: #fff;
-      }
-    </style>
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-      <div class="container">
-        <a class="navbar-brand" href="#">
-          <img src="{% static 'assets/img/l2_logo.png' %}" height="60" alt="Lineage2 Logo" />
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="#features">Sobre</a></li>
-            <li class="nav-item"><a class="nav-link" href="#download">Download</a></li>
-            <li class="nav-item"><a class="nav-link" href="#comunidade">Comunidade</a></li>
-            {% if request.user.is_authenticated %}
-              <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Painel</a></li>
-              <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Sair</a></li>
-            {% else %}
-              <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
-            {% endif %}
-          </ul>
-          <a href="{% url 'register' %}" class="btn btn-outline-light ms-lg-3">Criar Conta</a>
+  <section class="features" id="features" style="padding: 80px 0; background-color: var(--bg-section); text-align: center;">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 feature">
+          <h3>⚔️ PvP & Sieges</h3>
+          <p>Domine castelos, lute por território e mostre sua força no campo de batalha.</p>
+        </div>
+        <div class="col-md-4 feature">
+          <h3>📜 Missões Personalizadas</h3>
+          <p>Conteúdo exclusivo com recompensas únicas para jogadores dedicados.</p>
+        </div>
+        <div class="col-md-4 feature">
+          <h3>🎉 Eventos & Premiações</h3>
+          <p>Participe de eventos semanais com itens raros e bônus poderosos.</p>
         </div>
       </div>
-    </nav>
+    </div>
+  </section>
 
-    <section class="hero">
-      <div class="container hero-content text-white">
-        <h1>Bem-vindo ao Lineage 2 [NOME DO SERVIDOR]</h1>
-        <p>Explore o mundo de Aden com desafios épicos, PvP frenético e uma comunidade ativa!</p>
-        <a href="#download" class="btn-ruby">Jogar Agora</a>
-      </div>
-    </section>
+  <section id="download" style="background-color: #121212; padding: 60px 0; text-align: center;">
+    <div class="container">
+      <h2 style="color: var(--gold); margin-bottom: 20px;">Download & Instalação</h2>
+      <p style="color: #ccc; margin-bottom: 30px;">Baixe agora o cliente e patch oficial e comece sua jornada em nosso servidor.</p>
+      <a href="#" class="btn btn-outline-light btn-lg me-3">Baixar Patch</a>
+      <a href="#" class="btn btn-outline-light btn-lg">Baixar Cliente</a>
+    </div>
+  </section>
 
-    <section class="features" id="features">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-4 feature">
-            <h3>⚔️ PvP & Sieges</h3>
-            <p>Domine castelos, lute por território e mostre sua força no campo de batalha.</p>
-          </div>
-          <div class="col-md-4 feature">
-            <h3>📜 Missões Personalizadas</h3>
-            <p>Conteúdo exclusivo com recompensas únicas para jogadores dedicados.</p>
-          </div>
-          <div class="col-md-4 feature">
-            <h3>🎉 Eventos & Premiações</h3>
-            <p>Participe de eventos semanais com itens raros e bônus poderosos.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="download">
-      <div class="container">
-        <h2>Download & Instalação</h2>
-        <p>Baixe agora o cliente e patch oficial e comece sua jornada em nosso servidor.</p>
-        <a href="#" class="btn btn-outline-light btn-lg me-3">Baixar Patch</a>
-        <a href="#" class="btn btn-outline-light btn-lg">Baixar Cliente</a>
-      </div>
-    </section>
-
-    <section id="comunidade">
-      <div class="container">
-        <h2>Junte-se à Comunidade</h2>
-        <p>Conecte-se com outros jogadores, tire dúvidas e participe dos eventos via Discord.</p>
-        <a href="https://discord.gg/seulink" target="_blank" class="btn-ruby">Entrar no Discord</a>
-      </div>
-    </section>
-
-    <footer>
-      <div class="container">
-        <p>&copy; {{ year }} Lineage 2 [NOME DO SERVIDOR]. Todos os direitos reservados.</p>
-      </div>
-    </footer>
-
-    {% include 'includes/scripts.html' %}
-    <script>
-      const year = new Date().getFullYear();
-      document.querySelector('footer p').innerHTML = `&copy; ${year} Lineage 2 [NOME DO SERVIDOR]. Todos os direitos reservados.`;
-    </script>
-  </body>
-</html>
+  <section id="comunidade" style="background-color: #121212; padding: 60px 0; text-align: center;">
+    <div class="container">
+      <h2 style="color: var(--gold); margin-bottom: 20px;">Junte-se à Comunidade</h2>
+      <p style="color: #ccc; margin-bottom: 30px;">Conecte-se com outros jogadores, tire dúvidas e participe dos eventos via Discord.</p>
+      <a href="https://discord.gg/seulink" target="_blank" class="btn-ruby">Entrar no Discord</a>
+    </div>
+  </section>
+{% endblock %}

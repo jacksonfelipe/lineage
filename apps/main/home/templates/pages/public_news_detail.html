@@ -1,0 +1,33 @@
+{% extends 'layouts/public.html' %}
+{% load static %}
+
+{% block title %}Notícias{% endblock title %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+
+      <h1 class="fw-bold mb-4" style="color: var(--gold);">
+        {{ news.title }}
+      </h1>
+
+      {% if news.image %}
+        <img src="{{ news.image.url }}" class="img-fluid rounded mb-4" alt="{{ news.title }}">
+      {% endif %}
+
+      <div class="mb-4" style="white-space: pre-line;">
+        {{ news.content|safe }}
+      </div>
+
+      <p class="text-muted">
+        <small>
+          Autor: {{ news.author.username }} |
+          Publicado em: {{ news.pub_date|date:"d/m/Y H:i" }}
+        </small>
+      </p>
+
+    </div>
+  </div>
+</div>
+{% endblock content %}
