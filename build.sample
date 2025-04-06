@@ -48,9 +48,12 @@ docker compose build || { echo "Failed to build Docker images"; exit 1; }
 echo "Starting containers..."
 docker compose up -d || { echo "Failed to start containers"; exit 1; }
 
-# Wait for DB
+# Wait for DB (direct)
 echo "Waiting for database..."
-docker compose exec postgres bash -c "until pg_isready -h $DB_HOST -U $DB_USERNAME; do sleep 2; done"
+until docker compose exec postgres pg_isready -U db_user > /dev/null 2>&1; do
+  echo "$(date '+%H:%M:%S') - PostgreSQL is not ready yet. Waiting..."
+  sleep 2
+done
 
 # Run migration inside container (applies what was created on host)
 echo "Applying migrations inside container..."
