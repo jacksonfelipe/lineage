@@ -2,41 +2,87 @@
 {% load static %}
 
 {% block content %}
-  <section class="hero" style="
-    background-image: url('{% static 'assets/img/lineage2-bg.jpg' %}');
-    background-size: cover;
-    background-position: center;
-    padding: 120px 0;
-    text-align: center;
-    position: relative;
-  ">
+  <!-- Hero / Banner -->
+  <section class="hero" style="background-image: url('{% static 'assets/img/lineage2-bg.jpg' %}'); background-size: cover; background-position: center; padding: 120px 0; text-align: center; position: relative;">
     <div class="hero-content text-white" style="position: relative; z-index: 1; max-width: 700px; margin: 0 auto;">
-      <h1 style="font-size: 3.5rem; color: var(--gold); margin-bottom: 20px;">Bem-vindo ao Lineage 2 [NOME DO SERVIDOR]</h1>
-      <p style="font-size: 1.2rem; color: var(--light); margin-bottom: 30px;">Explore o mundo de Aden com desafios épicos, PvP frenético e uma comunidade ativa!</p>
+      <h1 style="font-size: 3.5rem; color: var(--gold); margin-bottom: 20px;">Lineage 2 [NOME DO SERVIDOR]</h1>
+      <p style="font-size: 1.2rem; color: var(--light); margin-bottom: 30px;">Desafios Épicos. PvP Frenético. Uma Comunidade Viva.</p>
       <a href="#download" class="btn-ruby">Jogar Agora</a>
     </div>
     <div style="content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 0;"></div>
   </section>
 
+  <!-- Trailer / Gameplay -->
+  <section class="video-section" style="background-color: #111; padding: 60px 0; text-align: center;">
+    <div class="container">
+      <h2 style="color: var(--gold); margin-bottom: 30px;">Trailer Oficial</h2>
+      <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);">
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen style="position: absolute; width: 100%; height: 100%; left: 0;"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
   <section class="features" id="features" style="padding: 80px 0; background-color: var(--bg-section); text-align: center;">
     <div class="container">
       <div class="row">
         <div class="col-md-4 feature">
-          <h3>⚔️ PvP & Sieges</h3>
+          <h3 class="text-secondary">⚔️ PvP & Sieges</h3>
           <p>Domine castelos, lute por território e mostre sua força no campo de batalha.</p>
         </div>
         <div class="col-md-4 feature">
-          <h3>📜 Missões Personalizadas</h3>
+          <h3 class="text-secondary">📜 Missões Personalizadas</h3>
           <p>Conteúdo exclusivo com recompensas únicas para jogadores dedicados.</p>
         </div>
         <div class="col-md-4 feature">
-          <h3>🎉 Eventos & Premiações</h3>
+          <h3 class="text-secondary">🎉 Eventos & Premiações</h3>
           <p>Participe de eventos semanais com itens raros e bônus poderosos.</p>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Classes -->
+  <section style="background-color: #1a1a1a; padding: 60px 0; text-align: center;">
+    <div class="container">
+      <h2 style="color: var(--gold); margin-bottom: 30px;">Classes Jogáveis</h2>
+      <div class="row justify-content-center">
+        {% for classe in classes %}
+        <div class="col-md-2 col-6 mb-4">
+          <img src="{% static 'assets/img/l2/characters/'|add:classe|add:'.png' %}" alt="{{ classe }}" class="img-fluid mb-2" style="height: 160px;">
+          <p style="color: #ccc;">{{ classe }}</p>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Ranking / Clãs -->
+  <section style="background-color: #121212; padding: 60px 0;">
+    <div class="container text-center">
+      <h2 style="color: var(--gold); margin-bottom: 30px;">Top Clãs</h2>
+      <div class="row justify-content-center">
+        {% for clan in clanes %}
+        <div class="col-md-2 col-6 mb-4">
+          <div style="background-color: #1f1f1f; padding: 15px; border-radius: 10px; color: var(--light); border: 1px solid var(--gold);">
+            <strong>{{ forloop.counter }}º</strong><br>
+            {{ clan }}
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Contador de jogadores online -->
+  <section style="background-color: #0b0b0b; padding: 40px 0; text-align: center;">
+    <div class="container">
+      <h2 style="color: var(--gold);">Jogadores Online Agora</h2>
+      <p style="font-size: 2rem; color: #fff;">🔹 <span id="player-count">123</span> 🔹</p>
+    </div>
+  </section>
+
+  <!-- Download -->
   <section id="download" style="background-color: #121212; padding: 60px 0; text-align: center;">
     <div class="container">
       <h2 style="color: var(--gold); margin-bottom: 20px;">Download & Instalação</h2>
@@ -46,6 +92,7 @@
     </div>
   </section>
 
+  <!-- Comunidade -->
   <section id="comunidade" style="background-color: #121212; padding: 60px 0; text-align: center;">
     <div class="container">
       <h2 style="color: var(--gold); margin-bottom: 20px;">Junte-se à Comunidade</h2>

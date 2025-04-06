@@ -24,7 +24,7 @@
                     {% endif %}
                     <div class="card-body">
                         <h3 class="card-title text-dark">{{ news.title }}</h3>
-                        <p class="card-text text-muted">{{ news.content|truncatewords:30 }}</p>
+                        <p class="card-text flex-grow-1">{{ news.summary }}</p>
                         <p class="card-text">
                             <small class="text-muted">Autor: {{ news.author.username }} | Data: {{ news.pub_date }}</small>
                         </p>

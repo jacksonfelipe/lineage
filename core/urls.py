@@ -33,6 +33,7 @@ urlpatterns = [
     path("", include('admin_volt.urls')),
 
     path("admin/", admin.site.urls),
+    path("ckeditor/", include("ckeditor_uploader.urls")),
 ]
 
 # Static/media routes

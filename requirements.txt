@@ -38,3 +38,4 @@ daphne
 
 # others
 passlib[bcrypt]
+django-ckeditor

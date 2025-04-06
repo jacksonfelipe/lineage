@@ -4,6 +4,7 @@
   <head>
     {% include 'includes/head.html' %}
     <link type="text/css" href="{% static 'css/public.css' %}" rel="stylesheet">
+    {% block extrahead %}{% endblock %}
   </head>
   <body>
 
@@ -20,9 +21,9 @@
             &times;
           </button>
           <ul>
-            <li><a href="#features" onclick="closeMenu()">Sobre</a></li>
-            <li><a href="#download" onclick="closeMenu()">Download</a></li>
-            <li><a href="#comunidade" onclick="closeMenu()">Comunidade</a></li>
+            <li><a href="{% url 'index' %}#features" onclick="closeMenu()">Sobre</a></li>
+            <li><a href="{% url 'index' %}#download" onclick="closeMenu()">Download</a></li>
+            <li><a href="{% url 'index' %}#comunidade" onclick="closeMenu()">Comunidade</a></li>
             <li><a href="{% url 'public_news_list' %}" onclick="closeMenu()">Notícias</a></li>
             <li><a href="{% url 'public_faq_list' %}" onclick="closeMenu()">FAQ</a></li>
             {% if request.user.is_authenticated %}

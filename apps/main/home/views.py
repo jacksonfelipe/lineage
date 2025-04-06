@@ -12,9 +12,12 @@ from django.contrib.auth import logout
 
 
 def index(request):
-
-    # Page from the theme 
-    return render(request, 'pages/index.html')
+    classes = ['elf', 'human', 'dark_elf', 'dwarfs', 'orcs']
+    clanes = ['BloodLegion', 'ShadowFang', 'Eternals', 'Immortals', 'DarkEmpire']
+    return render(request, 'pages/index.html', {
+        'classes': classes,
+        'clanes': clanes,
+    })
 
 
 def custom_400_view(request, exception):
