@@ -12,7 +12,7 @@ echo "Parando os contêineres em execução..."
 docker compose down || { echo "Falha ao parar os contêineres"; }
 
 # Remove todos os contêineres do projeto, se existirem
-containers=$(docker ps -a -q --filter name=site --filter name=nginx --filter name=redis)
+containers=$(docker ps -a -q --filter name=site --filter name=celery --filter name=celery_beat --filter name=flower --filter name=nginx --filter name=redis)
 if [ -n "$containers" ]; then
   echo "Removendo todos os contêineres do projeto..."
   docker rm $containers || { echo "Falha ao remover contêineres"; }
