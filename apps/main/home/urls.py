@@ -18,4 +18,5 @@ urlpatterns = [
     path('public/faq/', public_faq_list, name='public_faq_list'),
 
     path('accounts/logout/', logout_view, name="logout"),
+    path('accounts/register/', register_view, name='register'),
 ]

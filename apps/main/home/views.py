@@ -3,7 +3,7 @@ from django.apps import apps
 from django.http import HttpResponse
 from django.core.paginator import Paginator
 
-from .forms import UserProfileForm, AddressUserForm
+from .forms import UserProfileForm, AddressUserForm, RegistrationForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -131,3 +131,19 @@ def log_error_dashboard(request):
 def logout_view(request):
   logout(request)
   return redirect('/')
+
+
+def register_view(request):
+  if request.method == 'POST':
+    form = RegistrationForm(request.POST)
+    if form.is_valid():
+      print("Account created successfully!")
+      form.save()
+      return redirect('/accounts/login/')
+    else:
+      print("Registration failed!")
+  else:
+    form = RegistrationForm()
+
+  context = { 'form': form }
+  return render(request, 'accounts/sign-up.html', context)
