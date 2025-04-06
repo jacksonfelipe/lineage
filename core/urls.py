@@ -33,7 +33,7 @@ urlpatterns = [
     path("", include('admin_volt.urls')),
 
     path("admin/", admin.site.urls),
-    path("ckeditor/", include("ckeditor_uploader.urls")),
+    path("ckeditor5/", include('django_ckeditor_5.urls')),
 ]
 
 # Static/media routes

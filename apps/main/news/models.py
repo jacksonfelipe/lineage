@@ -3,13 +3,13 @@ from core.models import BaseModel
 from apps.main.home.models import User
 from django.utils.text import slugify
 from django.utils import timezone
-from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 class News(BaseModel):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
-    content = RichTextUploadingField()
+    content = CKEditor5Field('Text', config_name='extends')
     summary = models.TextField(blank=True)
     image = models.ImageField(upload_to='news', blank=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
