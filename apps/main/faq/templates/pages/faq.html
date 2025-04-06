@@ -1,22 +1,22 @@
-{% extends 'internal/layouts/screen.html' %}
+{% extends 'layouts/base.html' %}
 {% load static %}
 
-{% block extrahead %}
+{% block title %}Perguntas Frequentes{% endblock title %}
+
+{% block extrastyle %}
 <link rel="stylesheet" href="{% static 'css/faq.css' %}"> 
-{% endblock extrahead %}
+{% endblock extrastyle %}
 
-{% block title_scream %}<!-- CODE HERE -->{% endblock title_scream %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="#">Ajuda</a></li>
+<li class="breadcrumb-item active" aria-current="page">Perguntas Frequentes</li>
+{% endblock breadcrumbs %}
 
-{% block breadcrumb_scream %}
-    <li class="breadcrumb-item"><a href="javascript: void(0)"><!-- CODE HERE --></a></li>
-    <li class="breadcrumb-item" aria-current="page"><!-- CODE HERE --></li>
-{% endblock breadcrumb_scream %}
+{% block page_header %}
+<h5 class="display-5">Perguntas Frequentes</h5>
+{% endblock page_header %}
 
-{% block head_scream %}
-    <h5 class="display-5"><!-- CODE HERE --></h5>
-{% endblock head_scream %}
-
-{% block content_scream %}
+{% block content %}
 <div class="row">
   <div class="col-sm-8 offset-sm-2">
     <div class="card">
@@ -55,8 +55,8 @@
     </div>
   </div>
 </div>
-{% endblock content_scream %}
+{% endblock content %}
 
 {% block extra_js %}
-<!-- CODE HERE --> 
+<!-- JS extra, se necessário -->
 {% endblock extra_js %}
