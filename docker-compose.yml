@@ -17,6 +17,7 @@ services:
     command: daphne -b 0.0.0.0 -p 5005 core.asgi:application
     depends_on:
       - redis
+      - postgres
 
   celery:
     container_name: celery
@@ -97,6 +98,19 @@ services:
     networks:
       - lineage_network
 
+  postgres:
+    container_name: postgres
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - lineage_network
+
 networks:
   lineage_network:
     driver: bridge
@@ -105,3 +119,4 @@ volumes:
   static_data:
   media_data:
   logs_data:
+  postgres_data:

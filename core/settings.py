@@ -135,7 +135,7 @@ if DB_ENGINE and DB_NAME and DB_USERNAME:
         'USER'    : DB_USERNAME,
         'PASSWORD': DB_PASS,
         'HOST'    : DB_HOST,
-        'PORT'    : DB_PORT,
+        'PORT'    : int(DB_PORT) if DB_PORT else '',
         },
     }
 else:
