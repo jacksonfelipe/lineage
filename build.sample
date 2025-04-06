@@ -1,42 +1,65 @@
 #!/bin/bash
 
-# Para parar a execução em caso de erro grave
+# Exit on any error
 set -e
 
-# Atualiza o repositório Git
-echo "Atualizando o repositório Git..."
-git pull origin main || { echo "Falha ao atualizar o repositório Git"; exit 1; }
+echo "=============================="
+echo "Starting deployment process"
+echo "=============================="
 
-# Para os contêineres em execução
-echo "Parando os contêineres em execução..."
-docker compose down || { echo "Falha ao parar os contêineres"; }
+# Pull latest changes from Git
+echo "Pulling latest changes from Git..."
+git pull origin main || { echo "Failed to pull from Git repository"; exit 1; }
 
-# Remove todos os contêineres do projeto, se existirem
+# Activate virtualenv (must exist)
+echo "Activating virtual environment..."
+source .venv/bin/activate || { echo "Virtualenv not found. Please create it with 'python -m venv .venv'"; exit 1; }
+
+# Check Django project for issues
+echo "Running Django system check (host)..."
+python3 manage.py check || { echo "Django check failed"; exit 1; }
+
+# Create new migrations locally
+echo "Making migrations (host)..."
+python3 manage.py makemigrations || { echo "Failed to make migrations"; exit 1; }
+
+# Stop running containers
+echo "Stopping containers..."
+docker compose down || { echo "Failed to stop running containers"; }
+
+# Remove old containers
+echo "Removing old containers..."
 containers=$(docker ps -a -q --filter name=site --filter name=celery --filter name=celery_beat --filter name=flower --filter name=nginx --filter name=redis)
 if [ -n "$containers" ]; then
-  echo "Removendo todos os contêineres do projeto..."
-  docker rm $containers || { echo "Falha ao remover contêineres"; }
+  docker rm $containers || echo "Some containers could not be removed (maybe already removed)"
 else
-  echo "Nenhum contêiner encontrado para remover."
+  echo "No containers found to remove."
 fi
 
-# Remove o volume static_data, se existir
-echo "Removendo o volume static_data..."
-docker volume rm $(docker volume ls -q --filter name=static_data) || { echo "Falha ao remover o volume static_data"; }
+# Remove optional static_data volume
+echo "Removing static_data volume..."
+docker volume rm $(docker volume ls -q --filter name=static_data) || echo "Volume not found or already removed"
 
-# Constrói uma nova imagem
-echo "Construindo a nova imagem..."
-docker compose build || { echo "Falha ao construir a imagem"; exit 1; }
+# Build Docker images
+echo "Building Docker images..."
+docker compose build || { echo "Failed to build Docker images"; exit 1; }
 
-# Sobe os contêineres novamente
-echo "Subindo os contêineres..."
-docker compose up -d || { echo "Falha ao subir os contêineres"; exit 1; }
+# Start containers
+echo "Starting containers..."
+docker compose up -d || { echo "Failed to start containers"; exit 1; }
 
-# Limpa os arquivos orfãos
-echo "Limpando imagens e volumes não utilizados..."
+# Wait for DB
+echo "Waiting for database..."
+docker compose exec site bash -c "until pg_isready -h postgres -U \$DB_USERNAME; do sleep 2; done"
+
+# Run migration inside container (applies what was created on host)
+echo "Applying migrations inside container..."
+docker compose exec site python3 manage.py migrate || { echo "Failed to apply migrations"; exit 1; }
+
+# Clean up
+echo "Cleaning up..."
 docker image prune -f
 docker volume prune -f
 docker container prune -f
 
-# Finaliza o deploy
-echo "Deploy concluído com sucesso!"
+echo "Deployment completed successfully."
