@@ -75,7 +75,7 @@ class AuditorMiddleware:
         else:
             s['body'] = None
 
-        s['response_content'] = response.content if self.AUDITOR_MIDDLEWARE_CONTENT else "DISABLE"
+        s['response_content'] = "DISABLE"
         s['response_status_code'] = getattr(response, 'status_code', None)
 
         # Garantir que todos os campos obrigatórios estão presentes

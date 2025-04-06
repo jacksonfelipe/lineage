@@ -10,7 +10,6 @@ django-redis
 django_ratelimit
 django-import-export
 django-encrypted-fields-and-files
-django-auditlog
 django-celery-beat
 
 # Deployment

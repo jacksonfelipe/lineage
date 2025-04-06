@@ -63,7 +63,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     "serve_files",
-    "auditlog",
     "import_export",
     "corsheaders",
 
@@ -267,7 +266,7 @@ SERVE_DECRYPTED_FILE_URL_BASE = os.environ.get('SERVE_DECRYPTED_FILE_URL_BASE')
 # =========================== AUDITOR CONFIGS ===========================
 
 AUDITOR_MIDDLEWARE_ENABLE = os.getenv('CONFIG_AUDITOR_MIDDLEWARE_ENABLE', False)
-AUDITOR_MIDDLEWARE_RESTRICT_PATHS = ["/api/", "/app/", "/admin/"]
+AUDITOR_MIDDLEWARE_RESTRICT_PATHS = os.getenv('CONFIG_AUDITOR_MIDDLEWARE_RESTRICT_PATHS', [])
 
 # =========================== EXTRA CONFIGS ===========================
 
