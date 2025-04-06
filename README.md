@@ -1,5 +1,7 @@
 # Painel Definitivo Lineage [1.0](https://pdl.denky.dev.br)
 
+<img align="right" height="180" src="https://i.imgur.com/y37VikH.png"/>
+
 O PDL é um painel que nasceu com a missão de oferecer ferramentas poderosas para administradores de servidores privados de Lineage 2. Inicialmente voltado à análise de riscos e estabilidade dos servidores, o projeto evoluiu e se consolidou como uma solução completa para prospecção, gerenciamento e operação de servidores — tudo em código aberto.
 
 ## Tecnologias Utilizadas
