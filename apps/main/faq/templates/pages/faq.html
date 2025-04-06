@@ -30,24 +30,32 @@
       </div>
       <div class="card-body">
         {% if private_faqs %}
-          <div class="accordion" id="faqAccordionPrivate">
-            {% for faq in private_faqs %}
-              <div class="card faq-item">
-                <div class="card-header" id="headingPrivate{{ forloop.counter }}">
-                  <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left {% if not forloop.first %}collapsed{% endif %}" type="button" data-toggle="collapse" data-target="#collapsePrivate{{ forloop.counter }}" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="collapsePrivate{{ forloop.counter }}">
-                      {{ faq.question }}
-                    </button>
-                  </h2>
-                </div>
-                <div id="collapsePrivate{{ forloop.counter }}" class="collapse {% if forloop.first %}show{% endif %}" aria-labelledby="headingPrivate{{ forloop.counter }}" data-parent="#faqAccordionPrivate">
-                  <div class="card-body">
-                    {{ faq.answer }}
-                  </div>
+        <div class="accordion" id="faqAccordionPrivate">
+          {% for faq in private_faqs %}
+            <div class="card faq-item">
+              <div class="card-header" id="headingPrivate{{ forloop.counter }}">
+                <h2 class="mb-0">
+                  <button class="btn btn-link btn-block text-left {% if not forloop.first %}collapsed{% endif %}" 
+                          type="button" 
+                          data-bs-toggle="collapse" 
+                          data-bs-target="#collapsePrivate{{ forloop.counter }}" 
+                          aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" 
+                          aria-controls="collapsePrivate{{ forloop.counter }}">
+                    {{ faq.question }}
+                  </button>
+                </h2>
+              </div>
+              <div id="collapsePrivate{{ forloop.counter }}" 
+                   class="collapse {% if forloop.first %}show{% endif %}" 
+                   aria-labelledby="headingPrivate{{ forloop.counter }}" 
+                   data-bs-parent="#faqAccordionPrivate">
+                <div class="card-body">
+                  {{ faq.answer }}
                 </div>
               </div>
-            {% endfor %}
-          </div>
+            </div>
+          {% endfor %}
+        </div>
         {% else %}
           <p class="text-center">Não há perguntas frequentes disponíveis no momento.</p>
         {% endif %}
