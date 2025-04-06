@@ -37,6 +37,10 @@ O PDL é um painel que nasceu com a missão de oferecer ferramentas poderosas pa
 
 #
 
+<p align="center">
+<img height="280" src="https://i.imgur.com/y37VikH.png">
+</p>
+
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/Django.svg)](https://www.djangoproject.com/)
 
 
