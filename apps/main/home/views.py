@@ -10,6 +10,9 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import logout
 
+from admin_volt.forms import RegistrationForm, LoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm
+from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
+
 
 def index(request):
     classes = ['elf', 'human', 'dark_elf', 'dwarfs', 'orcs']
@@ -149,4 +152,60 @@ def register_view(request):
     form = RegistrationForm()
 
   context = { 'form': form }
-  return render(request, 'accounts/sign-up.html', context)
+  return render(request, 'accounts_custom/sign-up.html', context)
+
+
+class UserLoginView(LoginView):
+    form_class = LoginForm
+    template_name = 'accounts_custom/sign-in.html'
+
+    def form_valid(self, form):
+        print("Login successful!")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print("Login failed!")
+        return super().form_invalid(form)
+    
+
+class UserPasswordChangeView(PasswordChangeView):
+    template_name = 'accounts_custom/password-change.html'
+    form_class = UserPasswordChangeForm
+
+    def form_valid(self, form):
+        print("Password changed successfully!")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print("Password change failed!")
+        return super().form_invalid(form)
+    
+
+class UserPasswordResetView(PasswordResetView):
+    template_name = 'accounts_custom/forgot-password.html'
+    form_class = UserPasswordResetForm
+
+    def form_valid(self, form):
+        print("Password reset email sent!")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print("Failed to send password reset email!")
+        return super().form_invalid(form)
+    
+
+class UserPasswrodResetConfirmView(PasswordResetConfirmView):
+    template_name = 'accounts_custom/reset-password.html'
+    form_class = UserSetPasswordForm
+
+    def form_valid(self, form):
+        print("Password has been reset!")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print("Password reset failed!")
+        return super().form_invalid(form)
+    
+
+def lock(request):
+    return render(request, 'accounts_custom/lock.html')

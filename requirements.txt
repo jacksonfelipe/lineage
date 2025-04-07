@@ -39,3 +39,4 @@ daphne
 # others
 passlib[bcrypt]
 django-ckeditor-5
+django-widget-tweaks

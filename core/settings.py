@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "import_export",
     "corsheaders",
     "django_ckeditor_5",
+    "widget_tweaks",
 
     "apps.main.administrator",
     "apps.main.auditor",

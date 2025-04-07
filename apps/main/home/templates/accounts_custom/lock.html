@@ -1,0 +1,127 @@
+{% extends 'layouts/base-auth.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body {
+    background: url("{% static 'assets/img/l2/bgs/bg.png' %}") no-repeat center center fixed;
+    background-size: cover;
+  }
+
+  .unlock-panel {
+    background-color: rgba(20, 20, 20, 0.95);
+    color: #f0e6d2;
+    border-radius: 1rem;
+    border: 1px solid #e0c36b;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.85);
+    font-family: 'Cinzel', serif;
+  }
+
+  .unlock-panel h1 {
+    font-size: 1.5rem;
+    color: #e0c36b;
+    text-shadow: 0 0 8px rgba(255, 215, 100, 0.4);
+  }
+
+  .unlock-panel p.text-gray {
+    color: #f5deb3;
+    font-size: 0.9rem;
+  }
+
+  label {
+    font-weight: bold;
+    font-size: 0.95rem;
+    color: #f5deb3;
+  }
+
+  .form-control {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid #e0c36b;
+  }
+
+  .form-control:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: #f0e68c;
+    box-shadow: 0 0 10px rgba(255, 255, 160, 0.5);
+  }
+
+  .btn-golden {
+    background: linear-gradient(to right, #b89b56, #d5c170);
+    color: #000;
+    font-weight: bold;
+    text-shadow: 0 0 5px #fff8dc;
+    border: none;
+  }
+
+  .btn-golden:hover {
+    background: linear-gradient(to right, #d5c170, #b89b56);
+    color: #000;
+  }
+
+  .link-home {
+    color: #e0c36b;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .link-home:hover {
+    color: #fff2aa;
+  }
+
+  .avatar-lg img {
+    border: 3px solid #e0c36b;
+    box-shadow: 0 0 15px rgba(255, 215, 100, 0.3);
+  }
+</style>
+
+<section class="vh-100 d-flex align-items-center justify-content-center">
+  <div class="container">
+    <a href="{% url 'dashboard' %}" class="d-flex align-items-center justify-content-center mb-4 link-home">
+      <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd"
+          d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
+          clip-rule="evenodd"></path>
+      </svg>
+      Voltar para o painel
+    </a>
+
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="p-5 unlock-panel">
+          <div class="text-center mb-4">
+            <div class="avatar avatar-lg mx-auto mb-3">
+              <img class="rounded-circle" alt="Avatar"
+                   src="{% static 'assets/img/team/profile-picture-3.jpg' %}">
+            </div>
+            <h1>Bonnie Green</h1>
+            <p class="text-gray">Melhor prevenir do que remediar.</p>
+          </div>
+
+          <form class="mt-4">
+            <div class="form-group mb-4">
+              <label for="password">Sua Senha</label>
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon2">
+                  <svg class="icon icon-xs text-gray-300" fill="currentColor" viewBox="0 0 20 20"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                          clip-rule="evenodd"></path>
+                  </svg>
+                </span>
+                <input type="password" placeholder="Senha" class="form-control" id="password" required>
+              </div>
+            </div>
+
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-golden">Desbloquear</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
