@@ -209,3 +209,13 @@ class UserPasswrodResetConfirmView(PasswordResetConfirmView):
 
 def lock(request):
     return render(request, 'accounts_custom/lock.html')
+
+
+def dashboard(request):
+    if request.user.is_authenticated:
+        context = {
+            'segment': 'dashboard'
+        }
+        return render(request, 'dashboard_custom/dashboard.html', context)
+    else:
+        return redirect('/')

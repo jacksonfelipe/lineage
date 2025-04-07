@@ -6,6 +6,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', index, name='index'),
+    path('pages/dashboard/', dashboard, name="dashboard"),
 
     path('profile/edit/', edit_profile, name='edit_profile'),
     path('profile/add-or-edit-address/', add_or_edit_address, name='add_or_edit_address'),
