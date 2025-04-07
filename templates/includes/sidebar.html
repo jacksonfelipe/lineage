@@ -45,11 +45,7 @@
       </li>
 
       <li class="nav-item {% if 'dashboard' in segment %}active{% endif %}">
-        {% if request.user.is_superuser %}
-        <a href="{% url 'home:dashboard' %}" class="nav-link">
-        {% else %}
         <a href="{% url 'dashboard' %}" class="nav-link">
-        {% endif %}
           <span class="sidebar-icon">
             <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M10 2a8 8 0 11-8 8 8 8 0 018-8zm0 2a6 6 0 100 12 6 6 0 000-12z" clip-rule="evenodd"></path>
