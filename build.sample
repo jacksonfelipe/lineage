@@ -15,6 +15,10 @@ git pull origin main || { echo "Failed to pull from Git repository"; exit 1; }
 echo "Activating virtual environment..."
 source .venv/bin/activate || { echo "Virtualenv not found. Please create it with 'python -m venv .venv'"; exit 1; }
 
+# Upgrade installed packages from requirements.txt
+echo "Upgrading packages from requirements.txt..."
+pip install -U -r requirements.txt || { echo "Failed to upgrade packages"; exit 1; }
+
 # Check Django project for issues
 echo "Running Django system check (host)..."
 python3 manage.py check || { echo "Django check failed"; exit 1; }
