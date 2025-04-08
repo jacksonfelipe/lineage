@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.http import Http404, JsonResponse
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import permission_required, login_required
-from django.templatetags.static import static
 
 from apps.main.notification.models import Notification
 from apps.main.news.models import News
@@ -54,7 +53,7 @@ def chat_room(request, group_name):
         custom_imagem = '/decrypted-file/home/user/avatar/'
         avatar_url = custom_imagem + str(request.user.uuid) + '/'
     except (ValueError, AttributeError):
-        avatar_url = static('assets/img/team/generic_user.png')
+        avatar_url = '/static/assets/img/team/generic_user.png'
 
     solicitation_name = (
         str(solicitation.user.username).upper() + ' - ' + str(solicitation.user.email)
