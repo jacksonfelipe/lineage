@@ -48,12 +48,13 @@ def chat_room(request, group_name):
 
     # Tentar carregar a URL do avatar do usuário
     try:
-        avatar_url = request.user.avatar.url
+        custom_imagem = '/decrypted-file/home/user/avatar/'
+        avatar_url = custom_imagem + str(request.user.uuid) + '/'
     except (ValueError, AttributeError):
         avatar_url = static('assets/img/team/generic_user.png')
 
-    if solicitation.client is not None:
-        solicitation_name = str(solicitation.client.username).upper() + ' - ' + str(solicitation.client.email)
+    if solicitation.user is not None:
+        solicitation_name = str(solicitation.user.username).upper() + ' - ' + str(solicitation.user.email)
     else:
         solicitation_name = "Solicitação sem usuário..."
 

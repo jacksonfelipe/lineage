@@ -8,12 +8,24 @@
 {% endblock extrastyle %}
 
 {% block content %}
+{% if messages %}
+<div class="mt-3">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 <div class="container mt-4">
     <div class="header-bg p-4 rounded shadow-sm d-flex align-items-center justify-content-between">
         <div class="icon-title">
             <i class="fas fa-file-alt"></i>
             <h3 class="mb-0">Lista de Solicitações</h3>
         </div>
+        <a href="{% url 'solicitation:create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Criar Solicitação
+        </a>
     </div>
 
     <div class="table-responsive mt-3">
@@ -36,7 +48,7 @@
                     <td>{{ solicitation.created_at|date:"d/m/Y" }}</td>
                     <td>
                         <a href="{% url 'solicitation:solicitation_dashboard' solicitation.protocol %}" class="btn btn-primary btn_custom">
-                            <i class="fas fa-eye"></i> Ver Dashboard
+                            <i class="fas fa-eye"></i> Ver Solicitação
                         </a>
                     </td>
                 </tr>

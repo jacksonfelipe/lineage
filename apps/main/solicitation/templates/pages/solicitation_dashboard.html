@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 
-{% block title %}Dashboard da Solicitação{% endblock title %}
+{% block title %}Detalhe da Solicitação{% endblock title %}
 
 {% block extrastyle %}
 <link rel="stylesheet" href="{% static 'css/solicitation.css' %}">
@@ -15,14 +15,14 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="mt-4">Dashboard da Solicitação</h1>
+    <h1 class="mt-4">Detalhe da Solicitação</h1>
     
     <div class="row mt-4">
         <!-- Detalhes da Solicitação -->
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h5>Detalhes da Solicitação</h5>
+                    <h5>Solicitação</h5>
                 </div>
                 <div class="card-body">
                     <p><strong>Protocolo:</strong> {{ solicitation.protocol }}</p>

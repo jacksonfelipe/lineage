@@ -3,7 +3,6 @@ from core.admin import BaseModelAdmin
 from .models import (
     Solicitation,
     SolicitationHistory,
-    SolicitationTask,
     SolicitationParticipant,
 )
 
@@ -21,13 +20,6 @@ class SolicitationHistoryAdmin(BaseModelAdmin):
     list_display = ('solicitation', 'action', 'timestamp')
     search_fields = ('solicitation__protocol', 'action')
     list_filter = ('timestamp',)
-
-
-@admin.register(SolicitationTask)
-class SolicitationTaskAdmin(BaseModelAdmin):
-    list_display = ('solicitation', 'description', 'stage', 'sequence', 'is_completed')
-    search_fields = ('solicitation__protocol', 'description', 'stage')
-    list_filter = ('is_completed', 'stage')
 
 
 @admin.register(SolicitationParticipant)

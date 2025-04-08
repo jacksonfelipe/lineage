@@ -4,6 +4,11 @@ from django.views import View
 from .models import Solicitation, SolicitationParticipant
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
+from .forms import SolicitationForm
+from django.contrib import messages
+from django.shortcuts import redirect
 
 
 class SolicitationDashboardView(LoginRequiredMixin, View):
@@ -32,3 +37,20 @@ class SolicitationListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         # Aqui você pode adicionar filtros se necessário
         return Solicitation.objects.all()
+
+
+class SolicitationCreateView(LoginRequiredMixin, CreateView):
+    model = Solicitation
+    form_class = SolicitationForm
+    template_name = 'pages/solicitation_create.html'
+    success_url = reverse_lazy('solicitation:solicitation_list')
+
+    def dispatch(self, request, *args, **kwargs):
+        if Solicitation.objects.filter(user=request.user, status='pending').exists():
+            messages.warning(request, "Você já possui uma solicitação pendente. Aguarde o processamento antes de criar uma nova.")
+            return redirect('solicitation:solicitation_list')
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
