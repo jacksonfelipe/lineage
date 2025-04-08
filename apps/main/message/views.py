@@ -199,11 +199,13 @@ def load_messages(request, friend_id):
 
         value_limit = 500  # limita a quantidade de mensagens retornadas (caso a conversa seja muito grande)
         messages = chat.messages.all().select_related('sender').order_by('timestamp')[:value_limit].values('text', 'timestamp', 'sender__username', 'is_read', 'sender__uuid', 'sender__avatar')
+        default_image = '/static/assets/img/team/generic_user.png'
+        custom_imagem = '/decrypted-file/home/user/avatar/'
 
         formatted_messages = [
             {
                 'text': msg['text'],
-                'sender': {'username': msg['sender__username'], "avatar_url": '/static/assets/img/team/generic_user.png' if msg['sender__avatar'] is None else f'/decrypted-file/home/user/avatar/{msg['sender__uuid']}/'},
+                'sender': {'username': msg['sender__username'], "avatar_url": default_image if msg['sender__avatar'] is None else custom_imagem + str(msg['sender__uuid']) + '/'},
                 'timestamp': msg['timestamp'],
                 'is_read': msg['is_read']
             }
