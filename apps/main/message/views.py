@@ -23,16 +23,16 @@ logger = logging.getLogger('django')
 def message(request):
     accepted_friendships = Friendship.objects.filter(user=request.user, accepted=True)
     
-    try:
-        avatar_url = request.user.avatar.url
-    except ValueError:
-        avatar_url = None
+    if request.user.avatar:
+        user_uuid = request.user.uuid
+    else:
+        user_uuid = None
 
     context = {
         'segment': 'index',
         'parent': 'message',
         'accepted_friendships': accepted_friendships,
-        'avatar_url': avatar_url,
+        'user_uuid': user_uuid,
         'username': request.user.username,
     }
     return render(request, 'pages/chat.html', context)
@@ -198,12 +198,12 @@ def load_messages(request, friend_id):
         chat.messages.filter(sender=friend, is_read=False).update(is_read=True)
 
         value_limit = 500  # limita a quantidade de mensagens retornadas (caso a conversa seja muito grande)
-        messages = chat.messages.all().select_related('sender').order_by('timestamp')[:value_limit].values('text', 'timestamp', 'sender__username', 'sender__avatar', 'is_read')
+        messages = chat.messages.all().select_related('sender').order_by('timestamp')[:value_limit].values('text', 'timestamp', 'sender__username', 'is_read', 'sender__uuid', 'sender__avatar')
 
         formatted_messages = [
             {
                 'text': msg['text'],
-                'sender': {'username': msg['sender__username'], 'avatar_url': msg['sender__avatar']},
+                'sender': {'username': msg['sender__username'], "avatar_url": '/static/assets/img/team/generic_user.png' if msg['sender__avatar'] is None else f'/decrypted-file/home/user/avatar/{msg['sender__uuid']}/'},
                 'timestamp': msg['timestamp'],
                 'is_read': msg['is_read']
             }

@@ -20,7 +20,7 @@
         <!-- Cabeçalho -->
         <div class="col-sm-12 mb-4 bg-light-gray p-4">
             <h2 class="fw-bold text-white">Mensagens</h2>
-            <p class="text-muted">Converse com seus amigos de forma rápida e prática.</p>
+            <p class="text-white">Converse com seus amigos de forma rápida e prática.</p>
         </div>      
 
         <!-- Card de mensagens -->
@@ -47,7 +47,7 @@
                                     {% for friendship in accepted_friendships %}
                                         <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between friend-item" data-friend-id="{{ friendship.friend.id }}">
                                             <div class="d-flex" style="gap: 8px;">
-                                                <img src="{% if friendship.friend.avatar %}{{ friendship.friend.avatar.url }}{% else %}{% static 'internal/images/user/GenericAvatar.png' %}{% endif %}" class="rounded-circle me-3" alt="{{ friendship.friend.username }}" width="40" height="40">
+                                                <img src="{% if friendship.friend.avatar %}{% url 'serve_files:serve_decrypted_file' 'home' 'user' 'avatar' friendship.friend.uuid %}{% else %}{% static 'assets/img/team/generic_user.png' %}{% endif %}" class="rounded-circle me-3" alt="{{ friendship.friend.username }}" width="40" height="40">
                                                 <div class="me-auto">
                                                     <h6 class="mb-0 friend-name">{{ friendship.friend.username }}</h6>
                                                     <small class="friend-status">...</small>
@@ -94,7 +94,7 @@
 <script>
     const currentUser = '{{ username }}';
     const csrfToken = '{{ csrf_token }}';
-    const avatarUrl = '{% if avatar_url %}{{ avatar_url }}{% else %}{% static "internal/images/user/GenericAvatar.png" %}{% endif %}';
+    const avatarUrl = '{% if user_uuid %}{% url 'serve_files:serve_decrypted_file' 'home' 'user' 'avatar' user_uuid %}{% else %}{% static 'assets/img/team/generic_user.png' %}{% endif %}';
 </script>
 
 <script src="{% static 'js/chat.js' %}"></script>

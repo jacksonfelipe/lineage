@@ -27,7 +27,7 @@
             <li class="list-group-item d-flex justify-content-between align-items-center">
               <div class="d-flex align-items-center">
                 {% if friendship.friend.avatar %}
-                  <img src="{{ friendship.friend.avatar.url }}" alt="{{ friendship.friend.username }}" class="img-fluid rounded-circle" style="width: 40px; height: 40px; margin-right: 10px;">
+                  <img src="{% url 'serve_files:serve_decrypted_file' 'home' 'user' 'avatar' friendship.friend.uuid %}" alt="{{ friendship.friend.username }}" class="img-fluid rounded-circle" style="width: 40px; height: 40px; margin-right: 10px;">
                 {% else %}
                   <img src="{% static 'assets/img/team/generic_user.png' %}" alt="default profile image" class="img-fluid rounded-circle" style="width: 40px; height: 40px; margin-right: 10px;">
                 {% endif %}
@@ -55,7 +55,9 @@
                 {% endif %}
                 <span>{{ user.username }}</span>
               </div>
-              <!-- Você pode adicionar um botão para enviar convite aqui -->
+              <a href="{% url 'message:send_friend_request' user.id %}" class="btn btn-primary btn-sm">
+                Enviar Pedido
+              </a>
             </li>
           {% empty %}
             <li class="list-group-item">Nenhum usuário disponível para adicionar.</li>
