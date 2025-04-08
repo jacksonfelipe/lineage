@@ -157,27 +157,31 @@ def logout_view(request):
 
 
 def register_view(request):
-  if request.method == 'POST':
-    form = RegistrationForm(request.POST)
-    if form.is_valid():
-        user = form.save()
-        
-        # notificação de criação de conta
-        send_notification(
-            user=None,
-            notification_type='staff',
-            message=f'Usuário {user.username} de email {user.email} cadastrado com sucesso!',
-            created_by=None  # não há usuário autenticado ainda
-        )
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
 
-        return redirect('/accounts/login/')
+        # Verifica se o checkbox dos termos foi marcado
+        if not request.POST.get('terms'):
+            form.add_error(None, 'Você precisa aceitar os termos e condições para se registrar.')
+        elif form.is_valid():
+            user = form.save()
+
+            # notificação de criação de conta
+            send_notification(
+                user=None,
+                notification_type='staff',
+                message=f'Usuário {user.username} de email {user.email} cadastrado com sucesso!',
+                created_by=None
+            )
+
+            return redirect('/accounts/login/')
+        else:
+            print("Registration failed!")
     else:
-      print("Registration failed!")
-  else:
-    form = RegistrationForm()
+        form = RegistrationForm()
 
-  context = { 'form': form }
-  return render(request, 'accounts_custom/sign-up.html', context)
+    context = {'form': form}
+    return render(request, 'accounts_custom/sign-up.html', context)
 
 
 class UserLoginView(LoginView):
@@ -244,3 +248,10 @@ def dashboard(request):
         return render(request, 'dashboard_custom/dashboard.html', context)
     else:
         return redirect('/')
+
+
+def terms_view(request):
+    return render(request, "pages/terms.html", {
+        "server_name": "PDL",  # ou qualquer nome que quiser
+        "last_updated": datetime.today().strftime("%d/%m/%Y"),
+    })

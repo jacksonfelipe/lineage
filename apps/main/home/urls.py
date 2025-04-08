@@ -18,7 +18,7 @@ urlpatterns = [
     path('public/news/', public_news_list, name='public_news_list'),
     path('public/news/<slug:slug>/', public_news_detail, name='public_news_detail'),
     path('public/faq/', public_faq_list, name='public_faq_list'),
-
+    path("public/terms/", terms_view, name="terms"),
 
     # Authentication
     path('accounts/register/', register_view, name="register"),

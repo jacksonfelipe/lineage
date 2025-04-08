@@ -1,0 +1,145 @@
+{% extends 'layouts/public.html' %}
+{% load static %}
+
+{% block extrahead %}
+<style>
+    .terms-page {
+        --terms-bg: #1a1a1a;
+        --terms-text: #d4d4d4;
+        --terms-title: #facc15;
+        --terms-subtitle: #fde68a;
+        --terms-border: #a16207;
+        --terms-glow: 0 0 8px #facc15;
+      
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--terms-text);
+      }
+      
+      .terms-page .bg-dark {
+        background-color: var(--terms-bg) !important;
+        border-color: var(--terms-border);
+        box-shadow: 0 0 25px rgba(250, 204, 21, 0.15);
+        border-radius: 1.5rem;
+        padding: 3rem;
+      }
+      
+      .terms-page h1,
+      .terms-page h2 {
+        text-shadow: var(--terms-glow);
+      }
+      
+      .terms-page h1 {
+        font-size: 2.25rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        color: var(--terms-title);
+      }
+      
+      .terms-page h2 {
+        font-size: 1.25rem;
+        color: var(--terms-subtitle);
+        margin-top: 2rem;
+        margin-bottom: 0.75rem;
+      }
+      
+      .terms-page p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+      }
+      
+      .terms-page ul {
+        list-style-type: disc;
+        padding-left: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      .terms-page ul li {
+        margin-bottom: 0.5rem;
+      }
+      
+      .terms-page strong {
+        color: var(--terms-subtitle);
+      }
+      
+      .terms-page .text-sm {
+        font-size: 0.875rem;
+      }
+      
+      .terms-page .text-end {
+        text-align: right;
+      }
+      
+      .terms-page .text-center {
+        text-align: center;
+      }
+      
+      .terms-page .text-gray-400 {
+        color: #9ca3af;
+      }
+      
+      .terms-page .italic {
+        font-style: italic;
+      }
+      
+      .terms-page .text-yellow-400 {
+        color: var(--terms-title);
+      }
+      
+      .terms-page .text-yellow-300 {
+        color: var(--terms-subtitle);
+      }
+          
+</style>
+{% endblock %}
+
+{% block title %}Termos e Condições | Lineage 2 {{ server_name }}{% endblock %}
+
+{% block content %}
+<div class="container my-5 px-3 px-md-5 terms-page">
+  <div class="bg-dark p-5 rounded-4 shadow-lg border border-yellow-700" style="background-color: var(--bg-section);">
+    <h1 class="text-3xl text-center mb-5 text-yellow-400" style="text-shadow: var(--glow);">🛡️ Termos e Condições de Uso</h1>
+    <p class="text-sm text-gray-400 text-end mb-4">Última atualização: {{ last_updated|default:"Abril de 2025" }}</p>
+
+    <h2 class="text-xl font-semibold text-yellow-300 mt-4 mb-2">1. Sobre o Servidor</h2>
+    <p>O <strong>Lineage 2 {{ server_name }}</strong> é um servidor privado, sem vínculos com a NCSoft. Criado por fãs e para fins recreativos.</p>
+
+    <h2 class="text-xl font-semibold text-yellow-300 mt-5 mb-2">2. Regras Gerais</h2>
+    <ul class="list-disc ps-4 space-y-1">
+      <li>Proibido uso de bots, cheats, exploits ou automações.</li>
+      <li>Contas compartilhadas são por sua conta e risco.</li>
+      <li>Atitudes tóxicas não serão toleradas.</li>
+      <li>Exploração de bugs será punida.</li>
+      <li>A Staff pode agir contra comportamentos nocivos.</li>
+    </ul>
+
+    <h2 class="text-xl font-semibold text-yellow-300 mt-5 mb-2">3. Contas e Segurança</h2>
+    <p>Você é responsável por sua conta. Use senhas seguras. Não nos responsabilizamos por perdas causadas por descuido.</p>
+
+    <h2 class="text-xl font-semibold text-yellow-300 mt-5 mb-2">4. Política de Doações</h2>
+    <p>Doações são voluntárias, sem reembolso, e ajudam na manutenção do servidor. Os benefícios podem mudar.</p>
+
+    <h2 class="text-xl font-semibold text-yellow-300 mt-5 mb-2">5. Propriedade Intelectual</h2>
+    <p>Lineage 2 é da NCSoft. Este servidor é feito por fãs e não possui fins lucrativos.</p>
+
+    <h2 class="text-xl font-semibold text-yellow-300 mt-5 mb-2">6. Responsabilidades da Staff</h2>
+    <p>A Staff visa manter o servidor justo e estável. Mudanças, resets ou manutenções podem ocorrer.</p>
+
+    <h2 class="text-xl font-semibold text-yellow-300 mt-5 mb-2">7. Penalidades</h2>
+    <p>Infrações podem resultar em:</p>
+    <ul class="list-disc ps-4 space-y-1">
+      <li>Advertência</li>
+      <li>Mute</li>
+      <li>Banimento</li>
+      <li>Perda de itens</li>
+    </ul>
+
+    <h2 class="text-xl font-semibold text-yellow-300 mt-5 mb-2">8. Alterações nos Termos</h2>
+    <p>Os termos podem mudar. Ao continuar jogando, você aceita as atualizações automaticamente.</p>
+
+    <h2 class="text-xl font-semibold text-yellow-300 mt-5 mb-2">9. Contato</h2>
+    <p>Fale conosco pelo <strong>Discord</strong>, e-mail ou fórum oficial em caso de dúvidas ou denúncias.</p>
+
+    <p class="text-center text-gray-400 mt-10 italic">Lineage 2 {{ server_name }} — Um mundo para verdadeiros aventureiros.</p>
+  </div>
+</div>
+{% endblock %}

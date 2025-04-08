@@ -101,9 +101,9 @@
             </div>
 
             <div class="form-check mb-3">
-              <input class="form-check-input" type="checkbox" id="terms">
+              <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
               <label class="form-check-label" for="terms">
-                Eu concordo com os <a href="#" class="text-white">termos e condições</a>
+                Eu concordo com os <a href="{% url 'terms' %}" class="text-white">termos e condições</a>
               </label>
             </div>
 
