@@ -30,11 +30,30 @@
   .btn-close-white:hover {
     opacity: 1;
   }
+
+  .modal-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    text-align: left;
+    padding: 20px;
+
+  }
+  
+  .class-img {
+    max-height: 250px;
+    width: auto;
+    flex-shrink: 0;
+  }
+  
+  .class-description {
+    max-width: 400px;
+  }
   
   .modal-body img {
-    border: 2px solid var(--gold);
-    border-radius: 12px;
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+    filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5));
     animation: fadeInUp 0.8s ease forwards;
   }
   
@@ -60,6 +79,15 @@
   
     .modal-body p {
       font-size: 0.95rem;
+    }
+
+    .modal-body {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .class-description {
+      max-width: 100%;
     }
   }
   

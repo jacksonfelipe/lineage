@@ -28,12 +28,28 @@ def index(request):
     'DragonReign'
     ]
     classes_info = [
-        {"name": "elf", "descricao": "Mestre em combates corpo a corpo."},
-        {"name": "human", "descricao": "Manipula elementos para causar dano."},
-        {"name": "dark_elf", "descricao": "Ágil e furtivo, mestre em armadilhas."},
-        {"name": "dwarfs", "descricao": "Ágil e furtivo, mestre em armadilhas."},
-        {"name": "orcs", "descricao": "Ágil e furtivo, mestre em armadilhas."}
+        {
+            "name": "elf",
+            "descricao": "Ágeis e com alta velocidade de ataque, os Elfos são especialistas em magias de cura, arco e flecha e combate corpo a corpo leve. Têm menos ataque que outras raças, mas compensam com velocidade e precisão."
+        },
+        {
+            "name": "human",
+            "descricao": "Versáteis e equilibrados, os Humanos têm um bom desempenho em todas as áreas: melee, magia e suporte. São o 'padrão' do jogo, com boa curva de crescimento."
+        },
+        {
+            "name": "dark_elf",
+            "descricao": "Especialistas em dano explosivo, tanto físico quanto mágico. São mais frágeis, mas causam muito dano em pouco tempo. Ótimos assassinos e magos ofensivos."
+        },
+        {
+            "name": "dwarfs",
+            "descricao": "Fortes e resistentes, os Anões são mestres em criação de itens (Crafting) e coleta de loot. Também têm grande poder físico e usam armaduras pesadas. Podem invocar autômatos (golems) para ajudar em guerras e caçadas."
+        },
+        {
+            "name": "orcs",
+            "descricao": "Possuem o maior poder físico e mágico bruto entre as raças, com grande resistência. São devotados a espíritos e têm habilidades únicas de suporte e ataque. Seus magos focam em buffs de força e resistência."
+        }
     ]
+
     return render(request, 'pages/index.html', {
         'clanes': clanes,
         'classes_info': classes_info
