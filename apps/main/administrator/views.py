@@ -27,40 +27,41 @@ def get_latest_notifications(request):
 
 @login_required
 def chat_room(request, group_name):
-    # Tenta encontrar a solicitação ou proposta com o protocolo correspondente
     solicitation = None
     type_chat = None
 
     try:
-        # Primeiro tenta buscar em CreditSolicitation
         solicitation = Solicitation.objects.get(protocol=group_name)
-        # Verificar se o usuário é participante da solicitação
-        is_participant = SolicitationParticipant.objects.filter(solicitation=solicitation, user=request.user).exists()
+        is_participant = SolicitationParticipant.objects.filter(
+            solicitation=solicitation, user=request.user
+        ).exists()
         type_chat = "Solicitação"
-
     except Solicitation.DoesNotExist:
-        # Se não for encontrado em nenhum dos dois, lança um erro 404
         raise Http404(f"Protocolo {group_name} não encontrado.")
 
-    # Se o usuário não for participante, retorna erro 404
+    # Verifica se o usuário é participante
     if not is_participant:
         raise Http404("Você não tem permissão para acessar esta sala de chat.")
 
-    # Tentar carregar a URL do avatar do usuário
+    # Verifica se o status é 'pending'
+    if solicitation.status != 'pending':
+        return render(request, 'errors/solicitation_closed.html', {
+            'solicitation': solicitation,
+            'status': solicitation.get_status_display(),  # Exibe 'Aprovado', 'Rejeitado', etc
+        })
+
     try:
         custom_imagem = '/decrypted-file/home/user/avatar/'
         avatar_url = custom_imagem + str(request.user.uuid) + '/'
     except (ValueError, AttributeError):
         avatar_url = static('assets/img/team/generic_user.png')
 
-    if solicitation.user is not None:
-        solicitation_name = str(solicitation.user.username).upper() + ' - ' + str(solicitation.user.email)
-    else:
-        solicitation_name = "Solicitação sem usuário..."
+    solicitation_name = (
+        str(solicitation.user.username).upper() + ' - ' + str(solicitation.user.email)
+        if solicitation.user else "Solicitação sem usuário..."
+    )
 
-    # Carregar mensagens anteriores
     messages = ChatGroup.objects.filter(group_name=group_name).order_by('timestamp')
-
     solicitation_context = 'do Usuário:'
 
     return render(request, 'pages/group.html', {

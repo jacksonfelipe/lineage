@@ -5,9 +5,12 @@ from .utils import validate_cpf, remove_cpf_mask
 from encrypted_fields.encrypted_fields import *
 from encrypted_fields.encrypted_files import *
 from utils.choices import *
+from django.core.validators import validate_email
 
 
 class User(BaseModel, AbstractUser):
+    email = models.EmailField(unique=True, verbose_name="email", validators=[validate_email])
+
     avatar = EncryptedImageField(upload_to="avatars", verbose_name="foto de perfil", null=True, blank=True)
     bio = EncryptedTextField(verbose_name='biografia', blank=True, null=True, max_length=500)
     cpf = EncryptedCharField(verbose_name='CPF', max_length=14, blank=True, null=True, validators=[validate_cpf])

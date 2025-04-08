@@ -8,9 +8,9 @@ from utils.choices import *
 
 class Notification(BaseModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
-    notification_type = EncryptedCharField(max_length=20, choices=NOTIFICATION_TYPES)
+    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
     message = EncryptedCharField(max_length=255)
-    viewed = EncryptedBooleanField(default=False)
+    viewed = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Notificação'
@@ -23,7 +23,7 @@ class Notification(BaseModel):
 class PublicNotificationView(BaseModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
-    viewed = EncryptedBooleanField(default=False)
+    viewed = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Visualização de Notificação Pública'

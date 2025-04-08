@@ -4,51 +4,64 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .models import Notification, PublicNotificationView
 from django.contrib.auth.decorators import permission_required
+from django.db.models import Q
 
 
 @login_required
 def get_notifications(request):
+    # Notificações privadas do usuário (exclui staff se user não for staff/superuser)
+    user_notifications = Notification.objects.filter(
+        user=request.user,
+        viewed=False
+    ).exclude(
+        notification_type='staff'
+    ).order_by('-created_at')
 
-    # Filtra as notificações do usuário atual que ainda não foram visualizadas
-    user_notifications = Notification.objects.filter(user=request.user, viewed=False).order_by('-created_at')
+    if request.user.is_staff or request.user.is_superuser:
+        # Se for staff/superuser, incluir também notificações staff pra ele
+        staff_notifications = Notification.objects.filter(
+            user=request.user,
+            notification_type='staff',
+            viewed=False
+        ).order_by('-created_at')
+        user_notifications = user_notifications | staff_notifications
 
-    # Busca todas as notificações públicas
+    # Notificações públicas
     public_notifications = Notification.objects.filter(user=None).order_by('-created_at')
-    
-    # Obtém as notificações públicas que o usuário visualizou
-    public_notifications_viewed = PublicNotificationView.objects.filter(user=request.user, viewed=True)
-    public_notifications_viewed_ids = [public_notification_view.notification.id for public_notification_view in public_notifications_viewed]
 
-    # lista que sera retornada no final
+    # Filtra notificações públicas staff apenas para usuários staff/superusers
+    if not (request.user.is_staff or request.user.is_superuser):
+        public_notifications = public_notifications.exclude(notification_type='staff')
+
+    # Visualizações públicas
+    public_notifications_viewed = PublicNotificationView.objects.filter(user=request.user, viewed=True)
+    public_notifications_viewed_ids = [pnv.notification.id for pnv in public_notifications_viewed]
+
     notifications_list = []
-    
-    # Adicionamos notificações do usuário atual
+
+    # Notificações privadas
     for notification in user_notifications:
-        notification_data = {
+        notifications_list.append({
             'id': notification.id,
             'message': notification.message,
             'type': notification.notification_type,
             'created_at': notification.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             'viewed': notification.viewed,
-            # Aqui você gera o URL para a visualização de detalhes da notificação
             'detail_url': reverse('notification:notification_detail', args=[notification.id])
-        }
-        notifications_list.append(notification_data)
-    
-    # Adicionamos notificações públicas
+        })
+
+    # Notificações públicas
     for notification in public_notifications:
-        if notification.id in public_notifications_viewed_ids:
-            notification_data = {
+        if notification.id not in public_notifications_viewed_ids:
+            notifications_list.append({
                 'id': notification.id,
                 'message': notification.message,
                 'type': notification.notification_type,
                 'created_at': notification.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-                'viewed': notification.viewed,
-            }
-            # Adiciona a URL para a página de detalhes da notificação
-            notification_data['detail_url'] = reverse('notification:notification_detail', args=[notification.id])
-            notifications_list.append(notification_data)
-    
+                'viewed': False,
+                'detail_url': reverse('notification:notification_detail', args=[notification.id])
+            })
+
     return JsonResponse({'notifications': notifications_list})
 
 
@@ -84,43 +97,68 @@ def clear_all_notifications(request):
 def notification_detail(request, pk):
     notification = get_object_or_404(Notification, pk=pk)
 
+    # Proteção: usuário comum tentando acessar notificação staff
+    if notification.notification_type == 'staff' and not (request.user.is_staff or request.user.is_superuser):
+        return JsonResponse({'error': 'Você não tem permissão para ver esta notificação.'}, status=403)
+
     data = {
-            'type': notification.notification_type,
-            'message': notification.message,
-            'created_at': notification.created_at.strftime('%Y-%m-%d %H:%M:%S')
-           }
-    
+        'type': notification.notification_type,
+        'message': notification.message,
+        'created_at': notification.created_at.strftime('%Y-%m-%d %H:%M:%S')
+    }
+
     if notification.user == request.user:
         notification.viewed = True
         notification.save()
-    
-    if notification.user == None:
-        # Verifica se existe uma marcação de visualização para notificação pública
-        public_notification_view = PublicNotificationView.objects.filter(user=request.user, notification=notification).first()
+
+    elif notification.user is None:
+        # Verifica se já existe visualização pública
+        public_notification_view = PublicNotificationView.objects.filter(
+            user=request.user,
+            notification=notification
+        ).first()
+
         if not public_notification_view:
-            PublicNotificationView.objects.create(user=request.user, notification=notification, viewed=True)
-    
+            PublicNotificationView.objects.create(
+                user=request.user,
+                notification=notification,
+                viewed=True
+            )
+
+    else:
+        # Caso o usuário tente acessar notificação privada de outro usuário
+        return JsonResponse({'error': 'Você não tem permissão para ver esta notificação.'}, status=403)
+
     return JsonResponse(data)
 
 
 @login_required
 def all_notifications(request):
-    # Busca todas as notificações do usuário
-    private_notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
-    
-    # Busca todas as notificações públicas
+    user = request.user
+
+    # Filtra notificações privadas do usuário
+    private_notifications = Notification.objects.filter(
+        user=user
+    ).order_by('-created_at')
+
+    # Se o usuário não é staff/superuser, removemos notificações staff
+    if not (user.is_staff or user.is_superuser):
+        private_notifications = private_notifications.exclude(notification_type='staff')
+
+    # Notificações públicas (user=None)
     public_notifications = Notification.objects.filter(user=None).order_by('-created_at')
-    
-    # Obtém as notificações públicas que o usuário visualizou
-    public_notifications_viewed = PublicNotificationView.objects.filter(user=request.user)
-    public_notifications_viewed_ids = [public_notification_view.notification.id for public_notification_view in public_notifications_viewed]
-    
-    # Marca as notificações públicas que o usuário visualizou
+
+    # Se não for staff/superuser, não verá as públicas tipo 'staff'
+    if not (user.is_staff or user.is_superuser):
+        public_notifications = public_notifications.exclude(notification_type='staff')
+
+    # Ver quais públicas já foram visualizadas
+    public_notifications_viewed = PublicNotificationView.objects.filter(user=user)
+    public_notifications_viewed_ids = {pnv.notification_id for pnv in public_notifications_viewed}
+
+    # Marcar na instância se a notificação pública foi visualizada ou não
     for notification in public_notifications:
-        if notification.id in public_notifications_viewed_ids:
-            notification.viewed = True
-        else:
-            notification.viewed = False
+        notification.viewed = notification.id in public_notifications_viewed_ids
 
     context = {
         'private_notifications': private_notifications,

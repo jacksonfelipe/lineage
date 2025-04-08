@@ -9,5 +9,5 @@ GENDER_CHOICES = [
 NOTIFICATION_TYPES = [
     ('user', 'User Notification'),
     ('system', 'System Notification'),
-    ('client', 'Client Notification'),
+    ('staff', 'Staff Notification'),
 ]

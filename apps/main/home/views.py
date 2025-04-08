@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import logout
+from utils.notifications import send_notification
 
 
 def index(request):
@@ -142,9 +143,17 @@ def register_view(request):
   if request.method == 'POST':
     form = RegistrationForm(request.POST)
     if form.is_valid():
-      print("Account created successfully!")
-      form.save()
-      return redirect('/accounts/login/')
+        user = form.save()
+        
+        # notificação de criação de conta
+        send_notification(
+            user=None,
+            notification_type='staff',
+            message=f'Usuário {user.username} de email {user.email} cadastrado com sucesso!',
+            created_by=None  # não há usuário autenticado ainda
+        )
+
+        return redirect('/accounts/login/')
     else:
       print("Registration failed!")
   else:
