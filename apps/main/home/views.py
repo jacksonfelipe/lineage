@@ -15,11 +15,28 @@ from utils.notifications import send_notification
 
 
 def index(request):
-    classes = ['elf', 'human', 'dark_elf', 'dwarfs', 'orcs']
-    clanes = ['BloodLegion', 'ShadowFang', 'Eternals', 'Immortals', 'DarkEmpire']
+    clanes = [
+    'BloodLegion',
+    'ShadowFang',
+    'Eternals',
+    'Immortals',
+    'DarkEmpire',
+    'NightWolves',
+    'IronVanguard',
+    'CelestialDawn',
+    'DoomBringers',
+    'DragonReign'
+    ]
+    classes_info = [
+        {"name": "elf", "descricao": "Mestre em combates corpo a corpo."},
+        {"name": "human", "descricao": "Manipula elementos para causar dano."},
+        {"name": "dark_elf", "descricao": "Ágil e furtivo, mestre em armadilhas."},
+        {"name": "dwarfs", "descricao": "Ágil e furtivo, mestre em armadilhas."},
+        {"name": "orcs", "descricao": "Ágil e furtivo, mestre em armadilhas."}
+    ]
     return render(request, 'pages/index.html', {
-        'classes': classes,
         'clanes': clanes,
+        'classes_info': classes_info
     })
 
 

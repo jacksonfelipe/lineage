@@ -1,103 +1,222 @@
 {% extends 'layouts/public.html' %}
 {% load static %}
 
+{% block extrahead %}
+<link type="text/css" href="{% static 'css/index.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
+
   <!-- Hero / Banner -->
-  <section class="hero" style="background-image: url('{% static 'assets/img/lineage2-bg.jpg' %}'); background-size: cover; background-position: center; padding: 120px 0; text-align: center; position: relative;">
-    <div class="hero-content text-white" style="position: relative; z-index: 1; max-width: 700px; margin: 0 auto;">
-      <h1 style="font-size: 3.5rem; color: var(--gold); margin-bottom: 20px;">Lineage 2 [NOME DO SERVIDOR]</h1>
-      <p style="font-size: 1.2rem; color: var(--light); margin-bottom: 30px;">Desafios Épicos. PvP Frenético. Uma Comunidade Viva.</p>
-      <a href="#download" class="btn-ruby">Jogar Agora</a>
-    </div>
-    <div style="content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 0;"></div>
-  </section>
+  <section class="hero" style="
+  background-image: url('{% static 'assets/img/lineage2-bg.jpg' %}');
+  background-size: cover;
+  background-position: center;
+  padding: 160px 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+">
+  <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.6)); backdrop-filter: blur(2px); z-index: 0;"></div>
 
-  <!-- Trailer / Gameplay -->
-  <section class="video-section" style="background-color: #111; padding: 60px 0; text-align: center;">
-    <div class="container">
-      <h2 style="color: var(--gold); margin-bottom: 30px;">Trailer Oficial</h2>
-      <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);">
-        <iframe src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen style="position: absolute; width: 100%; height: 100%; left: 0;"></iframe>
+  <div class="hero-content text-white" style="position: relative; z-index: 1; max-width: 800px; margin: 0 auto;">
+    <h1 style="font-size: 4rem; font-weight: bold; color: var(--gold); text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); margin-bottom: 20px;">
+      Lineage 2 PDL
+    </h1>
+    <p style="font-size: 1.4rem; color: var(--light); margin-bottom: 40px; font-style: italic;">
+      “Onde Lendas Nascem, Heróis Lutam e a Glória É Eterna.”
+    </p>
+    <a href="#download" class="btn-ruby" style="
+      padding: 15px 40px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(212,175,55,0.4);
+    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+      ⚔️ Jogar Agora
+    </a>
+  </div>
+
+  <div class="hero-overlay-glow" style="
+    position: absolute;
+    top: -100px;
+    left: -100px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,215,0,0.2), transparent 70%);
+    z-index: 0;
+    animation: glow 8s infinite ease-in-out alternate;
+  "></div>
+
+  <style>
+    @keyframes glow {
+      0% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+      100% { transform: translate(100px, 50px) scale(1.2); opacity: 0.1; }
+    }
+  </style>
+</section>
+
+<!-- Trailer / Gameplay -->
+<section class="trailer-section">
+  <div class="container text-center">
+    <h2 class="trailer-title">🎬 Trailer Oficial</h2>
+
+    <div class="video-wrapper">
+      <div class="video-overlay"></div>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <p class="trailer-description">Assista ao trailer e mergulhe no mundo épico do nosso servidor!</p>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features" style="padding: 100px 0; background-color: #1f1f1f; text-align: center; position: relative;">
+  <div class="container">
+    <h2 style="color: var(--gold); margin-bottom: 60px; font-size: 2.5rem; text-shadow: 0 0 10px rgba(212,175,55,0.3);">
+      O Que Torna Nosso Servidor Único?
+    </h2>
+    <div class="row justify-content-center">
+      <div class="col-md-4 mb-5">
+        <div style="background: #1a1a1a; padding: 40px 20px; border-radius: 15px; border: 1px solid rgba(212,175,55,0.3); transition: 0.3s; box-shadow: 0 0 15px rgba(0,0,0,0.5);" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          <div style="font-size: 2.5rem; margin-bottom: 20px; color: var(--gold);">⚔️</div>
+          <h3 style="color: #fff; margin-bottom: 10px;">PvP & Sieges</h3>
+          <p style="color: #ccc;">Domine castelos, lute por território e mostre sua força no campo de batalha.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-5">
+        <div style="background: #1a1a1a; padding: 40px 20px; border-radius: 15px; border: 1px solid rgba(212,175,55,0.3); transition: 0.3s; box-shadow: 0 0 15px rgba(0,0,0,0.5);" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          <div style="font-size: 2.5rem; margin-bottom: 20px; color: var(--gold);">📜</div>
+          <h3 style="color: #fff; margin-bottom: 10px;">Missões Personalizadas</h3>
+          <p style="color: #ccc;">Conteúdo exclusivo com recompensas únicas para jogadores dedicados.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-5">
+        <div style="background: #1a1a1a; padding: 40px 20px; border-radius: 15px; border: 1px solid rgba(212,175,55,0.3); transition: 0.3s; box-shadow: 0 0 15px rgba(0,0,0,0.5);" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          <div style="font-size: 2.5rem; margin-bottom: 20px; color: var(--gold);">🎉</div>
+          <h3 style="color: #fff; margin-bottom: 10px;">Eventos & Premiações</h3>
+          <p style="color: #ccc;">Participe de eventos semanais com itens raros e bônus poderosos.</p>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Features -->
-  <section class="features" id="features" style="padding: 80px 0; background-color: var(--bg-section); text-align: center;">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4 feature">
-          <h3 class="text-secondary">⚔️ PvP & Sieges</h3>
-          <p>Domine castelos, lute por território e mostre sua força no campo de batalha.</p>
-        </div>
-        <div class="col-md-4 feature">
-          <h3 class="text-secondary">📜 Missões Personalizadas</h3>
-          <p>Conteúdo exclusivo com recompensas únicas para jogadores dedicados.</p>
-        </div>
-        <div class="col-md-4 feature">
-          <h3 class="text-secondary">🎉 Eventos & Premiações</h3>
-          <p>Participe de eventos semanais com itens raros e bônus poderosos.</p>
+<!-- Classes Jogáveis -->
+<section style="background-color: #1a1a1a; padding: 80px 0; text-align: center;">
+  <div class="container">
+    <h2 style="color: var(--gold); margin-bottom: 50px; font-size: 2.5rem; text-shadow: 0 0 10px rgba(212,175,55,0.4);">
+      Escolha Sua Classe
+    </h2>
+    <div class="row justify-content-center">
+      {% for classe in classes_info %}
+      <div class="col-md-2 col-6 mb-4">
+        <div class="classe-card position-relative"
+             data-bs-toggle="modal"
+             data-bs-target="#modalClasse{{ forloop.counter }}"
+             style="background-color: #0d0d0d; padding: 15px; border: 1px solid rgba(212,175,55,0.2); border-radius: 12px; transition: 0.3s; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.5); cursor: pointer;">
+          <img src="{% static 'assets/img/l2/characters/'|add:classe.name|add:'.png' %}" alt="{{ classe }}" class="img-fluid mb-2" style="height: 300px; z-index: 1; position: relative;">
+          <p style="color: #ccc; font-weight: 500;">{{ classe.name }}</p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- Classes -->
-  <section style="background-color: #1a1a1a; padding: 60px 0; text-align: center;">
-    <div class="container">
-      <h2 style="color: var(--gold); margin-bottom: 30px;">Classes Jogáveis</h2>
-      <div class="row justify-content-center">
-        {% for classe in classes %}
-        <div class="col-md-2 col-6 mb-4">
-          <img src="{% static 'assets/img/l2/characters/'|add:classe|add:'.png' %}" alt="{{ classe }}" class="img-fluid mb-2" style="height: 160px;">
-          <p style="color: #ccc;">{{ classe }}</p>
-        </div>
       {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Modais das Classes -->
+{% for classe in classes_info %}
+<div class="modal fade" id="modalClasse{{ forloop.counter }}" tabindex="-1" aria-labelledby="modalClasseLabel{{ forloop.counter }}" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg-dark text-white border-secondary">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalClasseLabel{{ forloop.counter }}">{{ classe.name }}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="{% static 'assets/img/l2/characters/'|add:classe.name|add:'.png' %}" alt="{{ classe.name }}" class="img-fluid mb-4" style="max-height: 250px;">
+        <p style="color: #ccc;">{{ classe.descricao }}</p>
       </div>
     </div>
-  </section>
+  </div>
+</div>
+{% endfor %}
 
-  <!-- Ranking / Clãs -->
-  <section style="background-color: #121212; padding: 60px 0;">
-    <div class="container text-center">
-      <h2 style="color: var(--gold); margin-bottom: 30px;">Top Clãs</h2>
-      <div class="row justify-content-center">
-        {% for clan in clanes %}
-        <div class="col-md-2 col-6 mb-4">
-          <div style="background-color: #1f1f1f; padding: 15px; border-radius: 10px; color: var(--light); border: 1px solid var(--gold);">
-            <strong>{{ forloop.counter }}º</strong><br>
-            {{ clan }}
-          </div>
+<!-- Top Clãs Horizontal -->
+<section id="top-clans-section">
+  <div class="container text-center">
+    <h2>Top Clãs</h2>
+
+    <!-- Destaque para o 1º colocado -->
+    <div class="row justify-content-center mb-5">
+      <div class="col-md-4">
+        <div class="top-clan-first">
+          <h3>🏆 1º</h3>
+          <div>{{ clanes.0 }}</div>
         </div>
-      {% endfor %}
       </div>
     </div>
-  </section>
 
-  <!-- Contador de jogadores online -->
-  <section style="background-color: #0b0b0b; padding: 40px 0; text-align: center;">
-    <div class="container">
-      <h2 style="color: var(--gold);">Jogadores Online Agora</h2>
-      <p style="font-size: 2rem; color: #fff;">🔹 <span id="player-count">123</span> 🔹</p>
+    <!-- Demais em grupos de 3 -->
+    {% for clan in clanes|slice:"1:" %}
+      {% if forloop.first or forloop.counter0|divisibleby:3 %}
+        <div class="row justify-content-center mb-4">
+      {% endif %}
+
+      <div class="col-md-3 col-sm-6 mb-3">
+        <div class="top-clan-card">
+          <strong>{{ forloop.counter|add:"1" }}º</strong><br>
+          {{ clan }}
+        </div>
+      </div>
+
+      {% if forloop.counter0|add:"1"|divisibleby:3 or forloop.last %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Contador de jogadores online -->
+<section class="online-section">
+  <div class="container text-center">
+    <h2 class="online-title">🔥 Jogadores Online Agora</h2>
+    <div class="online-counter">
+      <span class="icon">🧙‍♂️</span>
+      <span id="player-count">123</span>
+      <span class="icon">🗡️</span>
     </div>
-  </section>
+    <p class="status-text">O campo de batalha está ativo!</p>
+  </div>
+</section>
 
   <!-- Download -->
   <section id="download" style="background-color: #121212; padding: 60px 0; text-align: center;">
     <div class="container">
-      <h2 style="color: var(--gold); margin-bottom: 20px;">Download & Instalação</h2>
+      <h2 class="online-title">Download & Instalação</h2>
       <p style="color: #ccc; margin-bottom: 30px;">Baixe agora o cliente e patch oficial e comece sua jornada em nosso servidor.</p>
-      <a href="#" class="btn btn-outline-light btn-lg me-3">Baixar Patch</a>
-      <a href="#" class="btn btn-outline-light btn-lg">Baixar Cliente</a>
+      <a href="#" class="btn highlight-btn btn-lg me-3">Baixar Patch</a>
+      <a href="#" class="btn highlight-btn btn-lg">Baixar Cliente</a>
     </div>
   </section>
 
   <!-- Comunidade -->
-  <section id="comunidade" style="background-color: #121212; padding: 60px 0; text-align: center;">
+  <section id="comunidade" style="background-color: #121212; padding: 60px 0; text-align: center; display: flex; ">
     <div class="container">
-      <h2 style="color: var(--gold); margin-bottom: 20px;">Junte-se à Comunidade</h2>
+      <h2 class="online-title">Junte-se à Comunidade</h2>
       <p style="color: #ccc; margin-bottom: 30px;">Conecte-se com outros jogadores, tire dúvidas e participe dos eventos via Discord.</p>
-      <a href="https://discord.gg/seulink" target="_blank" class="btn-ruby">Entrar no Discord</a>
+      <a href="#" target="_blank" class="custom-btn-ruby" style="max-width: 250px">Entrar no Discord</a>
     </div>
   </section>
+
+  <script>
+    document.querySelectorAll('.classe-card').forEach(card => {
+      card.addEventListener('click', function () {
+        this.classList.toggle('active');
+      });
+    });
+  </script>
+
 {% endblock %}

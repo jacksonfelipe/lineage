@@ -1,0 +1,259 @@
+.modal-content {
+    background-color: var(--bg-section);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    font-family: 'Cinzel', serif;
+    animation: fadeInUp 0.5s ease forwards;
+    color: var(--light);
+  }
+  
+  .modal-header {
+    border-bottom: 1px solid var(--gold);
+    background-color: rgba(0, 0, 0, 0.7);
+    box-shadow: inset 0 -1px 8px rgba(212, 175, 55, 0.2);
+  }
+  
+  .modal-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--gold);
+    text-shadow: 0 0 5px var(--gold);
+  }
+  
+  .btn-close-white {
+    filter: invert(1);
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+  }
+  
+  .btn-close-white:hover {
+    opacity: 1;
+  }
+  
+  .modal-body img {
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+    animation: fadeInUp 0.8s ease forwards;
+  }
+  
+  .modal-body p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--light);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+    animation: fadeInUp 1s ease forwards;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  /* Responsivo */
+  @media (max-width: 768px) {
+    .modal-title {
+      font-size: 1.4rem;
+    }
+  
+    .modal-body img {
+      max-height: 180px;
+    }
+  
+    .modal-body p {
+      font-size: 0.95rem;
+    }
+  }
+  
+  /* Sessão Geral */
+  #top-clans-section {
+    background-color: #121212;
+    padding: 60px 0;
+  }
+  
+  /* Título */
+  #top-clans-section h2 {
+    color: var(--gold);
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  }
+  
+  /* Card do 1º colocado */
+  .top-clan-first {
+    background: linear-gradient(145deg, #d4af37, #b8860b);
+    color: #000;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 25px var(--gold);
+    font-weight: bold;
+    transition: transform 0.3s ease;
+  }
+  
+  .top-clan-first:hover {
+    transform: scale(1.05);
+  }
+  
+  .top-clan-first h3 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  /* Cards dos outros clãs */
+  .top-clan-card {
+    background-color: #1f1f1f;
+    color: var(--light);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--gold);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .top-clan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  }
+  
+  .top-clan-card strong {
+    font-size: 1.2rem;
+    color: var(--gold);
+  }
+  
+  /* Seção do trailer */
+  .trailer-section {
+    background: url('/static/assets/img/backgrounds/trailer-bg.jpg') center center/cover no-repeat;
+    position: relative;
+    padding: 80px 0;
+    overflow: hidden;
+  }
+  
+  /* Título */
+  .trailer-title {
+    color: var(--gold);
+    font-size: 2.8rem;
+    margin-bottom: 40px;
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+    animation: fadeInDown 1s ease-out;
+  }
+  
+  /* Descrição */
+  .trailer-description {
+    color: #ccc;
+    margin-top: 20px;
+    font-size: 1.1rem;
+    animation: fadeInUp 1s ease-out;
+  }
+  
+  /* Wrapper do vídeo */
+  .video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+    animation: zoomIn 0.8s ease-out;
+  }
+  
+  /* Overlay escuro por cima do vídeo */
+  .video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+    pointer-events: none;
+  }
+  
+  /* Estilo do iframe */
+  .video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    border: none;
+    border-radius: 12px;
+  }
+  
+  /* Animações */
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes zoomIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  
+  /* Seção geral */
+.online-section {
+  background: radial-gradient(circle at center, #1a1a1a, #0b0b0b);
+  padding: 60px 0;
+  border-top: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+}
+
+/* Título */
+.online-title {
+  color: var(--gold);
+  font-size: 2.6rem;
+  margin-bottom: 25px;
+  text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+  animation: fadeInDown 1s ease-out;
+}
+
+/* Contador de jogadores */
+.online-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1f1f1f;
+  border: 2px solid var(--gold);
+  border-radius: 12px;
+  padding: 20px 40px;
+  font-size: 2.5rem;
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+  animation: pulse 2s infinite;
+}
+
+/* Ícones */
+.online-counter .icon {
+  margin: 0 15px;
+  font-size: 2rem;
+}
+
+/* Texto abaixo */
+.status-text {
+  color: #bbb;
+  margin-top: 20px;
+  font-style: italic;
+  font-size: 1.1rem;
+  animation: fadeInUp 1s ease-out;
+}
+
+/* Animações */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
+  50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(212, 175, 55, 0.6); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

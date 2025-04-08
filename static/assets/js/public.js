@@ -1,12 +1,16 @@
-const year = new Date().getFullYear();
-document.getElementById('footer-year').innerHTML = `&copy; ${year} Lineage 2 [NOME DO SERVIDOR]. Todos os direitos reservados.`;
+// Atualiza o ano no rodapé
+document.getElementById("footer-year").textContent = new Date().getFullYear();
 
+// Corrige o menu toggle
 function toggleMenu() {
-  const menu = document.getElementById('customMenu');
+  const menu = document.getElementById('mobile-menu');
   menu.classList.toggle('show');
-  }
+}
 
-  function closeMenu() {
-    const menu = document.getElementById('customMenu');
-    menu.classList.remove('show');
-  }
+function closeMenu() {
+  const menu = document.getElementById('mobile-menu');
+  menu.classList.remove('show');
+}
+
+// Evento do botão
+document.getElementById('menu-toggle').addEventListener('click', toggleMenu);
