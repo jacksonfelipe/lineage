@@ -83,6 +83,20 @@
                 Meu Perfil
               </a>
 
+              {% if request.user.is_staff %}
+              <div role="separator" class="dropdown-divider my-1"></div>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'server:api_config_panel' %}">
+                <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M11.3 1.046a1 1 0 011.4 0l1.8 1.8a1 1 0 010 1.4L6.207 12.54a1 1 0 01-.516.27l-3.286.657a.5.5 0 01-.588-.588l.657-3.286a1 1 0 01.27-.516L11.3 1.046zM4.5 13l2.5-.5.5-2.5-1.5-1.5-2.5.5-.5 2.5L4.5 13z"
+                    clip-rule="evenodd" />
+                </svg>
+                Config
+              </a>
+              {% endif %}
+              
+
               <div role="separator" class="dropdown-divider my-1"></div>
 
               <a class="dropdown-item d-flex align-items-center" href="{% url 'wallet:dashboard' %}">

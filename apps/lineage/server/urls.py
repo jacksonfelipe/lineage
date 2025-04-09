@@ -19,4 +19,6 @@ urlpatterns = [
     path("api/siege/", views.siege, name="api_siege"),
     path("api/siege-participants/<int:castle_id>/", views.siege_participants, name="api_siege_participants"),
     path("api/boss-jewel-locations/", views.boss_jewel_locations, name="api_boss_jewel_locations"),
+
+    path("server/api-config/", views.api_config_panel, name="api_config_panel"),
 ]
