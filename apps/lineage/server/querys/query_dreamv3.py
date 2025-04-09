@@ -133,15 +133,6 @@ class LineageServices:
 
     @staticmethod
     @cache_lineage_result
-    def log_service(acc, cid, key, value, price):
-        sql = f"""
-            INSERT INTO site_log_services (log_account, log_cid, log_key, log_value, log_price, log_date)
-            VALUES ('{acc}', '{cid}', '{key}', '{value}', '{price}', NOW())
-        """
-        return LineageDB().execute(sql)
-
-    @staticmethod
-    @cache_lineage_result
     def check_name_exists(name):
         sql = f"SELECT * FROM characters WHERE char_name = '{name}' LIMIT 1"
         return LineageDB().select(sql)
@@ -187,12 +178,6 @@ class LineageServices:
     def delete_shortcuts(cid):
         sql = f"DELETE FROM character_shortcuts WHERE charId = '{cid}' AND class_index = '0'"
         return LineageDB().execute(sql)
-
-    @staticmethod
-    @cache_lineage_result
-    def list_classes_skills(classes):
-        sql = f"SELECT skill_id, MAX(level) AS level, nome FROM site_skills_classes WHERE class IN ({classes}) GROUP BY skill_id"
-        return LineageDB().select(sql)
 
     @staticmethod
     @cache_lineage_result
