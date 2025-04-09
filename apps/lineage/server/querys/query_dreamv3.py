@@ -8,7 +8,7 @@ class LineageStats:
     @cache_lineage_result(timeout=300)
     def players_online():
         sql = "SELECT COUNT(*) AS quant FROM characters WHERE online > 0 AND accesslevel = '0'"
-        return LineageDB.query(sql)
+        return LineageDB().select(sql, use_cache=True)
 
     @staticmethod
     @cache_lineage_result(timeout=300)
@@ -21,7 +21,7 @@ class LineageStats:
             ORDER BY pvpkills DESC, pkkills DESC, onlinetime DESC, char_name ASC
             LIMIT {limit}
         """
-        return LineageDB.query(sql)
+        return LineageDB().select(sql, use_cache=True)
 
     @staticmethod
     @cache_lineage_result(timeout=300)
@@ -34,7 +34,7 @@ class LineageStats:
             ORDER BY pkkills DESC, pvpkills DESC, onlinetime DESC, char_name ASC
             LIMIT {limit}
         """
-        return LineageDB.query(sql)
+        return LineageDB().select(sql, use_cache=True)
 
     @staticmethod
     @cache_lineage_result(timeout=300)
@@ -47,7 +47,7 @@ class LineageStats:
             ORDER BY onlinetime DESC, pvpkills DESC, pkkills DESC, char_name ASC
             LIMIT {limit}
         """
-        return LineageDB.query(sql)
+        return LineageDB().select(sql, use_cache=True)
 
     @staticmethod
     @cache_lineage_result(timeout=300)
@@ -61,7 +61,7 @@ class LineageStats:
             ORDER BY level DESC, exp DESC, onlinetime DESC, char_name ASC
             LIMIT {limit}
         """
-        return LineageDB.query(sql)
+        return LineageDB().select(sql, use_cache=True)
 
     @staticmethod
     @cache_lineage_result(timeout=300)
@@ -94,4 +94,4 @@ class LineageStats:
             ORDER BY adenas DESC, onlinetime DESC, char_name ASC
             LIMIT {limit}
         """
-        return LineageDB.query(sql)
+        return LineageDB().select(sql, use_cache=True)

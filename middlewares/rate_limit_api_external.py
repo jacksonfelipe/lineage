@@ -34,39 +34,37 @@ class RateLimitMiddleware:
         return self.get_response(request)
 
     def process_request(self, request):
-        """
-        Processa o rate limit para URLs configuradas.
-        """
         logger.debug("Middleware foi chamada para verificar rate limit")
         
         for path, config in self.URL_RATE_LIMITS.items():
             logger.debug(f"Checking path {request.path} against {path}")
             if request.path.rstrip('/') == path.rstrip('/'):
 
+                method = config.get("method", "GET")
+
                 was_limited = is_ratelimited(
                     request=request,
                     group=config["group"],
                     key=config["key"],
                     rate=config["rate"],
-                    method='POST',
+                    method=method,
                     increment=True,
                 )
 
                 if was_limited:
                     logger.warning(f"Rate limit exceeded for path {path}")
-                    
-                    # Calcula o tempo restante
+
                     usage = get_usage(
                         request=request,
                         group=config["group"],
                         key=config["key"],
                         rate=config["rate"],
-                        method=config.get("method", "POST"),
-                        increment=True
+                        method=method,
+                        increment=False
                     )
 
                     reset_time = usage['time_left']
-                    
+
                     return JsonResponse(
                         {"error": "Rate limit exceeded", "retry_after": reset_time},
                         status=429

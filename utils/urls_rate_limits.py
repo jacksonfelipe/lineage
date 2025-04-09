@@ -1,3 +1,7 @@
 URL_RATE_LIMITS_DICT = {
-    'api/example/': {'rate': '60/m', 'key': 'ip', 'group': 'public-login'},  # 60 requisições por minuto por IP
+    '/app/server/api/players-online/': {'rate': '30/m', 'key': 'ip', 'group': 'public-api'},
+    '/app/server/api/top-pvp/':       {'rate': '30/m', 'key': 'ip', 'group': 'public-api'},
+    '/app/server/api/top-pk/':        {'rate': '30/m', 'key': 'ip', 'group': 'public-api'},
+    '/app/server/api/top-clan/':      {'rate': '30/m', 'key': 'ip', 'group': 'public-api'},
+    '/app/server/api/top-rich/':      {'rate': '30/m', 'key': 'ip', 'group': 'public-api'},
 }
