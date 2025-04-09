@@ -70,11 +70,11 @@ class LineageStats:
 
     @staticmethod
     @cache_lineage_result(timeout=300)
-    def top_adena(limit=10, adn_billion_item=0):
+    def top_adena(limit=10, adn_billion_item=0, value_item=1000000):
         part1 = ""
         if adn_billion_item != 0:
             part1 = f"""
-                IFNULL((SELECT (SUM(I2.amount) * 1000000000)
+                IFNULL((SELECT (SUM(I2.amount) * {value_item})
                         FROM items AS I2
                         WHERE I2.owner_id = C.obj_Id AND I2.item_type = '{adn_billion_item}'
                         GROUP BY I2.owner_id), 0) +
@@ -100,12 +100,216 @@ class LineageStats:
             LIMIT {limit}
         """
         return LineageDB().select(sql, use_cache=True)
+    
+    @staticmethod
+    @cache_lineage_result(timeout=300)
+    def top_clans(limit):
+        sql = f"""
+            SELECT
+                D.name AS clan_name,
+                C.clan_level,
+                C.reputation_score,
+                A.ally_name,
+                P.char_name,
+                (SELECT COUNT(*) FROM characters WHERE clanid = C.clan_id) AS membros
+            FROM
+                clan_data AS C
+            LEFT JOIN
+                clan_subpledges AS D ON D.clan_id = C.clan_id AND D.type = '0'
+            LEFT JOIN
+                ally_data AS A ON A.ally_id = C.ally_id
+            LEFT JOIN
+                characters AS P ON P.obj_Id = D.leader_id
+            ORDER BY
+                C.clan_level DESC, C.reputation_score DESC, membros DESC
+            LIMIT {limit}
+        """
+        return LineageDB().select(sql)
+
+    @staticmethod
+    @cache_lineage_result(timeout=300)
+    def olympiad_ranking():
+        sql = """
+            SELECT 
+                C.char_name, 
+                C.online, 
+                D.name AS clan_name, 
+                CS.class_id AS base, 
+                O.points_current AS olympiad_points
+            FROM
+                oly_nobles AS O
+            LEFT JOIN
+                characters AS C ON C.obj_Id = O.char_id
+            LEFT JOIN
+                clan_subpledges AS D ON D.clan_id = C.clanid AND D.type = '0'
+            LEFT JOIN
+                character_subclasses AS CS ON CS.char_obj_id = C.obj_Id AND CS.isBase = '1'
+            ORDER BY points_current DESC
+        """
+        return LineageDB().select(sql)
+
+    @staticmethod
+    @cache_lineage_result(timeout=300)
+    def olympiad_all_heroes():
+        sql = """
+            SELECT 
+                C.char_name, 
+                C.online, 
+                D.name AS clan_name, 
+                A.ally_name, 
+                CS.class_id AS base, 
+                H.count
+            FROM
+                oly_heroes AS H
+            LEFT JOIN
+                characters AS C ON C.obj_Id = H.char_id
+            LEFT JOIN
+                character_subclasses AS CS ON CS.char_obj_id = C.obj_Id AND CS.isBase = '1'
+            LEFT JOIN
+                clan_subpledges AS D ON D.clan_id = C.clanid AND D.type = '0'
+            LEFT JOIN
+                clan_data AS CLAN ON CLAN.clan_id = C.clanid
+            LEFT JOIN
+                ally_data AS A ON A.ally_id = CLAN.clan_id
+            WHERE
+                H.played > 0 AND H.count > 0
+            ORDER BY count DESC, base ASC, char_name ASC
+        """
+        return LineageDB().select(sql)
+
+    @staticmethod
+    @cache_lineage_result(timeout=300)
+    def olympiad_current_heroes():
+        sql = """
+            SELECT 
+                C.char_name, 
+                C.online, 
+                D.name AS clan_name, 
+                A.ally_name, 
+                CS.class_id AS base 
+            FROM
+                oly_heroes AS H
+            LEFT JOIN
+                characters AS C ON C.obj_Id = H.char_id
+            LEFT JOIN
+                character_subclasses AS CS ON CS.char_obj_id = C.obj_Id AND CS.isBase = '1'
+            LEFT JOIN
+                clan_subpledges AS D ON D.clan_id = C.clanid AND D.type = '0'
+            LEFT JOIN
+                clan_data AS CLAN ON CLAN.clan_id = C.clanid
+            LEFT JOIN
+                ally_data AS A ON A.ally_id = CLAN.clan_id
+            WHERE
+                H.played > 0 AND H.count > 0
+            ORDER BY base ASC
+        """
+        return LineageDB().select(sql)
+
+    @staticmethod
+    @cache_lineage_result(timeout=300)
+    def grandboss_status():
+        sql = """
+            SELECT 
+                B.bossId AS boss_id, 
+                B.respawnDate AS respawn, 
+                N.name, 
+                N.level
+            FROM
+                epic_boss_spawn AS B
+            INNER JOIN
+                site_bosses AS N ON N.id = B.bossId
+            ORDER BY respawn DESC, level DESC, name ASC
+        """
+        return LineageDB().select(sql)
+
+    @staticmethod
+    @cache_lineage_result(timeout=300)
+    def raidboss_status():
+        sql = """
+            SELECT 
+                B.id AS boss_id, 
+                B.respawn_delay AS respawn, 
+                N.name, 
+                N.level
+            FROM
+                raidboss_status AS B
+            INNER JOIN
+                site_bosses AS N ON N.id = B.id
+            ORDER BY respawn DESC, level DESC, name ASC
+        """
+        return LineageDB().select(sql)
+
+    @staticmethod
+    @cache_lineage_result(timeout=300)
+    def siege():
+        sql = """
+            SELECT
+                W.id, 
+                W.name, 
+                W.siege_date AS sdate, 
+                W.treasury AS stax, 
+                P.char_name, 
+                CS.name AS clan_name, 
+                A.ally_name
+            FROM
+                castle AS W
+            LEFT JOIN
+                clan_data AS C ON C.hasCastle = W.id
+            LEFT JOIN
+                clan_subpledges AS CS ON CS.clan_id = C.clan_id AND CS.type = '0'
+            LEFT JOIN
+                ally_data AS A ON A.ally_id = C.ally_id
+            LEFT JOIN
+                characters AS P ON P.obj_Id = CS.leader_id
+        """
+        return LineageDB().select(sql)
+
+    @staticmethod
+    @cache_lineage_result(timeout=300)
+    def siege_participants(castle_id):
+        sql = f"""
+            SELECT
+                S.type, 
+                C.name AS clan_name
+            FROM
+                siege_clans AS S
+            LEFT JOIN
+                clan_subpledges AS C ON C.clan_id = S.clan_id AND C.type = '0'
+            WHERE
+                S.residence_id = '{castle_id}'
+        """
+        return LineageDB().select(sql)
+
+    @staticmethod
+    @cache_lineage_result(timeout=300)
+    def boss_jewel_locations(boss_jewel_ids):
+        sql = f"""
+            SELECT
+                I.owner_id, 
+                I.item_type AS item_id, 
+                SUM(I.amount) AS count, 
+                C.char_name, 
+                P.name AS clan_name
+            FROM
+                items AS I
+            INNER JOIN
+                characters AS C ON C.obj_Id = I.owner_id
+            LEFT JOIN
+                clan_subpledges AS P ON P.clan_id = C.clanid AND P.type = '0'
+            WHERE
+                I.item_type IN ({boss_jewel_ids})
+            GROUP BY
+                I.owner_id, C.char_name, P.name, I.item_type
+            ORDER BY
+                count DESC, C.char_name ASC
+        """
+        return LineageDB().select(sql)
 
 
 class LineageServices:
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def find_chars(login):
         sql = f"""
             SELECT
@@ -126,67 +330,67 @@ class LineageServices:
         return LineageDB().select(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def check_char(acc, cid):
         sql = f"SELECT * FROM characters WHERE obj_id = '{cid}' AND account_name = '{acc}' LIMIT 1"
         return LineageDB().select(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def check_name_exists(name):
         sql = f"SELECT * FROM characters WHERE char_name = '{name}' LIMIT 1"
         return LineageDB().select(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def change_nickname(acc, cid, name):
         sql = f"UPDATE characters SET char_name = '{name}' WHERE obj_id = '{cid}' AND account_name = '{acc}' LIMIT 1"
         return LineageDB().execute(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def change_sex(acc, cid, sex):
         sql = f"UPDATE characters SET sex = '{sex}' WHERE obj_Id = '{cid}' AND account_name = '{acc}' LIMIT 1"
         return LineageDB().execute(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def unstuck(acc, cid, x, y, z):
         sql = f"UPDATE characters SET x = '{x}', y = '{y}', z = '{z}' WHERE obj_id = '{cid}' AND account_name = '{acc}' LIMIT 1"
         return LineageDB().execute(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def delete_skills(cid):
         sql = f"DELETE FROM character_skills WHERE charId = '{cid}' AND class_index = '0'"
         return LineageDB().execute(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def delete_skills_save(cid):
         sql = f"DELETE FROM character_skills_save WHERE charId = '{cid}' AND class_index = '0'"
         return LineageDB().execute(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def delete_hennas(cid):
         sql = f"DELETE FROM character_hennas WHERE charId = '{cid}' AND class_index = '0'"
         return LineageDB().execute(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def delete_shortcuts(cid):
         sql = f"DELETE FROM character_shortcuts WHERE charId = '{cid}' AND class_index = '0'"
         return LineageDB().execute(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def add_skills(new_skills_values):
         sql = f"INSERT INTO character_skills VALUES {new_skills_values}"
         return LineageDB().execute(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def update_class_in_olympiad(char_class, cid):
         sql = f"UPDATE olympiad_nobles SET class_id = '{char_class}' WHERE char_id = '{cid}'"
         return LineageDB().execute(sql)
@@ -208,34 +412,34 @@ class LineageServices:
         return LineageDB().execute(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def move_all_paperdoll(cid):
         sql = f"UPDATE items SET loc = 'INVENTORY' WHERE owner_id = '{cid}' AND loc = 'PAPERDOLL'"
         return LineageDB().execute(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def check_has_class_in_sub(cid, classes):
         sql = f"SELECT * FROM character_subclasses WHERE charId = '{cid}' AND class_id IN ({classes}) LIMIT 1"
         return LineageDB().select(sql)
-
+    
 
 class LineageAccount:
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def check_login_exists(login):
         sql = f"SELECT * FROM accounts WHERE login = '{login}' LIMIT 1"
         return LineageDB().select(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def check_email_exists(email):
         sql = f"SELECT login, email FROM accounts WHERE email = '{email}'"
         return LineageDB().select(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def register(login, password, access_level, email):
         hashed = base64.b64encode(hashlib.sha1(password.encode()).digest()).decode()
         sql = f"""
@@ -245,7 +449,7 @@ class LineageAccount:
         return LineageDB().execute(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def update_password(password, login):
         hashed = base64.b64encode(hashlib.sha1(password.encode()).digest()).decode()
         sql = f"""
@@ -255,7 +459,7 @@ class LineageAccount:
         return LineageDB().execute(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def update_password_group(password, logins_list):
         if not logins_list:
             return False
@@ -268,7 +472,7 @@ class LineageAccount:
         return LineageDB().execute(sql)
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def update_access_level(access, login):
         sql = f"""
             UPDATE accounts SET accessLevel = '{access}'
@@ -280,13 +484,13 @@ class LineageAccount:
 class TransferFromWalletToChar:
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def find_char(account: str, char_name: str):
         query = "SELECT * FROM characters WHERE account_name = %s AND char_name = %s"
         return LineageDB().select(query, (account, char_name))
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def search_coin(char_name: str, coin_id: int):
         query = """
             SELECT i.* FROM items i
@@ -296,7 +500,7 @@ class TransferFromWalletToChar:
         return LineageDB().select(query, (char_name, coin_id))
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def insert_coin(char_name: str, coin_id: int, amount: int):
         db = LineageDB()
         
@@ -325,7 +529,7 @@ class TransferFromWalletToChar:
 class TransferFromCharToWallet:
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def find_char(account, char_id):
         query = """
             SELECT online, char_name FROM characters 
@@ -334,7 +538,7 @@ class TransferFromCharToWallet:
         return LineageDB.select(query, (account, char_id))
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def check_ingame_coin(coin_id, char_id):
         query = """
             SELECT count FROM items 
@@ -343,7 +547,7 @@ class TransferFromCharToWallet:
         return LineageDB.select(query, (char_id, coin_id))
 
     @staticmethod
-    @cache_lineage_result
+    @cache_lineage_result(timeout=300)
     def remove_ingame_coin(coin_id, count, char_id):
         query = """
             UPDATE items 
