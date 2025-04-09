@@ -78,6 +78,8 @@ INSTALLED_APPS = [
     "apps.main.solicitation",
 
     "apps.lineage.server",
+    "apps.lineage.wallet",
+    "apps.lineage.payment",
 ]
 
 # =========================== MIDDLEWARE CONFIGS ===========================
