@@ -9,7 +9,7 @@
 
   <!-- Hero / Banner -->
   <section class="hero" style="
-  background-image: url('{% static 'assets/img/lineage2-bg.jpg' %}');
+  background-image: url('{% if configuracao %}{{ configuracao.imagem_banner.url }}{% else %}{% static 'assets/img/lineage2-bg.jpg' %}{% endif %}');
   background-size: cover;
   background-position: center;
   padding: 160px 0;
@@ -21,10 +21,18 @@
 
   <div class="hero-content text-white" style="position: relative; z-index: 1; max-width: 800px; margin: 0 auto;">
     <h1 style="font-size: 4rem; font-weight: bold; color: var(--gold); text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); margin-bottom: 20px;">
-      Lineage 2 PDL
+      {% if configuracao %}
+          {{ configuracao.nome_servidor }}
+        {% else %}
+          Lineage 2 PDL
+        {% endif %}
     </h1>
     <p style="font-size: 1.4rem; color: var(--light); margin-bottom: 40px; font-style: italic;">
-      “Onde Lendas Nascem, Heróis Lutam e a Glória É Eterna.”
+      {% if configuracao %}
+          "{{ configuracao.descricao_servidor }}"
+        {% else %}
+          "Onde Lendas Nascem, Heróis Lutam e a Glória É Eterna."
+        {% endif %}
     </p>
     <a href="#download" class="btn-ruby" style="
       padding: 15px 40px;
@@ -63,7 +71,7 @@
 
     <div class="video-wrapper">
       <div class="video-overlay"></div>
-      <iframe src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/{% if configuracao and configuracao.trailer_video_id %}{{ configuracao.trailer_video_id }}{% else %}VIDEO_ID{% endif %}" frameborder="0" allowfullscreen></iframe>
     </div>
 
     <p class="trailer-description">Assista ao trailer e mergulhe no mundo épico do nosso servidor!</p>
@@ -154,7 +162,14 @@
       <div class="col-md-4">
         <div class="top-clan-first">
           <h3>🏆 1º</h3>
-          <div>{{ clanes.0 }}</div>
+          <div>
+            <strong>Clã:</strong> {{ clanes.0.clan_name }}<br>
+            <strong>Nível:</strong> {{ clanes.0.clan_level }}<br>
+            <strong>Pontuação de Reputação:</strong> {{ clanes.0.reputation_score }}<br>
+            <strong>Aliança:</strong> {{ clanes.0.ally_name|default:"Nenhuma" }}<br>
+            <strong>Personagem:</strong> {{ clanes.0.char_name }}<br>
+            <strong>Membros:</strong> {{ clanes.0.membros }}
+          </div>
         </div>
       </div>
     </div>
@@ -168,7 +183,12 @@
       <div class="col-md-3 col-sm-6 mb-3">
         <div class="top-clan-card">
           <strong>{{ forloop.counter|add:"1" }}º</strong><br>
-          {{ clan }}
+          <strong>Clã:</strong> {{ clan.clan_name }}<br>
+          <strong>Nível:</strong> {{ clan.clan_level }}<br>
+          <strong>Pontuação de Reputação:</strong> {{ clan.reputation_score }}<br>
+          <strong>Aliança:</strong> {{ clan.ally_name|default:"Nenhuma" }}<br>
+          <strong>Personagem:</strong> {{ clan.char_name }}<br>
+          <strong>Membros:</strong> {{ clan.membros }}
         </div>
       </div>
 
@@ -179,13 +199,14 @@
   </div>
 </section>
 
+
 <!-- Contador de jogadores online -->
 <section class="online-section">
   <div class="container text-center">
-    <h2 class="online-title">🔥 Jogadores Online Agora</h2>
+    <h2 class="online-title">{% if configuracao %}{{ configuracao.jogadores_online_texto }}{% else %}jogadores online Agora{% endif %}</h2>
     <div class="online-counter">
       <span class="icon">🧙‍♂️</span>
-      <span id="player-count">123</span>
+      <span id="player-count">{{ online }}</span>
       <span class="icon">🗡️</span>
     </div>
     <p class="status-text">O campo de batalha está ativo!</p>
@@ -197,17 +218,17 @@
     <div class="container">
       <h2 class="online-title">Download & Instalação</h2>
       <p style="color: #ccc; margin-bottom: 30px;">Baixe agora o cliente e patch oficial e comece sua jornada em nosso servidor.</p>
-      <a href="#" class="btn highlight-btn btn-lg me-3">Baixar Patch</a>
-      <a href="#" class="btn highlight-btn btn-lg">Baixar Cliente</a>
+      <a href="{% if configuracao %}{{ configuracao.link_patch }}{% else %}#{% endif %}" class="btn highlight-btn btn-lg me-3">Baixar Patch</a>
+      <a href="{% if configuracao %}{{ configuracao.link_cliente }}{% else %}#{% endif %}" class="btn highlight-btn btn-lg">Baixar Cliente</a>
     </div>
   </section>
 
   <!-- Comunidade -->
-  <section id="comunidade" style="background-color: #121212; padding: 60px 0; text-align: center; display: flex; ">
+  <section id="comunidade" style="background-color: #121212; padding: 60px 0; text-align: center; display: flex;">
     <div class="container">
       <h2 class="online-title">Junte-se à Comunidade</h2>
       <p style="color: #ccc; margin-bottom: 30px;">Conecte-se com outros jogadores, tire dúvidas e participe dos eventos via Discord.</p>
-      <a href="#" target="_blank" class="custom-btn-ruby" style="max-width: 250px">Entrar no Discord</a>
+      <a href="{% if configuracao %}{{ configuracao.link_discord }}{% else %}#{% endif %}" target="_blank" class="custom-btn-ruby" style="max-width: 250px">Entrar no Discord</a>
     </div>
   </section>
 

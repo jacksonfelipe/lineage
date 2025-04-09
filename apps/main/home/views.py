@@ -1,4 +1,5 @@
 from .models import *
+import json
 from django.apps import apps
 from django.http import HttpResponse
 from django.core.paginator import Paginator
@@ -13,46 +14,25 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import logout
 from utils.notifications import send_notification
 
+from apps.lineage.server.querys.query_dreamv3 import LineageStats
+from apps.lineage.server.models import IndexConfig
+
+
+with open('utils/data/index.json', 'r', encoding='utf-8') as file:
+        data_index = json.load(file)
+
 
 def index(request):
-    clanes = [
-    'BloodLegion',
-    'ShadowFang',
-    'Eternals',
-    'Immortals',
-    'DarkEmpire',
-    'NightWolves',
-    'IronVanguard',
-    'CelestialDawn',
-    'DoomBringers',
-    'DragonReign'
-    ]
-    classes_info = [
-        {
-            "name": "elf",
-            "descricao": "Ágeis e com alta velocidade de ataque, os Elfos são especialistas em magias de cura, arco e flecha e combate corpo a corpo leve. Têm menos ataque que outras raças, mas compensam com velocidade e precisão."
-        },
-        {
-            "name": "human",
-            "descricao": "Versáteis e equilibrados, os Humanos têm um bom desempenho em todas as áreas: melee, magia e suporte. São o 'padrão' do jogo, com boa curva de crescimento."
-        },
-        {
-            "name": "dark_elf",
-            "descricao": "Especialistas em dano explosivo, tanto físico quanto mágico. São mais frágeis, mas causam muito dano em pouco tempo. Ótimos assassinos e magos ofensivos."
-        },
-        {
-            "name": "dwarfs",
-            "descricao": "Fortes e resistentes, os Anões são mestres em criação de itens (Crafting) e coleta de loot. Também têm grande poder físico e usam armaduras pesadas. Podem invocar autômatos (golems) para ajudar em guerras e caçadas."
-        },
-        {
-            "name": "orcs",
-            "descricao": "Possuem o maior poder físico e mágico bruto entre as raças, com grande resistência. São devotados a espíritos e têm habilidades únicas de suporte e ataque. Seus magos focam em buffs de força e resistência."
-        }
-    ]
+    clanes = LineageStats.top_clans(limit=10)
+    online = LineageStats.players_online()
+    config = IndexConfig.objects.first()
+    classes_info = data_index['classes']
 
     return render(request, 'pages/index.html', {
         'clanes': clanes,
-        'classes_info': classes_info
+        'classes_info': classes_info,
+        'online': online[0]['quant'],
+        'configuracao': config
     })
 
 

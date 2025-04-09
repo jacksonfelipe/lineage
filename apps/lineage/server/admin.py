@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ApiEndpointToggle
+from .models import ApiEndpointToggle, IndexConfig
 from core.admin import BaseModelAdmin
 
 
@@ -34,3 +34,23 @@ class ApiEndpointToggleAdmin(BaseModelAdmin):
     def has_delete_permission(self, request, obj=None):
         # Impede a exclusão do registro
         return False
+
+
+@admin.register(IndexConfig)
+class IndexConfigAdmin(BaseModelAdmin):
+    list_display = ('nome_servidor', 'descricao_servidor', 'link_patch', 'link_cliente', 'link_discord', 'trailer_video_id', 'jogadores_online_texto', 'imagem_banner')
+    search_fields = ('nome_servidor', 'descricao_servidor')
+    list_filter = ('nome_servidor',)
+
+    # Exibindo o campo de imagem no painel admin
+    fieldsets = (
+        (None, {
+            'fields': ('nome_servidor', 'descricao_servidor', 'link_patch', 'link_cliente', 'link_discord')
+        }),
+        ('Configurações de Trailer', {
+            'fields': ('trailer_video_id',)
+        }),
+        ('Configurações de Exibição', {
+            'fields': ('jogadores_online_texto', 'imagem_banner')
+        }),
+    )

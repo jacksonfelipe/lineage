@@ -1,5 +1,6 @@
 from django.db import models
 from core.models import BaseModel
+from django.core.exceptions import ValidationError
 
 
 class ApiEndpointToggle(BaseModel):
@@ -25,3 +26,38 @@ class ApiEndpointToggle(BaseModel):
 
     def __str__(self):
         return "API Endpoint Configuration"
+
+
+class IndexConfig(BaseModel):
+    # Nome do servidor
+    nome_servidor = models.CharField(max_length=100, default="Lineage 2 PDL")
+
+    # Descrição do servidor
+    descricao_servidor = models.CharField(max_length=255, blank=True, default="Onde Lendas Nascem, Heróis Lutam e a Glória É Eterna.")
+
+    # Links importantes
+    link_patch = models.URLField(default="https://link.para.baixar.patch")
+    link_cliente = models.URLField(default="https://link.para.baixar.cliente")
+    link_discord = models.URLField(default="https://discord.com/invite/exemplo")
+
+    # Trailer
+    trailer_video_id = models.CharField(max_length=100, blank=True, default="VIDEO_ID")  # Aqui você pode colocar um valor padrão do YouTube ou deixar em branco.
+
+    # Texto de jogadores online
+    jogadores_online_texto = models.CharField(max_length=255, blank=True, default="X jogadores online")
+
+    # Imagem do banner
+    imagem_banner = models.ImageField(upload_to='banners/', blank=True, null=True, default='default_banner.jpg')
+
+    class Meta:
+        verbose_name = "Configuração da Index"
+        verbose_name_plural = "Configuração da Index"
+
+    def save(self, *args, **kwargs):
+        # Garantir que só existe um único registro
+        if not self.pk and IndexConfig.objects.exists():
+            raise ValidationError("Só pode existir um registro de configuração do servidor.")
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.nome_servidor
