@@ -36,18 +36,18 @@ class IndexConfig(BaseModel):
     descricao_servidor = models.CharField(max_length=255, blank=True, default="Onde Lendas Nascem, Heróis Lutam e a Glória É Eterna.")
 
     # Links importantes
-    link_patch = models.URLField(default="https://link.para.baixar.patch")
-    link_cliente = models.URLField(default="https://link.para.baixar.cliente")
-    link_discord = models.URLField(default="https://discord.com/invite/exemplo")
+    link_patch = models.URLField(default="https://pdl.denky.dev.br/")
+    link_cliente = models.URLField(default="https://pdl.denky.dev.br/")
+    link_discord = models.URLField(default="https://pdl.denky.dev.br/")
 
     # Trailer
-    trailer_video_id = models.CharField(max_length=100, blank=True, default="VIDEO_ID")  # Aqui você pode colocar um valor padrão do YouTube ou deixar em branco.
+    trailer_video_id = models.CharField(max_length=100, blank=True, default="CsNutvmrHIA?si=2lF1z1jPFkf8uGJB")  # Aqui você pode colocar um valor padrão do YouTube ou deixar em branco.
 
     # Texto de jogadores online
-    jogadores_online_texto = models.CharField(max_length=255, blank=True, default="X jogadores online")
+    jogadores_online_texto = models.CharField(max_length=255, blank=True, default="jogadores online Agora")
 
     # Imagem do banner
-    imagem_banner = models.ImageField(upload_to='banners/', blank=True, null=True, default='default_banner.jpg')
+    imagem_banner = models.ImageField(upload_to='banners/', blank=True, null=True)
 
     class Meta:
         verbose_name = "Configuração da Index"

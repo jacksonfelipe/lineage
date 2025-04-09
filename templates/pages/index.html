@@ -9,7 +9,7 @@
 
   <!-- Hero / Banner -->
   <section class="hero" style="
-  background-image: url('{% if configuracao %}{{ configuracao.imagem_banner.url }}{% else %}{% static 'assets/img/lineage2-bg.jpg' %}{% endif %}');
+  background-image: url('{% if configuracao %}{% if configuracao.imagem_banner %}{{ configuracao.imagem_banner.url }}{% else %}{% static 'assets/img/lineage2-bg.jpg' %}{% endif %}{% else %}{% static 'assets/img/lineage2-bg.jpg' %}{% endif %}');
   background-size: cover;
   background-position: center;
   padding: 160px 0;
@@ -71,7 +71,7 @@
 
     <div class="video-wrapper">
       <div class="video-overlay"></div>
-      <iframe src="https://www.youtube.com/embed/{% if configuracao and configuracao.trailer_video_id %}{{ configuracao.trailer_video_id }}{% else %}VIDEO_ID{% endif %}" frameborder="0" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/{% if configuracao and configuracao.trailer_video_id %}{{ configuracao.trailer_video_id }}{% else %}CsNutvmrHIA?si=2lF1z1jPFkf8uGJB{% endif %}" frameborder="0" allowfullscreen></iframe>
     </div>
 
     <p class="trailer-description">Assista ao trailer e mergulhe no mundo épico do nosso servidor!</p>
