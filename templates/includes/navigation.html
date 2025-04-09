@@ -82,8 +82,18 @@
                 </svg>
                 Meu Perfil
               </a>
+
+              <div role="separator" class="dropdown-divider my-1"></div>
+
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'wallet:dashboard' %}">
+                <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M21 7H3a1 1 0 00-1 1v8a1 1 0 001 1h18a1 1 0 001-1V8a1 1 0 00-1-1zM3 9h18v6H3V9zm16 2h-2a1 1 0 100 2h2a1 1 0 100-2z"/>
+                </svg>
+                <span>Carteira</span>
+              </a>
             
               <div role="separator" class="dropdown-divider my-1"></div>
+
               <a class="dropdown-item d-flex align-items-center" href="{% url 'password_change' %}">
                 <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg">
@@ -93,6 +103,7 @@
                 </svg>
                 Mudar Senha
               </a>
+
               <a class="dropdown-item d-flex align-items-center" href="{% url 'logout' %}">
                 <svg class="dropdown-icon text-danger me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg">
@@ -102,6 +113,7 @@
                 </svg>
                 Sair
               </a>
+              
             </div>
           </li>
         {% endif %}

@@ -29,6 +29,9 @@ urlpatterns = [
     path('app/', include('apps.main.solicitation.urls')),
     path('', include('apps.main.administrator.urls')),
 
+    path('app/wallet/', include('apps.lineage.wallet.urls')),
+    path('app/payment/', include('apps.lineage.payment.urls')),
+
     path("", include('serve_files.urls')),
     path("", include('admin_volt.urls')),
 
