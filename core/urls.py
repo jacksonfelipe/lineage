@@ -31,6 +31,7 @@ urlpatterns = [
 
     path('app/wallet/', include('apps.lineage.wallet.urls')),
     path('app/payment/', include('apps.lineage.payment.urls')),
+    path('app/server/', include('apps.lineage.server.urls')),
 
     path("", include('serve_files.urls')),
     path("", include('admin_volt.urls')),

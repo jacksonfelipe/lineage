@@ -1,1 +1,0 @@
-# vai ser colocado aqui as querys
