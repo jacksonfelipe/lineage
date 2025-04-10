@@ -26,15 +26,25 @@ def validar_assinatura_hmac(request):
         logger.warning("Cabeçalhos obrigatórios ausentes: x-signature ou x-request-id.")
         return False
 
+    # Pega o data.id da query string ou do corpo da requisição
     query_string = urllib.parse.urlparse(request.build_absolute_uri()).query
     query_params = urllib.parse.parse_qs(query_string)
     data_id = query_params.get("data.id", [None])[0]
 
+    # Se não veio pela query string, tenta pegar do corpo
     if not data_id:
-        logger.warning("Parâmetro 'data.id' ausente na query string.")
+        try:
+            body_data = json.loads(request.body)
+            data_id = body_data.get("data", {}).get("id") or body_data.get("id")
+        except Exception as e:
+            logger.warning(f"Falha ao extrair data.id do corpo da requisição: {e}")
+            return False
+
+    if not data_id:
+        logger.warning("Parâmetro 'data.id' ausente na query string e no corpo.")
         return False
 
-    ts, v1 = None, None
+    # Extrai ts e v1 da assinatura
     try:
         parts = dict(part.strip().split("=", 1) for part in x_signature.split(","))
         ts = parts.get("ts")
@@ -47,6 +57,7 @@ def validar_assinatura_hmac(request):
         logger.warning("Partes 'ts' ou 'v1' da assinatura ausentes.")
         return False
 
+    # Monta o manifest de acordo com a documentação oficial
     manifest = f"id:{data_id};request-id:{x_request_id};ts:{ts};"
 
     try:
@@ -87,21 +98,25 @@ def notificacao_mercado_pago(request):
     tipo = body.get("type")
     data = body.get("data", {})
 
-    if not tipo or not data:
+    if not tipo:
         return HttpResponse("Parâmetros inválidos", status=400)
 
     # Trata notificações alternativas como equivalentes
     if tipo == "topic_merchant_order_wh":
         tipo = "merchant_order"
 
-    data_id = (
-        data.get("id")
-        if tipo in ["payment", "plan", "subscription", "invoice", "merchant_order"]
-        else body.get("id")
-    )
+    # Identifica o ID da entidade conforme o tipo
+    if tipo in ["payment", "plan", "subscription", "invoice"]:
+        data_id = data.get("id")
+    elif tipo == "merchant_order":
+        data_id = body.get("id")  # merchant_order manda direto no root
+    else:
+        data_id = body.get("id")
 
     if not data_id:
         return HttpResponse("ID não encontrado", status=400)
+
+    logger.info(f"Webhook recebido | Tipo: {tipo} | ID: {data_id}")
 
     WebhookLog.objects.create(
         tipo=tipo,
