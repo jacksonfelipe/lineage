@@ -283,6 +283,10 @@ class LineageStats:
     @staticmethod
     @cache_lineage_result(timeout=300)
     def boss_jewel_locations(boss_jewel_ids):
+        # Converta a lista de IDs para uma tupla, se necessário
+        ids_tuple = tuple(boss_jewel_ids)  # Converte para tupla para passar no IN
+
+        # Geração da consulta SQL
         sql = f"""
             SELECT
                 I.owner_id, 
@@ -297,7 +301,7 @@ class LineageStats:
             LEFT JOIN
                 clan_subpledges AS P ON P.clan_id = C.clanid AND P.type = '0'
             WHERE
-                I.item_type IN ({boss_jewel_ids})
+                I.item_type IN {ids_tuple}  -- Usa a tupla para passar a lista de IDs
             GROUP BY
                 I.owner_id, C.char_name, P.name, I.item_type
             ORDER BY

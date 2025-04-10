@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import ApiEndpointToggle, IndexConfig
 from core.admin import BaseModelAdmin
+from django.contrib import messages
 
 
 @admin.register(ApiEndpointToggle)
@@ -38,7 +39,10 @@ class ApiEndpointToggleAdmin(BaseModelAdmin):
 
 @admin.register(IndexConfig)
 class IndexConfigAdmin(BaseModelAdmin):
-    list_display = ('nome_servidor', 'descricao_servidor', 'link_patch', 'link_cliente', 'link_discord', 'trailer_video_id', 'jogadores_online_texto', 'imagem_banner')
+    list_display = (
+        'nome_servidor', 'descricao_servidor', 'link_patch', 'link_cliente', 
+        'link_discord', 'trailer_video_id', 'jogadores_online_texto', 'imagem_banner'
+    )
     search_fields = ('nome_servidor', 'descricao_servidor')
     list_filter = ('nome_servidor',)
 
@@ -54,3 +58,15 @@ class IndexConfigAdmin(BaseModelAdmin):
             'fields': ('jogadores_online_texto', 'imagem_banner')
         }),
     )
+
+    def save_model(self, request, obj, form, change):
+        # Verifica se o objeto é novo e já existe outro registro
+        if not change and IndexConfig.objects.exists():
+            # Se for um novo objeto e já existir um, envia um alerta
+            self.message_user(
+                request,
+                "Apenas um registro de configuração do servidor pode existir. Por favor, edite o existente.",
+                messages.WARNING
+            )
+            return  # Impede a criação de outro objeto
+        super().save_model(request, obj, form, change)

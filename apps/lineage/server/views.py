@@ -93,6 +93,10 @@ def siege(request):
 
 @endpoint_enabled('siege_participants')
 def siege_participants(request, castle_id):
+    # Valida se o castle_id está entre 1 e 9
+    if castle_id not in range(1, 10):
+        return JsonResponse({'error': 'castle_id deve ser um valor entre 1 e 9'}, status=400)
+    
     data = LineageStats.siege_participants(castle_id=castle_id)
     return JsonResponse(data, safe=False)
 
@@ -100,9 +104,25 @@ def siege_participants(request, castle_id):
 @endpoint_enabled('boss_jewel_locations')
 def boss_jewel_locations(request):
     jewel_ids = request.GET.get("ids", "")
+    
     if not jewel_ids:
         return JsonResponse({"error": "Missing jewel item IDs"}, status=400)
-    data = LineageStats.boss_jewel_locations(boss_jewel_ids=jewel_ids)
+    
+    # Convertendo os IDs fornecidos para uma lista de inteiros
+    try:
+        jewel_ids_list = [int(id) for id in jewel_ids.split(',')]
+    except ValueError:
+        return JsonResponse({"error": "Invalid ID format"}, status=400)
+    
+    # IDs permitidos
+    allowed_ids = [6656, 6657, 6658, 6659, 6660, 6661, 8191]
+    
+    # Verificando se todos os IDs fornecidos são válidos
+    if not all(id in allowed_ids for id in jewel_ids_list):
+        return JsonResponse({"error": "Invalid jewel item ID(s)"}, status=400)
+    
+    # Chamando a função para buscar as localizações
+    data = LineageStats.boss_jewel_locations(boss_jewel_ids=jewel_ids_list)
     return JsonResponse(data, safe=False)
 
 

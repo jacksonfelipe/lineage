@@ -54,9 +54,10 @@ class IndexConfig(BaseModel):
         verbose_name_plural = "Configuração da Index"
 
     def save(self, *args, **kwargs):
-        # Garantir que só existe um único registro
-        if not self.pk and IndexConfig.objects.exists():
-            raise ValidationError("Só pode existir um registro de configuração do servidor.")
+        if not self.pk:  # Se não estiver sendo atualizado (novo objeto)
+            if IndexConfig.objects.exists():
+                # Aqui, ao invés de levantar um erro, vamos enviar uma mensagem
+                raise ValidationError("Só pode existir um registro de configuração do servidor.")
         super().save(*args, **kwargs)
 
     def __str__(self):
