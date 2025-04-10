@@ -23,40 +23,42 @@ def validar_assinatura_hmac(request):
     x_request_id = request.headers.get("x-request-id")
 
     if not x_signature or not x_request_id:
-        logger.warning("Cabeçalhos ausentes para verificação HMAC.")
+        logger.warning("Cabeçalhos obrigatórios ausentes: x-signature ou x-request-id.")
         return False
 
-    query_string = urllib.parse.urlparse(request.get_raw_uri()).query
+    # Obtém o parâmetro data.id da query string
+    query_string = urllib.parse.urlparse(request.build_absolute_uri()).query
     query_params = urllib.parse.parse_qs(query_string)
-    data_id = query_params.get("data.id", [""])[0]
+    data_id = query_params.get("data.id", [None])[0]
 
     if not data_id:
-        logger.warning("Query param data.id ausente.")
+        logger.warning("Parâmetro 'data.id' ausente na query string.")
         return False
 
-    parts = x_signature.split(",")
-    ts = None
-    v1 = None
-
-    for part in parts:
-        key_value = part.strip().split("=", 1)
-        if len(key_value) == 2:
-            key, value = key_value
-            if key == "ts":
-                ts = value
-            elif key == "v1":
-                v1 = value
-
-    if not all([ts, v1]):
-        logger.warning("Partes da assinatura ausentes.")
+    # Extrai partes da assinatura
+    ts, v1 = None, None
+    try:
+        parts = dict(part.strip().split("=", 1) for part in x_signature.split(","))
+        ts = parts.get("ts")
+        v1 = parts.get("v1")
+    except Exception as e:
+        logger.warning(f"Erro ao analisar x-signature: {e}")
         return False
 
-    # Monta o manifesto como especificado na doc do Mercado Pago
+    if not ts or not v1:
+        logger.warning("Partes 'ts' ou 'v1' da assinatura ausentes.")
+        return False
+
+    # Monta o manifesto conforme a especificação do Mercado Pago
     manifest = f"id:{data_id};request-id:{x_request_id};ts:{ts};"
+    
+    try:
+        secret = settings.MERCADO_PAGO_WEBHOOK_SECRET
+    except AttributeError:
+        logger.error("Chave secreta do Mercado Pago não configurada no settings.")
+        return False
 
-    # Obtém a chave secreta do settings
-    secret = settings.MERCADO_PAGO_WEBHOOK_SECRET
-
+    # Gera HMAC e compara com o valor recebido
     hmac_obj = hmac.new(secret.encode(), manifest.encode(), hashlib.sha256)
     expected_signature = hmac_obj.hexdigest()
 
