@@ -1,14 +1,19 @@
 from django.urls import path
 from . import views
+from . import mercadopago_views
 
 
 app_name = "payment"
 
 
 urlpatterns = [
-    path('purchase/', views.purchase, name='purchase'),
-    path('confirmar-pagamento/<str:valor>/<str:metodo>/', views.confirmar_pagamento, name='confirmar_pagamento'),
-    path('mercadopago/sucesso/', views.pagamento_sucesso, name='pagamento_sucesso'),
-    path('mercadopago/erro/', views.pagamento_erro, name='pagamento_erro'),
-    path('mercadopago/notificacao/', views.notificacao_mercado_pago, name='notificacao_mercado_pago'),
+    path('novo/', views.criar_ou_reaproveitar_pedido, name='novo_pedido'),
+    path('pedido/<int:pedido_id>/', views.detalhes_pedido, name='detalhes_pedido'),
+    path('pedido/<int:pedido_id>/confirmar/', views.confirmar_pagamento, name='confirmar_pagamento'),
+    path('pendentes/', views.pedidos_pendentes, name='pedidos_pendentes'),
+    path('cancelar-pedido/<int:pedido_id>/', views.cancelar_pedido, name='cancelar_pedido'),
+
+    path('mercadopago/sucesso/', mercadopago_views.pagamento_sucesso, name='pagamento_sucesso'),
+    path('mercadopago/erro/', mercadopago_views.pagamento_erro, name='pagamento_erro'),
+    path('mercadopago/notificacao/', mercadopago_views.notificacao_mercado_pago, name='notificacao_mercado_pago'),
 ]

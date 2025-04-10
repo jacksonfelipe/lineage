@@ -1,125 +1,163 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 import mercadopago
 from .models import *
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
+from datetime import timedelta
+from django.utils.timezone import now
+from django.contrib import messages
+from django.db import transaction
 
 
 @login_required
-def purchase(request):
-    """
-    Formulário onde o usuário informa o valor a pagar e escolhe o método (ex: MercadoPago)
-    """
+def criar_ou_reaproveitar_pedido(request):
     if request.method == 'POST':
-        valor = float(request.POST.get('valor'))
+        try:
+            valor = float(request.POST.get('valor'))
+            if valor <= 0:
+                return HttpResponse("Valor inválido", status=400)
+        except (TypeError, ValueError):
+            return HttpResponse("Valor inválido", status=400)
+
         metodo = request.POST.get('metodo')
+        if metodo not in ["MercadoPago"]:  # Expanda conforme necessário
+            return HttpResponse("Método de pagamento inválido", status=400)
 
-        # Aqui você pode adicionar validações extras
+        usuario = request.user
+        duas_horas_atras = now() - timedelta(hours=2)
 
-        return redirect('payment:confirmar_pagamento', valor=valor, metodo=metodo)
+        with transaction.atomic():
+            # Lock em todos os pedidos pendentes parecidos do usuário (para evitar criação duplicada)
+            pedidos_similares = (
+                PedidoPagamento.objects
+                .select_for_update()
+                .filter(
+                    usuario=usuario,
+                    valor_pago=valor,
+                    metodo=metodo,
+                    status='PENDENTE',
+                    data_criacao__gte=duas_horas_atras
+                )
+            )
 
-    return render(request, "payment/purchase.html")  # Deve ter <form method="post"> com campos valor e metodo
+            pedido_existente = pedidos_similares.first()
+            if pedido_existente:
+                return redirect('payment:detalhes_pedido', pedido_id=pedido_existente.id)
+
+            novo_pedido = PedidoPagamento.objects.create(
+                usuario=usuario,
+                valor_pago=valor,
+                moedas_geradas=valor,
+                metodo=metodo,
+                status='PENDENTE'
+            )
+            return redirect('payment:detalhes_pedido', pedido_id=novo_pedido.id)
+
+    return render(request, "payment/purchase.html")
 
 
 @login_required
-def confirmar_pagamento(request, valor, metodo):
-    usuario = request.user
-    moedas = float(valor)
+def confirmar_pagamento(request, pedido_id):
+    try:
+        with transaction.atomic():
+            pedido = PedidoPagamento.objects.select_for_update().get(id=pedido_id, usuario=request.user)
 
-    pedido = PedidoPagamento.objects.create(
-        usuario=usuario,
-        valor_pago=valor,
-        moedas_geradas=moedas,
-        metodo=metodo
-    )
+            if pedido.status != 'PENDENTE':
+                return HttpResponse("Pedido já processado ou inválido.")
 
-    pagamento = Pagamento.objects.create(
-        usuario=usuario,
-        valor=valor,
-        status="Pendente",
-        pedido_pagamento=pedido
-    )
+            # Verifica se já existe um pagamento iniciado para esse pedido
+            if Pagamento.objects.filter(pedido_pagamento=pedido).exists():
+                return HttpResponse("Já existe um pagamento iniciado para este pedido.", status=400)
 
-    if metodo == "MercadoPago":
-        sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
+            pagamento = Pagamento.objects.create(
+                usuario=request.user,
+                valor=pedido.valor_pago,
+                status="Pendente",
+                pedido_pagamento=pedido
+            )
 
-        preference_data = {
-            "items": [
-                {
-                    "title": "Moedas para o jogo",
-                    "quantity": 1,
-                    "currency_id": "BRL",
-                    "unit_price": float(valor),
+            if pedido.metodo == "MercadoPago":
+                sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
+                preference_data = {
+                    "items": [{
+                        "title": "Moedas para o jogo",
+                        "quantity": 1,
+                        "currency_id": "BRL",
+                        "unit_price": float(pedido.valor_pago),
+                    }],
+                    "back_urls": {
+                        "success": settings.MERCADO_PAGO_SUCCESS_URL,
+                        "failure": settings.MERCADO_PAGO_FAILURE_URL,
+                    },
+                    "auto_return": "approved",
+                    "metadata": {"pagamento_id": pagamento.id}
                 }
-            ],
-            "back_urls": {
-                "success": settings.MERCADO_PAGO_SUCCESS_URL,
-                "failure": settings.MERCADO_PAGO_FAILURE_URL,
-            },
-            "auto_return": "approved",
-            "metadata": {
-                "pagamento_id": pagamento.id
-            }
-        }
 
-        preference_response = sdk.preference().create(preference_data)
+                preference_response = sdk.preference().create(preference_data)
+                if preference_response.get("status") != 201:
+                    return HttpResponse("Erro ao criar preferência de pagamento", status=500)
 
-        if preference_response.get("status") != 201:
-            erro = preference_response.get("response", {}).get("message", "Erro desconhecido")
-            return HttpResponse(f"Erro ao criar preferência de pagamento: {erro}", status=500)
+                preference = preference_response.get("response", {})
+                pagamento.transaction_code = preference["id"]
+                pagamento.save()
 
-        preference = preference_response.get("response", {})
+                return redirect(preference["init_point"])
 
-        if "id" not in preference or "init_point" not in preference:
-            return HttpResponse("Resposta inválida do Mercado Pago.", status=500)
+            return HttpResponse("Método de pagamento não suportado", status=400)
 
-        pagamento.transaction_code = preference["id"]
-        pagamento.save()
-
-        return redirect(preference["init_point"])
-
-    return HttpResponse("Método de pagamento não suportado.", status=400)
+    except PedidoPagamento.DoesNotExist:
+        return HttpResponse("Pedido não encontrado.", status=404)
 
 
-def pagamento_sucesso(request):
-    return HttpResponse("Pagamento aprovado com sucesso!")
+@login_required
+def detalhes_pedido(request, pedido_id):
+    pedido = get_object_or_404(PedidoPagamento, id=pedido_id, usuario=request.user)
+
+    if pedido.status != 'PENDENTE':
+        return HttpResponse("Pedido já processado ou inválido.")
+
+    if request.method == 'POST':
+        return redirect('payment:confirmar_pagamento', pedido_id=pedido.id)
+
+    return render(request, "payment/detalhes_pedido.html", {"pedido": pedido})
 
 
-def pagamento_erro(request):
-    return HttpResponse("Pagamento cancelado ou falhou.")
+@login_required
+def pedidos_pendentes(request):
+    pedidos = PedidoPagamento.objects.filter(usuario=request.user, status='PENDENTE').order_by('-data_criacao')
+    return render(request, "payment/pedidos_pendentes.html", {"pedidos": pedidos})
 
 
-@csrf_exempt
-@require_POST
-def notificacao_mercado_pago(request):
-    import json
-    body = json.loads(request.body)
-    payment_id = body.get("data", {}).get("id")
+@login_required
+def cancelar_pedido(request, pedido_id):
+    if request.method != 'POST':
+        return HttpResponse("Método não permitido", status=405)
 
-    if payment_id:
-        sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
-        result = sdk.payment().get(payment_id)
+    pedido = get_object_or_404(PedidoPagamento, id=pedido_id, usuario=request.user)
 
-        if result["status"] == 200:
-            pagamento_info = result["response"]
-            status = pagamento_info["status"]
-            pagamento_id = pagamento_info["metadata"].get("pagamento_id")
+    if pedido.status != 'PENDENTE':
+        return HttpResponse("Este pedido não pode ser cancelado.", status=400)
 
-            if pagamento_id:
-                try:
-                    pagamento = Pagamento.objects.get(id=pagamento_id)
-                    pagamento.status = status.capitalize()
-                    pagamento.save()
+    pedido.status = 'CANCELADO'
+    pedido.save()
 
-                    if status == "approved":
-                        # Aqui você pode creditar as moedas na Wallet, etc
-                        pass
+    messages.success(request, "Pedido cancelado com sucesso.")
+    return redirect('payment:pedidos_pendentes')
 
-                    return HttpResponse("Notificação processada", status=200)
-                except Pagamento.DoesNotExist:
-                    pass
 
-    return HttpResponse("Erro ao processar notificação", status=400)
+def expirar_pedidos_antigos():
+    limite = now() - timedelta(hours=48)
+    PedidoPagamento.objects.filter(status='PENDENTE', data_criacao__lt=limite).update(status='EXPIRADO')
+
+
+def processar_pedidos_aprovados():
+    pagamentos = Pagamento.objects.filter(status='approved', creditado=False)
+    for pagamento in pagamentos:
+        try:
+            Wallet.creditar(pagamento.usuario, pagamento.pedido_pagamento.moedas_geradas)
+            pagamento.creditado = True
+            pagamento.save()
+        except Exception as e:
+            # Logar ou tratar o erro de alguma forma
+            print(f"Erro ao creditar pagamento {pagamento.id}: {e}")
