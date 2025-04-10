@@ -10,9 +10,36 @@ from apps.lineage.wallet.signals import aplicar_transacao
 from apps.lineage.wallet.models import Wallet
 from django.db import transaction
 import logging
+import hmac
+import hashlib
 
 
 logger = logging.getLogger(__name__)
+
+
+def validar_assinatura(request):
+    print(request.headers)
+    signature_header = request.headers.get("X-Hub-Signature")
+
+    if not signature_header:
+        logger.warning("Cabeçalho X-Hub-Signature ausente.")
+        return False
+
+    try:
+        _, received_signature = signature_header.split('=')
+    except ValueError:
+        logger.warning("Formato inválido da assinatura.")
+        return False
+
+    secret = settings.MERCADO_PAGO_WEBHOOK_SECRET.encode("utf-8")
+    body = request.body
+    expected_signature = hmac.new(secret, body, hashlib.sha256).hexdigest()
+
+    if not hmac.compare_digest(expected_signature, received_signature):
+        logger.warning("Assinatura inválida.")
+        return False
+
+    return True
 
 
 def pagamento_sucesso(request):
@@ -26,6 +53,9 @@ def pagamento_erro(request):
 @csrf_exempt
 @require_POST
 def notificacao_mercado_pago(request):
+    if not validar_assinatura(request):
+        return HttpResponse("Assinatura inválida", status=403)
+
     try:
         body = json.loads(request.body) if request.body else {}
     except json.JSONDecodeError:
@@ -33,7 +63,14 @@ def notificacao_mercado_pago(request):
 
     tipo = body.get("type")
     data = body.get("data", {})
-    data_id = data.get("id")
+
+    # Corrigir o data_id dependendo do tipo
+    if tipo == "payment":
+        data_id = data.get("id")
+    elif tipo in ["merchant_order", "topic_merchant_order_wh"]:
+        data_id = body.get("id")  # vem fora do campo data
+    else:
+        data_id = data.get("id")  # fallback genérico
 
     if not tipo or not data_id:
         return HttpResponse("Parâmetros inválidos", status=400)
