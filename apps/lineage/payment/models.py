@@ -55,3 +55,10 @@ class Pagamento(BaseModel):
 
     def __str__(self):
         return f"Pagamento {self.id} - {self.status}"
+
+
+class WebhookLog(models.Model):
+    tipo = models.CharField(max_length=100)
+    data_id = models.CharField(max_length=100)
+    payload = models.JSONField()
+    recebido_em = models.DateTimeField(auto_now_add=True)

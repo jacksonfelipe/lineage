@@ -30,7 +30,7 @@ ASGI_APPLICATION = "core.asgi.application"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_REDIRECT_URL = '/'
 
-# =========================== LOOGER CONFIGS ===========================
+# =========================== LOGGER CONFIGS ===========================
 
 LOGGING = is_LOGGING
 

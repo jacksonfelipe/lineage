@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.conf import settings
 import mercadopago
 from .models import *
@@ -9,20 +9,23 @@ import json
 from apps.lineage.wallet.signals import aplicar_transacao
 from apps.lineage.wallet.models import Wallet
 from django.db import transaction
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 def pagamento_sucesso(request):
-    return HttpResponse("Pagamento aprovado com sucesso!")
+    return render(request, 'mp/pagamento_sucesso.html')
 
 
 def pagamento_erro(request):
-    return HttpResponse("Pagamento cancelado ou falhou.")
+    return render(request, 'mp/pagamento_erro.html')
 
 
 @csrf_exempt
 @require_POST
 def notificacao_mercado_pago(request):
-    
     try:
         body = json.loads(request.body)
     except json.JSONDecodeError:
@@ -33,6 +36,13 @@ def notificacao_mercado_pago(request):
 
     if not tipo or not data_id:
         return HttpResponse("Parâmetros inválidos", status=400)
+
+    # Salva o log da notificação
+    WebhookLog.objects.create(
+        tipo=tipo,
+        data_id=data_id,
+        payload=body
+    )
 
     sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
 
@@ -47,27 +57,29 @@ def notificacao_mercado_pago(request):
             if pagamento_id:
                 try:
                     pagamento = Pagamento.objects.get(id=pagamento_id)
-                    pagamento.status = status.capitalize()
-                    pagamento.save()
 
-                    if status == "approved":
-                        try:
-                            with transaction.atomic():
-                                wallet, _ = Wallet.objects.get_or_create(usuario=pagamento.usuario)
-                                aplicar_transacao(
-                                    wallet=wallet,
-                                    tipo="ENTRADA",
-                                    valor=pagamento.valor,
-                                    descricao="Crédito via MercadoPago",
-                                    origem="MercadoPago",
-                                    destino=pagamento.usuario.username
-                                )
-                        except Exception as e:
-                            print(f"Erro ao aplicar transação: {e}")
+                    # Só processa se ainda não estiver aprovado
+                    if status == "approved" and pagamento.status != "Approved":
+                        with transaction.atomic():
+                            wallet, _ = Wallet.objects.get_or_create(usuario=pagamento.usuario)
+                            aplicar_transacao(
+                                wallet=wallet,
+                                tipo="ENTRADA",
+                                valor=pagamento.valor,
+                                descricao="Crédito via MercadoPago",
+                                origem="MercadoPago",
+                                destino=pagamento.usuario.username
+                            )
+                            pagamento.status = "Approved"
+                            pagamento.save()
 
                     return HttpResponse("Notificação de pagamento processada", status=200)
+
                 except Pagamento.DoesNotExist:
                     return HttpResponse("Pagamento não encontrado", status=404)
+                except Exception as e:
+                    logger.error(f"Erro ao aplicar transação: {e}")
+                    return HttpResponse("Erro interno ao processar transação", status=500)
 
         return HttpResponse("Erro ao buscar pagamento", status=400)
 
@@ -76,19 +88,19 @@ def notificacao_mercado_pago(request):
 
         if result["status"] == 200:
             order = result["response"]
-
-            # Verifica se há pagamentos e se algum está aprovado
             pagamentos = order.get("payments", [])
             aprovado = any(p["status"] == "approved" for p in pagamentos)
 
             if aprovado:
-                # Aqui você pode localizar a referência do pedido e atualizar o status
                 external_reference = order.get("external_reference")
                 if external_reference:
                     try:
                         pagamento = Pagamento.objects.get(id=external_reference)
-                        pagamento.status = "Approved"
-                        pagamento.save()
+
+                        if pagamento.status != "Approved":
+                            pagamento.status = "Approved"
+                            pagamento.save()
+
                         return HttpResponse("Notificação de merchant order processada", status=200)
                     except Pagamento.DoesNotExist:
                         return HttpResponse("Pagamento não encontrado pela referência", status=404)
