@@ -1,0 +1,31 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg p-4">
+    <h2 class="text-center mb-4">Detalhes do Pedido</h2>
+
+    <ul class="list-group mb-4">
+      <li class="list-group-item"><strong>ID do Pedido:</strong> {{ pedido.id }}</li>
+      <li class="list-group-item"><strong>Valor Pago:</strong> R$ {{ pedido.valor_pago }}</li>
+      <li class="list-group-item"><strong>Moedas Geradas:</strong> {{ pedido.moedas_geradas }}</li>
+      <li class="list-group-item"><strong>Status:</strong> {{ pedido.status }}</li>
+      <li class="list-group-item"><strong>Método:</strong> {{ pedido.metodo }}</li>
+      <li class="list-group-item"><strong>Data de Criação:</strong> {{ pedido.data_criacao }}</li>
+    </ul>
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-lg">
+          Confirmar e Ir para o Pagamento
+        </button>
+      </div>
+    </form>
+
+    <div class="text-center mt-3">
+      <a href="{% url 'payment:pedidos_pendentes' %}" class="btn btn-link">Voltar para Pedidos Pendentes</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

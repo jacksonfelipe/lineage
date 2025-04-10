@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head> 
   {% include 'includes/head.html' %}
   {% block extrastyle %}{% endblock extrastyle %}
   {% block extrahead %}{% endblock extrahead %}
 </head>
 
+<body>
   {% block nav %}
     {% include 'includes/nav.html' %}
   {% endblock nav %}
@@ -16,24 +16,23 @@
   {% endblock sidebar %}
 
   <main class="content">
+    {% include 'includes/messages.html' %}
+
     {% block header %}
       {% include 'includes/navigation.html' %}
     {% endblock header %}
 
     {% block content %}{% endblock content %}
 
-    {% block theme_settings %}
-
-    {% endblock theme_settings %}
+    {% block theme_settings %}{% endblock theme_settings %}
 
     {% block footer %}
       {% include 'includes/footer.html' %}
     {% endblock footer %}
-
   </main>
 
   {% include "includes/notification.html" %}
-
   {% include 'includes/scripts.html' %}
   {% block extra_js %}{% endblock extra_js %}
-<body>
+</body>
+</html>

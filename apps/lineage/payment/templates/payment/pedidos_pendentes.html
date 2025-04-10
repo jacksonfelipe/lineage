@@ -1,0 +1,36 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg p-4">
+    <h2 class="mb-4 text-center">Meus Pedidos Pendentes</h2>
+
+    {% if pedidos %}
+      <div class="list-group">
+        {% for pedido in pedidos %}
+          <div class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <strong>Pedido #{{ pedido.id }}</strong><br>
+              Valor: R$ {{ pedido.valor_pago }}<br>
+              Criado em: {{ pedido.data_criacao|date:"d/m/Y H:i" }}
+            </div>
+            <div class="text-end">
+              <a href="{% url 'payment:detalhes_pedido' pedido.id %}" class="btn btn-sm btn-primary">Detalhes</a>
+              <form method="post" action="{% url 'payment:cancelar_pedido' pedido.id %}" class="d-inline-block ms-2">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-danger">Cancelar</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-center">Você não possui pedidos pendentes.</p>
+    {% endif %}
+
+    <div class="text-center mt-4">
+      <a href="{% url 'payment:purchase' %}" class="btn btn-success">Criar Novo Pedido</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
