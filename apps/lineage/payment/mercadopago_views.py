@@ -12,31 +12,48 @@ from django.db import transaction
 import logging
 import hmac
 import hashlib
+import time
 
 
 logger = logging.getLogger(__name__)
 
 
 def validar_assinatura(request):
-    print(request.headers)
-    signature_header = request.headers.get("X-Hub-Signature")
+    signature_header = request.headers.get("X-Signature")
 
     if not signature_header:
-        logger.warning("Cabeçalho X-Hub-Signature ausente.")
+        logger.warning("Cabeçalho X-Signature ausente.")
         return False
 
     try:
-        _, received_signature = signature_header.split('=')
-    except ValueError:
+        parts = dict(part.split("=") for part in signature_header.split(","))
+        ts = parts.get("ts")
+        v1 = parts.get("v1")
+    except Exception:
         logger.warning("Formato inválido da assinatura.")
+        return False
+
+    if not ts or not v1:
+        logger.warning("Componentes da assinatura ausentes.")
+        return False
+
+    try:
+        ts_int = int(ts)
+        now_ms = int(time.time() * 1000)
+        if abs(now_ms - ts_int) > 5 * 60 * 1000:  # tolerância de 5 minutos
+            logger.warning("Timestamp fora do intervalo permitido.")
+            return False
+    except Exception:
+        logger.warning("Timestamp inválido.")
         return False
 
     secret = settings.MERCADO_PAGO_WEBHOOK_SECRET.encode("utf-8")
     body = request.body
-    expected_signature = hmac.new(secret, body, hashlib.sha256).hexdigest()
+    message = ts.encode() + body
+    expected_signature = hmac.new(secret, message, hashlib.sha256).hexdigest()
 
-    if not hmac.compare_digest(expected_signature, received_signature):
-        logger.warning("Assinatura inválida.")
+    if not hmac.compare_digest(expected_signature, v1):
+        logger.warning("Assinatura incorreta.")
         return False
 
     return True

@@ -380,6 +380,37 @@ CKEDITOR_5_CONFIGS = {
 
 # =========================== PAYMENTS CONFIGS ===========================
 
-MERCADO_PAGO_ACCESS_TOKEN = os.getenv('CONFIG_MERCADO_PAGO_ACCESS_TOKEN', "SEU_ACCESS_TOKEN")
-MERCADO_PAGO_SUCCESS_URL = os.getenv('CONFIG_MERCADO_PAGO_SUCCESS_URL', "http://127.0.0.1/app/payment/sucesso/")
-MERCADO_PAGO_FAILURE_URL = os.getenv('CONFIG_MERCADO_PAGO_FAILURE_URL', "http://127.0.0.1/app/payment/erro/")
+MERCADO_PAGO_ACCESS_TOKEN = os.getenv(
+    'CONFIG_MERCADO_PAGO_ACCESS_TOKEN',
+    ""
+)
+
+MERCADO_PAGO_PUBLIC_KEY = os.getenv(
+    'CONFIG_MERCADO_PAGO_PUBLIC_KEY',
+    ""
+)
+
+MERCADO_PAGO_CLIENT_ID = os.getenv(
+    'CONFIG_MERCADO_PAGO_CLIENT_ID',
+    ""
+)
+
+MERCADO_PAGO_CLIENT_SECRET = os.getenv(
+    'CONFIG_MERCADO_PAGO_CLIENT_SECRET',
+    ""
+)
+
+MERCADO_PAGO_WEBHOOK_SECRET = os.getenv(
+    'CONFIG_MERCADO_PAGO_SIGNATURE',
+    ""
+)
+
+MERCADO_PAGO_SUCCESS_URL = os.getenv(
+    'CONFIG_MERCADO_PAGO_SUCCESS_URL',
+    "https://pdl.denky.dev.br/app/payment/mercadopago/sucesso/"
+)
+
+MERCADO_PAGO_FAILURE_URL = os.getenv(
+    'CONFIG_MERCADO_PAGO_FAILURE_URL',
+    "https://pdl.denky.dev.br/app/payment/mercadopago/erro/"
+)
