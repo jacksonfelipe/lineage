@@ -67,9 +67,21 @@ def confirmar_pagamento(request, pedido_id):
                 return HttpResponse("Pedido já processado ou inválido.")
 
             # Verifica se já existe um pagamento iniciado para esse pedido
-            if Pagamento.objects.filter(pedido_pagamento=pedido).exists():
+            pagamento = Pagamento.objects.filter(pedido_pagamento=pedido).first()
+            if pagamento:
+                if pedido.metodo == "MercadoPago" and pagamento.transaction_code:
+                    sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
+                    preference_response = sdk.preference().get(pagamento.transaction_code)
+
+                    if preference_response.get("status") != 200:
+                        return HttpResponse("Erro ao recuperar preferência de pagamento", status=500)
+
+                    preference = preference_response.get("response", {})
+                    return redirect(preference["init_point"])
+
                 return HttpResponse("Já existe um pagamento iniciado para este pedido.", status=400)
 
+            # Cria novo pagamento
             pagamento = Pagamento.objects.create(
                 usuario=request.user,
                 valor=pedido.valor_pago,
