@@ -27,9 +27,9 @@ def pagamento_erro(request):
 @require_POST
 def notificacao_mercado_pago(request):
     try:
-        body = json.loads(request.body)
+        body = json.loads(request.body) if request.body else {}
     except json.JSONDecodeError:
-        return HttpResponse("JSON inválido", status=400)
+        body = {}
 
     tipo = request.GET.get("type")
     data_id = request.GET.get("data.id")
@@ -58,7 +58,6 @@ def notificacao_mercado_pago(request):
                 try:
                     pagamento = Pagamento.objects.get(id=pagamento_id)
 
-                    # Só processa se ainda não estiver aprovado
                     if status == "approved" and pagamento.status != "Approved":
                         with transaction.atomic():
                             wallet, _ = Wallet.objects.get_or_create(usuario=pagamento.usuario)
