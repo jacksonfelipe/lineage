@@ -12,48 +12,56 @@ from django.db import transaction
 import logging
 import hmac
 import hashlib
-import time
+import urllib.parse
 
 
 logger = logging.getLogger(__name__)
 
 
-def validar_assinatura(request):
-    signature_header = request.headers.get("X-Signature")
+def validar_assinatura_hmac(request):
+    x_signature = request.headers.get("x-signature")
+    x_request_id = request.headers.get("x-request-id")
 
-    if not signature_header:
-        logger.warning("Cabeçalho X-Signature ausente.")
+    if not x_signature or not x_request_id:
+        logger.warning("Cabeçalhos ausentes para verificação HMAC.")
         return False
 
-    try:
-        parts = dict(part.split("=") for part in signature_header.split(","))
-        ts = parts.get("ts")
-        v1 = parts.get("v1")
-    except Exception:
-        logger.warning("Formato inválido da assinatura.")
+    query_string = urllib.parse.urlparse(request.get_raw_uri()).query
+    query_params = urllib.parse.parse_qs(query_string)
+    data_id = query_params.get("data.id", [""])[0]
+
+    if not data_id:
+        logger.warning("Query param data.id ausente.")
         return False
 
-    if not ts or not v1:
-        logger.warning("Componentes da assinatura ausentes.")
+    parts = x_signature.split(",")
+    ts = None
+    v1 = None
+
+    for part in parts:
+        key_value = part.strip().split("=", 1)
+        if len(key_value) == 2:
+            key, value = key_value
+            if key == "ts":
+                ts = value
+            elif key == "v1":
+                v1 = value
+
+    if not all([ts, v1]):
+        logger.warning("Partes da assinatura ausentes.")
         return False
 
-    try:
-        ts_int = int(ts)
-        now_ms = int(time.time() * 1000)
-        if abs(now_ms - ts_int) > 5 * 60 * 1000:  # tolerância de 5 minutos
-            logger.warning("Timestamp fora do intervalo permitido.")
-            return False
-    except Exception:
-        logger.warning("Timestamp inválido.")
-        return False
+    # Monta o manifesto como especificado na doc do Mercado Pago
+    manifest = f"id:{data_id};request-id:{x_request_id};ts:{ts};"
 
-    secret = settings.MERCADO_PAGO_WEBHOOK_SECRET.encode("utf-8")
-    body = request.body
-    message = ts.encode() + body
-    expected_signature = hmac.new(secret, message, hashlib.sha256).hexdigest()
+    # Obtém a chave secreta do settings
+    secret = settings.MERCADO_PAGO_WEBHOOK_SECRET
+
+    hmac_obj = hmac.new(secret.encode(), manifest.encode(), hashlib.sha256)
+    expected_signature = hmac_obj.hexdigest()
 
     if not hmac.compare_digest(expected_signature, v1):
-        logger.warning("Assinatura incorreta.")
+        logger.warning("Assinatura HMAC inválida.")
         return False
 
     return True
@@ -70,7 +78,7 @@ def pagamento_erro(request):
 @csrf_exempt
 @require_POST
 def notificacao_mercado_pago(request):
-    if not validar_assinatura(request):
+    if not validar_assinatura_hmac(request):
         return HttpResponse("Assinatura inválida", status=403)
 
     try:
@@ -92,7 +100,6 @@ def notificacao_mercado_pago(request):
     if not tipo or not data_id:
         return HttpResponse("Parâmetros inválidos", status=400)
 
-    # Salva o log da notificação
     WebhookLog.objects.create(
         tipo=tipo,
         data_id=str(data_id),
