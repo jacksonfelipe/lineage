@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import PedidoPagamento, Pagamento
+from .models import PedidoPagamento, Pagamento, WebhookLog
 from core.admin import BaseModelAdmin
 
 
@@ -42,3 +42,21 @@ class PagamentoAdmin(BaseModelAdmin):
             return format_html('<a href="/admin/payment/pedidopagamento/{}/change/">Ver Pedido</a>', obj.pedido_pagamento.id)
         return '-'
     pedido_link.short_description = "Pedido"
+
+
+@admin.register(WebhookLog)
+class WebhookLogAdmin(BaseModelAdmin):
+    list_display = ('id', 'tipo', 'data_id', 'recebido_em')
+    search_fields = ('tipo', 'data_id')
+    list_filter = ('tipo', 'recebido_em')
+    readonly_fields = ('tipo', 'data_id', 'payload', 'recebido_em')
+    ordering = ('-recebido_em',)
+
+    def has_add_permission(self, request):
+        return False  # impede a criação manual
+
+    def has_change_permission(self, request, obj=None):
+        return False  # impede a edição
+
+    def has_delete_permission(self, request, obj=None):
+        return False  # impede a exclusão
