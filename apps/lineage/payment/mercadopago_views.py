@@ -29,10 +29,11 @@ def notificacao_mercado_pago(request):
     try:
         body = json.loads(request.body) if request.body else {}
     except json.JSONDecodeError:
-        body = {}
+        return HttpResponse("JSON inválido", status=400)
 
-    tipo = request.GET.get("type")
-    data_id = request.GET.get("data.id")
+    tipo = body.get("type")
+    data = body.get("data", {})
+    data_id = data.get("id")
 
     if not tipo or not data_id:
         return HttpResponse("Parâmetros inválidos", status=400)
@@ -40,7 +41,7 @@ def notificacao_mercado_pago(request):
     # Salva o log da notificação
     WebhookLog.objects.create(
         tipo=tipo,
-        data_id=data_id,
+        data_id=str(data_id),
         payload=body
     )
 
@@ -52,7 +53,7 @@ def notificacao_mercado_pago(request):
         if result["status"] == 200:
             pagamento_info = result["response"]
             status = pagamento_info["status"]
-            pagamento_id = pagamento_info["metadata"].get("pagamento_id")
+            pagamento_id = pagamento_info.get("metadata", {}).get("pagamento_id")
 
             if pagamento_id:
                 try:
@@ -82,13 +83,13 @@ def notificacao_mercado_pago(request):
 
         return HttpResponse("Erro ao buscar pagamento", status=400)
 
-    elif tipo == "merchant_order":
+    elif tipo in ["merchant_order", "topic_merchant_order_wh"]:
         result = sdk.merchant_order().get(data_id)
 
         if result["status"] == 200:
             order = result["response"]
             pagamentos = order.get("payments", [])
-            aprovado = any(p["status"] == "approved" for p in pagamentos)
+            aprovado = any(p.get("status") == "approved" for p in pagamentos)
 
             if aprovado:
                 external_reference = order.get("external_reference")
