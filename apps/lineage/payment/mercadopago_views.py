@@ -89,87 +89,104 @@ def notificacao_mercado_pago(request):
     tipo = body.get("type")
     data = body.get("data", {})
 
-    # Corrigir o data_id dependendo do tipo
-    if tipo == "payment":
-        data_id = data.get("id")
-    elif tipo in ["merchant_order", "topic_merchant_order_wh"]:
-        data_id = body.get("id")  # vem fora do campo data
-    else:
-        data_id = data.get("id")  # fallback genérico
-
-    if not tipo or not data_id:
+    if not tipo or not data:
         return HttpResponse("Parâmetros inválidos", status=400)
 
+    # Determinar o ID de acordo com o tipo
+    data_id = (
+        data.get("id")
+        if tipo in ["payment", "plan", "subscription", "invoice"]
+        else body.get("id")
+    )
+
+    if not data_id:
+        return HttpResponse("ID não encontrado", status=400)
+
+    # Log da notificação
     WebhookLog.objects.create(
         tipo=tipo,
         data_id=str(data_id),
         payload=body
     )
 
+    # SDK do Mercado Pago
     sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
 
-    if tipo == "payment":
-        result = sdk.payment().get(data_id)
+    try:
+        if tipo == "payment":
+            result = sdk.payment().get(data_id)
+            if result["status"] == 200:
+                pagamento_info = result["response"]
+                status = pagamento_info["status"]
+                pagamento_id = pagamento_info.get("metadata", {}).get("pagamento_id")
 
-        if result["status"] == 200:
-            pagamento_info = result["response"]
-            status = pagamento_info["status"]
-            pagamento_id = pagamento_info.get("metadata", {}).get("pagamento_id")
-
-            if pagamento_id:
-                try:
-                    pagamento = Pagamento.objects.get(id=pagamento_id)
-
-                    if status == "approved" and pagamento.status != "Approved":
-                        with transaction.atomic():
-                            wallet, _ = Wallet.objects.get_or_create(usuario=pagamento.usuario)
-                            aplicar_transacao(
-                                wallet=wallet,
-                                tipo="ENTRADA",
-                                valor=pagamento.valor,
-                                descricao="Crédito via MercadoPago",
-                                origem="MercadoPago",
-                                destino=pagamento.usuario.username
-                            )
-                            pagamento.status = "Approved"
-                            pagamento.save()
-
-                    return HttpResponse("Notificação de pagamento processada", status=200)
-
-                except Pagamento.DoesNotExist:
-                    return HttpResponse("Pagamento não encontrado", status=404)
-                except Exception as e:
-                    logger.error(f"Erro ao aplicar transação: {e}")
-                    return HttpResponse("Erro interno ao processar transação", status=500)
-
-        return HttpResponse("Erro ao buscar pagamento", status=400)
-
-    elif tipo in ["merchant_order", "topic_merchant_order_wh"]:
-        result = sdk.merchant_order().get(data_id)
-
-        if result["status"] == 200:
-            order = result["response"]
-            pagamentos = order.get("payments", [])
-            aprovado = any(p.get("status") == "approved" for p in pagamentos)
-
-            if aprovado:
-                external_reference = order.get("external_reference")
-                if external_reference:
+                if pagamento_id:
                     try:
-                        pagamento = Pagamento.objects.get(id=external_reference)
+                        pagamento = Pagamento.objects.get(id=pagamento_id)
+                        if status == "approved" and pagamento.status != "Approved":
+                            with transaction.atomic():
+                                wallet, _ = Wallet.objects.get_or_create(usuario=pagamento.usuario)
+                                aplicar_transacao(
+                                    wallet=wallet,
+                                    tipo="ENTRADA",
+                                    valor=pagamento.valor,
+                                    descricao="Crédito via MercadoPago",
+                                    origem="MercadoPago",
+                                    destino=pagamento.usuario.username
+                                )
+                                pagamento.status = "Approved"
+                                pagamento.save()
 
-                        if pagamento.status != "Approved":
-                            pagamento.status = "Approved"
-                            pagamento.save()
+                        return HttpResponse("OK", status=200)
 
-                        return HttpResponse("Notificação de merchant order processada", status=200)
                     except Pagamento.DoesNotExist:
-                        return HttpResponse("Pagamento não encontrado pela referência", status=404)
-                else:
-                    return HttpResponse("Referência externa ausente", status=400)
+                        return HttpResponse("Pagamento não encontrado", status=404)
+            return HttpResponse("Erro ao consultar pagamento", status=400)
 
-            return HttpResponse("Ordem ainda não paga", status=200)
+        elif tipo == "merchant_order":
+            result = sdk.merchant_order().get(data_id)
+            if result["status"] == 200:
+                order = result["response"]
+                pagamentos = order.get("payments", [])
+                aprovado = any(p.get("status") == "approved" for p in pagamentos)
 
-        return HttpResponse("Erro ao buscar merchant order", status=400)
+                if aprovado:
+                    external_reference = order.get("external_reference")
+                    if external_reference:
+                        try:
+                            pagamento = Pagamento.objects.get(id=external_reference)
+                            if pagamento.status != "Approved":
+                                pagamento.status = "Approved"
+                                pagamento.save()
+                            return HttpResponse("OK", status=200)
+                        except Pagamento.DoesNotExist:
+                            return HttpResponse("Pagamento não encontrado pela referência", status=404)
+                return HttpResponse("Ordem ainda não paga", status=200)
+            return HttpResponse("Erro ao buscar merchant order", status=400)
 
-    return HttpResponse("Tipo de notificação não suportado", status=400)
+        elif tipo == "plan":
+            sdk.preapproval().get(data_id)
+            logger.info(f"Notificação de plano {data_id} recebida.")
+            return HttpResponse("OK", status=200)
+
+        elif tipo == "subscription":
+            sdk.preapproval().get(data_id)
+            logger.info(f"Notificação de assinatura {data_id} recebida.")
+            return HttpResponse("OK", status=200)
+
+        elif tipo == "invoice":
+            sdk.invoice().get(data_id)
+            logger.info(f"Notificação de fatura {data_id} recebida.")
+            return HttpResponse("OK", status=200)
+
+        elif tipo == "point_integration_wh":
+            logger.info(f"Notificação Point Integration recebida: {data_id}")
+            return HttpResponse("OK", status=200)
+
+        else:
+            logger.warning(f"Tipo de notificação não tratado: {tipo}")
+            return HttpResponse("Tipo não suportado", status=200)
+
+    except Exception as e:
+        logger.exception("Erro ao processar notificação")
+        return HttpResponse("Erro interno", status=500)
