@@ -26,7 +26,6 @@ def validar_assinatura_hmac(request):
         logger.warning("Cabeçalhos obrigatórios ausentes: x-signature ou x-request-id.")
         return False
 
-    # Obtém o parâmetro data.id da query string
     query_string = urllib.parse.urlparse(request.build_absolute_uri()).query
     query_params = urllib.parse.parse_qs(query_string)
     data_id = query_params.get("data.id", [None])[0]
@@ -35,7 +34,6 @@ def validar_assinatura_hmac(request):
         logger.warning("Parâmetro 'data.id' ausente na query string.")
         return False
 
-    # Extrai partes da assinatura
     ts, v1 = None, None
     try:
         parts = dict(part.strip().split("=", 1) for part in x_signature.split(","))
@@ -49,16 +47,14 @@ def validar_assinatura_hmac(request):
         logger.warning("Partes 'ts' ou 'v1' da assinatura ausentes.")
         return False
 
-    # Monta o manifesto conforme a especificação do Mercado Pago
     manifest = f"id:{data_id};request-id:{x_request_id};ts:{ts};"
-    
+
     try:
         secret = settings.MERCADO_PAGO_WEBHOOK_SECRET
     except AttributeError:
         logger.error("Chave secreta do Mercado Pago não configurada no settings.")
         return False
 
-    # Gera HMAC e compara com o valor recebido
     hmac_obj = hmac.new(secret.encode(), manifest.encode(), hashlib.sha256)
     expected_signature = hmac_obj.hexdigest()
 
@@ -94,24 +90,25 @@ def notificacao_mercado_pago(request):
     if not tipo or not data:
         return HttpResponse("Parâmetros inválidos", status=400)
 
-    # Determinar o ID de acordo com o tipo
+    # Trata notificações alternativas como equivalentes
+    if tipo == "topic_merchant_order_wh":
+        tipo = "merchant_order"
+
     data_id = (
         data.get("id")
-        if tipo in ["payment", "plan", "subscription", "invoice"]
+        if tipo in ["payment", "plan", "subscription", "invoice", "merchant_order"]
         else body.get("id")
     )
 
     if not data_id:
         return HttpResponse("ID não encontrado", status=400)
 
-    # Log da notificação
     WebhookLog.objects.create(
         tipo=tipo,
         data_id=str(data_id),
         payload=body
     )
 
-    # SDK do Mercado Pago
     sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
 
     try:
@@ -186,9 +183,9 @@ def notificacao_mercado_pago(request):
             return HttpResponse("OK", status=200)
 
         else:
-            logger.warning(f"Tipo de notificação não tratado: {tipo}")
+            logger.warning(f"Tipo de notificação não tratado: {tipo} | data_id: {data_id} | payload: {json.dumps(body)}")
             return HttpResponse("Tipo não suportado", status=200)
 
     except Exception as e:
-        logger.exception("Erro ao processar notificação")
+        logger.exception(f"Erro ao processar notificação do tipo '{tipo}' com data_id '{data_id}': {e}")
         return HttpResponse("Erro interno", status=500)
