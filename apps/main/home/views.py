@@ -23,17 +23,21 @@ with open('utils/data/index.json', 'r', encoding='utf-8') as file:
 
 
 def index(request):
-    clanes = LineageStats.top_clans(limit=10)
-    online = LineageStats.players_online()
+    clanes = LineageStats.top_clans(limit=10) or []
+    online = LineageStats.players_online() or []
     config = IndexConfig.objects.first()
-    classes_info = data_index['classes']
+    classes_info = data_index.get('classes', [])
+
+    # Pegando o valor de jogadores online com segurança
+    online_count = online[0]['quant'] if online and isinstance(online, list) and 'quant' in online[0] else 0
 
     return render(request, 'pages/index.html', {
         'clanes': clanes,
         'classes_info': classes_info,
-        'online': online[0]['quant'],
+        'online': online_count,
         'configuracao': config
     })
+
 
 
 def custom_400_view(request, exception):

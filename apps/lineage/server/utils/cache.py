@@ -1,6 +1,15 @@
 from django.core.cache import cache
 import hashlib
 import json
+from sqlalchemy.engine import RowMapping
+
+
+def convert_rowmapping_to_dict(obj):
+    if isinstance(obj, list):
+        return [dict(row) for row in obj]
+    elif isinstance(obj, RowMapping):
+        return dict(obj)
+    return obj
 
 
 def cache_lineage_result(timeout=300):
@@ -17,7 +26,10 @@ def cache_lineage_result(timeout=300):
 
             # Se não tiver, executa e armazena no cache
             result = func(*args, **kwargs)
-            cache.set(key, result, timeout=timeout)
-            return result
+
+            # Converte o resultado antes de salvar e retornar
+            result_converted = convert_rowmapping_to_dict(result)
+            cache.set(key, result_converted, timeout=timeout)
+            return result_converted
         return wrapper
     return decorator

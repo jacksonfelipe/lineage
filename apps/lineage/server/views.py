@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from .querys.query_dreamv3 import LineageStats
-from .decorators import endpoint_enabled
+from .decorators import endpoint_enabled, safe_json_response
 from django.shortcuts import render, redirect
 from .models import ApiEndpointToggle
 from django.views.decorators.http import require_http_methods
@@ -8,122 +8,115 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 
 @endpoint_enabled('players_online')
+@safe_json_response
 def players_online(request):
-    data = LineageStats.players_online()
-    return JsonResponse(data, safe=False)
+    return LineageStats.players_online()
 
 
 @endpoint_enabled('top_pvp')
+@safe_json_response
 def top_pvp(request):
     limit = int(request.GET.get("limit", 10))
-    data = LineageStats.top_pvp(limit=limit)
-    return JsonResponse(data, safe=False)
+    return LineageStats.top_pvp(limit=limit)
 
 
 @endpoint_enabled('top_pk')
+@safe_json_response
 def top_pk(request):
     limit = int(request.GET.get("limit", 10))
-    data = LineageStats.top_pk(limit=limit)
-    return JsonResponse(data, safe=False)
+    return LineageStats.top_pk(limit=limit)
 
 
 @endpoint_enabled('top_clan')
+@safe_json_response
 def top_clan(request):
     limit = int(request.GET.get("limit", 10))
-    data = LineageStats.top_clans(limit=limit)
-    return JsonResponse(data, safe=False)
+    return LineageStats.top_clans(limit=limit)
 
 
 @endpoint_enabled('top_rich')
+@safe_json_response
 def top_rich(request):
     limit = int(request.GET.get("limit", 10))
-    data = LineageStats.top_adena(limit=limit)
-    return JsonResponse(data, safe=False)
+    return LineageStats.top_adena(limit=limit)
 
 
 @endpoint_enabled('top_online')
+@safe_json_response
 def top_online(request):
     limit = int(request.GET.get("limit", 10))
-    data = LineageStats.top_online(limit=limit)
-    return JsonResponse(data, safe=False)
+    return LineageStats.top_online(limit=limit)
 
 
 @endpoint_enabled('top_level')
+@safe_json_response
 def top_level(request):
     limit = int(request.GET.get("limit", 10))
-    data = LineageStats.top_level(limit=limit)
-    return JsonResponse(data, safe=False)
+    return LineageStats.top_level(limit=limit)
 
 
 @endpoint_enabled('olympiad_ranking')
+@safe_json_response
 def olympiad_ranking(request):
-    data = LineageStats.olympiad_ranking()
-    return JsonResponse(data, safe=False)
+    return LineageStats.olympiad_ranking()
 
 
 @endpoint_enabled('olympiad_all_heroes')
+@safe_json_response
 def olympiad_all_heroes(request):
-    data = LineageStats.olympiad_all_heroes()
-    return JsonResponse(data, safe=False)
+    return LineageStats.olympiad_all_heroes()
 
 
 @endpoint_enabled('olympiad_current_heroes')
+@safe_json_response
 def olympiad_current_heroes(request):
-    data = LineageStats.olympiad_current_heroes()
-    return JsonResponse(data, safe=False)
+    return LineageStats.olympiad_current_heroes()
 
 
 @endpoint_enabled('grandboss_status')
+@safe_json_response
 def grandboss_status(request):
-    data = LineageStats.grandboss_status()
-    return JsonResponse(data, safe=False)
+    return LineageStats.grandboss_status()
 
 
 @endpoint_enabled('raidboss_status')
+@safe_json_response
 def raidboss_status(request):
-    data = LineageStats.raidboss_status()
-    return JsonResponse(data, safe=False)
+    return LineageStats.raidboss_status()
 
 
 @endpoint_enabled('siege')
+@safe_json_response
 def siege(request):
-    data = LineageStats.siege()
-    return JsonResponse(data, safe=False)
+    return LineageStats.siege()
 
 
 @endpoint_enabled('siege_participants')
+@safe_json_response
 def siege_participants(request, castle_id):
-    # Valida se o castle_id está entre 1 e 9
     if castle_id not in range(1, 10):
         return JsonResponse({'error': 'castle_id deve ser um valor entre 1 e 9'}, status=400)
-    
-    data = LineageStats.siege_participants(castle_id=castle_id)
-    return JsonResponse(data, safe=False)
+    return LineageStats.siege_participants(castle_id=castle_id)
 
 
 @endpoint_enabled('boss_jewel_locations')
+@safe_json_response
 def boss_jewel_locations(request):
     jewel_ids = request.GET.get("ids", "")
     
     if not jewel_ids:
         return JsonResponse({"error": "Missing jewel item IDs"}, status=400)
     
-    # Convertendo os IDs fornecidos para uma lista de inteiros
     try:
         jewel_ids_list = [int(id) for id in jewel_ids.split(',')]
     except ValueError:
         return JsonResponse({"error": "Invalid ID format"}, status=400)
     
-    # IDs permitidos
     allowed_ids = [6656, 6657, 6658, 6659, 6660, 6661, 8191]
-    
-    # Verificando se todos os IDs fornecidos são válidos
     if not all(id in allowed_ids for id in jewel_ids_list):
         return JsonResponse({"error": "Invalid jewel item ID(s)"}, status=400)
     
-    # Chamando a função para buscar as localizações
-    data = LineageStats.boss_jewel_locations(boss_jewel_ids=jewel_ids_list)
-    return JsonResponse(data, safe=False)
+    return LineageStats.boss_jewel_locations(boss_jewel_ids=jewel_ids_list)
 
 
 @staff_member_required
