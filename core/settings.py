@@ -377,3 +377,9 @@ CKEDITOR_5_CONFIGS = {
         }
     }
 }
+
+# =========================== PAYMENTS CONFIGS ===========================
+
+MERCADO_PAGO_ACCESS_TOKEN = os.getenv('CONFIG_MERCADO_PAGO_ACCESS_TOKEN', "SEU_ACCESS_TOKEN")
+MERCADO_PAGO_SUCCESS_URL = os.getenv('CONFIG_MERCADO_PAGO_SUCCESS_URL', "http://127.0.0.1/app/payment/sucesso/")
+MERCADO_PAGO_FAILURE_URL = os.getenv('CONFIG_MERCADO_PAGO_FAILURE_URL', "http://127.0.0.1/app/payment/erro/")

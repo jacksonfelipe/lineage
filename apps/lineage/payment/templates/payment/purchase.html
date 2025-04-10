@@ -1,6 +1,25 @@
-{% extends "base.html" %}
+{% extends "layouts/base.html" %}
 
 {% block content %}
-  <h1>Finalizar Compra</h1>
-  <p>Aqui vai o processo de pagamento.</p>
+<div class="container mt-5">
+  <h1 class="mb-4">Comprar Moedas</h1>
+
+  <form method="post" action="{% url 'payment:purchase' %}">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label for="valor" class="form-label">Valor (em R$)</label>
+      <input type="number" class="form-control" id="valor" name="valor" step="0.01" min="1" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="metodo" class="form-label">Meio de Pagamento</label>
+      <select class="form-select" id="metodo" name="metodo" required>
+        <option value="MercadoPago">MercadoPago</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Gerar Pagamento</button>
+  </form>
+</div>
 {% endblock %}

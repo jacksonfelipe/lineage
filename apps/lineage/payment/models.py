@@ -8,7 +8,7 @@ class PedidoPagamento(BaseModel):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     valor_pago = models.DecimalField(max_digits=10, decimal_places=2)
     moedas_geradas = models.DecimalField(max_digits=10, decimal_places=2)
-    metodo = models.CharField(max_length=50)  # ex: 'Pix', 'MercadoPago'
+    metodo = models.CharField(max_length=100)  # Aumentado para comportar nomes mais longos
     status = models.CharField(max_length=20, default='PENDENTE')  # CONFIRMADO, FALHOU...
     data_criacao = models.DateTimeField(auto_now_add=True)
 
@@ -31,3 +31,27 @@ class PedidoPagamento(BaseModel):
             # Atualiza o saldo da carteira
             wallet.saldo += self.moedas_geradas
             wallet.save()
+
+    def __str__(self):
+        return f"Pedido #{self.id} - {self.usuario.username} - {self.status}"
+
+
+class Pagamento(BaseModel):
+    STATUS_CHOICES = [
+        ('Pendente', 'Pendente'),
+        ('Aprovado', 'Aprovado'),
+        ('Cancelado', 'Cancelado'),
+        ('Outro', 'Outro'),
+    ]
+
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Pendente')
+    transaction_code = models.CharField(max_length=100, null=True, blank=True)
+    pedido_pagamento = models.OneToOneField(
+        PedidoPagamento, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    data_criacao = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Pagamento {self.id} - {self.status}"

@@ -5,10 +5,24 @@
 {% block content %}
 <div class="container mt-4">
     <h2><i class="fas fa-plus-circle"></i> Criar Nova Solicitação</h2>
+    
+    <div class="alert alert-info">
+        <p><strong>Informações Importantes:</strong></p>
+        <ul>
+            <li>As solicitações são <strong>tickets de suporte</strong> para iniciar um chat com a administração.</li>
+            <li>Enquanto o status da solicitação estiver como <strong>Pendente</strong>, o chat permanecerá ativo.</li>
+            <li>Após a solicitação ser <strong>concluída</strong>, o chat será desabilitado e o atendimento encerrado.</li>
+            <li>Somente <strong>uma solicitação pendente</strong> pode existir por vez.</li>
+            <li>Seja <strong>claro e objetivo</strong> ao abrir uma solicitação para que a equipe possa ajudá-lo de forma mais eficaz.</li>
+            <li>Após criar a solicitação, acesse o <strong>dashboard</strong> e clique em <strong>Chat</strong> para iniciar o atendimento.</li>
+            <li>O atendimento não é em tempo real, ou seja, você criará a solicitação e aguardar a resposta da equipe.</li>
+        </ul>
+    </div>
+
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Criar</button>
+        <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Criar Solicitação</button>
         <a href="{% url 'solicitation:solicitation_list' %}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>

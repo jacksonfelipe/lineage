@@ -6,6 +6,9 @@ app_name = "payment"
 
 
 urlpatterns = [
-    path("buy/", views.buy_coins, name="buy_coins"),
-    path("purchase/", views.purchase, name="purchase"),
+    path('purchase/', views.purchase, name='purchase'),
+    path('confirmar-pagamento/<str:valor>/<str:metodo>/', views.confirmar_pagamento, name='confirmar_pagamento'),
+    path('mercadopago/sucesso/', views.pagamento_sucesso, name='pagamento_sucesso'),
+    path('mercadopago/erro/', views.pagamento_erro, name='pagamento_erro'),
+    path('mercadopago/notificacao/', views.notificacao_mercado_pago, name='notificacao_mercado_pago'),
 ]
