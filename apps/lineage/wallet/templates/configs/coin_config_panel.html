@@ -70,11 +70,30 @@
         </div>
       </form>
 
-      <div class="text-end mt-3">
-        <a href="#" class="btn btn-success rounded-pill">
-          <i class="bi bi-plus-circle me-2"></i>Nova Moeda
-        </a>
-      </div>
+      <hr class="my-4">
+
+      <h5 class="fw-bold mb-3"><i class="bi bi-plus-circle me-2"></i>Nova Moeda</h5>
+      <form method="post" class="row g-3">
+        {% csrf_token %}
+        <input type="hidden" name="create_coin" value="1">
+        <div class="col-md-4">
+          <label class="form-label">Nome</label>
+          <input type="text" name="nome" class="form-control" placeholder="Ex: Gold Coin" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">ID (no servidor)</label>
+          <input type="text" name="coin_id" class="form-control" placeholder="Ex: 4037" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Multiplicador</label>
+          <input type="number" step="0.01" name="multiplicador" class="form-control" placeholder="Ex: 1.0" required>
+        </div>
+        <div class="col-12 text-end">
+          <button type="submit" class="btn btn-success rounded-pill px-4">
+            <i class="bi bi-save me-2"></i>Cadastrar Moeda
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
