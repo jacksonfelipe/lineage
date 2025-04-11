@@ -14,8 +14,10 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import logout
 from utils.notifications import send_notification
 
-from apps.lineage.server.querys.query_dreamv3 import LineageStats
 from apps.lineage.server.models import IndexConfig
+
+from utils.dynamic_import import get_query_class  # importa o helper
+LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
 
 
 with open('utils/data/index.json', 'r', encoding='utf-8') as file:

@@ -1,9 +1,10 @@
-from django.http import JsonResponse
-from apps.lineage.server.querys.query_dreamv3 import LineageAccount
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .decorators import require_lineage_connection
+
+from utils.dynamic_import import get_query_class  # importa o helper
+LineageAccount = get_query_class("LineageAccount")  # carrega a classe certa com base no .env
 
 
 @login_required

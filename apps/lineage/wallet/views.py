@@ -9,8 +9,11 @@ from django.contrib.auth import authenticate
 from apps.main.home.models import User
 from django.db import transaction
 from .signals import aplicar_transacao
-from apps.lineage.server.querys.query_dreamv3 import TransferFromWalletToChar, LineageServices
 from apps.lineage.server.database import LineageDB
+
+from utils.dynamic_import import get_query_class
+TransferFromWalletToChar = get_query_class("TransferFromWalletToChar")
+LineageServices = get_query_class("LineageServices")
 
 
 @login_required

@@ -1,10 +1,12 @@
 from django.http import JsonResponse
-from .querys.query_dreamv3 import LineageStats
 from .decorators import endpoint_enabled, safe_json_response
 from django.shortcuts import render, redirect
 from .models import ApiEndpointToggle
 from django.views.decorators.http import require_http_methods
 from django.contrib.admin.views.decorators import staff_member_required
+
+from utils.dynamic_import import get_query_class  # importa o helper
+LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
 
 
 @endpoint_enabled('players_online')
