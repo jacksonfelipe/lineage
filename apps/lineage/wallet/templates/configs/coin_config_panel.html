@@ -1,0 +1,81 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card shadow-lg rounded-4">
+    <div class="card-header bg-primary text-white rounded-top-4">
+      <h4 class="mb-0 fw-bold"><i class="bi bi-currency-exchange me-2"></i>Configuração de Moeda In-game</h4>
+    </div>
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        <div class="table-responsive">
+          <table class="table align-middle table-hover table-striped">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>ID</th>
+                <th>Multiplicador</th>
+                <th>Status</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for moeda in moedas %}
+              <tr class="{% if moeda.ativa %}table-success{% endif %}">
+                <td>{{ moeda.nome }}</td>
+                <td>{{ moeda.coin_id }}</td>
+                <td>x{{ moeda.multiplicador }}</td>
+                <td>
+                  {% if moeda.ativa %}
+                    <span class="badge bg-success">Ativa</span>
+                  {% else %}
+                    <span class="badge bg-secondary">Inativa</span>
+                  {% endif %}
+                </td>
+                <td style="min-width: 160px;">
+                  <div class="d-grid gap-2">
+                    {% if not moeda.ativa %}
+                    <form method="post" class="w-100">
+                      {% csrf_token %}
+                      <input type="hidden" name="activate_coin_id" value="{{ moeda.id }}">
+                      <button type="submit" class="btn btn-sm btn-outline-primary w-100 text-nowrap">
+                        Ativar
+                      </button>
+                    </form>
+                    {% else %}
+                    <button class="btn btn-sm btn-outline-secondary w-100 text-nowrap" disabled>
+                      Atual
+                    </button>
+                    {% endif %}
+
+                    <form method="post" class="w-100" onsubmit="return confirm('Tem certeza que deseja excluir esta moeda?')">
+                      {% csrf_token %}
+                      <input type="hidden" name="delete_coin_id" value="{{ moeda.id }}">
+                      <button type="submit" class="btn btn-sm btn-outline-danger w-100 text-nowrap">
+                        <i class="bi bi-trash me-1"></i>Excluir
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" class="text-center text-muted">Nenhuma moeda configurada ainda.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </form>
+
+      <div class="text-end mt-3">
+        <a href="#" class="btn btn-success rounded-pill">
+          <i class="bi bi-plus-circle me-2"></i>Nova Moeda
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

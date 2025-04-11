@@ -39,6 +39,12 @@ class CoinConfig(BaseModel):
     )
     ativa = models.BooleanField(default=True, verbose_name="Moeda Ativa")
 
+    def save(self, *args, **kwargs):
+        # Se esta moeda está sendo ativada, desativa todas as outras
+        if self.ativa:
+            CoinConfig.objects.exclude(pk=self.pk).update(ativa=False)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.nome} - ID: {self.coin_id} - x{self.multiplicador}"
 

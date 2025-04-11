@@ -10,6 +10,9 @@ from apps.main.home.models import User
 from django.db import transaction
 from .signals import aplicar_transacao
 from apps.lineage.server.database import LineageDB
+from django.contrib.admin.views.decorators import staff_member_required
+from django.views.decorators.http import require_http_methods
+
 
 from utils.dynamic_import import get_query_class
 TransferFromWalletToChar = get_query_class("TransferFromWalletToChar")
@@ -169,3 +172,39 @@ def transfer_to_player(request):
         return redirect('wallet:dashboard')
 
     return render(request, 'wallet/transfer_to_player.html')
+
+
+@staff_member_required
+@require_http_methods(["GET", "POST"])
+def coin_config_panel(request):
+    if request.method == "POST":
+        if "activate_coin_id" in request.POST:
+            coin_id = request.POST.get("activate_coin_id")
+            if coin_id and CoinConfig.objects.filter(id=coin_id).exists():
+                CoinConfig.objects.update(ativa=False)
+                CoinConfig.objects.filter(id=coin_id).update(ativa=True)
+                return redirect("wallet:coin_config_panel")
+
+        elif "create_coin" in request.POST:
+            nome = request.POST.get("nome")
+            coin_id = request.POST.get("coin_id")
+            multiplicador = request.POST.get("multiplicador")
+
+            if nome and coin_id and multiplicador:
+                CoinConfig.objects.create(
+                    nome=nome,
+                    coin_id=coin_id,
+                    multiplicador=multiplicador,
+                    ativa=False
+                )
+                return redirect("wallet:coin_config_panel")
+
+        elif "delete_coin_id" in request.POST:
+            coin_id = request.POST.get("delete_coin_id")
+            if coin_id and CoinConfig.objects.filter(id=coin_id).exists():
+                CoinConfig.objects.filter(id=coin_id).delete()
+                return redirect("wallet:coin_config_panel")
+
+    moedas = CoinConfig.objects.all().order_by("-ativa", "nome")
+    context = {"moedas": moedas}
+    return render(request, "configs/coin_config_panel.html", context)

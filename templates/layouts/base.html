@@ -4,6 +4,11 @@
   {% include 'includes/head.html' %}
   {% block extrastyle %}{% endblock extrastyle %}
   {% block extrahead %}{% endblock extrahead %}
+  <style>
+    .submenu-items .dropdown-item {
+      padding-left: 1.5rem;
+    }
+  </style>
 </head>
 
 <body>
@@ -34,5 +39,24 @@
   {% include "includes/notification.html" %}
   {% include 'includes/scripts.html' %}
   {% block extra_js %}{% endblock extra_js %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggle = document.getElementById('configToggle');
+      const submenu = document.getElementById('configSubmenu');
+  
+      toggle.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation(); // impede o fechamento automático
+        submenu.classList.toggle('d-none');
+      });
+  
+      // Fecha o submenu quando o dropdown principal for fechado
+      document.querySelectorAll('.dropdown').forEach(dropdown => {
+        dropdown.addEventListener('hide.bs.dropdown', function () {
+          submenu.classList.add('d-none');
+        });
+      });
+    });
+  </script>
 </body>
 </html>
