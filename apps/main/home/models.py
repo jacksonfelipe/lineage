@@ -6,22 +6,16 @@ from encrypted_fields.encrypted_fields import *
 from encrypted_fields.encrypted_files import *
 from utils.choices import *
 from django.core.validators import validate_email
-from .validators import validate_ascii_username, validate_ascii_password
+from .validators import validate_ascii_username
 
 
 class User(BaseModel, AbstractUser):
     username = models.CharField(
-        max_length=150,
+        max_length=16,
         unique=True,
         verbose_name="nome de usuário",
         validators=[validate_ascii_username],
         help_text="Use apenas letras e números. Sem espaços ou símbolos."
-    )
-
-    password = models.CharField(
-        max_length=128,
-        verbose_name="senha",
-        validators=[validate_ascii_password]
     )
 
     email = models.EmailField(
