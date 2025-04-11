@@ -307,3 +307,16 @@
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+
+@media (max-width: 768px) {
+  #download .btn {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  #download .btn:last-child {
+    margin-bottom: 0;
+  }
+}
