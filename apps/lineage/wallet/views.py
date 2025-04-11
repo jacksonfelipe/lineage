@@ -10,6 +10,7 @@ from apps.main.home.models import User
 from django.db import transaction
 from .signals import aplicar_transacao
 from apps.lineage.server.querys.query_dreamv3 import TransferFromWalletToChar
+from apps.lineage.server.database import LineageDB
 
 
 @login_required
@@ -55,6 +56,12 @@ def transfer_to_server(request):
 
         if wallet.saldo < valor:
             messages.error(request, 'Saldo insuficiente.')
+            return redirect('wallet:transfer_to_server')
+
+        # Verifica conexão com banco do Lineage
+        db = LineageDB()
+        if not db.is_connected():
+            messages.error(request, 'O banco do jogo está indisponível no momento. Tente novamente mais tarde.')
             return redirect('wallet:transfer_to_server')
 
         conta_jogo = request.user.username  # ajuste se o nome da conta do jogo for diferente
