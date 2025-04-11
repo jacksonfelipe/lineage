@@ -73,9 +73,7 @@ def transfer_to_server(request):
             return redirect('wallet:transfer_to_server')
 
         # Confirma se o personagem pertence à conta
-        print(nome_personagem)
         personagem = TransferFromWalletToChar.find_char(request.user.username, nome_personagem)
-        print(personagem)
         if not personagem:
             messages.error(request, 'Personagem inválido ou não pertence a essa conta.')
             return redirect('wallet:transfer_to_server')
@@ -91,12 +89,14 @@ def transfer_to_server(request):
                     destino=nome_personagem
                 )
 
-                transfer = TransferFromWalletToChar(
+                sucesso = TransferFromWalletToChar.insert_coin(
                     char_name=nome_personagem,
                     coin_id=COIN_ID,
                     amount=int(valor)
                 )
-                transfer.execute()
+
+                if not sucesso:
+                    raise Exception("Erro ao adicionar a moeda ao personagem.")
 
         except Exception as e:
             messages.error(request, f"Ocorreu um erro durante a transferência: {str(e)}")
