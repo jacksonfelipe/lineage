@@ -456,14 +456,14 @@ class LineageAccount:
     def check_login_exists(login):
         sql = f"SELECT * FROM accounts WHERE login = '{login}' LIMIT 1"
         result = LineageDB().select(sql)
-        return result if result is not None else None
+        return result
 
     @staticmethod
     @cache_lineage_result(timeout=300)
     def check_email_exists(email):
         sql = f"SELECT login, email FROM accounts WHERE email = '{email}'"
         result = LineageDB().select(sql)
-        return result if result is not None else None
+        return result
 
     @staticmethod
     @cache_lineage_result(timeout=300)
@@ -540,7 +540,7 @@ class LineageAccount:
                 "login": login
             }
             result = LineageDB().update(sql, params)
-            return result if result is not None else None
+            return result
         except Exception as e:
             print(f"Erro ao atualizar accessLevel: {e}")
             return None
@@ -551,9 +551,11 @@ class TransferFromWalletToChar:
     @staticmethod
     @cache_lineage_result(timeout=300)
     def find_char(account: str, char_name: str):
-        query = "SELECT * FROM characters WHERE account_name = %s AND char_name = %s"
-        result = LineageDB().select(query, (account, char_name))
-        return result if result is not None else None
+        query = f"SELECT * FROM characters WHERE account_name = '{account}' AND char_name = '{char_name}' LIMIT 1"
+        try:
+            return LineageDB().select(query)
+        except:
+            return None
 
     @staticmethod
     @cache_lineage_result(timeout=300)
@@ -564,7 +566,7 @@ class TransferFromWalletToChar:
             WHERE c.char_name = %s AND i.item_id = %s
         """
         result = LineageDB().select(query, (char_name, coin_id))
-        return result if result is not None else None
+        return result
 
     @staticmethod
     @cache_lineage_result(timeout=300)
@@ -605,7 +607,7 @@ class TransferFromCharToWallet:
             WHERE account_name = %s AND charId = %s
         """
         result = LineageDB().select(query, (account, char_id))
-        return result if result is not None else None
+        return result
 
     @staticmethod
     @cache_lineage_result(timeout=300)
@@ -615,7 +617,7 @@ class TransferFromCharToWallet:
             WHERE owner_id = %s AND item_id = %s AND loc = 'INVENTORY'
         """
         result = LineageDB().select(query, (char_id, coin_id))
-        return result if result is not None else None
+        return result
 
     @staticmethod
     @cache_lineage_result(timeout=300)
@@ -631,7 +633,7 @@ class TransferFromCharToWallet:
             """
             params = {"count": count, "char_id": char_id, "coin_id": coin_id}
             result = LineageDB().update(query, params)
-            return result if result is not None else None
+            return result
         except Exception as e:
             print(f"Erro ao remover coin do inventário: {e}")
             return None

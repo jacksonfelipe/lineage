@@ -48,6 +48,20 @@ class LineageDB:
             print(f"❌ Falha ao conectar ao banco Lineage: {e}")
             self.engine = None
 
+    def _normalize_params(self, query: str, params: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
+        new_params = {}
+        for key, val in params.items():
+            if isinstance(val, list):
+                placeholders = []
+                for i, item in enumerate(val):
+                    new_key = f"{key}_{i}"
+                    placeholders.append(f":{new_key}")
+                    new_params[new_key] = item
+                query = query.replace(f":{key}", f"({', '.join(placeholders)})")
+            else:
+                new_params[key] = val
+        return query, new_params
+
     def _get_cache(self, query: str, params: Tuple) -> Optional[List[Dict]]:
         key = (query, params)
         if key in self.cache:
@@ -67,13 +81,14 @@ class LineageDB:
             print("⚠️ Sem conexão com o banco")
             return None
         try:
+            query, normalized_params = self._normalize_params(query, params)
             with self.engine.connect() as conn:
                 stmt = text(query)
-                return conn.execute(stmt, params)
+                return conn.execute(stmt, normalized_params)
         except SQLAlchemyError as e:
             print(f"❌ Erro na execução: {e}")
             return None
-        
+
     def is_connected(self) -> bool:
         if not self.engine:
             return False
@@ -86,41 +101,40 @@ class LineageDB:
             return False
 
     def select(self, query: str, params: Dict[str, Any] = {}, use_cache: bool = False) -> Optional[List[Dict]]:
-        param_tuple = tuple(sorted(params.items()))
+        params = params or {}
+        query_exp, params_exp = self._normalize_params(query, params)
+        param_tuple = tuple(sorted(params_exp.items()))
         if use_cache:
-            cached = self._get_cache(query, param_tuple)
+            cached = self._get_cache(query_exp, param_tuple)
             if cached is not None:
                 return cached
 
         result = self._safe_execute(query, params)
         if result is None:
             return None
+
         rows = result.mappings().all()
         if use_cache:
-            self._set_cache(query, param_tuple, rows)
+            self._set_cache(query_exp, param_tuple, rows)
         return rows
 
     def insert(self, query: str, params: Dict[str, Any] = {}) -> Optional[int]:
-        result = self._safe_execute(query, params)
-        if result is None:
-            return None
-        return result.lastrowid
+        return self._execute_and_get(query, params, "lastrowid")
 
     def update(self, query: str, params: Dict[str, Any] = {}) -> Optional[int]:
-        result = self._safe_execute(query, params)
-        if result is None:
-            return None
-        return result.rowcount
+        return self._execute_and_get(query, params, "rowcount")
 
     def delete(self, query: str, params: Dict[str, Any] = {}) -> Optional[int]:
+        return self._execute_and_get(query, params, "rowcount")
+
+    def _execute_and_get(self, query: str, params: Dict[str, Any], attr: str) -> Optional[int]:
         result = self._safe_execute(query, params)
         if result is None:
             return None
-        return result.rowcount
+        return getattr(result, attr, None)
 
     def execute_raw(self, query: str, params: Dict[str, Any] = {}) -> bool:
-        result = self._safe_execute(query, params)
-        return result is not None
+        return self._safe_execute(query, params) is not None
 
     def clear_cache(self):
         self.cache.clear()

@@ -73,7 +73,9 @@ def transfer_to_server(request):
             return redirect('wallet:transfer_to_server')
 
         # Confirma se o personagem pertence à conta
-        personagem = LineageServices.check_char(request.user.username, nome_personagem)
+        print(nome_personagem)
+        personagem = TransferFromWalletToChar.find_char(request.user.username, nome_personagem)
+        print(personagem)
         if not personagem:
             messages.error(request, 'Personagem inválido ou não pertence a essa conta.')
             return redirect('wallet:transfer_to_server')
