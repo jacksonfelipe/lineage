@@ -2,6 +2,7 @@ from django.db import models
 from apps.main.home.models import User
 from apps.lineage.wallet.models import Wallet, TransacaoWallet  # função que atualiza a wallet
 from core.models import BaseModel
+from .choices import *
 
 
 class PedidoPagamento(BaseModel):
@@ -37,16 +38,9 @@ class PedidoPagamento(BaseModel):
 
 
 class Pagamento(BaseModel):
-    STATUS_CHOICES = [
-        ('Pendente', 'Pendente'),
-        ('Aprovado', 'Aprovado'),
-        ('Cancelado', 'Cancelado'),
-        ('Outro', 'Outro'),
-    ]
-
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     valor = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Pendente')
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='pending')
     transaction_code = models.CharField(max_length=100, null=True, blank=True)
     pedido_pagamento = models.OneToOneField(
         PedidoPagamento, on_delete=models.SET_NULL, null=True, blank=True

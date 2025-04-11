@@ -102,7 +102,8 @@ def pagamento_sucesso(request):
 
         pagamento = Pagamento.objects.get(id=pagamento_id)
 
-        if status_pagamento == "approved" and pagamento.status != "Approved":
+        # garantia do pagamento
+        if status_pagamento == "approved" and pagamento.status != "paid" and pagamento.status == "approved":
             with transaction.atomic():
                 wallet, _ = Wallet.objects.get_or_create(usuario=pagamento.usuario)
                 aplicar_transacao(
@@ -113,7 +114,7 @@ def pagamento_sucesso(request):
                     origem="MercadoPago",
                     destino=pagamento.usuario.username
                 )
-                pagamento.status = "Approved"
+                pagamento.status = "paid"
                 pagamento.save()
 
         return render(request, 'mp/pagamento_sucesso.html')
@@ -184,7 +185,7 @@ def notificacao_mercado_pago(request):
                 if pagamento_id:
                     try:
                         pagamento = Pagamento.objects.get(id=pagamento_id)
-                        if status == "approved" and pagamento.status != "Approved":
+                        if status == "approved" and pagamento.status != "paid" and pagamento.status == "approved":
                             with transaction.atomic():
                                 wallet, _ = Wallet.objects.get_or_create(usuario=pagamento.usuario)
                                 aplicar_transacao(
@@ -195,7 +196,7 @@ def notificacao_mercado_pago(request):
                                     origem="MercadoPago",
                                     destino=pagamento.usuario.username
                                 )
-                                pagamento.status = "Approved"
+                                pagamento.status = "paid"
                                 pagamento.save()
 
                         return HttpResponse("OK", status=200)
@@ -216,8 +217,8 @@ def notificacao_mercado_pago(request):
                     if external_reference:
                         try:
                             pagamento = Pagamento.objects.get(id=external_reference)
-                            if pagamento.status != "Approved":
-                                pagamento.status = "Approved"
+                            if pagamento.status != "approved":
+                                pagamento.status = "approved"
                                 pagamento.save()
                             return HttpResponse("OK", status=200)
                         except Pagamento.DoesNotExist:
