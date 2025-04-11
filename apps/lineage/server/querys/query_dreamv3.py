@@ -294,101 +294,149 @@ class LineageServices:
     @staticmethod
     @cache_lineage_result(timeout=300)
     def change_sex(acc, cid, sex):
-        sql = f"UPDATE characters SET sex = '{sex}' WHERE obj_Id = '{cid}' AND account_name = '{acc}' LIMIT 1"
         try:
-            return LineageDB().execute(sql)
-        except:
+            sql = """
+                UPDATE characters SET sex = :sex
+                WHERE obj_Id = :cid AND account_name = :acc
+                LIMIT 1
+            """
+            return LineageDB().update(sql, {"sex": sex, "cid": cid, "acc": acc})
+        except Exception as e:
+            print(f"Erro ao trocar sexo: {e}")
             return None
 
     @staticmethod
     @cache_lineage_result(timeout=300)
     def unstuck(acc, cid, x, y, z):
-        sql = f"UPDATE characters SET x = '{x}', y = '{y}', z = '{z}' WHERE obj_id = '{cid}' AND account_name = '{acc}' LIMIT 1"
         try:
-            return LineageDB().execute(sql)
-        except:
+            sql = """
+                UPDATE characters SET x = :x, y = :y, z = :z
+                WHERE obj_id = :cid AND account_name = :acc
+                LIMIT 1
+            """
+            return LineageDB().update(sql, {"x": x, "y": y, "z": z, "cid": cid, "acc": acc})
+        except Exception as e:
+            print(f"Erro ao desbugar personagem: {e}")
             return None
 
     @staticmethod
     @cache_lineage_result(timeout=300)
     def delete_skills(cid):
-        sql = f"DELETE FROM character_skills WHERE charId = '{cid}' AND class_index = '0'"
         try:
-            return LineageDB().execute(sql)
-        except:
+            sql = """
+                DELETE FROM character_skills
+                WHERE charId = :cid AND class_index = 0
+            """
+            return LineageDB().update(sql, {"cid": cid})
+        except Exception as e:
+            print(f"Erro ao deletar skills: {e}")
             return None
 
     @staticmethod
     @cache_lineage_result(timeout=300)
     def delete_skills_save(cid):
-        sql = f"DELETE FROM character_skills_save WHERE charId = '{cid}' AND class_index = '0'"
         try:
-            return LineageDB().execute(sql)
-        except:
+            sql = """
+                DELETE FROM character_skills_save
+                WHERE charId = :cid AND class_index = 0
+            """
+            return LineageDB().update(sql, {"cid": cid})
+        except Exception as e:
+            print(f"Erro ao deletar skills salvas: {e}")
             return None
 
     @staticmethod
     @cache_lineage_result(timeout=300)
     def delete_hennas(cid):
-        sql = f"DELETE FROM character_hennas WHERE charId = '{cid}' AND class_index = '0'"
         try:
-            return LineageDB().execute(sql)
-        except:
+            sql = """
+                DELETE FROM character_hennas
+                WHERE charId = :cid AND class_index = 0
+            """
+            return LineageDB().update(sql, {"cid": cid})
+        except Exception as e:
+            print(f"Erro ao deletar hennas: {e}")
             return None
 
     @staticmethod
     @cache_lineage_result(timeout=300)
     def delete_shortcuts(cid):
-        sql = f"DELETE FROM character_shortcuts WHERE charId = '{cid}' AND class_index = '0'"
         try:
-            return LineageDB().execute(sql)
-        except:
+            sql = """
+                DELETE FROM character_shortcuts
+                WHERE charId = :cid AND class_index = 0
+            """
+            return LineageDB().update(sql, {"cid": cid})
+        except Exception as e:
+            print(f"Erro ao deletar atalhos: {e}")
             return None
 
     @staticmethod
     @cache_lineage_result(timeout=300)
     def add_skills(new_skills_values):
-        sql = f"INSERT INTO character_skills VALUES {new_skills_values}"
         try:
-            return LineageDB().execute(sql)
-        except:
+            sql = f"INSERT INTO character_skills VALUES {new_skills_values}"
+            return LineageDB().update(sql)
+        except Exception as e:
+            print(f"Erro ao adicionar novas skills: {e}")
             return None
 
     @staticmethod
     @cache_lineage_result(timeout=300)
     def update_class_in_olympiad(char_class, cid):
-        sql = f"UPDATE olympiad_nobles SET class_id = '{char_class}' WHERE char_id = '{cid}'"
         try:
-            return LineageDB().execute(sql)
-        except:
+            sql = """
+                UPDATE olympiad_nobles
+                SET class_id = :class_id
+                WHERE char_id = :cid
+            """
+            return LineageDB().update(sql, {"class_id": char_class, "cid": cid})
+        except Exception as e:
+            print(f"Erro ao atualizar classe no Olympiad: {e}")
             return None
 
     @staticmethod
     @cache_lineage_result
     def update_base_class(char_class, cid, lvl=78, exp=1511275834, race='NONE'):
-        sql = f"""
-            UPDATE characters SET
-                base_class = '{char_class}',
-                face = '0',
-                hairStyle = '0',
-                hairColor = '0'
-                {" ,level = '78'" if lvl < 78 else ""}
-                {" ,exp = '1511275834'" if exp < 1511275834 else ""}
-                {" ,race = '" + race + "'" if race != 'NONE' else ""}
-            WHERE charId = '{cid}'
-        """
         try:
-            return LineageDB().execute(sql)
-        except:
+            updates = [
+                "base_class = :char_class",
+                "face = 0",
+                "hairStyle = 0",
+                "hairColor = 0"
+            ]
+            params = {"char_class": char_class, "cid": cid}
+
+            if lvl < 78:
+                updates.append("level = 78")
+            if exp < 1511275834:
+                updates.append("exp = 1511275834")
+            if race != 'NONE':
+                updates.append("race = :race")
+                params["race"] = race
+
+            sql = f"""
+                UPDATE characters
+                SET {', '.join(updates)}
+                WHERE charId = :cid
+            """
+            return LineageDB().update(sql, params)
+        except Exception as e:
+            print(f"Erro ao atualizar base class: {e}")
             return None
 
     @staticmethod
     @cache_lineage_result(timeout=300)
     def move_all_paperdoll(cid):
-        sql = f"UPDATE items SET loc = 'INVENTORY' WHERE owner_id = '{cid}' AND loc = 'PAPERDOLL'"
         try:
-            return LineageDB().execute(sql)
-        except:
+            sql = """
+                UPDATE items
+                SET loc = 'INVENTORY'
+                WHERE owner_id = :cid AND loc = 'PAPERDOLL'
+            """
+            return LineageDB().update(sql, {"cid": cid})
+        except Exception as e:
+            print(f"Erro ao mover itens do paperdoll para o inventário: {e}")
             return None
 
     @staticmethod
@@ -572,10 +620,18 @@ class TransferFromCharToWallet:
     @staticmethod
     @cache_lineage_result(timeout=300)
     def remove_ingame_coin(coin_id, count, char_id):
-        query = """
-            UPDATE items 
-            SET count = count - %s 
-            WHERE owner_id = %s AND item_id = %s AND loc = 'INVENTORY' AND count >= %s
-        """
-        result = LineageDB().execute(query, (count, char_id, coin_id, count))
-        return result if result is not None else None
+        try:
+            query = """
+                UPDATE items 
+                SET count = count - :count 
+                WHERE owner_id = :char_id 
+                AND item_id = :coin_id 
+                AND loc = 'INVENTORY' 
+                AND count >= :count
+            """
+            params = {"count": count, "char_id": char_id, "coin_id": coin_id}
+            result = LineageDB().update(query, params)
+            return result if result is not None else None
+        except Exception as e:
+            print(f"Erro ao remover coin do inventário: {e}")
+            return None
