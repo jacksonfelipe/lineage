@@ -8,6 +8,7 @@ from datetime import timedelta
 from django.utils.timezone import now
 from django.contrib import messages
 from django.db import transaction
+from apps.lineage.wallet.signals import aplicar_transacao
 
 
 @login_required
@@ -85,7 +86,7 @@ def confirmar_pagamento(request, pedido_id):
             pagamento = Pagamento.objects.create(
                 usuario=request.user,
                 valor=pedido.valor_pago,
-                status="Pendente",
+                status="pending",
                 pedido_pagamento=pedido
             )
 
@@ -164,12 +165,25 @@ def expirar_pedidos_antigos():
 
 
 def processar_pedidos_aprovados():
-    pagamentos = Pagamento.objects.filter(status='approved', creditado=False)
+    pagamentos = Pagamento.objects.filter(status='approved', pedido_pagamento__status='PENDENTE')
     for pagamento in pagamentos:
         try:
-            Wallet.creditar(pagamento.usuario, pagamento.pedido_pagamento.moedas_geradas)
-            pagamento.creditado = True
-            pagamento.save()
+            with transaction.atomic():
+                wallet, _ = Wallet.objects.get_or_create(usuario=pagamento.usuario)
+                aplicar_transacao(
+                    wallet=wallet,
+                    tipo="ENTRADA",
+                    valor=pagamento.valor,
+                    descricao="Crédito via MercadoPago (celery beats)",
+                    origem="MercadoPago",
+                    destino=pagamento.usuario.username
+                )
+                pagamento.status = "paid"
+                pagamento.save()
+
+                pedido = pagamento.pedido_pagamento
+                pedido.status = 'CONCLUÍDO'
+                pedido.save()
         except Exception as e:
             # Logar ou tratar o erro de alguma forma
             print(f"Erro ao creditar pagamento {pagamento.id}: {e}")

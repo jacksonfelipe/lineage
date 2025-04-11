@@ -117,6 +117,10 @@ def pagamento_sucesso(request):
                 pagamento.status = "paid"
                 pagamento.save()
 
+                pedido = pagamento.pedido_pagamento
+                pedido.status = 'CONCLUÍDO'
+                pedido.save()
+
         return render(request, 'mp/pagamento_sucesso.html')
 
     except Pagamento.DoesNotExist:
@@ -198,6 +202,10 @@ def notificacao_mercado_pago(request):
                                 )
                                 pagamento.status = "paid"
                                 pagamento.save()
+
+                                pedido = pagamento.pedido_pagamento
+                                pedido.status = 'CONCLUÍDO'
+                                pedido.save()
 
                         return HttpResponse("OK", status=200)
 
