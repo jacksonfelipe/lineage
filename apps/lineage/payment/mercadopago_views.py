@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.conf import settings
 import mercadopago
 from .models import *
@@ -77,7 +77,54 @@ def validar_assinatura_hmac(request):
 
 
 def pagamento_sucesso(request):
-    return render(request, 'mp/pagamento_sucesso.html')
+    payment_id = request.GET.get("payment_id")
+    status = request.GET.get("status")
+
+    if not payment_id or status != "approved":
+        logger.warning("Pagamento não aprovado ou parâmetros inválidos na URL de sucesso.")
+        return redirect("payment:erro")  # Redireciona para view de erro
+
+    try:
+        sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
+        result = sdk.payment().get(payment_id)
+
+        if result["status"] != 200:
+            logger.error("Erro ao consultar o pagamento no Mercado Pago.")
+            return redirect("payment:erro")
+
+        pagamento_info = result["response"]
+        status_pagamento = pagamento_info["status"]
+        pagamento_id = pagamento_info.get("metadata", {}).get("pagamento_id")
+
+        if not pagamento_id:
+            logger.warning("Pagamento sem metadata.pagamento_id.")
+            return redirect("payment:erro")
+
+        pagamento = Pagamento.objects.get(id=pagamento_id)
+
+        if status_pagamento == "approved" and pagamento.status != "Approved":
+            with transaction.atomic():
+                wallet, _ = Wallet.objects.get_or_create(usuario=pagamento.usuario)
+                aplicar_transacao(
+                    wallet=wallet,
+                    tipo="ENTRADA",
+                    valor=pagamento.valor,
+                    descricao="Crédito via MercadoPago (fallback)",
+                    origem="MercadoPago",
+                    destino=pagamento.usuario.username
+                )
+                pagamento.status = "Approved"
+                pagamento.save()
+
+        return render(request, 'mp/pagamento_sucesso.html')
+
+    except Pagamento.DoesNotExist:
+        logger.error(f"Pagamento com ID {pagamento_id} não encontrado.")
+        return redirect("payment:erro")
+
+    except Exception as e:
+        logger.exception(f"Erro inesperado na view pagamento_sucesso: {e}")
+        return redirect("payment:erro")
 
 
 def pagamento_erro(request):
