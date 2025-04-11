@@ -103,6 +103,7 @@ def pagamento_sucesso(request):
         pagamento = Pagamento.objects.get(id=pagamento_id)
 
         # garantia do pagamento
+        print(status_pagamento, ' - ', pagamento.status, ' <------------------------------------ fallback')
         if status_pagamento == "approved" and pagamento.status != "paid" and pagamento.status == "approved":
             with transaction.atomic():
                 wallet, _ = Wallet.objects.get_or_create(usuario=pagamento.usuario)
@@ -196,6 +197,7 @@ def notificacao_mercado_pago(request):
                 if pagamento_id:
                     try:
                         pagamento = Pagamento.objects.get(id=pagamento_id)
+                        print(status, ' - ', pagamento.status, ' <------------------------------------ payment')
                         if status == "approved" and pagamento.status != "paid" and pagamento.status == "approved":
                             with transaction.atomic():
                                 wallet, _ = Wallet.objects.get_or_create(usuario=pagamento.usuario)
@@ -232,6 +234,7 @@ def notificacao_mercado_pago(request):
                     if external_reference:
                         try:
                             pagamento = Pagamento.objects.get(id=external_reference)
+                            print(pagamento.status, ' <------------------------------------ merchant_order')
                             if pagamento.status != "approved":
                                 pagamento.status = "approved"
                                 pagamento.save()
