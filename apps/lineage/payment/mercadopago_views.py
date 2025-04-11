@@ -121,6 +121,13 @@ def pagamento_sucesso(request):
                 pedido.status = 'CONCLUÍDO'
                 pedido.save()
 
+                # REGISTRO DO FALBACK NO WEBHOOKLOG
+                WebhookLog.objects.create(
+                    tipo="payment_fallback",
+                    data_id=str(payment_id),
+                    payload=pagamento_info
+                )
+
         return render(request, 'mp/pagamento_sucesso.html')
 
     except Pagamento.DoesNotExist:
