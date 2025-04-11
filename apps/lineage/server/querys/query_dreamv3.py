@@ -606,28 +606,90 @@ class TransferFromCharToWallet:
     @staticmethod
     @cache_lineage_result(timeout=300)
     def check_ingame_coin(coin_id, char_id):
-        query = """
+        db = LineageDB()
+
+        # Buscar no INVENTORY
+        query_inve = """
             SELECT count FROM items 
-            WHERE owner_id = :char_id AND item_id = :coin_id AND loc = 'INVENTORY'
+            WHERE owner_id = :char_id AND item_type = :coin_id AND loc = 'INVENTORY'
+            LIMIT 1
         """
-        params = {"char_id": char_id, "coin_id": coin_id}
-        return LineageDB().select(query, params)
+        result_inve = db.select(query_inve, {"char_id": char_id, "coin_id": coin_id})
+        inINVE = result_inve[0]["count"] if result_inve else 0
+
+        # Buscar no WAREHOUSE
+        query_ware = """
+            SELECT count FROM items 
+            WHERE owner_id = :char_id AND item_type = :coin_id AND loc = 'WAREHOUSE'
+            LIMIT 1
+        """
+        result_ware = db.select(query_ware, {"char_id": char_id, "coin_id": coin_id})
+        inWARE = result_ware[0]["count"] if result_ware else 0
+
+        total = inINVE + inWARE
+        return {"total": total, "inventory": inINVE, "warehouse": inWARE}
 
     @staticmethod
     @cache_lineage_result(timeout=300)
     def remove_ingame_coin(coin_id, count, char_id):
         try:
-            query = """
-                UPDATE items 
-                SET count = count - :count 
-                WHERE owner_id = :char_id 
-                AND item_id = :coin_id 
-                AND loc = 'INVENTORY' 
-                AND count >= :count
+            db = LineageDB()
+
+            # Buscar no INVENTORY
+            query_inve = """
+                SELECT count, item_id FROM items 
+                WHERE owner_id = :char_id AND item_type = :coin_id AND loc = 'INVENTORY' 
+                LIMIT 1
             """
-            params = {"count": count, "char_id": char_id, "coin_id": coin_id}
-            result = LineageDB().update(query, params)
-            return result
+            item_inve = db.select(query_inve, {"char_id": char_id, "coin_id": coin_id})
+            inINVE = item_inve[0]["count"] if item_inve else 0
+            inve_id = item_inve[0]["item_id"] if item_inve else None
+
+            # Buscar no WAREHOUSE
+            query_ware = """
+                SELECT count, item_id FROM items 
+                WHERE owner_id = :char_id AND item_type = :coin_id AND loc = 'WAREHOUSE' 
+                LIMIT 1
+            """
+            item_ware = db.select(query_ware, {"char_id": char_id, "coin_id": coin_id})
+            inWARE = item_ware[0]["count"] if item_ware else 0
+            ware_id = item_ware[0]["item_id"] if item_ware else None
+
+            count_exist = inINVE + inWARE
+            if count_exist < count:
+                return False
+
+            # INVENTORY: remove ou atualiza
+            if inINVE > 0:
+                if inINVE <= count:
+                    delete_query = "DELETE FROM items WHERE item_id = :item_id LIMIT 1"
+                    if db.update(delete_query, {"item_id": inve_id}) is None:
+                        return False
+                else:
+                    update_query = """
+                        UPDATE items SET count = count - :count 
+                        WHERE item_id = :item_id LIMIT 1
+                    """
+                    if db.update(update_query, {"count": count, "item_id": inve_id}) is None:
+                        return False
+
+            # WAREHOUSE: se necessário
+            if count > inINVE:
+                tirar_do_ware = count - inINVE
+                if tirar_do_ware == inWARE:
+                    delete_query = "DELETE FROM items WHERE item_id = :item_id LIMIT 1"
+                    if db.update(delete_query, {"item_id": ware_id}) is None:
+                        return False
+                else:
+                    update_query = """
+                        UPDATE items SET count = count - :count 
+                        WHERE item_id = :item_id LIMIT 1
+                    """
+                    if db.update(update_query, {"count": tirar_do_ware, "item_id": ware_id}) is None:
+                        return False
+
+            return True
+
         except Exception as e:
-            print(f"Erro ao remover coin do inventário: {e}")
-            return None
+            print(f"Erro ao remover coin do inventário/warehouse: {e}")
+            return False
