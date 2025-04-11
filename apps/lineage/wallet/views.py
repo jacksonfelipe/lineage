@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from .models import Wallet, TransacaoWallet
+from .models import Wallet, TransacaoWallet, CoinConfig
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .utils import transferir_para_jogador
@@ -40,6 +40,11 @@ def transfer_to_server(request):
     if not db.is_connected():
         messages.error(request, 'O banco do jogo está indisponível no momento. Tente novamente mais tarde.')
         return redirect('wallet:transfer_to_server')
+    
+    config = CoinConfig.objects.filter(ativa=True).first()
+    if not config:
+        messages.error(request, 'Nenhuma moeda configurada está ativa no momento.')
+        return redirect('wallet:transfer_to_server')
 
     wallet, _ = Wallet.objects.get_or_create(usuario=request.user)
     personagens = []
@@ -54,7 +59,9 @@ def transfer_to_server(request):
         nome_personagem = request.POST.get('personagem')
         valor = request.POST.get('valor')
         senha = request.POST.get('senha')
-        COIN_ID = 57  # Ajuste se necessário
+
+        COIN_ID = config.coin_id
+        multiplicador = config.multiplicador
 
         try:
             valor = Decimal(valor)
@@ -95,7 +102,7 @@ def transfer_to_server(request):
                 sucesso = TransferFromWalletToChar.insert_coin(
                     char_name=nome_personagem,
                     coin_id=COIN_ID,
-                    amount=int(valor)
+                    amount=int(valor * multiplicador)
                 )
 
                 if not sucesso:
