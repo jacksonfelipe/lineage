@@ -7,6 +7,9 @@ from .utils import transferir_para_jogador
 from decimal import Decimal
 from django.contrib.auth import authenticate
 from apps.main.home.models import User
+from django.db import transaction
+from .signals import aplicar_transacao
+from apps.lineage.server.querys.query_dreamv3 import TransferFromWalletToChar
 
 
 @login_required
@@ -25,12 +28,65 @@ def dashboard_wallet(request):
     })
 
 
+@login_required
 def transfer_to_server(request):
+    wallet, _ = Wallet.objects.get_or_create(usuario=request.user)
+
     if request.method == 'POST':
-        # lógica de transferência
-        messages.success(request, 'Transferência para o servidor realizada com sucesso.')
+        nome_personagem = request.POST.get('personagem')
+        valor = request.POST.get('valor')
+        senha = request.POST.get('senha')
+        COIN_ID = 57  # ID da moeda no banco do jogo
+
+        try:
+            valor = Decimal(valor)
+        except:
+            messages.error(request, 'Valor inválido.')
+            return redirect('wallet:transfer_to_server')
+
+        if valor < 1 or valor > 1000:
+            messages.error(request, 'Só é permitido transferir entre R$1,00 e R$1.000,00.')
+            return redirect('wallet:transfer_to_server')
+
+        user = authenticate(username=request.user.username, password=senha)
+        if not user:
+            messages.error(request, 'Senha incorreta.')
+            return redirect('wallet:transfer_to_server')
+
+        if wallet.saldo < valor:
+            messages.error(request, 'Saldo insuficiente.')
+            return redirect('wallet:transfer_to_server')
+
+        conta_jogo = request.user.username  # ajuste se o nome da conta do jogo for diferente
+        personagem = TransferFromWalletToChar.find_char(conta_jogo, nome_personagem)
+
+        if not personagem:
+            messages.error(request, 'Personagem não encontrado.')
+            return redirect('wallet:transfer_to_server')
+
+        try:
+            with transaction.atomic():
+                aplicar_transacao(
+                    wallet=wallet,
+                    tipo="SAIDA",
+                    valor=valor,
+                    descricao="Transferência para o servidor",
+                    origem=request.user.username,
+                    destino=nome_personagem
+                )
+
+                inserido = TransferFromWalletToChar.insert_coin(nome_personagem, COIN_ID, int(valor))
+                if not inserido:
+                    raise Exception("Erro ao inserir moedas no personagem.")
+
+        except Exception as e:
+            messages.error(request, f"Ocorreu um erro durante a transferência: {str(e)}")
+            return redirect('wallet:transfer_to_server')
+
+        messages.success(request, f"R${valor:.2f} transferidos com sucesso para o personagem {nome_personagem}.")
         return redirect('wallet:dashboard')
-    return render(request, 'wallet/transfer_to_server.html')
+
+    return render(request, 'wallet/transfer_to_server.html', {'wallet': wallet})
 
 
 @login_required

@@ -73,6 +73,17 @@ class LineageDB:
         except SQLAlchemyError as e:
             print(f"❌ Erro na execução: {e}")
             return None
+        
+    def is_connected(self) -> bool:
+        if not self.engine:
+            return False
+        try:
+            with self.engine.connect() as conn:
+                conn.execute(text("SELECT 1"))
+            return True
+        except SQLAlchemyError as e:
+            print(f"❌ Conexão perdida: {e}")
+            return False
 
     def select(self, query: str, params: Dict[str, Any] = {}, use_cache: bool = False) -> Optional[List[Dict]]:
         param_tuple = tuple(sorted(params.items()))
