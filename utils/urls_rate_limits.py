@@ -14,4 +14,7 @@ URL_RATE_LIMITS_DICT = {
     '/app/server/api/siege/':                      {'rate': '30/m', 'key': 'ip', 'group': 'public-api'},
     '/app/server/api/siege-participants/':         {'rate': '30/m', 'key': 'ip', 'group': 'public-api'},  # essa é com path param
     '/app/server/api/boss-jewel-locations/':       {'rate': '30/m', 'key': 'ip', 'group': 'public-api'},
+
+    '/app/wallet/transfer/servidor/': {'rate': '5/m', 'key': 'user_or_ip', 'group': 'wallet-transfers'},
+    '/app/wallet/transfer/jogador/':  {'rate': '5/m', 'key': 'user_or_ip', 'group': 'wallet-transfers'},
 }
