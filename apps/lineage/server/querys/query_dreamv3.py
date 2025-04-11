@@ -274,10 +274,21 @@ class LineageServices:
     @staticmethod
     @cache_lineage_result(timeout=300)
     def change_nickname(acc, cid, name):
-        sql = f"UPDATE characters SET char_name = '{name}' WHERE obj_id = '{cid}' AND account_name = '{acc}' LIMIT 1"
         try:
-            return LineageDB().execute(sql)
-        except:
+            sql = """
+                UPDATE characters
+                SET char_name = :name
+                WHERE obj_id = :cid AND account_name = :acc
+                LIMIT 1
+            """
+            params = {
+                "name": name,
+                "cid": cid,
+                "acc": acc
+            }
+            return LineageDB().update(sql, params)
+        except Exception as e:
+            print(f"Erro ao trocar nickname: {e}")
             return None
 
     @staticmethod
@@ -411,13 +422,21 @@ class LineageAccount:
     def register(login, password, access_level, email):
         try:
             hashed = base64.b64encode(hashlib.sha1(password.encode()).digest()).decode()
-            sql = f"""
+            sql = """
                 INSERT INTO accounts (login, password, accessLevel, email, created_time)
-                VALUES ('{login}', '{hashed}', '{access_level}', '{email}', '{int(time.time())}')
+                VALUES (:login, :password, :access_level, :email, :created_time)
             """
-            result = LineageDB().execute(sql)
+            params = {
+                "login": login,
+                "password": hashed,
+                "access_level": access_level,
+                "email": email,
+                "created_time": int(time.time())
+            }
+            result = LineageDB().insert(sql, params)
             return result if result is not None else None
-        except Exception:
+        except Exception as e:
+            print(f"Erro ao registrar conta: {e}")
             return None
 
     @staticmethod
@@ -425,13 +444,18 @@ class LineageAccount:
     def update_password(password, login):
         try:
             hashed = base64.b64encode(hashlib.sha1(password.encode()).digest()).decode()
-            sql = f"""
-                UPDATE accounts SET password = '{hashed}'
-                WHERE login = '{login}' LIMIT 1
+            sql = """
+                UPDATE accounts SET password = :password
+                WHERE login = :login LIMIT 1
             """
-            result = LineageDB().execute(sql)
+            params = {
+                "password": hashed,
+                "login": login
+            }
+            result = LineageDB().update(sql, params)
             return result if result is not None else None
-        except Exception:
+        except Exception as e:
+            print(f"Erro ao atualizar senha: {e}")
             return None
 
     @staticmethod
@@ -440,26 +464,38 @@ class LineageAccount:
         if not logins_list:
             return None
         try:
-            logins = ','.join([f"'{login}'" for login in logins_list])
             hashed = base64.b64encode(hashlib.sha1(password.encode()).digest()).decode()
+            # Gerar placeholders únicos para os parâmetros
+            placeholders = ", ".join([f":login_{i}" for i in range(len(logins_list))])
             sql = f"""
-                UPDATE accounts SET password = '{hashed}'
-                WHERE login IN ({logins})
+                UPDATE accounts SET password = :password
+                WHERE login IN ({placeholders})
             """
-            result = LineageDB().execute(sql)
+            params = {f"login_{i}": login for i, login in enumerate(logins_list)}
+            params["password"] = hashed
+            result = LineageDB().update(sql, params)
             return result if result is not None else None
-        except Exception:
+        except Exception as e:
+            print(f"Erro ao atualizar senhas em grupo: {e}")
             return None
 
     @staticmethod
     @cache_lineage_result(timeout=300)
     def update_access_level(access, login):
-        sql = f"""
-            UPDATE accounts SET accessLevel = '{access}'
-            WHERE login = '{login}' LIMIT 1
-        """
-        result = LineageDB().execute(sql)
-        return result if result is not None else None
+        try:
+            sql = """
+                UPDATE accounts SET accessLevel = :access
+                WHERE login = :login LIMIT 1
+            """
+            params = {
+                "access": access,
+                "login": login
+            }
+            result = LineageDB().update(sql, params)
+            return result if result is not None else None
+        except Exception as e:
+            print(f"Erro ao atualizar accessLevel: {e}")
+            return None
 
 
 class TransferFromWalletToChar:

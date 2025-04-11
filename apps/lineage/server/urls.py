@@ -26,4 +26,5 @@ urlpatterns = [
     path('account/my-account', my_account, name='my_account'),
     path('account/api/update-password', update_password, name='update_password'),
     path('account/dashboard', account_dashboard, name='account_dashboard'),
+    path('account/register', register_lineage_account, name='lineage_register'),
 ]

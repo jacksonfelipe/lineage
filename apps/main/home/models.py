@@ -6,10 +6,29 @@ from encrypted_fields.encrypted_fields import *
 from encrypted_fields.encrypted_files import *
 from utils.choices import *
 from django.core.validators import validate_email
+from .validators import validate_ascii_username, validate_ascii_password
 
 
 class User(BaseModel, AbstractUser):
-    email = models.EmailField(unique=True, verbose_name="email", validators=[validate_email])
+    username = models.CharField(
+        max_length=150,
+        unique=True,
+        verbose_name="nome de usuário",
+        validators=[validate_ascii_username],
+        help_text="Use apenas letras e números. Sem espaços ou símbolos."
+    )
+
+    password = models.CharField(
+        max_length=128,
+        verbose_name="senha",
+        validators=[validate_ascii_password]
+    )
+
+    email = models.EmailField(
+        unique=True,
+        verbose_name="email",
+        validators=[validate_email]
+    )
 
     avatar = EncryptedImageField(upload_to="avatars", verbose_name="foto de perfil", null=True, blank=True)
     bio = EncryptedTextField(verbose_name='biografia', blank=True, null=True, max_length=500)
@@ -21,7 +40,6 @@ class User(BaseModel, AbstractUser):
         if self.cpf:
             self.cpf = remove_cpf_mask(self.cpf)
 
-        # Salva o objeto no banco de dados
         super().save(*args, **kwargs)
 
     def __str__(self):

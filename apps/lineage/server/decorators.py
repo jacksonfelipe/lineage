@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from functools import wraps
 from .models import ApiEndpointToggle
 from django.http import JsonResponse
+from apps.lineage.server.database import LineageDB
+from django.contrib import messages
 
 
 def endpoint_enabled(endpoint_field):
@@ -22,4 +24,15 @@ def safe_json_response(func):
         if data is None:
             return JsonResponse({"error": "Falha ao obter dados do banco de dados"}, status=500)
         return JsonResponse(data, safe=False)
+    return wrapper
+
+
+def require_lineage_connection(view_func):
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        db = LineageDB()
+        if not db.is_connected():
+            messages.error(request, "Banco de dados do Lineage está indisponível no momento.")
+            return redirect('home:profile')
+        return view_func(request, *args, **kwargs)
     return wrapper
