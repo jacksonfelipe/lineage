@@ -25,38 +25,31 @@ def account_dashboard(request):
 
 @login_required
 @require_lineage_connection
-def my_account(request):
-    user = request.user.username
-    result = LineageAccount.check_login_exists(user)
-
-    if not result or not isinstance(result, list) or len(result) == 0:
-        return JsonResponse({"error": "Conta não encontrada"}, status=404)
-
-    account = result[0]  # acessa o primeiro item da lista
-
-    return JsonResponse({
-        "login": account['login'],
-        "email": account['email'],
-        "accessLevel": account['accessLevel'],
-        "status": "Ativa" if int(account['accessLevel']) >= 0 else "Bloqueada"
-    })
-
-
-@login_required
-@require_lineage_connection
 def update_password(request):
-    import json
-    body = json.loads(request.body)
-    password = body.get('password')
-    user = request.user.username  # ou outro identificador
+    if request.method == "POST":
+        senha = request.POST.get("nova_senha")
+        confirmar = request.POST.get("confirmar_senha")
+        user = request.user.username
 
-    if not password:
-        return JsonResponse({"message": "Senha inválida"}, status=400)
+        if not senha or not confirmar:
+            messages.error(request, "Por favor, preencha todos os campos.")
+            return redirect('server:update_password')
 
-    success = LineageAccount.update_password(password, user)
-    if success:
-        return JsonResponse({"message": "Senha atualizada com sucesso!"})
-    return JsonResponse({"message": "Erro ao atualizar senha"}, status=500)
+        if senha != confirmar:
+            messages.error(request, "As senhas não coincidem.")
+            return redirect('server:update_password')
+
+        success = LineageAccount.update_password(senha, user)
+
+        if success:
+            messages.success(request, "Senha atualizada com sucesso!")
+            return redirect('server:account_dashboard')
+        else:
+            messages.error(request, "Erro ao atualizar senha.")
+            return redirect('server:update_password')
+
+    # GET request — exibe o formulário
+    return render(request, "l2_accounts/update_password.html")
 
 
 @login_required
