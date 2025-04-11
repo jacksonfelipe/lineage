@@ -146,12 +146,34 @@
     color: var(--gold);
   }
   
-  /* Seção do trailer */
   .trailer-section {
-    background: url('/static/assets/img/backgrounds/trailer-bg.jpg') center center/cover no-repeat;
     position: relative;
     padding: 80px 0;
     overflow: hidden;
+    z-index: 1;
+  }
+  
+  .trailer-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url('/static/assets/img/backgrounds/trailer-bg.jpg') center center/cover no-repeat;
+    filter: brightness(0.4) contrast(1.1) saturate(1.2) blur(1px);
+    z-index: -1;
+    transition: filter 0.3s ease;
+  }
+  
+  /* Efeito adicional no hover (opcional) */
+  .trailer-section:hover::before {
+    filter: brightness(0.3) contrast(1.2) saturate(1.3) blur(2px);
+  }
+  
+  /* Conteúdo dentro da seção */
+  .trailer-section .content {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
   }
   
   /* Título */
