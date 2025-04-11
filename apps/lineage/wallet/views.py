@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate
 from apps.main.home.models import User
 from django.db import transaction
 from .signals import aplicar_transacao
-from apps.lineage.server.querys.query_dreamv3 import TransferFromWalletToChar
+from apps.lineage.server.querys.query_dreamv3 import TransferFromWalletToChar, LineageServices
 from apps.lineage.server.database import LineageDB
 
 
@@ -31,13 +31,27 @@ def dashboard_wallet(request):
 
 @login_required
 def transfer_to_server(request):
+
+    # Verifica conexão com banco do Lineage
+    db = LineageDB()
+    if not db.is_connected():
+        messages.error(request, 'O banco do jogo está indisponível no momento. Tente novamente mais tarde.')
+        return redirect('wallet:transfer_to_server')
+
     wallet, _ = Wallet.objects.get_or_create(usuario=request.user)
+    personagens = []
+
+    # Lista os personagens da conta
+    try:
+        personagens = LineageServices.find_chars(request.user.username)
+    except:
+        messages.warning(request, 'Não foi possível carregar seus personagens agora.')
 
     if request.method == 'POST':
         nome_personagem = request.POST.get('personagem')
         valor = request.POST.get('valor')
         senha = request.POST.get('senha')
-        COIN_ID = 57  # ID da moeda no banco do jogo
+        COIN_ID = 57  # Ajuste se necessário
 
         try:
             valor = Decimal(valor)
@@ -58,17 +72,10 @@ def transfer_to_server(request):
             messages.error(request, 'Saldo insuficiente.')
             return redirect('wallet:transfer_to_server')
 
-        # Verifica conexão com banco do Lineage
-        db = LineageDB()
-        if not db.is_connected():
-            messages.error(request, 'O banco do jogo está indisponível no momento. Tente novamente mais tarde.')
-            return redirect('wallet:transfer_to_server')
-
-        conta_jogo = request.user.username  # ajuste se o nome da conta do jogo for diferente
-        personagem = TransferFromWalletToChar.find_char(conta_jogo, nome_personagem)
-
+        # Confirma se o personagem pertence à conta
+        personagem = LineageServices.check_char(request.user.username, nome_personagem)
         if not personagem:
-            messages.error(request, 'Personagem não encontrado.')
+            messages.error(request, 'Personagem inválido ou não pertence a essa conta.')
             return redirect('wallet:transfer_to_server')
 
         try:
@@ -82,9 +89,12 @@ def transfer_to_server(request):
                     destino=nome_personagem
                 )
 
-                inserido = TransferFromWalletToChar.insert_coin(nome_personagem, COIN_ID, int(valor))
-                if not inserido:
-                    raise Exception("Erro ao inserir moedas no personagem.")
+                transfer = TransferFromWalletToChar(
+                    char_name=nome_personagem,
+                    coin_id=COIN_ID,
+                    amount=int(valor)
+                )
+                transfer.execute()
 
         except Exception as e:
             messages.error(request, f"Ocorreu um erro durante a transferência: {str(e)}")
@@ -93,7 +103,10 @@ def transfer_to_server(request):
         messages.success(request, f"R${valor:.2f} transferidos com sucesso para o personagem {nome_personagem}.")
         return redirect('wallet:dashboard')
 
-    return render(request, 'wallet/transfer_to_server.html', {'wallet': wallet})
+    return render(request, 'wallet/transfer_to_server.html', {
+        'wallet': wallet,
+        'personagens': personagens,
+    })
 
 
 @login_required

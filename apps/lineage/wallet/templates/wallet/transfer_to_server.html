@@ -28,8 +28,13 @@
     <form method="post" novalidate>
       {% csrf_token %}
       <div class="mb-3">
-        <label class="form-label fw-semibold">Nome do Personagem</label>
-        <input type="text" name="personagem" class="form-control rounded-3" placeholder="Ex: FulanoL2" required>
+        <label class="form-label fw-semibold">Selecione o Personagem</label>
+        <select name="personagem" class="form-select rounded-3" required>
+          <option value="" disabled selected>Escolha um personagem</option>
+          {% for p in personagens %}
+            <option value="{{ p.char_name }}">{{ p.char_name }} (Lv.{{ p.level }})</option>
+          {% endfor %}
+        </select>
       </div>
       <div class="mb-3">
         <label class="form-label fw-semibold">Valor da Transferência</label>
