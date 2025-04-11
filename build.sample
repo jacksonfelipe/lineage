@@ -68,5 +68,6 @@ echo "Cleaning up..."
 docker image prune -f
 docker volume prune -f
 docker container prune -f
+docker builder prune -f
 
 echo "Deployment completed successfully."
