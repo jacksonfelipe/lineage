@@ -1,18 +1,9 @@
 from django.db import transaction
-from django.core.exceptions import ObjectDoesNotExist
 from .models import *
 from .signals import aplicar_transacao
 
 
-def transferir_para_jogador(wallet_origem, username_destino, valor, descricao="Transferência entre jogadores"):
-    if wallet_origem.usuario.username == username_destino:
-        raise ValueError("Você não pode transferir para si mesmo.")
-
-    try:
-        usuario_destino = User.objects.get(username=username_destino)
-        wallet_destino = Wallet.objects.get(usuario=usuario_destino)
-    except ObjectDoesNotExist:
-        raise ValueError("Usuário de destino não encontrado.")
+def transferir_para_jogador(wallet_origem, wallet_destino, valor, descricao="Transferência entre jogadores"):
 
     if wallet_origem.saldo < valor:
         raise ValueError("Saldo insuficiente para transferência.")
