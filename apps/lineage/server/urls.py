@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .accounts_views import *
 
 app_name = 'server'
 
@@ -20,5 +21,9 @@ urlpatterns = [
     path("api/siege-participants/<int:castle_id>/", views.siege_participants, name="api_siege_participants"),
     path("api/boss-jewel-locations/", views.boss_jewel_locations, name="api_boss_jewel_locations"),
 
-    path("server/api-config/", views.api_config_panel, name="api_config_panel"),
+    path("api/config/", views.api_config_panel, name="api_config_panel"),
+
+    path('account/my-account', my_account, name='my_account'),
+    path('account/api/update-password', update_password, name='update_password'),
+    path('account/dashboard', account_dashboard, name='account_dashboard'),
 ]
