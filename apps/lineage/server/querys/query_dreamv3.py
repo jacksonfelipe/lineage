@@ -481,8 +481,8 @@ class LineageAccount:
                 "email": email,
                 "created_time": int(time.time())
             }
-            result = LineageDB().insert(sql, params)
-            return result if result is not None else None
+            LineageDB().insert(sql, params)
+            return True
         except Exception as e:
             print(f"Erro ao registrar conta: {e}")
             return None
@@ -500,8 +500,8 @@ class LineageAccount:
                 "password": hashed,
                 "login": login
             }
-            result = LineageDB().update(sql, params)
-            return result if result is not None else None
+            LineageDB().update(sql, params)
+            return True
         except Exception as e:
             print(f"Erro ao atualizar senha: {e}")
             return None
@@ -521,8 +521,8 @@ class LineageAccount:
             """
             params = {f"login_{i}": login for i, login in enumerate(logins_list)}
             params["password"] = hashed
-            result = LineageDB().update(sql, params)
-            return result if result is not None else None
+            LineageDB().update(sql, params)
+            return True
         except Exception as e:
             print(f"Erro ao atualizar senhas em grupo: {e}")
             return None
