@@ -20,7 +20,7 @@
 <!-- Chat Log -->
 <div id="chat-log">
     <div id="messages-container">
-        {% for message in messages %}
+        {% for message in chat_messages %}
             <div class="chat-message {% if message.sender.username == username %}sent{% else %}received{% endif %}">
                 <img src="{% if message.sender.avatar %}{% url 'serve_files:serve_decrypted_file' 'home' 'user' 'avatar' message.sender.uuid %}{% else %}{% static 'assets/img/team/generic_user.png' %}{% endif %}" 
                 class="message-avatar" 

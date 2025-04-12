@@ -60,14 +60,14 @@ def chat_room(request, group_name):
         if solicitation.user else "Solicitação sem usuário..."
     )
 
-    messages = ChatGroup.objects.filter(group_name=group_name).order_by('timestamp')
+    chat_messages = ChatGroup.objects.filter(group_name=group_name).order_by('timestamp')
     solicitation_context = 'do Usuário:'
 
     return render(request, 'pages/group.html', {
         'group_name': group_name,
         'avatar_url': avatar_url,
         'username': request.user.username,
-        'messages': messages,
+        'chat_messages': chat_messages,
         'solicitation': solicitation_name,
         'solicitation_context': solicitation_context,
         'type_chat': type_chat,
