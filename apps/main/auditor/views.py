@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views import View
 from .models import Auditor
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.admin.views.decorators import staff_member_required
 
 
@@ -19,11 +19,14 @@ def auditor_data_view(request):
         return JsonResponse({'error': 'Erro ao buscar dados de auditoria'}, status=500)
 
 
-@staff_member_required
-class AuditorPageView(View):
+class AuditorPageView(UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.is_staff
+
     def get(self, request, *args, **kwargs):
         context = {
             'segment': 'middleware',
             'parent': 'logging',
         }
         return render(request, 'pages/auditor.html', context)
+    
