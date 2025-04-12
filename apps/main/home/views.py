@@ -1,8 +1,9 @@
 from .models import *
+import requests
 import json
-from django.apps import apps
 from django.http import HttpResponse
 from django.core.paginator import Paginator
+from django.conf import settings
 
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
 from .forms import UserProfileForm, AddressUserForm, RegistrationForm, LoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm
@@ -14,6 +15,13 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import logout
 from utils.notifications import send_notification
 
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.contrib.auth.tokens import default_token_generator
+from django.urls import reverse
+from django.core.mail import send_mail
+from django.contrib import messages
+
 from apps.lineage.server.models import IndexConfig
 
 from utils.dynamic_import import get_query_class  # importa o helper
@@ -22,6 +30,17 @@ LineageStats = get_query_class("LineageStats")  # carrega a classe certa com bas
 
 with open('utils/data/index.json', 'r', encoding='utf-8') as file:
         data_index = json.load(file)
+
+
+def verificar_hcaptcha(token):
+    secret = settings.HCAPTCHA_SECRET_KEY
+    data = {
+        'response': token,
+        'secret': secret,
+    }
+    r = requests.post('https://hcaptcha.com/siteverify', data=data)
+    return r.json().get('success', False)
+
 
 
 def index(request):
@@ -162,13 +181,36 @@ def register_view(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
 
-        # Verifica se o checkbox dos termos foi marcado
+        hcaptcha_token = request.POST.get('h-captcha-response')
+        hcaptcha_ok = verificar_hcaptcha(hcaptcha_token)
+
+        # Verifica termos + captcha + formulário
         if not request.POST.get('terms'):
             form.add_error(None, 'Você precisa aceitar os termos e condições para se registrar.')
-        elif form.is_valid():
-            user = form.save()
 
-            # notificação de criação de conta
+        elif not hcaptcha_ok:
+            form.add_error(None, 'Verificação do hCaptcha falhou. Tente novamente.')
+
+        elif form.is_valid():
+            user = form.save(commit=False)
+            user.is_active = True
+            user.is_verified = False
+            user.save()
+
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            verification_link = request.build_absolute_uri(
+                reverse('verificar_email', args=[uid, token])
+            )
+
+            send_mail(
+                subject='Verifique seu e-mail',
+                message=f'Olá {user.username}, clique no link para verificar sua conta: {verification_link}',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+                fail_silently=False,
+            )
+
             send_notification(
                 user=None,
                 notification_type='staff',
@@ -182,7 +224,7 @@ def register_view(request):
     else:
         form = RegistrationForm()
 
-    context = {'form': form}
+    context = {'form': form, 'hcaptcha_site_key': settings.HCAPTCHA_SITE_KEY}
     return render(request, 'accounts_custom/sign-up.html', context)
 
 
@@ -257,3 +299,61 @@ def terms_view(request):
         "server_name": "PDL",  # ou qualquer nome que quiser
         "last_updated": datetime.today().strftime("%d/%m/%Y"),
     })
+
+
+def verificar_email(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (User.DoesNotExist, ValueError):
+        user = None
+
+    if user and default_token_generator.check_token(user, token):
+        user.is_verified = True
+        user.save(update_fields=['is_verified'])
+        return render(request, 'verify/email_verificado.html')
+    return render(request, 'verify/email_verificado.html', {'erro': True})
+
+
+def reenviar_verificacao_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+
+        try:
+            user = User.objects.get(email=email)
+
+            if user.is_verified:
+                messages.info(request, 'Sua conta já está verificada.')
+                return redirect('login')
+
+            # Gera novo link
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            verification_link = request.build_absolute_uri(
+                reverse('verificar_email', args=[uid, token])
+            )
+
+            # Envia o e-mail
+            if getattr(settings, 'CONFIG_EMAIL_ENABLE', False):
+                send_mail(
+                    subject='Reenvio de verificação de e-mail',
+                    message=(
+                        f'Olá {user.username},\n\n'
+                        f'Aqui está seu novo link de verificação:\n\n{verification_link}\n\n'
+                        'Se você não solicitou isso, ignore este e-mail.'
+                    ),
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[user.email],
+                    fail_silently=False,
+                )
+
+                messages.success(request, 'Um novo e-mail de verificação foi enviado.')
+            else:
+                messages.error(request, 'O envio de e-mail está desativado no momento.')
+
+            return redirect('login')
+
+        except User.DoesNotExist:
+            messages.error(request, 'Nenhuma conta foi encontrada com este e-mail.')
+
+    return render(request, 'accounts_custom/reenviar_verificacao.html')

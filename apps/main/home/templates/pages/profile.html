@@ -140,6 +140,18 @@
             <a href="{% url 'message:friends_list' %}" class="btn btn-secondary mt-3">Ver Lista de Amigos</a>
           </div>
 
+          {% if not user.is_verified %}
+            <div class="alert alert-warning text-center mt-4">
+              <strong>Conta não verificada</strong><br>
+              Seu e-mail ainda não foi verificado.
+            </div>
+            <form method="post" action="{% url 'reenviar_verificacao' %}" class="text-center mt-2">
+              {% csrf_token %}
+              <input type="hidden" name="email" value="{{ user.email }}">
+              <button type="submit" class="btn btn-outline-warning">Reenviar E-mail de Verificação</button>
+            </form>
+          {% endif %}
+
         </div>
       </div>
     </div>

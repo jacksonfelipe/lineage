@@ -28,6 +28,7 @@ class User(BaseModel, AbstractUser):
     bio = EncryptedTextField(verbose_name='biografia', blank=True, null=True, max_length=500)
     cpf = EncryptedCharField(verbose_name='CPF', max_length=14, blank=True, null=True, validators=[validate_cpf])
     gender = EncryptedCharField(verbose_name='Gênero', max_length=50, choices=GENDER_CHOICES, blank=True, null=True)
+    is_verified = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         # Remove a máscara do CPF antes de salvar no banco

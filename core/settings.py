@@ -280,8 +280,6 @@ AUDITOR_MIDDLEWARE_RESTRICT_PATHS = os.getenv('CONFIG_AUDITOR_MIDDLEWARE_RESTRIC
 
 # =========================== EXTRA CONFIGS ===========================
 
-SEND_EMAIL_DEGUB = os.getenv('SEND_EMAIL_DEGUB', False)
-
 customColorPalette = [
     {
         'color': 'hsl(4, 90%, 58%)',
@@ -414,3 +412,8 @@ MERCADO_PAGO_FAILURE_URL = os.getenv(
     'CONFIG_MERCADO_PAGO_FAILURE_URL',
     "https://pdl.denky.dev.br/app/payment/mercadopago/erro/"
 )
+
+# =========================== HCAPTCHA CONFIGS ===========================
+
+HCAPTCHA_SITE_KEY = os.environ.get('CONFIG_HCAPTCHA_SITE_KEY')
+HCAPTCHA_SECRET_KEY = os.environ.get('CONFIG_HCAPTCHA_SECRET_KEY')

@@ -42,6 +42,8 @@ daphne
 passlib[bcrypt]
 django-ckeditor-5
 django-widget-tweaks
+django-hcaptcha
+requests
 
 # payments
 mercadopago
