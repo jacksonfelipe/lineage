@@ -5,16 +5,18 @@ from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
+    # main index
     path('', index, name='index'),
-    path('pages/dashboard/', dashboard, name="dashboard"),
 
-    path('profile/edit/', edit_profile, name='edit_profile'),
-    path('profile/add-or-edit-address/', add_or_edit_address, name='add_or_edit_address'),
-    path('profile/', profile, name='profile'),
-
+    # internals views users
+    path('app/dashboard/', dashboard, name="dashboard"),
+    path('app/profile/edit/', edit_profile, name='edit_profile'),
+    path('app/profile/add-or-edit-address/', add_or_edit_address, name='add_or_edit_address'),
+    path('app/profile/', profile, name='profile'),
     path('app/logs/info/', log_info_dashboard, name='log_info_dashboard'),
     path('app/logs/error/', log_error_dashboard, name='log_error_dashboard'),
 
+    # public views
     path('public/news/', public_news_list, name='public_news_list'),
     path('public/news/<slug:slug>/', public_news_detail, name='public_news_detail'),
     path('public/faq/', public_faq_list, name='public_faq_list'),
@@ -32,6 +34,7 @@ urlpatterns = [
     path('accounts/password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='accounts_custom/password-reset-complete.html'), name='password_reset_complete'),
     path('accounts/lock/', lock, name="lock"),
 
+    # validations
     path('verificar/<uidb64>/<token>/', verificar_email, name='verificar_email'),
     path('reenviar-verificacao/', reenviar_verificacao_view, name='reenviar_verificacao'),
 ]

@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     "apps.lineage.server",
     "apps.lineage.wallet",
     "apps.lineage.payment",
+    "apps.lineage.accountancy",
 ]
 
 # =========================== MIDDLEWARE CONFIGS ===========================

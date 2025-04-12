@@ -4,7 +4,7 @@ from celery import shared_task
 from .models import Notification
 
 
-logger = logging.getLogger('celery')
+logger = logging.getLogger(__name__)
 
 
 @shared_task

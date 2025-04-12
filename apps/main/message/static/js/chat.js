@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const message = messageInput.value.trim();
         if (!message || !activeFriendId) return;
     
-        fetch('/app/api/send-message/', {
+        fetch('/app/message/api/send-message/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // CHECK ONLINE STATUS
-        fetch(`/app/api/check-user-activity/${friendId}/`)
+        fetch(`/app/message/api/check-user-activity/${friendId}/`)
             .then(res => res.json())
             .then(data => {
                 const status = item.querySelector('.friend-status');
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function loadMessages(friendId) {
-        fetch(`/app/api/load-messages/${friendId}/`)
+        fetch(`/app/message/api/load-messages/${friendId}/`)
             .then(res => res.json())
             .then(data => {
                 messageContainer.innerHTML = '';
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // CONTADORES DE MENSAGENS NÃO LIDAS
     function updateUnreadCounts() {
-        fetch('/app/api/get_unread_count/')
+        fetch('/app/message/api/get_unread_count/')
             .then(res => res.json())
             .then(response => {
                 for (const [friendId, count] of Object.entries(response.unread_counts)) {
@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // STATUS DE ATIVIDADE
     function setUserActive() {
-        fetch('/app/api/set-user-active/', {
+        fetch('/app/message/api/set-user-active/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

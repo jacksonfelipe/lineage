@@ -16,7 +16,30 @@ from apps.main.notification.tasks import create_notification
 
 
 import logging
-logger = logging.getLogger('django')
+logger = logging.getLogger(__name__)
+
+
+def create_or_get_chat(user, friend):
+    # Tenta encontrar um chat existente entre os dois usuários
+    user1, user2 = sorted([user, friend], key=lambda u: u.id)
+
+    # Tente obter ou criar o chat
+    chat, created = Chat.objects.get_or_create(
+        user1=user1,
+        user2=user2
+    )
+
+    # Se o chat não foi encontrado, pode ser que o inverso esteja presente
+    if not created:
+        try:
+            chat = Chat.objects.get(user1=user1, user2=user2)
+        except Chat.DoesNotExist:
+            chat = None  # Se não encontrar, chat permanece None
+
+    if chat is None:
+        chat = Chat.objects.create(user1=user1, user2=user2)
+
+    return chat
 
 
 @login_required()
@@ -142,30 +165,6 @@ def friends_list(request):
 
 
 @login_required
-def create_or_get_chat(user, friend):
-    # Tenta encontrar um chat existente entre os dois usuários
-    user1, user2 = sorted([user, friend], key=lambda u: u.id)
-
-    # Tente obter ou criar o chat
-    chat, created = Chat.objects.get_or_create(
-        user1=user1,
-        user2=user2
-    )
-
-    # Se o chat não foi encontrado, pode ser que o inverso esteja presente
-    if not created:
-        try:
-            chat = Chat.objects.get(user1=user1, user2=user2)
-        except Chat.DoesNotExist:
-            chat = None  # Se não encontrar, chat permanece None
-
-    if chat is None:
-        chat = Chat.objects.create(user1=user1, user2=user2)
-
-    return chat
-
-
-@login_required
 def send_message(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -221,6 +220,7 @@ def load_messages(request, friend_id):
 
     except Http404 as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=404)
+    
     except Exception as e:
         return JsonResponse({'success': False, 'error': 'Ocorreu um erro inesperado.'}, status=400)
 
