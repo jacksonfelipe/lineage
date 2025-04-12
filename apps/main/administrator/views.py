@@ -49,10 +49,10 @@ def chat_room(request, group_name):
             'status': solicitation.get_status_display(),  # Exibe 'Aprovado', 'Rejeitado', etc
         })
 
-    try:
+    if request.user.avatar:
         custom_imagem = '/decrypted-file/home/user/avatar/'
         avatar_url = custom_imagem + str(request.user.uuid) + '/'
-    except (ValueError, AttributeError):
+    else:
         avatar_url = '/static/assets/img/team/generic_user.png'
 
     solicitation_name = (
