@@ -3,8 +3,10 @@ from django.http import JsonResponse
 from django.views import View
 from .models import Auditor
 from django.contrib.auth.decorators import permission_required
+from django.contrib.admin.views.decorators import staff_member_required
 
 
+@staff_member_required
 def auditor_data_view(request):
     try:
         limit = int(request.GET.get('limit', 10))  # Pega o limite da query string, ou usa 10 como padrão
@@ -17,6 +19,7 @@ def auditor_data_view(request):
         return JsonResponse({'error': 'Erro ao buscar dados de auditoria'}, status=500)
 
 
+@staff_member_required
 class AuditorPageView(View):
     def get(self, request, *args, **kwargs):
         context = {

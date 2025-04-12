@@ -141,6 +141,7 @@ def friends_list(request):
     })
 
 
+@login_required
 def create_or_get_chat(user, friend):
     # Tenta encontrar um chat existente entre os dois usuários
     user1, user2 = sorted([user, friend], key=lambda u: u.id)

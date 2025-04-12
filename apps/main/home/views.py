@@ -42,7 +42,6 @@ def verificar_hcaptcha(token):
     return r.json().get('success', False)
 
 
-
 def index(request):
     clanes = LineageStats.top_clans(limit=10) or []
     online = LineageStats.players_online() or []
@@ -58,7 +57,6 @@ def index(request):
         'online': online_count,
         'configuracao': config
     })
-
 
 
 def custom_400_view(request, exception):
@@ -284,6 +282,7 @@ def lock(request):
     return render(request, 'accounts_custom/lock.html')
 
 
+@login_required
 def dashboard(request):
     if request.user.is_authenticated:
         context = {
@@ -315,6 +314,7 @@ def verificar_email(request, uidb64, token):
     return render(request, 'verify/email_verificado.html', {'erro': True})
 
 
+@login_required
 def reenviar_verificacao_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')

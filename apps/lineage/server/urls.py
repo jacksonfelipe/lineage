@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from .accounts_views import *
+from .config_views import *
 
 app_name = 'server'
 
