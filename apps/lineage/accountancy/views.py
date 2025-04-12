@@ -1,3 +1,54 @@
 from django.shortcuts import render
+from django.contrib.admin.views.decorators import staff_member_required
+from apps.main.home.models import User
 
-# Create your views here.
+from .reports.saldo import saldo_usuario
+from .reports.fluxo_caixa import fluxo_caixa_por_dia
+from .reports.pedidos_pagamentos import pedidos_pagamentos_resumo
+from .reports.reconciliacao_wallet import reconciliacao_wallet_transacoes
+
+
+@staff_member_required
+def relatorio_saldo_usuarios(request):
+    usuarios = User.objects.all()
+    relatorio = []
+
+    for usuario in usuarios:
+        info = saldo_usuario(usuario)
+        relatorio.append({
+            'usuario': usuario.username,
+            **info
+        })
+
+    return render(request, 'accountancy/relatorio_saldo.html', {
+        'relatorio': relatorio
+    })
+
+
+@staff_member_required
+def relatorio_fluxo_caixa(request):
+    relatorio = fluxo_caixa_por_dia()
+    return render(request, 'accountancy/relatorio_fluxo_caixa.html', {
+        'relatorio': relatorio
+    })
+
+
+@staff_member_required
+def relatorio_pedidos_pagamentos(request):
+    relatorio = pedidos_pagamentos_resumo()
+    return render(request, 'accountancy/relatorio_pedidos_pagamentos.html', {
+        'relatorio': relatorio
+    })
+
+
+@staff_member_required
+def relatorio_reconciliacao_wallet(request):
+    relatorio = reconciliacao_wallet_transacoes()
+    return render(request, 'accountancy/relatorio_reconciliacao_wallet.html', {
+        'relatorio': relatorio
+    })
+
+
+@staff_member_required
+def dashboard_accountancy(request):
+    return render(request, 'accountancy/dashboard.html')

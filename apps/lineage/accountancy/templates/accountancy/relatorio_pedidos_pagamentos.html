@@ -1,0 +1,58 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg p-4">
+    <h2 class="text-center mb-4">Relatório de Pedidos e Pagamentos</h2>
+
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>ID Pedido</th>
+          <th>Usuário</th>
+          <th>Valor Pago</th>
+          <th>Moedas</th>
+          <th>Status Pedido</th>
+          <th>Status Pagamento</th>
+          <th>Método</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in relatorio %}
+        <tr>
+          <td>{{ item.pedido_id }}</td>
+          <td>{{ item.usuario }}</td>
+          <td>R$ {{ item.valor_pago }}</td>
+          <td>{{ item.moedas_geradas }}</td>
+          <td>
+            {% if item.status_pedido == 'CONFIRMADO' %}
+              <span class="text-success">{{ item.status_pedido }}</span>
+            {% elif item.status_pedido == 'PENDENTE' %}
+              <span class="text-warning">{{ item.status_pedido }}</span>
+            {% else %}
+              <span class="text-danger">{{ item.status_pedido }}</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if item.status_pagamento == 'confirmed' %}
+              <span class="text-success">{{ item.status_pagamento }}</span>
+            {% elif item.status_pagamento == 'pending' %}
+              <span class="text-warning">{{ item.status_pagamento }}</span>
+            {% else %}
+              <span class="text-danger">{{ item.status_pagamento }}</span>
+            {% endif %}
+          </td>
+          <td>{{ item.metodo }}</td>
+          <td>{{ item.data|date:"d/m/Y H:i" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+      <a href="{% url 'accountancy:dashboard' %}" class="btn btn-secondary">Voltar para o Dashboard</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
