@@ -185,6 +185,7 @@ USE_THOUSAND_SEPARATOR = True
 DATETIME_FORMAT = 'd/m/Y H:i:s'
 DATE_FORMAT = 'd/m/Y'
 TIME_FORMAT = 'H:i:s'
+GMT_OFFSET = -3  # Ajuste para o fuso horário de Brasília (UTC -3)
 
 # =========================== STATIC FILES CONFIGS ===========================
 

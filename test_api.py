@@ -15,7 +15,6 @@ URL_RATE_LIMITS_DICT = {
     '/app/server/api/olympiad-heroes/': {'rate': '30/m', 'key': 'ip', 'group': 'public-api'},
     '/app/server/api/olympiad-current-heroes/': {'rate': '30/m', 'key': 'ip', 'group': 'public-api'},
     '/app/server/api/grandboss-status/': {'rate': '30/m', 'key': 'ip', 'group': 'public-api'},
-    '/app/server/api/raidboss-status/': {'rate': '30/m', 'key': 'ip', 'group': 'public-api'},
     '/app/server/api/siege/': {'rate': '30/m', 'key': 'ip', 'group': 'public-api'},
     '/app/server/api/siege-participants/': {'rate': '30/m', 'key': 'ip', 'group': 'public-api'},  # com path param
     '/app/server/api/boss-jewel-locations/': {'rate': '30/m', 'key': 'ip', 'group': 'public-api'},

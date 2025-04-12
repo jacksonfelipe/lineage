@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 from .accounts_views import *
 from .config_views import *
+from .tops_views import *
+from .status_views import *
 
 app_name = 'server'
 
@@ -17,7 +19,6 @@ urlpatterns = [
     path("api/olympiad-heroes/", views.olympiad_all_heroes, name="api_olympiad_all_heroes"),
     path("api/olympiad-current-heroes/", views.olympiad_current_heroes, name="api_olympiad_current_heroes"),
     path("api/grandboss-status/", views.grandboss_status, name="api_grandboss_status"),
-    path("api/raidboss-status/", views.raidboss_status, name="api_raidboss_status"),
     path("api/siege/", views.siege, name="api_siege"),
     path("api/siege-participants/<int:castle_id>/", views.siege_participants, name="api_siege_participants"),
     path("api/boss-jewel-locations/", views.boss_jewel_locations, name="api_boss_jewel_locations"),
@@ -27,4 +28,18 @@ urlpatterns = [
     path('account/update-password', update_password, name='update_password'),
     path('account/dashboard', account_dashboard, name='account_dashboard'),
     path('account/register', register_lineage_account, name='lineage_register'),
+
+    path('stats/top-pvp/', top_pvp_view, name='top_pvp'),
+    path('stats/top-pk/', top_pk_view, name='top_pk'),
+    path('stats/top-adena/', top_adena_view, name='top_adena'),
+    path('stats/top-clans/', top_clans_view, name='top_clans'),
+    path('stats/top-level/', top_level_view, name='top_level'),
+    path("stats/top-online/", top_online_view, name="top_online"),
+
+    path("siege-ranking/", siege_ranking_view, name="siege_ranking"),
+    path('olympiad-ranking/', olympiad_ranking_view, name='olympiad_ranking'),
+    path('olympiad-all-heroes/', olympiad_all_heroes_view, name='olympiad_all_heroes'),
+    path('olympiad-current-heroes/', olympiad_current_heroes_view, name='olympiad_current_heroes'),
+    path('boss_jewel_locations/', boss_jewel_locations_view, name='boss_jewel_locations'),
+    path('status/grandboss/', grandboss_status_view, name='grandboss_status'),
 ]

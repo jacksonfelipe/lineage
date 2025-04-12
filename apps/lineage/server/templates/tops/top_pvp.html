@@ -1,0 +1,45 @@
+{% extends "layouts/base.html" %}
+
+{% load lineage_extras %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg p-4">
+    <h2 class="text-center mb-4">Ranking PvP</h2>
+
+    {% if players %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Personagem</th>
+          <th>Clan</th>
+          <th>PvPs</th>
+          <th>PKs</th>
+          <th>Online</th>
+          <th>Tempo Online</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for player in players %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ player.char_name }}</td>
+          <td>{{ player.clan_name|default:"-" }}</td>
+          <td>{{ player.pvpkills }}</td>
+          <td>{{ player.pkkills }}</td>
+          <td>{% if player.online > 0 %}🟢{% else %}⚪{% endif %}</td>
+          <td>{{ player.onlinetime|humanize_time }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-warning text-center">
+      Nenhum dado encontrado.
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

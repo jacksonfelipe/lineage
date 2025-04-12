@@ -77,12 +77,6 @@ def grandboss_status(request):
     return LineageStats.grandboss_status()
 
 
-@endpoint_enabled('raidboss_status')
-@safe_json_response
-def raidboss_status(request):
-    return LineageStats.raidboss_status()
-
-
 @endpoint_enabled('siege')
 @safe_json_response
 def siege(request):

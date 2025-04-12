@@ -170,21 +170,9 @@ class LineageStats:
     @cache_lineage_result(timeout=300)
     def grandboss_status():
         sql = """
-            SELECT B.bossId AS boss_id, B.respawnDate AS respawn, N.name, N.level
-            FROM epic_boss_spawn B
-            INNER JOIN site_bosses N ON N.id = B.bossId
-            ORDER BY respawn DESC, level DESC, name ASC
-        """
-        return LineageStats._run_query(sql)
-
-    @staticmethod
-    @cache_lineage_result(timeout=300)
-    def raidboss_status():
-        sql = """
-            SELECT B.id AS boss_id, B.respawn_delay AS respawn, N.name, N.level
-            FROM raidboss_status B
-            INNER JOIN site_bosses N ON N.id = B.id
-            ORDER BY respawn DESC, level DESC, name ASC
+            SELECT bossId AS boss_id, respawnDate AS respawn
+            FROM epic_boss_spawn
+            ORDER BY respawnDate DESC
         """
         return LineageStats._run_query(sql)
 

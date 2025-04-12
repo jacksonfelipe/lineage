@@ -1,0 +1,32 @@
+{% extends "layouts/base.html" %}
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="text-center mb-4">
+    <h2>Castle & Siege Ranking</h2>
+  </div>
+
+  {% for castle in castles %}
+  <div class="card mb-4 shadow-lg">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src="{% static castle.image_path %}" class="img-fluid rounded-start" alt="{{ castle.name }}">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h3 class="card-title">{{ castle.name }} Castle</h3>
+          <p><strong>Clan Proprietário:</strong> {{ castle.clan_name|default:"No Owner" }}</p>
+          <p><strong>Clan Líder:</strong> {{ castle.char_name|default:"No Leader" }}</p>
+          <p><strong>Aliança:</strong> {{ castle.ally_name|default:"No Alliance" }}</p>
+          <p><strong>Próxima Guerra:</strong> {{ castle.sdate|date:"d F, Y H:i" }} &nbsp; <strong>Taxa:</strong> {{ castle.stax }}%</p>
+          <p><strong>Atacantes:</strong> {{ castle.attackers|length }}</p>
+          <p><strong>Defensores:</strong> {{ castle.defenders|length }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

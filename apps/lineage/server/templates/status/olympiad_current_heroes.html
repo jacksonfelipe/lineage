@@ -1,0 +1,40 @@
+{% extends "layouts/base.html" %}
+
+{% load lineage_extras %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg p-4">
+    <h2 class="text-center mb-4">Heróis Atuais Olimpíada</h2>
+
+    {% if current_heroes %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Jogador</th>
+          <th>Clan</th>
+          <th>Aliança</th>
+          <th>Classe</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for hero in current_heroes %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ hero.char_name|default:"-" }}</td>
+          <td>{{ hero.clan_name|default:"-" }}</td>
+          <td>{{ hero.ally_name|default:"-" }}</td>
+          <td>{{ hero.base }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-warning text-center">
+      Nenhum dado encontrado.
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
