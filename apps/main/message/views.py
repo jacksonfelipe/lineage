@@ -20,24 +20,9 @@ logger = logging.getLogger(__name__)
 
 
 def create_or_get_chat(user, friend):
-    # Tenta encontrar um chat existente entre os dois usuários
     user1, user2 = sorted([user, friend], key=lambda u: u.id)
 
-    # Tente obter ou criar o chat
-    chat, created = Chat.objects.get_or_create(
-        user1=user1,
-        user2=user2
-    )
-
-    # Se o chat não foi encontrado, pode ser que o inverso esteja presente
-    if not created:
-        try:
-            chat = Chat.objects.get(user1=user1, user2=user2)
-        except Chat.DoesNotExist:
-            chat = None  # Se não encontrar, chat permanece None
-
-    if chat is None:
-        chat = Chat.objects.create(user1=user1, user2=user2)
+    chat, _ = Chat.objects.get_or_create(user1=user1, user2=user2)
 
     return chat
 
