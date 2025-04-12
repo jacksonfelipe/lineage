@@ -22,7 +22,7 @@ urlpatterns = [
     path("api/siege-participants/<int:castle_id>/", views.siege_participants, name="api_siege_participants"),
     path("api/boss-jewel-locations/", views.boss_jewel_locations, name="api_boss_jewel_locations"),
 
-    path("api/config/", views.api_config_panel, name="api_config_panel"),
+    path("api/config/", api_config_panel, name="api_config_panel"),
 
     path('account/update-password', update_password, name='update_password'),
     path('account/dashboard', account_dashboard, name='account_dashboard'),
