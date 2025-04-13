@@ -8,36 +8,38 @@
     <h2 class="text-center mb-4">Ranking Olimpíada</h2>
 
     {% if ranking %}
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Jogador</th>
-          <th>Clan</th>
-          <th>Aliança</th>
-          <th>Pontos Olímpicos</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for player in ranking %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          <td>{{ player.char_name|default:"-" }}</td>
-          <td>{{ player.clan_name|default:"-" }}</td>
-          <td>{{ player.ally_name|default:"-" }}</td>
-          <td>{{ player.olympiad_points }}</td>
-          <td>
-            {% if player.online %}
-              <span class="badge bg-success">Online</span>
-            {% else %}
-              <span class="badge bg-danger">Offline</span>
-            {% endif %}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="table-responsive-md">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Jogador</th>
+            <th class="d-none d-md-table-cell">Clan</th>
+            <th class="d-none d-md-table-cell">Aliança</th>
+            <th>Pontos Olímpicos</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for player in ranking %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ player.char_name|default:"-" }}</td>
+            <td class="d-none d-md-table-cell">{{ player.clan_name|default:"-" }}</td>
+            <td class="d-none d-md-table-cell">{{ player.ally_name|default:"-" }}</td>
+            <td>{{ player.olympiad_points }}</td>
+            <td>
+              {% if player.online %}
+                <span class="badge bg-success">Online</span>
+              {% else %}
+                <span class="badge bg-danger">Offline</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
     {% else %}
     <div class="alert alert-warning text-center">
       Nenhum dado encontrado.

@@ -8,30 +8,32 @@
     <h2 class="text-center mb-4">Todos os Heróis Olimpíada</h2>
 
     {% if heroes %}
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Jogador</th>
-          <th>Clan</th>
-          <th>Aliança</th>
-          <th>Classe</th>
-          <th>Contagem de Jogos</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for hero in heroes %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          <td>{{ hero.char_name|default:"-" }}</td>
-          <td>{{ hero.clan_name|default:"-" }}</td>
-          <td>{{ hero.ally_name|default:"-" }}</td>
-          <td>{{ hero.base }}</td>
-          <td>{{ hero.count }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="table-responsive-md">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Jogador</th>
+            <th class="d-none d-md-table-cell">Clan</th>
+            <th class="d-none d-md-table-cell">Aliança</th>
+            <th>Classe</th>
+            <th>Contagem de Jogos</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for hero in heroes %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ hero.char_name|default:"-" }}</td>
+            <td class="d-none d-md-table-cell">{{ hero.clan_name|default:"-" }}</td>
+            <td class="d-none d-md-table-cell">{{ hero.ally_name|default:"-" }}</td>
+            <td>{{ hero.base }}</td>
+            <td>{{ hero.count }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
     {% else %}
     <div class="alert alert-warning text-center">
       Nenhum dado encontrado.

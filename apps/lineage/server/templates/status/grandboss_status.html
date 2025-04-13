@@ -6,28 +6,30 @@
     <h2 class="text-center mb-4">Grand Boss Status</h2>
 
     {% if bosses %}
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Nome</th>
-          <th>Nível</th>
-          <th>Respawn</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for boss in bosses %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          <td>{{ boss.name }}</td>
-          <td>{{ boss.level }}</td>
-          <td>{{ boss.respawn_human }}</td>
-          <td>{{ boss.status }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="table-responsive-md">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th class="d-none d-md-table-cell">Nível</th>
+            <th class="d-none d-md-table-cell">Respawn</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for boss in bosses %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ boss.name }}</td>
+            <td class="d-none d-md-table-cell">{{ boss.level }}</td>
+            <td class="d-none d-md-table-cell">{{ boss.respawn_human }}</td>
+            <td>{{ boss.status }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
     {% else %}
     <div class="alert alert-warning text-center">
       Nenhum boss encontrado.

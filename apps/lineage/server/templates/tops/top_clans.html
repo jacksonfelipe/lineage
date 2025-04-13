@@ -8,32 +8,34 @@
     <h2 class="text-center mb-4">Ranking Clans</h2>
 
     {% if clans %}
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Clan</th>
-          <th>Ally</th>
-          <th>Líder</th>
-          <th>Nível</th>
-          <th>Reputação</th>
-          <th>Membros</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for clan in clans %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          <td>{{ clan.clan_name|default:"-" }}</td>
-          <td>{{ clan.ally_name|default:"-" }}</td>
-          <td>{{ clan.char_name|default:"-" }}</td>
-          <td>{{ clan.clan_level }}</td>
-          <td>{{ clan.reputation_score }}</td>
-          <td>{{ clan.membros }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="table-responsive-md">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Clan</th>
+            <th class="d-none d-md-table-cell">Ally</th>
+            <th class="d-none d-md-table-cell">Líder</th>
+            <th class="d-none d-md-table-cell">Nível</th>
+            <th>Reputação</th>
+            <th>Membros</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for clan in clans %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ clan.clan_name|default:"-" }}</td>
+            <td class="d-none d-md-table-cell">{{ clan.ally_name|default:"-" }}</td>
+            <td class="d-none d-md-table-cell">{{ clan.char_name|default:"-" }}</td>
+            <td class="d-none d-md-table-cell">{{ clan.clan_level }}</td>
+            <td>{{ clan.reputation_score }}</td>
+            <td>{{ clan.membros }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
     {% else %}
     <div class="alert alert-warning text-center">
       Nenhum dado encontrado.

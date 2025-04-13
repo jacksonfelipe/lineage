@@ -8,28 +8,30 @@
     <h2 class="text-center mb-4">Boss Jewel Locations</h2>
 
     {% if jewel_locations %}
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Item</th>
-          <th>Count</th>
-          <th>Character</th>
-          <th>Clan</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for location in jewel_locations %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          <td>{{ location.item_name }}</td>
-          <td>{{ location.count }}</td>
-          <td>{{ location.char_name }}</td>
-          <td>{{ location.clan_name|default:"-" }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="table-responsive-md">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Item</th>
+            <th>Count</th>
+            <th class="d-none d-md-table-cell">Character</th>
+            <th class="d-none d-md-table-cell">Clan</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for location in jewel_locations %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ location.item_name }}</td>
+            <td>{{ location.count }}</td>
+            <td class="d-none d-md-table-cell">{{ location.char_name }}</td>
+            <td class="d-none d-md-table-cell">{{ location.clan_name|default:"-" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
     {% else %}
     <div class="alert alert-warning text-center">
       Nenhuma localização de Boss Jewel encontrada.

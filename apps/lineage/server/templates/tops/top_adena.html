@@ -8,37 +8,40 @@
     <h2 class="text-center mb-4">Ranking Adena</h2>
 
     {% if players %}
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Personagem</th>
-          <th>Clan</th>
-          <th>Nível</th>
-          <th>Adenas</th>
-          <th>Online</th>
-          <th>Tempo Online</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for player in players %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          <td>{{ player.char_name }}</td>
-          <td>{{ player.clan_name|default:"-" }}</td>
-          <td>{{ player.level }}</td>
-          <td>{{ player.adenas|floatformat:0 }}</td>
-          <td>{% if player.online > 0 %}🟢{% else %}⚪{% endif %}</td>
-          <td>{{ player.onlinetime|humanize_time }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="table-responsive-md">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Personagem</th>
+            <th class="d-none d-md-table-cell">Clan</th>
+            <th class="d-none d-md-table-cell">Nível</th>
+            <th>Adenas</th>
+            <th>Online</th>
+            <th class="d-none d-md-table-cell">Tempo Online</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for player in players %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ player.char_name }}</td>
+            <td class="d-none d-md-table-cell">{{ player.clan_name|default:"-" }}</td>
+            <td class="d-none d-md-table-cell">{{ player.level }}</td>
+            <td>{{ player.adenas|floatformat:0 }}</td>
+            <td>{% if player.online > 0 %}🟢{% else %}⚪{% endif %}</td>
+            <td class="d-none d-md-table-cell">{{ player.onlinetime|humanize_time }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
     {% else %}
     <div class="alert alert-warning text-center">
       Nenhum dado encontrado.
     </div>
     {% endif %}
+    
   </div>
 </div>
 {% endblock %}

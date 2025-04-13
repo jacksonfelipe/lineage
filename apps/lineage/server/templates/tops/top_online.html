@@ -6,28 +6,31 @@
   <div class="card shadow-lg p-4">
     <h2 class="text-center mb-4">Top Tempo Online</h2>
 
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Personagem</th>
-          <th>PvP</th>
-          <th>PK</th>
-          <th>Tempo Online</th>
-          <th>Clan</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for player in ranking %}
-        <tr>
-          <td>{{ player.char_name }}</td>
-          <td>{{ player.pvpkills }}</td>
-          <td>{{ player.pkkills }}</td>
-          <td>{{ player.onlinetime|humanize_time }}</td>
-          <td>{{ player.clan_name|default:"-" }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="table-responsive-md">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Personagem</th>
+            <th>PvP</th>
+            <th class="d-none d-md-table-cell">PK</th>
+            <th>Tempo Online</th>
+            <th class="d-none d-md-table-cell">Clan</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for player in ranking %}
+          <tr>
+            <td>{{ player.char_name }}</td>
+            <td>{{ player.pvpkills }}</td>
+            <td class="d-none d-md-table-cell">{{ player.pkkills }}</td>
+            <td>{{ player.onlinetime|humanize_time }}</td>
+            <td class="d-none d-md-table-cell">{{ player.clan_name|default:"-" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
   </div>
 </div>
 {% endblock %}
