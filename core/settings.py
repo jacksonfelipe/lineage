@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from str2bool import str2bool
 from .logger import LOGGING as is_LOGGING
 from urllib.parse import urlparse
+from django.utils.translation import gettext_lazy as _
 
 # =========================== MAIN CONFIGS ===========================
 
@@ -93,6 +94,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
+    'django.middleware.locale.LocaleMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -176,16 +178,27 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # =========================== INTERNATIONALIZATION CONFIGS ===========================
 
-LANGUAGE_CODE = "pt-br"
-TIME_ZONE = "America/Recife"
+LANGUAGE_CODE = os.getenv("CONFIG_LANGUAGE_CODE", "pt-br")
+TIME_ZONE = os.getenv("CONFIG_TIME_ZONE", "America/Recife")
 USE_I18N = True
+USE_L10N = True
 USE_TZ = True
-DECIMAL_SEPARATOR = ','
-USE_THOUSAND_SEPARATOR = True
-DATETIME_FORMAT = 'd/m/Y H:i:s'
-DATE_FORMAT = 'd/m/Y'
-TIME_FORMAT = 'H:i:s'
-GMT_OFFSET = -3  # Ajuste para o fuso horário de Brasília (UTC -3)
+DECIMAL_SEPARATOR = os.getenv("CONFIG_DECIMAL_SEPARATOR", ',')
+USE_THOUSAND_SEPARATOR = os.getenv("CONFIG_USE_THOUSAND_SEPARATOR", "True").lower() in ['true', '1', 'yes']
+DATETIME_FORMAT = os.getenv("CONFIG_DATETIME_FORMAT", 'd/m/Y H:i:s')
+DATE_FORMAT = os.getenv("CONFIG_DATE_FORMAT", 'd/m/Y')
+TIME_FORMAT = os.getenv("CONFIG_TIME_FORMAT", 'H:i:s')
+GMT_OFFSET = float(os.getenv("CONFIG_GMT_OFFSET", -3))
+
+LANGUAGES = [
+    ('pt-br', _('Português')),
+    ('en', _('Inglês')),
+    ('es', _('Espanhol')),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 # =========================== STATIC FILES CONFIGS ===========================
 

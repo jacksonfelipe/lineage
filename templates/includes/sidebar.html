@@ -19,7 +19,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
             </svg>
-            Sair
+            {% trans "Sair" %}
           </a>
         </div>
       </div>
@@ -52,7 +52,7 @@
               <path d="M10 6a4 4 0 11-4 4 4 4 0 014-4z"></path>
             </svg>
           </span>
-          <span class="sidebar-text">Início</span>
+          <span class="sidebar-text">{% trans "Início" %}</span>
         </a>
       </li>  
       
@@ -68,7 +68,7 @@
               <path d="M10 6a4 4 0 11-4 4 4 4 0 014-4z"></path>
             </svg>
           </span>
-          <span class="sidebar-text">Ajuda (FAQ)</span>
+          <span class="sidebar-text">{% trans "Ajuda (FAQ)" %}</span>
         </a>
       </li> 
 
@@ -80,7 +80,7 @@
               <path d="M10 6a4 4 0 11-4 4 4 4 0 014-4z"></path>
             </svg>
           </span>
-          <span class="sidebar-text">Notícias</span>
+          <span class="sidebar-text">{% trans "Notícias" %}</span>
         </a>
       </li> 
 
@@ -92,7 +92,7 @@
               <path d="M10 6a4 4 0 11-4 4 4 4 0 014-4z"></path>
             </svg>
           </span>
-          <span class="sidebar-text">Mensagens</span>
+          <span class="sidebar-text">{% trans "Mensagens" %}</span>
         </a>
       </li> 
 
@@ -104,7 +104,7 @@
               <path d="M10 6a4 4 0 11-4 4 4 4 0 014-4z"></path>
             </svg>
           </span>
-          <span class="sidebar-text">Solicitações</span>
+          <span class="sidebar-text">{% trans "Solicitações" %}</span>
         </a>
       </li> 
 
@@ -123,7 +123,7 @@
                 <path fill-rule="evenodd" d="M4 13a6 6 0 0012 0H4zm6 3a3 3 0 003-3H7a3 3 0 003 3z" clip-rule="evenodd"></path>
               </svg>
             </span>            
-            Tops
+            {% trans "Tops" %}
             <span class="sidebar-text"></span>
           </span>
           <span class="link-arrow">
@@ -139,39 +139,39 @@
 
             <li class="nav-item {% if 'top-level' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'server:top_level' %}">
-                <span class="sidebar-text">Top Level</span>
+                <span class="sidebar-text">{% trans "Top Level" %}</span>
               </a>
             </li>
             
             <li class="nav-item {% if 'top-pk' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'server:top_pk' %}">
-                <span class="sidebar-text">Top PK</span>
+                <span class="sidebar-text">{% trans "Top PK" %}</span>
               </a>
             </li>
-
+            
             <li class="nav-item {% if 'top-pk' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'server:top_pvp' %}">
-                <span class="sidebar-text">Top PVP</span>
+                <span class="sidebar-text">{% trans "Top PVP" %}</span>
               </a>
             </li>
             
             <li class="nav-item {% if 'top-adena' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'server:top_adena' %}">
-                <span class="sidebar-text">Top Adena</span>
+                <span class="sidebar-text">{% trans "Top Adena" %}</span>
               </a>
             </li>
             
             <li class="nav-item {% if 'top-clans' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'server:top_clans' %}">
-                <span class="sidebar-text">Top Clans</span>
+                <span class="sidebar-text">{% trans "Top Clans" %}</span>
               </a>
-            </li>     
+            </li>
             
             <li class="nav-item {% if 'top-clans' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'server:top_online' %}">
-                <span class="sidebar-text">Top Online</span>
+                <span class="sidebar-text">{% trans "Top Online" %}</span>
               </a>
-            </li>  
+            </li>
 
           </ul>
         </div>
@@ -188,7 +188,7 @@
                 <path fill-rule="evenodd" d="M4 13a6 6 0 0012 0H4zm6 3a3 3 0 003-3H7a3 3 0 003 3z" clip-rule="evenodd"></path>
               </svg>
             </span>
-            Heroes
+            {% trans "Heroes" %}
             <span class="sidebar-text"></span>
           </span>
           <span class="link-arrow">
@@ -204,19 +204,19 @@
       
             <li class="nav-item {% if 'top-olympiad' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'server:olympiad_ranking' %}">
-                <span class="sidebar-text">Top Olympiad</span>
+                <span class="sidebar-text">{% trans "Top Olympiad" %}</span>
               </a>
             </li>
-      
+            
             <li class="nav-item {% if 'top-heroes-all' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'server:olympiad_all_heroes' %}">
-                <span class="sidebar-text">All Heroes</span>
+                <span class="sidebar-text">{% trans "All Heroes" %}</span>
               </a>
             </li>
-      
+            
             <li class="nav-item {% if 'top-heroes-current' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'server:olympiad_current_heroes' %}">
-                <span class="sidebar-text">Current Heroes</span>
+                <span class="sidebar-text">{% trans "Current Heroes" %}</span>
               </a>
             </li>
       
@@ -231,7 +231,7 @@
               <path fill-rule="evenodd" d="M10 2C5.58 2 2 5.58 2 10s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 2c.55 0 1 .45 1 1v3h3c.55 0 1 .45 1 1s-.45 1-1 1h-3v3c0 .55-.45 1-1 1s-1-.45-1-1v-3H6c-.55 0-1-.45-1-1s.45-1 1-1h3V5c0-.55.45-1 1-1z" clip-rule="evenodd"></path>
             </svg>
           </span>
-          <span class="sidebar-text">Castle Siege</span>
+          <span class="sidebar-text">{% trans "Castle Siege" %}</span>
         </a>
       </li>
       
@@ -242,7 +242,7 @@
               <path fill-rule="evenodd" d="M10 2C5.58 2 2 5.58 2 10s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 2c.55 0 1 .45 1 1v3h3c.55 0 1 .45 1 1s-.45 1-1 1h-3v3c0 .55-.45 1-1 1s-1-.45-1-1v-3H6c-.55 0-1-.45-1-1s.45-1 1-1h3V5c0-.55.45-1 1-1z" clip-rule="evenodd"></path>
             </svg>
           </span>
-          <span class="sidebar-text">Boss Jewel Locations</span>
+          <span class="sidebar-text">{% trans "Boss Jewel Locations" %}</span>
         </a>
       </li>
 
@@ -253,7 +253,7 @@
               <path fill-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c.55 0 1 .45 1 1v5h4c.55 0 1 .45 1 1s-.45 1-1 1h-5V6c0-.55.45-1 1-1z" clip-rule="evenodd"/>
             </svg>
           </span>
-          <span class="sidebar-text">Grand Boss Status</span>
+          <span class="sidebar-text">{% trans "Grand Boss Status" %}</span>
         </a>
       </li>      
 
@@ -279,7 +279,7 @@
 
                   <!-- TEXTO DO APLICATIVO -->
                   {% if app.label == 'Autenticação e Autorização' %} 
-                    <span class="sidebar-text">Permissões</span>
+                    <span class="sidebar-text">{% trans "Permissões" %}</span>
                   {% else %} 
                     <span class="sidebar-text">{{ app.label|slice:15 }}{% if app.label|length > 15 %}..{% endif %}</span>
                   {% endif %}
@@ -332,7 +332,7 @@
                 clip-rule="evenodd"></path>
             </svg>
           </span>
-          <span class="sidebar-text">Dashboard Contábil</span>
+          <span class="sidebar-text">{% trans "Dashboard Contábil" %}</span>
         </a>
       </li>      
 
@@ -347,7 +347,7 @@
                 clip-rule="evenodd"></path>
             </svg>
           </span>
-          <span class="sidebar-text">Auditoria</span>
+          <span class="sidebar-text">{% trans "Auditoria" %}</span>
         </a>
       </li>
       
@@ -361,7 +361,7 @@
               <path fill-rule="evenodd" d="M9 10h2v2H9z" clip-rule="evenodd"></path>
             </svg>
           </span>
-          <span class="sidebar-text">Logs Info</span>
+          <span class="sidebar-text">{% trans "Logs Info" %}</span>
         </a>
       </li>
 
@@ -375,7 +375,7 @@
               <path fill-rule="evenodd" d="M9 10h2v2H9z" clip-rule="evenodd"></path>
             </svg>
           </span>
-          <span class="sidebar-text">Logs Errors</span>
+          <span class="sidebar-text">{% trans "Logs Errors" %}</span>
         </a>
       </li>
 
@@ -394,7 +394,7 @@
                   clip-rule="evenodd"></path>
               </svg>
             </span>
-            Componentes
+            {% trans "Componentes" %}
             <span class="sidebar-text"></span>
           </span>
           <span class="link-arrow">
@@ -409,77 +409,77 @@
           <ul class="flex-column nav">
             <li class="nav-item {% if 'buttons' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'buttons' %}">
-                <span class="sidebar-text">Buttons</span>
+                <span class="sidebar-text">{% trans "Buttons" %}</span>
               </a>
             </li>
             <li class="nav-item {% if 'notifications' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'notifications' %}">
-                <span class="sidebar-text">Notifications</span>
+                <span class="sidebar-text">{% trans "Notifications" %}</span>
               </a>
             </li>
             <li class="nav-item {% if 'forms' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'forms' %}">
-                <span class="sidebar-text">Forms</span>
+                <span class="sidebar-text">{% trans "Forms" %}</span>
               </a>
             </li>
             <li class="nav-item {% if 'modals' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'modals' %}">
-                <span class="sidebar-text">Modals</span>
+                <span class="sidebar-text">{% trans "Modals" %}</span>
               </a>
             </li>
             <li class="nav-item {% if 'typography' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'typography' %}">
-                <span class="sidebar-text">Typography</span>
+                <span class="sidebar-text">{% trans "Typography" %}</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'login' %}">
-                <span class="sidebar-text">Sign In</span>
+                <span class="sidebar-text">{% trans "Sign In" %}</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'register' %}">
-                <span class="sidebar-text">Sign Up</span>
+                <span class="sidebar-text">{% trans "Sign Up" %}</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'password_reset' %}">
-                <span class="sidebar-text">Forgot password</span>
+                <span class="sidebar-text">{% trans "Forgot password" %}</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'password_change' %}">
-                <span class="sidebar-text">Change password</span>
+                <span class="sidebar-text">{% trans "Change password" %}</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'lock' %}">
-                <span class="sidebar-text">Lock</span>
+                <span class="sidebar-text">{% trans "Lock" %}</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'error_404' %}">
-                <span class="sidebar-text">404 Not Found</span>
+                <span class="sidebar-text">{% trans "404 Not Found" %}</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'error_500' %}">
-                <span class="sidebar-text">500 Not Found</span>
+                <span class="sidebar-text">{% trans "500 Not Found" %}</span>
               </a>
             </li>
             <li class="nav-item {% if 'bs_tables' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'bs_tables' %}">
-                <span class="sidebar-text">Bootstrap Tables</span>
+                <span class="sidebar-text">{% trans "Bootstrap Tables" %}</span>
               </a>
             </li>
             <li class="nav-item {% if 'transaction' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'transaction' %}">
-                <span class="sidebar-text">Transaction</span>
+                <span class="sidebar-text">{% trans "Transaction" %}</span>
               </a>
             </li>
             <li class="nav-item {% if 'settings' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'settings' %}">
-                <span class="sidebar-text">Settings</span>
+                <span class="sidebar-text">{% trans "Settings" %}</span>
               </a>
             </li>
           </ul>

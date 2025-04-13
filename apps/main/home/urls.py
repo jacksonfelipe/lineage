@@ -37,4 +37,7 @@ urlpatterns = [
     # validations
     path('verificar/<uidb64>/<token>/', verificar_email, name='verificar_email'),
     path('reenviar-verificacao/', reenviar_verificacao_view, name='reenviar_verificacao'),
+
+    # locale
+    path('set-language/', custom_set_language, name='set_language'),
 ]

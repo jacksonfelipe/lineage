@@ -21,6 +21,8 @@ from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse
 from django.core.mail import send_mail
 from django.contrib import messages
+from django.utils.translation import activate
+from django.http import HttpResponseRedirect
 
 from apps.lineage.server.models import IndexConfig
 
@@ -357,3 +359,18 @@ def reenviar_verificacao_view(request):
             messages.error(request, 'Nenhuma conta foi encontrada com este e-mail.')
 
     return render(request, 'accounts_custom/reenviar_verificacao.html')
+
+
+@login_required
+def custom_set_language(request):
+    if request.method == 'POST':
+        lang_code = request.POST.get('language')
+        next_url = request.POST.get('next', '/')
+        
+        if lang_code:
+            response = HttpResponseRedirect(next_url)
+            response.set_cookie('django_language', lang_code)
+            activate(lang_code)
+            return response
+
+    return redirect('/')

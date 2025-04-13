@@ -1,6 +1,6 @@
+{% load static i18n %}
 <!DOCTYPE html>
-{% load static %}
-<html lang="pt-br">
+<html lang="{{ LANGUAGE_CODE }}">
   <head>
     {% include 'includes/head.html' %}
     <link type="text/css" href="{% static 'css/public.css' %}" rel="stylesheet">
@@ -14,26 +14,26 @@
         
         <!-- LOGO -->
         <a href="{% url 'index' %}" class="navbar-brand text-light fs-3">
-          <img src="{% static 'assets/img/l2_logo.png' %}" height="60" alt="Lineage2 Logo">
+          <img src="{% static 'assets/img/l2_logo.png' %}" height="60" alt="{% trans 'Lineage2 Logo' %}">
         </a>
     
         <!-- MENU DESKTOP -->
         <ul class="nav custom-menu d-none d-lg-flex">
-          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#features" onclick="closeMenu()">Sobre</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#download" onclick="closeMenu()">Download</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#comunidade" onclick="closeMenu()">Comunidade</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'public_news_list' %}" onclick="closeMenu()">Notícias</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'public_faq_list' %}" onclick="closeMenu()">FAQ</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#features" onclick="closeMenu()">{% trans "Sobre" %}</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#download" onclick="closeMenu()">{% trans "Download" %}</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#comunidade" onclick="closeMenu()">{% trans "Comunidade" %}</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'public_news_list' %}" onclick="closeMenu()">{% trans "Notícias" %}</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'public_faq_list' %}" onclick="closeMenu()">{% trans "FAQ" %}</a></li>
         </ul>
     
         <!-- AÇÕES -->
         <div class="d-none d-lg-flex gap-3">
           {% if request.user.is_authenticated %}
-            <a href="{% url 'dashboard' %}" class="highlight-btn">Painel</a>
-            <a href="{% url 'logout' %}" class="custom-btn">Sair</a>
+            <a href="{% url 'dashboard' %}" class="highlight-btn">{% trans "Painel" %}</a>
+            <a href="{% url 'logout' %}" class="custom-btn">{% trans "Sair" %}</a>
           {% else %}
-            <a href="{% url 'login' %}" class="custom-btn">Minha Conta</a>
-            <a href="{% url 'register' %}" class="highlight-btn">Jogue Grátis</a>
+            <a href="{% url 'login' %}" class="custom-btn">{% trans "Minha Conta" %}</a>
+            <a href="{% url 'register' %}" class="highlight-btn">{% trans "Jogue Grátis" %}</a>
           {% endif %}
         </div>
     
@@ -49,18 +49,18 @@
           &times;
         </button>
         <ul class="nav flex-column align-items-center">
-          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#features" onclick="closeMenu()">Sobre</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#download" onclick="closeMenu()">Download</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#comunidade" onclick="closeMenu()">Comunidade</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'public_news_list' %}" onclick="closeMenu()">Notícias</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'public_faq_list' %}" onclick="closeMenu()">FAQ</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#features" onclick="closeMenu()">{% trans "Sobre" %}</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#download" onclick="closeMenu()">{% trans "Download" %}</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#comunidade" onclick="closeMenu()">{% trans "Comunidade" %}</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'public_news_list' %}" onclick="closeMenu()">{% trans "Notícias" %}</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'public_faq_list' %}" onclick="closeMenu()">{% trans "FAQ" %}</a></li>
 
           {% if request.user.is_authenticated %}
-            <li class="nav-item mt-4"><a href="{% url 'dashboard' %}" class="highlight-btn text-center">Painel</a></li>
-            <li class="nav-item mt-2"><a href="{% url 'logout' %}" class="custom-btn text-center">Sair</a></li>
+            <li class="nav-item mt-4"><a href="{% url 'dashboard' %}" class="highlight-btn text-center">{% trans "Painel" %}</a></li>
+            <li class="nav-item mt-2"><a href="{% url 'logout' %}" class="custom-btn text-center">{% trans "Sair" %}</a></li>
           {% else %}
-            <li class="nav-item mt-4"><a href="{% url 'login' %}" class="custom-btn-green text-center">Minha Conta</a></li>
-            <li class="nav-item mt-2"><a href="{% url 'register' %}" class="highlight-btn text-center">Jogue Grátis</a></li>
+            <li class="nav-item mt-4"><a href="{% url 'login' %}" class="custom-btn-green text-center">{% trans "Minha Conta" %}</a></li>
+            <li class="nav-item mt-2"><a href="{% url 'register' %}" class="highlight-btn text-center">{% trans "Jogue Grátis" %}</a></li>
           {% endif %}
         </ul>
       </div>
@@ -79,8 +79,8 @@
           <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
           <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
         </div>
-        <p>&copy; <span id="footer-year"></span> Lineage 2 PDL - Todos os direitos reservados.</p>
-        <p>Feito com ❤️ por aventureiros para aventureiros.</p>
+        <p>&copy; <span id="footer-year"></span> Lineage 2 PDL - {% trans "Todos os direitos reservados." %}</p>
+        <p>{% trans "Feito com ❤️ por aventureiros para aventureiros." %}</p>
       </div>
     </footer>    
 

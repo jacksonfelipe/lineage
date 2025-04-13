@@ -1,0 +1,1 @@
+# inicio do sistema de internacionalização
