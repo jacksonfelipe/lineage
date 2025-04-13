@@ -4,6 +4,13 @@
 set -e
 
 echo "=================================="
+echo " Instalandoo GetText"
+echo "=================================="
+
+# instala o gettext
+sudo apt-get install --reinstall gettext
+
+echo "=================================="
 echo " Instalando Docker e Docker Compose"
 echo "=================================="
 
