@@ -1,0 +1,86 @@
+#!/bin/bash
+
+# Exit on any error
+set -e
+
+echo "=================================="
+echo " Instalando Docker e Docker Compose"
+echo "=================================="
+
+# Atualiza pacotes e instala dependências
+sudo apt update
+sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+
+# Adiciona chave GPG do Docker
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+# Adiciona repositório Docker (Ubuntu 22.x usa 'jammy' no lugar de 'focal')
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu jammy stable"
+
+# Instala Docker CE
+sudo apt update
+sudo apt install -y docker-ce
+
+# Ativa Docker no boot
+sudo systemctl enable docker
+sudo systemctl start docker
+
+# Verifica instalação do Docker
+docker --version
+
+echo "=================================="
+echo " Instalando Docker Compose"
+echo "=================================="
+
+# Baixa Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+# Dá permissão de execução
+sudo chmod +x /usr/local/bin/docker-compose
+
+# Verifica instalação do Docker Compose
+docker-compose --version
+
+echo "=================================="
+echo " Instalando e configurando o PDL"
+echo "=================================="
+
+# Cria diretório do projeto
+sudo mkdir -p /var/pdl
+cd /var/pdl
+
+# Clona repositório
+git clone https://github.com/D3NKYT0/lineage.git .
+echo "Repositório clonado."
+
+# Cria install.sh básico
+cat <<EOL > install.sh
+#!/bin/bash
+echo "Executando install.sh..."
+# Adicione seus comandos de instalação aqui
+EOL
+
+# Cria build.sh básico
+cat <<EOL > build.sh
+#!/bin/bash
+echo "Executando build.sh..."
+# Adicione seus comandos de build aqui
+EOL
+
+# Dá permissão de execução
+chmod +x install.sh build.sh
+
+# Cria arquivo .env vazio (caso não exista)
+touch .env
+echo ".env criado (preencha manualmente)"
+
+echo "=================================="
+echo " Executando install.sh e build.sh"
+echo "=================================="
+
+./install.sh
+./build.sh
+
+echo "=================================="
+echo " Instalação e configuração concluídas!"
+echo "=================================="
