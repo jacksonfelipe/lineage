@@ -1,0 +1,937 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-14 06:27-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
+
+#: .\apps\main\home\forms.py:37
+msgid "Username"
+msgstr ""
+
+#: .\apps\main\home\forms.py:41
+msgid "Email"
+msgstr ""
+
+#: .\apps\main\home\forms.py:45
+msgid "Password"
+msgstr ""
+
+#: .\apps\main\home\forms.py:49
+msgid "Confirm Password"
+msgstr ""
+
+#: .\apps\main\home\forms.py:59
+msgid "Your Username"
+msgstr ""
+
+#: .\apps\main\home\forms.py:61
+msgid "Your Password"
+msgstr ""
+
+#: .\core\settings.py:194
+msgid "Português"
+msgstr ""
+
+#: .\core\settings.py:195
+msgid "Inglês"
+msgstr ""
+
+#: .\core\settings.py:196
+msgid "Espanhol"
+msgstr ""
+
+#: .\templates\admin\actions.html:18
+msgid "Run the selected action"
+msgstr ""
+
+#: .\templates\admin\actions.html:19
+msgid "Go"
+msgstr ""
+
+#: .\templates\admin\actions.html:29
+msgid "Click here to select the objects across all pages"
+msgstr ""
+
+#: .\templates\admin\actions.html:29
+#, python-format
+msgid ""
+"\n"
+"                            Select all %(total_count)s %(module_name)s"
+msgstr ""
+
+#: .\templates\admin\actions.html:32
+msgid "Clear selection"
+msgstr ""
+
+#: .\templates\admin\auth\user\add_form.html:10
+msgid ""
+"First, enter a username and password. Then, you'll be able to edit more user "
+"options."
+msgstr ""
+
+#: .\templates\admin\auth\user\add_form.html:12
+msgid "Enter a username and password."
+msgstr ""
+
+#: .\templates\admin\auth\user\change_password.html:40
+msgid "Alterar senha"
+msgstr ""
+
+#: .\templates\admin\auth\user\change_password.html:54
+#, python-format
+msgid ""
+"\n"
+"                            Digite uma nova senha para o usuário\n"
+"                            <strong>%(username)s</strong>.\n"
+"                        "
+msgstr ""
+
+#: .\templates\admin\auth\user\change_password.html:90
+msgid "Alterar minha senha"
+msgstr ""
+
+#: .\templates\admin\auth\user\change_password.html:105
+msgid "Por favor, corrija o erro abaixo."
+msgstr ""
+
+#: .\templates\admin\auth\user\change_password.html:107
+msgid "Por favor, corrija os erros abaixo."
+msgstr ""
+
+#: .\templates\admin\change_form.html:44
+#, python-format
+msgid ""
+"Add\n"
+"                                %(name)s"
+msgstr ""
+
+#: .\templates\admin\change_form.html:62
+#: .\templates\admin\change_list_object_tools.html:11
+#, python-format
+msgid "Add %(name)s"
+msgstr ""
+
+#: .\templates\admin\change_form_object_tools.html:8
+#: .\templates\admin\object_history.html:36
+msgid "History"
+msgstr ""
+
+#: .\templates\admin\change_form_object_tools.html:13
+#: .\templates\admin\edit_inline\stacked.html:32
+#: .\templates\admin\edit_inline\tabular.html:64
+msgid "View on site"
+msgstr ""
+
+#: .\templates\admin\change_list.html:111
+msgid "Filter"
+msgstr ""
+
+#: .\templates\admin\change_list_results.html:22
+msgid "Remove from sorting"
+msgstr ""
+
+#: .\templates\admin\change_list_results.html:24
+#, python-format
+msgid "Sorting priority: %(priority_number)s"
+msgstr ""
+
+#: .\templates\admin\change_list_results.html:26
+msgid "Toggle sorting"
+msgstr ""
+
+#: .\templates\admin\confirm_action.html:35
+msgid "Confirmar Ação"
+msgstr ""
+
+#: .\templates\admin\confirm_action.html:50
+#, python-format
+msgid ""
+"\n"
+"                                Tem certeza de que deseja executar a ação "
+"\"%(action_name)s\" nos %(objects_name)s selecionados?\n"
+"                                Esta ação não pode ser desfeita.\n"
+"                            "
+msgstr ""
+
+#: .\templates\admin\confirm_action.html:59
+msgid "Objetos Selecionados"
+msgstr ""
+
+#: .\templates\admin\confirm_action.html:75
+#: .\templates\admin\delete_confirmation.html:124
+#: .\templates\admin\delete_selected_confirmation.html:122
+msgid "Sim, tenho certeza"
+msgstr ""
+
+#: .\templates\admin\confirm_action.html:78
+msgid "Não, voltar"
+msgstr ""
+
+#: .\templates\admin\delete_confirmation.html:38
+#: .\templates\admin\import_export\import.html:193
+#: .\templates\admin\submit_line.html:31
+msgid "Delete"
+msgstr ""
+
+#: .\templates\admin\delete_confirmation.html:54
+#, python-format
+msgid ""
+"\n"
+"                                    Deleting the %(object_name)s "
+"'%(escaped_object)s' would result in deleting\n"
+"                                    related objects, but your account "
+"doesn't have permission to delete the\n"
+"                                    following types of objects:\n"
+"                                "
+msgstr ""
+
+#: .\templates\admin\delete_confirmation.html:72
+#, python-format
+msgid ""
+"\n"
+"                                    Deleting the %(object_name)s ' "
+"%(escaped_object)s' would require deleting\n"
+"                                    the following protected related "
+"objects:\n"
+"                                "
+msgstr ""
+
+#: .\templates\admin\delete_confirmation.html:89
+#, python-format
+msgid ""
+"\n"
+"                                    Are you sure you want to delete the "
+"%(object_name)s \"%(escaped_object)s\"?\n"
+"                                    All of the following related items will "
+"be deleted:\n"
+"                                "
+msgstr ""
+
+#: .\templates\admin\delete_confirmation.html:103
+#: .\templates\admin\delete_selected_confirmation.html:103
+msgid "Objects"
+msgstr ""
+
+#: .\templates\admin\delete_confirmation.html:126
+#: .\templates\admin\delete_selected_confirmation.html:124
+msgid "No, take me back"
+msgstr ""
+
+#: .\templates\admin\delete_selected_confirmation.html:38
+msgid "Delete multiple objects"
+msgstr ""
+
+#: .\templates\admin\delete_selected_confirmation.html:54
+#, python-format
+msgid ""
+"\n"
+"                                        Deleting the selected "
+"%(objects_name)s would result in deleting related\n"
+"                                        objects, but your account doesn't "
+"have permission to delete the following\n"
+"                                        types of objects:\n"
+"                                    "
+msgstr ""
+
+#: .\templates\admin\delete_selected_confirmation.html:72
+#, python-format
+msgid ""
+"\n"
+"                                        Deleting the selected "
+"%(objects_name)s would require deleting the\n"
+"                                        following protected related "
+"objects:\n"
+"                                    "
+msgstr ""
+
+#: .\templates\admin\delete_selected_confirmation.html:89
+#, python-format
+msgid ""
+"\n"
+"                                        Are you sure you want to delete the "
+"selected %(objects_name)s? All of the\n"
+"                                        following objects and their related "
+"items will be deleted:\n"
+"                                    "
+msgstr ""
+
+#: .\templates\admin\edit_inline\stacked.html:29
+#: .\templates\admin\edit_inline\tabular.html:60
+msgid "Change"
+msgstr ""
+
+#: .\templates\admin\edit_inline\stacked.html:29
+#: .\templates\admin\edit_inline\tabular.html:60
+msgid "View"
+msgstr ""
+
+#: .\templates\admin\edit_inline\tabular.html:37
+msgid "Delete?"
+msgstr ""
+
+#: .\templates\admin\filter.html:9
+#, python-format
+msgid " By %(filter_title)s "
+msgstr ""
+
+#: .\templates\admin\import_export\change_form.html:8
+#: .\templates\admin\import_export\change_list_export_item.html:6
+#: .\templates\admin\import_export\export.html:12
+msgid "Export"
+msgstr ""
+
+#: .\templates\admin\import_export\change_list_import_item.html:6
+#: .\templates\admin\import_export\import.html:19
+msgid "Import"
+msgstr ""
+
+#: .\templates\admin\import_export\export.html:24
+#, python-format
+msgid ""
+"\n"
+"        Export %(len)s selected item.\n"
+"        "
+msgid_plural ""
+"\n"
+"        Export %(len)s selected items.\n"
+"      "
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\templates\admin\import_export\export.html:51
+#: .\templates\admin\import_export\resource_fields_list.html:5
+msgid "This exporter will export the following fields: "
+msgstr ""
+
+#: .\templates\admin\import_export\export.html:85
+#: .\templates\admin\import_export\import.html:73
+msgid "Submit"
+msgstr ""
+
+#: .\templates\admin\import_export\import.html:30
+msgid ""
+"Below is a preview of data to be imported. If you are satisfied with the "
+"results, click 'Confirm import'"
+msgstr ""
+
+#: .\templates\admin\import_export\import.html:33
+msgid "Confirm import"
+msgstr ""
+
+#: .\templates\admin\import_export\import.html:84
+#: .\templates\admin\import_export\import.html:125
+msgid "Errors"
+msgstr ""
+
+#: .\templates\admin\import_export\import.html:98
+msgid "Line number"
+msgstr ""
+
+#: .\templates\admin\import_export\import.html:117
+msgid "Some rows failed to validate"
+msgstr ""
+
+#: .\templates\admin\import_export\import.html:119
+msgid ""
+"Please correct these errors in your data where possible, then reupload it "
+"using the form above."
+msgstr ""
+
+#: .\templates\admin\import_export\import.html:124
+msgid "Row"
+msgstr ""
+
+#: .\templates\admin\import_export\import.html:151
+msgid "Non field specific"
+msgstr ""
+
+#: .\templates\admin\import_export\import.html:174
+msgid "Preview"
+msgstr ""
+
+#: .\templates\admin\import_export\import.html:189
+msgid "New"
+msgstr ""
+
+#: .\templates\admin\import_export\import.html:191
+msgid "Skipped"
+msgstr ""
+
+#: .\templates\admin\import_export\import.html:195
+msgid "Update"
+msgstr ""
+
+#: .\templates\admin\import_export\resource_fields_list.html:7
+msgid "This importer will import the following fields: "
+msgstr ""
+
+#: .\templates\admin\includes\object_delete_summary.html:5
+msgid "Summary"
+msgstr ""
+
+#: .\templates\admin\invalid_setup.html:35
+#: .\templates\admin\invalid_setup.html:56
+msgid ""
+"Something's wrong with your database installation. Make sure the appropriate "
+"database tables have been created, and make sure the database is readable by "
+"the appropriate user."
+msgstr ""
+
+#: .\templates\admin\login.html:99
+msgid "Please correct the error below."
+msgstr ""
+
+#: .\templates\admin\login.html:101
+#: .\templates\registration\password_change_form.html:82
+msgid "Please correct the errors below."
+msgstr ""
+
+#: .\templates\admin\object_history.html:53
+msgid "User"
+msgstr ""
+
+#: .\templates\admin\object_history.html:54
+msgid "Action"
+msgstr ""
+
+#: .\templates\admin\object_history.html:55
+msgid "Date/time"
+msgstr ""
+
+#: .\templates\admin\object_history.html:72
+msgid ""
+"Este objeto não tem um histórico de alterações. Provavelmente não foi "
+"adicionado por meio deste site de administração."
+msgstr ""
+
+#: .\templates\admin\pagination.html:35 .\templates\admin\search_form.html:36
+msgid "Show all"
+msgstr ""
+
+#: .\templates\admin\pagination.html:51 .\templates\admin\submit_line.html:10
+msgid "Save"
+msgstr ""
+
+#: .\templates\admin\search_form.html:20
+#: .\templates\includes\navigation.html:18
+#: .\templates\includes\navigation.html:19
+msgid "Search"
+msgstr ""
+
+#: .\templates\admin\search_form.html:26
+#, python-format
+msgid ""
+"\n"
+"                                    %(counter)s result\n"
+"                                "
+msgid_plural ""
+"\n"
+"                                    %(counter)s results\n"
+"                                "
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\templates\admin\search_form.html:32
+#, python-format
+msgid ""
+"\n"
+"                                    %(full_result_count)s total\n"
+"                                "
+msgstr ""
+
+#: .\templates\admin\submit_line.html:14
+msgid "Save as new"
+msgstr ""
+
+#: .\templates\admin\submit_line.html:18
+msgid "Save and add another"
+msgstr ""
+
+#: .\templates\admin\submit_line.html:22
+msgid "Save and continue editing"
+msgstr ""
+
+#: .\templates\admin\submit_line.html:22
+msgid "Save and view"
+msgstr ""
+
+#: .\templates\admin\submit_line.html:26 .\templates\includes\messages.html:9
+msgid "Close"
+msgstr ""
+
+#: .\templates\includes\footer.html:8 .\templates\layouts\public.html:82
+msgid "Todos os direitos reservados."
+msgstr ""
+
+#: .\templates\includes\footer.html:10 .\templates\layouts\public.html:83
+msgid "Feito com ❤️ por aventureiros para aventureiros."
+msgstr ""
+
+#: .\templates\includes\head.html:5 .\templates\includes\head.html:7
+#: .\templates\includes\head.html:8 .\templates\includes\head.html:16
+#: .\templates\includes\head.html:23 .\templates\pages\index.html:19
+msgid "Lineage 2 PDL"
+msgstr ""
+
+#: .\templates\includes\head.html:9 .\templates\includes\head.html:17
+#: .\templates\includes\head.html:24
+msgid ""
+"O PDL é um painel que nasceu com a missão de oferecer ferramentas poderosas "
+"para administradores de servidores privados de Lineage 2. Inicialmente "
+"voltado à análise de riscos e estabilidade dos servidores, o projeto evoluiu "
+"e se consolidou como uma solução completa para prospecção, gerenciamento e "
+"operação de servidores — tudo em código aberto."
+msgstr ""
+
+#: .\templates\includes\head.html:10
+msgid "lineage l2 painel servidor"
+msgstr ""
+
+#: .\templates\includes\messages.html:5 .\templates\includes\navigation.html:37
+msgid "Notificações"
+msgstr ""
+
+#: .\templates\includes\nav.html:11 .\templates\includes\nav.html:16
+msgid "Volt logo"
+msgstr ""
+
+#: .\templates\includes\nav.html:27
+msgid "Toggle navigation"
+msgstr ""
+
+#: .\templates\includes\navigation.html:39
+msgid "Marcar como lidas"
+msgstr ""
+
+#: .\templates\includes\navigation.html:42
+msgid "Limpar todas as notificações"
+msgstr ""
+
+#: .\templates\includes\navigation.html:48
+msgid "Nenhuma notificação"
+msgstr ""
+
+#: .\templates\includes\navigation.html:55
+msgid "Ver todas as notificações"
+msgstr ""
+
+#: .\templates\includes\navigation.html:82
+msgid "Meu Perfil"
+msgstr ""
+
+#: .\templates\includes\navigation.html:92
+msgid "Mudar Senha"
+msgstr ""
+
+#: .\templates\includes\navigation.html:105
+msgid "Configurações"
+msgstr ""
+
+#: .\templates\includes\navigation.html:108
+msgid "API"
+msgstr ""
+
+#: .\templates\includes\navigation.html:109
+msgid "Moedas"
+msgstr ""
+
+#: .\templates\includes\navigation.html:122
+msgid "Conta L2"
+msgstr ""
+
+#: .\templates\includes\navigation.html:129
+msgid "Carteira"
+msgstr ""
+
+#: .\templates\includes\navigation.html:141
+#: .\templates\includes\sidebar.html:22 .\templates\layouts\public.html:33
+#: .\templates\layouts\public.html:60
+msgid "Sair"
+msgstr ""
+
+#: .\templates\includes\notification.html:8
+msgid "Detalhes da Notificação"
+msgstr ""
+
+#: .\templates\includes\notification.html:9
+#: .\templates\includes\notification.html:15 .\templates\pages\index.html:120
+msgid "Fechar"
+msgstr ""
+
+#: .\templates\includes\notification.html:31
+msgid "Tem certeza de que deseja limpar todas as notificações?"
+msgstr ""
+
+#: .\templates\includes\notification.html:32
+msgid "Erro ao carregar os detalhes da notificação."
+msgstr ""
+
+#: .\templates\includes\notification.html:33
+msgid "Criado em:"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:55
+msgid "Início"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:71
+msgid "Ajuda (FAQ)"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:83 .\templates\layouts\public.html:25
+#: .\templates\layouts\public.html:55
+msgid "Notícias"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:95
+msgid "Mensagens"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:107
+msgid "Solicitações"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:126
+msgid "Tops"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:142
+msgid "Top Level"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:148
+msgid "Top PK"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:154
+msgid "Top PVP"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:160
+msgid "Top Adena"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:166
+msgid "Top Clans"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:172
+msgid "Top Online"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:191
+msgid "Heroes"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:207
+msgid "Top Olympiad"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:213
+msgid "All Heroes"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:219
+msgid "Current Heroes"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:234
+msgid "Castle Siege"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:245
+msgid "Boss Jewel Locations"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:256
+msgid "Grand Boss Status"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:282
+msgid "Permissões"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:335
+msgid "Dashboard Contábil"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:350
+msgid "Auditoria"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:364
+msgid "Logs Info"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:378
+msgid "Logs Errors"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:397
+msgid "Componentes"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:412
+msgid "Buttons"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:417
+msgid "Notifications"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:422
+msgid "Forms"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:427
+msgid "Modals"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:432
+msgid "Typography"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:437
+msgid "Sign In"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:442
+msgid "Sign Up"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:447
+msgid "Forgot password"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:452
+#: .\templates\registration\password_change_done.html:17
+msgid "Change password"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:457
+msgid "Lock"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:462
+msgid "404 Not Found"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:467
+msgid "500 Not Found"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:472
+msgid "Bootstrap Tables"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:477
+msgid "Transaction"
+msgstr ""
+
+#: .\templates\includes\sidebar.html:482
+msgid "Settings"
+msgstr ""
+
+#: .\templates\layouts\public.html:17
+msgid "Lineage2 Logo"
+msgstr ""
+
+#: .\templates\layouts\public.html:22 .\templates\layouts\public.html:52
+msgid "Sobre"
+msgstr ""
+
+#: .\templates\layouts\public.html:23 .\templates\layouts\public.html:53
+msgid "Download"
+msgstr ""
+
+#: .\templates\layouts\public.html:24 .\templates\layouts\public.html:54
+msgid "Comunidade"
+msgstr ""
+
+#: .\templates\layouts\public.html:26 .\templates\layouts\public.html:56
+msgid "FAQ"
+msgstr ""
+
+#: .\templates\layouts\public.html:32 .\templates\layouts\public.html:59
+msgid "Painel"
+msgstr ""
+
+#: .\templates\layouts\public.html:35 .\templates\layouts\public.html:62
+msgid "Minha Conta"
+msgstr ""
+
+#: .\templates\layouts\public.html:36 .\templates\layouts\public.html:63
+msgid "Jogue Grátis"
+msgstr ""
+
+#: .\templates\pages\index.html:26
+msgid "Onde Lendas Nascem, Heróis Lutam e a Glória É Eterna."
+msgstr ""
+
+#: .\templates\pages\index.html:30
+msgid "Jogar Agora"
+msgstr ""
+
+#: .\templates\pages\index.html:47
+msgid "Trailer Oficial"
+msgstr ""
+
+#: .\templates\pages\index.html:54
+msgid "Assista ao trailer e mergulhe no mundo épico do nosso servidor!"
+msgstr ""
+
+#: .\templates\pages\index.html:62
+msgid "O Que Torna Nosso Servidor Único?"
+msgstr ""
+
+#: .\templates\pages\index.html:68
+msgid "PvP & Sieges"
+msgstr ""
+
+#: .\templates\pages\index.html:69
+msgid ""
+"Domine castelos, lute por território e mostre sua força no campo de batalha."
+msgstr ""
+
+#: .\templates\pages\index.html:76
+msgid "Missões Personalizadas"
+msgstr ""
+
+#: .\templates\pages\index.html:77
+msgid "Conteúdo exclusivo com recompensas únicas para jogadores dedicados."
+msgstr ""
+
+#: .\templates\pages\index.html:84
+msgid "Eventos & Premiações"
+msgstr ""
+
+#: .\templates\pages\index.html:85
+msgid "Participe de eventos semanais com itens raros e bônus poderosos."
+msgstr ""
+
+#: .\templates\pages\index.html:95
+msgid "Escolha Sua Classe"
+msgstr ""
+
+#: .\templates\pages\index.html:134
+msgid "Top Clãs"
+msgstr ""
+
+#: .\templates\pages\index.html:142 .\templates\pages\index.html:162
+msgid "Clã:"
+msgstr ""
+
+#: .\templates\pages\index.html:143 .\templates\pages\index.html:163
+msgid "Nível:"
+msgstr ""
+
+#: .\templates\pages\index.html:144 .\templates\pages\index.html:164
+msgid "Pontuação de Reputação:"
+msgstr ""
+
+#: .\templates\pages\index.html:145 .\templates\pages\index.html:165
+msgid "Aliança:"
+msgstr ""
+
+#: .\templates\pages\index.html:146 .\templates\pages\index.html:166
+msgid "Personagem:"
+msgstr ""
+
+#: .\templates\pages\index.html:147 .\templates\pages\index.html:167
+msgid "Membros:"
+msgstr ""
+
+#: .\templates\pages\index.html:185
+msgid "Jogadores online Agora"
+msgstr ""
+
+#: .\templates\pages\index.html:193
+msgid "O campo de batalha está ativo!"
+msgstr ""
+
+#: .\templates\pages\index.html:200
+msgid "Download & Instalação"
+msgstr ""
+
+#: .\templates\pages\index.html:201
+msgid ""
+"Baixe agora o cliente e patch oficial e comece sua jornada em nosso servidor."
+msgstr ""
+
+#: .\templates\pages\index.html:202
+msgid "Baixar Patch"
+msgstr ""
+
+#: .\templates\pages\index.html:203
+msgid "Baixar Cliente"
+msgstr ""
+
+#: .\templates\pages\index.html:210
+msgid "Junte-se à Comunidade"
+msgstr ""
+
+#: .\templates\pages\index.html:211
+msgid ""
+"Conecte-se com outros jogadores, tire dúvidas e participe dos eventos via "
+"Discord."
+msgstr ""
+
+#: .\templates\pages\index.html:212
+msgid "Entrar no Discord"
+msgstr ""
+
+#: .\templates\registration\logged_out.html:11
+msgid "Log in"
+msgstr ""
+
+#: .\templates\registration\logged_out.html:12
+#: .\templates\registration\logged_out.html:28
+msgid "Thanks for spending some quality time with the Web site today."
+msgstr ""
+
+#: .\templates\registration\logged_out.html:16
+msgid "Log in again"
+msgstr ""
+
+#: .\templates\registration\password_change_done.html:14
+msgid "Documentation"
+msgstr ""
+
+#: .\templates\registration\password_change_done.html:18
+msgid "Log out"
+msgstr ""
+
+#: .\templates\registration\password_change_done.html:35
+#: .\templates\registration\password_change_form.html:22
+msgid "Password change"
+msgstr ""
+
+#: .\templates\registration\password_change_done.html:49
+#: .\templates\registration\password_change_done.html:63
+msgid "Your password was changed."
+msgstr ""
+
+#: .\templates\registration\password_change_form.html:37
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new "
+"password twice so we can verify you typed it in correctly."
+msgstr ""
+
+#: .\templates\registration\password_change_form.html:68
+msgid "Change my password"
+msgstr ""
