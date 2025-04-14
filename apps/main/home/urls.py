@@ -40,4 +40,15 @@ urlpatterns = [
 
     # locale
     path('set-language/', custom_set_language, name='set_language'),
+
+    # disable views
+    path('components/buttons/', empty_view, name="buttons"),
+    path('components/notifications/', empty_view, name="notifications"),
+    path('components/forms/', empty_view, name="forms"),
+    path('components/modals/', empty_view, name="modals"),
+    path('components/typography/', empty_view, name="typography"),
+    path('pages/transaction/', empty_view, name="transaction"),
+    path('pages/settings/', empty_view, name="settings"),
+    path('tables/bs-tables/', empty_view, name="bs_tables"),
+    path('pages/upgrade-to-pro/', empty_view, name="upgrade_to_pro"),
 ]
