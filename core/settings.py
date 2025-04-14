@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "django_ckeditor_5",
     "widget_tweaks",
+    "django_deep_translator",
 
     "apps.main.administrator",
     "apps.main.auditor",
@@ -178,7 +179,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # =========================== INTERNATIONALIZATION CONFIGS ===========================
 
-LANGUAGE_CODE = os.getenv("CONFIG_LANGUAGE_CODE", "pt-br")
+LANGUAGE_CODE = os.getenv("CONFIG_LANGUAGE_CODE", "pt")
 TIME_ZONE = os.getenv("CONFIG_TIME_ZONE", "America/Recife")
 USE_I18N = True
 USE_L10N = True
@@ -191,7 +192,7 @@ TIME_FORMAT = os.getenv("CONFIG_TIME_FORMAT", 'H:i:s')
 GMT_OFFSET = float(os.getenv("CONFIG_GMT_OFFSET", -3))
 
 LANGUAGES = [
-    ('pt-br', _('Português')),
+    ('pt', _('Português')),
     ('en', _('Inglês')),
     ('es', _('Espanhol')),
 ]

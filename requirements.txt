@@ -43,6 +43,7 @@ passlib[bcrypt]
 django-ckeditor-5
 django-widget-tweaks
 django-hcaptcha
+django-deep-translator
 requests
 
 # payments
