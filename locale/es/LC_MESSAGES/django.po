@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-14 15:39-0300\n"
+"POT-Creation-Date: 2025-04-14 17:51-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -320,6 +320,18 @@ msgstr ""
 msgid "Suas moedas foram creditadas com sucesso na sua carteira."
 msgstr ""
 
+#: .\apps\lineage\server\status_views.py:29
+msgid "No Owner"
+msgstr ""
+
+#: .\apps\lineage\server\status_views.py:30
+msgid "No Leader"
+msgstr ""
+
+#: .\apps\lineage\server\status_views.py:31
+msgid "No Alliance"
+msgstr ""
+
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:8
 msgid "Minha Conta Lineage"
 msgstr ""
@@ -438,7 +450,7 @@ msgstr ""
 #: .\apps\lineage\server\templates\status\grandboss_status.html:16
 #: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:18
 #: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:81
-#: .\apps\main\home\templates\pages\profile.html:48
+#: .\apps\main\home\templates\pages\profile.html:53
 msgid "Nome"
 msgstr ""
 
@@ -540,19 +552,19 @@ msgstr ""
 msgid "Clan Líder"
 msgstr ""
 
-#: .\apps\lineage\server\templates\status\siege_ranking.html:24
+#: .\apps\lineage\server\templates\status\siege_ranking.html:25
 msgid "Próxima Guerra"
 msgstr ""
 
-#: .\apps\lineage\server\templates\status\siege_ranking.html:24
+#: .\apps\lineage\server\templates\status\siege_ranking.html:26
 msgid "Taxa"
 msgstr ""
 
-#: .\apps\lineage\server\templates\status\siege_ranking.html:25
+#: .\apps\lineage\server\templates\status\siege_ranking.html:28
 msgid "Atacantes"
 msgstr ""
 
-#: .\apps\lineage\server\templates\status\siege_ranking.html:26
+#: .\apps\lineage\server\templates\status\siege_ranking.html:29
 msgid "Defensores"
 msgstr ""
 
@@ -862,6 +874,37 @@ msgstr ""
 msgid "Se você precisar de mais informações, entre em contato com o suporte."
 msgstr ""
 
+#: .\apps\main\administrator\templates\pages\group.html:4
+msgid "Chat da Solicitação"
+msgstr ""
+
+#: .\apps\main\administrator\templates\pages\group.html:15
+msgid "Conversa sobre a"
+msgstr ""
+
+#: .\apps\main\administrator\templates\pages\group.html:20
+#: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:29
+msgid "Protocolo:"
+msgstr ""
+
+#: .\apps\main\administrator\templates\pages\group.html:55
+msgid "Digite sua mensagem aqui..."
+msgstr ""
+
+#: .\apps\main\administrator\templates\pages\group.html:56
+#: .\apps\main\notification\templates\pages\notifications.html:45
+#: .\apps\main\notification\templates\pages\notifications.html:85
+msgid "Mensagem"
+msgstr ""
+
+#: .\apps\main\administrator\templates\pages\group.html:62
+msgid "Selecionar Emoji"
+msgstr ""
+
+#: .\apps\main\administrator\templates\pages\group.html:70
+msgid "Enviar"
+msgstr ""
+
 #: .\apps\main\auditor\templates\pages\auditor.html:8
 msgid "Real-time Auditor Middleware Data"
 msgstr ""
@@ -1110,132 +1153,161 @@ msgid "← Já tem conta? Faça login"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:7
+#: .\templates\pages\dashboard\dashboard.html:8
 msgid "Logo Lineage 2"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:8
+#: .\templates\pages\dashboard\dashboard.html:9
 msgid "Painel Definitivo Lineage - PDL 1.0"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:9
+#: .\templates\pages\dashboard\dashboard.html:10
 msgid "Gerenciamento de Servidores de Lineage 2 com Python e Django"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:10
+#: .\templates\pages\dashboard\dashboard.html:11
 msgid "A Solução Web Perfeita para Administração e Atração de Jogadores"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:17
+#: .\templates\pages\dashboard\dashboard.html:18
 msgid "Por que usar Django e Python?"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:18
+#: .\templates\pages\dashboard\dashboard.html:19
 msgid ""
 "Django é uma framework poderosa, segura e com uma administração pronta para "
 "uso, ideal para gerenciar servidores privados de Lineage 2."
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:20
+#: .\templates\pages\dashboard\dashboard.html:21
 msgid "Desenvolvimento rápido e escalável"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:21
+#: .\templates\pages\dashboard\dashboard.html:22
 msgid "Sistema de administração completo"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:22
+#: .\templates\pages\dashboard\dashboard.html:23
 msgid "Integração com APIs e bancos de dados"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:23
+#: .\templates\pages\dashboard\dashboard.html:24
 msgid "Alta segurança e flexibilidade"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:27
+#: .\templates\pages\dashboard\dashboard.html:28
 msgid "Django Logo"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:33
+#: .\templates\pages\dashboard\dashboard.html:34
 msgid "Tecnologias de Ponta"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:36
+#: .\templates\pages\dashboard\dashboard.html:37
 msgid "Django"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:37
+#: .\templates\pages\dashboard\dashboard.html:38
 msgid "Backbone sólido com segurança e escalabilidade."
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:40
+#: .\templates\pages\dashboard\dashboard.html:41
 msgid "Docker + Nginx"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:41
+#: .\templates\pages\dashboard\dashboard.html:42
 msgid "Deploy e entrega eficientes em qualquer ambiente."
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:44
+#: .\templates\pages\dashboard\dashboard.html:45
 msgid "Celery + Redis"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:45
+#: .\templates\pages\dashboard\dashboard.html:46
 msgid "Execução de tarefas assíncronas com performance."
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:53
+#: .\templates\pages\dashboard\dashboard.html:54
 msgid "Painel Administrativo"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:55
+#: .\templates\pages\dashboard\dashboard.html:56
 msgid "Gerenciamento de jogadores e servidores"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:56
+#: .\templates\pages\dashboard\dashboard.html:57
 msgid "Eventos, estatísticas e monitoramento"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:57
+#: .\templates\pages\dashboard\dashboard.html:58
 msgid "Integração com sistemas de pagamento"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:61
+#: .\templates\pages\dashboard\dashboard.html:62
 msgid "Site Público"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:63
+#: .\templates\pages\dashboard\dashboard.html:64
 msgid "Cadastro, login e personalização de conta"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:64
+#: .\templates\pages\dashboard\dashboard.html:65
 msgid "Status do servidor e rankings"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:65
+#: .\templates\pages\dashboard\dashboard.html:66
 msgid "Notícias e suporte ao jogador"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:72
+#: .\templates\pages\dashboard\dashboard.html:73
 msgid "Participe do Futuro dos Servidores Privados"
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:73
+#: .\templates\pages\dashboard\dashboard.html:74
 msgid ""
 "O PDL 1.0 é open source e está em constante evolução. Contribua, implemente, "
 "personalize e transforme a forma como servidores Lineage 2 são administrados."
 msgstr ""
 
 #: .\apps\main\home\templates\dashboard_custom\dashboard.html:74
+#: .\templates\pages\dashboard\dashboard.html:75
 msgid "Ver Projeto no GitHub"
 msgstr ""
 
 #: .\apps\main\home\templates\pages\address_form.html:9
-#: .\apps\main\home\templates\pages\profile.html:74
+#: .\apps\main\home\templates\pages\profile.html:89
 msgid "Editar Endereço"
 msgstr ""
 
 #: .\apps\main\home\templates\pages\address_form.html:9
-#: .\apps\main\home\templates\pages\profile.html:76
+#: .\apps\main\home\templates\pages\profile.html:91
 msgid "Cadastrar Endereço"
 msgstr ""
 
@@ -1273,7 +1345,7 @@ msgid "Salvar"
 msgstr ""
 
 #: .\apps\main\home\templates\pages\edit_profile.html:16
-#: .\apps\main\home\templates\pages\profile.html:118
+#: .\apps\main\home\templates\pages\profile.html:137
 msgid "Editar Perfil"
 msgstr ""
 
@@ -1323,88 +1395,88 @@ msgstr ""
 msgid "Perfil/Biografia"
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:42
+#: .\apps\main\home\templates\pages\profile.html:43
 msgid "Endereço de Email"
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:43
-#: .\apps\main\home\templates\pages\profile.html:49
+#: .\apps\main\home\templates\pages\profile.html:45
 #: .\apps\main\home\templates\pages\profile.html:55
 #: .\apps\main\home\templates\pages\profile.html:65
-#: .\apps\main\home\templates\pages\profile.html:85
-#: .\apps\main\home\templates\pages\profile.html:93
-#: .\apps\main\home\templates\pages\profile.html:109
+#: .\apps\main\home\templates\pages\profile.html:78
+#: .\apps\main\home\templates\pages\profile.html:102
+#: .\apps\main\home\templates\pages\profile.html:110
+#: .\apps\main\home\templates\pages\profile.html:127
 msgid "N/A"
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:54
+#: .\apps\main\home\templates\pages\profile.html:63
 msgid "Sobrenome"
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:60
+#: .\apps\main\home\templates\pages\profile.html:73
 msgid "Endereço"
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:84
+#: .\apps\main\home\templates\pages\profile.html:100
 msgid "Sobre Você"
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:88
+#: .\apps\main\home\templates\pages\profile.html:108
 msgid "CPF"
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:100
+#: .\apps\main\home\templates\pages\profile.html:118
 msgid "Gênero"
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:103
+#: .\apps\main\home\templates\pages\profile.html:121
 msgid "Masculino"
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:104
+#: .\apps\main\home\templates\pages\profile.html:122
 msgid "Feminino"
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:105
+#: .\apps\main\home\templates\pages\profile.html:123
 msgid "Outro"
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:106
+#: .\apps\main\home\templates\pages\profile.html:124
 msgid "Prefiro não dizer"
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:128
+#: .\apps\main\home\templates\pages\profile.html:151
 msgid "Imagem de perfil"
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:130
+#: .\apps\main\home\templates\pages\profile.html:154
 msgid "Imagem de perfil padrão"
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:135
+#: .\apps\main\home\templates\pages\profile.html:160
 msgid "O sucesso não é garantido, mas o fracasso é certo se você não tentar."
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:140
+#: .\apps\main\home\templates\pages\profile.html:165
 msgid ""
 "Encontre inspiração em cada desafio e mantenha-se comprometido com o seu "
 "crescimento pessoal e profissional. Lembre-se sempre de que o esforço que "
 "você coloca hoje moldará o seu amanhã."
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:145
+#: .\apps\main\home\templates\pages\profile.html:169
 msgid "Ver Lista de Amigos"
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:150
+#: .\apps\main\home\templates\pages\profile.html:174
 msgid "Conta não verificada"
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:151
+#: .\apps\main\home\templates\pages\profile.html:175
 msgid "Seu e-mail ainda não foi verificado."
 msgstr ""
 
-#: .\apps\main\home\templates\pages\profile.html:156
+#: .\apps\main\home\templates\pages\profile.html:180
 #: .\apps\main\home\templates\verify\reenviar_verificacao.html:14
 msgid "Reenviar E-mail de Verificação"
 msgstr ""
@@ -1633,11 +1705,6 @@ msgstr ""
 msgid "Tipo"
 msgstr ""
 
-#: .\apps\main\notification\templates\pages\notifications.html:45
-#: .\apps\main\notification\templates\pages\notifications.html:85
-msgid "Mensagem"
-msgstr ""
-
 #: .\apps\main\notification\templates\pages\notifications.html:46
 #: .\apps\main\notification\templates\pages\notifications.html:86
 msgid "Criado em"
@@ -1722,10 +1789,6 @@ msgstr ""
 #: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:13
 #: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:26
 msgid "Solicitação"
-msgstr ""
-
-#: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:29
-msgid "Protocolo:"
 msgstr ""
 
 #: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:31
