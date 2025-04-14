@@ -14,13 +14,13 @@
     <div class="card">
       <div class="card-header d-flex align-items-center">
         <i class="fas fa-users mr-2"></i>
-        <h5 class="mb-0">{% trans "Amigos e Conexões" %}</h5>
+        <h5 class="mb-0"> {% trans "Amigos e Conexões" %}</h5>
       </div>
       <div class="card-body">
 
         <!-- Lista de Amigos -->
         <div class="section-header mb-3">
-          <h6><i class="fas fa-users mr-2"></i>{% trans "Meus Amigos" %}</h6>
+          <h6><i class="fas fa-users mr-2"></i> {% trans "Meus Amigos" %}</h6>
         </div>
         <ul class="list-group mb-4">
           {% for friendship in accepted_friendships %}
@@ -42,7 +42,7 @@
 
         <!-- Adicionar Amigos -->
         <div class="section-header mb-3">
-          <h6><i class="fas fa-user-plus mr-2"></i>{% trans "Adicionar Novos Amigos" %}</h6>
+          <h6><i class="fas fa-user-plus mr-2"></i> {% trans "Adicionar Novos Amigos" %}</h6>
         </div>
         <ul class="list-group mb-4">
           {% for user in users %}
@@ -66,7 +66,7 @@
 
         <!-- Convites de Amizade -->
         <div class="section-header mb-3">
-          <h6><i class="fas fa-user-friends mr-2"></i>{% trans "Convites Pendentes" %}</h6>
+          <h6><i class="fas fa-user-friends mr-2"></i> {% trans "Convites Pendentes" %}</h6>
         </div>
         <ul class="list-group">
           {% for request in pending_friend_requests %}

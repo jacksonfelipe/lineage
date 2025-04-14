@@ -18,10 +18,13 @@
       <div class="col-md-8">
         <div class="card-body">
           <h3 class="card-title">{{ castle.name }} {% trans "Castle" %}</h3>
-          <p><strong>{% trans "Clan Proprietário" %}:</strong> {{ castle.clan_name|default:"{% trans 'No Owner' %}" }}</p>
-          <p><strong>{% trans "Clan Líder" %}:</strong> {{ castle.char_name|default:"{% trans 'No Leader' %}" }}</p>
-          <p><strong>{% trans "Aliança" %}:</strong> {{ castle.ally_name|default:"{% trans 'No Alliance' %}" }}</p>
-          <p><strong>{% trans "Próxima Guerra" %}:</strong> {{ castle.sdate|date:"d F, Y H:i" }} &nbsp; <strong>{% trans "Taxa" %}:</strong> {{ castle.stax }}%</p>
+          <p><strong>{% trans "Clan Proprietário" %}:</strong> {{ castle.clan_name }}</p>
+          <p><strong>{% trans "Clan Líder" %}:</strong> {{ castle.char_name }}</p>
+          <p><strong>{% trans "Aliança" %}:</strong> {{ castle.ally_name }}</p>
+          <p>
+            <strong>{% trans "Próxima Guerra" %}:</strong> {{ castle.sdate|date:"d F, Y H:i" }}
+            &nbsp; <strong>{% trans "Taxa" %}:</strong> {{ castle.stax }}%
+          </p>
           <p><strong>{% trans "Atacantes" %}:</strong> {{ castle.attackers|length }}</p>
           <p><strong>{% trans "Defensores" %}:</strong> {{ castle.defenders|length }}</p>
         </div>

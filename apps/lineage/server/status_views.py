@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import gettext as _
 
 import json
 import os
@@ -16,7 +17,6 @@ LineageStats = get_query_class("LineageStats")  # carrega a classe certa com bas
 def siege_ranking_view(request):
     castles = LineageStats.siege()
 
-    # adicionando atacantes e defensores
     for castle in castles:
         participants = LineageStats.siege_participants(castle["id"])
         castle["attackers"] = [p for p in participants if p["type"] == "0"]
@@ -24,6 +24,11 @@ def siege_ranking_view(request):
 
         # adiciona caminho da imagem baseado no nome
         castle["image_path"] = f"assets/img/castles/{castle['name'].lower()}.jpg"
+
+        # adiciona valores default traduzidos se vazio
+        castle["clan_name"] = castle["clan_name"] or _("No Owner")
+        castle["char_name"] = castle["char_name"] or _("No Leader")
+        castle["ally_name"] = castle["ally_name"] or _("No Alliance")
 
     return render(request, "status/siege_ranking.html", {"castles": castles})
 

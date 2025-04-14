@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static i18n %}
 
-{% block title %}{{ "Chat da Solicitação" | trans }}{% endblock title %}
+{% block title %}{% trans "Chat da Solicitação" %}{% endblock title %}
 
 {% block extrastyle %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-button@4.6.0/dist/index.min.css">
@@ -12,12 +12,12 @@
 <!-- Chat Room Header -->
 <div class="chat-header">
     <h1 class="chat-title">
-        {{ "Conversa sobre a" | trans }} {{ type_chat }} {{ solicitation_context }} 
+        {% trans "Conversa sobre a" %} {{ type_chat }} {{ solicitation_context }} 
         <strong>{{ solicitation }}</strong>
     </h1>
     <div class="chat-info">
         <span class="chat-protocol">
-            {{ "Protocolo:" | trans }} <strong>{{ group_name }}</strong>
+            {% trans "Protocolo:" %} <strong>{{ group_name }}</strong>
         </span><br>
     </div>
 </div>
@@ -52,14 +52,14 @@
         id="chat-message-input" 
         type="text" 
         class="form-control" 
-        placeholder="{{ 'Digite sua mensagem aqui...' | trans }}"
-        aria-label="{{ 'Mensagem' | trans }}"
+        placeholder="{% trans 'Digite sua mensagem aqui...' %}"
+        aria-label="{% trans 'Mensagem' %}"
     >
     <button 
         id="emoji-button" 
         type="button" 
         class="btn btn-outline-secondary" 
-        aria-label="{{ 'Selecionar Emoji' | trans }}"
+        aria-label="{% trans 'Selecionar Emoji' %}"
     >
         &#x1F60A;
     </button>
@@ -67,7 +67,7 @@
         id="chat-message-submit" 
         type="button" 
         class="btn btn-primary" 
-        value="{{ 'Enviar' | trans }}"
+        value="{% trans 'Enviar' %}"
     >
 </div>
 {% endblock content %}
