@@ -1,33 +1,34 @@
 {% extends 'layouts/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Detalhe da Solicitação{% endblock title %}
+{% block title %}{% trans "Detalhe da Solicitação" %}{% endblock title %}
 
 {% block extrastyle %}
 <link rel="stylesheet" href="{% static 'css/solicitation.css' %}">
 {% endblock extrastyle %}
 
-{% block page_title %}Solicitação{% endblock page_title %}
+{% block page_title %}{% trans "Solicitação" %}{% endblock page_title %}
+
 {% block breadcrumbs %}
-  <li class="breadcrumb-item"><a href="#">Solicitação</a></li>
-  <li class="breadcrumb-item active" aria-current="page">Detalhes</li>
+  <li class="breadcrumb-item"><a href="#">{% trans "Solicitação" %}</a></li>
+  <li class="breadcrumb-item active" aria-current="page">{% trans "Detalhes" %}</li>
 {% endblock breadcrumbs %}
 
 {% block content %}
 <div class="container">
-    <h1 class="mt-4">Detalhe da Solicitação</h1>
+    <h1 class="mt-4">{% trans "Detalhe da Solicitação" %}</h1>
     
     <div class="row mt-4">
         <!-- Detalhes da Solicitação -->
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h5>Solicitação</h5>
+                    <h5>{% trans "Solicitação" %}</h5>
                 </div>
                 <div class="card-body">
-                    <p><strong>Protocolo:</strong> {{ solicitation.protocol }}</p>
-                    <p><strong>Status:</strong> {{ solicitation.status }}</p>
-                    <p><strong>Data da Solicitação:</strong> {{ solicitation.created_at|date:"d/m/Y" }}</p>
+                    <p><strong>{% trans "Protocolo:" %}</strong> {{ solicitation.protocol }}</p>
+                    <p><strong>{% trans "Status:" %}</strong> {{ solicitation.status }}</p>
+                    <p><strong>{% trans "Data da Solicitação:" %}</strong> {{ solicitation.created_at|date:"d/m/Y" }}</p>
                 </div>
             </div>
         </div>
@@ -36,7 +37,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h5>Participantes</h5>
+                    <h5>{% trans "Participantes" %}</h5>
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
@@ -45,7 +46,7 @@
                                 {{ participant.user.username | upper }} - {{ participant.user.email }}
                             </li>
                         {% empty %}
-                            <li class="list-group-item">Nenhum participante cadastrado.</li>
+                            <li class="list-group-item">{% trans "Nenhum participante cadastrado." %}</li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -56,7 +57,7 @@
     <!-- Botão de Chat -->
     <div class="row mt-4">
         <div class="col-md-12 text-center">
-            <a href="{% url 'administrator:chat_room' solicitation.protocol %}" class="btn btn-primary">Ir para o Chat</a>
+            <a href="{% url 'administrator:chat_room' solicitation.protocol %}" class="btn btn-primary">{% trans "Ir para o Chat" %}</a>
         </div>
     </div>
 </div>

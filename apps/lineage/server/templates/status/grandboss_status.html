@@ -1,9 +1,11 @@
 {% extends "layouts/base.html" %}
 
+{% load i18n %}
+
 {% block content %}
 <div class="container mt-5">
   <div class="card shadow-lg p-4">
-    <h2 class="text-center mb-4">Grand Boss Status</h2>
+    <h2 class="text-center mb-4">{% trans "Grand Boss Status" %}</h2>
 
     {% if bosses %}
     <div class="table-responsive-md">
@@ -11,10 +13,10 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Nome</th>
-            <th class="d-none d-md-table-cell">Nível</th>
-            <th class="d-none d-md-table-cell">Respawn</th>
-            <th>Status</th>
+            <th>{% trans "Nome" %}</th>
+            <th class="d-none d-md-table-cell">{% trans "Nível" %}</th>
+            <th class="d-none d-md-table-cell">{% trans "Respawn" %}</th>
+            <th>{% trans "Status" %}</th>
           </tr>
         </thead>
         <tbody>
@@ -32,7 +34,7 @@
     </div>
     {% else %}
     <div class="alert alert-warning text-center">
-      Nenhum boss encontrado.
+      {% trans "Nenhum boss encontrado." %}
     </div>
     {% endif %}
   </div>

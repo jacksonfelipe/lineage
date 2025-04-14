@@ -1,11 +1,11 @@
 {% extends 'layouts/public.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Notícias{% endblock title %}
+{% block title %}{% trans "Notícias" %}{% endblock title %}
 
 {% block content %}
 <div class="container mt-5 mb-5">
-  <h1 class="mb-4" style="color: var(--gold);">Notícias Recentes</h1>
+  <h1 class="mb-4" style="color: var(--gold);">{% trans "Notícias Recentes" %}</h1>
 
   <div class="row">
     {% if latest_news_list %}
@@ -22,18 +22,18 @@
               <p class="card-text flex-grow-1">{{ news.summary }}</p>
               <p class="card-text mt-2">
                 <small style="color: #aaa;">
-                  Autor: {{ news.author.username }}<br>
-                  Publicado em: {{ news.pub_date|date:"d/m/Y H:i" }}
+                  {% trans "Autor" %}: {{ news.author.username }}<br>
+                  {% trans "Publicado em" %}: {{ news.pub_date|date:"d/m/Y H:i" }}
                 </small>
               </p>
-              <a href="{% url 'public_news_detail' news.slug %}" class="btn btn-outline-light mt-auto">Leia mais</a>
+              <a href="{% url 'public_news_detail' news.slug %}" class="btn btn-outline-light mt-auto">{% trans "Leia mais" %}</a>
             </div>
           </div>
         </div>
       {% endfor %}
     {% else %}
       <div class="col-12">
-        <p class="text-muted">Não há notícias disponíveis no momento.</p>
+        <p class="text-muted">{% trans "Não há notícias disponíveis no momento." %}</p>
       </div>
     {% endif %}
   </div>

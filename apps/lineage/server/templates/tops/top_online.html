@@ -1,20 +1,21 @@
 {% extends "layouts/base.html" %}
 {% load lineage_extras %}
+{% load i18n %}
 
 {% block content %}
 <div class="container mt-5">
   <div class="card shadow-lg p-4">
-    <h2 class="text-center mb-4">Top Tempo Online</h2>
+    <h2 class="text-center mb-4">{% trans "Top Tempo Online" %}</h2>
 
     <div class="table-responsive-md">
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Personagem</th>
-            <th>PvP</th>
-            <th class="d-none d-md-table-cell">PK</th>
-            <th>Tempo Online</th>
-            <th class="d-none d-md-table-cell">Clan</th>
+            <th>{% trans "Personagem" %}</th>
+            <th>{% trans "PvP" %}</th>
+            <th class="d-none d-md-table-cell">{% trans "PK" %}</th>
+            <th>{% trans "Tempo Online" %}</th>
+            <th class="d-none d-md-table-cell">{% trans "Clan" %}</th>
           </tr>
         </thead>
         <tbody>

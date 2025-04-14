@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-{% load static %}
+{% load static i18n %}
 
 {% block content %}
 
@@ -13,7 +13,7 @@
         </div>
         <div class="card">
             <div class="card-body text-center">
-                <h3 class="mb-4">Editar Perfil</h3>
+                <h3 class="mb-4">{% trans 'Editar Perfil' %}</h3>
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">
@@ -44,7 +44,7 @@
                         {{ form.gender.label_tag }}
                         {{ form.gender }}
                     </div>
-                    <button type="submit" class="btn btn-primary shadow-2 mb-4">Salvar</button>
+                    <button type="submit" class="btn btn-primary shadow-2 mb-4">{% trans 'Salvar' %}</button>
                 </form>
             </div>
         </div>

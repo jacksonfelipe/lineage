@@ -1,19 +1,19 @@
 {% extends 'layouts/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Perguntas Frequentes{% endblock title %}
+{% block title %}{% trans "Perguntas Frequentes" %}{% endblock title %}
 
 {% block extrastyle %}
 <link rel="stylesheet" href="{% static 'css/faq.css' %}"> 
 {% endblock extrastyle %}
 
 {% block breadcrumbs %}
-<li class="breadcrumb-item"><a href="#">Ajuda</a></li>
-<li class="breadcrumb-item active" aria-current="page">Perguntas Frequentes</li>
+<li class="breadcrumb-item"><a href="#"> {% trans "Ajuda" %}</a></li>
+<li class="breadcrumb-item active" aria-current="page">{% trans "Perguntas Frequentes" %}</li>
 {% endblock breadcrumbs %}
 
 {% block page_header %}
-<h5 class="display-5">Perguntas Frequentes</h5>
+<h5 class="display-5">{% trans "Perguntas Frequentes" %}</h5>
 {% endblock page_header %}
 
 {% block content %}
@@ -23,8 +23,8 @@
       <div class="card-header bg-primary text-white">
         <div class="d-flex justify-content-between align-items-center">
           <div>
-            <h4 class="text-white"><i class="feather icon-help-circle"></i> Perguntas Frequentes</h4>
-            <p class="mb-0">Encontre as respostas para as perguntas mais comuns feitas pelos nossos usuários.</p>
+            <h4 class="text-white"><i class="feather icon-help-circle"></i> {% trans "Perguntas Frequentes" %}</h4>
+            <p class="mb-0">{% trans "Encontre as respostas para as perguntas mais comuns feitas pelos nossos usuários." %}</p>
           </div>
         </div>
       </div>
@@ -57,7 +57,7 @@
           {% endfor %}
         </div>
         {% else %}
-          <p class="text-center">Não há perguntas frequentes disponíveis no momento.</p>
+          <p class="text-center">{% trans "Não há perguntas frequentes disponíveis no momento." %}</p>
         {% endif %}
       </div>
     </div>

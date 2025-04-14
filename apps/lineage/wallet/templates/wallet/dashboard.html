@@ -1,5 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load humanize %}
+{% load i18n %}
 
 {% block extrahead %}
 <style>
@@ -55,16 +56,16 @@
   <div class="col-lg-8">
     <div class="card shadow-lg border-0 rounded-4">
       <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center rounded-top-4 px-4 py-3">
-        <h4 class="mb-0"><i class="bi bi-wallet2 me-2"></i>Minha Carteira</h4>
+        <h4 class="mb-0"><i class="bi bi-wallet2 me-2"></i>{% trans "Minha Carteira" %}</h4>
       </div>
 
       <div class="card-body px-4 py-4">
         <!-- Saldo -->
         <div class="mb-5">
           <div class="saldo-box text-center">
-            <small class="text-light">Saldo Atual</small>
+            <small class="text-light">{% trans "Saldo Atual" %}</small>
             <h2>{{ wallet.saldo|floatformat:2 }}</h2>
-            <span class="text-light">moedas disponíveis</span>
+            <span class="text-light">{% trans "moedas disponíveis" %}</span>
           </div>
         </div>
 
@@ -72,29 +73,29 @@
         <div class="row quick-actions mb-5">
           <div class="col-md-6 mb-3">
             <a href="{% url 'wallet:transfer_to_server' %}" class="btn btn-outline-primary shadow-glow">
-              <i class="bi bi-arrow-down-circle me-2"></i>Transferir para o Servidor
+              <i class="bi bi-arrow-down-circle me-2"></i>{% trans "Transferir para o Servidor" %}
             </a>
           </div>
           <div class="col-md-6 mb-3">
             <a href="{% url 'wallet:transfer_to_player' %}" class="btn btn-outline-success shadow-glow">
-              <i class="bi bi-person-plus-fill me-2"></i>Transferir para Outro Jogador
+              <i class="bi bi-person-plus-fill me-2"></i>{% trans "Transferir para Outro Jogador" %}
             </a>
           </div>
           <div class="col-md-6 mb-3">
             <a href="{% url 'payment:novo_pedido' %}" class="btn btn-outline-warning shadow-glow">
-              <i class="bi bi-cart-plus-fill me-2"></i>Comprar Moedas
+              <i class="bi bi-cart-plus-fill me-2"></i>{% trans "Comprar Moedas" %}
             </a>
           </div>
           <div class="col-md-6 mb-3">
             <a href="{% url 'solicitation:solicitation_list' %}" class="btn btn-outline-danger shadow-glow">
-              <i class="bi bi-life-preserver me-2"></i>Abrir Solicitação
+              <i class="bi bi-life-preserver me-2"></i>{% trans "Abrir Solicitação" %}
             </a>
           </div>
         </div>
 
         <!-- Histórico de Transações -->
         <div>
-          <h6 class="text-muted mb-3"><i class="bi bi-clock-history me-1"></i>Últimas Transações</h6>
+          <h6 class="text-muted mb-3"><i class="bi bi-clock-history me-1"></i>{% trans "Últimas Transações" %}</h6>
           <div class="list-group list-group-flush">
             {% for transacao in transacoes %}
               <div class="list-group-item d-flex justify-content-between align-items-start py-3 px-2">
@@ -119,7 +120,7 @@
               </div>
             {% empty %}
               <div class="text-center text-muted py-4">
-                Nenhuma transação registrada ainda.
+                {% trans "Nenhuma transação registrada ainda." %}
               </div>
             {% endfor %}
           </div>
@@ -158,24 +159,24 @@
 
     <div class="card shadow-sm border-0 rounded-4 mt-4">
       <div class="card-body text-center py-4 px-3">
-        <h5 class="fw-bold mb-3">Sobre a Carteira</h5>
+        <h5 class="fw-bold mb-3">{% trans "Sobre a Carteira" %}</h5>
         <p class="text-muted">
-          Gerencie seu saldo virtual e acompanhe suas transações recentes. Use as moedas para realizar compras, enviar presentes ou desbloquear recursos exclusivos dentro do servidor.
+          {% trans "Gerencie seu saldo virtual e acompanhe suas transações recentes. Use as moedas para realizar compras, enviar presentes ou desbloquear recursos exclusivos dentro do servidor." %}
         </p>
         <a href="{% url 'wallet:dashboard' %}" class="btn btn-outline-secondary mt-3">
-          <i class="bi bi-arrow-clockwise me-1"></i>Atualizar Carteira
+          <i class="bi bi-arrow-clockwise me-1"></i>{% trans "Atualizar Carteira" %}
         </a>
       </div>
     </div>
 
     <div class="card shadow-sm border-0 rounded-4 mt-4">
       <div class="card-body text-center py-4 px-3">
-        <h5 class="fw-bold mb-3">Pedidos Pendentes</h5>
+        <h5 class="fw-bold mb-3">{% trans "Pedidos Pendentes" %}</h5>
         <p class="text-muted">
-          Visualize pedidos de compra de moedas que ainda não foram pagos ou processados. Evite criar novos pedidos repetidos e acompanhe o andamento dos seus pagamentos.
+          {% trans "Visualize pedidos de compra de moedas que ainda não foram pagos ou processados. Evite criar novos pedidos repetidos e acompanhe o andamento dos seus pagamentos." %}
         </p>
         <a href="{% url 'payment:pedidos_pendentes' %}" class="btn btn-outline-primary mt-3">
-          <i class="bi bi-hourglass-split me-1"></i>Ver Pedidos Pendentes
+          <i class="bi bi-hourglass-split me-1"></i>{% trans "Ver Pedidos Pendentes" %}
         </a>
       </div>
     </div>

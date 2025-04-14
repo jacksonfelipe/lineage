@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Notícias{% endblock title %}
+{% block title %}{% trans "Notícias" %}{% endblock title %}
 
 {% block extrastyle %}
 <link rel="stylesheet" href="{% static 'css/news.css' %}">
@@ -9,8 +9,8 @@
 
 {% block content %}
 <div class="header-bg">
-    <h1 class="text-white">Notícias</h1>
-    <p>Fique por dentro das últimas novidades e atualizações exclusivas.</p>
+    <h1 class="text-white">{% trans "Notícias" %}</h1>
+    <p>{% trans "Fique por dentro das últimas novidades e atualizações exclusivas." %}</p>
 </div>
 
 {% if user.is_authenticated %}
@@ -26,16 +26,16 @@
                         <h3 class="card-title text-dark">{{ news.title }}</h3>
                         <p class="card-text flex-grow-1">{{ news.summary }}</p>
                         <p class="card-text">
-                            <small class="text-muted">Autor: {{ news.author.username }} | Data: {{ news.pub_date }}</small>
+                            <small class="text-muted">{% trans "Autor" %}: {{ news.author.username }} | {% trans "Data" %}: {{ news.pub_date }}</small>
                         </p>
-                        <a href="{% url 'news:detail' news.slug %}" class="btn btn-primary mt-3">Leia mais</a>
+                        <a href="{% url 'news:detail' news.slug %}" class="btn btn-primary mt-3">{% trans "Leia mais" %}</a>
                     </div>
                 </div>
             </div>
         {% endfor %}
     {% else %}
         <div class="col-12">
-            <p class="text-muted">Não há notícias privadas disponíveis no momento.</p>
+            <p class="text-muted">{% trans "Não há notícias privadas disponíveis no momento." %}</p>
         </div>
     {% endif %}
 </div>

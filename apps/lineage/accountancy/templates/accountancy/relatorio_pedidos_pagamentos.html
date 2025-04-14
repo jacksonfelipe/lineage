@@ -1,21 +1,22 @@
 {% extends "layouts/base.html" %}
+{% load i18n %}
 
 {% block content %}
 <div class="container mt-5">
   <div class="card shadow-lg p-4">
-    <h2 class="text-center mb-4">Relatório de Pedidos e Pagamentos</h2>
+    <h2 class="text-center mb-4">{% trans "Relatório de Pedidos e Pagamentos" %}</h2>
 
     <table class="table table-striped table-hover">
       <thead class="table-dark">
         <tr>
-          <th>ID Pedido</th>
-          <th>Usuário</th>
-          <th>Valor Pago</th>
-          <th>Moedas</th>
-          <th>Status Pedido</th>
-          <th>Status Pagamento</th>
-          <th>Método</th>
-          <th>Data</th>
+          <th>{% trans "ID Pedido" %}</th>
+          <th>{% trans "Usuário" %}</th>
+          <th>{% trans "Valor Pago" %}</th>
+          <th>{% trans "Moedas" %}</th>
+          <th>{% trans "Status Pedido" %}</th>
+          <th>{% trans "Status Pagamento" %}</th>
+          <th>{% trans "Método" %}</th>
+          <th>{% trans "Data" %}</th>
         </tr>
       </thead>
       <tbody>
@@ -27,18 +28,18 @@
           <td>{{ item.moedas_geradas }}</td>
           <td>
             {% if item.status_pedido == 'CONFIRMADO' %}
-              <span class="text-success">{{ item.status_pedido }}</span>
+              <span class="text-success">{% trans "CONFIRMADO" %}</span>
             {% elif item.status_pedido == 'PENDENTE' %}
-              <span class="text-warning">{{ item.status_pedido }}</span>
+              <span class="text-warning">{% trans "PENDENTE" %}</span>
             {% else %}
               <span class="text-danger">{{ item.status_pedido }}</span>
             {% endif %}
           </td>
           <td>
             {% if item.status_pagamento == 'confirmed' %}
-              <span class="text-success">{{ item.status_pagamento }}</span>
+              <span class="text-success">{% trans "confirmed" %}</span>
             {% elif item.status_pagamento == 'pending' %}
-              <span class="text-warning">{{ item.status_pagamento }}</span>
+              <span class="text-warning">{% trans "pending" %}</span>
             {% else %}
               <span class="text-danger">{{ item.status_pagamento }}</span>
             {% endif %}
@@ -51,7 +52,7 @@
     </table>
 
     <div class="text-center mt-4">
-      <a href="{% url 'accountancy:dashboard' %}" class="btn btn-secondary">Voltar para o Dashboard</a>
+      <a href="{% url 'accountancy:dashboard' %}" class="btn btn-secondary">{% trans "Voltar para o Dashboard" %}</a>
     </div>
   </div>
 </div>

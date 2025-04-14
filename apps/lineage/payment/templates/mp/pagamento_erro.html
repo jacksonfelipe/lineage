@@ -1,10 +1,11 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pagamento Não Concluído</title>
+  <title>{% trans "Pagamento Não Concluído" %}</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="icon" href="{% static 'favicon.ico' %}">
   <style>
@@ -29,14 +30,17 @@
         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.646 4.646a.5.5 0 0 0 0 .708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646a.5.5 0 0 0-.708 0z"/>
       </svg>
     </div>
-    <h1 class="display-6 text-danger">Pagamento não realizado</h1>
-    <p class="lead mt-3">Algo deu errado ou o pagamento foi cancelado.<br class="d-none d-md-block">Tente novamente em alguns instantes.</p>
+    <h1 class="display-6 text-danger">{% trans "Pagamento não realizado" %}</h1>
+    <p class="lead mt-3">
+      {% trans "Algo deu errado ou o pagamento foi cancelado." %}<br class="d-none d-md-block">
+      {% trans "Tente novamente em alguns instantes." %}
+    </p>
     <a href="{% url 'wallet:dashboard' %}" class="btn btn-danger btn-lg mt-4 px-4">
-      Voltar para a Carteira
+      {% trans "Voltar para a Carteira" %}
     </a>
     <div class="mt-3">
       <a href="{% url 'payment:novo_pedido' %}" class="btn btn-outline-danger">
-        Tentar Novamente
+        {% trans "Tentar Novamente" %}
       </a>
     </div>
   </div>

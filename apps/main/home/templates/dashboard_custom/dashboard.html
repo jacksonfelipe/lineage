@@ -1,48 +1,48 @@
 {% extends 'layouts/base.html' %}
-{% load static %}
+{% load static i18n %}
 
 {% block content %}
 <div class="py-5 bg-dark text-white">
   <div class="container text-center">
-    <img src="{% static 'assets/img/banner-pdl.png' %}" alt="Logo Lineage 2" class="img-fluid mb-4" style="max-height: 240px;">
-    <h1 class="display-5 fw-bold text-primary">Painel Definitivo Lineage - PDL 1.0</h1>
-    <p class="lead mb-4 text-primary">Gerenciamento de Servidores de Lineage 2 com Python e Django</p>
-    <p class="text-primary">A Solução Web Perfeita para Administração e Atração de Jogadores</p>
+    <img src="{% static 'assets/img/banner-pdl.png' %}" alt="{% trans 'Logo Lineage 2' %}" class="img-fluid mb-4" style="max-height: 240px;">
+    <h1 class="display-5 fw-bold text-primary">{% trans 'Painel Definitivo Lineage - PDL 1.0' %}</h1>
+    <p class="lead mb-4 text-primary">{% trans 'Gerenciamento de Servidores de Lineage 2 com Python e Django' %}</p>
+    <p class="text-primary">{% trans 'A Solução Web Perfeita para Administração e Atração de Jogadores' %}</p>
   </div>
 </div>
 
 <div class="container py-5">
   <div class="row align-items-center mb-5">
     <div class="col-md-6">
-      <h2 class="fw-bold">Por que usar Django e Python?</h2>
-      <p>Django é uma framework poderosa, segura e com uma administração pronta para uso, ideal para gerenciar servidores privados de Lineage 2.</p>
+      <h2 class="fw-bold">{% trans 'Por que usar Django e Python?' %}</h2>
+      <p>{% trans 'Django é uma framework poderosa, segura e com uma administração pronta para uso, ideal para gerenciar servidores privados de Lineage 2.' %}</p>
       <ul>
-        <li>Desenvolvimento rápido e escalável</li>
-        <li>Sistema de administração completo</li>
-        <li>Integração com APIs e bancos de dados</li>
-        <li>Alta segurança e flexibilidade</li>
+        <li>{% trans 'Desenvolvimento rápido e escalável' %}</li>
+        <li>{% trans 'Sistema de administração completo' %}</li>
+        <li>{% trans 'Integração com APIs e bancos de dados' %}</li>
+        <li>{% trans 'Alta segurança e flexibilidade' %}</li>
       </ul>
     </div>
     <div class="col-md-6">
-      <img src="{% static 'assets/img/django-logo.png' %}" class="img-fluid" alt="Django Logo">
+      <img src="{% static 'assets/img/django-logo.png' %}" class="img-fluid" alt="{% trans 'Django Logo' %}">
     </div>
   </div>
 
   <div class="row mb-5">
     <div class="col-12">
-      <h2 class="fw-bold text-center mb-4">Tecnologias de Ponta</h2>
+      <h2 class="fw-bold text-center mb-4">{% trans 'Tecnologias de Ponta' %}</h2>
       <div class="row text-center">
         <div class="col-md-4 mb-4">
-          <h5>Django</h5>
-          <p>Backbone sólido com segurança e escalabilidade.</p>
+          <h5>{% trans 'Django' %}</h5>
+          <p>{% trans 'Backbone sólido com segurança e escalabilidade.' %}</p>
         </div>
         <div class="col-md-4 mb-4">
-          <h5>Docker + Nginx</h5>
-          <p>Deploy e entrega eficientes em qualquer ambiente.</p>
+          <h5>{% trans 'Docker + Nginx' %}</h5>
+          <p>{% trans 'Deploy e entrega eficientes em qualquer ambiente.' %}</p>
         </div>
         <div class="col-md-4 mb-4">
-          <h5>Celery + Redis</h5>
-          <p>Execução de tarefas assíncronas com performance.</p>
+          <h5>{% trans 'Celery + Redis' %}</h5>
+          <p>{% trans 'Execução de tarefas assíncronas com performance.' %}</p>
         </div>
       </div>
     </div>
@@ -50,28 +50,28 @@
 
   <div class="row mb-5">
     <div class="col-md-6">
-      <h3 class="fw-bold">Painel Administrativo</h3>
+      <h3 class="fw-bold">{% trans 'Painel Administrativo' %}</h3>
       <ul>
-        <li>Gerenciamento de jogadores e servidores</li>
-        <li>Eventos, estatísticas e monitoramento</li>
-        <li>Integração com sistemas de pagamento</li>
+        <li>{% trans 'Gerenciamento de jogadores e servidores' %}</li>
+        <li>{% trans 'Eventos, estatísticas e monitoramento' %}</li>
+        <li>{% trans 'Integração com sistemas de pagamento' %}</li>
       </ul>
     </div>
     <div class="col-md-6">
-      <h3 class="fw-bold">Site Público</h3>
+      <h3 class="fw-bold">{% trans 'Site Público' %}</h3>
       <ul>
-        <li>Cadastro, login e personalização de conta</li>
-        <li>Status do servidor e rankings</li>
-        <li>Notícias e suporte ao jogador</li>
+        <li>{% trans 'Cadastro, login e personalização de conta' %}</li>
+        <li>{% trans 'Status do servidor e rankings' %}</li>
+        <li>{% trans 'Notícias e suporte ao jogador' %}</li>
       </ul>
     </div>
   </div>
 
   <div class="row">
     <div class="col text-center">
-      <h2 class="fw-bold mb-3">Participe do Futuro dos Servidores Privados</h2>
-      <p class="text-muted">O PDL 1.0 é open source e está em constante evolução. Contribua, implemente, personalize e transforme a forma como servidores Lineage 2 são administrados.</p>
-      <a href="https://github.com/D3NKYT0/lineage" class="btn btn-primary btn-lg mt-3">Ver Projeto no GitHub</a>
+      <h2 class="fw-bold mb-3">{% trans 'Participe do Futuro dos Servidores Privados' %}</h2>
+      <p class="text-muted">{% trans 'O PDL 1.0 é open source e está em constante evolução. Contribua, implemente, personalize e transforme a forma como servidores Lineage 2 são administrados.' %}</p>
+      <a href="https://github.com/D3NKYT0/lineage" class="btn btn-primary btn-lg mt-3">{% trans 'Ver Projeto no GitHub' %}</a>
     </div>
   </div>
 </div>

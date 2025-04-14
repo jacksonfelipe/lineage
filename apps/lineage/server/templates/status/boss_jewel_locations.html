@@ -1,11 +1,11 @@
 {% extends "layouts/base.html" %}
 
-{% load lineage_extras %}
+{% load i18n lineage_extras %}
 
 {% block content %}
 <div class="container mt-5">
   <div class="card shadow-lg p-4">
-    <h2 class="text-center mb-4">Boss Jewel Locations</h2>
+    <h2 class="text-center mb-4">{% trans "Boss Jewel Locations" %}</h2>
 
     {% if jewel_locations %}
     <div class="table-responsive-md">
@@ -13,10 +13,10 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Item</th>
-            <th>Count</th>
-            <th class="d-none d-md-table-cell">Character</th>
-            <th class="d-none d-md-table-cell">Clan</th>
+            <th>{% trans "Item" %}</th>
+            <th>{% trans "Count" %}</th>
+            <th class="d-none d-md-table-cell">{% trans "Character" %}</th>
+            <th class="d-none d-md-table-cell">{% trans "Clan" %}</th>
           </tr>
         </thead>
         <tbody>
@@ -34,7 +34,7 @@
     </div>
     {% else %}
     <div class="alert alert-warning text-center">
-      Nenhuma localização de Boss Jewel encontrada.
+      {% trans "Nenhuma localização de Boss Jewel encontrada." %}
     </div>
     {% endif %}
   </div>

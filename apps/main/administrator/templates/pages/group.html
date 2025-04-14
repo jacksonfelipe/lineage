@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Chat da Solicitação{% endblock title %}
+{% block title %}{{ "Chat da Solicitação" | trans }}{% endblock title %}
 
 {% block extrastyle %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-button@4.6.0/dist/index.min.css">
@@ -11,9 +11,14 @@
 {% block content %}
 <!-- Chat Room Header -->
 <div class="chat-header">
-    <h1 class="chat-title">Conversa sobre a {{ type_chat }} {{ solicitation_context }} <strong>{{ solicitation }}</strong></h1>
+    <h1 class="chat-title">
+        {{ "Conversa sobre a" | trans }} {{ type_chat }} {{ solicitation_context }} 
+        <strong>{{ solicitation }}</strong>
+    </h1>
     <div class="chat-info">
-        <span class="chat-protocol">Protocolo: <strong>{{ group_name }}</strong></span><br>
+        <span class="chat-protocol">
+            {{ "Protocolo:" | trans }} <strong>{{ group_name }}</strong>
+        </span><br>
     </div>
 </div>
 
@@ -22,11 +27,13 @@
     <div id="messages-container">
         {% for message in chat_messages %}
             <div class="chat-message {% if message.sender.username == username %}sent{% else %}received{% endif %}">
-                <img src="{% if message.sender.avatar %}{% url 'serve_files:serve_decrypted_file' 'home' 'user' 'avatar' message.sender.uuid %}{% else %}{% static 'assets/img/team/generic_user.png' %}{% endif %}" 
-                class="message-avatar" 
-                alt="{{ message.sender.username }}" 
-                width="40" 
-                height="40">                  
+                <img 
+                    src="{% if message.sender.avatar %}{% url 'serve_files:serve_decrypted_file' 'home' 'user' 'avatar' message.sender.uuid %}{% else %}{% static 'assets/img/team/generic_user.png' %}{% endif %}" 
+                    class="message-avatar" 
+                    alt="{{ message.sender.username }}" 
+                    width="40" 
+                    height="40"
+                >                  
                 <div class="message-content">
                     <div class="message-header">
                         <strong class="sender-name">{{ message.sender.username }}</strong>
@@ -41,9 +48,27 @@
 
 <!-- Input for Chat Message -->
 <div class="input-group mt-3">
-    <input id="chat-message-input" type="text" class="form-control" placeholder="Digite sua mensagem aqui...">
-    <button id="emoji-button" type="button" class="btn btn-outline-secondary">&#x1F60A;</button>
-    <input id="chat-message-submit" type="button" class="btn btn-primary" value="Enviar">
+    <input 
+        id="chat-message-input" 
+        type="text" 
+        class="form-control" 
+        placeholder="{{ 'Digite sua mensagem aqui...' | trans }}"
+        aria-label="{{ 'Mensagem' | trans }}"
+    >
+    <button 
+        id="emoji-button" 
+        type="button" 
+        class="btn btn-outline-secondary" 
+        aria-label="{{ 'Selecionar Emoji' | trans }}"
+    >
+        &#x1F60A;
+    </button>
+    <input 
+        id="chat-message-submit" 
+        type="button" 
+        class="btn btn-primary" 
+        value="{{ 'Enviar' | trans }}"
+    >
 </div>
 {% endblock content %}
 

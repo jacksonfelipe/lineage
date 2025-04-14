@@ -1,26 +1,29 @@
 {# templates/server/account/dashboard.html #}
 {% extends "layouts/base.html" %}
+{% load i18n %}
 
 {% block content %}
 <div class="container mt-5">
   <div class="card shadow-lg p-4">
-    <h2 class="text-center mb-4">Minha Conta Lineage</h2>
+    <h2 class="text-center mb-4">{% trans "Minha Conta Lineage" %}</h2>
 
     {% if account %}
     <ul class="list-group mb-4">
-      <li class="list-group-item"><strong>Login:</strong> {{ account.login }}</li>
-      <li class="list-group-item"><strong>Email:</strong> {{ account.email }}</li>
-      <li class="list-group-item"><strong>Nível de Acesso:</strong> {{ account.status }}</li>
+      <li class="list-group-item"><strong>{% trans "Login:" %}</strong> {{ account.login }}</li>
+      <li class="list-group-item"><strong>{% trans "Email:" %}</strong> {{ account.email }}</li>
+      <li class="list-group-item"><strong>{% trans "Nível de Acesso:" %}</strong> {{ account.status }}</li>
     </ul>
 
     <div class="d-grid gap-2">
-      <a href="{% url 'server:update_password' %}" class="btn btn-outline-primary">Alterar Senha</a>
+      <a href="{% url 'server:update_password' %}" class="btn btn-outline-primary">
+        {% trans "Alterar Senha" %}
+      </a>
       {# Adicione outros botões aqui futuramente, como: mudar email, PIN etc. #}
     </div>
 
     {% else %}
     <div class="alert alert-danger text-center">
-      Não foi possível carregar os dados da conta.
+      {% trans "Não foi possível carregar os dados da conta." %}
     </div>
     {% endif %}
   </div>

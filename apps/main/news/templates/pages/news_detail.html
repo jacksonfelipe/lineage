@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Detalhes da Notícia{% endblock title %}
+{% block title %}{% trans "Detalhes da Notícia" %}{% endblock title %}
 
 {% block extrastyle %}
 <link rel="stylesheet" href="{% static 'css/news_detail.css' %}">
@@ -74,12 +74,12 @@
 
             <!-- Metadados -->
             <div class="news-meta">
-                <small>Autor: {{ news.author.username }} | Data de Publicação: {{ news.pub_date }}</small>
+                <small>{% trans "Autor" %}: {{ news.author.username }} | {% trans "Data de Publicação" %}: {{ news.pub_date }}</small>
             </div>
 
             <!-- Botão voltar -->
             <div class="news-navigation">
-                <a href="{% url 'news:index' %}" class="btn btn-primary mt-4">Voltar para as notícias</a>
+                <a href="{% url 'news:index' %}" class="btn btn-primary mt-4">{% trans "Voltar para as notícias" %}</a>
             </div>
         </div>
     </div>

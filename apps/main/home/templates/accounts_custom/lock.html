@@ -1,5 +1,5 @@
 {% extends 'layouts/base-auth.html' %}
-{% load static %}
+{% load static i18n %}
 
 {% block content %}
 <style>
@@ -84,7 +84,7 @@
           d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
           clip-rule="evenodd"></path>
       </svg>
-      Voltar para o painel
+      {% trans "Voltar para o painel" %}
     </a>
 
     <div class="row justify-content-center">
@@ -96,12 +96,12 @@
                    src="{% static 'assets/img/team/profile-picture-3.jpg' %}">
             </div>
             <h1>Bonnie Green</h1>
-            <p class="text-gray">Melhor prevenir do que remediar.</p>
+            <p class="text-gray">{% trans "Melhor prevenir do que remediar." %}</p>
           </div>
 
           <form class="mt-4">
             <div class="form-group mb-4">
-              <label for="password">Sua Senha</label>
+              <label for="password">{% trans "Sua Senha" %}</label>
               <div class="input-group">
                 <span class="input-group-text" id="basic-addon2">
                   <svg class="icon icon-xs text-gray-300" fill="currentColor" viewBox="0 0 20 20"
@@ -111,12 +111,12 @@
                           clip-rule="evenodd"></path>
                   </svg>
                 </span>
-                <input type="password" placeholder="Senha" class="form-control" id="password" required>
+                <input type="password" placeholder="{% trans 'Senha' %}" class="form-control" id="password" required>
               </div>
             </div>
 
             <div class="d-grid mt-4">
-              <button type="submit" class="btn btn-golden">Desbloquear</button>
+              <button type="submit" class="btn btn-golden">{% trans "Desbloquear" %}</button>
             </div>
           </form>
         </div>

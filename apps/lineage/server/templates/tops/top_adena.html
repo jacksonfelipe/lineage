@@ -1,11 +1,11 @@
 {% extends "layouts/base.html" %}
-
 {% load lineage_extras %}
+{% load i18n %}
 
 {% block content %}
 <div class="container mt-5">
   <div class="card shadow-lg p-4">
-    <h2 class="text-center mb-4">Ranking Adena</h2>
+    <h2 class="text-center mb-4">{% trans "Ranking Adena" %}</h2>
 
     {% if players %}
     <div class="table-responsive-md">
@@ -13,12 +13,12 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Personagem</th>
-            <th class="d-none d-md-table-cell">Clan</th>
-            <th class="d-none d-md-table-cell">Nível</th>
-            <th>Adenas</th>
-            <th>Online</th>
-            <th class="d-none d-md-table-cell">Tempo Online</th>
+            <th>{% trans "Personagem" %}</th>
+            <th class="d-none d-md-table-cell">{% trans "Clan" %}</th>
+            <th class="d-none d-md-table-cell">{% trans "Nível" %}</th>
+            <th>{% trans "Adenas" %}</th>
+            <th>{% trans "Online" %}</th>
+            <th class="d-none d-md-table-cell">{% trans "Tempo Online" %}</th>
           </tr>
         </thead>
         <tbody>
@@ -38,7 +38,7 @@
     </div>
     {% else %}
     <div class="alert alert-warning text-center">
-      Nenhum dado encontrado.
+      {% trans "Nenhum dado encontrado." %}
     </div>
     {% endif %}
     

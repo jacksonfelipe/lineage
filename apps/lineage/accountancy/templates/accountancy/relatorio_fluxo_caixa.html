@@ -1,17 +1,18 @@
 {% extends "layouts/base.html" %}
+{% load i18n %}
 
 {% block content %}
 <div class="container mt-5">
   <div class="card shadow-lg p-4">
-    <h2 class="text-center mb-4">Relatório de Fluxo de Caixa</h2>
+    <h2 class="text-center mb-4">{% trans "Relatório de Fluxo de Caixa" %}</h2>
 
     <table class="table table-striped table-hover">
       <thead class="table-dark">
         <tr>
-          <th>Data</th>
-          <th>Entradas</th>
-          <th>Saídas</th>
-          <th>Saldo do Dia</th>
+          <th>{% trans "Data" %}</th>
+          <th>{% trans "Entradas" %}</th>
+          <th>{% trans "Saídas" %}</th>
+          <th>{% trans "Saldo do Dia" %}</th>
         </tr>
       </thead>
       <tbody>
@@ -33,7 +34,7 @@
     </table>
 
     <div class="text-center mt-4">
-      <a href="{% url 'accountancy:dashboard' %}" class="btn btn-secondary">Voltar para o Dashboard</a>
+      <a href="{% url 'accountancy:dashboard' %}" class="btn btn-secondary">{% trans "Voltar para o Dashboard" %}</a>
     </div>
   </div>
 </div>

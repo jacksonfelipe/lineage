@@ -1,5 +1,5 @@
 {% extends 'layouts/base-auth.html' %}
-{% load static widget_tweaks %}
+{% load static widget_tweaks i18n %}
 
 {% block content %}
 <style>
@@ -71,8 +71,8 @@
     <div class="row justify-content-center">
       <div class="col-md-6 col-lg-5">
         <div class="p-4 register-panel">
-          <h2 class="text-center mb-3">Crie sua conta</h2>
-          <p class="text-center mb-4">Preencha os campos abaixo para se juntar à aventura.</p>
+          <h2 class="text-center mb-3">{% trans "Crie sua conta" %}</h2>
+          <p class="text-center mb-4">{% trans "Preencha os campos abaixo para se juntar à aventura." %}</p>
           <form method="post">
             {% csrf_token %}
 
@@ -103,19 +103,19 @@
             <div class="form-check mb-3">
               <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
               <label class="form-check-label" for="terms">
-                Eu concordo com os <a href="{% url 'terms' %}" class="text-white">termos e condições</a>
+                {% trans "Eu concordo com os" %} <a href="{% url 'terms' %}" class="text-white">{% trans "termos e condições" %}</a>
               </label>
             </div>
 
             <div class="h-captcha" data-sitekey="{{ hcaptcha_site_key }}"></div>
 
             <div class="d-grid mt-4">
-              <button type="submit" class="btn btn-register">Registrar</button>
+              <button type="submit" class="btn btn-register">{% trans "Registrar" %}</button>
             </div>
           </form>
 
           <div class="mt-4 text-center">
-            <a href="{% url 'login' %}" class="btn btn-outline-light">← Já tem conta? Faça login</a>
+            <a href="{% url 'login' %}" class="btn btn-outline-light">{% trans "← Já tem conta? Faça login" %}</a>
           </div>
         </div>
       </div>
