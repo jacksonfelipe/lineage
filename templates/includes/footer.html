@@ -22,7 +22,7 @@
           {% csrf_token %}
           <div class="input-group input-group-sm" style="width: 180px;">
             <select name="language" class="form-select form-select-sm" onchange="this.form.submit()">
-              <option value="pt-br" {% if LANGUAGE_CODE == 'pt-br' %}selected{% endif %}>🇧🇷 Português</option>
+              <option value="pt" {% if LANGUAGE_CODE == 'pt' %}selected{% endif %}>🇧🇷 Português</option>
               <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>🇺🇸 English</option>
               <option value="es" {% if LANGUAGE_CODE == 'es' %}selected{% endif %}>🇪🇸 Español</option>
             </select>
