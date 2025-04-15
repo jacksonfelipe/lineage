@@ -69,7 +69,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "django_ckeditor_5",
     "widget_tweaks",
-    "django_deep_translator",
+    "po_translate",
 
     "apps.main.administrator",
     "apps.main.auditor",
