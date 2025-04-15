@@ -1,9 +1,11 @@
 from .models import *
 import requests
 import json
+import os
 from django.http import HttpResponse
 from django.core.paginator import Paginator
 from django.conf import settings
+from django.utils.translation import get_language
 
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
 from .forms import UserProfileForm, AddressUserForm, RegistrationForm, LoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm
@@ -48,16 +50,37 @@ def index(request):
     clanes = LineageStats.top_clans(limit=10) or []
     online = LineageStats.players_online() or []
     config = IndexConfig.objects.first()
-    classes_info = data_index.get('classes', [])
 
-    # Pegando o valor de jogadores online com segurança
     online_count = online[0]['quant'] if online and isinstance(online, list) and 'quant' in online[0] else 0
+    current_lang = get_language()
+
+    # Pega a tradução configurada
+    translation = None
+    if config:
+        translation = config.translations.filter(language=current_lang).first()
+        
+    # Verifica se existe uma tradução para o nome e descrição do servidor, se não, usa o padrão
+    nome_servidor = translation.nome_servidor if translation else config.nome_servidor
+    descricao_servidor = translation.descricao_servidor if translation else config.descricao_servidor
+    jogadores_online_texto = translation.jogadores_online_texto if translation.jogadores_online_texto else config.jogadores_online_texto
+
+    # Classes info (ajustando a descrição conforme a linguagem)
+    classes_info = []
+    for c in data_index.get('classes', []):
+        descricao = c['descricao'].get(current_lang, c['descricao'].get('pt'))  # fallback para 'pt'
+        classes_info.append({
+            'name': c['name'],
+            'descricao': descricao
+        })
 
     return render(request, 'pages/index.html', {
         'clanes': clanes,
         'classes_info': classes_info,
         'online': online_count,
-        'configuracao': config
+        'configuracao': config,
+        'nome_servidor': nome_servidor,
+        'descricao_servidor': descricao_servidor,
+        'jogadores_online_texto': jogadores_online_texto
     })
 
 

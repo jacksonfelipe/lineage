@@ -13,17 +13,17 @@
 
     <div class="hero-content text-white" style="position: relative; z-index: 1; max-width: 800px; margin: 0 auto;">
       <h1 style="font-size: 4rem; font-weight: bold; color: var(--gold); text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); margin-bottom: 20px;">
-        {% if configuracao %}
-            {{ configuracao.nome_servidor }}
-          {% else %}
-            {% trans "Lineage 2 PDL" %}
+        {% if nome_servidor %}
+          {{ nome_servidor }}
+        {% else %}
+          {% trans "Lineage 2 PDL" %}
         {% endif %}
       </h1>
       <p style="font-size: 1.4rem; color: var(--light); margin-bottom: 40px; font-style: italic;">
-        {% if configuracao %}
-            "{{ configuracao.descricao_servidor }}"
-          {% else %}
-            {% trans "Onde Lendas Nascem, Heróis Lutam e a Glória É Eterna." %}
+        {% if descricao_servidor %}
+          "{{ descricao_servidor }}"
+        {% else %}
+          {% trans "Onde Lendas Nascem, Heróis Lutam e a Glória É Eterna." %}
         {% endif %}
       </p>
       <a href="#download" class="btn-ruby" style="padding: 15px 40px; font-size: 1.1rem; border-radius: 8px; transition: all 0.3s ease; box-shadow: 0 0 10px rgba(212,175,55,0.4);" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
@@ -88,6 +88,7 @@
       </div>
     </div>
   </section>
+
 <!-- Classes Jogáveis -->
 <section style="background-color: #1a1a1a; padding: 80px 0; text-align: center;">
   <div class="container">
@@ -100,33 +101,36 @@
         <div class="classe-card position-relative"
              data-bs-toggle="modal"
              data-bs-target="#modalClasse{{ forloop.counter }}"
-             style="background-color: #0d0d0d; padding: 15px; border: 1px solid rgba(212,175,55,0.2); border-radius: 12px; transition: 0.3s; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.5); cursor: pointer;">
-          <img src="{% static 'assets/img/l2/characters/'|add:classe.name|add:'.png' %}" alt="{{ classe }}" class="img-fluid mb-2" style="height: 300px; z-index: 1; position: relative;">
-          <p style="color: #ccc; font-weight: 500;">{{ classe.name }}</p>
+             style="background-color: #0d0d0d; padding: 15px; border: 1px solid rgba(212,175,55,0.2); border-radius: 12px; transition: 0.3s; cursor: pointer;"
+             onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          <img src="{% static 'assets/img/l2/characters/' %}{{ classe.name }}.png" alt="{{ classe.name }}" class="img-fluid mb-2" style="max-height: 300px;">
+          <h5 style="color: var(--gold); font-size: 1.1rem;">{{ classe.name|capfirst }}</h5>
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="modalClasse{{ forloop.counter }}" tabindex="-1" aria-labelledby="modalClasseLabel{{ forloop.counter }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content" style="background-color: #111; border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; color: #fff;">
+            <div class="modal-header" style="border-bottom: 1px solid rgba(212,175,55,0.2);">
+              <h5 class="modal-title" id="modalClasseLabel{{ forloop.counter }}" style="color: var(--gold);">
+                {{ classe.name|capfirst }}
+              </h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="text-align: left;">
+              <p style="color: #ccc;">{{ classe.descricao }}</p>
+            </div>
+            <div class="modal-footer" style="border-top: 1px solid rgba(212,175,55,0.2);">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Fechar" %}</button>
+            </div>
+          </div>
         </div>
       </div>
       {% endfor %}
     </div>
   </div>
 </section>
-
-<!-- Modais das Classes -->
-{% for classe in classes_info %}
-<div class="modal fade" id="modalClasse{{ forloop.counter }}" tabindex="-1" aria-labelledby="modalClasseLabel{{ forloop.counter }}" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content bg-dark text-white border-secondary">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalClasseLabel{{ forloop.counter }}">{{ classe.name }}</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="{% trans 'Fechar' %}"></button>
-      </div>
-      <div class="modal-body text-center">
-        <img src="{% static 'assets/img/l2/characters/'|add:classe.name|add:'.png' %}" alt="{{ classe.name }}" class="img-fluid mb-4" style="max-height: 250px;">
-        <p style="color: #ccc;">{{ classe.descricao }}</p>
-      </div>
-    </div>
-  </div>
-</div>
-{% endfor %}
 
 <!-- Top Clãs Horizontal -->
 <section id="top-clans-section">
@@ -180,7 +184,7 @@
   <div class="container text-center">
     <h2 class="online-title">
       {% if configuracao %}
-        {{ configuracao.jogadores_online_texto }}
+        {{ jogadores_online_texto }}
       {% else %}
         {% trans "Jogadores online Agora" %}
       {% endif %}

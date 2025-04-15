@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ApiEndpointToggle, IndexConfig
+from .models import ApiEndpointToggle, IndexConfig, IndexConfigTranslation
 from core.admin import BaseModelAdmin
 from django.contrib import messages
 
@@ -37,16 +37,24 @@ class ApiEndpointToggleAdmin(BaseModelAdmin):
         return False
 
 
+class IndexConfigTranslationInline(admin.TabularInline):
+    model = IndexConfigTranslation
+    extra = 1
+    fields = ('language', 'nome_servidor', 'descricao_servidor', 'jogadores_online_texto')
+    min_num = 1
+
+
 @admin.register(IndexConfig)
 class IndexConfigAdmin(BaseModelAdmin):
     list_display = (
-        'nome_servidor', 'descricao_servidor', 'link_patch', 'link_cliente', 
-        'link_discord', 'trailer_video_id', 'jogadores_online_texto', 'imagem_banner'
+        'nome_servidor', 'link_patch', 'link_cliente', 'link_discord', 
+        'trailer_video_id', 'imagem_banner'
     )
-    search_fields = ('nome_servidor', 'descricao_servidor')
-    list_filter = ('nome_servidor',)
+    search_fields = ('nome_servidor',)
+    list_filter = ()
 
-    # Exibindo o campo de imagem no painel admin
+    inlines = [IndexConfigTranslationInline]
+
     fieldsets = (
         (None, {
             'fields': ('nome_servidor', 'descricao_servidor', 'link_patch', 'link_cliente', 'link_discord')
@@ -60,13 +68,11 @@ class IndexConfigAdmin(BaseModelAdmin):
     )
 
     def save_model(self, request, obj, form, change):
-        # Verifica se o objeto é novo e já existe outro registro
         if not change and IndexConfig.objects.exists():
-            # Se for um novo objeto e já existir um, envia um alerta
             self.message_user(
                 request,
                 "Apenas um registro de configuração do servidor pode existir. Por favor, edite o existente.",
                 messages.WARNING
             )
-            return  # Impede a criação de outro objeto
+            return
         super().save_model(request, obj, form, change)

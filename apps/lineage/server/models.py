@@ -41,7 +41,7 @@ class IndexConfig(BaseModel):
     link_discord = models.URLField(default="https://pdl.denky.dev.br/")
 
     # Trailer
-    trailer_video_id = models.CharField(max_length=100, blank=True, default="CsNutvmrHIA?si=2lF1z1jPFkf8uGJB")  # Aqui você pode colocar um valor padrão do YouTube ou deixar em branco.
+    trailer_video_id = models.CharField(max_length=100, blank=True, default="CsNutvmrHIA?si=2lF1z1jPFkf8uGJB")
 
     # Texto de jogadores online
     jogadores_online_texto = models.CharField(max_length=255, blank=True, default="jogadores online Agora")
@@ -56,9 +56,30 @@ class IndexConfig(BaseModel):
     def save(self, *args, **kwargs):
         if not self.pk:  # Se não estiver sendo atualizado (novo objeto)
             if IndexConfig.objects.exists():
-                # Aqui, ao invés de levantar um erro, vamos enviar uma mensagem
                 raise ValidationError("Só pode existir um registro de configuração do servidor.")
         super().save(*args, **kwargs)
 
     def __str__(self):
         return self.nome_servidor
+
+
+class IndexConfigTranslation(BaseModel):
+    LANGUAGES = [
+        ('pt', 'Português'),
+        ('en', 'English'),
+        ('es', 'Español'),
+    ]
+
+    config = models.ForeignKey(IndexConfig, on_delete=models.CASCADE, related_name='translations')
+    language = models.CharField(max_length=5, choices=LANGUAGES)
+    nome_servidor = models.CharField(max_length=100)
+    descricao_servidor = models.CharField(max_length=255, blank=True)
+    jogadores_online_texto = models.CharField(max_length=255, blank=True)
+
+    class Meta:
+        unique_together = ('config', 'language')
+        verbose_name = 'Tradução da Configuração da Index'
+        verbose_name_plural = 'Traduções da Configuração da Index'
+
+    def __str__(self):
+        return f"{self.nome_servidor} ({self.language})"
