@@ -58,11 +58,17 @@ def index(request):
     translation = None
     if config:
         translation = config.translations.filter(language=current_lang).first()
-        
-    # Verifica se existe uma tradução para o nome e descrição do servidor, se não, usa o padrão
-    nome_servidor = translation.nome_servidor if translation else config.nome_servidor
-    descricao_servidor = translation.descricao_servidor if translation else config.descricao_servidor
-    jogadores_online_texto = translation.jogadores_online_texto if translation.jogadores_online_texto else config.jogadores_online_texto
+
+    # Caso não exista o registro de configuração ou tradução, usa valores padrões
+    nome_servidor = "Lineage 2 PDL"  # Valor padrão
+    descricao_servidor = "Onde Lendas Nascem, Heróis Lutam e a Glória É Eterna."  # Valor padrão
+    jogadores_online_texto = "Jogadores online Agora"  # Valor padrão
+
+    if config:
+        # Verifica se a tradução existe, senão usa os valores do config
+        nome_servidor = translation.nome_servidor if translation else config.nome_servidor
+        descricao_servidor = translation.descricao_servidor if translation else config.descricao_servidor
+        jogadores_online_texto = translation.jogadores_online_texto if translation else config.jogadores_online_texto
 
     # Classes info (ajustando a descrição conforme a linguagem)
     classes_info = []
