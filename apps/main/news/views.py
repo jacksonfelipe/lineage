@@ -1,15 +1,27 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import News
-from django.contrib.auth.decorators import permission_required
+from django.utils import translation
 from django.contrib.auth.decorators import login_required
 from .forms import NewsForm
 
 
 @login_required
 def index(request):
+    language = translation.get_language()
     private_news_list = News.objects.filter(is_published=True, is_private=True).order_by('-pub_date')[:5]
+
+    # adiciona a tradução correta ou fallback em português
+    translated_news = []
+    for news in private_news_list:
+        translation_obj = news.translations.filter(language=language).first() or news.translations.filter(language='pt').first()
+        if translation_obj:
+            translated_news.append({
+                'news': news,
+                'translation': translation_obj
+            })
+
     context = {
-        'private_news_list': private_news_list,
+        'private_news_list': translated_news,
         'segment': 'index',
         'parent': 'news',
     }
@@ -18,12 +30,17 @@ def index(request):
 
 @login_required
 def detail(request, slug):
+    language = translation.get_language()
     news = get_object_or_404(News, slug=slug)
+
+    translation_obj = news.translations.filter(language=language).first() or news.translations.filter(language='pt').first()
+
     context = {
         'news': news,
+        'translation': translation_obj,
         'segment': 'detail',
         'parent': 'news',
-        }
+    }
     return render(request, 'pages/news_detail.html', context)
 
 

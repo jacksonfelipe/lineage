@@ -50,7 +50,7 @@
                    aria-labelledby="headingPrivate{{ forloop.counter }}" 
                    data-bs-parent="#faqAccordionPrivate">
                 <div class="card-body">
-                  {{ faq.answer }}
+                  {{ faq.answer|safe }}
                 </div>
               </div>
             </div>
