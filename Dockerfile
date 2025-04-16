@@ -1,5 +1,5 @@
 # Use a imagem base do Python 3.12
-FROM python:3.13.1
+FROM python:3.13.3
 
 # Defina variáveis de ambiente para o Python
 ENV PYTHONDONTWRITEBYTECODE 1
