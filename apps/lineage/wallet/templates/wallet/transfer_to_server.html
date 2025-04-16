@@ -33,7 +33,7 @@
         <select name="personagem" class="form-select rounded-3" required>
           <option value="" disabled selected>{% trans "Escolha um personagem" %}</option>
           {% for p in personagens %}
-            <option value="{{ p.char_name }}">{{ p.char_name }} (Lv.{{ p.level }})</option>
+            <option value="{{ p.char_name }}">{{ p.char_name }} (Lv.{{ p.base_level }})</option>
           {% endfor %}
         </select>
       </div>

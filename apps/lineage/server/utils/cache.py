@@ -12,9 +12,15 @@ def convert_rowmapping_to_dict(obj):
     return obj
 
 
-def cache_lineage_result(timeout=300):
+def cache_lineage_result(timeout=300, use_cache=True):
     def decorator(func):
         def wrapper(*args, **kwargs):
+            # Se o cache não deve ser usado, execute a função normalmente
+            if not use_cache:
+                result = func(*args, **kwargs)
+                result_converted = convert_rowmapping_to_dict(result)
+                return result_converted
+            
             # Gera uma chave única com base na função + argumentos
             key_base = f"{func.__module__}.{func.__name__}:{json.dumps(args)}:{json.dumps(kwargs)}"
             key = f"lineage_cache:{hashlib.md5(key_base.encode()).hexdigest()}"

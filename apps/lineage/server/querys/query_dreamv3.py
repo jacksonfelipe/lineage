@@ -229,10 +229,23 @@ class LineageServices:
         sql = """
             SELECT
                 C.*, 
+                -- Base class e level
                 (SELECT S0.class_id FROM character_subclasses AS S0 WHERE S0.char_obj_id = C.obj_Id AND S0.isBase = '1' LIMIT 1) AS base_class,
+                (SELECT S0.level FROM character_subclasses AS S0 WHERE S0.char_obj_id = C.obj_Id AND S0.isBase = '1' LIMIT 1) AS base_level,
+
+                -- Subclass 1
                 (SELECT S1.class_id FROM character_subclasses AS S1 WHERE S1.char_obj_id = C.obj_Id AND S1.isBase = '0' LIMIT 0,1) AS subclass1,
+                (SELECT S1.level FROM character_subclasses AS S1 WHERE S1.char_obj_id = C.obj_Id AND S1.isBase = '0' LIMIT 0,1) AS subclass1_level,
+
+                -- Subclass 2
                 (SELECT S2.class_id FROM character_subclasses AS S2 WHERE S2.char_obj_id = C.obj_Id AND S2.isBase = '0' LIMIT 1,1) AS subclass2,
+                (SELECT S2.level FROM character_subclasses AS S2 WHERE S2.char_obj_id = C.obj_Id AND S2.isBase = '0' LIMIT 1,1) AS subclass2_level,
+
+                -- Subclass 3
                 (SELECT S3.class_id FROM character_subclasses AS S3 WHERE S3.char_obj_id = C.obj_Id AND S3.isBase = '0' LIMIT 2,1) AS subclass3,
+                (SELECT S3.level FROM character_subclasses AS S3 WHERE S3.char_obj_id = C.obj_Id AND S3.isBase = '0' LIMIT 2,1) AS subclass3_level,
+
+                -- Clan e Ally
                 CS.name AS clan_name,
                 A.ally_name
             FROM characters AS C
@@ -520,7 +533,7 @@ class LineageAccount:
 class TransferFromWalletToChar:
 
     @staticmethod
-    @cache_lineage_result(timeout=300)
+    @cache_lineage_result(timeout=300, use_cache=False)
     def find_char(account: str, char_name: str):
         query = """
             SELECT * FROM characters 
@@ -533,7 +546,7 @@ class TransferFromWalletToChar:
             return None
 
     @staticmethod
-    @cache_lineage_result(timeout=300)
+    @cache_lineage_result(timeout=300, use_cache=False)
     def search_coin(char_name: str, coin_id: int):
         query = """
             SELECT i.* FROM items i
@@ -543,7 +556,7 @@ class TransferFromWalletToChar:
         return LineageDB().select(query, {"char_name": char_name, "coin_id": coin_id})
 
     @staticmethod
-    @cache_lineage_result(timeout=300)
+    @cache_lineage_result(timeout=300, use_cache=False)
     def insert_coin(char_name: str, coin_id: int, amount: int):
         db = LineageDB()
 
@@ -582,66 +595,81 @@ class TransferFromWalletToChar:
 class TransferFromCharToWallet:
 
     @staticmethod
-    @cache_lineage_result(timeout=300)
+    @cache_lineage_result(timeout=300, use_cache=False)
     def find_char(account, char_id):
         query = """
             SELECT online, char_name FROM characters 
-            WHERE account_name = :account AND charId = :char_id
+            WHERE account_name = :account AND obj_Id = :char_id
         """
         params = {"account": account, "char_id": char_id}
         return LineageDB().select(query, params)
 
     @staticmethod
-    @cache_lineage_result(timeout=300)
+    @cache_lineage_result(timeout=300, use_cache=False)
+    def list_items(char_id):
+        query = """
+            SELECT item_id, item_type, amount, location
+            FROM items
+            WHERE owner_id = :char_id
+            AND location IN ('INVENTORY', 'WAREHOUSE')
+            ORDER BY location, item_type
+        """
+        params = {"char_id": char_id}
+        results = LineageDB().select(query, params)
+
+        return results
+
+    @staticmethod
+    @cache_lineage_result(timeout=300, use_cache=False)
     def check_ingame_coin(coin_id, char_id):
         db = LineageDB()
 
         # Buscar no INVENTORY
         query_inve = """
-            SELECT count FROM items 
-            WHERE owner_id = :char_id AND item_type = :coin_id AND loc = 'INVENTORY'
+            SELECT amount FROM items 
+            WHERE owner_id = :char_id AND item_type = :coin_id AND location = 'INVENTORY'
             LIMIT 1
         """
         result_inve = db.select(query_inve, {"char_id": char_id, "coin_id": coin_id})
-        inINVE = result_inve[0]["count"] if result_inve else 0
+        inINVE = result_inve[0]["amount"] if result_inve else 0
 
         # Buscar no WAREHOUSE
         query_ware = """
-            SELECT count FROM items 
-            WHERE owner_id = :char_id AND item_type = :coin_id AND loc = 'WAREHOUSE'
+            SELECT amount FROM items 
+            WHERE owner_id = :char_id AND item_type = :coin_id AND location = 'WAREHOUSE'
             LIMIT 1
         """
         result_ware = db.select(query_ware, {"char_id": char_id, "coin_id": coin_id})
-        inWARE = result_ware[0]["count"] if result_ware else 0
+        inWARE = result_ware[0]["amount"] if result_ware else 0
 
         total = inINVE + inWARE
         return {"total": total, "inventory": inINVE, "warehouse": inWARE}
 
     @staticmethod
-    @cache_lineage_result(timeout=300)
+    @cache_lineage_result(timeout=300, use_cache=False)
     def remove_ingame_coin(coin_id, count, char_id):
         try:
             db = LineageDB()
 
             # Buscar no INVENTORY
             query_inve = """
-                SELECT count, item_id FROM items 
-                WHERE owner_id = :char_id AND item_type = :coin_id AND loc = 'INVENTORY' 
+                SELECT amount, item_type FROM items 
+                WHERE owner_id = :char_id AND item_type = :item_type AND location = 'INVENTORY' 
                 LIMIT 1
             """
-            item_inve = db.select(query_inve, {"char_id": char_id, "coin_id": coin_id})
-            inINVE = item_inve[0]["count"] if item_inve else 0
-            inve_id = item_inve[0]["item_id"] if item_inve else None
+            item_inve = db.select(query_inve, {"char_id": char_id, "item_type": coin_id})
+            inINVE = item_inve[0]["amount"] if item_inve else 0
+            inve_id = item_inve[0]["item_type"] if item_inve else None
 
             # Buscar no WAREHOUSE
             query_ware = """
-                SELECT count, item_id FROM items 
-                WHERE owner_id = :char_id AND item_type = :coin_id AND loc = 'WAREHOUSE' 
+                SELECT amount, item_type FROM items 
+                WHERE owner_id = :char_id AND item_type = :item_type AND location = 'WAREHOUSE' 
                 LIMIT 1
             """
-            item_ware = db.select(query_ware, {"char_id": char_id, "coin_id": coin_id})
-            inWARE = item_ware[0]["count"] if item_ware else 0
-            ware_id = item_ware[0]["item_id"] if item_ware else None
+            item_ware = db.select(query_ware, {"char_id": char_id, "item_type": coin_id})
+            inWARE = item_ware[0]["amount"] if item_ware else 0
+            ware_id = item_ware[0]["item_type"] if item_ware else None
 
             count_exist = inINVE + inWARE
             if count_exist < count:
@@ -650,31 +678,44 @@ class TransferFromCharToWallet:
             # INVENTORY: remove ou atualiza
             if inINVE > 0:
                 if inINVE <= count:
-                    delete_query = "DELETE FROM items WHERE item_id = :item_id LIMIT 1"
-                    if db.update(delete_query, {"item_id": inve_id}) is None:
+                    delete_query = "DELETE FROM items WHERE item_type = :item_type AND owner_id = :char_id LIMIT 1"
+                    if db.update(delete_query, {"item_type": inve_id, "char_id": char_id}) is None:
                         return False
                 else:
+                    print("aqui")
                     update_query = """
-                        UPDATE items SET count = count - :count 
-                        WHERE item_id = :item_id LIMIT 1
+                        UPDATE items SET amount = amount - :amount_item 
+                        WHERE item_type = :item_type AND owner_id = :char_id LIMIT 1
                     """
-                    if db.update(update_query, {"count": count, "item_id": inve_id}) is None:
+                    if db.update(update_query, {"amount_item": count, "item_type": inve_id, "char_id": char_id}) is None:
                         return False
+
+                    # Verificar se a quantidade foi reduzida a 0 e remover o item se necessário
+                    check_query = "SELECT amount FROM items WHERE item_type = :item_type AND owner_id = :char_id"
+                    result = db.select(check_query, {"item_type": inve_id, "char_id": char_id})
+                    if result and result[0]["amount"] == 0:
+                        db.update("DELETE FROM items WHERE item_type = :item_type AND owner_id = :char_id LIMIT 1", {"item_type": inve_id, "char_id": char_id})
 
             # WAREHOUSE: se necessário
             if count > inINVE:
                 tirar_do_ware = count - inINVE
                 if tirar_do_ware == inWARE:
-                    delete_query = "DELETE FROM items WHERE item_id = :item_id LIMIT 1"
-                    if db.update(delete_query, {"item_id": ware_id}) is None:
+                    delete_query = "DELETE FROM items WHERE item_type = :item_type AND owner_id = :char_id LIMIT 1"
+                    if db.update(delete_query, {"item_type": ware_id, "char_id": char_id}) is None:
                         return False
                 else:
                     update_query = """
-                        UPDATE items SET count = count - :count 
-                        WHERE item_id = :item_id LIMIT 1
+                        UPDATE items SET amount = amount - :amount_item 
+                        WHERE item_type = :item_type AND owner_id = :char_id LIMIT 1
                     """
-                    if db.update(update_query, {"count": tirar_do_ware, "item_id": ware_id}) is None:
+                    if db.update(update_query, {"amount_item": tirar_do_ware, "item_type": ware_id, "char_id": char_id}) is None:
                         return False
+
+                    # Verificar se a quantidade foi reduzida a 0 e remover o item se necessário
+                    check_query = "SELECT amount FROM items WHERE item_type = :item_type AND owner_id = :char_id"
+                    result = db.select(check_query, {"item_type": ware_id, "char_id": char_id})
+                    if result and result[0]["amount"] == 0:
+                        db.update("DELETE FROM items WHERE item_type = :item_type AND owner_id = :char_id LIMIT 1", {"item_type": ware_id, "char_id": char_id})
 
             return True
 

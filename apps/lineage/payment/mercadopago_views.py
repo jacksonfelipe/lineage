@@ -82,7 +82,7 @@ def pagamento_sucesso(request):
 
     if not payment_id or status != "approved":
         logger.warning("Pagamento não aprovado ou parâmetros inválidos na URL de sucesso.")
-        return redirect("payment:erro")  # Redireciona para view de erro
+        return redirect("payment:pagamento_erro")  # Redireciona para view de erro
 
     try:
         sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
@@ -90,7 +90,7 @@ def pagamento_sucesso(request):
 
         if result["status"] != 200:
             logger.error("Erro ao consultar o pagamento no Mercado Pago.")
-            return redirect("payment:erro")
+            return redirect("payment:pagamento_erro")
 
         pagamento_info = result["response"]
         status_pagamento = pagamento_info["status"]
@@ -98,7 +98,7 @@ def pagamento_sucesso(request):
 
         if not pagamento_id:
             logger.warning("Pagamento sem metadata.pagamento_id.")
-            return redirect("payment:erro")
+            return redirect("payment:pagamento_erro")
 
         pagamento = Pagamento.objects.get(id=pagamento_id)
 
@@ -132,11 +132,11 @@ def pagamento_sucesso(request):
 
     except Pagamento.DoesNotExist:
         logger.error(f"Pagamento com ID {pagamento_id} não encontrado.")
-        return redirect("payment:erro")
+        return redirect("payment:pagamento_erro")
 
     except Exception as e:
         logger.exception(f"Erro inesperado na view pagamento_sucesso: {e}")
-        return redirect("payment:erro")
+        return redirect("payment:pagamento_erro")
 
 
 def pagamento_erro(request):

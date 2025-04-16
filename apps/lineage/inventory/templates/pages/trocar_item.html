@@ -1,0 +1,38 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card border-0 shadow-lg rounded-4">
+    <div class="card-header bg-primary text-white rounded-top-4 py-3 px-4">
+      <h4 class="mb-0 fw-bold"><i class="bi bi-arrow-left-right me-2"></i>{% trans "Trocar Item entre Jogadores" %}</h4>
+    </div>
+    <div class="card-body px-5 py-4">
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="character_name_origem">{% trans "Personagem Origem" %}</label>
+          <input type="text" class="form-control" id="character_name_origem" name="character_name_origem" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="character_name_destino">{% trans "Personagem Destino" %}</label>
+          <input type="text" class="form-control" id="character_name_destino" name="character_name_destino" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="item_id">{% trans "ID do Item" %}</label>
+          <input type="number" class="form-control" id="item_id" name="item_id" required>
+        </div>
+        <div class="mb-4">
+          <label class="form-label fw-semibold" for="quantity">{% trans "Quantidade" %}</label>
+          <input type="number" class="form-control" id="quantity" name="quantity" required>
+        </div>
+        <div class="text-end">
+          <button type="submit" class="btn btn-success rounded-pill px-4 shadow-sm">
+            <i class="bi bi-check-circle me-2"></i>{% trans "Trocar" %}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

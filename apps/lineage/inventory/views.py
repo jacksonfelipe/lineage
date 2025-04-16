@@ -1,3 +1,204 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.db import transaction
+from django.contrib.auth import authenticate
 
-# Create your views here.
+import os, json
+from django.conf import settings
+
+from .models import Inventory, InventoryItem
+from apps.lineage.server.database import LineageDB
+from utils.dynamic_import import get_query_class
+from django.core.paginator import Paginator
+
+TransferFromWalletToChar = get_query_class("TransferFromWalletToChar")
+TransferFromCharToWallet = get_query_class("TransferFromCharToWallet")
+LineageServices = get_query_class("LineageServices")
+
+
+@login_required
+def retirar_item_servidor(request):
+    db = LineageDB()
+    if not db.is_connected():
+        messages.error(request, 'O banco do jogo está indisponível no momento. Tente novamente mais tarde.')
+        return redirect('inventory:retirar_item')
+
+    personagens = []
+    try:
+        personagens = LineageServices.find_chars(request.user.username)
+    except:
+        messages.warning(request, 'Não foi possível carregar seus personagens agora.')
+
+    char_id = request.GET.get('char_id') or request.POST.get('char_id')
+    page_number = request.GET.get('page')
+    items = []
+    personagem = None
+
+    if char_id:
+        try:
+            personagem = TransferFromCharToWallet.find_char(request.user.username, char_id)
+            if not personagem:
+                messages.error(request, 'Personagem não encontrado ou não pertence à sua conta.')
+                return redirect('inventory:retirar_item')
+
+            if personagem[0]['online'] != 0:
+                messages.error(request, 'O personagem precisa estar offline.')
+                return redirect('inventory:retirar_item')
+
+            all_items = TransferFromCharToWallet.list_items(char_id)
+
+            # Carrega itens.json
+            itens_path = os.path.join(settings.BASE_DIR, 'utils/data/itens.json')
+            with open(itens_path, 'r', encoding='utf-8') as f:
+                itens_data = json.load(f)
+
+            # Substitui item_id pelo item_name
+            for item in all_items:
+                item_id_str = str(item['item_type'])
+                item_name = itens_data.get(item_id_str, [f"(não identificado - {item_id_str})"])[0]
+                item['name'] = item_name
+
+            paginator = Paginator(all_items, 10)  # 10 itens por página
+            items = paginator.get_page(page_number)
+
+        except Exception as e:
+            messages.error(request, f'Erro ao buscar o inventário: {str(e)}')
+
+    if request.method == 'POST' and char_id:
+        item_id = int(request.POST.get('item_id').replace(',', ''))
+        quantity = int(request.POST.get('quantity'))
+        senha = request.POST.get('senha')
+
+        user = authenticate(username=request.user.username, password=senha)
+        if not user:
+            messages.error(request, 'Senha incorreta.')
+            return redirect(f"{request.path}?char_id={char_id}")
+
+        if not items:
+            messages.error(request, 'Inventário não carregado.')
+            return redirect('inventory:retirar_item')
+
+        item_status = TransferFromCharToWallet.check_ingame_coin(item_id, char_id)
+        if item_status['total'] < quantity:
+            messages.error(request, 'Quantidade insuficiente no jogo.')
+            return redirect(f"{request.path}?char_id={char_id}")
+
+        success = TransferFromCharToWallet.remove_ingame_coin(item_id, quantity, char_id)
+        if not success:
+            messages.error(request, 'Falha ao remover o item do jogo.')
+            return redirect(f"{request.path}?char_id={char_id}")
+
+        messages.success(request, 'Item transferido com sucesso!')
+        return redirect(f"{request.path}?char_id={char_id}")
+
+    return render(request, 'pages/retirar_item.html', {
+        'personagens': personagens,
+        'char_id': char_id,
+        'items': items,
+        'personagem': personagem[0] if personagem else None
+    })
+
+
+@login_required
+def inserir_item_servidor(request):
+    if request.method == 'POST':
+        character_name = request.POST.get('character_name')
+        item_id = int(request.POST.get('item_id'))
+        quantity = int(request.POST.get('quantity'))
+
+        inventory = get_object_or_404(Inventory, character_name=character_name, user=request.user)
+
+        try:
+            item = InventoryItem.objects.get(inventory=inventory, item_id=item_id)
+            if item.quantity < quantity:
+                messages.error(request, 'Quantidade insuficiente no inventário online.')
+                return redirect('inventory:inserir_item')
+
+            char_data = TransferFromWalletToChar.find_char(inventory.account_name, character_name)
+            if not char_data:
+                messages.error(request, 'Personagem não encontrado.')
+                return redirect('inventory:inserir_item')
+
+            inserted = TransferFromWalletToChar.insert_coin(character_name, item_id, quantity)
+            if not inserted:
+                messages.error(request, 'Falha ao adicionar item no servidor.')
+                return redirect('inventory:inserir_item')
+
+            item.quantity -= quantity
+            if item.quantity == 0:
+                item.delete()
+            else:
+                item.save()
+
+            messages.success(request, 'Item enviado para o jogo com sucesso!')
+            return redirect('inventory:inserir_item')
+
+        except InventoryItem.DoesNotExist:
+            messages.error(request, 'Item não encontrado no inventário online.')
+            return redirect('inventory:inserir_item')
+
+        except Exception as e:
+            messages.error(request, f'Erro: {str(e)}')
+            return redirect('inventory:inserir_item')
+
+    return render(request, 'pages/inserir_item.html')
+
+
+@login_required
+@transaction.atomic
+def trocar_item_com_jogador(request):
+    if request.method == 'POST':
+        character_name_origem = request.POST.get('character_name_origem')
+        character_name_destino = request.POST.get('character_name_destino')
+        item_id = int(request.POST.get('item_id'))
+        quantity = int(request.POST.get('quantity'))
+
+        inventario_origem = get_object_or_404(Inventory, character_name=character_name_origem, user=request.user)
+        inventario_destino = get_object_or_404(Inventory, character_name=character_name_destino)
+
+        try:
+            item_origem = InventoryItem.objects.get(inventory=inventario_origem, item_id=item_id)
+            if item_origem.quantity < quantity:
+                messages.error(request, 'Quantidade insuficiente para troca.')
+                return redirect('trocar_item')
+
+            item_origem.quantity -= quantity
+            if item_origem.quantity == 0:
+                item_origem.delete()
+            else:
+                item_origem.save()
+
+            item_destino, created = InventoryItem.objects.get_or_create(
+                inventory=inventario_destino,
+                item_id=item_id,
+                defaults={'item_name': item_origem.item_name, 'quantity': quantity}
+            )
+            if not created:
+                item_destino.quantity += quantity
+                item_destino.save()
+
+            messages.success(request, 'Troca realizada com sucesso!')
+            return redirect('trocar_item')
+
+        except InventoryItem.DoesNotExist:
+            messages.error(request, 'Item não encontrado no inventário de origem.')
+            return redirect('trocar_item')
+
+        except Exception as e:
+            messages.error(request, f'Erro: {str(e)}')
+            return redirect('trocar_item')
+
+    return render(request, 'pages/trocar_item.html')
+
+
+@login_required
+def inventario_dashboard(request):
+    inventories = Inventory.objects.filter(user=request.user)
+    items = InventoryItem.objects.filter(inventory__in=inventories)
+    for inv in inventories:
+        inv.is_online = False  # você pode ajustar com seu TransferFromCharToWallet se quiser exibir online real
+    return render(request, 'pages/inventario_dashboard.html', {
+        'inventories': inventories,
+        'items': items
+    })
