@@ -678,14 +678,14 @@ class TransferFromCharToWallet:
             # INVENTORY: remove ou atualiza
             if inINVE > 0:
                 if inINVE <= count:
-                    delete_query = "DELETE FROM items WHERE item_type = :item_type AND owner_id = :char_id LIMIT 1"
+                    delete_query = "DELETE FROM items WHERE item_type = :item_type AND owner_id = :char_id"
                     if db.update(delete_query, {"item_type": inve_id, "char_id": char_id}) is None:
                         return False
                 else:
                     print("aqui")
                     update_query = """
                         UPDATE items SET amount = amount - :amount_item 
-                        WHERE item_type = :item_type AND owner_id = :char_id LIMIT 1
+                        WHERE item_type = :item_type AND owner_id = :char_id
                     """
                     if db.update(update_query, {"amount_item": count, "item_type": inve_id, "char_id": char_id}) is None:
                         return False
@@ -694,19 +694,19 @@ class TransferFromCharToWallet:
                     check_query = "SELECT amount FROM items WHERE item_type = :item_type AND owner_id = :char_id"
                     result = db.select(check_query, {"item_type": inve_id, "char_id": char_id})
                     if result and result[0]["amount"] == 0:
-                        db.update("DELETE FROM items WHERE item_type = :item_type AND owner_id = :char_id LIMIT 1", {"item_type": inve_id, "char_id": char_id})
+                        db.update("DELETE FROM items WHERE item_type = :item_type AND owner_id = :char_id", {"item_type": inve_id, "char_id": char_id})
 
             # WAREHOUSE: se necessário
             if count > inINVE:
                 tirar_do_ware = count - inINVE
                 if tirar_do_ware == inWARE:
-                    delete_query = "DELETE FROM items WHERE item_type = :item_type AND owner_id = :char_id LIMIT 1"
+                    delete_query = "DELETE FROM items WHERE item_type = :item_type AND owner_id = :char_id"
                     if db.update(delete_query, {"item_type": ware_id, "char_id": char_id}) is None:
                         return False
                 else:
                     update_query = """
                         UPDATE items SET amount = amount - :amount_item 
-                        WHERE item_type = :item_type AND owner_id = :char_id LIMIT 1
+                        WHERE item_type = :item_type AND owner_id = :char_id
                     """
                     if db.update(update_query, {"amount_item": tirar_do_ware, "item_type": ware_id, "char_id": char_id}) is None:
                         return False
