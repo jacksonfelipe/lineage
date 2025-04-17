@@ -46,10 +46,10 @@
                     <h5 class="fw-bold mb-2 text-primary">{{ item.item_name }}</h5>
                     <p class="mb-3 small text-primary">{% trans "Quantidade" %}: <span class="fw-semibold text-primary">{{ item.quantity }}</span></p>
                     <div class="d-grid gap-2">
-                      <a href="{% url 'inventory:inserir_item' %}?item_id={{ item.item_id }}" class="btn btn-outline-success btn-sm rounded-pill">
+                      <a href="{% url 'inventory:inserir_item' char_name=data.inventory.character_name item_id=item.item_id %}" class="btn btn-outline-success btn-sm rounded-pill">
                         <i class="bi bi-upload me-1"></i>{% trans "Inserir" %}
                       </a>
-                      <a href="{% url 'inventory:trocar_item' %}?item_id={{ item.item_id }}" class="btn btn-outline-warning btn-sm rounded-pill">
+                      <a href="{% url 'inventory:trocar_item' %}?character_name_origem={{ data.inventory.character_name }}&item_id={{ item.item_id }}" class="btn btn-outline-warning btn-sm rounded-pill">
                         <i class="bi bi-arrow-left-right me-1"></i>{% trans "Trocar" %}
                       </a>
                     </div>

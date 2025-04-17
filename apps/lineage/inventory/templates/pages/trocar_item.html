@@ -1,5 +1,5 @@
 {% extends "layouts/base.html" %}
-{% load i18n %}
+{% load i18n l10n %}
 
 {% block content %}
 <div class="container py-5">
@@ -10,22 +10,28 @@
     <div class="card-body px-5 py-4">
       <form method="post">
         {% csrf_token %}
+
         <div class="mb-3">
-          <label class="form-label fw-semibold" for="character_name_origem">{% trans "Personagem Origem" %}</label>
-          <input type="text" class="form-control" id="character_name_origem" name="character_name_origem" required>
+          <label class="form-label fw-semibold">{% trans "Personagem Origem" %}</label>
+          <input type="text" class="form-control" value="{{ character_name_origem }}" readonly name="character_name_origem">
         </div>
+
         <div class="mb-3">
-          <label class="form-label fw-semibold" for="character_name_destino">{% trans "Personagem Destino" %}</label>
-          <input type="text" class="form-control" id="character_name_destino" name="character_name_destino" required>
+          <label class="form-label fw-semibold">{% trans "Personagem Destino" %}</label>
+          <input type="text" class="form-control" name="character_name_destino" required>
         </div>
+
         <div class="mb-3">
-          <label class="form-label fw-semibold" for="item_id">{% trans "ID do Item" %}</label>
-          <input type="number" class="form-control" id="item_id" name="item_id" required>
+          <label class="form-label fw-semibold">{% trans "Item" %}</label>
+          <input type="text" class="form-control" value="{{ item_name }}" readonly>
+          <input type="hidden" name="item_id" value="{{ item_id }}">
         </div>
+
         <div class="mb-4">
-          <label class="form-label fw-semibold" for="quantity">{% trans "Quantidade" %}</label>
-          <input type="number" class="form-control" id="quantity" name="quantity" required>
+          <label class="form-label fw-semibold">{% trans "Quantidade" %}</label>
+          <input type="number" class="form-control" name="quantity" min="1" max="{{ max_quantity|unlocalize }}" required>
         </div>
+
         <div class="text-end">
           <button type="submit" class="btn btn-success rounded-pill px-4 shadow-sm">
             <i class="bi bi-check-circle me-2"></i>{% trans "Trocar" %}

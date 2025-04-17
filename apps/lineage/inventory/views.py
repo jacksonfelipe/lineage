@@ -120,48 +120,61 @@ def retirar_item_servidor(request):
 
 
 @login_required
-def inserir_item_servidor(request):
+def inserir_item_servidor(request, char_name, item_id):
+    db = LineageDB()
+    if not db.is_connected():
+        messages.error(request, 'O banco do jogo está indisponível no momento. Tente novamente mais tarde.')
+        return redirect('inventory:inventario_dashboard')
+
+    try:
+        personagem = TransferFromWalletToChar.find_char(request.user.username, char_name)
+        if not personagem:
+            messages.error(request, 'Personagem não encontrado ou não pertence à sua conta.')
+            return redirect('inventory:inventario_dashboard')
+
+    except Exception as e:
+        messages.error(request, f'Erro ao buscar personagem: {str(e)}')
+        return redirect('inventory:inventario_dashboard')
+
+    try:
+        inventory = Inventory.objects.get(
+            user=request.user,
+            account_name=request.user.username,
+            character_name=personagem[0]['char_name']
+        )
+        item = InventoryItem.objects.get(inventory=inventory, item_id=item_id)
+    except InventoryItem.DoesNotExist:
+        messages.error(request, 'Item não encontrado no inventário online.')
+        return redirect('inventory:inventario_dashboard')
+
     if request.method == 'POST':
-        character_name = request.POST.get('character_name')
-        item_id = int(request.POST.get('item_id'))
         quantity = int(request.POST.get('quantity'))
+        senha = request.POST.get('senha')
 
-        inventory = get_object_or_404(Inventory, character_name=character_name, user=request.user)
+        user = authenticate(username=request.user.username, password=senha)
+        if not user:
+            messages.error(request, 'Senha incorreta.')
+            return redirect(request.path)
 
-        try:
-            item = InventoryItem.objects.get(inventory=inventory, item_id=item_id)
-            if item.quantity < quantity:
-                messages.error(request, 'Quantidade insuficiente no inventário online.')
-                return redirect('inventory:inserir_item')
+        if item.quantity < quantity:
+            messages.error(request, 'Quantidade insuficiente no inventário.')
+            return redirect(request.path)
+        
+        success = TransferFromWalletToChar.insert_coin(personagem[0]['char_name'], item_id, quantity)
+        if not success:
+            messages.error(request, 'Falha ao inserir o item no servidor.')
+            return redirect(request.path)
 
-            char_data = TransferFromWalletToChar.find_char(inventory.account_name, character_name)
-            if not char_data:
-                messages.error(request, 'Personagem não encontrado.')
-                return redirect('inventory:inserir_item')
+        item.quantity -= quantity
+        item.save()
 
-            inserted = TransferFromWalletToChar.insert_coin(character_name, item_id, quantity)
-            if not inserted:
-                messages.error(request, 'Falha ao adicionar item no servidor.')
-                return redirect('inventory:inserir_item')
+        messages.success(request, f'{quantity}x {item.item_name} inserido no servidor com sucesso!')
+        return redirect('inventory:inventario_dashboard')
 
-            item.quantity -= quantity
-            if item.quantity == 0:
-                item.delete()
-            else:
-                item.save()
-
-            messages.success(request, 'Item enviado para o jogo com sucesso!')
-            return redirect('inventory:inserir_item')
-
-        except InventoryItem.DoesNotExist:
-            messages.error(request, 'Item não encontrado no inventário online.')
-            return redirect('inventory:inserir_item')
-
-        except Exception as e:
-            messages.error(request, f'Erro: {str(e)}')
-            return redirect('inventory:inserir_item')
-
-    return render(request, 'pages/inserir_item.html')
+    return render(request, 'pages/inserir_item_direct.html', {
+        'personagem': personagem[0],
+        'item': item,
+    })
 
 
 @login_required
@@ -180,7 +193,7 @@ def trocar_item_com_jogador(request):
             item_origem = InventoryItem.objects.get(inventory=inventario_origem, item_id=item_id)
             if item_origem.quantity < quantity:
                 messages.error(request, 'Quantidade insuficiente para troca.')
-                return redirect('trocar_item')
+                return redirect('inventory:trocar_item')
 
             item_origem.quantity -= quantity
             if item_origem.quantity == 0:
@@ -198,17 +211,39 @@ def trocar_item_com_jogador(request):
                 item_destino.save()
 
             messages.success(request, 'Troca realizada com sucesso!')
-            return redirect('trocar_item')
+            return redirect('inventory:inventario_dashboard')
 
         except InventoryItem.DoesNotExist:
             messages.error(request, 'Item não encontrado no inventário de origem.')
-            return redirect('trocar_item')
+            return redirect('inventory:trocar_item')
 
         except Exception as e:
             messages.error(request, f'Erro: {str(e)}')
-            return redirect('trocar_item')
+            return redirect('inventory:trocar_item')
 
-    return render(request, 'pages/trocar_item.html')
+    # --- GET (preenche o form com os dados da querystring) ---
+    character_name_origem = request.GET.get('character_name_origem', '')
+    item_id = request.GET.get('item_id')
+
+    item_name = ''
+    max_quantity = 0
+
+    if character_name_origem and item_id:
+        try:
+            inventario = Inventory.objects.get(character_name=character_name_origem, user=request.user)
+            item = InventoryItem.objects.get(inventory=inventario, item_id=item_id)
+            item_name = item.item_name
+            max_quantity = item.quantity
+        except (Inventory.DoesNotExist, InventoryItem.DoesNotExist):
+            messages.error(request, 'Item ou inventário não encontrado.')
+
+    context = {
+        'character_name_origem': character_name_origem,
+        'item_id': item_id,
+        'item_name': item_name,
+        'max_quantity': max_quantity
+    }
+    return render(request, 'pages/trocar_item.html', context)
 
 
 @login_required
@@ -240,4 +275,3 @@ def inventario_global(request):
     return render(request, 'pages/inventario_global.html', {
         'itens_globais': itens_globais
     })
-    
