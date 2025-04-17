@@ -223,7 +223,7 @@ def trocar_item_com_jogador(request):
 
     # --- GET (preenche o form com os dados da querystring) ---
     character_name_origem = request.GET.get('character_name_origem', '')
-    item_id = request.GET.get('item_id')
+    item_id = request.GET.get('item_id').replace(',', '').replace('.', '')
 
     item_name = ''
     max_quantity = 0
