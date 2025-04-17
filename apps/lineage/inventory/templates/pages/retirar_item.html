@@ -31,27 +31,29 @@
           <h5 class="fw-bold mb-3">{% trans "Inventário de" %} {{ personagem.char_name }}</h5>
 
           <!-- Lista de itens -->
-          <table class="table table-hover table-striped">
-            <thead>
-              <tr>
-                <th>{% trans "Item" %}</th>
-                <th>{% trans "Quantidade" %}</th>
-                <th>{% trans "Localização" %}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for item in items %}
-                <tr class="clickable-row" 
-                    data-item-id="{{ item.item_type }}" 
-                    data-item-amount="{{ item.amount }}"
-                    data-item-name="{{ item.name }}">
-                  <td>{{ item.name }}</td>
-                  <td>{{ item.amount }}</td>
-                  <td>{{ item.location }}</td>
+          <div class="table-responsive">
+            <table class="table table-hover table-striped">
+              <thead>
+                <tr>
+                  <th>{% trans "Item" %}</th>
+                  <th>{% trans "Quantidade" %}</th>
+                  <th>{% trans "Localização" %}</th>
                 </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {% for item in items %}
+                  <tr class="clickable-row" 
+                      data-item-id="{{ item.item_type }}" 
+                      data-item-amount="{{ item.amount }}"
+                      data-item-name="{{ item.name }}">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.amount }}</td>
+                    <td>{{ item.location }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
 
           <!-- Paginação -->
           <nav class="mt-4">
