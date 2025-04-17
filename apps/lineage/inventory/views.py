@@ -68,7 +68,7 @@ def retirar_item_servidor(request):
 
     if request.method == 'POST' and char_id:
         item_id = int(request.POST.get('item_id').replace(',', '').replace('.', ''))
-        quantity = int(request.POST.get('quantity'))
+        quantity = int(request.POST.get('quantity').replace(',', '').replace('.', ''))
         senha = request.POST.get('senha')
 
         user = authenticate(username=request.user.username, password=senha)
@@ -148,7 +148,7 @@ def inserir_item_servidor(request, char_name, item_id):
         return redirect('inventory:inventario_dashboard')
 
     if request.method == 'POST':
-        quantity = int(request.POST.get('quantity'))
+        quantity = int(request.POST.get('quantity').replace(',', '').replace('.', ''))
         senha = request.POST.get('senha')
 
         user = authenticate(username=request.user.username, password=senha)
@@ -183,8 +183,8 @@ def trocar_item_com_jogador(request):
     if request.method == 'POST':
         character_name_origem = request.POST.get('character_name_origem')
         character_name_destino = request.POST.get('character_name_destino')
-        item_id = int(request.POST.get('item_id'))
-        quantity = int(request.POST.get('quantity'))
+        item_id = int(request.POST.get('item_id').replace(',', '').replace('.', ''))
+        quantity = int(request.POST.get('quantity').replace(',', '').replace('.', ''))
 
         inventario_origem = get_object_or_404(Inventory, character_name=character_name_origem, user=request.user)
         inventario_destino = get_object_or_404(Inventory, character_name=character_name_destino)
