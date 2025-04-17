@@ -67,7 +67,7 @@ def retirar_item_servidor(request):
             messages.error(request, f'Erro ao buscar o inventário: {str(e)}')
 
     if request.method == 'POST' and char_id:
-        item_id = int(request.POST.get('item_id').replace(',', ''))
+        item_id = int(request.POST.get('item_id').replace(',', '').replace('.', ''))
         quantity = int(request.POST.get('quantity'))
         senha = request.POST.get('senha')
 
