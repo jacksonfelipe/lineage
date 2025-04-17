@@ -1,5 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load i18n l10n %}
+{% load static %}
 
 {% block content %}
 <div class="container py-5">
@@ -42,7 +43,10 @@
               <div class="col">
                 <div class="card bg-dark border-0 shadow text-white rounded-4 overflow-hidden h-100">
                   <div class="card-body text-center py-4 d-flex flex-column justify-content-between h-100">
-                    <i class="bi bi-gem display-4 mb-3 text-warning"></i>
+                    <img src="{% static 'assets/img/l2/icons/5-' %}{{ item.item_id|unlocalize }}.jpg"
+                      alt="{{ item.item_name }}"
+                      class="mb-3 rounded border border-secondary d-block mx-auto"
+                      style="width: 32px; height: 32px;">
                     <h5 class="fw-bold mb-2 text-primary">{{ item.item_name }}</h5>
                     <p class="mb-3 small text-primary">{% trans "Quantidade" %}: <span class="fw-semibold text-primary">{{ item.quantity }}</span></p>
                     <div class="d-grid gap-2">

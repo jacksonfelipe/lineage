@@ -1,5 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load i18n l10n %}
+{% load static %}
 
 {% block content %}
 <div class="container py-5">
@@ -23,7 +24,13 @@
 
         <div class="mb-3">
           <label class="form-label fw-semibold">{% trans "Item" %}</label>
-          <input type="text" class="form-control" value="{{ item_name }}" readonly>
+          <div class="d-flex align-items-center">
+            <img src="{% static 'assets/img/l2/icons/5-' %}{{ item_id }}.jpg"
+                 alt="{{ item_name|unlocalize }}"
+                 class="me-3 rounded border border-secondary"
+                 style="width: 32px; height: 32px;">
+            <strong class="mb-0">{{ item_name }}</strong>
+          </div>
           <input type="hidden" name="item_id" value="{{ item_id }}">
         </div>
 

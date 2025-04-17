@@ -1,5 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load i18n %}
+{% load static %}
 
 {% block content %}
 <div class="container py-5">
@@ -26,8 +27,12 @@
       <tbody>
         {% for item in itens_globais %}
         <tr>
-          <td class="fw-bold text-white">
-            <i class="bi bi-box-seam me-2 text-warning"></i>{{ item.item_name }}
+          <td class="fw-bold text-white d-flex align-items-center">
+            <img src="{% static 'assets/img/l2/icons/5-' %}{{ item.item_id|unlocalize }}.jpg"
+                 alt="{{ item.item_name }}"
+                 class="me-2 rounded border border-secondary"
+                 style="width: 32px; height: 32px;">
+            {{ item.item_name }}
           </td>
           <td class="text-end">
             <span class="badge bg-success fs-6 px-3 py-2 rounded-pill">{{ item.total_quantity }}</span>
