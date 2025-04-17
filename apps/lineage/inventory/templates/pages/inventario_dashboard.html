@@ -4,65 +4,70 @@
 {% block content %}
 <div class="container py-5">
 
-  <!-- Header do Inventário -->
+  <!-- Header -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold text-primary">
       <i class="bi bi-backpack2-fill me-2"></i>{% trans "Meu Inventário" %}
     </h2>
-    <a href="{% url 'inventory:retirar_item' %}" class="btn btn-primary rounded-pill px-4 shadow-sm transition">
-      <i class="bi bi-plus-circle me-2"></i>{% trans "Adicionar Item" %}
-    </a>
-  </div>
-
-  <!-- Personagens -->
-  <div class="mb-5">
-    <h5 class="text-primary mb-3">{% trans "Seus Personagens" %}</h5>
-    <div class="d-flex flex-wrap gap-3">
-      {% for inv in inventories %}
-      <div class="card bg-dark text-white border-0 shadow-lg rounded-4 p-3 d-flex align-items-center transition" style="width: 220px;">
-        <div class="text-center">
-          <i class="bi bi-person-circle display-4 mb-3 text-primary"></i>
-          <h6 class="fw-bold mb-0">{{ inv.character_name }}</h6>
-          <span class="badge {% if inv.is_online %}bg-danger{% else %}bg-success{% endif %} mt-2 py-1 px-3 rounded-pill">
-            {% if inv.is_online %}{% trans "Online" %}{% else %}{% trans "Offline" %}{% endif %}
-          </span>
-        </div>
-      </div>
-      {% endfor %}
+    <div class="d-flex gap-3">
+      <a href="{% url 'inventory:retirar_item' %}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm transition">
+        <i class="bi bi-plus-circle me-2"></i>{% trans "Adicionar Item" %}
+      </a>
+      <a href="{% url 'inventory:inventario_global' %}" class="btn btn-primary rounded-pill px-4 shadow-sm transition">
+        <i class="bi bi-boxes me-2"></i>{% trans "Inventário Global" %}
+      </a>
     </div>
   </div>
 
-  <!-- Itens no Inventário -->
-  <div class="mt-5">
-    <h5 class="text-primary mb-3">{% trans "Itens" %}</h5>
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-      {% for item in items %}
-      <div class="col">
-        <div class="card bg-dark border-0 shadow-lg text-white rounded-4 overflow-hidden transition h-100">
-          <div class="card-body text-center py-4 d-flex flex-column justify-content-between h-100">
-            <i class="bi bi-gem display-4 mb-3 text-warning"></i>
-            <h5 class="fw-bold mb-2">{{ item.item_name }}</h5>
-            <p class="mb-3 small text-muted">{% trans "Quantidade" %}: <span class="fw-semibold text-white">{{ item.quantity }}</span></p>
-            <div class="d-grid gap-2">
-              <a href="{% url 'inventory:inserir_item' %}?item_id={{ item.item_id }}" class="btn btn-outline-success btn-sm rounded-pill">
-                <i class="bi bi-upload me-1"></i>{% trans "Inserir" %}
-              </a>
-              <a href="{% url 'inventory:trocar_item' %}?item_id={{ item.item_id }}" class="btn btn-outline-warning btn-sm rounded-pill">
-                <i class="bi bi-arrow-left-right me-1"></i>{% trans "Trocar" %}
-              </a>
-            </div>
+  <!-- Personagens com seus itens -->
+  {% for data in inventory_data %}
+    <div class="card bg-dark text-white border-0 shadow-lg rounded-4 mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center bg-primary rounded-top-4 p-3">
+        <div>
+          <i class="bi bi-person-circle me-2 text-secondary"></i>
+          <strong class="text-secondary">{{ data.inventory.character_name }}</strong>
+          <span class="badge {% if data.inventory.is_online %}bg-danger{% else %}bg-success{% endif %} ms-2">
+            {% if data.inventory.is_online %}{% trans "Online" %}{% else %}{% trans "Offline" %}{% endif %}
+          </span>
+        </div>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill" type="button" data-bs-toggle="collapse" data-bs-target="#inv{{ data.inventory.id }}">
+          <i class="bi bi-box-seam me-1"></i>{% trans "Itens" %}
+        </button>
+      </div>
+
+      <div id="inv{{ data.inventory.id }}" class="collapse show">
+        <div class="card-body">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            {% for item in data.items %}
+              <div class="col">
+                <div class="card bg-dark border-0 shadow text-white rounded-4 overflow-hidden h-100">
+                  <div class="card-body text-center py-4 d-flex flex-column justify-content-between h-100">
+                    <i class="bi bi-gem display-4 mb-3 text-warning"></i>
+                    <h5 class="fw-bold mb-2 text-primary">{{ item.item_name }}</h5>
+                    <p class="mb-3 small text-primary">{% trans "Quantidade" %}: <span class="fw-semibold text-primary">{{ item.quantity }}</span></p>
+                    <div class="d-grid gap-2">
+                      <a href="{% url 'inventory:inserir_item' %}?item_id={{ item.item_id }}" class="btn btn-outline-success btn-sm rounded-pill">
+                        <i class="bi bi-upload me-1"></i>{% trans "Inserir" %}
+                      </a>
+                      <a href="{% url 'inventory:trocar_item' %}?item_id={{ item.item_id }}" class="btn btn-outline-warning btn-sm rounded-pill">
+                        <i class="bi bi-arrow-left-right me-1"></i>{% trans "Trocar" %}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+              <div class="col">
+                <div class="alert alert-info rounded-4 text-center text-primary">
+                  {% trans "Nenhum item no inventário." %}
+                </div>
+              </div>
+            {% endfor %}
           </div>
         </div>
       </div>
-      {% empty %}
-      <div class="col">
-        <div class="alert alert-info rounded-4 text-center">
-          {% trans "Nenhum item no inventário." %}
-        </div>
-      </div>
-      {% endfor %}
     </div>
-  </div>
+  {% endfor %}
 
 </div>
 {% endblock %}

@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate
 
 import os, json
 from django.conf import settings
+from django.db.models import Sum
 
 from .models import Inventory, InventoryItem
 from apps.lineage.server.database import LineageDB
@@ -88,6 +89,24 @@ def retirar_item_servidor(request):
         if not success:
             messages.error(request, 'Falha ao remover o item do jogo.')
             return redirect(f"{request.path}?char_id={char_id}")
+        
+        # Localiza ou cria o inventário online do personagem
+        inventory, _ = Inventory.objects.get_or_create(
+            user=request.user,
+            account_name=request.user.username,
+            character_name=personagem[0]['char_name']
+        )
+
+        # Verifica se já existe esse item no inventário
+        inventory_item, _ = InventoryItem.objects.get_or_create(
+            inventory=inventory,
+            item_id=item_id,
+            defaults={'item_name': itens_data[str(item_id)][0], 'quantity': 0}
+        )
+
+        # Atualiza a quantidade
+        inventory_item.quantity += quantity
+        inventory_item.save()
 
         messages.success(request, 'Item transferido com sucesso!')
         return redirect(f"{request.path}?char_id={char_id}")
@@ -195,10 +214,30 @@ def trocar_item_com_jogador(request):
 @login_required
 def inventario_dashboard(request):
     inventories = Inventory.objects.filter(user=request.user)
-    items = InventoryItem.objects.filter(inventory__in=inventories)
+    inventory_data = []
+
     for inv in inventories:
-        inv.is_online = False  # você pode ajustar com seu TransferFromCharToWallet se quiser exibir online real
+        inv.is_online = False  # ou use TransferFromCharToWallet pra pegar status real
+        inv_items = InventoryItem.objects.filter(inventory=inv)
+        inventory_data.append({
+            'inventory': inv,
+            'items': inv_items
+        })
+
     return render(request, 'pages/inventario_dashboard.html', {
-        'inventories': inventories,
-        'items': items
+        'inventory_data': inventory_data
     })
+
+
+@login_required
+def inventario_global(request):
+    # Agrupar os itens de todos os inventários do usuário e somar as quantidades
+    itens_globais = InventoryItem.objects.filter(inventory__user=request.user) \
+        .values('item_id', 'item_name') \
+        .annotate(total_quantity=Sum('quantity')) \
+        .order_by('-total_quantity')
+
+    return render(request, 'pages/inventario_global.html', {
+        'itens_globais': itens_globais
+    })
+    
