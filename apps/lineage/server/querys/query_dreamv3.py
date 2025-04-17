@@ -682,12 +682,11 @@ class TransferFromCharToWallet:
                     if db.update(delete_query, {"item_type": inve_id, "char_id": char_id}) is None:
                         return False
                 else:
-                    print("aqui")
                     update_query = """
-                        UPDATE items SET amount = amount - :amount_item 
-                        WHERE item_type = :item_type AND owner_id = :char_id
+                        UPDATE items SET amount = amount - :count 
+                        WHERE item_type = :inve_id AND owner_id = :char_id
                     """
-                    if db.update(update_query, {"amount_item": count, "item_type": inve_id, "char_id": char_id}) is None:
+                    if db.update(update_query, {"count": count, "inve_id": inve_id, "char_id": char_id}) is None:
                         return False
 
                     # Verificar se a quantidade foi reduzida a 0 e remover o item se necessário

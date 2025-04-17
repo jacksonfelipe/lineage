@@ -7,9 +7,7 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.engine import Engine, Result
 
-
 load_dotenv()
-
 
 class LineageDB:
     _instance = None
@@ -76,13 +74,26 @@ class LineageDB:
     def _set_cache(self, query: str, params: Tuple, data: List[Dict]):
         self.cache[(query, params)] = (data, time.time())
 
-    def _safe_execute(self, query: str, params: Dict[str, Any]) -> Optional[Result]:
+    def _safe_execute_read(self, query: str, params: Dict[str, Any]) -> Optional[Result]:
         if not self.engine:
             print("⚠️ Sem conexão com o banco")
             return None
         try:
             query, normalized_params = self._normalize_params(query, params)
             with self.engine.connect() as conn:
+                stmt = text(query)
+                return conn.execute(stmt, normalized_params)
+        except SQLAlchemyError as e:
+            print(f"❌ Erro na execução: {e}")
+            return None
+
+    def _safe_execute_write(self, query: str, params: Dict[str, Any]) -> Optional[Result]:
+        if not self.engine:
+            print("⚠️ Sem conexão com o banco")
+            return None
+        try:
+            query, normalized_params = self._normalize_params(query, params)
+            with self.engine.begin() as conn:
                 stmt = text(query)
                 return conn.execute(stmt, normalized_params)
         except SQLAlchemyError as e:
@@ -109,7 +120,7 @@ class LineageDB:
             if cached is not None:
                 return cached
 
-        result = self._safe_execute(query, params)
+        result = self._safe_execute_read(query, params)
         if result is None:
             return None
 
@@ -122,19 +133,20 @@ class LineageDB:
         return self._execute_and_get(query, params, "lastrowid")
 
     def update(self, query: str, params: Dict[str, Any] = {}) -> Optional[int]:
-        return self._execute_and_get(query, params, "rowcount")
+        affected_rows = self._execute_and_get(query, params, "rowcount")
+        return affected_rows
 
     def delete(self, query: str, params: Dict[str, Any] = {}) -> Optional[int]:
         return self._execute_and_get(query, params, "rowcount")
 
     def _execute_and_get(self, query: str, params: Dict[str, Any], attr: str) -> Optional[int]:
-        result = self._safe_execute(query, params)
+        result = self._safe_execute_write(query, params)
         if result is None:
             return None
         return getattr(result, attr, None)
 
     def execute_raw(self, query: str, params: Dict[str, Any] = {}) -> bool:
-        return self._safe_execute(query, params) is not None
+        return self._safe_execute_write(query, params) is not None
 
     def clear_cache(self):
         self.cache.clear()
