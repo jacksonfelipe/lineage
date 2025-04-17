@@ -93,7 +93,7 @@
             <!-- Quantidade -->
             <div class="mb-3">
               <label class="form-label fw-semibold" for="quantity">{% trans "Quantidade" %}</label>
-              <input type="number" class="form-control" id="quantity" name="quantity" required>
+              <input type="number" class="form-control" id="quantity" name="quantity" min="1" required>
             </div>
 
             <!-- Senha -->
@@ -130,16 +130,25 @@
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const rows = document.querySelectorAll(".clickable-row");
+    const itemIdInput = document.getElementById("item_id");
+    const quantityInput = document.getElementById("quantity");
+    const itemNameInput = document.getElementById("item_name");
+  
     rows.forEach(row => {
       row.addEventListener("click", () => {
         const itemId = row.getAttribute("data-item-id");
-        const itemAmount = row.getAttribute("data-item-amount");
+        let itemAmount = row.getAttribute("data-item-amount");
         const itemName = row.getAttribute("data-item-name");
-        document.getElementById("item_id").value = itemId;
-        document.getElementById("quantity").value = itemAmount;
-        document.getElementById("item_name").value = itemName;
+  
+        // Garante que itemAmount é string, depois remove tudo que não for número
+        itemAmount = String(itemAmount).replace(/[^\d]/g, '');
+  
+        itemIdInput.value = itemId;
+        quantityInput.value = itemAmount;
+        quantityInput.max = itemAmount;
+        itemNameInput.value = itemName;
       });
     });
-  });
+  });  
 </script>
 {% endblock %}
