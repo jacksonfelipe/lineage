@@ -90,37 +90,37 @@ def checkout(request):
 
     # Adicionar os itens do carrinho no inventário
     for cart_item in cart.cartitem_set.all():
+        quantidade_total = cart_item.quantidade * cart_item.item.quantidade
+
         existing_item = InventoryItem.objects.filter(inventory=inventory, item_id=cart_item.item.item_id).first()
 
         if existing_item:
-            # Atualiza a quantidade do item existente
-            existing_item.quantity += cart_item.quantidade
+            existing_item.quantity += quantidade_total
             existing_item.save()
         else:
-            # Cria um novo item no inventário
             InventoryItem.objects.create(
                 inventory=inventory,
                 item_id=cart_item.item.item_id,
                 item_name=cart_item.item.nome,
-                quantity=cart_item.quantidade
+                quantity=quantidade_total
             )
 
     # Adicionar os itens dos pacotes no inventário
     for cart_package in cart.cartpackage_set.all():
         for pacote_item in cart_package.pacote.shoppackageitem_set.all():
+            quantidade_total = pacote_item.quantidade * pacote_item.item.quantidade * cart_package.quantidade
+
             existing_item = InventoryItem.objects.filter(inventory=inventory, item_id=pacote_item.item.item_id).first()
 
             if existing_item:
-                # Atualiza a quantidade do item do pacote existente
-                existing_item.quantity += pacote_item.quantidade * cart_package.quantidade
+                existing_item.quantity += quantidade_total
                 existing_item.save()
             else:
-                # Cria um novo item do pacote no inventário
                 InventoryItem.objects.create(
                     inventory=inventory,
                     item_id=pacote_item.item.item_id,
                     item_name=pacote_item.item.nome,
-                    quantity=pacote_item.quantidade * cart_package.quantidade
+                    quantity=quantidade_total
                 )
 
     # Registrar a compra
