@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db import transaction
 from .models import ShopItem, ShopPackage, Cart, CartItem, CartPackage, PromotionCode, ShopPurchase
 from apps.lineage.wallet.signals import aplicar_transacao
 from apps.lineage.inventory.models import InventoryItem, Inventory
@@ -27,10 +28,26 @@ def view_cart(request):
 def add_item_to_cart(request, item_id):
     cart, _ = Cart.objects.get_or_create(user=request.user)
     item = get_object_or_404(ShopItem, id=item_id, ativo=True)
+    
+    quantidade = int(request.POST.get('quantidade', 1))
+    if quantidade < 1:
+        messages.error(request, "A quantidade deve ser maior que zero.")
+        return redirect('shop:shop_home')
+        
+    if quantidade > 99:  # Limite máximo por item
+        messages.error(request, "Quantidade máxima excedida.")
+        return redirect('shop:shop_home')
+    
     cart_item, created = CartItem.objects.get_or_create(cart=cart, item=item)
     if not created:
-        cart_item.quantidade += 1
+        cart_item.quantidade += quantidade
+        if cart_item.quantidade > 99:
+            messages.error(request, "Quantidade máxima no carrinho excedida.")
+            return redirect('shop:shop_home')
+    else:
+        cart_item.quantidade = quantidade
     cart_item.save()
+    
     messages.success(request, f"{item.nome} adicionado ao carrinho.")
     return redirect('shop:shop_home')
 
@@ -77,62 +94,82 @@ def checkout(request):
         return redirect('shop:view_cart')
 
     personagem = request.POST.get('character_name')
-    if not personagem:
-        messages.error(request, "Informe o nome do personagem para entrega.")
+    if not personagem or len(personagem.strip()) < 3:
+        messages.error(request, "Informe um nome de personagem válido para entrega (mínimo 3 caracteres).")
         return redirect('shop:view_cart')
 
-    # Descontar do saldo
-    aplicar_transacao(wallet, 'SAIDA', total, descricao="Compra no Shop")
+    if not cart.cartitem_set.exists() and not cart.cartpackage_set.exists():
+        messages.error(request, "Seu carrinho está vazio.")
+        return redirect('shop:view_cart')
 
-    # Enviar itens e pacotes para o inventário
-    inventory, _ = Inventory.objects.get_or_create(user=request.user, account_name=request.user.username, character_name=personagem)
+    try:
+        with transaction.atomic():
+            # Descontar do saldo
+            aplicar_transacao(wallet, 'SAIDA', total, descricao="Compra no Shop")
 
-    # Adicionar os itens do carrinho no inventário
-    for cart_item in cart.cartitem_set.all():
-        quantidade_total = cart_item.quantidade * cart_item.item.quantidade
-
-        existing_item = InventoryItem.objects.filter(inventory=inventory, item_id=cart_item.item.item_id).first()
-
-        if existing_item:
-            existing_item.quantity += quantidade_total
-            existing_item.save()
-        else:
-            InventoryItem.objects.create(
-                inventory=inventory,
-                item_id=cart_item.item.item_id,
-                item_name=cart_item.item.nome,
-                quantity=quantidade_total
+            # Enviar itens e pacotes para o inventário
+            inventory, _ = Inventory.objects.get_or_create(
+                user=request.user,
+                account_name=request.user.username,
+                character_name=personagem
             )
 
-    # Adicionar os itens dos pacotes no inventário
-    for cart_package in cart.cartpackage_set.all():
-        for pacote_item in cart_package.pacote.shoppackageitem_set.all():
-            quantidade_total = pacote_item.quantidade * pacote_item.item.quantidade * cart_package.quantidade
+            # Adicionar os itens do carrinho no inventário
+            for cart_item in cart.cartitem_set.all():
+                quantidade_total = cart_item.quantidade * cart_item.item.quantidade
 
-            existing_item = InventoryItem.objects.filter(inventory=inventory, item_id=pacote_item.item.item_id).first()
-
-            if existing_item:
-                existing_item.quantity += quantidade_total
-                existing_item.save()
-            else:
-                InventoryItem.objects.create(
+                existing_item = InventoryItem.objects.filter(
                     inventory=inventory,
-                    item_id=pacote_item.item.item_id,
-                    item_name=pacote_item.item.nome,
-                    quantity=quantidade_total
-                )
+                    item_id=cart_item.item.item_id
+                ).first()
 
-    # Registrar a compra
-    ShopPurchase.objects.create(
-        user=request.user,
-        character_name=personagem,
-        total_pago=total,
-        promocao_aplicada=cart.promocao_aplicada
-    )
+                if existing_item:
+                    existing_item.quantity += quantidade_total
+                    existing_item.save()
+                else:
+                    InventoryItem.objects.create(
+                        inventory=inventory,
+                        item_id=cart_item.item.item_id,
+                        item_name=cart_item.item.nome,
+                        quantity=quantidade_total
+                    )
 
-    cart.limpar()
-    messages.success(request, "Compra realizada com sucesso! Itens enviados para o inventário.")
-    return redirect('shop:purchase_history')
+            # Adicionar os itens dos pacotes no inventário
+            for cart_package in cart.cartpackage_set.all():
+                for pacote_item in cart_package.pacote.shoppackageitem_set.all():
+                    quantidade_total = pacote_item.quantidade * pacote_item.item.quantidade * cart_package.quantidade
+
+                    existing_item = InventoryItem.objects.filter(
+                        inventory=inventory,
+                        item_id=pacote_item.item.item_id
+                    ).first()
+
+                    if existing_item:
+                        existing_item.quantity += quantidade_total
+                        existing_item.save()
+                    else:
+                        InventoryItem.objects.create(
+                            inventory=inventory,
+                            item_id=pacote_item.item.item_id,
+                            item_name=pacote_item.item.nome,
+                            quantity=quantidade_total
+                        )
+
+            # Registrar a compra
+            ShopPurchase.objects.create(
+                user=request.user,
+                character_name=personagem,
+                total_pago=total,
+                promocao_aplicada=cart.promocao_aplicada
+            )
+
+            cart.limpar()
+            messages.success(request, "Compra realizada com sucesso! Itens enviados para o inventário.")
+            return redirect('shop:purchase_history')
+
+    except Exception as e:
+        messages.error(request, "Erro ao processar a compra. Por favor, tente novamente.")
+        return redirect('shop:view_cart')
 
 
 @login_required
