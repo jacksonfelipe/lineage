@@ -20,5 +20,8 @@ class InventoryItem(BaseModel):
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('inventory', 'item_id')  # Garantir que o item seja único no inventário
+
     def __str__(self):
         return f"{self.item_name} x{self.quantity}"

@@ -88,22 +88,40 @@ def checkout(request):
     # Enviar itens e pacotes para o inventário
     inventory, _ = Inventory.objects.get_or_create(user=request.user, account_name=request.user.username, character_name=personagem)
 
+    # Adicionar os itens do carrinho no inventário
     for cart_item in cart.cartitem_set.all():
-        InventoryItem.objects.create(
-            inventory=inventory,
-            item_id=cart_item.item.item_id,
-            item_name=cart_item.item.nome,
-            quantity=cart_item.quantidade
-        )
+        existing_item = InventoryItem.objects.filter(inventory=inventory, item_id=cart_item.item.item_id).first()
 
-    for cart_package in cart.cartpackage_set.all():
-        for pacote_item in cart_package.pacote.shoppackageitem_set.all():
+        if existing_item:
+            # Atualiza a quantidade do item existente
+            existing_item.quantity += cart_item.quantidade
+            existing_item.save()
+        else:
+            # Cria um novo item no inventário
             InventoryItem.objects.create(
                 inventory=inventory,
-                item_id=pacote_item.item.item_id,
-                item_name=pacote_item.item.nome,
-                quantity=pacote_item.quantidade * cart_package.quantidade
+                item_id=cart_item.item.item_id,
+                item_name=cart_item.item.nome,
+                quantity=cart_item.quantidade
             )
+
+    # Adicionar os itens dos pacotes no inventário
+    for cart_package in cart.cartpackage_set.all():
+        for pacote_item in cart_package.pacote.shoppackageitem_set.all():
+            existing_item = InventoryItem.objects.filter(inventory=inventory, item_id=pacote_item.item.item_id).first()
+
+            if existing_item:
+                # Atualiza a quantidade do item do pacote existente
+                existing_item.quantity += pacote_item.quantidade * cart_package.quantidade
+                existing_item.save()
+            else:
+                # Cria um novo item do pacote no inventário
+                InventoryItem.objects.create(
+                    inventory=inventory,
+                    item_id=pacote_item.item.item_id,
+                    item_name=pacote_item.item.nome,
+                    quantity=pacote_item.quantidade * cart_package.quantidade
+                )
 
     # Registrar a compra
     ShopPurchase.objects.create(
