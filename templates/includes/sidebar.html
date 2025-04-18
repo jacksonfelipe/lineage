@@ -60,6 +60,20 @@
 
       <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
 
+      <li class="nav-item {% if 'shop' in segment %}active{% endif %}">
+        <a href="{% url 'shop:shop_home' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 3a1 1 0 000 2h1l1 9a2 2 0 002 2h6a2 2 0 002-2l1-9h1a1 1 0 100-2H4zm2 2h8l-1 9H7L6 5z"></path>
+              <path d="M9 13a1 1 0 102 0 1 1 0 00-2 0z"></path>
+            </svg>
+          </span>
+          <span class="sidebar-text">{% trans "Loja Online" %}</span>
+        </a>
+      </li>      
+
+      <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
+
       <li class="nav-item {% if 'faq' in segment %}active{% endif %}">
         <a href="{% url 'faq:faq_list' %}" class="nav-link">
           <span class="sidebar-icon">

@@ -1,0 +1,37 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card border-0 shadow-lg rounded-4">
+    <div class="card-header bg-primary text-white rounded-top-4 py-3 px-4">
+      <h4 class="mb-0 fw-bold">Cadastro de Itens</h4>
+    </div>
+    <div class="card-body px-5 py-4">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success rounded-pill">Cadastrar Item</button>
+      </form>
+
+      <hr class="my-4">
+
+      <h5 class="fw-bold">Itens Cadastrados</h5>
+      <ul class="list-group">
+        {% for item in items %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ item.nome }} — R${{ item.preco }}
+            {% if item.ativo %}
+              <span class="badge bg-success">Ativo</span>
+            {% else %}
+              <span class="badge bg-secondary">Inativo</span>
+            {% endif %}
+          </li>
+        {% empty %}
+          <li class="list-group-item">Nenhum item cadastrado.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

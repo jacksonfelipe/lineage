@@ -1,0 +1,64 @@
+{% extends "layouts/base.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div class="container py-5">
+  <h3 class="fw-bold mb-4">
+    <i class="bi bi-cart4 me-2"></i>{% trans "Meu Carrinho" %}
+  </h3>
+
+  {% if cart.cartitem_set.all or cart.cartpackage_set.all %}
+  <div class="mb-4">
+    <h5 class="fw-semibold">{% trans "Itens no Carrinho" %}</h5>
+    <ul class="list-group mb-3">
+      {% for ci in cart.cartitem_set.all %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>
+          <img src="{% static 'assets/img/l2/icons/5-' %}{{ ci.item.item_id }}.jpg" class="me-2" style="width:24px;">
+          {{ ci.item.nome }} x{{ ci.quantidade }}
+        </span>
+        <strong>R$ {{ ci.item.preco|floatformat:2 }}</strong>
+      </li>
+      {% endfor %}
+      {% for cp in cart.cartpackage_set.all %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>
+          📦 {{ cp.pacote.nome }} x{{ cp.quantidade }}
+        </span>
+        <strong>R$ {{ cp.pacote.preco_total|floatformat:2 }}</strong>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <form method="post" action="{% url 'shop:apply_promo_code' %}" class="mb-3 d-flex">
+      {% csrf_token %}
+      <input type="text" name="promo_code" class="form-control rounded-start-pill" placeholder="{% trans 'Código promocional' %}">
+      <button type="submit" class="btn btn-success rounded-end-pill ms-2">
+        <i class="bi bi-ticket-perforated me-1"></i>{% trans "Aplicar" %}
+      </button>
+    </form>
+
+    <div class="text-end mb-3">
+      <h5 class="fw-bold">
+        {% trans "Total" %}: R$ {{ cart.calcular_total|floatformat:2 }}
+      </h5>
+    </div>
+
+    <form method="post" action="{% url 'shop:checkout' %}">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label fw-semibold">{% trans "Personagem para Entrega" %}</label>
+        <input type="text" name="character_name" class="form-control rounded-3" required>
+      </div>
+      <div class="text-end">
+        <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">
+          <i class="bi bi-credit-card me-2"></i>{% trans "Finalizar Compra" %}
+        </button>
+      </div>
+    </form>
+  </div>
+  {% else %}
+  <p>{% trans "Seu carrinho está vazio." %}</p>
+  {% endif %}
+</div>
+{% endblock %}

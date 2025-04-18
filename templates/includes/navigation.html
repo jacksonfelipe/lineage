@@ -107,7 +107,10 @@
                 <div class="submenu-items mt-1 ms-4 d-none" id="configSubmenu">
                   <a class="dropdown-item" href="{% url 'server:api_config_panel' %}">{% trans "API" %}</a>
                   <a class="dropdown-item" href="{% url 'wallet:coin_config_panel' %}">{% trans "Moedas" %}</a>
-                </div>
+                  <a class="dropdown-item" href="{% url 'shop:admin_items' %}">{% trans "Itens do Shop" %}</a>
+                  <a class="dropdown-item" href="{% url 'shop:admin_packages' %}">{% trans "Pacotes" %}</a>
+                  <a class="dropdown-item" href="{% url 'shop:admin_promotions' %}">{% trans "Promoções" %}</a>
+                </div>                
               </div>
             {% endif %}
 
