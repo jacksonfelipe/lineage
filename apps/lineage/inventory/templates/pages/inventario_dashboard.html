@@ -27,7 +27,7 @@
         <div>
           <i class="bi bi-person-circle me-2 text-secondary"></i>
           <strong class="text-secondary">{{ data.inventory.character_name }}</strong>
-          <span class="badge {% if data.inventory.is_online %}bg-danger{% else %}bg-success{% endif %} ms-2">
+          <span class="badge {% if data.inventory.is_online %}bg-success{% else %}bg-danger{% endif %} ms-2">
             {% if data.inventory.is_online %}{% trans "Online" %}{% else %}{% trans "Offline" %}{% endif %}
           </span>
         </div>
