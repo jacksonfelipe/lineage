@@ -15,26 +15,6 @@ class ShopItem(BaseModel):
         return f"{self.nome} ({self.quantidade}x) — R${self.preco}"
 
 
-class ShopPackage(BaseModel):
-    nome = models.CharField(max_length=100)
-    preco_total = models.DecimalField(max_digits=10, decimal_places=2)
-    itens = models.ManyToManyField(ShopItem, through='ShopPackageItem')
-    ativo = models.BooleanField(default=True)
-    promocao = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"{self.nome} — R${self.preco_total}"
-
-
-class ShopPackageItem(models.Model):
-    pacote = models.ForeignKey(ShopPackage, on_delete=models.CASCADE)
-    item = models.ForeignKey(ShopItem, on_delete=models.CASCADE)
-    quantidade = models.PositiveIntegerField(default=1)
-
-    def __str__(self):
-        return f"{self.pacote.nome} — {self.item.nome} x{self.quantidade}"
-
-
 class PromotionCode(BaseModel):
     codigo = models.CharField(max_length=50, unique=True)
     desconto_percentual = models.DecimalField(max_digits=5, decimal_places=2)
@@ -50,6 +30,28 @@ class PromotionCode(BaseModel):
 
     def __str__(self):
         return f"{self.codigo} — {self.desconto_percentual}%"
+
+
+class ShopPackage(BaseModel):
+    nome = models.CharField(max_length=100)
+    preco_total = models.DecimalField(max_digits=10, decimal_places=2)
+    itens = models.ManyToManyField(ShopItem, through='ShopPackageItem')
+    ativo = models.BooleanField(default=True)
+    promocao = models.ForeignKey(
+        PromotionCode, null=True, blank=True, on_delete=models.SET_NULL
+    )
+
+    def __str__(self):
+        return f"{self.nome} — R${self.preco_total}"
+
+
+class ShopPackageItem(BaseModel):
+    pacote = models.ForeignKey(ShopPackage, on_delete=models.CASCADE)
+    item = models.ForeignKey(ShopItem, on_delete=models.CASCADE)
+    quantidade = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.pacote.nome} — {self.item.nome} x{self.quantidade}"
 
 
 class Cart(BaseModel):
@@ -75,7 +77,7 @@ class Cart(BaseModel):
         return f"Carrinho de {self.user.username}"
 
 
-class CartItem(models.Model):
+class CartItem(BaseModel):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     item = models.ForeignKey(ShopItem, on_delete=models.CASCADE)
     quantidade = models.PositiveIntegerField(default=1)
@@ -84,7 +86,7 @@ class CartItem(models.Model):
         return f"{self.quantidade}x {self.item.nome} (Carrinho de {self.cart.user.username})"
 
 
-class CartPackage(models.Model):
+class CartPackage(BaseModel):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     pacote = models.ForeignKey(ShopPackage, on_delete=models.CASCADE)
     quantidade = models.PositiveIntegerField(default=1)

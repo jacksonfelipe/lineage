@@ -4,13 +4,12 @@ from django.contrib import messages
 from .models import ShopItem, ShopPackage, Cart, CartItem, CartPackage, PromotionCode, ShopPurchase
 from apps.lineage.wallet.signals import aplicar_transacao
 from apps.lineage.inventory.models import InventoryItem, Inventory
-from django.contrib.admin.views.decorators import staff_member_required
-from .forms import ShopItemForm, ShopPackageForm, PromotionCodeForm
 
 
 @login_required
 def shop_home(request):
     items = ShopItem.objects.filter(ativo=True)
+    print(items)
     packages = ShopPackage.objects.filter(ativo=True)
     return render(request, 'shop/home.html', {
         'items': items,
@@ -140,50 +139,3 @@ def checkout(request):
 def purchase_history(request):
     purchases = ShopPurchase.objects.filter(user=request.user).order_by('-data_compra')
     return render(request, 'shop/purchases.html', {'purchases': purchases})
-
-
-@staff_member_required
-def admin_items(request):
-    items = ShopItem.objects.all()
-    if request.method == 'POST':
-        form = ShopItemForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('shop:admin_items')
-    else:
-        form = ShopItemForm()
-
-    return render(request, 'shop/admin_items.html', {'form': form, 'items': items})
-
-
-@staff_member_required
-def admin_packages(request):
-    packages = ShopPackage.objects.all()
-    if request.method == 'POST':
-        form = ShopPackageForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('shop:admin_packages')
-    else:
-        form = ShopPackageForm()
-
-    return render(request, 'shop/admin_packages.html', {'form': form, 'packages': packages})
-
-
-@staff_member_required
-def admin_promotions(request):
-    promotions = PromotionCode.objects.all()
-    if request.method == 'POST':
-        form = PromotionCodeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('shop:admin_promotions')
-    else:
-        form = PromotionCodeForm()
-
-    return render(request, 'shop/admin_promotions.html', {'form': form, 'promotions': promotions})
-
-
-@staff_member_required
-def admin_dashboard(request):
-    return render(request, 'shop/admin_dashboard.html')

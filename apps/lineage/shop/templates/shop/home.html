@@ -1,5 +1,5 @@
 {% extends "layouts/base.html" %}
-{% load i18n static %}
+{% load i18n static l10n %}
 
 {% block content %}
 <div class="container py-5">
@@ -18,7 +18,7 @@
     <div class="col-md-4">
       <div class="card h-100 shadow-sm rounded-4">
         <div class="card-body text-center">
-          <img src="{% static 'assets/img/l2/icons/5-' %}{{ item.item_id }}.jpg" alt="{{ item.nome }}" class="mb-3" style="width: 48px;">
+          <img src="{% static 'assets/img/l2/icons/5-' %}{{ item.item_id|unlocalize }}.jpg" alt="{{ item.nome }}" class="mb-3" style="width: 48px;">
           <h5 class="fw-bold">{{ item.nome }}</h5>
           <p class="mb-1">{% trans "Quantidade" %}: {{ item.quantidade }}</p>
           <p class="fw-semibold text-success">R$ {{ item.preco }}</p>
