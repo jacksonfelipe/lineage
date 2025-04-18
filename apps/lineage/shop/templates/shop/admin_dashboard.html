@@ -1,0 +1,19 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Painel Administrativo do Shop</h2>
+    <div class="row mt-4">
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'shop:admin_items' %}" class="btn btn-primary w-100">Gerenciar Itens</a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'shop:admin_packages' %}" class="btn btn-primary w-100">Gerenciar Pacotes</a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'shop:admin_promotions' %}" class="btn btn-primary w-100">Gerenciar Promoções</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

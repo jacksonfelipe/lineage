@@ -182,3 +182,8 @@ def admin_promotions(request):
         form = PromotionCodeForm()
 
     return render(request, 'shop/admin_promotions.html', {'form': form, 'promotions': promotions})
+
+
+@staff_member_required
+def admin_dashboard(request):
+    return render(request, 'shop/admin_dashboard.html')
