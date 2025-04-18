@@ -25,8 +25,8 @@
         <div class="mb-3">
           <label class="form-label fw-semibold">{% trans "Item" %}</label>
           <div class="d-flex align-items-center">
-            <img src="{% static 'assets/img/l2/icons/5-' %}{{ item_id }}.jpg"
-                 alt="{{ item_name|unlocalize }}"
+            <img src="{% static 'assets/img/l2/icons/5-' %}{{ item_id|unlocalize }}.jpg"
+                 alt="{{ item_name }}"
                  class="me-3 rounded border border-secondary"
                  style="width: 32px; height: 32px;">
             <strong class="mb-0">{{ item_name }}</strong>
