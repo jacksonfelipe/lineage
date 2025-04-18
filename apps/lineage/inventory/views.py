@@ -166,7 +166,11 @@ def inserir_item_servidor(request, char_name, item_id):
             return redirect(request.path)
 
         item.quantity -= quantity
-        item.save()
+
+        if item.quantity == 0:
+            item.delete()
+        else:
+            item.save()
 
         messages.success(request, f'{quantity}x {item.item_name} inserido no servidor com sucesso!')
         return redirect('inventory:inventario_dashboard')
