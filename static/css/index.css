@@ -1,3 +1,16 @@
+.crest-images {
+  display: flex;          /* Usa o modelo de layout flexbox */
+  justify-content: center; /* Centraliza as imagens */
+  gap: 0;                 /* Remove qualquer espaço entre as imagens */
+}
+
+.top-clan-crest {
+  width: auto;  /* Garante que as imagens mantenham suas proporções */
+  height: 12px; /* Define uma altura padrão para as imagens */
+  margin: 0;    /* Remove qualquer margem entre as imagens */
+}
+
+
 .modal-content {
     background-color: var(--bg-section);
     border: 2px solid var(--gold);

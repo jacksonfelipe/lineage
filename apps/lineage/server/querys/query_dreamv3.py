@@ -11,6 +11,33 @@ class LineageStats:
     @staticmethod
     def _run_query(sql, params=None):
         return LineageDB().select(sql, params=params, use_cache=True)
+    
+    @staticmethod
+    @cache_lineage_result(timeout=300)
+    def get_crests(ids, type='clan'):
+        # Verifique se os IDs foram fornecidos
+        if not ids:
+            return []
+
+        # Defina a tabela e a coluna do emblema com base no tipo (clan ou ally)
+        if type == 'ally':
+            table = 'ally_data'
+            id_column = 'ally_id'
+            crest_column = 'crest'
+        else:
+            table = 'clan_data'
+            id_column = 'clan_id'
+            crest_column = 'crest'
+
+        # Construção da consulta SQL para obter as crests dos clãs ou alianças
+        sql = f"""
+            SELECT {id_column}, {crest_column}
+            FROM {table}
+            WHERE {id_column} IN :ids
+        """
+        
+        # Chama a função _run_query para executar a consulta
+        return LineageStats._run_query(sql, {"ids": tuple(ids)})
 
     @staticmethod
     @cache_lineage_result(timeout=300)
@@ -108,7 +135,7 @@ class LineageStats:
     @cache_lineage_result(timeout=300)
     def top_clans(limit=10):
         sql = """
-            SELECT D.name AS clan_name, C.clan_level, C.reputation_score, A.ally_name, 
+            SELECT C.clan_id, D.name AS clan_name, C.clan_level, C.reputation_score, A.ally_name, A.ally_id,
                    P.char_name, 
                    (SELECT COUNT(*) FROM characters WHERE clanid = C.clan_id) AS membros
             FROM clan_data C
