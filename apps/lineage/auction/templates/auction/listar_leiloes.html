@@ -1,0 +1,30 @@
+{% extends "layouts/base.html" %}
+{% load i18n l10n %}
+{% load static %}
+
+{% block content %}
+<h2>Leilões Ativos</h2>
+<table>
+  <tr>
+    <th>Item</th>
+    <th>Vendedor</th>
+    <th>Lance Atual</th>
+    <th>Tempo Restante</th>
+    <th>Ações</th>
+  </tr>
+  {% for leilao in leiloes %}
+  <tr>
+    <td>{{ leilao.item.item_name }}</td>
+    <td>{{ leilao.seller.username }}</td>
+    <td>R$ {{ leilao.current_bid|default:leilao.starting_bid }}</td>
+    <td>{{ leilao.end_time }}</td>
+    <td>
+      <a href="{% url 'auction:fazer_lance' leilao.id %}">Dar Lance</a>
+      {% if leilao.seller == user %}
+        <a href="{% url 'auction:encerrar_leilao' leilao.id %}">Encerrar</a>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
