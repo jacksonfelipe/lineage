@@ -1,0 +1,27 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg p-4">
+    <h2 class="text-center mb-4">{% trans "Remover Henna" %}</h2>
+    
+    <form method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="cid">{% trans "ID do Personagem" %}</label>
+        <input type="text" name="cid" id="cid" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-primary">{% trans "Remover Henna" %}</button>
+    </form>
+
+    {% if messages %}
+      <div class="mt-4">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
