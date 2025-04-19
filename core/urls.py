@@ -24,6 +24,7 @@ urlpatterns = [
     path('app/accountancy/', include('apps.lineage.accountancy.urls')),
     path('app/inventory/', include('apps.lineage.inventory.urls')),
     path('app/shop/', include('apps.lineage.shop.urls')),
+    path('app/auction/', include('apps.lineage.auction.urls')),
 
     # libs externals
     path('', include('serve_files.urls')),

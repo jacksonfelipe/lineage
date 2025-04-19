@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     "apps.lineage.accountancy",
     "apps.lineage.inventory",
     "apps.lineage.shop",
+    "apps.lineage.auction",
 ]
 
 # =========================== MIDDLEWARE CONFIGS ===========================
