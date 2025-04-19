@@ -2,9 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
-from .models import Auction
+from .models import Auction, InventoryItem
 from .services import place_bid, finish_auction
-from apps.lineage.inventory.models import Inventory, InventoryItem
+from apps.lineage.inventory.models import Inventory
 from datetime import timedelta
 from decimal import Decimal, InvalidOperation
 from django.db import transaction
@@ -71,9 +71,15 @@ def criar_leilao(request):
                 else:
                     item.save()
 
-                # Cria o leilão
+                # Cria um item desvinculado do inventário para o leilão
+                auction_item = InventoryItem.objects.create(
+                    item_id=item.item_id,
+                    quantity=quantity
+                )
+
+                # Cria o leilão com o item separado
                 Auction.objects.create(
-                    item=item,
+                    item=auction_item,
                     seller=request.user,
                     starting_bid=starting_bid,
                     end_time=timezone.now() + timedelta(hours=duration_hours)
