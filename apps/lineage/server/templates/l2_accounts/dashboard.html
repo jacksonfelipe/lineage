@@ -1,4 +1,3 @@
-{# templates/server/account/dashboard.html #}
 {% extends "layouts/base.html" %}
 {% load i18n %}
 
@@ -14,11 +13,25 @@
       <li class="list-group-item"><strong>{% trans "Nível de Acesso:" %}</strong> {{ account.status }}</li>
     </ul>
 
-    <div class="d-grid gap-2">
+    <div class="d-grid gap-2 mb-4">
       <a href="{% url 'server:update_password' %}" class="btn btn-outline-primary">
         {% trans "Alterar Senha" %}
       </a>
-      {# Adicione outros botões aqui futuramente, como: mudar email, PIN etc. #}
+    </div>
+
+    <h4 class="text-center mb-3">{% trans "Serviços de Personagem" %}</h4>
+    <div class="d-grid gap-2">
+
+      <a href="{% url 'server:change_nickname' %}" class="btn btn-primary">
+        {% trans "Alterar Nickname" %}
+      </a>
+      <a href="{% url 'server:change_sex' %}" class="btn btn-primary">
+        {% trans "Alterar Sexo do Personagem" %}
+      </a>
+      <a href="{% url 'server:unstuck' %}" class="btn btn-primary">
+        {% trans "Destravar Personagem (Unstuck)" %}
+      </a>
+
     </div>
 
     {% else %}
@@ -26,6 +39,7 @@
       {% trans "Não foi possível carregar os dados da conta." %}
     </div>
     {% endif %}
+
   </div>
 </div>
 {% endblock %}
