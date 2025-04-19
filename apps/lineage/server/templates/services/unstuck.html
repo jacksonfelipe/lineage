@@ -1,5 +1,5 @@
 {% extends "layouts/base.html" %}
-{% load i18n %}
+{% load i18n l10n %}
 
 {% block content %}
 <div class="container mt-5">
@@ -7,7 +7,7 @@
     <h2 class="text-center mb-4">{% trans "Desbugar Personagem" %}</h2>
 
     <p class="text-center mb-3">
-      {% trans "Personagem ID:" %} <strong>{{ char_id }}</strong>
+      {% trans "Personagem:" %} <strong>{{ char_name }}</strong>
     </p>
     
     <form method="POST">

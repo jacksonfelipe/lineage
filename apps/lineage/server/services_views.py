@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 from apps.lineage.wallet.models import Wallet
 from apps.lineage.wallet.signals import aplicar_transacao
 from .models import ServicePrice
+import re
 
 from utils.dynamic_import import get_query_class  
 LineageServices = get_query_class("LineageServices")
@@ -17,12 +18,21 @@ def change_nickname_view(request, char_id):
         price = ServicePrice.objects.get(servico='CHANGE_NICKNAME').preco
     except ServicePrice.DoesNotExist:
         messages.error(request, _("Preço do serviço não configurado."))
-        return redirect("server:account_dashboard")  # Redireciona para a página de dashboard se o preço não estiver configurado
+        return redirect("server:account_dashboard")
+    
+    response = LineageServices.check_char(request.user.username, char_id)
     
     if request.method == "POST":
         acc = request.user.username
         cid = char_id
         name = request.POST.get("name")
+
+        # Regex de validação
+        pattern = r"^([0-9A-Za-z]{2,16})|([0-9\u0410-\u044f]{3,16})$"
+
+        if not re.fullmatch(pattern, name):
+            messages.error(request, _("Nickname inválido. Use de 2 a 16 caracteres latinos ou de 3 a 16 caracteres cirílicos."))
+            return redirect("server:change_nickname", char_id=char_id)
 
         wallet = Wallet.objects.get(usuario=request.user)
 
@@ -41,7 +51,8 @@ def change_nickname_view(request, char_id):
 
     context = {
         'char_id': char_id,
-        'price': price  # Isso agora só será acessado se o serviço estiver configurado
+        'char_name': response[0]['char_name'],
+        'price': price
     }
     return render(request, "services/change_nickname.html", context)
 
@@ -52,12 +63,22 @@ def change_sex_view(request, char_id):
         price = ServicePrice.objects.get(servico='CHANGE_SEX').preco
     except ServicePrice.DoesNotExist:
         messages.error(request, _("Preço do serviço não configurado."))
-        return redirect("server:account_dashboard")  # Redireciona para outra página
+        return redirect("server:account_dashboard")
     
+    response = LineageServices.check_char(request.user.username, char_id)
+
     if request.method == "POST":
         acc = request.user.username
         cid = char_id
-        sex = request.POST.get("sex")
+        sex_input = request.POST.get("sex")
+
+        # Validação
+        if sex_input not in ['M', 'F']:
+            messages.error(request, _("Sexo inválido selecionado."))
+            return redirect("server:change_sex", char_id=char_id)
+
+        # Converte 'F' para 1 e 'M' para 0
+        sex_value = 1 if sex_input == 'F' else 0
 
         wallet = Wallet.objects.get(usuario=request.user)
 
@@ -65,7 +86,7 @@ def change_sex_view(request, char_id):
             messages.error(request, _("Saldo insuficiente na carteira."))
             return redirect("server:change_sex", char_id=char_id)
 
-        result = LineageServices.change_sex(acc, cid, sex)
+        result = LineageServices.change_sex(acc, cid, sex_value)
 
         if result:
             aplicar_transacao(wallet, "SAIDA", price, descricao="Alteração de Sexo")
@@ -76,20 +97,24 @@ def change_sex_view(request, char_id):
 
     context = {
         'char_id': char_id,
-        'price': price  # Isso agora só será acessado se o serviço estiver configurado
+        'price': price,
+        'char_name': response[0]['char_name'],
     }
     return render(request, "services/change_sex.html", context)
 
 
 @login_required
 def unstuck_view(request, char_id):
+
+    response = LineageServices.check_char(request.user.username, char_id)
+
     if request.method == "POST":
         acc = request.user.username
         cid = char_id
         # posições fixas
-        spawn_x = 149999
-        spawn_y = 46728
-        spawn_z = -3414
+        spawn_x = 83400
+        spawn_y = 147940
+        spawn_z = -3404
         result = LineageServices.unstuck(acc, cid, spawn_x, spawn_y, spawn_z)
         if result:
             messages.success(request, _("Personagem desbugado com sucesso!"))
@@ -99,7 +124,8 @@ def unstuck_view(request, char_id):
             return redirect("server:unstuck", char_id=char_id)
 
     context = {
-        'char_id': char_id
+        'char_id': char_id,
+        'char_name': response[0]['char_name'],
     }
     return render(request, "services/unstuck.html", context)
 
