@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ApiEndpointToggle, IndexConfig, IndexConfigTranslation
+from .models import ApiEndpointToggle, IndexConfig, IndexConfigTranslation, ServicePrice
 from core.admin import BaseModelAdmin
 from django.contrib import messages
 
@@ -76,3 +76,8 @@ class IndexConfigAdmin(BaseModelAdmin):
             )
             return
         super().save_model(request, obj, form, change)
+
+
+@admin.register(ServicePrice)
+class ServicePriceAdmin(BaseModelAdmin):
+    list_display = ('servico', 'preco')

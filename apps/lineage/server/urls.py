@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, api_service_views
+from . import views
 from .accounts_views import *
 from .config_views import *
 from .tops_views import *
@@ -45,8 +45,8 @@ urlpatterns = [
     path('status/grandboss/', grandboss_status_view, name='grandboss_status'),
 
     # account management views
-    path('account/change-nickname/', change_nickname_view, name='change_nickname'),
-    path('account/change-sex/', change_sex_view, name='change_sex'),
-    path('account/unstuck/', unstuck_view, name='unstuck'),
-
+    path('account/change-sex/<int:char_id>/', change_sex_view, name='change_sex'),
+    path('account/unstuck/<int:char_id>/', unstuck_view, name='unstuck'),
+    path('account/change-nickname/<int:char_id>/', change_nickname_view, name='change_nickname'),
+    path('configure-service-prices/', configure_service_prices, name='configure_service_prices'),
 ]

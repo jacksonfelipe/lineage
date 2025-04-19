@@ -83,3 +83,23 @@ class IndexConfigTranslation(BaseModel):
 
     def __str__(self):
         return f"{self.nome_servidor} ({self.language})"
+
+
+class ServicePrice(BaseModel):
+    SERVICO_CHOICES = [
+        ('CHANGE_NICKNAME', 'Alterar Nickname'),
+        ('CHANGE_SEX', 'Alterar Sexo'),
+    ]
+
+    servico = models.CharField(max_length=30, choices=SERVICO_CHOICES, unique=True)
+    preco = models.DecimalField(max_digits=10, decimal_places=2, default=10.00)
+
+    def __str__(self):
+        return f"{self.get_servico_display()} - R${self.preco}"
+
+    @classmethod
+    def create_default(cls):
+        # Verifica se já existe um registro. Se não, cria o registro com o preço padrão.
+        if not cls.objects.exists():
+            cls.objects.create(servico='CHANGE_NICKNAME', preco=10.00)
+            cls.objects.create(servico='CHANGE_SEX', preco=10.00)

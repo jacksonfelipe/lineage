@@ -2,26 +2,84 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .decorators import require_lineage_connection
+from datetime import datetime
+from django.utils.timezone import make_aware
+from django.utils.timezone import now
+from utils.resources import gen_avatar, get_class_name
 
 from utils.dynamic_import import get_query_class  # importa o helper
 LineageAccount = get_query_class("LineageAccount")  # carrega a classe certa com base no .env
+LineageServices = get_query_class("LineageServices")
 
 
 @login_required
-@require_lineage_connection
+@require_lineage_connection  # Assumindo que você tem um decorator para verificar a conexão
 def account_dashboard(request):
     user_login = request.user.username
     account_data = LineageAccount.check_login_exists(user_login)
 
     if not account_data or len(account_data) == 0:
-        return redirect('server:lineage_register')  # url que vamos criar abaixo
+        return redirect('server:lineage_register')
 
-    account_data = account_data[0]
-    account_data['status'] = "Ativa" if int(account_data['accessLevel']) >= 0 else "Bloqueada"
+    try:
+        personagens = LineageServices.find_chars(user_login)
+    except Exception as e:
+        personagens = []
+        messages.warning(request, 'Não foi possível carregar seus personagens agora.')
 
-    return render(request, 'l2_accounts/dashboard.html', {
-        'account': account_data,
-    })
+    account = account_data[0]
+    account['status'] = "Ativa" if int(account['accessLevel']) >= 0 else "Bloqueada"
+
+    # Formata data de criação
+    created_time = None
+    if account.get('created_time'):
+        try:
+            created_time = make_aware(datetime.strptime(account['created_time'], '%Y-%m-%d %H:%M:%S'))
+        except:
+            try:
+                created_time = make_aware(datetime.fromtimestamp(int(account['created_time'])))
+            except:
+                created_time = None
+
+    # Status dos personagens
+    char_list = []
+    for char in personagens:
+
+        # Verificando se o campo 'level' existe antes de acessá-lo
+        level = char.get('base_level', '-')
+
+        char_list.append({
+            'id': char['obj_Id'],
+            'nome': char['char_name'],
+            'title': char.get('title', '-'),
+            'lastAccess': datetime.fromtimestamp(int(char['lastAccess']) / 1000).strftime('%B %d, %Y às %H:%M') if char.get('lastAccess') else '-',
+            'online': 'Online' if char.get('online') else 'Offline',
+            'base_class': get_class_name(char['base_class']),
+            'subclass1': get_class_name(char['subclass1']) if char.get('subclass1') else '-',
+            'subclass2': get_class_name(char['subclass2']) if char.get('subclass2') else '-',
+            'subclass3': get_class_name(char['subclass3']) if char.get('subclass3') else '-',
+            'level': level,
+            'sex': 'Feminino' if char['sex'] else 'Masculino',
+            'pvp': char['pvpkills'],
+            'pk': char['pkkills'],
+            'karma': char['karma'],
+            'clan': char.get('clan_name', '-'),
+            'ally': char.get('ally_name', '-'),
+            'nobless': 'Sim' if char.get('nobless') else 'Não',
+            'hero': 'Sim' if char.get('hero_end') and int(char['hero_end']) > int(now().timestamp() * 1000) else 'Não',
+            'avatar': gen_avatar(char['base_class'], char['sex'])
+        })
+
+    context = {
+        'account': account,
+        'created_time': created_time.strftime('%B %d, %Y às %H:%M') if created_time else '-',
+        'lastIP': account.get('lastIP', '-'),
+        'char_count': account.get('chars', 0),
+        'characters': char_list,
+        'char_count': len(char_list)
+    }
+
+    return render(request, 'l2_accounts/dashboard.html', context)
 
 
 @login_required
