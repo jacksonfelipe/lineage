@@ -3,7 +3,12 @@
 
 {% block content %}
 <div class="container my-4">
-  <h2 class="text-center mb-4">{% trans "Leilões Ativos" %}</h2>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">{% trans "Leilões Ativos" %}</h2>
+    <a href="{% url 'auction:criar_leilao' %}" class="btn btn-primary">
+      <i class="bi bi-plus-circle"></i> {% trans "Criar Leilão" %}
+    </a>
+  </div>
 
   {% if leiloes %}
     <div class="row g-4">
@@ -16,9 +21,11 @@
           </div>
           <div class="card-body">
             <div class="d-flex align-items-center mb-3">
-              <img src="{% static 'images/items/'|add:leilao.item.item_id|stringformat:'s'|add:'.png' %}" 
-                   alt="{{ leilao.item.item_name }}" class="me-3 rounded" width="64" height="64"
-                   onerror="this.src='{% static 'images/default-item.png' %}'">
+              <img src="{% static 'assets/img/l2/icons/5-' %}{{ leilao.item.item_id|unlocalize }}.jpg"
+                   alt="{{ leilao.item.item_name }}"
+                   class="me-3 rounded border border-secondary"
+                   style="width: 64px; height: 64px;"
+                   onerror="this.src='{% static 'assets/img/l2/icons/default.jpg' %}'">
               <div>
                 <p class="mb-1">
                   <i class="bi bi-person-fill"></i>

@@ -24,7 +24,7 @@ class PedidoPagamento(BaseModel):
                 wallet=wallet,
                 tipo='ENTRADA',
                 valor=self.moedas_geradas,
-                descricao='Compra de moedas via ' + self.metodo,
+                descricao='Compra de moedas via ADMINISTRADOR (\' + self.metodo + \')',
                 origem='Sistema de Pagamento',
                 destino='Wallet'
             )
