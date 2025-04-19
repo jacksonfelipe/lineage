@@ -9,6 +9,7 @@ from django.views.generic.edit import CreateView
 from .forms import SolicitationForm
 from django.contrib import messages
 from django.shortcuts import redirect
+from utils.notifications import send_notification
 
 
 class SolicitationDashboardView(LoginRequiredMixin, View):
@@ -53,4 +54,14 @@ class SolicitationCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+
+        # Envia notificação para os staffs
+        send_notification(
+            user=None,  # None para broadcast para staff
+            notification_type='staff',
+            message='Relatório sigiloso disponível.',
+            created_by=self.request.user
+        )
+
+        return response

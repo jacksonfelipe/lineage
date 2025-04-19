@@ -13,6 +13,7 @@ import logging
 import hmac
 import hashlib
 import urllib.parse
+from utils.notifications import send_notification
 
 
 logger = logging.getLogger(__name__)
@@ -213,6 +214,14 @@ def notificacao_mercado_pago(request):
                                 pedido = pagamento.pedido_pagamento
                                 pedido.status = 'CONCLUÍDO'
                                 pedido.save()
+
+                                # Notificação para staff
+                                send_notification(
+                                    user=None,
+                                    notification_type='staff',
+                                    message=f"Pagamento aprovado para {pagamento.usuario.username} no valor de R$ {pagamento.valor:.2f}.",
+                                    created_by=pagamento.usuario
+                                )
 
                         return HttpResponse("OK", status=200)
 

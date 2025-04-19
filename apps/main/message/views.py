@@ -12,7 +12,7 @@ from django.http import Http404
 from django.utils import timezone
 from django.core.cache import cache
 
-from apps.main.notification.tasks import create_notification
+from utils.notifications import send_notification
 
 
 import logging
@@ -67,7 +67,12 @@ def send_friend_request(request, user_id):
 
     try:
         message = f"{request.user.username} enviou um pedido de amizade."
-        create_notification.delay(user_id, False, message)
+        send_notification(
+            user=friend,
+            notification_type='user',
+            message=message,
+            created_by=request.user
+        )
     except Exception as e:
         logger.error(f"Erro ao criar notificação: {str(e)}")
 
