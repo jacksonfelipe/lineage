@@ -27,6 +27,10 @@ def change_nickname_view(request, char_id):
         cid = char_id
         name = request.POST.get("name")
 
+        if response[0]['online'] != 0:
+            messages.error(request, 'O personagem precisa estar offline.')
+            return redirect("server:change_nickname", char_id=char_id)
+
         # Regex de validação
         pattern = r"^([0-9A-Za-z]{2,16})|([0-9\u0410-\u044f]{3,16})$"
 
@@ -72,6 +76,10 @@ def change_sex_view(request, char_id):
         cid = char_id
         sex_input = request.POST.get("sex")
 
+        if response[0]['online'] != 0:
+            messages.error(request, 'O personagem precisa estar offline.')
+            return redirect("server:change_nickname", char_id=char_id)
+
         # Validação
         if sex_input not in ['M', 'F']:
             messages.error(request, _("Sexo inválido selecionado."))
@@ -111,6 +119,11 @@ def unstuck_view(request, char_id):
     if request.method == "POST":
         acc = request.user.username
         cid = char_id
+
+        if response[0]['online'] != 0:
+            messages.error(request, 'O personagem precisa estar offline.')
+            return redirect("server:change_nickname", char_id=char_id)
+
         # posições fixas
         spawn_x = 83400
         spawn_y = 147940
