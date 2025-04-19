@@ -2,7 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
-from .models import Auction, InventoryItem
+from .models import Auction
+from apps.lineage.inventory.models import InventoryItem
 from .services import place_bid, finish_auction
 from apps.lineage.inventory.models import Inventory
 from datetime import timedelta
@@ -24,23 +25,33 @@ def fazer_lance(request, auction_id):
     auction = get_object_or_404(Auction, id=auction_id)
 
     if request.method == 'POST':
-        bid_amount_str = request.POST.get('bid_amount')
+        bid_amount_str = request.POST.get('bid_amount', '').strip()  # Garantir que não haja espaços extras
         if not bid_amount_str:
             messages.error(request, 'Você precisa informar um valor para o lance.')
             return redirect('auction:fazer_lance', auction_id=auction.id)
 
         try:
-            bid_amount = Decimal(bid_amount_str)
+            # Remover vírgulas se houver
+            bid_amount_str = bid_amount_str.replace(',', '.')
+            bid_amount = Decimal(bid_amount_str)  # Tenta converter para decimal
+
+            # Garantir que current_bid nunca seja None
+            current_bid = auction.current_bid if auction.current_bid is not None else auction.starting_bid
+
+            # Verifica se o valor é válido e maior que o lance atual
+            if bid_amount <= current_bid:
+                messages.error(request, f'O lance precisa ser maior que o lance atual ({current_bid}).')
+                return redirect('auction:fazer_lance', auction_id=auction.id)
 
             with transaction.atomic():
-                # Só realiza o lance, que já faz a transação no services
+                # Coloca o lance
                 place_bid(auction, request.user, bid_amount)
 
             messages.success(request, 'Lance efetuado com sucesso!')
             return redirect('auction:listar_leiloes')
 
-        except (ValueError, InvalidOperation):
-            messages.error(request, 'Valor de lance inválido. Por favor, insira um número válido.')
+        except (ValueError, InvalidOperation) as e:
+            messages.error(request, f'Valor de lance inválido. Erro: {str(e)}')
             return redirect('auction:fazer_lance', auction_id=auction.id)
 
         except Exception as e:
@@ -54,7 +65,6 @@ def fazer_lance(request, auction_id):
 def criar_leilao(request):
     inventories = Inventory.objects.filter(user=request.user).prefetch_related('items')
 
-    # Sempre gera o JSON dos inventories pra passar pro template
     inventories_data = []
     for inv in inventories:
         items = [
@@ -86,16 +96,18 @@ def criar_leilao(request):
                     messages.error(request, 'Quantidade insuficiente no inventário.')
                     return redirect('auction:criar_leilao')
 
-                # Remove o item do inventário
+                item_name = item.item_name
+
                 item.quantity -= quantity
                 if item.quantity == 0:
                     item.delete()
                 else:
                     item.save()
 
-                # Cria o leilão
                 Auction.objects.create(
-                    item=item,
+                    item_id=item_id,
+                    item_name=item_name,
+                    quantity=quantity,
                     seller=request.user,
                     starting_bid=starting_bid,
                     end_time=timezone.now() + timedelta(hours=duration_hours)

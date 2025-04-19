@@ -41,12 +41,10 @@ def place_bid(auction, bidder, bid_amount):
         destino=str(auction.seller)
     )
 
-    # Atualiza o leilão
     auction.current_bid = bid_amount
     auction.highest_bidder = bidder
     auction.save()
 
-    # Registra o lance
     return Bid.objects.create(
         auction=auction,
         bidder=bidder,
@@ -60,7 +58,6 @@ def finish_auction(auction):
         raise ValueError("Leilão ainda está ativo.")
 
     if auction.highest_bidder:
-        # Credita o valor ao vendedor
         seller_wallet = Wallet.objects.select_for_update().get(usuario=auction.seller)
         aplicar_transacao(
             seller_wallet,
@@ -70,29 +67,23 @@ def finish_auction(auction):
             origem=str(auction.highest_bidder)
         )
 
-        # Transfere o item para o inventário do comprador
         dest_inventory, _ = Inventory.objects.get_or_create(
             user=auction.highest_bidder,
             character_name="Leilao",
             account_name="Leilao"
         )
 
-        # Move ou cria item no inventário
         dest_item, created = InventoryItem.objects.get_or_create(
             inventory=dest_inventory,
-            item_id=auction.item.item_id,
-            defaults={'quantity': auction.item.quantity}
+            item_id=auction.item_id,
+            defaults={'quantity': auction.quantity}
         )
 
         if not created:
-            dest_item.quantity += auction.item.quantity
+            dest_item.quantity += auction.quantity
             dest_item.save()
 
-        # Remove item do leilão
-        auction.item.delete()
-
     else:
-        # Devolve o item ao vendedor se não houve lances
         seller_inventory, _ = Inventory.objects.get_or_create(
             user=auction.seller,
             character_name="Leilao",
@@ -101,16 +92,12 @@ def finish_auction(auction):
 
         returned_item, created = InventoryItem.objects.get_or_create(
             inventory=seller_inventory,
-            item_id=auction.item.item_id,
-            defaults={'quantity': auction.item.quantity}
+            item_id=auction.item_id,
+            defaults={'quantity': auction.quantity}
         )
 
         if not created:
-            returned_item.quantity += auction.item.quantity
+            returned_item.quantity += auction.quantity
             returned_item.save()
 
-        auction.item.delete()
-
-    # Marca o leilão como encerrado (sem excluir)
-    auction.is_active = False
-    auction.save()
+    auction.delete()  # remove o leilão encerrado

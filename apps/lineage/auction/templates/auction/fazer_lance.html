@@ -12,14 +12,14 @@
 
   <div class="card bg-dark text-light border-secondary">
     <div class="card-header d-flex align-items-center">
-      <img src="{% static 'assets/img/l2/icons/5-' %}{{ auction.item.item_id|unlocalize }}.jpg"
-           alt="{{ auction.item.item_name }}"
+      <img src="{% static 'assets/img/l2/icons/5-' %}{{ auction.item_id|unlocalize }}.jpg"
+           alt="{{ auction.item_name }}"
            class="me-3 rounded border border-secondary"
            style="width: 64px; height: 64px;"
            onerror="this.src='{% static 'assets/img/l2/icons/default.jpg' %}'">
       <div>
-        <h4 class="mb-0">{{ auction.item.item_name }}</h4>
-        <small class="text-muted">ID: {{ auction.item.item_id }}</small>
+        <h4 class="mb-0">{{ auction.item_name }}</h4>
+        <small class="text-muted">ID: {{ auction.item_id }}</small>
       </div>
     </div>
 
