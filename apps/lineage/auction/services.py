@@ -1,6 +1,5 @@
-from django.utils import timezone
 from django.db import transaction
-from .models import Auction, Bid
+from .models import Bid
 from apps.lineage.wallet.models import Wallet
 from apps.lineage.wallet.signals import aplicar_transacao
 from apps.lineage.inventory.models import InventoryItem, Inventory

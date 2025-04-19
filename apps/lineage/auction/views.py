@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
-from .models import Auction, Bid
+from .models import Auction
 from .services import place_bid, finish_auction
 from apps.lineage.inventory.models import Inventory, InventoryItem
 from datetime import timedelta
