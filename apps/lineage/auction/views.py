@@ -5,7 +5,6 @@ from django.utils import timezone
 from .models import Auction, Bid
 from .services import place_bid, finish_auction
 from apps.lineage.inventory.models import Inventory, InventoryItem
-from apps.lineage.wallet.signals import aplicar_transacao
 from datetime import timedelta
 from decimal import Decimal, InvalidOperation
 from django.db import transaction
@@ -31,18 +30,7 @@ def fazer_lance(request, auction_id):
             bid_amount = Decimal(bid_amount_str)
 
             with transaction.atomic():
-                # Verifica se o usuário tem saldo suficiente
-                user_wallet = request.user.wallet
-                aplicar_transacao(
-                    wallet=user_wallet,
-                    tipo="SAIDA",
-                    valor=bid_amount,
-                    descricao=f"Lance no leilão #{auction.id}",
-                    origem="lance",
-                    destino=f"leilao-{auction.id}"
-                )
-
-                # Realiza o lance e devolve valor ao antigo líder se houver
+                # Só realiza o lance, que já faz a transação no services
                 place_bid(auction, request.user, bid_amount)
 
             messages.success(request, 'Lance efetuado com sucesso!')
