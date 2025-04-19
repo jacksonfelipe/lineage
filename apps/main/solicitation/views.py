@@ -10,6 +10,10 @@ from .forms import SolicitationForm
 from django.contrib import messages
 from django.shortcuts import redirect
 from utils.notifications import send_notification
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class SolicitationDashboardView(LoginRequiredMixin, View):
@@ -56,12 +60,15 @@ class SolicitationCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         response = super().form_valid(form)
 
-        # Envia notificação para os staffs
-        send_notification(
-            user=None,  # None para broadcast para staff
-            notification_type='staff',
-            message='Relatório sigiloso disponível.',
-            created_by=self.request.user
-        )
+        try:
+            # Envia notificação para os staffs
+            send_notification(
+                user=None,  # None para broadcast para staff
+                notification_type='staff',
+                message='Relatório sigiloso disponível.',
+                created_by=self.request.user
+            )
+        except Exception as e:
+            logger.error(f"Erro ao criar notificação: {str(e)}")
 
         return response

@@ -16,6 +16,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import logout
 from utils.notifications import send_notification
+import logging
 
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
@@ -31,6 +32,9 @@ from apps.lineage.server.models import IndexConfig
 
 from utils.dynamic_import import get_query_class  # importa o helper
 LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
+
+
+logger = logging.getLogger(__name__)
 
 
 with open('utils/data/index.json', 'r', encoding='utf-8') as file:
@@ -312,12 +316,15 @@ def register_view(request):
                 fail_silently=False,
             )
 
-            send_notification(
-                user=None,
-                notification_type='staff',
-                message=f'Usuário {user.username} de email {user.email} cadastrado com sucesso!',
-                created_by=None
-            )
+            try:
+                send_notification(
+                    user=None,
+                    notification_type='staff',
+                    message=f'Usuário {user.username} de email {user.email} cadastrado com sucesso!',
+                    created_by=None
+                )
+            except Exception as e:
+                logger.error(f"Erro ao criar notificação: {str(e)}")
 
             return redirect('/accounts/login/')
         else:

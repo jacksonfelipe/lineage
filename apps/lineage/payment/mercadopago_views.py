@@ -215,13 +215,16 @@ def notificacao_mercado_pago(request):
                                 pedido.status = 'CONCLUÍDO'
                                 pedido.save()
 
-                                # Notificação para staff
-                                send_notification(
-                                    user=None,
-                                    notification_type='staff',
-                                    message=f"Pagamento aprovado para {pagamento.usuario.username} no valor de R$ {pagamento.valor:.2f}.",
-                                    created_by=pagamento.usuario
-                                )
+                                try:
+                                    # Notificação para staff
+                                    send_notification(
+                                        user=None,
+                                        notification_type='staff',
+                                        message=f"Pagamento aprovado para {pagamento.usuario.username} no valor de R$ {pagamento.valor:.2f}.",
+                                        created_by=pagamento.usuario
+                                    )
+                                except Exception as e:
+                                    logger.error(f"Erro ao criar notificação: {str(e)}")
 
                         return HttpResponse("OK", status=200)
 
