@@ -9,6 +9,9 @@ from datetime import timedelta
 from decimal import Decimal, InvalidOperation
 from django.db import transaction
 
+from django.core.serializers.json import DjangoJSONEncoder
+import json
+
 
 @login_required
 def listar_leiloes(request):
@@ -49,15 +52,34 @@ def fazer_lance(request, auction_id):
 
 @login_required
 def criar_leilao(request):
+    inventories = Inventory.objects.filter(user=request.user).prefetch_related('items')
+
+    # Sempre gera o JSON dos inventories pra passar pro template
+    inventories_data = []
+    for inv in inventories:
+        items = [
+            {
+                'item_id': item.item_id,
+                'quantity': item.quantity,
+                'item_name': item.item_name,
+            }
+            for item in inv.items.all()
+        ]
+        inventories_data.append({
+            'character_name': inv.character_name,
+            'items': items
+        })
+
     if request.method == 'POST':
-        item_id = int(request.POST.get('item_id'))
-        quantity = int(request.POST.get('quantity'))
-        starting_bid = Decimal(request.POST.get('starting_bid'))
-        duration_hours = int(request.POST.get('duration_hours'))
-
-        inventory = get_object_or_404(Inventory, user=request.user, character_name=request.POST.get('character_name'))
-
         try:
+            item_id = int(request.POST.get('item_id'))
+            quantity = int(request.POST.get('quantity'))
+            starting_bid = Decimal(request.POST.get('starting_bid'))
+            duration_hours = int(request.POST.get('duration_hours'))
+            character_name = request.POST.get('character_name')
+
+            inventory = get_object_or_404(Inventory, user=request.user, character_name=character_name)
+
             with transaction.atomic():
                 item = InventoryItem.objects.get(inventory=inventory, item_id=item_id)
                 if item.quantity < quantity:
@@ -71,15 +93,9 @@ def criar_leilao(request):
                 else:
                     item.save()
 
-                # Cria um item desvinculado do inventário para o leilão
-                auction_item = InventoryItem.objects.create(
-                    item_id=item.item_id,
-                    quantity=quantity
-                )
-
-                # Cria o leilão com o item separado
+                # Cria o leilão
                 Auction.objects.create(
-                    item=auction_item,
+                    item=item,
                     seller=request.user,
                     starting_bid=starting_bid,
                     end_time=timezone.now() + timedelta(hours=duration_hours)
@@ -95,9 +111,9 @@ def criar_leilao(request):
         except Exception as e:
             messages.error(request, f'Ocorreu um erro ao criar o leilão: {str(e)}')
 
-    inventories = Inventory.objects.filter(user=request.user)
     context = {
-        'inventories': inventories
+        'inventories': inventories,
+        'inventories_json': json.dumps(inventories_data, cls=DjangoJSONEncoder)
     }
     return render(request, 'auction/criar_leilao.html', context)
 
