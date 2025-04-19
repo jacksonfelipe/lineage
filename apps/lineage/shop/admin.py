@@ -41,3 +41,24 @@ class ShopPurchaseAdmin(BaseModelAdmin):
     list_filter = ('data_compra',)
     search_fields = ('user__username', 'character_name')
     ordering = ('-data_compra',)
+
+
+@admin.register(ShopPackageItem)
+class ShopPackageItemAdmin(BaseModelAdmin):
+    list_display = ('pacote', 'item', 'quantidade')
+    search_fields = ('pacote__nome', 'item__nome')
+    ordering = ('pacote', 'item')
+
+
+@admin.register(CartItem)
+class CartItemAdmin(BaseModelAdmin):
+    list_display = ('cart', 'item', 'quantidade')
+    search_fields = ('cart__user__username', 'item__nome')
+    ordering = ('cart',)
+
+
+@admin.register(CartPackage)
+class CartPackageAdmin(BaseModelAdmin):
+    list_display = ('cart', 'pacote', 'quantidade')
+    search_fields = ('cart__user__username', 'pacote__nome')
+    ordering = ('cart',)
