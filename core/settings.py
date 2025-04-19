@@ -7,6 +7,7 @@ from str2bool import str2bool
 from .logger import LOGGING as is_LOGGING
 from urllib.parse import urlparse
 from django.utils.translation import gettext_lazy as _
+from celery.schedules import crontab
 
 # =========================== MAIN CONFIGS ===========================
 
@@ -255,6 +256,13 @@ CELERY_IGNORE_RESULT = False  # Altere para True se não precisar dos resultados
 CELERY_TIMEZONE = TIME_ZONE
 # Pode ser definido como False se não precisar de rastreio
 CELERY_TRACK_STARTED = True
+
+CELERY_BEAT_SCHEDULE = {
+    'encerrar-leiloes-expirados-cada-minuto': {
+        'task': 'apps.lineage.auction.tasks.encerrar_leiloes_expirados',
+        'schedule': crontab(minute='*/1'),
+    },
+}
 
 # =========================== CHANNELS CONFIGS ===========================
 
