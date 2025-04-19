@@ -2,50 +2,35 @@
 
 set -e
 
-echo "=============================="
-echo "Preparing local environment"
-echo "=============================="
+echo "=== Setting up Python environment ==="
 
-# Verifica se Python 3.10+ está disponível
-echo "Checking Python version..."
+# Requisito mínimo
+REQUIRED_PYTHON="3.10"
+
+# Detecta versão do Python
 PYTHON_VERSION=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
-REQUIRED_VERSION="3.10"
 
-version_compare() {
-  [ "$(printf '%s\n' "$@" | sort -V | head -n 1)" = "$1" ]
-}
-
-if version_compare "$REQUIRED_VERSION" "$PYTHON_VERSION"; then
-  echo "Python $PYTHON_VERSION found"
-else
-  echo "Python 3.10+ required, found $PYTHON_VERSION"
+# Compara versão
+if [ "$(printf '%s\n' "$REQUIRED_PYTHON" "$PYTHON_VERSION" | sort -V | head -n1)" != "$REQUIRED_PYTHON" ]; then
+  echo "Python $REQUIRED_PYTHON+ required, found $PYTHON_VERSION"
   exit 1
 fi
 
-# Instala venv e pip se necessário
-echo "Installing python3-venv and pip (if needed)..."
-sudo apt update
-sudo apt install -y python3-venv python3-pip
+# Instala venv e pip se não existirem
+sudo apt-get update -qq
+sudo apt-get install -y python3-venv python3-pip
 
-# Cria o .venv se não existir
-if [ ! -d ".venv" ]; then
-  echo "Creating virtual environment..."
-  python3 -m venv .venv
-else
-  echo "Virtual environment already exists"
-fi
+# Cria virtualenv se não existir
+[ -d .venv ] || python3 -m venv .venv
 
-# Ativa o ambiente
-echo "Activating virtual environment..."
+# Ativa ambiente virtual
 source .venv/bin/activate
 
-# Atualiza pip e instala requirements
-echo "Installing requirements..."
+# Atualiza pip e instala dependências
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# Garante que o diretório de logs existe
-echo "Ensuring required folders exist..."
+# Garante diretórios obrigatórios
 mkdir -p logs
 
-echo "Environment is ready to use."
+echo "✓ Environment ready."

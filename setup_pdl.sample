@@ -1,75 +1,80 @@
 #!/bin/bash
 
-# Exit on any error
+# Sai em caso de erro
 set -e
 
-echo "=================================="
-echo " Instalandoo GetText"
-echo "=================================="
+# ==================================
+# FUNÇÕES AUXILIARES
+# ==================================
 
-# instala o gettext
-sudo apt update
-sudo apt upgrade -y
-sudo apt-get install --reinstall gettext
+log() {
+  echo
+  echo "=================================="
+  echo " $1"
+  echo "=================================="
+}
 
-echo "=================================="
-echo " Instalando Docker e Docker Compose"
-echo "=================================="
+# ==================================
+# INSTALAÇÃO DE DEPENDÊNCIAS DO SISTEMA
+# ==================================
 
-# Atualiza pacotes e instala dependências
-sudo apt update
-sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+instalar_dependencias() {
+  log "Atualizando pacotes e instalando dependências básicas"
+  sudo apt update
+  sudo apt upgrade -y
+  sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+}
 
-# Adiciona chave GPG do Docker
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+instalar_gettext() {
+  log "Instalando GetText"
+  sudo apt-get install --reinstall -y gettext
+}
 
-# Adiciona repositório Docker (Ubuntu 22.x usa 'jammy' no lugar de 'focal')
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu jammy stable"
+# ==================================
+# INSTALAÇÃO DO DOCKER E DOCKER COMPOSE
+# ==================================
 
-# Instala Docker CE
-sudo apt update
-sudo apt install -y docker-ce
+instalar_docker() {
+  log "Instalando Docker"
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu jammy stable"
+  sudo apt update
+  sudo apt install -y docker-ce
+  sudo systemctl enable docker
+  sudo systemctl start docker
+  docker --version
+}
 
-# Ativa Docker no boot
-sudo systemctl enable docker
-sudo systemctl start docker
+instalar_docker_compose() {
+  log "Instalando Docker Compose"
+  sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  sudo chmod +x /usr/local/bin/docker-compose
+  docker-compose --version
+}
 
-# Verifica instalação do Docker
-docker --version
+# ==================================
+# CLONAGEM E CONFIGURAÇÃO DO PROJETO
+# ==================================
 
-echo "=================================="
-echo " Instalando Docker Compose"
-echo "=================================="
+clonar_repositorio() {
+  log "Clonando repositório"
+  git clone https://github.com/D3NKYT0/lineage.git .
+  echo "Repositório clonado."
+}
 
-# Baixa Docker Compose
-sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+criar_install_sh() {
+  log "Criando script install.sh"
 
-# Dá permissão de execução
-sudo chmod +x /usr/local/bin/docker-compose
-
-# Verifica instalação do Docker Compose
-docker-compose --version
-
-echo "=================================="
-echo " Instalando e configurando o PDL"
-echo "=================================="
-
-# Clona repositório
-git clone https://github.com/D3NKYT0/lineage.git .
-echo "Repositório clonado."
-
-# Cria install.sh básico
-cat <<EOL > install.sh
+  cat <<'EOL' > install.sh
 #!/bin/bash
 
 set -e
 
 echo "=============================="
-echo "Preparing local environment"
+echo "Preparando ambiente local"
 echo "=============================="
 
-# Verifica se Python 3.10+ está disponível
-echo "Checking Python version..."
+echo "Verificando versão do Python..."
 PYTHON_VERSION=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
 REQUIRED_VERSION="3.10"
 
@@ -78,131 +83,127 @@ version_compare() {
 }
 
 if version_compare "$REQUIRED_VERSION" "$PYTHON_VERSION"; then
-  echo "Python $PYTHON_VERSION found"
+  echo "Python $PYTHON_VERSION encontrado"
 else
-  echo "Python 3.10+ required, found $PYTHON_VERSION"
+  echo "Python 3.10+ necessário, encontrado $PYTHON_VERSION"
   exit 1
 fi
 
-# Instala venv e pip se necessário
-echo "Installing python3-venv and pip (if needed)..."
+echo "Instalando python3-venv e pip..."
 sudo apt update
 sudo apt install -y python3-venv python3-pip
 
-# Cria o .venv se não existir
 if [ ! -d ".venv" ]; then
-  echo "Creating virtual environment..."
+  echo "Criando virtualenv..."
   python3 -m venv .venv
 else
-  echo "Virtual environment already exists"
+  echo "Virtualenv já existe"
 fi
 
-# Ativa o ambiente
-echo "Activating virtual environment..."
+echo "Ativando virtualenv..."
 source .venv/bin/activate
 
-# Atualiza pip e instala requirements
-echo "Installing requirements..."
+echo "Atualizando pip e instalando requirements..."
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# Garante que o diretório de logs existe
-echo "Ensuring required folders exist..."
+echo "Criando pasta de logs..."
 mkdir -p logs
 
-echo "Environment is ready to use."
+echo "Ambiente pronto."
 EOL
+}
 
-# Cria build.sh básico
-cat <<EOL > build.sh
+criar_build_sh() {
+  log "Criando script build.sh"
+
+  cat <<'EOL' > build.sh
 #!/bin/bash
 
-# Exit on any error
 set -e
 
 echo "=============================="
-echo "Starting deployment process"
+echo "Iniciando processo de deploy"
 echo "=============================="
 
-# Pull latest changes from Git
-echo "Pulling latest changes from Git..."
-git pull origin main || { echo "Failed to pull from Git repository"; exit 1; }
+echo "Atualizando código do repositório..."
+git pull origin main || { echo "Falha ao atualizar o repositório"; exit 1; }
 
-# Activate virtualenv (must exist)
-echo "Activating virtual environment..."
-source .venv/bin/activate || { echo "Virtualenv not found. Please create it with 'python -m venv .venv'"; exit 1; }
+echo "Ativando virtualenv..."
+source .venv/bin/activate || { echo "Virtualenv não encontrada"; exit 1; }
 
-# Upgrade installed packages from requirements.txt
-echo "Upgrading packages from requirements.txt..."
-pip install -U -r requirements.txt || { echo "Failed to upgrade packages"; exit 1; }
+echo "Atualizando pacotes..."
+pip install -U -r requirements.txt || { echo "Falha ao atualizar pacotes"; exit 1; }
 
-# Check Django project for issues
-echo "Running Django system check (host)..."
-python3 manage.py check || { echo "Django check failed"; exit 1; }
+echo "Rodando check do Django..."
+python3 manage.py check || { echo "Erro no Django check"; exit 1; }
 
-# Create new migrations locally
-echo "Making migrations (host)..."
-python3 manage.py makemigrations || { echo "Failed to make migrations"; exit 1; }
+echo "Criando novas migrações..."
+python3 manage.py makemigrations || { echo "Erro ao criar migrações"; exit 1; }
 
-# Stop running containers
-echo "Stopping containers..."
-docker compose down || { echo "Failed to stop running containers"; }
+echo "Derrubando containers..."
+docker compose down || { echo "Erro ao parar containers"; }
 
-# Remove old containers
-echo "Removing old containers..."
+echo "Removendo containers antigos..."
 containers=$(docker ps -a -q --filter name=site --filter name=celery --filter name=celery_beat --filter name=flower --filter name=nginx --filter name=redis)
 if [ -n "$containers" ]; then
-  docker rm $containers || echo "Some containers could not be removed (maybe already removed)"
+  docker rm $containers || echo "Alguns containers não puderam ser removidos"
 else
-  echo "No containers found to remove."
+  echo "Nenhum container para remover."
 fi
 
-# Remove optional static_data volume
-echo "Removing static_data volume..."
-docker volume rm $(docker volume ls -q --filter name=static_data) || echo "Volume not found or already removed"
+echo "Removendo volume static_data..."
+docker volume rm $(docker volume ls -q --filter name=static_data) || echo "Volume não encontrado"
 
-# Build Docker images
-echo "Building Docker images..."
-docker compose build || { echo "Failed to build Docker images"; exit 1; }
+echo "Construindo imagens Docker..."
+docker compose build || { echo "Erro ao buildar imagens"; exit 1; }
 
-# Start containers
-echo "Starting containers..."
-docker compose up -d || { echo "Failed to start containers"; exit 1; }
+echo "Subindo containers..."
+docker compose up -d || { echo "Erro ao iniciar containers"; exit 1; }
 
-# Wait for DB (direct)
-echo "Waiting for database..."
+echo "Aguardando banco de dados..."
 until docker compose exec postgres pg_isready -U db_user > /dev/null 2>&1; do
-  echo "$(date '+%H:%M:%S') - PostgreSQL is not ready yet. Waiting..."
+  echo "$(date '+%H:%M:%S') - PostgreSQL ainda não disponível..."
   sleep 2
 done
 
-# Run migration inside container (applies what was created on host)
-echo "Applying migrations inside container..."
-docker compose exec site python3 manage.py migrate || { echo "Failed to apply migrations"; exit 1; }
+echo "Aplicando migrações no container..."
+docker compose exec site python3 manage.py migrate || { echo "Erro ao aplicar migrações"; exit 1; }
 
-# Clean up
-echo "Cleaning up..."
+echo "Limpando recursos antigos..."
 docker image prune -f
 docker volume prune -f
 docker container prune -f
 docker builder prune -f
 
-echo "Deployment completed successfully."
+echo "Deploy concluído."
 EOL
+}
 
-# Dá permissão de execução
-chmod +x install.sh build.sh
+configurar_projeto() {
+  log "Configurando ambiente do projeto"
+  chmod +x install.sh build.sh
+  touch .env
+  echo ".env criado (preencha manualmente)"
+}
 
-# Cria arquivo .env vazio (caso não exista)
-touch .env
-echo ".env criado (preencha manualmente)"
+executar_scripts() {
+  log "Executando install.sh e build.sh"
+  ./install.sh
+}
 
-echo "=================================="
-echo " Executando install.sh e build.sh"
-echo "=================================="
+# ==================================
+# EXECUÇÃO FINAL
+# ==================================
 
-./install.sh
+instalar_dependencias
+instalar_gettext
+instalar_docker
+instalar_docker_compose
+clonar_repositorio
+criar_install_sh
+criar_build_sh
+configurar_projeto
+executar_scripts
 
-echo "=================================="
-echo " Instalação e configuração concluídas!"
-echo "=================================="
+log "Instalação e configuração concluídas!"

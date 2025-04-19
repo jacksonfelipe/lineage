@@ -52,7 +52,7 @@ $ ./build.sh
 ```
 
 
-## Como migrar o banco de dados (PostgreSQL)
+## Como migrar o banco de dados
 
 ```bash
 $ python manage.py makemigrations
@@ -60,9 +60,20 @@ $ python manage.py migrate
 ```
 
 
-## Como testar (homologação)
+## Como fazer backup do banco de dados
 
 ```bash
+$ chmod +x backup.sh
+$ crontab -e
+$ 0 3 * * * /caminho/para/seu/projeto/backup.sh >> /caminho/para/seu/projeto/backup.log 2>&1
+Importante: Substitua /caminho/para/seu/projeto pelo caminho real.
+```
+
+
+## Como testar (produção/homologação)
+
+```bash
+https://pdl.denky.dev.br/
 daphne -b 0.0.0.0 -p 80 core.asgi:application
 http://127.0.0.1
 ```
