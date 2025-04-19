@@ -1,30 +1,62 @@
 {% extends "layouts/base.html" %}
-{% load i18n l10n %}
-{% load static %}
+{% load i18n l10n static %}
 
 {% block content %}
-<h2>Leilões Ativos</h2>
-<table>
-  <tr>
-    <th>Item</th>
-    <th>Vendedor</th>
-    <th>Lance Atual</th>
-    <th>Tempo Restante</th>
-    <th>Ações</th>
-  </tr>
-  {% for leilao in leiloes %}
-  <tr>
-    <td>{{ leilao.item.item_name }}</td>
-    <td>{{ leilao.seller.username }}</td>
-    <td>R$ {{ leilao.current_bid|default:leilao.starting_bid }}</td>
-    <td>{{ leilao.end_time }}</td>
-    <td>
-      <a href="{% url 'auction:fazer_lance' leilao.id %}">Dar Lance</a>
-      {% if leilao.seller == user %}
-        <a href="{% url 'auction:encerrar_leilao' leilao.id %}">Encerrar</a>
-      {% endif %}
-    </td>
-  </tr>
-  {% endfor %}
-</table>
+<div class="container my-4">
+  <h2 class="text-center mb-4">{% trans "Leilões Ativos" %}</h2>
+
+  {% if leiloes %}
+    <div class="row g-4">
+      {% for leilao in leiloes %}
+      <div class="col-md-6 col-lg-4">
+        <div class="card bg-dark text-light border-secondary h-100">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <strong>{{ leilao.item.item_name }}</strong>
+            <span class="badge bg-primary">ID: {{ leilao.item.item_id }}</span>
+          </div>
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <img src="{% static 'images/items/'|add:leilao.item.item_id|stringformat:'s'|add:'.png' %}" 
+                   alt="{{ leilao.item.item_name }}" class="me-3 rounded" width="64" height="64"
+                   onerror="this.src='{% static 'images/default-item.png' %}'">
+              <div>
+                <p class="mb-1">
+                  <i class="bi bi-person-fill"></i>
+                  <strong>{% trans "Vendedor:" %}</strong> {{ leilao.seller.username }}
+                </p>
+                <p class="mb-1">
+                  <i class="bi bi-currency-dollar"></i>
+                  <strong>{% trans "Lance Atual:" %}</strong>
+                  R$ {{ leilao.current_bid|default:leilao.starting_bid }}
+                </p>
+                <p class="mb-0">
+                  <i class="bi bi-clock-fill"></i>
+                  <strong>{% trans "Restante:" %}</strong>
+                  <span class="text-warning fw-bold">
+                    {{ leilao.end_time|timeuntil }}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer d-flex justify-content-between">
+            <a href="{% url 'auction:fazer_lance' leilao.id %}" class="btn btn-success btn-sm">
+              <i class="bi bi-gavel"></i> {% trans "Dar Lance" %}
+            </a>
+            {% if leilao.seller == user %}
+              <a href="{% url 'auction:encerrar_leilao' leilao.id %}" class="btn btn-danger btn-sm">
+                <i class="bi bi-x-circle"></i> {% trans "Encerrar" %}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-secondary text-center" role="alert">
+      {% trans "Nenhum leilão ativo no momento." %}
+    </div>
+  {% endif %}
+</div>
 {% endblock %}
