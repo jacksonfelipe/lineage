@@ -1,4 +1,4 @@
-# Painel Definitivo Lineage [1.0](https://pdl.denky.dev.br)
+# Painel Definitivo Lineage [1.1](https://pdl.denky.dev.br)
 
 <img align="right" height="180" src="https://i.imgur.com/y37VikH.png"/>
 
@@ -44,10 +44,31 @@ O PDL é um painel que nasceu com a missão de oferecer ferramentas poderosas pa
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/Django.svg)](https://www.djangoproject.com/)
 
 
-## Como iniciar
+## Como Instalar
 
 ```bash
-$ chmod +x build.sh
+$ PASSOS PARA INSTALAR O PDL:
+$ 
+$ sudo mkdir -p /var/pdl
+$ cd /var/pdl
+$ nano setup.sh
+$ 
+$ >> copie o conteudo desse arquivo para dentro <<
+$ https://github.com/D3NKYT0/lineage/blob/main/setup/setup.sh
+$ >> e salve o arquivo. <<
+$ 
+$ chmod +x setup.sh
+$ ./setup.sh
+$ 
+$ >> O processo de instalação vai seguir e finalizar. <<
+$ 
+$ LOGO APÓS EDITE OS ARQUIVOS:
+$ 
+$  - .env
+$  - /nginx/.htpasswd
+$ 
+$ E EXECUTE O ARQUIVO:
+$ 
 $ ./build.sh
 ```
 
@@ -66,20 +87,18 @@ $ python manage.py migrate
 $ chmod +x backup.sh
 $ crontab -e
 $ 0 3 * * * /caminho/para/seu/projeto/backup.sh >> /caminho/para/seu/projeto/backup.log 2>&1
-Importante: Substitua /caminho/para/seu/projeto pelo caminho real.
+$ >> Importante: Substitua /caminho/para/seu/projeto pelo caminho real. <<
 ```
 
 
-## Como testar (produção/homologação)
+## Como testar (produção)
 
 ```bash
 https://pdl.denky.dev.br/
-daphne -b 0.0.0.0 -p 80 core.asgi:application
-http://127.0.0.1
 ```
 
 ## Sobre Mim
->Desenvolvedor - Daniel Amaral (31 Anos) Recife/PE
+>Desenvolvedor - Daniel Amaral Recife/PE
 - Emails:  contato@denky.dev.br
 - Discord: denkyto
 
