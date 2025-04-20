@@ -40,6 +40,12 @@ if [[ "$CONTINUE" != "s" && "$CONTINUE" != "S" ]]; then
   exit 0
 fi
 
+# Verificar se git está instalado
+if ! command -v git &> /dev/null; then
+  echo "❌ Git não está instalado. Instalando..."
+  sudo apt install -y git
+fi
+
 # Atualizar e instalar dependências
 if [ ! -f "$INSTALL_DIR/system_ready" ]; then
   echo
@@ -59,10 +65,23 @@ if [ ! -f "$INSTALL_DIR/docker_ready" ]; then
   sudo apt install -y docker-ce
   sudo systemctl enable docker
   sudo systemctl start docker
-  docker --version
-  sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-  sudo chmod +x /usr/local/bin/docker-compose
-  docker-compose --version
+
+  # Verificar se o Docker está rodando
+  if ! docker info &> /dev/null; then
+    echo "❌ Docker não está rodando corretamente. Verifique a instalação."
+    exit 1
+  fi
+
+  # Verificar Docker Compose (compose plugin ou standalone)
+  if ! docker compose version &> /dev/null; then
+    echo "❌ Docker Compose não encontrado. Instalando versão standalone..."
+    sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+    docker-compose --version
+  else
+    docker compose version
+  fi
+
   touch "$INSTALL_DIR/docker_ready"
 fi
 
@@ -135,50 +154,19 @@ EOF
   touch "../$INSTALL_DIR/fernet_key_generated"
 fi
 
-# 🛠️ Docker: parar, limpar, rebuildar, rodar e migrar
+# Copiar e executar build.sh
+if [ ! -f "../$INSTALL_DIR/build_executed" ]; then
+  echo
+  echo "🔨 Copiando e preparando build.sh..."
+  cp setup/build.sh .
+  chmod +x build.sh
 
-echo
-echo "🏗️ Parando containers antigos..."
-docker compose down || { echo "❌ Falha ao parar containers"; }
+  echo
+  echo "🚀 Executando build.sh..."
+  ./build.sh || { echo "❌ Falha ao executar build.sh"; exit 1; }
 
-echo
-echo "🗑️  Removendo containers antigos específicos..."
-containers=$(docker ps -a -q --filter name=site --filter name=celery --filter name=celery_beat --filter name=flower --filter name=nginx --filter name=redis)
-if [ -n "$containers" ]; then
-  docker rm $containers || echo "ℹ️ Alguns containers não puderam ser removidos (podem já estar removidos)"
-else
-  echo "ℹ️ Nenhum container antigo encontrado."
+  touch "../$INSTALL_DIR/build_executed"
 fi
-
-echo
-echo "🗑️  Removendo volume opcional static_data (se existir)..."
-docker volume rm $(docker volume ls -q --filter name=static_data) || echo "ℹ️ Volume não encontrado ou já removido"
-
-echo
-echo "🔨 Construindo Docker images..."
-docker compose build || { echo "❌ Falha ao buildar imagens"; exit 1; }
-
-echo
-echo "🚀 Subindo containers..."
-docker compose up -d || { echo "❌ Falha ao subir containers"; exit 1; }
-
-echo
-echo "⏳ Aguardando banco de dados iniciar..."
-until docker compose exec postgres pg_isready -U db_user > /dev/null 2>&1; do
-  echo "$(date '+%H:%M:%S') - PostgreSQL não está pronto ainda... aguardando..."
-  sleep 2
-done
-
-echo
-echo "🗄️ Aplicando migrações no banco..."
-docker compose exec site python3 manage.py migrate || { echo "❌ Falha ao aplicar migrações"; exit 1; }
-
-echo
-echo "🧹 Limpando imagens, volumes, containers e builders não usados..."
-docker image prune -f
-docker volume prune -f
-docker container prune -f
-docker builder prune -f
 
 # Criar superuser
 if [ ! -f "../$INSTALL_DIR/superuser_created" ]; then
