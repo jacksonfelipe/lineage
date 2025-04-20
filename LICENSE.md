@@ -1,7 +1,7 @@
 # Licença MIT
 
 Copyright (c) 2019 - presente [AppSeed](http://appseed.us/)  
-Copyright (c) 2022 - presente [Denky](https://denky.dev.br/)  
+Copyright (c) 2025 - presente [Denky](https://denky.dev.br/)  
 
 <br />
 
