@@ -97,7 +97,6 @@ if [ ! -f "../$INSTALL_DIR/env_created" ]; then
   echo "⚙️ Criando arquivo .env (se não existir)..."
   if [ ! -f ".env" ]; then
     cat <<EOL > .env
-# (seu conteúdo atual do .env aqui)
 DEBUG=False
 SECRET_KEY='key_32_bytes'
 # restante...
@@ -136,23 +135,33 @@ EOF
   touch "../$INSTALL_DIR/fernet_key_generated"
 fi
 
-# Construir containers
-if [ ! -f "../$INSTALL_DIR/docker_built" ]; then
-  echo
-  echo "🏗️  Construindo containers com Docker Compose..."
-  docker compose build
-  touch "../$INSTALL_DIR/docker_built"
+# 🛠️ Docker: parar, limpar, rebuildar, rodar e migrar
+
+echo
+echo "🏗️ Parando containers antigos..."
+docker compose down || { echo "❌ Falha ao parar containers"; }
+
+echo
+echo "🗑️  Removendo containers antigos específicos..."
+containers=$(docker ps -a -q --filter name=site --filter name=celery --filter name=celery_beat --filter name=flower --filter name=nginx --filter name=redis)
+if [ -n "$containers" ]; then
+  docker rm $containers || echo "ℹ️ Alguns containers não puderam ser removidos (podem já estar removidos)"
+else
+  echo "ℹ️ Nenhum container antigo encontrado."
 fi
 
-# Subir containers
-if [ ! -f "../$INSTALL_DIR/docker_up" ]; then
-  echo
-  echo "🚀 Subindo containers..."
-  docker compose up -d
-  touch "../$INSTALL_DIR/docker_up"
-fi
+echo
+echo "🗑️  Removendo volume opcional static_data (se existir)..."
+docker volume rm $(docker volume ls -q --filter name=static_data) || echo "ℹ️ Volume não encontrado ou já removido"
 
-# Esperar o banco
+echo
+echo "🔨 Construindo Docker images..."
+docker compose build || { echo "❌ Falha ao buildar imagens"; exit 1; }
+
+echo
+echo "🚀 Subindo containers..."
+docker compose up -d || { echo "❌ Falha ao subir containers"; exit 1; }
+
 echo
 echo "⏳ Aguardando banco de dados iniciar..."
 until docker compose exec postgres pg_isready -U db_user > /dev/null 2>&1; do
@@ -160,13 +169,16 @@ until docker compose exec postgres pg_isready -U db_user > /dev/null 2>&1; do
   sleep 2
 done
 
-# Aplicar migrações
-if [ ! -f "../$INSTALL_DIR/migrated" ]; then
-  echo
-  echo "🗄️ Aplicando migrações no banco..."
-  docker compose exec site python3 manage.py migrate
-  touch "../$INSTALL_DIR/migrated"
-fi
+echo
+echo "🗄️ Aplicando migrações no banco..."
+docker compose exec site python3 manage.py migrate || { echo "❌ Falha ao aplicar migrações"; exit 1; }
+
+echo
+echo "🧹 Limpando imagens, volumes, containers e builders não usados..."
+docker image prune -f
+docker volume prune -f
+docker container prune -f
+docker builder prune -f
 
 # Criar superuser
 if [ ! -f "../$INSTALL_DIR/superuser_created" ]; then
