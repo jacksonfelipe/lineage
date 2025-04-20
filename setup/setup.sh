@@ -2,8 +2,9 @@
 
 set -e
 
-INSTALL_DIR=".install_status"
-mkdir -p $INSTALL_DIR
+# Caminho absoluto para a pasta de status da instalação
+INSTALL_DIR="$(pwd)/.install_status"
+mkdir -p "$INSTALL_DIR"
 
 clear
 
@@ -23,8 +24,8 @@ if [ -f "$INSTALL_DIR/.install_done" ]; then
     exit 0
   elif [[ "$OPCAO" == "r" || "$OPCAO" == "R" ]]; then
     echo "🔄 Refazendo instalação..."
-    rm -rf $INSTALL_DIR
-    mkdir -p $INSTALL_DIR
+    rm -rf "$INSTALL_DIR"
+    mkdir -p "$INSTALL_DIR"
   else
     echo "❌ Opção inválida."
     exit 1
@@ -91,13 +92,13 @@ if [ ! -f "$INSTALL_DIR/repo_cloned" ]; then
   echo "📂 Clonando repositório do projeto..."
   git clone https://github.com/D3NKYT0/lineage.git || true
   cd lineage
-  touch "../$INSTALL_DIR/repo_cloned"
+  touch "$INSTALL_DIR/repo_cloned"
 else
   cd lineage
 fi
 
 # Configurar ambiente Python
-if [ ! -f "../$INSTALL_DIR/python_ready" ]; then
+if [ ! -f "$INSTALL_DIR/python_ready" ]; then
   echo
   echo "🐍 Configurando ambiente Python (virtualenv)..."
   python3 -m venv .venv
@@ -105,13 +106,13 @@ if [ ! -f "../$INSTALL_DIR/python_ready" ]; then
   pip install --upgrade pip
   pip install -r requirements.txt
   mkdir -p logs
-  touch "../$INSTALL_DIR/python_ready"
+  touch "$INSTALL_DIR/python_ready"
 else
   source .venv/bin/activate
 fi
 
 # Criar .env
-if [ ! -f "../$INSTALL_DIR/env_created" ]; then
+if [ ! -f "$INSTALL_DIR/env_created" ]; then
   echo
   echo "⚙️ Criando arquivo .env (se não existir)..."
   if [ ! -f ".env" ]; then
@@ -121,11 +122,11 @@ SECRET_KEY='key_32_bytes'
 # restante...
 EOL
   fi
-  touch "../$INSTALL_DIR/env_created"
+  touch "$INSTALL_DIR/env_created"
 fi
 
 # Configurar autenticação básica
-if [ ! -f "../$INSTALL_DIR/htpasswd_created" ]; then
+if [ ! -f "$INSTALL_DIR/htpasswd_created" ]; then
   echo
   echo "🔐 Configurando autenticação básica (.htpasswd)..."
   read -p "👤 Digite o login para o admin: " ADMIN_USER
@@ -139,11 +140,11 @@ EOF
 )
   echo "$ADMIN_USER:$HASHED_PASS" > nginx/.htpasswd
   echo "✅ Arquivo nginx/.htpasswd criado."
-  touch "../$INSTALL_DIR/htpasswd_created"
+  touch "$INSTALL_DIR/htpasswd_created"
 fi
 
 # Gerar chave Fernet
-if [ ! -f "../$INSTALL_DIR/fernet_key_generated" ]; then
+if [ ! -f "$INSTALL_DIR/fernet_key_generated" ]; then
   FERNET_KEY=$(python3 - <<EOF
 from cryptography.fernet import Fernet
 print(Fernet.generate_key().decode())
@@ -151,11 +152,11 @@ EOF
 )
   sed -i "/^ENCRYPTION_KEY=/c\ENCRYPTION_KEY='$FERNET_KEY'" .env
   echo "✅ ENCRYPTION_KEY atualizado no .env."
-  touch "../$INSTALL_DIR/fernet_key_generated"
+  touch "$INSTALL_DIR/fernet_key_generated"
 fi
 
 # Copiar e executar build.sh
-if [ ! -f "../$INSTALL_DIR/build_executed" ]; then
+if [ ! -f "$INSTALL_DIR/build_executed" ]; then
   echo
   echo "🔨 Copiando e preparando build.sh..."
   cp setup/build.sh .
@@ -165,11 +166,11 @@ if [ ! -f "../$INSTALL_DIR/build_executed" ]; then
   echo "🚀 Executando build.sh..."
   ./build.sh || { echo "❌ Falha ao executar build.sh"; exit 1; }
 
-  touch "../$INSTALL_DIR/build_executed"
+  touch "$INSTALL_DIR/build_executed"
 fi
 
 # Criar superuser
-if [ ! -f "../$INSTALL_DIR/superuser_created" ]; then
+if [ ! -f "$INSTALL_DIR/superuser_created" ]; then
   echo
   echo "👤 Criando usuário administrador no Django..."
   read -p "Username: " DJANGO_SUPERUSER_USERNAME
@@ -197,7 +198,7 @@ if not User.objects.filter(username='$DJANGO_SUPERUSER_USERNAME').exists():
 else:
     print('ℹ️ O usuário \"$DJANGO_SUPERUSER_USERNAME\" já existe.')
 "
-  touch "../$INSTALL_DIR/superuser_created"
+  touch "$INSTALL_DIR/superuser_created"
 fi
 
 # Finaliza instalação
