@@ -1,37 +1,38 @@
 {% load static i18n %}
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 <!-- Primary Meta Tags -->
-<title>{% trans "Lineage 2 PDL" %}</title>
+<title>{{ PROJECT_TITLE }}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="title" content="{% trans 'Lineage 2 PDL' %}">
-<meta name="author" content="{% trans 'Lineage 2 PDL' %}">
-<meta name="description" content="{% trans 'O PDL é um painel que nasceu com a missão de oferecer ferramentas poderosas para administradores de servidores privados de Lineage 2. Inicialmente voltado à análise de riscos e estabilidade dos servidores, o projeto evoluiu e se consolidou como uma solução completa para prospecção, gerenciamento e operação de servidores — tudo em código aberto.' %}">
-<meta name="keywords" content="{% trans 'lineage l2 painel servidor' %}">
-<link rel="canonical" href="#">
+<meta name="title" content="{{ PROJECT_TITLE }}">
+<meta name="author" content="{{ PROJECT_AUTHOR }}">
+<meta name="description" content="{{ PROJECT_DESCRIPTION }}">
+<meta name="keywords" content="{{ PROJECT_KEYWORDS }}">
+<link rel="canonical" href="{{ PROJECT_URL }}">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="#">
-<meta property="og:title" content="{% trans 'Lineage 2 PDL' %}">
-<meta property="og:description" content="{% trans 'O PDL é um painel que nasceu com a missão de oferecer ferramentas poderosas para administradores de servidores privados de Lineage 2. Inicialmente voltado à análise de riscos e estabilidade dos servidores, o projeto evoluiu e se consolidou como uma solução completa para prospecção, gerenciamento e operação de servidores — tudo em código aberto.' %}">
-<meta property="og:image" content="{% static 'assets/img/logo_painel.png' %}">
+<meta property="og:url" content="{{ PROJECT_URL }}">
+<meta property="og:title" content="{{ PROJECT_TITLE }}">
+<meta property="og:description" content="{{ PROJECT_DESCRIPTION }}">
+<meta property="og:image" content="{{ PROJECT_LOGO_URL }}">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="#">
-<meta property="twitter:title" content="{% trans 'Lineage 2 PDL' %}">
-<meta property="twitter:description" content="{% trans 'O PDL é um painel que nasceu com a missão de oferecer ferramentas poderosas para administradores de servidores privados de Lineage 2. Inicialmente voltado à análise de riscos e estabilidade dos servidores, o projeto evoluiu e se consolidou como uma solução completa para prospecção, gerenciamento e operação de servidores — tudo em código aberto.' %}">
-<meta property="twitter:image" content="{% static 'assets/img/logo_painel.png' %}">
+<meta property="twitter:url" content="{{ PROJECT_URL }}">
+<meta property="twitter:title" content="{{ PROJECT_TITLE }}">
+<meta property="twitter:description" content="{{ PROJECT_DESCRIPTION }}">
+<meta property="twitter:image" content="{{ PROJECT_LOGO_URL }}">
 
 <!-- Favicon -->
-<link rel="apple-touch-icon" sizes="120x120" href="{% static 'assets/img/ico.jpg' %}">
-<link rel="icon" type="image/jpg" sizes="32x32" href="{% static 'assets/img/ico.jpg' %}">
-<link rel="icon" type="image/jpg" sizes="16x16" href="{% static 'assets/img/ico.jpg' %}">
-<link rel="manifest" href="{% static 'assets/img/favicon/site.webmanifest' %}">
-<link rel="mask-icon" href="{% static 'assets/img/ico.jpg' %}" color="#ffffff">
-<meta name="msapplication-TileColor" content="#ffffff">
-<meta name="theme-color" content="#ffffff">
+<link rel="apple-touch-icon" sizes="120x120" href="{{ PROJECT_FAVICON_ICO }}">
+<link rel="icon" type="image/jpg" sizes="32x32" href="{{ PROJECT_FAVICON_ICO }}">
+<link rel="icon" type="image/jpg" sizes="16x16" href="{{ PROJECT_FAVICON_ICO }}">
+<link rel="manifest" href="{{ PROJECT_FAVICON_MANIFEST }}">
+<link rel="mask-icon" href="{{ PROJECT_FAVICON_ICO }}" color="{{ PROJECT_THEME_COLOR }}">
+<meta name="msapplication-TileColor" content="{{ PROJECT_THEME_COLOR }}">
+<meta name="theme-color" content="{{ PROJECT_THEME_COLOR }}">
 
 <!-- Sweet Alert -->
 <link type="text/css" href="{% static 'vendor/sweetalert2/dist/sweetalert2.min.css' %}" rel="stylesheet">

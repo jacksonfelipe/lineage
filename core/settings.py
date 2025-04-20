@@ -126,7 +126,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                'django.template.context_processors.i18n',
+                "django.template.context_processors.i18n",
+                "core.context_processors.project_metadata",
             ],
         },
     },
@@ -436,3 +437,15 @@ if not HCAPTCHA_SITE_KEY:
 HCAPTCHA_SECRET_KEY = os.environ.get('CONFIG_HCAPTCHA_SECRET_KEY')
 if not HCAPTCHA_SECRET_KEY:
     raise EnvironmentError(f"Required environment variable not set: HCAPTCHA_SECRET_KEY")
+
+# =========================== HEAD CONFIGS ===========================
+
+PROJECT_TITLE = os.getenv('PROJECT_TITLE', 'Lineage 2 PDL')
+PROJECT_AUTHOR = os.getenv('PROJECT_AUTHOR', 'Lineage 2 PDL')
+PROJECT_DESCRIPTION = os.getenv('PROJECT_DESCRIPTION', 'Painel para servidores privados de Lineage 2.')
+PROJECT_KEYWORDS = os.getenv('PROJECT_KEYWORDS', 'lineage l2 painel servidor')
+PROJECT_URL = os.getenv('PROJECT_URL', '#')
+PROJECT_LOGO_URL = os.getenv('PROJECT_LOGO_URL', '/static/assets/img/logo_painel.png')
+PROJECT_FAVICON_ICO = os.getenv('PROJECT_FAVICON_ICO', '/static/assets/img/ico.jpg')
+PROJECT_FAVICON_MANIFEST = os.getenv('PROJECT_FAVICON_MANIFEST', '/static/assets/img/favicon/site.webmanifest')
+PROJECT_THEME_COLOR = os.getenv('PROJECT_THEME_COLOR', '#ffffff')
