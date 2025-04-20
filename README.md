@@ -47,29 +47,42 @@ O PDL é um painel que nasceu com a missão de oferecer ferramentas poderosas pa
 ## Como Instalar
 
 ```bash
-$ PASSOS PARA INSTALAR O PDL:
-$ 
-$ sudo mkdir -p /var/pdl
-$ cd /var/pdl
-$ nano setup.sh
-$ 
-$ >> copie o conteudo desse arquivo para dentro <<
-$ https://github.com/D3NKYT0/lineage/blob/main/setup/setup.sh
-$ >> e salve o arquivo. <<
-$ 
-$ chmod +x setup.sh
-$ ./setup.sh
-$ 
-$ >> O processo de instalação vai seguir e finalizar. <<
-$ 
-$ LOGO APÓS EDITE OS ARQUIVOS:
-$ 
-$  - .env
-$  - /nginx/.htpasswd
-$ 
-$ E EXECUTE O ARQUIVO:
-$ 
-$ ./build.sh
+Instalar o PDL:
+
+sudo mkdir -p /var/pdl
+cd /var/pdl
+
+nano setup.sh
+>> copie o conteudo desse arquivo para dentro <<
+https://github.com/D3NKYT0/lineage/blob/main/setup/setup.sh
+>> e salve o arquivo. <<
+
+chmod +x setup.sh
+./setup.sh
+
+>> O processo de instalação vai seguir e finalizar. <<
+
+LOGO APÓS EDITE OS ARQUIVOS ABAIXO DENTRO DA PASTA [ cd lineage ]:
+
+ - .env
+ - /nginx/.htpasswd
+
+DEPOIS DISSO CRIE O ARQUIVO DE BUILD:
+
+nano build.sh
+>> copie o conteudo desse arquivo para dentro <<
+https://github.com/D3NKYT0/lineage/blob/main/setup/build.sh
+>> e salve o arquivo. <<
+
+chmod +x build.sh
+./build.sh
+
+PARABENS! FINALIZAMOS!
+
+AGORA É SO FICAR EXECUTANDO O COMANDO:
+./build.sh
+
+TODA VEZ QUE APARECER UMA VERSÃO NOVA!
 ```
 
 
