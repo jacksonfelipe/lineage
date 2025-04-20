@@ -70,8 +70,7 @@ echo "⚙️ Criando arquivo .env (se não existir)..."
 if [ ! -f ".env" ]; then
   cat <<EOL > .env
 # True for development, False for production
-DEBUG=True
-SEND_EMAIL_DEGUB=True
+DEBUG=False
 SECRET_KEY='key_32_bytes'
 
 DB_ENGINE=postgresql
@@ -90,8 +89,6 @@ CONFIG_EMAIL_HOST_PASSWORD=password
 CONFIG_EMAIL_PORT=587
 
 CONFIG_AUDITOR_MIDDLEWARE_ENABLE = True
-CONFIG_AUDITOR_MIDDLEWARE_RESTRICT_PATHS = ["/admin/", "/app/"]
-
 DJANGO_CACHE_REDIS_URI=redis://redis_container_name:6379/0
 
 RENDER_EXTERNAL_HOSTNAME=domain.com
@@ -99,12 +96,10 @@ RENDER_EXTERNAL_FRONTEND=domain.com
 
 CELERY_BROKER_URI=redis://redis:6379/1
 CELERY_BACKEND_URI=redis://redis:6379/1
-
 CHANNELS_BACKEND=redis://redis:6379/2
 
 ENCRYPTION_KEY='key_32_bytes'
 DATA_UPLOAD_MAX_MEMORY_SIZE=10485760
-SERVE_DECRYPTED_FILE_URL_BASE='decrypted-file'
 
 LINEAGE_DB_NAME=l2jdb
 LINEAGE_DB_USER=l2user
@@ -133,6 +128,17 @@ CONFIG_DATETIME_FORMAT='d/m/Y H:i:s'
 CONFIG_DATE_FORMAT='d/m/Y'
 CONFIG_TIME_FORMAT='H:i:s'
 CONFIG_GMT_OFFSET=-3
+
+PROJECT_TITLE=Lineage 2 PDL
+PROJECT_AUTHOR=Lineage 2 PDL
+PROJECT_DESCRIPTION=O PDL é um painel que nasceu com a missão de oferecer ferramentas poderosas para administradores de servidores privados de Lineage 2. Inicialmente voltado à análise de riscos e estabilidade dos servidores, o projeto evoluiu e se consolidou como uma solução completa para prospecção, gerenciamento e operação de servidores — tudo em código aberto.
+PROJECT_KEYWORDS=lineage l2 painel servidor
+PROJECT_URL=https://pdl.denky.dev.br
+PROJECT_LOGO_URL=/static/assets/img/logo_painel.png
+PROJECT_FAVICON_ICO=/static/assets/img/ico.jpg
+PROJECT_FAVICON_MANIFEST=/static/assets/img/favicon/site.webmanifest
+PROJECT_THEME_COLOR=#ffffff
+
 EOL
 fi
 
