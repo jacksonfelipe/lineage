@@ -2,7 +2,6 @@
 
 set -e
 
-# Caminho absoluto para a pasta de status da instalação
 INSTALL_DIR="$(pwd)/.install_status"
 mkdir -p "$INSTALL_DIR"
 
@@ -19,7 +18,9 @@ if [ -f "$INSTALL_DIR/.install_done" ]; then
   read -p "Deseja rodar os containers (s) ou refazer a instalação (r)? (s/r): " OPCAO
 
   if [[ "$OPCAO" == "s" || "$OPCAO" == "S" ]]; then
+    pushd lineage > /dev/null
     docker compose up -d
+    popd > /dev/null
     echo "✅ Containers iniciados."
     exit 0
   elif [[ "$OPCAO" == "r" || "$OPCAO" == "R" ]]; then
@@ -41,13 +42,11 @@ if [[ "$CONTINUE" != "s" && "$CONTINUE" != "S" ]]; then
   exit 0
 fi
 
-# Verificar se git está instalado
 if ! command -v git &> /dev/null; then
   echo "❌ Git não está instalado. Instalando..."
   sudo apt install -y git
 fi
 
-# Atualizar e instalar dependências
 if [ ! -f "$INSTALL_DIR/system_ready" ]; then
   echo
   echo "🔄 Atualizando pacotes e instalando dependências..."
@@ -56,7 +55,6 @@ if [ ! -f "$INSTALL_DIR/system_ready" ]; then
   touch "$INSTALL_DIR/system_ready"
 fi
 
-# Instalar Docker e Compose
 if [ ! -f "$INSTALL_DIR/docker_ready" ]; then
   echo
   echo "🐳 Instalando Docker e Docker Compose..."
@@ -67,13 +65,11 @@ if [ ! -f "$INSTALL_DIR/docker_ready" ]; then
   sudo systemctl enable docker
   sudo systemctl start docker
 
-  # Verificar se o Docker está rodando
   if ! docker info &> /dev/null; then
     echo "❌ Docker não está rodando corretamente. Verifique a instalação."
     exit 1
   fi
 
-  # Verificar Docker Compose (compose plugin ou standalone)
   if ! docker compose version &> /dev/null; then
     echo "❌ Docker Compose não encontrado. Instalando versão standalone..."
     sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -86,18 +82,15 @@ if [ ! -f "$INSTALL_DIR/docker_ready" ]; then
   touch "$INSTALL_DIR/docker_ready"
 fi
 
-# Clonar repositório
 if [ ! -f "$INSTALL_DIR/repo_cloned" ]; then
   echo
   echo "📂 Clonando repositório do projeto..."
   git clone https://github.com/D3NKYT0/lineage.git || true
-  cd lineage
   touch "$INSTALL_DIR/repo_cloned"
-else
-  cd lineage
 fi
 
-# Configurar ambiente Python
+pushd lineage > /dev/null
+
 if [ ! -f "$INSTALL_DIR/python_ready" ]; then
   echo
   echo "🐍 Configurando ambiente Python (virtualenv)..."
@@ -111,7 +104,6 @@ else
   source .venv/bin/activate
 fi
 
-# Criar .env
 if [ ! -f "$INSTALL_DIR/env_created" ]; then
   echo
   echo "⚙️ Criando arquivo .env (se não existir)..."
@@ -125,7 +117,6 @@ EOL
   touch "$INSTALL_DIR/env_created"
 fi
 
-# Configurar autenticação básica
 if [ ! -f "$INSTALL_DIR/htpasswd_created" ]; then
   echo
   echo "🔐 Configurando autenticação básica (.htpasswd)..."
@@ -143,7 +134,6 @@ EOF
   touch "$INSTALL_DIR/htpasswd_created"
 fi
 
-# Gerar chave Fernet
 if [ ! -f "$INSTALL_DIR/fernet_key_generated" ]; then
   FERNET_KEY=$(python3 - <<EOF
 from cryptography.fernet import Fernet
@@ -155,7 +145,6 @@ EOF
   touch "$INSTALL_DIR/fernet_key_generated"
 fi
 
-# Copiar e executar build.sh
 if [ ! -f "$INSTALL_DIR/build_executed" ]; then
   echo
   echo "🔨 Copiando e preparando build.sh..."
@@ -169,7 +158,6 @@ if [ ! -f "$INSTALL_DIR/build_executed" ]; then
   touch "$INSTALL_DIR/build_executed"
 fi
 
-# Criar superuser
 if [ ! -f "$INSTALL_DIR/superuser_created" ]; then
   echo
   echo "👤 Criando usuário administrador no Django..."
@@ -201,7 +189,8 @@ else:
   touch "$INSTALL_DIR/superuser_created"
 fi
 
-# Finaliza instalação
+popd > /dev/null
+
 touch "$INSTALL_DIR/.install_done"
 
 echo
