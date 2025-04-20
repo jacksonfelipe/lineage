@@ -5,12 +5,11 @@ set -e
 
 clear
 
-echo "===================================================="
-echo "  🚀 Bem-vindo ao Instalador do Projeto Lineage!   "
-echo "===================================================="
+echo "========================================================="
+echo "  🚀 Bem-vindo ao Instalador do Projeto Lineage 2 PDL!   "
+echo "========================================================="
 echo
 echo "Este script vai preparar todo o ambiente para você."
-echo "Recomendo que tenha sudo e Docker instalados."
 echo
 
 # Confirmar antes de iniciar
@@ -219,7 +218,7 @@ else:
 
 echo
 echo "🎉 Instalação concluída com sucesso!"
-echo "Acesse: http://localhost:8000"
+echo "Acesse: http://localhost:80"
 echo "Para gerenciar o projeto, use:"
 echo " - docker compose up -d         # Para iniciar"
 echo " - docker compose down          # Para parar"
