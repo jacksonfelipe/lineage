@@ -50,11 +50,5 @@ build/
 # celery
 *celerybeat*
 
-# build.sh
-build.sh
-
-# qualquer arquivo bash
-*.sh*
-
 # nginx / password
 /nginx/.htpasswd

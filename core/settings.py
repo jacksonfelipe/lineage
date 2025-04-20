@@ -17,7 +17,7 @@ load_dotenv()  # take environment variables from .env.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Enable/Disable DEBUG Mode
-DEBUG = str2bool(os.environ.get('DEBUG'))
+DEBUG = str2bool(os.environ.get('DEBUG', False))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -142,7 +142,7 @@ DB_PASS     = os.getenv('DB_PASS'     , None)
 if not RUNNING_IN_DOCKER:
     DB_HOST = 'localhost'
 else:
-    DB_HOST     = os.getenv('DB_HOST'     , None)
+    DB_HOST = os.getenv('DB_HOST'     , None)
 DB_PORT     = os.getenv('DB_PORT'     , None)
 DB_NAME     = os.getenv('DB_NAME'     , None)
 
@@ -245,10 +245,10 @@ CACHES = {
 
 # =========================== CELERY CONFIGS ===========================
 
-# e.g., 'redis://localhost:6379/0'
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URI')
-# e.g., 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = os.getenv('CELERY_BACKEND_URI')
+# e.g., 'redis://localhost:6379/1'
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URI', 'redis://redis:6379/1')
+# e.g., 'redis://localhost:6379/1'
+CELERY_RESULT_BACKEND = os.getenv('CELERY_BACKEND_URI', 'redis://redis:6379/1')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
@@ -274,7 +274,8 @@ if DEBUG:
     }
 
 else:
-    channels_backend = os.getenv('CHANNELS_BACKEND')
+    # e.g., 'redis://localhost:6379/2'
+    channels_backend = os.getenv('CHANNELS_BACKEND', 'redis://redis:6379/2')
     redis_url = urlparse(channels_backend)
     redis_host = redis_url.hostname
     redis_port = redis_url.port
@@ -296,8 +297,12 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 # =========================== ENCRYPTION CONFIG ===========================
 
 ENCRYPTION_KEY = os.environ.get('ENCRYPTION_KEY')
-DATA_UPLOAD_MAX_MEMORY_SIZE = int(os.environ.get('DATA_UPLOAD_MAX_MEMORY_SIZE'))
-SERVE_DECRYPTED_FILE_URL_BASE = os.environ.get('SERVE_DECRYPTED_FILE_URL_BASE')
+
+if not ENCRYPTION_KEY:
+    raise EnvironmentError("The ENCRYPTION_KEY environment variable is not set.")
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = int(os.environ.get('DATA_UPLOAD_MAX_MEMORY_SIZE', 2621440))
+SERVE_DECRYPTED_FILE_URL_BASE = os.environ.get('SERVE_DECRYPTED_FILE_URL_BASE', 'decrypted-file')
 
 # =========================== AUDITOR CONFIGS ===========================
 
@@ -404,42 +409,30 @@ CKEDITOR_5_CONFIGS = {
 
 # =========================== PAYMENTS CONFIGS ===========================
 
-MERCADO_PAGO_ACCESS_TOKEN = os.getenv(
-    'CONFIG_MERCADO_PAGO_ACCESS_TOKEN',
-    ""
-)
+def get_env_variable(var_name):
+    value = os.getenv(var_name)
+    if not value:
+        raise EnvironmentError(f"Required environment variable not set: {var_name}")
+    return value
 
-MERCADO_PAGO_PUBLIC_KEY = os.getenv(
-    'CONFIG_MERCADO_PAGO_PUBLIC_KEY',
-    ""
-)
+MERCADO_PAGO_ACCESS_TOKEN = get_env_variable('CONFIG_MERCADO_PAGO_ACCESS_TOKEN')
+MERCADO_PAGO_PUBLIC_KEY = get_env_variable('CONFIG_MERCADO_PAGO_PUBLIC_KEY')
+MERCADO_PAGO_CLIENT_ID = get_env_variable('CONFIG_MERCADO_PAGO_CLIENT_ID')
+MERCADO_PAGO_CLIENT_SECRET = get_env_variable('CONFIG_MERCADO_PAGO_CLIENT_SECRET')
+MERCADO_PAGO_WEBHOOK_SECRET = get_env_variable('CONFIG_MERCADO_PAGO_SIGNATURE')
 
-MERCADO_PAGO_CLIENT_ID = os.getenv(
-    'CONFIG_MERCADO_PAGO_CLIENT_ID',
-    ""
-)
+if not RENDER_EXTERNAL_HOSTNAME:
+    raise EnvironmentError(f"Required environment variable not set: RENDER_EXTERNAL_HOSTNAME")
 
-MERCADO_PAGO_CLIENT_SECRET = os.getenv(
-    'CONFIG_MERCADO_PAGO_CLIENT_SECRET',
-    ""
-)
-
-MERCADO_PAGO_WEBHOOK_SECRET = os.getenv(
-    'CONFIG_MERCADO_PAGO_SIGNATURE',
-    ""
-)
-
-MERCADO_PAGO_SUCCESS_URL = os.getenv(
-    'CONFIG_MERCADO_PAGO_SUCCESS_URL',
-    "https://pdl.denky.dev.br/app/payment/mercadopago/sucesso/"
-)
-
-MERCADO_PAGO_FAILURE_URL = os.getenv(
-    'CONFIG_MERCADO_PAGO_FAILURE_URL',
-    "https://pdl.denky.dev.br/app/payment/mercadopago/erro/"
-)
+MERCADO_PAGO_SUCCESS_URL = f"https://{RENDER_EXTERNAL_HOSTNAME}/app/payment/mercadopago/sucesso/"
+MERCADO_PAGO_FAILURE_URL = f"https://{RENDER_EXTERNAL_HOSTNAME}/app/payment/mercadopago/erro/"
 
 # =========================== HCAPTCHA CONFIGS ===========================
 
 HCAPTCHA_SITE_KEY = os.environ.get('CONFIG_HCAPTCHA_SITE_KEY')
+if not HCAPTCHA_SITE_KEY:
+    raise EnvironmentError(f"Required environment variable not set: HCAPTCHA_SITE_KEY")
+
 HCAPTCHA_SECRET_KEY = os.environ.get('CONFIG_HCAPTCHA_SECRET_KEY')
+if not HCAPTCHA_SECRET_KEY:
+    raise EnvironmentError(f"Required environment variable not set: HCAPTCHA_SECRET_KEY")
