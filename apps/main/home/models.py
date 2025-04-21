@@ -7,6 +7,7 @@ from encrypted_fields.encrypted_files import *
 from utils.choices import *
 from django.core.validators import validate_email
 from .validators import validate_ascii_username
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 class User(BaseModel, AbstractUser):
@@ -85,3 +86,39 @@ class City(BaseModelAbstract):
     class Meta:
         verbose_name = 'Cidades'
         verbose_name_plural = 'Cidades'
+
+
+class DashboardContent(BaseModel):
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
+    is_active = models.BooleanField(default=False)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Dashboard'
+        verbose_name_plural = 'Dashboards'
+
+    def __str__(self):
+        pt_translation = self.translations.filter(language='pt').first()
+        return pt_translation.title if pt_translation else f"Dashboard {self.pk}"
+
+
+class DashboardContentTranslation(BaseModel):
+    LANGUAGES = [
+        ('pt', 'Português'),
+        ('en', 'English'),
+        ('es', 'Español'),
+    ]
+
+    dashboard = models.ForeignKey(DashboardContent, on_delete=models.CASCADE, related_name='translations')
+    language = models.CharField(max_length=5, choices=LANGUAGES)
+    title = models.CharField(max_length=200)
+    content = CKEditor5Field('Content', config_name='extends')
+
+    class Meta:
+        unique_together = ('dashboard', 'language')
+        verbose_name = 'Tradução de Dashboard'
+        verbose_name_plural = 'Traduções de Dashboards'
+
+    def __str__(self):
+        return f"{self.title} ({self.language})"
+    

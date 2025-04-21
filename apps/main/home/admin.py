@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DefaultUserAdmin
 from .models import *
 from core.admin import BaseModelAdmin, BaseModelAdminAbstratic
+from .forms import DashboardContentForm, DashboardContentTranslationForm
 
 
 class UserAdmin(BaseModelAdmin, DefaultUserAdmin):
@@ -60,7 +61,34 @@ class CityAdmin(BaseModelAdminAbstratic):
     list_filter = ('state',)  # Filtro para a lista
 
 
+class DashboardContentTranslationInline(admin.TabularInline):
+    model = DashboardContentTranslation
+    form = DashboardContentTranslationForm
+    extra = 1
+    fields = ['language', 'title', 'content']
+
+
+class DashboardContentAdmin(BaseModelAdmin):
+    form = DashboardContentForm
+    inlines = [DashboardContentTranslationInline]
+
+    list_display = ('get_title', 'is_active', 'author')
+    list_filter = ('is_active',)
+    exclude = ('author',)
+
+    def save_model(self, request, obj, form, change):
+        if not change or not obj.author:
+            obj.author = request.user
+        super().save_model(request, obj, form, change)
+
+    def get_title(self, obj):
+        pt_translation = obj.translations.filter(language='pt').first()
+        return pt_translation.title if pt_translation else f"Dashboard {obj.pk}"
+    get_title.short_description = 'Título (PT)'
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(AddressUser, AddressAdmin)
 admin.site.register(State, StateAdmin)
 admin.site.register(City, CityAdmin)
+admin.site.register(DashboardContent, DashboardContentAdmin)

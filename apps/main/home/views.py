@@ -29,6 +29,7 @@ from django.http import HttpResponseRedirect
 from utils.crests import CrestHandler
 
 from apps.lineage.server.models import IndexConfig
+from django.utils import translation
 
 from utils.dynamic_import import get_query_class  # importa o helper
 LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
@@ -395,8 +396,17 @@ def lock(request):
 @login_required
 def dashboard(request):
     if request.user.is_authenticated:
+        language = translation.get_language()
+        dashboard = DashboardContent.objects.filter(is_active=True).first() or DashboardContent.objects.first()
+
+        translation_obj = None
+        if dashboard:
+            translation_obj = dashboard.translations.filter(language=language).first() or dashboard.translations.filter(language='pt').first()
+
         context = {
-            'segment': 'dashboard'
+            'segment': 'dashboard',
+            'dashboard': dashboard,
+            'translation': translation_obj,
         }
         return render(request, 'dashboard_custom/dashboard.html', context)
     else:

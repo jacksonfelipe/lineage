@@ -1,15 +1,15 @@
 from django.urls import path
 from .views import *
-from .public import *
+from .public import public_faq_list, public_news_detail, public_news_list
 from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
     # main index
     path('', index, name='index'),
+    path('pages/dashboard/', dashboard, name="dashboard"),
 
     # internals views users
-    path('app/dashboard/', dashboard, name="dashboard"),
     path('app/profile/edit/', edit_profile, name='edit_profile'),
     path('app/profile/add-or-edit-address/', add_or_edit_address, name='add_or_edit_address'),
     path('app/profile/', profile, name='profile'),

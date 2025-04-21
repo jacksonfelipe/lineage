@@ -1,5 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, UsernameField, PasswordResetForm, SetPasswordForm, UserChangeForm
 from django.utils.translation import gettext_lazy as _
+from django_ckeditor_5.widgets import CKEditor5Widget
 from django import forms
 from .models import *
 
@@ -87,3 +88,29 @@ class UserPasswordChangeForm(PasswordChangeForm):
     new_password2 = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
         'class': 'form-control', 'placeholder': 'Confirm New Password'
     }), label="Confirm New Password")
+
+
+class DashboardContentForm(forms.ModelForm):
+    class Meta:
+        model = DashboardContent
+        fields = ['slug', 'is_active']
+        widgets = {
+            'slug': forms.TextInput(attrs={'class': 'form-control'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+
+
+class DashboardContentTranslationForm(forms.ModelForm):
+    class Meta:
+        model = DashboardContentTranslation
+        fields = ['language', 'title', 'content']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'content': CKEditor5Widget(attrs={'class': 'django_ckeditor_5'}, config_name="extends"),
+        }
+
+    def __init__(self, *args, **kwargs):
+        language = kwargs.pop('language', None)
+        super().__init__(*args, **kwargs)
+        if language:
+            self.fields['language'].initial = language
