@@ -61,20 +61,14 @@ chmod +x setup.sh
 ./setup.sh
 
 >> O processo de instalação vai seguir e finalizar. <<
+>> Obs: fique atento ao processo do SETUP, pois ele vai precisar de você <<
 
-LOGO APÓS EDITE OS ARQUIVOS ABAIXO DENTRO DA PASTA [ cd lineage ]:
+LOGO APÓS EDITE O ARQUIVO ABAIXO DENTRO DA PASTA [ cd lineage ]:
+ - nano .env
+EDITE TUDO O QUE PRECISA E SALVE.
 
- - .env
- - /nginx/.htpasswd
+DEPOIS DISSO EXECUTE O ARQUIVO DE BUILD:
 
-DEPOIS DISSO CRIE O ARQUIVO DE BUILD:
-
-nano build.sh
->> copie o conteudo desse arquivo para dentro <<
-https://github.com/D3NKYT0/lineage/blob/main/setup/build.sh
->> e salve o arquivo. <<
-
-chmod +x build.sh
 ./build.sh
 
 PARABENS! FINALIZAMOS!
@@ -89,18 +83,21 @@ TODA VEZ QUE APARECER UMA VERSÃO NOVA!
 ## Como migrar o banco de dados
 
 ```bash
-$ python manage.py makemigrations
-$ python manage.py migrate
+$ >> entre na pasta [ cd /var/pdl/lineage ] e execute o comando abaixo <<
+$ ./build.sh
 ```
 
 
 ## Como fazer backup do banco de dados
 
 ```bash
+$ >> entre na pasta [ cd /var/pdl/lineage ] e execute o comando abaixo <<
+$ >> copie o conteudo desse arquivo para dentro <<
+$ https://github.com/D3NKYT0/lineage/blob/main/setup/backup.sh
+$ >> e salve o arquivo. <<
 $ chmod +x backup.sh
 $ crontab -e
-$ 0 3 * * * /caminho/para/seu/projeto/backup.sh >> /caminho/para/seu/projeto/backup.log 2>&1
-$ >> Importante: Substitua /caminho/para/seu/projeto pelo caminho real. <<
+$ 0 3 * * * /var/pdl/lineage/backup.sh >> /var/pdl/backup.log 2>&1
 ```
 
 
