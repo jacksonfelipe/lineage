@@ -18,9 +18,9 @@ class ChatGroupAdmin(BaseModelAdmin):
 
 
 @admin.register(Theme)
-class ThemeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'version', 'active')
-    readonly_fields = ('name', 'slug', 'version', 'author', 'description')
+class ThemeAdmin(BaseModelAdmin):
+    list_display = ('nome', 'slug', 'version', 'ativo')
+    readonly_fields = ('nome', 'slug', 'version', 'author', 'descricao')
 
     def save_model(self, request, obj, form, change):
         if obj.upload:
@@ -40,11 +40,11 @@ class ThemeAdmin(admin.ModelAdmin):
                 meta = json.load(f)
 
             # Atualiza os dados
-            obj.name = meta['name']
-            obj.slug = meta['slug']
-            obj.version = meta['version']
-            obj.author = meta['author']
-            obj.description = meta['description']
+            obj.nome = meta.get('name', obj.nome)
+            obj.slug = meta.get('slug', obj.slug)
+            obj.version = meta.get('version', '')
+            obj.author = meta.get('author', '')
+            obj.descricao = meta.get('description', '')
 
             # Remove o arquivo enviado
             os.remove(zip_path)

@@ -18,11 +18,15 @@ class ChatGroup(BaseModel):
         verbose_name_plural = 'Histórico dos Atendimentos'
 
 
-class Theme(models.Model):
+class Theme(BaseModel):
     nome = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(unique=True)
     descricao = models.TextField(blank=True)
     ativo = models.BooleanField(default=False)
+
+    version = models.CharField(max_length=50, blank=True)
+    author = models.CharField(max_length=100, blank=True)
+
     criado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
 
