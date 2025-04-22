@@ -14,7 +14,7 @@ services:
       - logs_data:/usr/src/app/logs
       - static_data:/usr/src/app/staticfiles
       - media_data:/usr/src/app/media
-      - ./themes:/usr/src/app/templates/themes
+      - ./themes:/usr/src/app/themes
     command: daphne -b 0.0.0.0 -p 5005 core.asgi:application
     environment:
       - RUNNING_IN_DOCKER=true
