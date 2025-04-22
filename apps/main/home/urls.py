@@ -12,6 +12,7 @@ urlpatterns = [
     # internals views users
     path('app/profile/edit/', edit_profile, name='edit_profile'),
     path('app/profile/add-or-edit-address/', add_or_edit_address, name='add_or_edit_address'),
+    path('app/profile/edit-avatar/', edit_avatar, name='edit_avatar'),
     path('app/profile/', profile, name='profile'),
     path('app/logs/info/', log_info_dashboard, name='log_info_dashboard'),
     path('app/logs/error/', log_error_dashboard, name='log_error_dashboard'),

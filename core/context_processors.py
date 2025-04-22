@@ -19,5 +19,5 @@ def project_metadata(request):
 def active_theme(request):
     theme = Theme.objects.filter(ativo=True).first()
     return {
-        'active_theme': theme.slug if theme else 'default'
+        'active_theme': theme.slug if theme else None
     }

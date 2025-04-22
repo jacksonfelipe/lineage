@@ -128,7 +128,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.i18n",
                 "core.context_processors.project_metadata",
-                "apps.core.context_processors.active_theme",
+                "core.context_processors.active_theme",
             ],
         },
     },

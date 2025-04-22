@@ -8,7 +8,8 @@ from django.conf import settings
 from django.utils.translation import get_language
 
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
-from .forms import UserProfileForm, AddressUserForm, RegistrationForm, LoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm
+from .forms import (UserProfileForm, AddressUserForm, RegistrationForm, LoginForm, 
+                    UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, AvatarForm)
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -194,15 +195,30 @@ def edit_profile(request):
         form = UserProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('profile')  # Redirecione para a página de perfil do usuário
+            return redirect('profile')  # Redireciona para a página de perfil do usuário
     else:
         form = UserProfileForm(instance=request.user)
+    
     context = {
         'segment': 'edit-profile',
         'parent': 'home',
         'form': form
     }
+    
     return render(request, 'pages/edit_profile.html', context)
+
+
+@login_required
+def edit_avatar(request):
+    if request.method == 'POST' and request.FILES['avatar']:
+        form = AvatarForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  # Redireciona para a página de perfil após salvar
+    else:
+        form = AvatarForm(instance=request.user)
+
+    return render(request, 'pages/edit_avatar.html', {'form': form})
 
 
 @login_required
@@ -381,11 +397,11 @@ class UserPasswrodResetConfirmView(PasswordResetConfirmView):
     form_class = UserSetPasswordForm
 
     def form_valid(self, form):
-        user = form.save(commit=False)
-        # Aqui você pode manipular o objeto user, se quiser
-        user.save()  # Só a senha será atualizada
+        # Apenas atualiza a senha sem mexer em outros campos do modelo
+        form.user.set_password(form.cleaned_data['new_password1'])
+        form.user.save(update_fields=["password"])  # Evita save completo que pode tentar mexer no avatar
         print("Password has been reset!")
-        return super().form_valid(form)
+        return super(PasswordResetConfirmView, self).form_valid(form)
 
     def form_invalid(self, form):
         print("Password reset failed!")

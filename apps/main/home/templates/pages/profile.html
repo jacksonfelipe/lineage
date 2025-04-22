@@ -3,26 +3,28 @@
 
 {% block extrahead %}
     <style>
-      .avatar-container {
-        width: 150px;
-        height: 150px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-      }
+        .avatar-container {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
 
-      .avatar-image {
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-      }
+        .avatar-image {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
 
-      .username {
-        margin-top: 15px;
-        font-weight: bold;
-      }
+        .username {
+            margin-top: 15px;
+            font-weight: bold;
+        }
     </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.7/dist/inputmask.min.js"></script>
 {% endblock extrahead %}
 
 {% block content %}
@@ -118,9 +120,9 @@
                 <label for="gender">{% trans 'Gênero' %}</label>
                 <span class="form-control" id="gender">
                   {% if user.gender %}
-                    {% if user.gender == 'M' %}{% trans 'Masculino' %}
-                    {% elif user.gender == 'F' %}{% trans 'Feminino' %}
-                    {% elif user.gender == 'O' %}{% trans 'Outro' %}
+                    {% if user.gender == 'male' %}{% trans 'Masculino' %}
+                    {% elif user.gender == 'female' %}{% trans 'Feminino' %}
+                    {% elif user.gender == 'non_binary' %}{% trans 'Não Binário' %}
                     {% else %}{% trans 'Prefiro não dizer' %}
                     {% endif %}
                   {% else %}
@@ -159,7 +161,10 @@
               <h4 class="font-weight-bold h6 text-uppercase username">{{ user.username }}</h4>
               <p class="font-italic text-muted">{% trans 'O sucesso não é garantido, mas o fracasso é certo se você não tentar.' %}</p>
             </div>
-          </div>
+            <!-- Botão de editar avatar -->
+            <a href="{% url 'edit_avatar' %}" class="btn btn-secondary mt-3">{% trans 'Editar Avatar' %}</a>
+        </div>
+        
 
           <div class="small font-weight-light mt-4 text-center text-muted">
             <p>{% trans 'Encontre inspiração em cada desafio e mantenha-se comprometido com o seu crescimento pessoal e profissional. Lembre-se sempre de que o esforço que você coloca hoje moldará o seu amanhã.' %}</p>
@@ -187,5 +192,13 @@
 
   </div>
   <!-- [ Main Content ] end -->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var cpfField = document.getElementById('cpf');
+        var im = new Inputmask('999.999.999-99');
+        im.mask(cpfField);
+    });
+</script>
 
 {% endblock content %}
