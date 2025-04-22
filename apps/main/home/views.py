@@ -381,6 +381,9 @@ class UserPasswrodResetConfirmView(PasswordResetConfirmView):
     form_class = UserSetPasswordForm
 
     def form_valid(self, form):
+        user = form.save(commit=False)
+        # Aqui você pode manipular o objeto user, se quiser
+        user.save()  # Só a senha será atualizada
         print("Password has been reset!")
         return super().form_valid(form)
 
