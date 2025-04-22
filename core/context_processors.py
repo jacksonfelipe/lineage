@@ -19,7 +19,7 @@ def project_metadata(request):
 def active_theme(request):
     theme = Theme.objects.filter(ativo=True).first()
     if theme:
-        base_template = f"themes/{theme.slug}/base.html"
+        base_template = f"installed/{theme.slug}/base.html"
     else:
         base_template = "layouts/base-default.html"
     

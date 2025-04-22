@@ -114,11 +114,12 @@ MIDDLEWARE = [
 # =========================== TEMPLATES CONFIGS ===========================
 
 HOME_TEMPLATES = os.path.join(BASE_DIR, "templates")
+THEMES_TEMPLATES = os.path.join(BASE_DIR, "themes")
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [HOME_TEMPLATES],
+        "DIRS": [HOME_TEMPLATES, THEMES_TEMPLATES],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
