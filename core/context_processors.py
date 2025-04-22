@@ -1,4 +1,6 @@
 from django.conf import settings
+from apps.main.administrator.models import Theme
+
 
 def project_metadata(request):
     return {
@@ -11,4 +13,11 @@ def project_metadata(request):
         'PROJECT_FAVICON_ICO': settings.PROJECT_FAVICON_ICO,
         'PROJECT_FAVICON_MANIFEST': settings.PROJECT_FAVICON_MANIFEST,
         'PROJECT_THEME_COLOR': settings.PROJECT_THEME_COLOR,
+    }
+
+
+def active_theme(request):
+    theme = Theme.objects.filter(ativo=True).first()
+    return {
+        'active_theme': theme.slug if theme else 'default'
     }
