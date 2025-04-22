@@ -210,7 +210,7 @@ def edit_profile(request):
 
 @login_required
 def edit_avatar(request):
-    if request.method == 'POST' and request.FILES['avatar']:
+    if request.method == 'POST' and request.FILES.get('avatar'):
         form = AvatarForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
