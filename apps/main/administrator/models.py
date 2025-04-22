@@ -27,6 +27,9 @@ class Theme(BaseModel):
     version = models.CharField(max_length=50, blank=True)
     author = models.CharField(max_length=100, blank=True)
 
+    # 👇 Este é o campo que estava faltando
+    upload = models.FileField(upload_to='temp/themes/', blank=True, null=True)
+
     criado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
 

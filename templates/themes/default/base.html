@@ -3,7 +3,7 @@
 <html lang="{{ LANGUAGE_CODE }}">
   <head>
     {% include 'includes/head.html' %}
-    <link type="text/css" href="{% static 'themes/default/css/theme.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'themes/default/static/css/theme.css' %}" rel="stylesheet">
     {% block extrahead %}{% endblock %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   </head>
@@ -85,6 +85,6 @@
     </footer>    
 
     {% include 'includes/scripts.html' %}
-    <script src="{% static 'assets/js/public.js' %}"></script>
+    <script src="{% static 'themes/default/static/jd/theme.js' %}"></script>
   </body>
 </html>
