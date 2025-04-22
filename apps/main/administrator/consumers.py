@@ -92,7 +92,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         try:
             from apps.main.home.models import User
             user = User.objects.get(username=username)
-            return user.avatar.url if user.avatar else None
+            custom_imagem = '/decrypted-file/home/user/avatar/'
+            avatar_url = custom_imagem + str(user.uuid) + '/'
+            return avatar_url if user.avatar else None
         except User.DoesNotExist:
             return None
 
