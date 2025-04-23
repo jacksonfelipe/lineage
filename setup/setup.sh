@@ -175,6 +175,12 @@ PROJECT_LOGO_URL=/static/assets/img/logo_painel.png
 PROJECT_FAVICON_ICO=/static/assets/img/ico.jpg
 PROJECT_FAVICON_MANIFEST=/static/assets/img/favicon/site.webmanifest
 PROJECT_THEME_COLOR=#ffffff
+
+PROJECT_DISCORD_URL='https://discord.gg/seu-link-aqui'
+PROJECT_YOUTUBE_URL='https://www.youtube.com/@seu-canal'
+PROJECT_FACEBOOK_URL='https://www.facebook.com/sua-pagina'
+PROJECT_INSTAGRAM_URL='https://www.instagram.com/seu-perfil'
+
 EOL
   fi
   touch "$INSTALL_DIR/env_created"

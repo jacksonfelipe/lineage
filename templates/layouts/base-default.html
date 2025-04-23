@@ -74,17 +74,17 @@
     <footer>
       <div class="container">
         <div class="social-icons">
-          <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
-          <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
-          <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
-          <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="{{ PROJECT_DISCORD_URL }}" title="Discord" target="_blank" rel="noopener"><i class="fab fa-discord"></i></a>
+          <a href="{{ PROJECT_YOUTUBE_URL }}" title="YouTube" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>
+          <a href="{{ PROJECT_FACEBOOK_URL }}" title="Facebook" target="_blank" rel="noopener"><i class="fab fa-facebook"></i></a>
+          <a href="{{ PROJECT_INSTAGRAM_URL }}" title="Instagram" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>          
         </div>
-        <p>&copy; <span id="footer-year"></span> Lineage 2 PDL - {% trans "Todos os direitos reservados." %}</p>
+        <p>&copy; <span id="footer-year"></span> {{ PROJECT_TITLE }} - {% trans "Todos os direitos reservados." %}</p>
         <p>{% trans "Feito com ❤️ por aventureiros para aventureiros." %}</p>
       </div>
     </footer>    
 
     {% include 'includes/scripts.html' %}
-    <script src="{% static 'assets/js/public.js' %}"></script>
+    <script src="{% static 'public/js/layout.js' %}"></script>
   </body>
 </html>

@@ -333,3 +333,25 @@
     margin-bottom: 0;
   }
 }
+
+.section-dark {
+  background-color: #121212;
+  padding: 60px 0;
+}
+
+.section-description {
+  color: #ccc;
+  margin-bottom: 30px;
+}
+
+.btn-discord {
+  max-width: 250px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.d-flex {
+  display: flex;
+}

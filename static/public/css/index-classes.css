@@ -1,0 +1,55 @@
+.classes-section {
+    background-color: #1a1a1a;
+    padding: 80px 0;
+    text-align: center;
+  }
+
+  .classes-title {
+    color: var(--gold);
+    margin-bottom: 50px;
+    font-size: 2.5rem;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+  }
+
+  .classe-card {
+    background-color: #0d0d0d;
+    padding: 15px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 12px;
+    transition: transform 0.3s;
+    cursor: pointer;
+  }
+
+  .classe-card:hover {
+    transform: scale(1.05);
+  }
+
+  .classe-img {
+    max-height: 300px;
+  }
+
+  .classe-name {
+    color: var(--gold);
+    font-size: 1.1rem;
+  }
+
+  .classe-modal {
+    background-color: #111;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 10px;
+    color: #fff;
+  }
+
+  .classe-modal .modal-header,
+  .classe-modal .modal-footer {
+    border-color: rgba(212, 175, 55, 0.2);
+  }
+
+  .classe-modal .modal-title {
+    color: var(--gold);
+  }
+
+  .classe-modal .modal-body p {
+    color: #ccc;
+    text-align: left;
+  }
