@@ -5,7 +5,7 @@
 <link type="text/css" href="{% static 'public/css/terms.css' %}" rel="stylesheet">
 {% endblock %}
 
-{% block title %}{% trans 'Termos e Condições' %} | Lineage 2 {{ PROJECT_TITLE }}{% endblock %}
+{% block title %}{% trans 'Termos e Condições' %} | {{ PROJECT_TITLE }}{% endblock %}
 
 {% block content %}
 <div class="container my-5 px-3 px-md-5 terms-page">
@@ -14,7 +14,7 @@
     <p class="text-sm text-gray-400 text-end mb-4">{% trans 'Última atualização' %}: {{ last_updated|default:"Abril de 2025" }}</p>
 
     <h2 class="text-xl font-semibold text-yellow-300 mt-4 mb-2">1. {% trans 'Sobre o Servidor' %}</h2>
-    <p>{% trans 'O' %} <strong>Lineage 2 {{ PROJECT_TITLE }}</strong> {% trans 'é um servidor privado, sem vínculos com a NCSoft. Criado por fãs e para fins recreativos.' %}</p>
+    <p>{% trans 'O' %} <strong>{{ PROJECT_TITLE }}</strong> {% trans 'é um servidor privado, sem vínculos com a NCSoft. Criado por fãs e para fins recreativos.' %}</p>
 
     <h2 class="text-xl font-semibold text-yellow-300 mt-5 mb-2">2. {% trans 'Regras Gerais' %}</h2>
     <ul class="list-disc ps-4 space-y-1">
@@ -52,7 +52,7 @@
     <h2 class="text-xl font-semibold text-yellow-300 mt-5 mb-2">9. {% trans 'Contato' %}</h2>
     <p>{% trans 'Fale conosco pelo' %} <strong>{% trans 'Discord' %}</strong>, {% trans 'e-mail' %} {% trans 'ou fórum oficial em caso de dúvidas ou denúncias.' %}</p>
 
-    <p class="text-center text-gray-400 mt-10 italic">{% trans 'Lineage 2' %} {{ PROJECT_TITLE }} — {% trans 'Um mundo para verdadeiros aventureiros.' %}</p>
+    <p class="text-center text-gray-400 mt-10 italic">{{ PROJECT_TITLE }} — {% trans 'Um mundo para verdadeiros aventureiros.' %}</p>
   </div>
 </div>
 {% endblock %}
