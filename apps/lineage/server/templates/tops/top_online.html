@@ -7,6 +7,7 @@
   <div class="card shadow-lg p-4">
     <h2 class="text-center mb-4">{% trans "Top Tempo Online" %}</h2>
 
+    {% if ranking %}
     <div class="table-responsive-md">
       <table class="table table-striped">
         <thead>
@@ -31,7 +32,12 @@
         </tbody>
       </table>
     </div>
-
+    {% else %}
+    <div class="alert alert-warning text-center">
+      {% trans "Nenhum dado encontrado." %}
+    </div>
+    {% endif %}
+    
   </div>
 </div>
 {% endblock %}

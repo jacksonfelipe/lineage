@@ -9,28 +9,34 @@
     <h2>{% trans "Castle & Siege Ranking" %}</h2>
   </div>
 
-  {% for castle in castles %}
-  <div class="card mb-4 shadow-lg">
-    <div class="row g-0">
-      <div class="col-md-4">
-        <img src="{% static castle.image_path %}" class="img-fluid rounded-start" alt="{{ castle.name }}">
-      </div>
-      <div class="col-md-8">
-        <div class="card-body">
-          <h3 class="card-title">{{ castle.name }} {% trans "Castle" %}</h3>
-          <p><strong>{% trans "Clan Proprietário" %}:</strong> {{ castle.clan_name }}</p>
-          <p><strong>{% trans "Clan Líder" %}:</strong> {{ castle.char_name }}</p>
-          <p><strong>{% trans "Aliança" %}:</strong> {{ castle.ally_name }}</p>
-          <p>
-            <strong>{% trans "Próxima Guerra" %}:</strong> {{ castle.sdate|date:"d F, Y H:i" }}
-            &nbsp; <strong>{% trans "Taxa" %}:</strong> {{ castle.stax }}%
-          </p>
-          <p><strong>{% trans "Atacantes" %}:</strong> {{ castle.attackers|length }}</p>
-          <p><strong>{% trans "Defensores" %}:</strong> {{ castle.defenders|length }}</p>
+  {% if castles %}
+    {% for castle in castles %}
+    <div class="card mb-4 shadow-lg">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img src="{% static castle.image_path %}" class="img-fluid rounded-start" alt="{{ castle.name }}">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h3 class="card-title">{{ castle.name }} {% trans "Castle" %}</h3>
+            <p><strong>{% trans "Clan Proprietário" %}:</strong> {{ castle.clan_name }}</p>
+            <p><strong>{% trans "Clan Líder" %}:</strong> {{ castle.char_name }}</p>
+            <p><strong>{% trans "Aliança" %}:</strong> {{ castle.ally_name }}</p>
+            <p>
+              <strong>{% trans "Próxima Guerra" %}:</strong> {{ castle.sdate|date:"d F, Y H:i" }}
+              &nbsp; <strong>{% trans "Taxa" %}:</strong> {{ castle.stax }}%
+            </p>
+            <p><strong>{% trans "Atacantes" %}:</strong> {{ castle.attackers|length }}</p>
+            <p><strong>{% trans "Defensores" %}:</strong> {{ castle.defenders|length }}</p>
+          </div>
         </div>
       </div>
     </div>
+    {% endfor %}
+  {% else %}
+  <div class="alert alert-warning text-center">
+    {% trans "Nenhum dado encontrado." %}
   </div>
-  {% endfor %}
+  {% endif %}
 </div>
 {% endblock %}

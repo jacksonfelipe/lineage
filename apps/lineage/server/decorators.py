@@ -22,7 +22,7 @@ def safe_json_response(func):
     def wrapper(*args, **kwargs):
         data = func(*args, **kwargs)
         if data is None:
-            return JsonResponse({"error": "Falha ao obter dados do banco de dados"}, status=500)
+            return JsonResponse({"error": "Falha ao obter dados do banco de dados"}, status=400)
         return JsonResponse(data, safe=False)
     return wrapper
 
@@ -33,6 +33,6 @@ def require_lineage_connection(view_func):
         db = LineageDB()
         if not db.is_connected():
             messages.error(request, "Banco de dados do Lineage está indisponível no momento.")
-            return redirect('home:profile')
+            return redirect('profile')
         return view_func(request, *args, **kwargs)
     return wrapper

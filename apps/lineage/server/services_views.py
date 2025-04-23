@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 from apps.lineage.wallet.models import Wallet
 from apps.lineage.wallet.signals import aplicar_transacao
 from .models import ServicePrice
+from .decorators import require_lineage_connection
 import re
 
 from utils.dynamic_import import get_query_class  
@@ -13,6 +14,7 @@ LineageServices = get_query_class("LineageServices")
 
 
 @login_required
+@require_lineage_connection
 def change_nickname_view(request, char_id):
     try:
         price = ServicePrice.objects.get(servico='CHANGE_NICKNAME').preco
@@ -62,6 +64,7 @@ def change_nickname_view(request, char_id):
 
 
 @login_required
+@require_lineage_connection
 def change_sex_view(request, char_id):
     try:
         price = ServicePrice.objects.get(servico='CHANGE_SEX').preco
@@ -112,6 +115,7 @@ def change_sex_view(request, char_id):
 
 
 @login_required
+@require_lineage_connection
 def unstuck_view(request, char_id):
 
     response = LineageServices.check_char(request.user.username, char_id)

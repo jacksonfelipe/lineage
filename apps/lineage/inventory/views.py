@@ -23,7 +23,7 @@ def retirar_item_servidor(request):
     db = LineageDB()
     if not db.is_connected():
         messages.error(request, 'O banco do jogo está indisponível no momento. Tente novamente mais tarde.')
-        return redirect('inventory:retirar_item')
+        return redirect('inventory:inventario_dashboard')
 
     personagens = []
     try:

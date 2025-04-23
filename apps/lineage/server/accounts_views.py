@@ -6,20 +6,26 @@ from datetime import datetime
 from django.utils.timezone import make_aware
 from django.utils.timezone import now
 from utils.resources import gen_avatar, get_class_name
+from django.core.cache import cache
 
-from utils.dynamic_import import get_query_class  # importa o helper
-LineageAccount = get_query_class("LineageAccount")  # carrega a classe certa com base no .env
+from utils.dynamic_import import get_query_class
+LineageAccount = get_query_class("LineageAccount")
 LineageServices = get_query_class("LineageServices")
 
 
 @login_required
-@require_lineage_connection  # Assumindo que você tem um decorator para verificar a conexão
+@require_lineage_connection
 def account_dashboard(request):
+
     user_login = request.user.username
     account_data = LineageAccount.check_login_exists(user_login)
 
     if not account_data or len(account_data) == 0:
         return redirect('server:lineage_register')
+    
+    if cache.get(f"lineage_registro_{request.user.username}"):
+        messages.info(request, "Sua conta foi criada recentemente. Aguarde até 5 minutos para que ela esteja disponível.")
+        return redirect('dashboard')
 
     try:
         personagens = LineageServices.find_chars(user_login)
@@ -138,8 +144,12 @@ def register_lineage_account(request):
         )
 
         if success:
+
+            # 🧠 Salva no cache por 5 minutos
+            cache.set(f"lineage_registro_{user.username}", True, timeout=300)  # 300 segundos = 5 minutos
+
             messages.success(request, "Conta Lineage criada com sucesso!")
-            return redirect('server:account_dashboard')
+            return redirect('server:register_success')
         else:
             messages.error(request, "Erro ao criar conta.")
             return redirect('server:lineage_register')
@@ -148,3 +158,8 @@ def register_lineage_account(request):
         'login': user.username,
         'email': user.email
     })
+
+
+@login_required
+def register_success(request):
+    return render(request, 'l2_accounts/register_success.html')

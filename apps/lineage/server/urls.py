@@ -26,9 +26,10 @@ urlpatterns = [
 
     path("api/config/", api_config_panel, name="api_config_panel"),
 
-    path('account/update-password', update_password, name='update_password'),
-    path('account/dashboard', account_dashboard, name='account_dashboard'),
-    path('account/register', register_lineage_account, name='lineage_register'),
+    path('account/update-password/', update_password, name='update_password'),
+    path('account/dashboard/', account_dashboard, name='account_dashboard'),
+    path('account/register/', register_lineage_account, name='lineage_register'),
+    path('account/register/success/', register_success, name='register_success'),
 
     path('stats/top-pvp/', top_pvp_view, name='top_pvp'),
     path('stats/top-pk/', top_pk_view, name='top_pk'),
