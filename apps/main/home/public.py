@@ -23,7 +23,7 @@ def public_news_list(request):
         'latest_news_list': news_with_translations
     }
 
-    return render(request, 'pages/public_news_index.html', context)
+    return render(request, 'public/news_index.html', context)
 
 
 def public_news_detail(request, slug):
@@ -42,7 +42,7 @@ def public_news_detail(request, slug):
         'translation': translation
     }
 
-    return render(request, 'pages/public_news_detail.html', context)
+    return render(request, 'public/news_detail.html', context)
 
 
 def public_faq_list(request):
@@ -60,4 +60,4 @@ def public_faq_list(request):
         'public_faqs': translated_public_faqs,
     }
 
-    return render(request, 'pages/public_faq.html', context)
+    return render(request, 'public/faq.html', context)

@@ -157,7 +157,7 @@ def index(request):
             'descricao': descricao
         })
 
-    return render(request, 'pages/index.html', {
+    return render(request, 'public/index.html', {
         'clanes': clanes,  # Passando os clãs com as imagens de crest
         'classes_info': classes_info,
         'online': online_count,
@@ -433,8 +433,7 @@ def dashboard(request):
 
 
 def terms_view(request):
-    return render(request, "pages/terms.html", {
-        "server_name": "PDL",  # ou qualquer nome que quiser
+    return render(request, "public/terms.html", {
         "last_updated": datetime.today().strftime("%d/%m/%Y"),
     })
 
@@ -449,8 +448,8 @@ def verificar_email(request, uidb64, token):
     if user and default_token_generator.check_token(user, token):
         user.is_verified = True
         user.save(update_fields=['is_verified'])
-        return render(request, 'verify/email_verificado.html')
-    return render(request, 'verify/email_verificado.html', {'erro': True})
+        return render(request, 'public/email_verificado.html')
+    return render(request, 'public/email_verificado.html', {'erro': True})
 
 
 @login_required
@@ -495,7 +494,7 @@ def reenviar_verificacao_view(request):
         except User.DoesNotExist:
             messages.error(request, 'Nenhuma conta foi encontrada com este e-mail.')
 
-    return render(request, 'accounts_custom/reenviar_verificacao.html')
+    return render(request, 'verify/reenviar_verificacao.html')
 
 
 @login_required
