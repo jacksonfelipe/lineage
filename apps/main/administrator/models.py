@@ -2,7 +2,7 @@ from django.db import models
 from core.models import BaseModel
 from apps.main.home.models import User
 from django.core.exceptions import ValidationError
-import zipfile, os, json
+import zipfile, os, json, shutil
 from django.conf import settings
 
 
@@ -59,6 +59,32 @@ class Theme(BaseModel):
     class Meta:
         verbose_name = "Tema"
         verbose_name_plural = "Temas"
+
+    def delete(self, *args, **kwargs):
+        # Remove o arquivo ZIP
+        try:
+            if self.upload and self.upload.path and os.path.isfile(self.upload.path):
+                print(f"Removendo arquivo: {self.upload.path}")
+                os.remove(self.upload.path)
+            else:
+                print(f"Arquivo não encontrado: {self.upload.path}")
+        except Exception as e:
+            print(f"Erro ao remover o arquivo: {e}")
+
+        # Remove a pasta extraída do tema
+        try:
+            if self.slug:
+                theme_folder_path = os.path.join(settings.BASE_DIR, 'themes/installed', self.slug)
+                if os.path.isdir(theme_folder_path):
+                    print(f"Removendo pasta: {theme_folder_path}")
+                    shutil.rmtree(theme_folder_path)
+                else:
+                    print(f"Pasta não encontrada: {theme_folder_path}")
+        except Exception as e:
+            print(f"Erro ao remover a pasta: {e}")
+
+        # Deleta a instância do banco
+        super().delete(*args, **kwargs)
 
     def clean_upload(self):
         file = self.upload
