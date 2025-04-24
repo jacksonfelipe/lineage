@@ -31,6 +31,7 @@ from utils.crests import CrestHandler
 
 from apps.lineage.server.models import IndexConfig
 from django.utils import translation
+from utils.render_theme_page import render_theme_page
 
 from utils.dynamic_import import get_query_class  # importa o helper
 LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
@@ -157,7 +158,7 @@ def index(request):
             'descricao': descricao
         })
 
-    return render(request, 'public/index.html', {
+    context = {
         'clanes': clanes,  # Passando os clãs com as imagens de crest
         'classes_info': classes_info,
         'online': online_count,
@@ -165,7 +166,9 @@ def index(request):
         'nome_servidor': nome_servidor,
         'descricao_servidor': descricao_servidor,
         'jogadores_online_texto': jogadores_online_texto
-    })
+    }
+
+    return render_theme_page(request, 'public', 'index.html', context)
 
 
 def custom_400_view(request, exception):
@@ -433,9 +436,10 @@ def dashboard(request):
 
 
 def terms_view(request):
-    return render(request, "public/terms.html", {
+    context = {
         "last_updated": datetime.today().strftime("%d/%m/%Y"),
-    })
+    }
+    return render_theme_page(request, 'public', 'terms.html', context)
 
 
 def verificar_email(request, uidb64, token):
@@ -448,8 +452,10 @@ def verificar_email(request, uidb64, token):
     if user and default_token_generator.check_token(user, token):
         user.is_verified = True
         user.save(update_fields=['is_verified'])
-        return render(request, 'public/email_verificado.html')
-    return render(request, 'public/email_verificado.html', {'erro': True})
+        context = dict()
+        return render_theme_page(request, 'public', 'email_verificado.html', context)
+    context = {'erro': True}
+    return render_theme_page(request, 'public', 'email_verificado.html', context)
 
 
 @login_required

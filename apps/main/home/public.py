@@ -3,6 +3,7 @@ from django.http import Http404
 from apps.main.faq.models import FAQ
 from apps.main.news.models import News
 from django.utils.translation import get_language
+from utils.render_theme_page import render_theme_page
 
 
 def public_news_list(request):
@@ -23,7 +24,7 @@ def public_news_list(request):
         'latest_news_list': news_with_translations
     }
 
-    return render(request, 'public/news_index.html', context)
+    return render_theme_page(request, 'public', 'news_index.html', context)
 
 
 def public_news_detail(request, slug):
@@ -42,7 +43,7 @@ def public_news_detail(request, slug):
         'translation': translation
     }
 
-    return render(request, 'public/news_detail.html', context)
+    return render_theme_page(request, 'public', 'news_detail.html', context)
 
 
 def public_faq_list(request):
@@ -60,4 +61,4 @@ def public_faq_list(request):
         'public_faqs': translated_public_faqs,
     }
 
-    return render(request, 'public/faq.html', context)
+    return render_theme_page(request, 'public', 'faq.html', context)
