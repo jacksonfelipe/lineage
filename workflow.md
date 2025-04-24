@@ -10,7 +10,7 @@ Este documento descreve o fluxo de trabalho utilizado no projeto para organizar 
   Branch estável, onde ficam as versões prontas para produção.  
   Recebe merges somente em releases.
 
-- **`master`**  
+- **`develop`**  
   Branch de desenvolvimento contínuo.  
   Todo desenvolvimento, novos recursos e correções devem ser feitos aqui.
 
@@ -19,10 +19,10 @@ Este documento descreve o fluxo de trabalho utilizado no projeto para organizar 
 ### 🛠️ Como Trabalhar
 
 #### 📌 1. Desenvolvendo
-Sempre faça commits e pushes diretamente na `master`:
+Sempre faça commits e pushes diretamente na `develop`:
 
 ```bash
-git checkout master
+git checkout develop
 # editar arquivos
 git add .
 git commit -m "Descrição do que foi feito"
@@ -36,7 +36,7 @@ Quando o projeto estiver pronto para uma nova versão estável:
 
 ```bash
 git checkout main
-git merge master
+git merge develop
 git tag -a vX.X.X -m "Descrição da release"
 git push origin main --tags
 ```
@@ -49,7 +49,7 @@ git push origin main --tags
 Depois da release:
 
 ```bash
-git checkout master
+git checkout develop
 ```
 
 E continue desenvolvendo.
