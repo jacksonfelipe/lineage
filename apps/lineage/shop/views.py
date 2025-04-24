@@ -176,3 +176,11 @@ def checkout(request):
 def purchase_history(request):
     purchases = ShopPurchase.objects.filter(user=request.user).order_by('-data_compra')
     return render(request, 'shop/purchases.html', {'purchases': purchases})
+
+
+@login_required
+def clear_cart(request):
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart.limpar()
+    messages.success(request, "Carrinho esvaziado com sucesso.")
+    return redirect('shop:view_cart')

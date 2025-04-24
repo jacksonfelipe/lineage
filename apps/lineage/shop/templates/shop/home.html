@@ -45,12 +45,44 @@
           <a href="{% url 'shop:add_package_to_cart' package.id %}" class="btn btn-outline-primary rounded-pill">
             <i class="bi bi-box-seam me-1"></i>{% trans "Adicionar Pacote" %}
           </a>
+          <!-- Botão de Visualizar Itens -->
+          <button type="button" class="btn btn-outline-info rounded-pill mt-2" data-bs-toggle="modal" data-bs-target="#modalPackageItems{{ package.id }}">
+            <i class="bi bi-eye me-1"></i>{% trans "Visualizar Itens" %}
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Modal para visualizar itens do pacote -->
+    <div class="modal fade" id="modalPackageItems{{ package.id }}" tabindex="-1" aria-labelledby="modalPackageItemsLabel{{ package.id }}" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalPackageItemsLabel{{ package.id }}">{{ package.nome }} - {% trans "Itens do Pacote" %}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <ul class="list-group">
+              {% for item in package.itens.all %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <!-- Imagem do ícone do item -->
+                <img src="{% static 'assets/img/l2/icons/5-' %}{{ item.item_id|unlocalize }}.jpg" class="me-2" style="width:24px;">
+                {{ item.nome }} <span class="text-muted">x{{ item.quantidade }}</span>
+              </li>
+              {% empty %}
+              <li class="list-group-item">{% trans "Este pacote não contém itens." %}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Fechar" %}</button>
+          </div>
         </div>
       </div>
     </div>
     {% empty %}
     <p>{% trans "Nenhum pacote disponível." %}</p>
     {% endfor %}
-  </div>
+  </div>  
 </div>
 {% endblock %}

@@ -11,6 +11,7 @@ urlpatterns = [
     path('cart/add-package/<int:package_id>/', views.add_package_to_cart, name='add_package_to_cart'),
     path('cart/apply-promo/', views.apply_promo_code, name='apply_promo_code'),
     path('cart/checkout/', views.checkout, name='checkout'),
+    path('cart/clear/', views.clear_cart, name='clear_cart'),
     
     path('purchases/', views.purchase_history, name='purchase_history'),
 
