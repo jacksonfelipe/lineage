@@ -4,6 +4,7 @@ from apps.main.home.models import User
 from django.core.exceptions import ValidationError
 import zipfile, os, json, shutil
 from django.conf import settings
+from django.utils.text import slugify
 
 
 class ChatGroup(BaseModel):
@@ -99,50 +100,68 @@ class Theme(BaseModel):
         return file
 
     def processar_upload(self):
-        if self.upload:
-            # Obter o arquivo enviado no campo upload
-            upload_file = self.upload.file  # Acessa o arquivo como objeto BytesIO
+        if not self.upload:
+            return
 
-            # Verifica se o arquivo ZIP é válido
-            with zipfile.ZipFile(upload_file, 'r') as zip_ref:
-                # Liste os arquivos dentro do ZIP
-                file_names = zip_ref.namelist()
-                print(file_names)  # Para fins de depuração, você pode remover isso depois.
+        upload_file = self.upload.file  # Objeto BytesIO
 
-                # Variáveis para o caminho do theme.json
-                theme_json_path = None
+        if not zipfile.is_zipfile(upload_file):
+            raise ValidationError("O arquivo não é um ZIP válido.")
 
-                # Procurando por 'theme.json' em qualquer lugar dentro do ZIP
-                for file_name in file_names:
-                    if file_name.lower() == 'theme.json':  # Verifique se 'theme.json' existe
-                        theme_json_path = file_name
-                        break  # Encontre o primeiro match e pare de procurar
+        with zipfile.ZipFile(upload_file, 'r') as zip_ref:
+            file_names = zip_ref.namelist()
+            print(file_names)
 
-                if not theme_json_path:
-                    raise ValidationError("Não foi encontrado um arquivo 'theme.json' no ZIP.")
+            # Segurança: extensões permitidas
+            extensoes_permitidas = ['.html', '.css', '.js', '.json', '.png', '.jpg', '.jpeg', '.svg', '.woff', '.ttf', '.map']
 
-                try:
-                    # Lê o theme.json diretamente do arquivo ZIP
-                    with zip_ref.open(theme_json_path) as f:
-                        meta = json.load(f)
+            for member in zip_ref.infolist():
+                ext = os.path.splitext(member.filename)[1].lower()
+                if ext and ext not in extensoes_permitidas:
+                    raise ValidationError(f"Arquivo com extensão não permitida: {ext}")
 
-                    # Atualiza os dados do tema com informações do JSON
-                    self.nome = meta.get('name', self.nome)
-                    self.slug = meta.get('slug', self.slug)
-                    self.version = meta.get('version', '')
-                    self.author = meta.get('author', '')
-                    self.descricao = meta.get('description', '')
+                extracted_path = os.path.join(settings.BASE_DIR, 'themes/installed', self.slug, member.filename)
+                if not os.path.realpath(extracted_path).startswith(
+                    os.path.realpath(os.path.join(settings.BASE_DIR, 'themes/installed', self.slug))
+                ):
+                    raise ValidationError("O tema contém arquivos em caminhos não permitidos.")
 
-                    # Criação da pasta onde o conteúdo do tema será extraído
-                    theme_folder_path = os.path.join(settings.BASE_DIR, 'themes/installed', self.slug)
+            # Procurando por theme.json
+            theme_json_path = next(
+                (f for f in file_names if f.lower().endswith('theme.json')),
+                None
+            )
+            if not theme_json_path:
+                raise ValidationError("O arquivo 'theme.json' não foi encontrado.")
 
-                    # Cria o diretório para armazenar os arquivos do tema, se não existir
-                    os.makedirs(theme_folder_path, exist_ok=True)
+            try:
+                with zip_ref.open(theme_json_path) as f:
+                    meta = json.load(f)
 
-                    # Extrai os arquivos do ZIP para o diretório específico
-                    zip_ref.extractall(theme_folder_path)
+                obrigatorios = ['name', 'slug']
+                for campo in obrigatorios:
+                    if campo not in meta:
+                        raise ValidationError(f"O campo obrigatório '{campo}' está ausente no theme.json.")
 
-                    # Se necessário, você pode adicionar mais lógica para organizar o conteúdo do tema
+                # Atualiza os dados do tema
+                self.nome = meta.get('name', self.nome)
+                self.slug = slugify(meta.get('slug', self.slug))
+                self.version = meta.get('version', '')
+                self.author = meta.get('author', '')
+                self.descricao = meta.get('description', '')
 
-                except Exception as e:
-                    raise ValidationError(f"Erro ao processar o arquivo do tema: {str(e)}")
+                # Caminho do tema
+                theme_folder_path = os.path.join(settings.BASE_DIR, 'themes/installed', self.slug)
+
+                # Apaga a pasta existente, se houver
+                if os.path.exists(theme_folder_path):
+                    shutil.rmtree(theme_folder_path)
+
+                # Cria a nova pasta e extrai
+                os.makedirs(theme_folder_path, exist_ok=False)
+                zip_ref.extractall(theme_folder_path)
+
+            except json.JSONDecodeError:
+                raise ValidationError("Erro ao interpretar o arquivo theme.json. Verifique se o JSON está bem formado.")
+            except Exception as e:
+                raise ValidationError(f"Erro ao processar o arquivo do tema: {str(e)}")

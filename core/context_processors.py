@@ -1,6 +1,7 @@
 from django.conf import settings
 from apps.main.administrator.models import Theme
 import os
+from django.utils.text import slugify
 
 
 def project_metadata(request):
@@ -23,26 +24,26 @@ def project_metadata(request):
 
 def active_theme(request):
     theme = Theme.objects.filter(ativo=True).first()
-    base_template = "layouts/base-default.html"  # Template base padrão
-    
-    # Lista de arquivos do tema ativo
+    base_template = "layouts/base-default.html"
     theme_files = {}
 
     if theme:
-        # Caminho para o diretório do tema ativo
-        theme_path = os.path.join(settings.BASE_DIR, 'templates', 'installed', theme.slug)
+        safe_slug = slugify(theme.slug)
+        theme_path = os.path.join(settings.BASE_DIR, 'templates', 'installed', safe_slug)
 
-        # Verificar se o diretório do tema existe
         if os.path.isdir(theme_path):
-            # Listar todos os arquivos dentro do diretório do tema
-            theme_files = {f: os.path.join('installed', theme.slug, f) for f in os.listdir(theme_path) if os.path.isfile(os.path.join(theme_path, f))}
+            theme_files = {
+                f: os.path.join('installed', safe_slug, f)
+                for f in os.listdir(theme_path)
+                if os.path.isfile(os.path.join(theme_path, f))
+            }
 
-        # Definir o template base do tema
-        base_template = f"installed/{theme.slug}/base.html"  # O base é sempre o mesmo para o tema
+        base_template = f"installed/{safe_slug}/base.html"
     
     return {
-        'active_theme': theme.slug if theme else None,
+        'active_theme': safe_slug if theme else None,
         'base_template': base_template,
-        'theme_slug': theme.slug if theme else None,
-        'theme_files': theme_files,  # Lista de arquivos do tema
+        'theme_slug': safe_slug if theme else None,
+        'path_theme': f'themes/installed/{safe_slug}' if theme else None,
+        'theme_files': theme_files,
     }

@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
+import os
 
 
 urlpatterns = [
@@ -37,6 +38,7 @@ urlpatterns = [
 
 # Static/media routes
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static('/themes/', document_root=os.path.join(settings.BASE_DIR, 'themes'))
 
 # Error handlers
 handler400 = 'apps.main.home.views.custom_400_view'
