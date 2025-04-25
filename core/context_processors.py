@@ -29,7 +29,7 @@ def active_theme(request):
 
     if theme:
         safe_slug = slugify(theme.slug)
-        theme_path = os.path.join(settings.BASE_DIR, 'templates', 'installed', safe_slug)
+        theme_path = os.path.join(settings.BASE_DIR, 'themes', 'installed', safe_slug)
 
         if os.path.isdir(theme_path):
             theme_files = {
