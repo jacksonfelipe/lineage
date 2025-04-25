@@ -81,8 +81,20 @@
         </div>
         <p>&copy; <span id="footer-year"></span> {{ PROJECT_TITLE }} - {% trans "Todos os direitos reservados." %}</p>
         <p>{% trans "Feito com ❤️ por aventureiros para aventureiros." %}</p>
+        <!-- Seletor de idioma -->
+        <form action="{% url 'set_language' %}" method="post" class="d-inline-block">
+          {% csrf_token %}
+          <div class="input-group input-group-sm" style="width: 180px;">
+            <select name="language" class="form-select form-select-sm" onchange="this.form.submit()">
+              <option value="pt" {% if LANGUAGE_CODE == 'pt' %}selected{% endif %}>🇧🇷 Português</option>
+              <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>🇺🇸 English</option>
+              <option value="es" {% if LANGUAGE_CODE == 'es' %}selected{% endif %}>🇪🇸 Español</option>
+            </select>
+            <input type="hidden" name="next" value="{{ request.path }}">
+          </div>
+        </form>
       </div>
-    </footer>    
+    </footer>   
 
     {% include 'includes/scripts.html' %}
     <script src="{% static 'public/js/layout.js' %}"></script>

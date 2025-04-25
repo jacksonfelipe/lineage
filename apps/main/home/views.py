@@ -508,7 +508,6 @@ def reenviar_verificacao_view(request):
     return render(request, 'verify/reenviar_verificacao.html')
 
 
-@login_required
 def custom_set_language(request):
     if request.method == 'POST':
         lang_code = request.POST.get('language')
