@@ -328,7 +328,7 @@ def register_view(request):
                 reverse('verificar_email', args=[uid, token])
             )
 
-            if getattr(settings, 'CONFIG_EMAIL_ENABLE', False):
+            try:
                 send_mail(
                     subject='Verifique seu e-mail',
                     message=f'Olá {user.username}, clique no link para verificar sua conta: {verification_link}',
@@ -336,6 +336,8 @@ def register_view(request):
                     recipient_list=[user.email],
                     fail_silently=False,
                 )
+            except Exception as e:
+                logger.error(f"Erro ao enviar email: {str(e)}")
 
             try:
                 send_notification(
@@ -479,7 +481,7 @@ def reenviar_verificacao_view(request):
             )
 
             # Envia o e-mail
-            if getattr(settings, 'CONFIG_EMAIL_ENABLE', False):
+            try:
                 send_mail(
                     subject='Reenvio de verificação de e-mail',
                     message=(
@@ -491,6 +493,8 @@ def reenviar_verificacao_view(request):
                     recipient_list=[user.email],
                     fail_silently=False,
                 )
+            except Exception as e:
+                logger.error(f"Erro ao enviar email: {str(e)}")
 
                 messages.success(request, 'Um novo e-mail de verificação foi enviado.')
             else:
