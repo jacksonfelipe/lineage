@@ -11,6 +11,7 @@ import re
 
 from utils.dynamic_import import get_query_class  
 LineageServices = get_query_class("LineageServices")
+TransferFromCharToWallet = get_query_class("TransferFromCharToWallet")
 
 
 @login_required
@@ -22,12 +23,16 @@ def change_nickname_view(request, char_id):
         messages.error(request, _("Preço do serviço não configurado."))
         return redirect("server:account_dashboard")
     
-    response = LineageServices.check_char(request.user.username, char_id)
+    response = TransferFromCharToWallet.find_char(request.user.username, char_id)
     
     if request.method == "POST":
         acc = request.user.username
         cid = char_id
         name = request.POST.get("name")
+
+        if not response:
+            messages.error(request, 'Personagem não encontrado ou não pertence à sua conta.')
+            return redirect("server:change_nickname", char_id=char_id)
 
         if response[0]['online'] != 0:
             messages.error(request, 'O personagem precisa estar offline.')
@@ -72,12 +77,16 @@ def change_sex_view(request, char_id):
         messages.error(request, _("Preço do serviço não configurado."))
         return redirect("server:account_dashboard")
     
-    response = LineageServices.check_char(request.user.username, char_id)
+    response = TransferFromCharToWallet.find_char(request.user.username, char_id)
 
     if request.method == "POST":
         acc = request.user.username
         cid = char_id
         sex_input = request.POST.get("sex")
+
+        if not response:
+            messages.error(request, 'Personagem não encontrado ou não pertence à sua conta.')
+            return redirect("server:change_nickname", char_id=char_id)
 
         if response[0]['online'] != 0:
             messages.error(request, 'O personagem precisa estar offline.')
@@ -118,11 +127,15 @@ def change_sex_view(request, char_id):
 @require_lineage_connection
 def unstuck_view(request, char_id):
 
-    response = LineageServices.check_char(request.user.username, char_id)
+    response = TransferFromCharToWallet.find_char(request.user.username, char_id)
 
     if request.method == "POST":
         acc = request.user.username
         cid = char_id
+
+        if not response:
+            messages.error(request, 'Personagem não encontrado ou não pertence à sua conta.')
+            return redirect("server:change_nickname", char_id=char_id)
 
         if response[0]['online'] != 0:
             messages.error(request, 'O personagem precisa estar offline.')
