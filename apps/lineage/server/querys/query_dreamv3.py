@@ -561,70 +561,73 @@ class TransferFromCharToWallet:
         try:
             db = LineageDB()
 
-            # Buscar no INVENTORY
+            # INVENTORY
             query_inve = """
-                SELECT amount, item_type FROM items 
-                WHERE owner_id = :char_id AND item_type = :item_type AND location = 'INVENTORY' 
-                LIMIT 1
+                SELECT object_id, amount FROM items 
+                WHERE owner_id = :char_id AND item_type = :item_type AND location = 'INVENTORY'
             """
-            item_inve = db.select(query_inve, {"char_id": char_id, "item_type": coin_id})
-            inINVE = item_inve[0]["amount"] if item_inve else 0
-            inve_id = item_inve[0]["item_type"] if item_inve else None
+            items_inve = db.select(query_inve, {"char_id": char_id, "item_type": coin_id})
+            inINVE = sum([item["amount"] for item in items_inve])
 
-            # Buscar no WAREHOUSE
+            # WAREHOUSE
             query_ware = """
-                SELECT amount, item_type FROM items 
-                WHERE owner_id = :char_id AND item_type = :item_type AND location = 'WAREHOUSE' 
-                LIMIT 1
+                SELECT object_id, amount FROM items 
+                WHERE owner_id = :char_id AND item_type = :item_type AND location = 'WAREHOUSE'
             """
-            item_ware = db.select(query_ware, {"char_id": char_id, "item_type": coin_id})
-            inWARE = item_ware[0]["amount"] if item_ware else 0
-            ware_id = item_ware[0]["item_type"] if item_ware else None
+            items_ware = db.select(query_ware, {"char_id": char_id, "item_type": coin_id})
+            inWARE = sum([item["amount"] for item in items_ware])
 
-            count_exist = inINVE + inWARE
-            if count_exist < count:
+            total_available = inINVE + inWARE
+            if total_available < count:
                 return False
 
-            # INVENTORY: remove ou atualiza
+            # Função auxiliar para deletar itens não-stackables
+            def delete_non_stackable(items, amount_to_remove):
+                removed = 0
+                for item in items:
+                    if removed >= amount_to_remove:
+                        break
+                    db.update("DELETE FROM items WHERE object_id = :object_id", {"object_id": item["object_id"]})
+                    removed += 1
+                return removed
+
+            # INVENTORY
             if inINVE > 0:
-                if inINVE <= count:
-                    delete_query = "DELETE FROM items WHERE item_type = :item_type AND owner_id = :char_id"
-                    if db.update(delete_query, {"item_type": inve_id, "char_id": char_id}) is None:
-                        return False
+                is_stackable = len(items_inve) == 1 and items_inve[0]["amount"] > 1
+
+                if is_stackable:
+                    if inINVE <= count:
+                        db.update("""
+                            DELETE FROM items 
+                            WHERE item_type = :item_type AND owner_id = :char_id AND location = 'INVENTORY'
+                        """, {"item_type": coin_id, "char_id": char_id})
+                    else:
+                        db.update("""
+                            UPDATE items SET amount = amount - :count 
+                            WHERE item_type = :item_type AND owner_id = :char_id AND location = 'INVENTORY'
+                        """, {"count": count, "item_type": coin_id, "char_id": char_id})
+                    count -= min(count, inINVE)
                 else:
-                    update_query = """
-                        UPDATE items SET amount = amount - :count 
-                        WHERE item_type = :inve_id AND owner_id = :char_id
-                    """
-                    if db.update(update_query, {"count": count, "inve_id": inve_id, "char_id": char_id}) is None:
-                        return False
+                    removed = delete_non_stackable(items_inve, count)
+                    count -= removed
 
-                    # Verificar se a quantidade foi reduzida a 0 e remover o item se necessário
-                    check_query = "SELECT amount FROM items WHERE item_type = :item_type AND owner_id = :char_id"
-                    result = db.select(check_query, {"item_type": inve_id, "char_id": char_id})
-                    if result and result[0]["amount"] == 0:
-                        db.update("DELETE FROM items WHERE item_type = :item_type AND owner_id = :char_id", {"item_type": inve_id, "char_id": char_id})
+            # WAREHOUSE
+            if count > 0 and inWARE > 0:
+                is_stackable = len(items_ware) == 1 and items_ware[0]["amount"] > 1
 
-            # WAREHOUSE: se necessário
-            if count > inINVE:
-                tirar_do_ware = count - inINVE
-                if tirar_do_ware == inWARE:
-                    delete_query = "DELETE FROM items WHERE item_type = :item_type AND owner_id = :char_id"
-                    if db.update(delete_query, {"item_type": ware_id, "char_id": char_id}) is None:
-                        return False
+                if is_stackable:
+                    if inWARE <= count:
+                        db.update("""
+                            DELETE FROM items 
+                            WHERE item_type = :item_type AND owner_id = :char_id AND location = 'WAREHOUSE'
+                        """, {"item_type": coin_id, "char_id": char_id})
+                    else:
+                        db.update("""
+                            UPDATE items SET amount = amount - :count 
+                            WHERE item_type = :item_type AND owner_id = :char_id AND location = 'WAREHOUSE'
+                        """, {"count": count, "item_type": coin_id, "char_id": char_id})
                 else:
-                    update_query = """
-                        UPDATE items SET amount = amount - :amount_item 
-                        WHERE item_type = :item_type AND owner_id = :char_id
-                    """
-                    if db.update(update_query, {"amount_item": tirar_do_ware, "item_type": ware_id, "char_id": char_id}) is None:
-                        return False
-
-                    # Verificar se a quantidade foi reduzida a 0 e remover o item se necessário
-                    check_query = "SELECT amount FROM items WHERE item_type = :item_type AND owner_id = :char_id"
-                    result = db.select(check_query, {"item_type": ware_id, "char_id": char_id})
-                    if result and result[0]["amount"] == 0:
-                        db.update("DELETE FROM items WHERE item_type = :item_type AND owner_id = :char_id LIMIT 1", {"item_type": ware_id, "char_id": char_id})
+                    delete_non_stackable(items_ware, count)
 
             return True
 
