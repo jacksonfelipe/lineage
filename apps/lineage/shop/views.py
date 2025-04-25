@@ -5,6 +5,7 @@ from django.db import transaction
 from .models import ShopItem, ShopPackage, Cart, CartItem, CartPackage, PromotionCode, ShopPurchase
 from apps.lineage.wallet.signals import aplicar_transacao
 from apps.lineage.inventory.models import InventoryItem, Inventory
+from apps.lineage.wallet.models import Wallet
 
 
 @login_required
@@ -85,7 +86,7 @@ def apply_promo_code(request):
 @login_required
 def checkout(request):
     cart, _ = Cart.objects.get_or_create(user=request.user)
-    wallet = request.user.wallet
+    wallet, _ = Wallet.objects.get_or_create(usuario=request.user)
 
     total = cart.calcular_total()
 

@@ -40,7 +40,7 @@ def change_nickname_view(request, char_id):
             messages.error(request, _("Nickname inválido. Use de 2 a 16 caracteres latinos ou de 3 a 16 caracteres cirílicos."))
             return redirect("server:change_nickname", char_id=char_id)
 
-        wallet = Wallet.objects.get(usuario=request.user)
+        wallet, _ = Wallet.objects.get_or_create(usuario=request.user)
 
         if wallet.saldo < price:
             messages.error(request, _("Saldo insuficiente na carteira."))
@@ -91,7 +91,7 @@ def change_sex_view(request, char_id):
         # Converte 'F' para 1 e 'M' para 0
         sex_value = 1 if sex_input == 'F' else 0
 
-        wallet = Wallet.objects.get(usuario=request.user)
+        wallet, _ = Wallet.objects.get_or_create(usuario=request.user)
 
         if wallet.saldo < price:
             messages.error(request, _("Saldo insuficiente na carteira."))

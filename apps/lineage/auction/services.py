@@ -16,14 +16,15 @@ def place_bid(auction, bidder, bid_amount):
     if auction.current_bid and bid_amount <= auction.current_bid:
         raise ValueError("O lance deve ser maior que o lance atual.")
 
-    wallet = Wallet.objects.select_for_update().get(usuario=bidder)
+    wallet, _ = Wallet.objects.select_for_update().get_or_create(usuario=auction.bidder)
 
     if wallet.saldo < bid_amount:
         raise ValueError("Saldo insuficiente.")
 
     # Devolve o valor do último lance ao último usuário
     if auction.highest_bidder:
-        old_wallet = Wallet.objects.select_for_update().get(usuario=auction.highest_bidder)
+        old_wallet, _ = Wallet.objects.select_for_update().get_or_create(usuario=auction.highest_bidder)
+
         aplicar_transacao(
             old_wallet,
             'ENTRADA',
@@ -58,7 +59,7 @@ def finish_auction(auction):
         raise ValueError("Leilão ainda está ativo.")
 
     if auction.highest_bidder:
-        seller_wallet = Wallet.objects.select_for_update().get(usuario=auction.seller)
+        seller_wallet, _ = Wallet.objects.select_for_update().get_or_create(usuario=auction.seller)
         aplicar_transacao(
             seller_wallet,
             'ENTRADA',
