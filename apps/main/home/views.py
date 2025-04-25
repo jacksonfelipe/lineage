@@ -328,13 +328,14 @@ def register_view(request):
                 reverse('verificar_email', args=[uid, token])
             )
 
-            send_mail(
-                subject='Verifique seu e-mail',
-                message=f'Olá {user.username}, clique no link para verificar sua conta: {verification_link}',
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[user.email],
-                fail_silently=False,
-            )
+            if getattr(settings, 'CONFIG_EMAIL_ENABLE', False):
+                send_mail(
+                    subject='Verifique seu e-mail',
+                    message=f'Olá {user.username}, clique no link para verificar sua conta: {verification_link}',
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[user.email],
+                    fail_silently=False,
+                )
 
             try:
                 send_notification(
