@@ -146,3 +146,49 @@ def encerrar_leilao(request, auction_id):
         messages.error(request, str(e))
 
     return redirect('auction:listar_leiloes')
+
+
+@login_required
+def cancelar_leilao(request, auction_id):
+    auction = get_object_or_404(Auction, id=auction_id)
+
+    if request.user != auction.seller:
+        messages.error(request, 'Você não tem permissão para cancelar este leilão.')
+        return redirect('auction:listar_leiloes')
+
+    if auction.end_time <= timezone.now():
+        messages.error(request, 'Não é possível cancelar um leilão que já terminou.')
+        return redirect('auction:listar_leiloes')
+
+    try:
+        with transaction.atomic():
+            # Devolver os valores dos lances para os usuários
+            for bid in auction.bids.all():  # Supondo que exista uma relação `bids` em Auction
+                user = bid.user
+                amount = bid.amount
+
+                # Aqui você precisará implementar a lógica de devolução do valor ao usuário
+                # Exemplo fictício (você pode substituir com seu sistema de moedas ou créditos):
+                user.profile.balance += amount
+                user.profile.save()
+
+            # Devolver os itens ao vendedor
+            inventory, _ = Inventory.objects.get_or_create(user=request.user, character_name=request.POST.get('character_name', ''))
+            item, created = InventoryItem.objects.get_or_create(inventory=inventory, item_id=auction.item_id, defaults={
+                'quantity': auction.quantity,
+                'item_name': auction.item_name
+            })
+            if not created:
+                item.quantity += auction.quantity
+                item.save()
+
+            # Cancelar o leilão
+            auction.delete()
+
+            messages.success(request, 'Leilão cancelado e recursos devolvidos com sucesso.')
+
+    except Exception as e:
+        messages.error(request, f'Ocorreu um erro ao cancelar o leilão: {str(e)}')
+
+    return redirect('auction:listar_leiloes')
+

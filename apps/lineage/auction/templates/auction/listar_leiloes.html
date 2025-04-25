@@ -51,10 +51,15 @@
               <i class="bi bi-gavel"></i> {% trans "Dar Lance" %}
             </a>
             {% if leilao.seller == user %}
-              <a href="{% url 'auction:encerrar_leilao' leilao.id %}" class="btn btn-danger btn-sm">
-                <i class="bi bi-x-circle"></i> {% trans "Encerrar" %}
+            <div class="btn-group">
+              <a href="{% url 'auction:cancelar_leilao' leilao.id %}" class="btn btn-warning btn-sm">
+                <i class="bi bi-x-octagon"></i> {% trans "Cancelar" %}
               </a>
-            {% endif %}
+              <a href="{% url 'auction:encerrar_leilao' leilao.id %}" class="btn btn-danger btn-sm">
+                <i class="bi bi-x-circle"></i> {% trans "Finalizar" %}
+              </a>
+            </div>
+          {% endif %}          
           </div>
         </div>
       </div>

@@ -10,4 +10,5 @@ urlpatterns = [
     path('criar/', views.criar_leilao, name='criar_leilao'),
     path('lance/<int:auction_id>/', views.fazer_lance, name='fazer_lance'),
     path('encerrar/<int:auction_id>/', views.encerrar_leilao, name='encerrar_leilao'),
+    path('cancelar/<int:auction_id>/', views.cancelar_leilao, name='cancelar_leilao'),
 ]
