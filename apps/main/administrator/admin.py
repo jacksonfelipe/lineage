@@ -60,3 +60,24 @@ class ThemeAdmin(BaseModelAdmin):
         return actions
 
     delete_selected_themes.short_description = "Excluir temas selecionados"
+
+
+@admin.register(BackgroundSetting)
+class BackgroundSettingAdmin(admin.ModelAdmin):
+    list_display = ('name', 'is_active', 'image_preview')
+    list_filter = ('is_active',)
+    search_fields = ('name',)
+    readonly_fields = ('image_preview',)
+
+    def image_preview(self, obj):
+        if obj.image:
+            return f'<img src="{obj.image.url}" width="200" style="object-fit: cover; border-radius: 8px;" />'
+        return "(Sem imagem)"
+    image_preview.allow_tags = True
+    image_preview.short_description = "Preview"
+
+    def save_model(self, request, obj, form, change):
+        # Desativa todos os outros backgrounds se esse for ativado
+        if obj.is_active:
+            BackgroundSetting.objects.exclude(id=obj.id).update(is_active=False)
+        super().save_model(request, obj, form, change)
