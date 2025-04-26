@@ -34,6 +34,8 @@ def siege_ranking_view(request):
             castle["clan_name"] = castle["clan_name"] or _("No Owner")
             castle["char_name"] = castle["char_name"] or _("No Leader")
             castle["ally_name"] = castle["ally_name"] or _("No Alliance")
+            timestamp_s = castle["sdate"] / 1000
+            castle["sdate"] = datetime.fromtimestamp(timestamp_s)
 
     else:
         castles = list()
