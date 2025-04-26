@@ -1,7 +1,8 @@
 from django.conf import settings
-from apps.main.administrator.models import Theme
+from apps.main.administrator.models import Theme, BackgroundSetting
 import os
 from django.utils.text import slugify
+from django.templatetags.static import static
 
 
 def project_metadata(request):
@@ -46,4 +47,16 @@ def active_theme(request):
         'theme_slug': safe_slug if theme else None,
         'path_theme': f'themes/installed/{safe_slug}' if theme else None,
         'theme_files': theme_files,
+    }
+
+
+def background_setting(request):
+    bg = BackgroundSetting.get_active()
+    if bg and bg.image:
+        bg_url = bg.image.url
+    else:
+        bg_url = static('assets/img/l2/bgs/bg.png')  # Caminho padrão
+
+    return {
+        'background_url': bg_url
     }

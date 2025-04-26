@@ -165,3 +165,21 @@ class Theme(BaseModel):
                 raise ValidationError("Erro ao interpretar o arquivo theme.json. Verifique se o JSON está bem formado.")
             except Exception as e:
                 raise ValidationError(f"Erro ao processar o arquivo do tema: {str(e)}")
+
+
+class BackgroundSetting(BaseModel):
+    name = models.CharField(max_length=100, help_text="Nome de referência para o background")
+    image = models.ImageField(upload_to='backgrounds/', help_text="Imagem de fundo")
+    is_active = models.BooleanField(default=False, help_text="Define se este background está ativo")
+
+    class Meta:
+        verbose_name = "Background Setting"
+        verbose_name_plural = "Background Settings"
+
+    def __str__(self):
+        return self.name
+
+    @classmethod
+    def get_active(cls):
+        """Pega o background ativo"""
+        return cls.objects.filter(is_active=True).first()

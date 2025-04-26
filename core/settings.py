@@ -130,6 +130,7 @@ TEMPLATES = [
                 "django.template.context_processors.i18n",
                 "core.context_processors.project_metadata",
                 "core.context_processors.active_theme",
+                "core.context_processors.background_setting",
             ],
         },
     },
