@@ -125,7 +125,7 @@ def grandboss_status_view(request):
             boss['respawn_human'] = timesince(respawn_datetime) + " atrás"
 
             # Verificar se o boss está vivo ou morto
-            if respawn_datetime > datetime.now():
+            if boss['respawn'] > 0:
                 boss['status'] = "Morto"
             else:
                 boss['status'] = "Vivo"
