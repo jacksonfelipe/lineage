@@ -63,7 +63,7 @@ class ThemeAdmin(BaseModelAdmin):
 
 
 @admin.register(BackgroundSetting)
-class BackgroundSettingAdmin(admin.ModelAdmin):
+class BackgroundSettingAdmin(BaseModelAdmin):
     list_display = ('name', 'is_active', 'image_preview')
     list_filter = ('is_active',)
     search_fields = ('name',)
