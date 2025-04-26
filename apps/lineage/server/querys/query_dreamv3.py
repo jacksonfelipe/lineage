@@ -518,7 +518,7 @@ class TransferFromCharToWallet:
     @cache_lineage_result(timeout=300, use_cache=False)
     def list_items(char_id):
         query = """
-            SELECT item_id, item_type, amount, location
+            SELECT item_id, item_type, amount, location, enchant
             FROM items
             WHERE owner_id = :char_id
             AND location IN ('INVENTORY', 'WAREHOUSE')
@@ -536,12 +536,13 @@ class TransferFromCharToWallet:
 
         # Buscar no INVENTORY
         query_inve = """
-            SELECT amount FROM items 
+            SELECT amount, enchant FROM items 
             WHERE owner_id = :char_id AND item_type = :coin_id AND location = 'INVENTORY'
             LIMIT 1
         """
         result_inve = db.select(query_inve, {"char_id": char_id, "coin_id": coin_id})
         inINVE = result_inve[0]["amount"] if result_inve else 0
+        enchant = result_inve[0]["enchant"] if result_inve else 0
 
         # Buscar no WAREHOUSE
         query_ware = """
@@ -553,7 +554,7 @@ class TransferFromCharToWallet:
         inWARE = result_ware[0]["amount"] if result_ware else 0
 
         total = inINVE + inWARE
-        return {"total": total, "inventory": inINVE, "warehouse": inWARE}
+        return {"total": total, "inventory": inINVE, "warehouse": inWARE, "enchant": enchant}
 
     @staticmethod
     @cache_lineage_result(timeout=300, use_cache=False)
@@ -573,14 +574,14 @@ class TransferFromCharToWallet:
 
             # INVENTORY
             query_inve = """
-                SELECT item_id, amount FROM items
+                SELECT * FROM items
                 WHERE owner_id = :char_id AND item_type = :item_type AND location = 'INVENTORY'
             """
             items_inve = db.select(query_inve, {"char_id": char_id, "item_type": coin_id})
 
             # WAREHOUSE
             query_ware = """
-                SELECT item_id, amount FROM items
+                SELECT * FROM items
                 WHERE owner_id = :char_id AND item_type = :item_type AND location = 'WAREHOUSE'
             """
             items_ware = db.select(query_ware, {"char_id": char_id, "item_type": coin_id})

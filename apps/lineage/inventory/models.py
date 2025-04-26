@@ -18,6 +18,7 @@ class InventoryItem(BaseModel):
     item_id = models.IntegerField()  # ID do item no banco do Lineage
     item_name = models.CharField(max_length=100)
     quantity = models.PositiveIntegerField(default=1)
+    enchant = models.IntegerField(default=0)
     added_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

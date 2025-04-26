@@ -3,10 +3,14 @@ from .models import Bid
 from apps.lineage.wallet.models import Wallet
 from apps.lineage.wallet.signals import aplicar_transacao
 from apps.lineage.inventory.models import InventoryItem, Inventory
+from apps.lineage.auction.models import Auction
 
 
 @transaction.atomic
-def place_bid(auction, bidder, bid_amount):
+def place_bid(auction, bidder, bid_amount, character_name):
+    if auction.seller == bidder:
+        raise ValueError("Você não pode dar lances no seu próprio leilão.")
+    
     if not auction.is_active:
         raise ValueError("Leilão encerrado.")
 
@@ -52,16 +56,18 @@ def place_bid(auction, bidder, bid_amount):
     return Bid.objects.create(
         auction=auction,
         bidder=bidder,
-        amount=bid_amount
+        amount=bid_amount,
+        character_name=character_name
     )
 
 
 @transaction.atomic
-def finish_auction(auction):
-    if auction.is_active:
+def finish_auction(auction: Auction):
+    if auction.is_active():
         raise ValueError("Leilão ainda está ativo.")
 
     if auction.highest_bidder:
+        # Transfere o dinheiro
         seller_wallet, _ = Wallet.objects.get_or_create(usuario=auction.seller)
         aplicar_transacao(
             seller_wallet,
@@ -71,10 +77,16 @@ def finish_auction(auction):
             origem=str(auction.highest_bidder)
         )
 
+        # Pega o último lance para saber o personagem que deve receber
+        winning_bid = auction.bids.order_by('-amount', '-created_at').first()
+        if not winning_bid:
+            raise ValueError("Não foi possível determinar o lance vencedor.")
+
+        # Cria/atualiza o inventário do comprador
         dest_inventory, _ = Inventory.objects.get_or_create(
             user=auction.highest_bidder,
-            character_name="Leilao",
-            account_name="Leilao"
+            character_name=winning_bid.character_name,
+            account_name=winning_bid.character_name  # ou outro valor se necessário
         )
 
         dest_item, created = InventoryItem.objects.get_or_create(
@@ -88,10 +100,11 @@ def finish_auction(auction):
             dest_item.save()
 
     else:
+        # Se ninguém comprou, devolve o item ao dono original
         seller_inventory, _ = Inventory.objects.get_or_create(
             user=auction.seller,
-            character_name="Leilao",
-            account_name="Leilao"
+            character_name=auction.character_name,
+            account_name=auction.character_name  # ou algo mais confiável
         )
 
         returned_item, created = InventoryItem.objects.get_or_create(
@@ -104,4 +117,4 @@ def finish_auction(auction):
             returned_item.quantity += auction.quantity
             returned_item.save()
 
-    auction.delete()  # remove o leilão encerrado
+    auction.delete()

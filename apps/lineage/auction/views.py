@@ -26,8 +26,19 @@ def fazer_lance(request, auction_id):
 
     if request.method == 'POST':
         bid_amount_str = request.POST.get('bid_amount', '').strip()  # Garantir que não haja espaços extras
+        character_name = request.POST.get('character_name', '').strip()  # Captura o nome do personagem
+
         if not bid_amount_str:
             messages.error(request, 'Você precisa informar um valor para o lance.')
+            return redirect('auction:fazer_lance', auction_id=auction.id)
+
+        if not character_name:
+            messages.error(request, 'Você precisa informar o nome do personagem.')
+            return redirect('auction:fazer_lance', auction_id=auction.id)
+        
+        # Verificar se o personagem existe no inventário do usuário
+        if not Inventory.objects.filter(user=request.user, character_name=character_name).exists():
+            messages.error(request, 'Este personagem não pertence a você.')
             return redirect('auction:fazer_lance', auction_id=auction.id)
 
         try:
@@ -45,7 +56,7 @@ def fazer_lance(request, auction_id):
 
             with transaction.atomic():
                 # Coloca o lance
-                place_bid(auction, request.user, bid_amount)
+                place_bid(auction, request.user, bid_amount, character_name)
 
             messages.success(request, 'Lance efetuado com sucesso!')
             return redirect('auction:listar_leiloes')
@@ -110,7 +121,8 @@ def criar_leilao(request):
                     quantity=quantity,
                     seller=request.user,
                     starting_bid=starting_bid,
-                    end_time=timezone.now() + timedelta(hours=duration_hours)
+                    end_time=timezone.now() + timedelta(hours=duration_hours),
+                    character_name = character_name
                 )
 
             messages.success(request, 'Leilão criado com sucesso!')
@@ -173,7 +185,7 @@ def cancelar_leilao(request, auction_id):
                 user.profile.save()
 
             # Devolver os itens ao vendedor
-            inventory, _ = Inventory.objects.get_or_create(user=request.user, character_name=request.POST.get('character_name', ''))
+            inventory, _ = Inventory.objects.get_or_create(user=request.user, character_name=auction.character_name)
             item, created = InventoryItem.objects.get_or_create(inventory=inventory, item_id=auction.item_id, defaults={
                 'quantity': auction.quantity,
                 'item_name': auction.item_name

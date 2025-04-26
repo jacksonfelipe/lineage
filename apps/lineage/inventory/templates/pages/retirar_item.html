@@ -37,6 +37,7 @@
               <thead>
                 <tr>
                   <th>{% trans "Item" %}</th>
+                  <th>{% trans "Encantamento" %}</th>
                   <th>{% trans "Quantidade" %}</th>
                   <th>{% trans "Localização" %}</th>
                 </tr>
@@ -54,6 +55,7 @@
                              style="width: 32px; height: 32px;">
                         {{ item.name }}
                       </td>
+                    <td>{{ item.enchant }}</td>
                     <td>{{ item.amount }}</td>
                     <td>{{ item.location }}</td>
                   </tr>

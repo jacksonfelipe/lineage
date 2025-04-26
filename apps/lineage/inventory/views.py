@@ -94,13 +94,14 @@ def retirar_item_servidor(request):
         inventory, _ = Inventory.objects.get_or_create(
             user=request.user,
             account_name=request.user.username,
-            character_name=personagem[0]['char_name']
+            character_name=personagem[0]['char_name'],
         )
 
         # Verifica se já existe esse item no inventário
         inventory_item, _ = InventoryItem.objects.get_or_create(
             inventory=inventory,
             item_id=item_id,
+            enchant=item_status['enchant'],
             defaults={'item_name': itens_data[str(item_id)][0], 'quantity': 0}
         )
 
