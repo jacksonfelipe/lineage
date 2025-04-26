@@ -6,7 +6,6 @@ import json, os, time
 from django.conf import settings
 
 from datetime import datetime, timedelta
-from django.utils.timesince import timesince
 from apps.lineage.server.database import LineageDB
 
 from utils.dynamic_import import get_query_class  # importa o helper
@@ -113,19 +112,16 @@ def grandboss_status_view(request):
             boss['level'] = boss_info['level']
 
             # Ajuste no fuso horário (considerando o GMT)
-            gmt_offset = float(settings.GMT_OFFSET)  # Certifique-se de que o GMT_OFFSET está configurado corretamente no settings
-            respawn_timestamp = boss['respawn'] / 1000  # Converter de milissegundos para segundos
+            respawn_timestamp = boss['respawn']
+            gmt_offset = int(settings.GMT_OFFSET)  # Certifique-se de que o GMT_OFFSET está configurado corretamente no settings
             current_time = time.time()
 
-            # Ajustar o respawn considerando o fuso horário
-            respawn_datetime = datetime.fromtimestamp(respawn_timestamp) - timedelta(hours=gmt_offset)
-            respawn_human = respawn_datetime.strftime('%d/%m/%Y %H:%M')
-
-            # Humanizar o tempo de respawn
-            boss['respawn_human'] = respawn_human
-
             # Verificar se o boss está vivo ou morto
-            if boss['respawn'] > 0:
+            if respawn_timestamp > current_time:
+                respawn_datetime = datetime.fromtimestamp(respawn_timestamp) - timedelta(hours=gmt_offset)
+                respawn_human = respawn_datetime.strftime('%d/%m/%Y %H:%M')
+                # Humanizar o tempo de respawn
+                boss['respawn_human'] = respawn_human
                 boss['status'] = "Morto"
             else:
                 boss['status'] = "Vivo"
