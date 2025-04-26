@@ -2,8 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 
-import json
-import os
+import json, os, time
 from django.conf import settings
 
 from datetime import datetime, timedelta
@@ -116,13 +115,14 @@ def grandboss_status_view(request):
             # Ajuste no fuso horário (considerando o GMT)
             gmt_offset = float(settings.GMT_OFFSET)  # Certifique-se de que o GMT_OFFSET está configurado corretamente no settings
             respawn_timestamp = boss['respawn'] / 1000  # Converter de milissegundos para segundos
+            current_time = time.time()
 
             # Ajustar o respawn considerando o fuso horário
-            respawn_datetime = datetime.fromtimestamp(respawn_timestamp)
-            respawn_datetime = respawn_datetime - timedelta(hours=gmt_offset)
+            respawn_datetime = datetime.fromtimestamp(respawn_timestamp) - timedelta(hours=gmt_offset)
+            respawn_human = respawn_datetime.strftime('%d/%m/%Y %H:%M')
 
             # Humanizar o tempo de respawn
-            boss['respawn_human'] = timesince(respawn_datetime) + " atrás"
+            boss['respawn_human'] = respawn_human
 
             # Verificar se o boss está vivo ou morto
             if boss['respawn'] > 0:
