@@ -467,7 +467,7 @@ class TransferFromWalletToChar:
 
     @staticmethod
     @cache_lineage_result(timeout=300, use_cache=False)
-    def insert_coin(char_name: str, coin_id: int, amount: int):
+    def insert_coin(char_name: str, coin_id: int, amount: int, enchant: int = 0):
         db = LineageDB()
 
         # Buscar owner_id do personagem
@@ -488,7 +488,7 @@ class TransferFromWalletToChar:
             SELECT
                 COALESCE(MAX(payment_id), 0) + 1,
                 :owner_id, :coin_id, :amount,
-                0, 0, 0,
+                :enchant, 0, 0,
                 0, 0, 'DONATE WEB'
             FROM items_delayed
         """
@@ -496,7 +496,8 @@ class TransferFromWalletToChar:
         result = db.insert(insert_query, {
             "owner_id": owner_id,
             "coin_id": coin_id,
-            "amount": amount
+            "amount": amount,
+            "enchant": enchant
         })
 
         return result is not None

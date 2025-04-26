@@ -92,6 +92,7 @@ def finish_auction(auction: Auction):
         dest_item, created = InventoryItem.objects.get_or_create(
             inventory=dest_inventory,
             item_id=auction.item_id,
+            enchant=auction.item_enchant,
             defaults={'quantity': auction.quantity}
         )
 
@@ -110,6 +111,7 @@ def finish_auction(auction: Auction):
         returned_item, created = InventoryItem.objects.get_or_create(
             inventory=seller_inventory,
             item_id=auction.item_id,
+            enchant=auction.item_enchant,
             defaults={'quantity': auction.quantity}
         )
 

@@ -6,6 +6,7 @@ from core.models import BaseModel
 class Auction(BaseModel):
     item_id = models.IntegerField(null=True, blank=True)
     item_name = models.CharField(max_length=255, null=True, blank=True)
+    item_enchant = models.IntegerField(default=0)
     quantity = models.PositiveIntegerField(null=True, blank=True)
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='auctions')
     starting_bid = models.DecimalField(max_digits=10, decimal_places=2)

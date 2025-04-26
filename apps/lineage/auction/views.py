@@ -118,6 +118,7 @@ def criar_leilao(request):
                 Auction.objects.create(
                     item_id=item_id,
                     item_name=item_name,
+                    item_enchant=item.enchant,
                     quantity=quantity,
                     seller=request.user,
                     starting_bid=starting_bid,
@@ -188,7 +189,8 @@ def cancelar_leilao(request, auction_id):
             inventory, _ = Inventory.objects.get_or_create(user=request.user, character_name=auction.character_name)
             item, created = InventoryItem.objects.get_or_create(inventory=inventory, item_id=auction.item_id, defaults={
                 'quantity': auction.quantity,
-                'item_name': auction.item_name
+                'item_name': auction.item_name,
+                'enchant': auction.item_enchant
             })
             if not created:
                 item.quantity += auction.quantity
