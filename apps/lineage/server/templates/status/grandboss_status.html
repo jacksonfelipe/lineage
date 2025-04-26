@@ -1,6 +1,28 @@
 {% extends "layouts/base.html" %}
-
 {% load i18n %}
+
+{% block extrastyle %}
+<style>
+  .clan-name-container {
+    display: flex;
+    align-items: center;
+    gap: 6px; /* Espaço entre o grupo de crests e o nome */
+  }
+
+  .crest-group {
+    display: flex;
+    align-items: center;
+    width: 26px;
+    gap: 0px; /* Espaço entre as duas imagens */
+  }
+
+  .top-clan-crest {
+    width: auto;
+    height: 14px;
+    margin: 0;
+  }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="container mt-5">

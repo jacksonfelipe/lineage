@@ -44,14 +44,23 @@ class LineageStats:
     def players_online():
         sql = "SELECT COUNT(*) AS quant FROM characters WHERE online > 0 AND accesslevel = '0'"
         return LineageStats._run_query(sql)
-
+    
     @staticmethod
     @cache_lineage_result(timeout=300)
     def top_pvp(limit=10):
         sql = """
-            SELECT C.char_name, C.pvpkills, C.pkkills, C.online, C.onlinetime, D.name AS clan_name
+            SELECT 
+                C.char_name, 
+                C.pvpkills, 
+                C.pkkills, 
+                C.online, 
+                C.onlinetime,
+                D.name AS clan_name,
+                C.clanid AS clan_id,
+                CD.ally_id AS ally_id
             FROM characters C
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clanid AND D.type = '0'
+            LEFT JOIN clan_data CD ON CD.clan_id = C.clanid
             WHERE C.accesslevel = '0'
             ORDER BY pvpkills DESC, pkkills DESC, onlinetime DESC, char_name ASC
             LIMIT :limit
@@ -62,9 +71,18 @@ class LineageStats:
     @cache_lineage_result(timeout=300)
     def top_pk(limit=10):
         sql = """
-            SELECT C.char_name, C.pvpkills, C.pkkills, C.online, C.onlinetime, D.name AS clan_name
+            SELECT 
+                C.char_name, 
+                C.pvpkills, 
+                C.pkkills, 
+                C.online, 
+                C.onlinetime,
+                D.name AS clan_name,
+                C.clanid AS clan_id,
+                CD.ally_id AS ally_id
             FROM characters C
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clanid AND D.type = '0'
+            LEFT JOIN clan_data CD ON CD.clan_id = C.clanid
             WHERE C.accesslevel = '0'
             ORDER BY pkkills DESC, pvpkills DESC, onlinetime DESC, char_name ASC
             LIMIT :limit
@@ -75,9 +93,18 @@ class LineageStats:
     @cache_lineage_result(timeout=300)
     def top_online(limit=10):
         sql = """
-            SELECT C.char_name, C.pvpkills, C.pkkills, C.online, C.onlinetime, D.name AS clan_name
+            SELECT 
+                C.char_name, 
+                C.pvpkills, 
+                C.pkkills, 
+                C.online, 
+                C.onlinetime,
+                D.name AS clan_name,
+                C.clanid AS clan_id,
+                CD.ally_id AS ally_id
             FROM characters C
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clanid AND D.type = '0'
+            LEFT JOIN clan_data CD ON CD.clan_id = C.clanid
             WHERE C.accesslevel = '0'
             ORDER BY onlinetime DESC, pvpkills DESC, pkkills DESC, char_name ASC
             LIMIT :limit
@@ -88,10 +115,20 @@ class LineageStats:
     @cache_lineage_result(timeout=300)
     def top_level(limit=10):
         sql = """
-            SELECT C.char_name, C.pvpkills, C.pkkills, C.online, C.onlinetime, CS.level, D.name AS clan_name
+            SELECT 
+                C.char_name, 
+                C.pvpkills, 
+                C.pkkills, 
+                C.online, 
+                C.onlinetime, 
+                CS.level,
+                D.name AS clan_name,
+                C.clanid AS clan_id,
+                CD.ally_id AS ally_id
             FROM characters C
             LEFT JOIN character_subclasses CS ON CS.char_obj_id = C.obj_Id AND CS.isBase = '1'
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clanid AND D.type = '0'
+            LEFT JOIN clan_data CD ON CD.clan_id = C.clanid
             WHERE C.accesslevel = '0'
             ORDER BY level DESC, exp DESC, onlinetime DESC, char_name ASC
             LIMIT :limit
@@ -111,7 +148,13 @@ class LineageStats:
             """
         sql = f"""
             SELECT 
-                C.char_name, C.online, C.onlinetime, CS.level, D.name AS clan_name,
+                C.char_name, 
+                C.online, 
+                C.onlinetime, 
+                CS.level, 
+                D.name AS clan_name,
+                C.clanid AS clan_id,
+                CD.ally_id AS ally_id,
                 (
                     {item_bonus_sql}
                     IFNULL((SELECT SUM(I1.amount)
@@ -122,6 +165,8 @@ class LineageStats:
             FROM characters C
             LEFT JOIN character_subclasses CS ON CS.char_obj_id = C.obj_Id AND CS.isBase = '1'
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clanid AND D.type = '0'
+            LEFT JOIN clan_data CD ON CD.clan_id = C.clanid
+            WHERE C.accesslevel = '0'
             ORDER BY adenas DESC, onlinetime DESC, char_name ASC
             LIMIT :limit
         """
@@ -151,10 +196,18 @@ class LineageStats:
     @cache_lineage_result(timeout=300)
     def olympiad_ranking():
         sql = """
-            SELECT C.char_name, C.online, D.name AS clan_name, CS.class_id AS base, O.points_current AS olympiad_points
+            SELECT 
+                C.char_name, 
+                C.online, 
+                D.name AS clan_name,
+                C.clanid AS clan_id,
+                CD.ally_id AS ally_id,
+                CS.class_id AS base, 
+                O.points_current AS olympiad_points
             FROM oly_nobles O
             LEFT JOIN characters C ON C.obj_Id = O.char_id
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clanid AND D.type = '0'
+            LEFT JOIN clan_data CD ON CD.clan_id = C.clanid
             LEFT JOIN character_subclasses CS ON CS.char_obj_id = C.obj_Id AND CS.isBase = '1'
             ORDER BY olympiad_points DESC
         """
@@ -164,14 +217,19 @@ class LineageStats:
     @cache_lineage_result(timeout=300)
     def olympiad_all_heroes():
         sql = """
-            SELECT C.char_name, C.online, D.name AS clan_name, A.ally_name, 
-                   CS.class_id AS base, H.count
+            SELECT 
+                C.char_name, 
+                C.online, 
+                D.name AS clan_name, 
+                C.clanid AS clan_id,
+                CLAN.ally_id AS ally_id,
+                CS.class_id AS base, 
+                H.count
             FROM oly_heroes H
             LEFT JOIN characters C ON C.obj_Id = H.char_id
             LEFT JOIN character_subclasses CS ON CS.char_obj_id = C.obj_Id AND CS.isBase = '1'
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clanid AND D.type = '0'
             LEFT JOIN clan_data CLAN ON CLAN.clan_id = C.clanid
-            LEFT JOIN ally_data A ON A.ally_id = CLAN.clan_id
             WHERE H.played > 0 AND H.count > 0
             ORDER BY H.count DESC, base ASC, char_name ASC
         """
@@ -181,13 +239,18 @@ class LineageStats:
     @cache_lineage_result(timeout=300)
     def olympiad_current_heroes():
         sql = """
-            SELECT C.char_name, C.online, D.name AS clan_name, A.ally_name, CS.class_id AS base
+            SELECT 
+                C.char_name, 
+                C.online, 
+                D.name AS clan_name,
+                C.clanid AS clan_id,
+                CLAN.ally_id AS ally_id,
+                CS.class_id AS base
             FROM oly_heroes H
             LEFT JOIN characters C ON C.obj_Id = H.char_id
             LEFT JOIN character_subclasses CS ON CS.char_obj_id = C.obj_Id AND CS.isBase = '1'
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clanid AND D.type = '0'
             LEFT JOIN clan_data CLAN ON CLAN.clan_id = C.clanid
-            LEFT JOIN ally_data A ON A.ally_id = CLAN.clan_id
             WHERE H.played > 0 AND H.count > 0
             ORDER BY base ASC
         """
@@ -207,8 +270,16 @@ class LineageStats:
     @cache_lineage_result(timeout=300)
     def siege():
         sql = """
-            SELECT W.id, W.name, W.siege_date AS sdate, W.treasury AS stax,
-                   P.char_name, CS.name AS clan_name, A.ally_name
+            SELECT 
+                W.id, 
+                W.name, 
+                W.siege_date AS sdate, 
+                W.treasury AS stax,
+                P.char_name, 
+                CS.name AS clan_name,
+                C.clan_id,
+                C.ally_id,
+                A.ally_name
             FROM castle W
             LEFT JOIN clan_data C ON C.hasCastle = W.id
             LEFT JOIN clan_subpledges CS ON CS.clan_id = C.clan_id AND CS.type = '0'
@@ -221,7 +292,10 @@ class LineageStats:
     @cache_lineage_result(timeout=300)
     def siege_participants(castle_id):
         sql = """
-            SELECT S.type, C.name AS clan_name
+            SELECT 
+                S.type, 
+                C.name AS clan_name,
+                C.clan_id
             FROM siege_clans S
             LEFT JOIN clan_subpledges C ON C.clan_id = S.clan_id AND C.type = '0'
             WHERE S.residence_id = :castle_id
@@ -235,13 +309,20 @@ class LineageStats:
         bind_ids = [f":id{i}" for i in range(len(boss_jewel_ids))]
         placeholders = ", ".join(bind_ids)
         sql = f"""
-            SELECT I.owner_id, I.item_type AS item_id, SUM(I.amount) AS count, 
-                   C.char_name, P.name AS clan_name
+            SELECT 
+                I.owner_id, 
+                I.item_type AS item_id, 
+                SUM(I.amount) AS count,
+                C.char_name,
+                P.name AS clan_name,
+                C.clanid AS clan_id,
+                CD.ally_id
             FROM items I
             INNER JOIN characters C ON C.obj_Id = I.owner_id
             LEFT JOIN clan_subpledges P ON P.clan_id = C.clanid AND P.type = '0'
+            LEFT JOIN clan_data CD ON CD.clan_id = C.clanid
             WHERE I.item_type IN ({placeholders})
-            GROUP BY I.owner_id, C.char_name, P.name, I.item_type
+            GROUP BY I.owner_id, C.char_name, P.name, I.item_type, C.clanid, CD.ally_id
             ORDER BY count DESC, C.char_name ASC
         """
         params = {f"id{i}": item_id for i, item_id in enumerate(boss_jewel_ids)}

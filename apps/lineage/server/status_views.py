@@ -7,6 +7,7 @@ from django.conf import settings
 
 from datetime import datetime, timedelta
 from apps.lineage.server.database import LineageDB
+from apps.lineage.server.utils.crest import attach_crests_to_clans
 
 from utils.dynamic_import import get_query_class  # importa o helper
 LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
@@ -35,6 +36,9 @@ def siege_ranking_view(request):
             timestamp_s = castle["sdate"] / 1000
             castle["sdate"] = datetime.fromtimestamp(timestamp_s)
 
+            # adiciona as crests dos clans
+            castles = attach_crests_to_clans(castles)
+
     else:
         castles = list()
 
@@ -44,22 +48,28 @@ def siege_ranking_view(request):
 @login_required
 def olympiad_ranking_view(request):
     # Obtém o ranking de olimpíada
-    result = LineageStats.olympiad_ranking()
+    db = LineageDB()
+    result = LineageStats.olympiad_ranking() if db.is_connected() else []
+    result = attach_crests_to_clans(result)
     return render(request, 'status/olympiad_ranking.html', {'ranking': result})
 
 
 @login_required
 def olympiad_all_heroes_view(request):
     # Obtém todos os heróis da olimpíada
-    heroes = LineageStats.olympiad_all_heroes()
-    return render(request, 'status/olympiad_all_heroes.html', {'heroes': heroes})
+    db = LineageDB()
+    result = LineageStats.olympiad_all_heroes() if db.is_connected() else []
+    result = attach_crests_to_clans(result)
+    return render(request, 'status/olympiad_all_heroes.html', {'heroes': result})
 
 
 @login_required
 def olympiad_current_heroes_view(request):
     # Obtém os heróis atuais da olimpíada
-    current_heroes = LineageStats.olympiad_current_heroes()
-    return render(request, 'status/olympiad_current_heroes.html', {'current_heroes': current_heroes})
+    db = LineageDB()
+    result = LineageStats.olympiad_current_heroes() if db.is_connected() else []
+    result = attach_crests_to_clans(result)
+    return render(request, 'status/olympiad_current_heroes.html', {'current_heroes': result})
 
 
 @login_required
@@ -81,6 +91,9 @@ def boss_jewel_locations_view(request):
             item_id_str = str(loc['item_id'])
             item_name = itens_data.get(item_id_str, ["Desconhecido"])[0]
             loc['item_name'] = item_name
+
+        # adiciona as crests dos clans
+        jewel_locations = attach_crests_to_clans(jewel_locations)    
 
     else:
         jewel_locations = list()
