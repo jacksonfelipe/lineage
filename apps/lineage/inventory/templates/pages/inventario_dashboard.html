@@ -1,6 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load i18n l10n %}
 {% load static %}
+{% load itens_extras %}
 
 {% block content %}
 <div class="container py-5">
@@ -43,7 +44,7 @@
               <div class="col">
                 <div class="card bg-dark border-0 shadow text-white rounded-4 overflow-hidden h-100">
                   <div class="card-body text-center py-4 d-flex flex-column justify-content-between h-100">
-                    <img src="{% static 'assets/img/l2/icons/5-' %}{{ item.item_id|unlocalize }}.jpg"
+                      <img src="{% item_image_url item.item_id %}" 
                       alt="{{ item.item_name }}"
                       class="mb-3 rounded border border-secondary d-block mx-auto"
                       style="width: 32px; height: 32px;">

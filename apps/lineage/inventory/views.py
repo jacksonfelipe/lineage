@@ -120,8 +120,7 @@ def retirar_item_servidor(request):
         'personagens': personagens,
         'char_id': char_id,
         'items': items,
-        'personagem': personagem[0] if personagem else None,
-        "itens_data": itens_data
+        'personagem': personagem[0] if personagem else None
     })
 
 

@@ -1,5 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load i18n static l10n %}
+{% load itens_extras %}
 
 {% block content %}
 <div class="container py-5">
@@ -18,7 +19,9 @@
     <div class="col-md-4">
       <div class="card h-100 shadow-sm rounded-4">
         <div class="card-body text-center">
-          <img src="{% static 'assets/img/l2/icons/5-' %}{{ item.item_id|unlocalize }}.jpg" alt="{{ item.nome }}" class="mb-3" style="width: 48px;">
+          <img src="{% item_image_url item.item_id %}" 
+          alt="{{ item.item_name }}"
+          class="mb-3" style="width: 48px;">
           <h5 class="fw-bold">{{ item.nome }}</h5>
           <p class="mb-1">{% trans "Quantidade" %}: {{ item.quantidade }}</p>
           <p class="fw-semibold text-success">R$ {{ item.preco }}</p>
@@ -66,7 +69,9 @@
               {% for item in package.itens.all %}
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 <!-- Imagem do ícone do item -->
-                <img src="{% static 'assets/img/l2/icons/5-' %}{{ item.item_id|unlocalize }}.jpg" class="me-2" style="width:24px;">
+                <img src="{% item_image_url item.item_id %}" 
+                alt="{{ item.item_name }}"
+                class="me-2" style="width:24px;">
                 {{ item.nome }} <span class="text-muted">x{{ item.quantidade }}</span>
               </li>
               {% empty %}
