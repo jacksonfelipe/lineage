@@ -26,3 +26,9 @@ class InventoryItemAdmin(BaseModelAdmin):
 class BlockedServerItemAdmin(BaseModelAdmin):
     list_display = ('item_id', 'reason', 'created_at')
     search_fields = ('item_id', 'reason')
+
+
+@admin.register(CustomItem)
+class CustomItemAdmin(BaseModelAdmin):
+    list_display = ('nome', 'imagem')  # Exibe os campos no painel de administração
+    search_fields = ('nome',)  # Permite buscar por nome

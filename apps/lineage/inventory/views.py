@@ -4,9 +4,8 @@ from django.contrib import messages
 from django.db import transaction
 from django.contrib.auth import authenticate
 
-import os, json
-from django.conf import settings
 from django.db.models import Sum
+from .utils.items import get_itens_json
 
 from .models import Inventory, InventoryItem, BlockedServerItem
 from apps.lineage.server.database import LineageDB
@@ -49,10 +48,7 @@ def retirar_item_servidor(request):
 
             all_items = TransferFromCharToWallet.list_items(char_id)
 
-            # Carrega itens.json
-            itens_path = os.path.join(settings.BASE_DIR, 'utils/data/itens.json')
-            with open(itens_path, 'r', encoding='utf-8') as f:
-                itens_data = json.load(f)
+            itens_data = get_itens_json
 
             # Substitui item_id pelo item_name
             for item in all_items:
@@ -110,7 +106,7 @@ def retirar_item_servidor(request):
             inventory=inventory,
             item_id=item_id,
             enchant=item_status['enchant'],
-            defaults={'item_name': itens_data[str(item_id)][0], 'quantity': 0}
+            defaults={'item_name': itens_data.get(str(item_id), [f"(não identificado - {str(item_id)})"])[0], 'quantity': 0}
         )
 
         # Atualiza a quantidade
@@ -124,7 +120,8 @@ def retirar_item_servidor(request):
         'personagens': personagens,
         'char_id': char_id,
         'items': items,
-        'personagem': personagem[0] if personagem else None
+        'personagem': personagem[0] if personagem else None,
+        "itens_data": itens_data
     })
 
 

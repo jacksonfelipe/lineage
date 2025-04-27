@@ -39,3 +39,15 @@ class BlockedServerItem(BaseModel):
 
     def __str__(self):
         return f"Item ID: {self.item_id} - {self.reason if self.reason else 'Sem motivo específico'}"
+
+
+class CustomItem(BaseModel):
+    nome = models.CharField(max_length=255, unique=True)  # Nome do item
+    imagem = models.ImageField(upload_to='itens_customizados/', null=True, blank=True)  # Imagem do item
+
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        verbose_name = 'Item Customizado'
+        verbose_name_plural = 'Itens Customizados'
