@@ -9,8 +9,8 @@ import hashlib
 class LineageStats:
 
     @staticmethod
-    def _run_query(sql, params=None):
-        return LineageDB().select(sql, params=params, use_cache=True)
+    def _run_query(sql, params=None, use_cache=True):
+        return LineageDB().select(sql, params=params, use_cache=use_cache)
     
     @staticmethod
     @cache_lineage_result(timeout=300)

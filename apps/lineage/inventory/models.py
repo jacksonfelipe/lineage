@@ -26,3 +26,16 @@ class InventoryItem(BaseModel):
 
     def __str__(self):
         return f"{self.item_name} x{self.quantity}"
+
+
+class BlockedServerItem(BaseModel):
+    item_id = models.PositiveIntegerField(unique=True, help_text="ID do item bloqueado")
+    reason = models.CharField(max_length=255, blank=True, help_text="Motivo do bloqueio (opcional)")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Item Bloqueado para Retirada"
+        verbose_name_plural = "Itens Bloqueados para Retirada"
+
+    def __str__(self):
+        return f"Item ID: {self.item_id} - {self.reason if self.reason else 'Sem motivo específico'}"

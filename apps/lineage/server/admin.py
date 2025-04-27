@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ApiEndpointToggle, IndexConfig, IndexConfigTranslation, ServicePrice
+from .models import *
 from core.admin import BaseModelAdmin
 from django.contrib import messages
 
@@ -81,3 +81,10 @@ class IndexConfigAdmin(BaseModelAdmin):
 @admin.register(ServicePrice)
 class ServicePriceAdmin(BaseModelAdmin):
     list_display = ('servico', 'preco')
+
+
+@admin.register(ActiveAdenaExchangeItem)
+class ActiveAdenaExchangeItemAdmin(BaseModelAdmin):
+    list_display = ('item_type', 'value_item', 'active', 'created_at')
+    list_filter = ('active',)
+    search_fields = ('item_type',)

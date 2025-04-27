@@ -8,7 +8,7 @@ import os, json
 from django.conf import settings
 from django.db.models import Sum
 
-from .models import Inventory, InventoryItem
+from .models import Inventory, InventoryItem, BlockedServerItem
 from apps.lineage.server.database import LineageDB
 from utils.dynamic_import import get_query_class
 from django.core.paginator import Paginator
@@ -75,6 +75,14 @@ def retirar_item_servidor(request):
         if not user:
             messages.error(request, 'Senha incorreta.')
             return redirect(f"{request.path}?char_id={char_id}")
+
+        # --- Validação: Item Bloqueado? ---
+        blocked_item = BlockedServerItem.objects.filter(item_id=item_id).first()
+        if blocked_item:
+            reason_text = f" Motivo: {blocked_item.reason}." if blocked_item.reason else ""
+            messages.error(request, f'O item selecionado não pode ser retirado do servidor.{reason_text}')
+            return redirect(f"{request.path}?char_id={char_id}")
+        # -----------------------------------
 
         if not items:
             messages.error(request, 'Inventário não carregado.')

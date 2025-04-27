@@ -35,18 +35,13 @@ class ThemeAdmin(BaseModelAdmin):
         obj.delete()
 
     def delete_selected_themes(self, request, queryset):
-        """
-        Handle the action to delete selected themes.
-        If confirmation is required, display a confirmation page.
-        """
-        if "post" in request.POST:  # Confirmação de exclusão
+        if "post" in request.POST:
             count = queryset.count()
             for obj in queryset:
                 obj.delete()
             self.message_user(request, f"{count} tema(s) deletado(s) com sucesso.", messages.SUCCESS)
-            return None  # Retorna None para seguir o fluxo padrão do Django Admin
+            return None
 
-        # Renderiza a tela de confirmação
         context = {
             'themes': queryset,
             'action_checkbox_name': helpers.ACTION_CHECKBOX_NAME,

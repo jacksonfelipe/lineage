@@ -103,3 +103,19 @@ class ServicePrice(BaseModel):
         if not cls.objects.exists():
             cls.objects.create(servico='CHANGE_NICKNAME', preco=10.00)
             cls.objects.create(servico='CHANGE_SEX', preco=10.00)
+
+
+class ActiveAdenaExchangeItem(BaseModel):
+    item_type = models.PositiveIntegerField(help_text="ID do item de troca de Adena")
+    value_item = models.PositiveIntegerField(default=1_000_000, help_text="Valor que cada item representa em Adena")
+    active = models.BooleanField(default=False, help_text="Marcar como ativo para ser utilizado no cálculo")
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Item de Troca de Adena Ativo"
+        verbose_name_plural = "Itens de Troca de Adena Ativos"
+
+    def __str__(self):
+        status = "Ativo" if self.active else "Inativo"
+        return f"Item {self.item_type} - {status}"
