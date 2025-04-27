@@ -343,8 +343,8 @@ customColorPalette = [
     },
 ]
 
-CKEDITOR_5_UPLOAD_FILE_TYPES = ['jpeg', 'pdf', 'png'] # optional
-CKEDITOR_5_MAX_FILE_SIZE = 5 # Max size in MB
+CKEDITOR_5_UPLOAD_FILE_TYPES = ['jpeg', 'pdf', 'png', 'jpg']
+CKEDITOR_5_MAX_FILE_SIZE = 2 # Max size in MB
 CKEDITOR_5_CONFIGS = {
     'default': {
         'toolbar': {
