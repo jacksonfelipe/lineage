@@ -480,7 +480,7 @@ class LineageAccount:
     @cache_lineage_result(timeout=300)
     def register(login, password, access_level, email):
         try:
-            LineageAccount.ensure_email_column()
+            LineageAccount.ensure_columns()
             hashed = base64.b64encode(hashlib.sha1(password.encode()).digest()).decode()
             sql = """
                 INSERT INTO accounts (login, password, accessLevel, email, created_time)
