@@ -431,29 +431,28 @@ class LineageServices:
 
 
 class LineageAccount:
+    _checked_email_column = False
 
     @staticmethod
-    @cache_lineage_result(timeout=300)
     def ensure_email_column():
-        lineage_db = LineageDB()
-
-        # Pega as colunas atuais da tabela
-        columns = lineage_db.get_table_columns("accounts")
-
-        if "email" in columns:
-            print("✅ Coluna 'email' já existe na tabela 'accounts'. Nenhuma alteração necessária.")
+        if LineageAccount._checked_email_column:
             return
+        lineage_db = LineageDB()
+        columns = lineage_db.get_table_columns("accounts")
+        if "email" not in columns:
+            try:
+                sql = """
+                    ALTER TABLE accounts
+                    ADD COLUMN email VARCHAR(100) NOT NULL DEFAULT '';
+                """
+                lineage_db.execute_raw(sql)
+                print("✅ Coluna 'email' adicionada com sucesso na tabela 'accounts'.")
+            except Exception as e:
+                print(f"❌ Erro ao adicionar coluna 'email': {e}")
+        else:
+            print("✅ Coluna 'email' já existe na tabela 'accounts'. Nenhuma alteração necessária.")
 
-        # Se não existir, adiciona a coluna
-        try:
-            sql = """
-                ALTER TABLE accounts
-                ADD COLUMN email VARCHAR(100) NOT NULL DEFAULT '';
-            """
-            lineage_db.execute_raw(sql)
-            print("✅ Coluna 'email' adicionada com sucesso na tabela 'accounts'.")
-        except Exception as e:
-            print(f"❌ Erro ao adicionar coluna 'email': {e}")
+        LineageAccount._checked_email_column = True
 
     @staticmethod
     @cache_lineage_result(timeout=300)

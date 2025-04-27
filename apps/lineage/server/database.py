@@ -147,6 +147,23 @@ class LineageDB:
 
     def execute_raw(self, query: str, params: Dict[str, Any] = {}) -> bool:
         return self._safe_execute_write(query, params) is not None
+    
+    def get_table_columns(self, table_name: str) -> List[str]:
+        """
+        Retorna uma lista com os nomes das colunas da tabela.
+        """
+        if not self.engine:
+            print("⚠️ Sem conexão com o banco")
+            return []
+        try:
+            query = f"SHOW COLUMNS FROM `{table_name}`"
+            with self.engine.connect() as conn:
+                result = conn.execute(text(query))
+                columns = [row[0] for row in result.fetchall()]
+                return columns
+        except SQLAlchemyError as e:
+            print(f"❌ Erro ao buscar colunas da tabela {table_name}: {e}")
+            return []
 
     def clear_cache(self):
         self.cache.clear()
