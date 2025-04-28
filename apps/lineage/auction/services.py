@@ -82,17 +82,19 @@ def finish_auction(auction: Auction):
         if not winning_bid:
             raise ValueError("Não foi possível determinar o lance vencedor.")
 
-        dest_inventory, _ = Inventory.objects.get_or_create(
+        dest_inventory = Inventory.objects.get(
             user=auction.highest_bidder,
-            character_name=winning_bid.character_name,
-            account_name=winning_bid.character_name
+            character_name=winning_bid.character_name
         )
 
         dest_item, created = InventoryItem.objects.get_or_create(
             inventory=dest_inventory,
             item_id=auction.item_id,
             enchant=auction.item_enchant,
-            defaults={'quantity': auction.quantity}
+            defaults={
+                'quantity': auction.quantity,
+                'item_name': auction.item_name,  # salva o nome certo também
+            }
         )
 
         if not created:
@@ -105,10 +107,9 @@ def finish_auction(auction: Auction):
 
     else:
         # Se ninguém comprou, devolve o item ao vendedor
-        seller_inventory, _ = Inventory.objects.get_or_create(
+        seller_inventory = Inventory.objects.get(
             user=auction.seller,
-            character_name=auction.character_name,
-            account_name=auction.character_name
+            character_name=auction.character_name
         )
 
         returned_item, created = InventoryItem.objects.get_or_create(

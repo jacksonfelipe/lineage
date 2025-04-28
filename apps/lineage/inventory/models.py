@@ -9,23 +9,26 @@ class Inventory(BaseModel):
     character_name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('user', 'character_name')
+
     def __str__(self):
         return f"{self.character_name} ({self.account_name})"
 
 
 class InventoryItem(BaseModel):
     inventory = models.ForeignKey(Inventory, related_name='items', on_delete=models.CASCADE)
-    item_id = models.IntegerField()  # ID do item no banco do Lineage
+    item_id = models.IntegerField()
     item_name = models.CharField(max_length=100)
     quantity = models.PositiveIntegerField(default=1)
     enchant = models.IntegerField(default=0)
     added_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('inventory', 'item_id')  # Garantir que o item seja único no inventário
+        unique_together = ('inventory', 'item_id', 'enchant')
 
     def __str__(self):
-        return f"{self.item_name} x{self.quantity}"
+        return f"{self.item_name} +{self.enchant} x{self.quantity}"
 
 
 class BlockedServerItem(BaseModel):
