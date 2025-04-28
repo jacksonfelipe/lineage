@@ -128,6 +128,31 @@ class Theme(BaseModel):
                 self.author = meta.get('author', '')
                 self.descricao = meta.get('description', '')
 
+                # Depois de extrair os arquivos e carregar o meta
+                variables = meta.get('variables', [])
+
+                for var in variables:
+                    nome_original = var.get('name')
+                    if not nome_original:
+                        continue  # Ignora se não tem nome
+                    
+                    nome_final = f"{self.slug}_{slugify(nome_original)}"
+
+                    tipo = var.get('tipo', 'string')  # Default para string
+                    valor_pt = var.get('valor_pt', '')
+                    valor_en = var.get('valor_en', '')
+                    valor_es = var.get('valor_es', '')
+
+                    variable_obj, created = ThemeVariable.objects.update_or_create(
+                        nome=nome_final,
+                        defaults={
+                            'tipo': tipo,
+                            'valor_pt': valor_pt,
+                            'valor_en': valor_en,
+                            'valor_es': valor_es,
+                        }
+                    )
+
                 theme_folder_path = os.path.join(settings.BASE_DIR, 'themes/installed', self.slug)
 
                 if os.path.exists(theme_folder_path):
