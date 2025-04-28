@@ -1,6 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load i18n l10n %}
 {% load static %}
+{% load itens_extras %}
 
 {% block content %}
 <div class="container py-5">
@@ -49,10 +50,10 @@
                       data-item-amount="{{ item.amount }}"
                       data-item-name="{{ item.name }}">
                       <td class="fw-bold text-primary d-flex align-items-center">
-                        <img src="{% static 'assets/img/l2/icons/5-' %}{{ item.item_type|unlocalize }}.jpg"
-                             alt="{{ item.name }}"
-                             class="me-2 rounded border border-secondary"
-                             style="width: 32px; height: 32px;">
+                        <img src="{% item_image_url item.item_type %}" 
+                        alt="{{ item.item_name }}"
+                        class="me-2 rounded border border-secondary"
+                        style="width: 32px; height: 32px;">
                         {{ item.name }}
                       </td>
                     <td>{{ item.enchant }}</td>

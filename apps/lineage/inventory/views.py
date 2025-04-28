@@ -48,7 +48,7 @@ def retirar_item_servidor(request):
 
             all_items = TransferFromCharToWallet.list_items(char_id)
 
-            itens_data = get_itens_json
+            itens_data = get_itens_json()
 
             # Substitui item_id pelo item_name
             for item in all_items:

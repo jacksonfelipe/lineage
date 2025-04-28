@@ -1,6 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load i18n l10n %}
 {% load static %}
+{% load itens_extras %}
 
 {% block content %}
 <div class="container py-5">
@@ -25,10 +26,10 @@
         <div class="mb-3">
           <label class="form-label fw-semibold">{% trans "Item" %}</label>
           <div class="d-flex align-items-center">
-            <img src="{% static 'assets/img/l2/icons/5-' %}{{ item_id|unlocalize }}.jpg"
-                 alt="{{ item_name }}"
-                 class="me-3 rounded border border-secondary"
-                 style="width: 32px; height: 32px;">
+              <img src="{% item_image_url item_id %}" 
+              alt="{{ item_name }}"
+              class="me-3 rounded border border-secondary"
+              style="width: 32px; height: 32px;">
             <strong class="mb-0">{{ item_name }}</strong>
           </div>
           <input type="hidden" name="item_id" value="{{ item_id }}">
