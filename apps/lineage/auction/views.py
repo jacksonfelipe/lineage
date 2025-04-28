@@ -209,7 +209,7 @@ def cancelar_leilao(request, auction_id):
         with transaction.atomic():
             # Devolver os valores dos lances para os usuários
             for bid in auction.bids.all():
-                user = bid.user
+                user = bid.bidder
                 amount = bid.amount
                 user.profile.balance += amount
                 user.profile.save()
