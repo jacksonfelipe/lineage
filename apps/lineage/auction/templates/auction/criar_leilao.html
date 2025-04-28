@@ -1,5 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load i18n static %}
+{% load itens_extras %}
 
 {% block content %}
 <div class="container my-4">
@@ -84,17 +85,20 @@
     const item = inventario.items.find(it => it.item_id == itemSelecionado);
 
     if (item) {
-      // Atualiza imagem
       const img = document.getElementById('item_image');
-      img.src = `/static/assets/img/l2/icons/5-${item.item_id}.jpg`;
-      img.onerror = () => {
-        img.src = `/static/assets/img/l2/icons/default.jpg`;
-      };
-
-      // Atualiza nome
+    
+      fetch(`/app/inventory/api/item-image/${item.item_id}/`)
+        .then(response => response.json())
+        .then(data => {
+          img.src = data.url;
+        })
+        .catch(error => {
+          console.error('Erro ao buscar imagem:', error);
+          img.src = '/static/assets/img/l2/icons/default.jpg';
+        });
+    
+      img.alt = item.item_name;
       document.getElementById('item_name').textContent = item.item_name;
-
-      // Mostra preview
       document.getElementById('item_preview').style.display = 'flex';
     }
   });

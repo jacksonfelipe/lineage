@@ -1,5 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load i18n l10n static %}
+{% load itens_extras %}
 
 {% block content %}
 <div class="container my-4">
@@ -21,11 +22,10 @@
           </div>
           <div class="card-body">
             <div class="d-flex align-items-center mb-3">
-              <img src="{% static 'assets/img/l2/icons/5-' %}{{ leilao.item_id|unlocalize }}.jpg"
-                   alt="{{ leilao.item_name }}"
-                   class="me-3 rounded border border-secondary"
-                   style="width: 64px; height: 64px;"
-                   onerror="this.src='{% static 'assets/img/l2/icons/default.jpg' %}'">
+              <img src="{% item_image_url leilao.item_id %}"
+              alt="{{ leilao.item_name }}"
+              class="me-3 rounded border border-secondary"
+              style="width: 64px; height: 64px;">         
               <div>
                 <p class="mb-1">
                   <i class="bi bi-person-fill"></i>

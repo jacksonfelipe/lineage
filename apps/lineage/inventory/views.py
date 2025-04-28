@@ -11,6 +11,8 @@ from .models import Inventory, InventoryItem, BlockedServerItem
 from apps.lineage.server.database import LineageDB
 from utils.dynamic_import import get_query_class
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+from .templatetags.itens_extras import item_image_url
 
 TransferFromWalletToChar = get_query_class("TransferFromWalletToChar")
 TransferFromCharToWallet = get_query_class("TransferFromCharToWallet")
@@ -284,3 +286,8 @@ def inventario_global(request):
     return render(request, 'pages/inventario_global.html', {
         'itens_globais': itens_globais
     })
+
+
+def get_item_image_url(request, item_id):
+    url = item_image_url(item_id)
+    return JsonResponse({'url': url})
