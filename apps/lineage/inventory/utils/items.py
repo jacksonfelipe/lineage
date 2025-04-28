@@ -16,6 +16,6 @@ def get_itens_json():
 
     # Adiciona os itens customizados no JSON
     for item in custom_items:
-        itens_data[str(item.id)] = [item.nome]
+        itens_data[str(item.item_id)] = [item.nome]
 
     return itens_data

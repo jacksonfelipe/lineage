@@ -42,6 +42,7 @@ class BlockedServerItem(BaseModel):
 
 
 class CustomItem(BaseModel):
+    item_id = models.PositiveIntegerField(unique=True)  # ID de referência do item
     nome = models.CharField(max_length=255, unique=True)  # Nome do item
     imagem = models.ImageField(upload_to='itens_customizados/', null=True, blank=True)  # Imagem do item
 
