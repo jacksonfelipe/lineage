@@ -95,7 +95,7 @@ def serve_theme_file(request, file_name):
         raise Http404("Tema não encontrado.")
 
     # Monta o caminho completo para o arquivo HTML
-    theme_file_path = os.path.join(settings.BASE_DIR, path_theme, file_name)
+    theme_file_path = os.path.join(settings.BASE_DIR, path_theme, file_name + '.html')
 
     # Verifica se o arquivo existe
     if not os.path.isfile(theme_file_path):
