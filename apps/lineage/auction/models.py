@@ -1,6 +1,7 @@
 from django.db import models
 from apps.main.home.models import User
 from core.models import BaseModel
+from .choices import STATUS_CHOICES
 
 
 class Auction(BaseModel):
@@ -14,10 +15,11 @@ class Auction(BaseModel):
     highest_bidder = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='bids')
     end_time = models.DateTimeField()
     character_name = models.CharField(max_length=100, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
 
     def is_active(self):
         from django.utils import timezone
-        return self.end_time > timezone.now()
+        return self.end_time > timezone.now() and self.status == 'pending'
 
     def __str__(self):
         return f"Auction of {self.item_name} ({self.quantity}x) by {self.seller.username}"

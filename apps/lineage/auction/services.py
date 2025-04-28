@@ -67,7 +67,7 @@ def finish_auction(auction: Auction):
         raise ValueError("Leilão ainda está ativo.")
 
     if auction.highest_bidder:
-        # Transfere o dinheiro
+        # Transfere o dinheiro para o vendedor
         seller_wallet, _ = Wallet.objects.get_or_create(usuario=auction.seller)
         aplicar_transacao(
             seller_wallet,
@@ -77,16 +77,15 @@ def finish_auction(auction: Auction):
             origem=str(auction.highest_bidder)
         )
 
-        # Pega o último lance para saber o personagem que deve receber
+        # Entrega o item ao comprador
         winning_bid = auction.bids.order_by('-amount', '-created_at').first()
         if not winning_bid:
             raise ValueError("Não foi possível determinar o lance vencedor.")
 
-        # Cria/atualiza o inventário do comprador
         dest_inventory, _ = Inventory.objects.get_or_create(
             user=auction.highest_bidder,
             character_name=winning_bid.character_name,
-            account_name=winning_bid.character_name  # ou outro valor se necessário
+            account_name=winning_bid.character_name
         )
 
         dest_item, created = InventoryItem.objects.get_or_create(
@@ -100,12 +99,16 @@ def finish_auction(auction: Auction):
             dest_item.quantity += auction.quantity
             dest_item.save()
 
+        # Marca o leilão como finalizado e pago
+        auction.status = 'finished'
+        auction.save()
+
     else:
-        # Se ninguém comprou, devolve o item ao dono original
+        # Se ninguém comprou, devolve o item ao vendedor
         seller_inventory, _ = Inventory.objects.get_or_create(
             user=auction.seller,
             character_name=auction.character_name,
-            account_name=auction.character_name  # ou algo mais confiável
+            account_name=auction.character_name
         )
 
         returned_item, created = InventoryItem.objects.get_or_create(
@@ -119,4 +122,6 @@ def finish_auction(auction: Auction):
             returned_item.quantity += auction.quantity
             returned_item.save()
 
-    auction.delete()
+        # Marca como expirado
+        auction.status = 'expired'
+        auction.save()

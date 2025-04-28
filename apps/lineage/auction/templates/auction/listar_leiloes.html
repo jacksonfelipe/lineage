@@ -4,65 +4,20 @@
 
 {% block content %}
 <div class="container my-4">
+
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">{% trans "Leilões Ativos" %}</h2>
+    <h2 class="mb-0">{% trans "Leilões" %}</h2>
     <a href="{% url 'auction:criar_leilao' %}" class="btn btn-primary">
       <i class="bi bi-plus-circle"></i> {% trans "Criar Leilão" %}
     </a>
   </div>
 
-  {% if leiloes %}
+  <!-- Leilões Ativos -->
+  <h3 class="mt-5">{% trans "Leilões Ativos" %}</h3>
+  {% if leiloes_ativos %}
     <div class="row g-4">
-      {% for leilao in leiloes %}
-      <div class="col-md-6 col-lg-4">
-        <div class="card bg-dark text-light border-secondary h-100">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <strong>{{ leilao.item_name }}</strong> <!-- Usando item_name diretamente -->
-            <span class="badge bg-primary">ID: {{ leilao.item_id }}</span> <!-- Usando item_id -->
-          </div>
-          <div class="card-body">
-            <div class="d-flex align-items-center mb-3">
-              <img src="{% item_image_url leilao.item_id %}"
-              alt="{{ leilao.item_name }}"
-              class="me-3 rounded border border-secondary"
-              style="width: 64px; height: 64px;">         
-              <div>
-                <p class="mb-1">
-                  <i class="bi bi-person-fill"></i>
-                  <strong>{% trans "Vendedor:" %}</strong> {{ leilao.seller.username }}
-                </p>
-                <p class="mb-1">
-                  <i class="bi bi-currency-dollar"></i>
-                  <strong>{% trans "Lance Atual:" %}</strong>
-                  R$ {{ leilao.current_bid|default:leilao.starting_bid }}
-                </p>
-                <p class="mb-0">
-                  <i class="bi bi-clock-fill"></i>
-                  <strong>{% trans "Restante:" %}</strong>
-                  <span class="text-warning fw-bold">
-                    {{ leilao.end_time|timeuntil }}
-                  </span>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="card-footer d-flex justify-content-between">
-            <a href="{% url 'auction:fazer_lance' leilao.id %}" class="btn btn-success btn-sm">
-              <i class="bi bi-gavel"></i> {% trans "Dar Lance" %}
-            </a>
-            {% if leilao.seller == user %}
-            <div class="btn-group">
-              <a href="{% url 'auction:cancelar_leilao' leilao.id %}" class="btn btn-warning btn-sm">
-                <i class="bi bi-x-octagon"></i> {% trans "Cancelar" %}
-              </a>
-              <a href="{% url 'auction:encerrar_leilao' leilao.id %}" class="btn btn-danger btn-sm">
-                <i class="bi bi-x-circle"></i> {% trans "Finalizar" %}
-              </a>
-            </div>
-          {% endif %}          
-          </div>
-        </div>
-      </div>
+      {% for leilao in leiloes_ativos %}
+        {% include "auction/partials/_leilao_card.html" %}
       {% endfor %}
     </div>
   {% else %}
@@ -70,5 +25,48 @@
       {% trans "Nenhum leilão ativo no momento." %}
     </div>
   {% endif %}
+
+  <!-- Leilões Pendentes de Entrega -->
+  <h3 class="mt-5">{% trans "Leilões Pendentes de Entrega" %}</h3>
+  {% if leiloes_pendentes_entrega %}
+    <div class="row g-4">
+      {% for leilao in leiloes_pendentes_entrega %}
+        {% include "auction/partials/_leilao_card.html" %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-secondary text-center" role="alert">
+      {% trans "Nenhum leilão pendente de entrega." %}
+    </div>
+  {% endif %}
+
+  <!-- Leilões Finalizados -->
+  <h3 class="mt-5">{% trans "Leilões Finalizados" %}</h3>
+  {% if leiloes_finalizados %}
+    <div class="row g-4">
+      {% for leilao in leiloes_finalizados %}
+        {% include "auction/partials/_leilao_card.html" %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-secondary text-center" role="alert">
+      {% trans "Nenhum leilão finalizado." %}
+    </div>
+  {% endif %}
+
+  <!-- Leilões Cancelados -->
+  <h3 class="mt-5">{% trans "Leilões Cancelados" %}</h3>
+  {% if leiloes_cancelados %}
+    <div class="row g-4">
+      {% for leilao in leiloes_cancelados %}
+        {% include "auction/partials/_leilao_card.html" %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-secondary text-center" role="alert">
+      {% trans "Nenhum leilão cancelado." %}
+    </div>
+  {% endif %}
+
 </div>
 {% endblock %}

@@ -16,8 +16,40 @@ import json
 
 @login_required
 def listar_leiloes(request):
-    leiloes = Auction.objects.filter(end_time__gt=timezone.now())
-    return render(request, 'auction/listar_leiloes.html', {'leiloes': leiloes})
+    now = timezone.now()
+
+    # Atualizar leilões que já passaram do tempo mas ainda estão como pending
+    auctions_to_expire = Auction.objects.filter(
+        status='pending',
+        end_time__lte=now
+    )
+    auctions_to_expire.update(status='expired')
+
+    # Separação correta
+    leiloes_ativos = Auction.objects.filter(
+        end_time__gt=now,
+        status='pending'
+    )
+
+    leiloes_finalizados = Auction.objects.filter(
+        status='finished'
+    )
+
+    leiloes_cancelados = Auction.objects.filter(
+        status='cancelled'
+    )
+
+    leiloes_pendentes_entrega = Auction.objects.filter(
+        status='expired'
+    )
+
+    context = {
+        'leiloes_ativos': leiloes_ativos,
+        'leiloes_pendentes_entrega': leiloes_pendentes_entrega,
+        'leiloes_finalizados': leiloes_finalizados,
+        'leiloes_cancelados': leiloes_cancelados,
+    }
+    return render(request, 'auction/listar_leiloes.html', context)
 
 
 @login_required
@@ -205,4 +237,3 @@ def cancelar_leilao(request, auction_id):
         messages.error(request, f'Ocorreu um erro ao cancelar o leilão: {str(e)}')
 
     return redirect('auction:listar_leiloes')
-

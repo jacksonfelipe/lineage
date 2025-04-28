@@ -5,16 +5,17 @@ from core.admin import BaseModelAdmin
 
 @admin.register(Auction)
 class AuctionAdmin(BaseModelAdmin):
-    list_display = ('item_name', 'seller', 'starting_bid', 'current_bid', 'highest_bidder', 'end_time', 'is_active')
-    list_filter = ('seller', 'end_time')
-    search_fields = ('item_name', 'seller__username', 'highest_bidder__username')  # Usando item_name diretamente
+    list_display = ('item_name', 'seller', 'starting_bid', 'current_bid', 'highest_bidder', 'end_time', 'status', 'is_currently_active')
+    list_filter = ('seller', 'status', 'end_time')
+    search_fields = ('item_name', 'seller__username', 'highest_bidder__username')
     readonly_fields = ('current_bid', 'highest_bidder')
-    
-    def is_active(self, obj):
+
+    def is_currently_active(self, obj):
         from django.utils import timezone
-        return obj.end_time > timezone.now()
-    is_active.boolean = True
-    is_active.short_description = "Ativo"
+        now = timezone.now()
+        return obj.status == 'pending' and obj.end_time > now
+    is_currently_active.boolean = True
+    is_currently_active.short_description = "Está Ativo?"
 
 
 @admin.register(Bid)
