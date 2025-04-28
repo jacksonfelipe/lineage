@@ -288,6 +288,7 @@ def inventario_global(request):
     })
 
 
+@login_required
 def get_item_image_url(request, item_id):
     url = item_image_url(item_id)
     return JsonResponse({'url': url})
