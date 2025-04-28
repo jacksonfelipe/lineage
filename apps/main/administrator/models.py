@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 import zipfile, os, json, shutil, re
 from django.conf import settings
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
 
 
 class ChatGroup(BaseModel):
@@ -136,7 +137,7 @@ class Theme(BaseModel):
                     if not nome_original:
                         continue  # Ignora se não tem nome
                     
-                    nome_final = f"{self.slug}_{slugify(nome_original)}"
+                    nome_final = f"{self.slug}_{slugify(nome_original)}".replace("-", "_")
 
                     tipo = var.get('tipo', 'string')  # Default para string
                     valor_pt = var.get('valor_pt', '')
@@ -194,11 +195,11 @@ class ThemeVariable(BaseModel):
     tipo = models.CharField(
         max_length=50,
         choices=(
-            ('texto', 'Texto'),
-            ('numero', 'Número'),
-            ('booleano', 'Booleano'),
+            ('string', 'Texto'),
+            ('int', 'Número'),
+            ('boolean', 'Booleano'),
         ),
-        default='texto'
+        default='string'
     )
 
     criado_em = models.DateTimeField(auto_now_add=True)
