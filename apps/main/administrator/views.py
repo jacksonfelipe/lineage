@@ -6,6 +6,10 @@ from django.contrib.auth.decorators import permission_required, login_required
 from apps.main.notification.models import Notification
 from apps.main.news.models import News
 from apps.main.solicitation.models import Solicitation, SolicitationParticipant
+from django.http import HttpResponse, Http404
+from django.conf import settings
+import os
+from core.context_processors import active_theme
 
 from .models import *
 
@@ -79,3 +83,26 @@ def error_chat(request):
     return render(request, 'errors/access_denied.html', {
         'message': 'Você não tem permissão para acessar esta sala de chat.'
     })
+
+
+def serve_theme_file(request, file_name):
+    # Obtemos o contexto do tema ativo
+    context_data = active_theme(request)
+    path_theme = context_data.get('path_theme')
+
+    # Verifica se o path_theme foi encontrado
+    if not path_theme:
+        raise Http404("Tema não encontrado.")
+
+    # Monta o caminho completo para o arquivo HTML
+    theme_file_path = os.path.join(settings.BASE_DIR, path_theme, file_name)
+
+    # Verifica se o arquivo existe
+    if not os.path.isfile(theme_file_path):
+        raise Http404("Arquivo não encontrado no tema.")
+
+    # Lê o conteúdo do arquivo e retorna como uma resposta
+    with open(theme_file_path, 'r') as f:
+        file_content = f.read()
+
+    return HttpResponse(file_content, content_type="text/html")

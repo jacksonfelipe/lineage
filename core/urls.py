@@ -11,7 +11,7 @@ urlpatterns = [
     
     # apps native
     path('app/message/', include('apps.main.message.urls')),
-    path('app/administrator/', include('apps.main.administrator.urls')),
+    path('app/', include('apps.main.administrator.urls')),
     path('app/news/', include('apps.main.news.urls')),
     path('app/faq/', include('apps.main.faq.urls')),
     path('app/auditor/', include('apps.main.auditor.urls')),
