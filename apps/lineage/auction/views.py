@@ -208,28 +208,33 @@ def cancelar_leilao(request, auction_id):
     try:
         with transaction.atomic():
             # Devolver os valores dos lances para os usuários
-            for bid in auction.bids.all():  # Supondo que exista uma relação `bids` em Auction
+            for bid in auction.bids.all():
                 user = bid.user
                 amount = bid.amount
-
-                # Aqui você precisará implementar a lógica de devolução do valor ao usuário
-                # Exemplo fictício (você pode substituir com seu sistema de moedas ou créditos):
                 user.profile.balance += amount
                 user.profile.save()
 
             # Devolver os itens ao vendedor
-            inventory, _ = Inventory.objects.get_or_create(user=request.user, character_name=auction.character_name)
-            item, created = InventoryItem.objects.get_or_create(inventory=inventory, item_id=auction.item_id, defaults={
-                'quantity': auction.quantity,
-                'item_name': auction.item_name,
-                'enchant': auction.item_enchant
-            })
+            inventory, _ = Inventory.objects.get_or_create(
+                user=request.user,
+                character_name=auction.character_name
+            )
+            item, created = InventoryItem.objects.get_or_create(
+                inventory=inventory,
+                item_id=auction.item_id,
+                defaults={
+                    'quantity': auction.quantity,
+                    'item_name': auction.item_name,
+                    'enchant': auction.item_enchant
+                }
+            )
             if not created:
                 item.quantity += auction.quantity
                 item.save()
 
-            # Cancelar o leilão
-            auction.delete()
+            # Atualizar o status do leilão para "cancelado"
+            auction.status = 'cancelled'
+            auction.save()
 
             messages.success(request, 'Leilão cancelado e recursos devolvidos com sucesso.')
 

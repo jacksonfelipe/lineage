@@ -40,32 +40,34 @@
     </div>
   {% endif %}
 
-  <!-- Leilões Finalizados -->
-  <h3 class="mt-5">{% trans "Leilões Finalizados" %}</h3>
-  {% if leiloes_finalizados %}
-    <div class="row g-4">
-      {% for leilao in leiloes_finalizados %}
-        {% include "auction/partials/_leilao_card.html" %}
-      {% endfor %}
-    </div>
-  {% else %}
-    <div class="alert alert-secondary text-center" role="alert">
-      {% trans "Nenhum leilão finalizado." %}
-    </div>
-  {% endif %}
+  {% if user.is_staff %}
+    <!-- Leilões Finalizados (visível só para staffs) -->
+    <h3 class="mt-5">{% trans "Leilões Finalizados" %}</h3>
+    {% if leiloes_finalizados %}
+      <div class="row g-4">
+        {% for leilao in leiloes_finalizados %}
+          {% include "auction/partials/_leilao_card.html" %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert alert-secondary text-center" role="alert">
+        {% trans "Nenhum leilão finalizado." %}
+      </div>
+    {% endif %}
 
-  <!-- Leilões Cancelados -->
-  <h3 class="mt-5">{% trans "Leilões Cancelados" %}</h3>
-  {% if leiloes_cancelados %}
-    <div class="row g-4">
-      {% for leilao in leiloes_cancelados %}
-        {% include "auction/partials/_leilao_card.html" %}
-      {% endfor %}
-    </div>
-  {% else %}
-    <div class="alert alert-secondary text-center" role="alert">
-      {% trans "Nenhum leilão cancelado." %}
-    </div>
+    <!-- Leilões Cancelados (visível só para staffs) -->
+    <h3 class="mt-5">{% trans "Leilões Cancelados" %}</h3>
+    {% if leiloes_cancelados %}
+      <div class="row g-4">
+        {% for leilao in leiloes_cancelados %}
+          {% include "auction/partials/_leilao_card.html" %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert alert-secondary text-center" role="alert">
+        {% trans "Nenhum leilão cancelado." %}
+      </div>
+    {% endif %}
   {% endif %}
 
 </div>
