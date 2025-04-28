@@ -131,6 +131,7 @@ TEMPLATES = [
                 "core.context_processors.project_metadata",
                 "core.context_processors.active_theme",
                 "core.context_processors.background_setting",
+                "core.context_processors.theme_variables",
             ],
         },
     },

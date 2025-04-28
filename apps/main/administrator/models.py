@@ -2,7 +2,7 @@ from django.db import models
 from core.models import BaseModel
 from apps.main.home.models import User
 from django.core.exceptions import ValidationError
-import zipfile, os, json, shutil
+import zipfile, os, json, shutil, re
 from django.conf import settings
 from django.utils.text import slugify
 
@@ -158,3 +158,55 @@ class BackgroundSetting(BaseModel):
     def get_active(cls):
         """Pega o background ativo"""
         return cls.objects.filter(is_active=True).first()
+
+
+class ThemeVariable(BaseModel):
+    nome = models.CharField(max_length=100, unique=True)
+    valor_pt = models.TextField(verbose_name="Valor em Português", blank=True, default="")
+    valor_en = models.TextField(verbose_name="Valor em Inglês", blank=True, default="")
+    valor_es = models.TextField(verbose_name="Valor em Espanhol", blank=True, default="")
+    
+    tipo = models.CharField(
+        max_length=50,
+        choices=(
+            ('texto', 'Texto'),
+            ('numero', 'Número'),
+            ('booleano', 'Booleano'),
+        ),
+        default='texto'
+    )
+
+    criado_em = models.DateTimeField(auto_now_add=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Variável de Tema"
+        verbose_name_plural = "Variáveis de Tema"
+
+    def clean(self):
+        if not re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', self.nome):
+            raise ValidationError(
+                _("O nome da variável só pode conter letras, números e underscores (_) "
+                  "e deve começar com uma letra ou underscore.")
+            )
+
+    def get_valor_convertido(self, lang_code='pt'):
+        """Retorna o valor no idioma atual e converte baseado no tipo"""
+        valor = getattr(self, f"valor_{lang_code}", None) or self.valor_pt
+
+        if self.tipo == 'numero':
+            try:
+                return float(valor)
+            except (ValueError, TypeError):
+                return 0
+        elif self.tipo == 'booleano':
+            return str(valor).lower() in ['true', '1', 'yes', 'sim']
+        
+        return valor
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.nome

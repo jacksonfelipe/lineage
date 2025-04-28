@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import *
 from core.admin import BaseModelAdmin
-from .forms import ThemeForm
+from .forms import ThemeForm, ThemeVariableForm
 from django.contrib import messages
 from django.template.response import TemplateResponse
 from django.utils.translation import gettext_lazy as _
@@ -76,3 +76,21 @@ class BackgroundSettingAdmin(BaseModelAdmin):
         if obj.is_active:
             BackgroundSetting.objects.exclude(id=obj.id).update(is_active=False)
         super().save_model(request, obj, form, change)
+
+
+@admin.register(ThemeVariable)
+class ThemeVariableAdmin(BaseModelAdmin):
+    form = ThemeVariableForm
+    list_display = ('nome', 'tipo', 'criado_em', 'atualizado_em')
+    list_filter = ('tipo',)
+    search_fields = ('nome', 'valor_pt', 'valor_en', 'valor_es')
+    ordering = ('nome',)
+    readonly_fields = ('criado_em', 'atualizado_em')
+    fieldsets = (
+        (None, {
+            'fields': ('nome', 'tipo', 'valor_pt', 'valor_en', 'valor_es')
+        }),
+        ('Datas', {
+            'fields': ('criado_em', 'atualizado_em')
+        }),
+    )

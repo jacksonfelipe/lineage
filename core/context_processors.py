@@ -1,8 +1,9 @@
 from django.conf import settings
-from apps.main.administrator.models import Theme, BackgroundSetting
+from apps.main.administrator.models import Theme, BackgroundSetting, ThemeVariable
 import os
 from django.utils.text import slugify
 from django.templatetags.static import static
+from django.utils.translation import get_language
 
 
 def project_metadata(request):
@@ -60,3 +61,11 @@ def background_setting(request):
     return {
         'background_url': bg_url
     }
+
+
+def theme_variables(request):
+    lang_code = get_language()[:2]  # exemplo: 'pt', 'en', 'es'
+
+    variables = ThemeVariable.objects.all()
+    context = {var.nome: var.get_valor_convertido(lang_code) for var in variables}
+    return context
