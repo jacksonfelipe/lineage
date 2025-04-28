@@ -9,6 +9,8 @@ from apps.lineage.inventory.models import Inventory
 from datetime import timedelta
 from decimal import Decimal, InvalidOperation
 from django.db import transaction
+from apps.lineage.wallet.models import Wallet
+from apps.lineage.wallet.signals import aplicar_transacao
 
 from django.core.serializers.json import DjangoJSONEncoder
 import json
@@ -209,10 +211,14 @@ def cancelar_leilao(request, auction_id):
         with transaction.atomic():
             # Devolver os valores dos lances para os usuários
             for bid in auction.bids.all():
-                user = bid.bidder
-                amount = bid.amount
-                user.profile.balance += amount
-                user.profile.save()
+                seller_wallet, _ = Wallet.objects.get_or_create(usuario=bid.bidder)
+                aplicar_transacao(
+                    seller_wallet,
+                    'ENTRADA',
+                    bid.amount,
+                    f"Devolução do leilão #{auction.id}",
+                    origem=str(auction.highest_bidder)
+                )
 
             # Devolver os itens ao vendedor
             inventory, _ = Inventory.objects.get_or_create(
