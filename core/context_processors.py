@@ -46,7 +46,7 @@ def active_theme(request):
         'active_theme': safe_slug if theme else None,
         'base_template': base_template,
         'theme_slug': safe_slug if theme else None,
-        'path_theme': f'themes/installed/{safe_slug}' if theme else None,
+        'path_theme': f'/themes/installed/{safe_slug}' if theme else None,
         'theme_files': theme_files,
     }
 

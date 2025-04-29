@@ -86,23 +86,19 @@ def error_chat(request):
 
 
 def serve_theme_file(request, file_name):
-    # Obtemos o contexto do tema ativo
+    # Obtém o contexto do tema ativo
     context_data = active_theme(request)
     path_theme = context_data.get('path_theme')
 
-    # Verifica se o path_theme foi encontrado
     if not path_theme:
         raise Http404("Tema não encontrado.")
 
-    # Monta o caminho completo para o arquivo HTML
-    theme_file_path = os.path.join(settings.BASE_DIR, path_theme, file_name + '.html')
+    # Caminho relativo com separador compatível com Django
+    template_relative_path = os.path.join(path_theme, file_name + '.html').replace('\\', '/').replace("/themes/", "")
 
-    # Verifica se o arquivo existe
-    if not os.path.isfile(theme_file_path):
+    # Verifica se o arquivo existe no sistema de arquivos
+    if not os.path.isfile(os.path.join(settings.BASE_DIR, path_theme.replace("/themes/", "themes/"), file_name + '.html')):
         raise Http404("Arquivo não encontrado no tema.")
 
-    # Lê o conteúdo do arquivo e retorna como uma resposta
-    with open(theme_file_path, 'r') as f:
-        file_content = f.read()
-
-    return HttpResponse(file_content, content_type="text/html")
+    # Renderiza o template
+    return render(request, template_relative_path)
