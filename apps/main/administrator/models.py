@@ -43,12 +43,6 @@ class Theme(BaseModel):
     def __str__(self):
         return self.nome
 
-    def clean(self):
-        if self.ativo:
-            active_themes = Theme.objects.filter(ativo=True).exclude(pk=self.pk)
-            if active_themes.exists():
-                raise ValidationError("Já existe um tema ativo. Desative o tema atual antes de ativar outro.")
-
     def save(self, *args, **kwargs):
         # Se ativado, desativa os outros
         if self.ativo:
@@ -78,8 +72,8 @@ class Theme(BaseModel):
     def clean_upload(self):
         file = self.upload
         if file:
-            if file.size > 10 * 1024 * 1024:
-                raise ValidationError("O arquivo é muito grande. Tente um arquivo menor.")
+            if file.size > 20 * 1024 * 1024:
+                raise ValidationError("O arquivo é muito grande. Tente um arquivo menor que 20MB.")
             if not zipfile.is_zipfile(file):
                 raise ValidationError("O arquivo não é um ZIP válido.")
         return file
@@ -96,7 +90,28 @@ class Theme(BaseModel):
         with zipfile.ZipFile(upload_file, 'r') as zip_ref:
             file_names = zip_ref.namelist()
 
-            extensoes_permitidas = ['.html', '.css', '.js', '.json', '.png', '.jpg', '.jpeg', '.svg', '.woff', '.ttf', '.map']
+            extensoes_permitidas = [
+                # Arquivos de marcação e dados
+                '.html', '.htm', '.json',
+
+                # Estilos
+                '.css', '.scss', '.sass', '.less',
+
+                # Scripts
+                '.js', '.ts', '.map', '.mjs', '.cjs',
+
+                # Imagens
+                '.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.ico', '.bmp', '.tiff', '.gif'
+
+                # Fontes
+                '.woff', '.woff2', '.ttf', '.otf', '.eot',
+
+                # Multimídia (menos comum em temas, mas possível)
+                '.mp4', '.webm', '.mp3', '.ogg',
+
+                # Outros arquivos úteis
+                '.md', '.txt', '.pdf',
+            ]
 
             for member in zip_ref.infolist():
                 ext = os.path.splitext(member.filename)[1].lower()
@@ -164,6 +179,7 @@ class Theme(BaseModel):
 
             except json.JSONDecodeError:
                 raise ValidationError("Erro ao interpretar o arquivo theme.json. Verifique se o JSON está bem formado.")
+            
             except Exception as e:
                 raise ValidationError(f"Erro ao processar o arquivo do tema: {str(e)}")
 

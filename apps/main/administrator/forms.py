@@ -1,7 +1,17 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from .models import Theme, ThemeVariable
+from django.utils.text import slugify
 import re
+from django.template.loader import engines
+
+
+def limpar_cache_templates():
+    for engine in engines.all():
+        if hasattr(engine.engine, 'template_loaders'):
+            for loader in engine.engine.template_loaders:
+                if hasattr(loader, 'reset'):
+                    loader.reset() 
 
 
 class ThemeForm(forms.ModelForm):
@@ -9,32 +19,52 @@ class ThemeForm(forms.ModelForm):
         model = Theme
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._meta_from_theme = {}
+
     def clean_upload(self):
         upload = self.cleaned_data.get('upload')
         if upload:
             temp_theme = Theme(upload=upload)
-            return temp_theme.clean_upload()
+            try:
+                temp_theme.clean_upload()
+            except ValidationError as e:
+                raise ValidationError(e.messages)
         return upload
 
     def clean(self):
         cleaned_data = super().clean()
-        ativo = cleaned_data.get('ativo')
+        upload = cleaned_data.get('upload')
 
-        if ativo:
-            active_themes = Theme.objects.filter(ativo=True)
-            if self.instance.pk:
-                active_themes = active_themes.exclude(pk=self.instance.pk)
+        if upload:
+            temp_theme = Theme(upload=upload)
+            temp_theme.slug = self.cleaned_data.get('slug') or slugify(self.cleaned_data.get('nome', ''))
 
-            if active_themes.exists():
-                raise ValidationError("Já existe um tema ativo. Desative o tema atual antes de ativar outro.")
+            try:
+                temp_theme.processar_upload()
+                limpar_cache_templates()
+
+                # Guarda os metadados para usar no save()
+                self._meta_from_theme = {
+                    'nome': temp_theme.nome,
+                    'slug': temp_theme.slug,
+                    'version': temp_theme.version,
+                    'author': temp_theme.author,
+                    'descricao': temp_theme.descricao,
+                }
+
+            except ValidationError as e:
+                raise ValidationError(e.messages)
 
         return cleaned_data
 
     def save(self, commit=True):
         instance = super().save(commit=False)
 
-        if instance.upload:
-            instance.processar_upload()
+        # Aplica os metadados extraídos, se existirem
+        for field, value in self._meta_from_theme.items():
+            setattr(instance, field, value)
 
         if commit:
             instance.save()
