@@ -29,11 +29,6 @@ class ThemeAdmin(BaseModelAdmin):
     actions = ['delete_selected_themes']
 
     def save_model(self, request, obj, form, change):
-        if not change:
-            if Theme.objects.filter(nome=obj.nome).exists():
-                raise ValidationError(f"O tema com nome '{obj.nome}' já existe.")
-            if Theme.objects.filter(slug=obj.slug).exists():
-                raise ValidationError(f"O tema com slug '{obj.slug}' já existe.")
         super().save_model(request, obj, form, change)
 
     def delete_model(self, request, obj):
