@@ -37,15 +37,8 @@ class ThemeForm(forms.ModelForm):
         cleaned_data = super().clean()
         upload = cleaned_data.get('upload')
 
-        # Verifica se nome ou slug já existem
         nome = cleaned_data.get('nome')
         slug = cleaned_data.get('slug')
-
-        if nome and Theme.objects.exclude(pk=self.instance.pk).filter(nome=nome).exists():
-            self.add_error('nome', f"O tema com nome '{nome}' já existe.")
-
-        if slug and Theme.objects.exclude(pk=self.instance.pk).filter(slug=slug).exists():
-            self.add_error('slug', f"O tema com slug '{slug}' já existe.")
 
         if upload:
             temp_theme = Theme(upload=upload)
@@ -55,6 +48,7 @@ class ThemeForm(forms.ModelForm):
                 temp_theme.processar_upload()
                 limpar_cache_templates()
 
+                # Aplica os metadados ANTES da validação
                 self._meta_from_theme = {
                     'nome': temp_theme.nome,
                     'slug': temp_theme.slug,
@@ -63,10 +57,23 @@ class ThemeForm(forms.ModelForm):
                     'descricao': temp_theme.descricao,
                 }
 
+                # Atualiza os dados no formulário
+                cleaned_data.update(self._meta_from_theme)
+
             except ValidationError as e:
                 self.add_error('upload', e.messages[0] if e.messages else "Erro de validação.")
             except Exception as e:
                 self.add_error('upload', f"Erro inesperado: {str(e)}")
+
+        # Validar depois de aplicar os metadados
+        nome_final = cleaned_data.get('nome')
+        slug_final = cleaned_data.get('slug')
+
+        if nome_final and Theme.objects.exclude(pk=self.instance.pk).filter(nome=nome_final).exists():
+            self.add_error('nome', f"O tema com nome '{nome_final}' já existe.")
+
+        if slug_final and Theme.objects.exclude(pk=self.instance.pk).filter(slug=slug_final).exists():
+            self.add_error('slug', f"O tema com slug '{slug_final}' já existe.")
 
         return cleaned_data
 
