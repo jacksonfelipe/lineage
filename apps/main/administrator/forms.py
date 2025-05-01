@@ -37,15 +37,24 @@ class ThemeForm(forms.ModelForm):
         cleaned_data = super().clean()
         upload = cleaned_data.get('upload')
 
+        # Verifica se nome ou slug já existem
+        nome = cleaned_data.get('nome')
+        slug = cleaned_data.get('slug')
+
+        if nome and Theme.objects.exclude(pk=self.instance.pk).filter(nome=nome).exists():
+            self.add_error('nome', f"O tema com nome '{nome}' já existe.")
+
+        if slug and Theme.objects.exclude(pk=self.instance.pk).filter(slug=slug).exists():
+            self.add_error('slug', f"O tema com slug '{slug}' já existe.")
+
         if upload:
             temp_theme = Theme(upload=upload)
-            temp_theme.slug = self.cleaned_data.get('slug') or slugify(self.cleaned_data.get('nome', ''))
+            temp_theme.slug = slug or slugify(nome or '')
 
             try:
                 temp_theme.processar_upload()
                 limpar_cache_templates()
 
-                # Guarda os metadados para usar no save()
                 self._meta_from_theme = {
                     'nome': temp_theme.nome,
                     'slug': temp_theme.slug,
