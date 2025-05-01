@@ -25,7 +25,7 @@ def criar_ou_reaproveitar_pedido(request):
             return HttpResponse("Valor inválido", status=400)
 
         metodo = request.POST.get('metodo')
-        if metodo not in ["MercadoPago"]:  # Expanda conforme necessário
+        if metodo not in ["MercadoPago", "Stripe"]:  # Expanda conforme necessário
             return HttpResponse("Método de pagamento inválido", status=400)
 
         usuario = request.user
