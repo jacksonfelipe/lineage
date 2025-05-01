@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 import mercadopago
+import stripe
 from .models import *
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -8,6 +9,9 @@ from datetime import timedelta
 from django.utils.timezone import now
 from django.contrib import messages
 from django.db import transaction
+
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 @login_required
@@ -66,7 +70,6 @@ def confirmar_pagamento(request, pedido_id):
             if pedido.status != 'PENDENTE':
                 return HttpResponse("Pedido já processado ou inválido.")
 
-            # Verifica se já existe um pagamento iniciado para esse pedido
             pagamento = Pagamento.objects.filter(pedido_pagamento=pedido).first()
             if pagamento:
                 if pedido.metodo == "MercadoPago" and pagamento.transaction_code:
@@ -79,9 +82,11 @@ def confirmar_pagamento(request, pedido_id):
                     preference = preference_response.get("response", {})
                     return redirect(preference["init_point"])
 
+                if pedido.metodo == "Stripe" and pagamento.transaction_code:
+                    return redirect(f"https://checkout.stripe.com/pay/{pagamento.transaction_code}")
+
                 return HttpResponse("Já existe um pagamento iniciado para este pedido.", status=400)
 
-            # Cria novo pagamento
             pagamento = Pagamento.objects.create(
                 usuario=request.user,
                 valor=pedido.valor_pago,
@@ -115,6 +120,28 @@ def confirmar_pagamento(request, pedido_id):
                 pagamento.save()
 
                 return redirect(preference["init_point"])
+
+            elif pedido.metodo == "Stripe":
+                session = stripe.checkout.Session.create(
+                    payment_method_types=['card'],
+                    mode='payment',
+                    line_items=[{
+                        'price_data': {
+                            'currency': 'brl',
+                            'product_data': {'name': 'Moedas para o jogo'},
+                            'unit_amount': int(pedido.valor_pago * 100),
+                        },
+                        'quantity': 1,
+                    }],
+                    success_url=settings.STRIPE_SUCCESS_URL + '?session_id={CHECKOUT_SESSION_ID}',
+                    cancel_url=settings.STRIPE_FAILURE_URL,
+                    metadata={"pagamento_id": pagamento.id}
+                )
+
+                pagamento.transaction_code = session.id
+                pagamento.save()
+
+                return redirect(session.url, code=303)
 
             return HttpResponse("Método de pagamento não suportado", status=400)
 

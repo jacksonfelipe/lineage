@@ -181,6 +181,9 @@ PROJECT_YOUTUBE_URL='https://www.youtube.com/@seu-canal'
 PROJECT_FACEBOOK_URL='https://www.facebook.com/sua-pagina'
 PROJECT_INSTAGRAM_URL='https://www.instagram.com/seu-perfil'
 
+CONFIG_STRIPE_WEBHOOK_SECRET='whsec_5dzjceF7LgeYzasdasdasdZpSuPq'
+CONFIG_STRIPE_SECRET_KEY='sk_test_51RK0cORmyaPSbmPDEMjN0DaasdasdadadasdafgagdhhfasdfsfnbgRrtdKRwHRakfrQub9SQ5jQEUNvTfrcFxbw00gsqFR09W'
+
 EOL
   fi
   touch "$INSTALL_DIR/env_created"

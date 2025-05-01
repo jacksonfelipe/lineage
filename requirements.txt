@@ -45,6 +45,7 @@ daphne
 
 # payments
 mercadopago
+stripe
 
 # for history-migrates
 django-ckeditor

@@ -433,6 +433,14 @@ if not RENDER_EXTERNAL_HOSTNAME:
 MERCADO_PAGO_SUCCESS_URL = f"https://{RENDER_EXTERNAL_HOSTNAME}/app/payment/mercadopago/sucesso/"
 MERCADO_PAGO_FAILURE_URL = f"https://{RENDER_EXTERNAL_HOSTNAME}/app/payment/mercadopago/erro/"
 
+# =========================== STRIPE CONFIGS ===========================
+
+STRIPE_WEBHOOK_SECRET = get_env_variable('CONFIG_STRIPE_WEBHOOK_SECRET')
+STRIPE_SECRET_KEY = get_env_variable('CONFIG_STRIPE_SECRET_KEY')
+
+STRIPE_SUCCESS_URL = f"https://{RENDER_EXTERNAL_HOSTNAME}/app/payment/stripe/sucesso/"
+STRIPE_FAILURE_URL = f"https://{RENDER_EXTERNAL_HOSTNAME}/app/payment/stripe/erro/"
+
 # =========================== HCAPTCHA CONFIGS ===========================
 
 HCAPTCHA_SITE_KEY = os.environ.get('CONFIG_HCAPTCHA_SITE_KEY')
