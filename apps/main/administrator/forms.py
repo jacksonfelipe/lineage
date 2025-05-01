@@ -57,7 +57,7 @@ class ThemeForm(forms.ModelForm):
                     'descricao': temp_theme.descricao,
                 }
 
-                # Atualiza os dados no formulário
+                # Atualiza os dados no formulário com os metadados extraídos
                 cleaned_data.update(self._meta_from_theme)
 
             except ValidationError as e:
@@ -65,15 +65,16 @@ class ThemeForm(forms.ModelForm):
             except Exception as e:
                 self.add_error('upload', f"Erro inesperado: {str(e)}")
 
-        # Validar depois de aplicar os metadados
+        # Após adicionar os metadados, verifique a unicidade dos campos
         nome_final = cleaned_data.get('nome')
         slug_final = cleaned_data.get('slug')
 
+        # Validação de unicidade para 'nome' e 'slug'
         if nome_final and Theme.objects.exclude(pk=self.instance.pk).filter(nome=nome_final).exists():
-            self.add_error('nome', f"O tema com nome '{nome_final}' já existe.")
+            self.add_error('upload', f"O tema com nome '{nome_final}' já existe.")
 
         if slug_final and Theme.objects.exclude(pk=self.instance.pk).filter(slug=slug_final).exists():
-            self.add_error('slug', f"O tema com slug '{slug_final}' já existe.")
+            self.add_error('upload', f"O tema com slug '{slug_final}' já existe.")
 
         return cleaned_data
 
