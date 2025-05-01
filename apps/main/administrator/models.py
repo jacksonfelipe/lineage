@@ -101,7 +101,7 @@ class Theme(BaseModel):
                 '.js', '.ts', '.map', '.mjs', '.cjs',
 
                 # Imagens
-                '.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.ico', '.bmp', '.tiff', '.gif'
+                '.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.ico', '.bmp', '.tiff', '.gif',
 
                 # Fontes
                 '.woff', '.woff2', '.ttf', '.otf', '.eot',

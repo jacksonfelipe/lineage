@@ -55,7 +55,9 @@ class ThemeForm(forms.ModelForm):
                 }
 
             except ValidationError as e:
-                raise ValidationError(e.messages)
+                self.add_error('upload', e.messages[0] if e.messages else "Erro de validação.")
+            except Exception as e:
+                self.add_error('upload', f"Erro inesperado: {str(e)}")
 
         return cleaned_data
 
