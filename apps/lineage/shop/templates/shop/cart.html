@@ -15,7 +15,9 @@
       {% for ci in cart.cartitem_set.all %}
       <li class="list-group-item d-flex justify-content-between align-items-center">
         <span>
-          <img src="{% static 'assets/img/l2/icons/5-' %}{{ ci.item.item_id|unlocalize }}.jpg" class="me-2" style="width:24px;">
+          <img src="{% item_image_url ci.item.item_id %}" 
+          alt="{{ ci.item.item_name }}"
+          class="me-2" style="width:24px;">
           <span title="{{ ci.item.descricao }}">
             {{ ci.item.nome }} {{ ci.item.quantidade }} x{{ ci.quantidade|unlocalize }}
           </span>
