@@ -16,13 +16,10 @@ def render_theme_page(request, base_path, template_name, context=None):
     context_processor_data = active_theme(request)
 
     theme_slug = context_processor_data.get('theme_slug', '')
-    theme_files = context_processor_data.get('theme_files', {})
 
     if theme_slug:
         theme_path = os.path.join(settings.BASE_DIR, 'themes', 'installed', theme_slug)
         theme_file_path = os.path.join(theme_path, template_name)
-
-        print(theme_file_path, os.path.isfile(theme_file_path))
 
         if os.path.isfile(theme_file_path):
             return render(request, f"installed/{theme_slug}/{template_name}", {**context, **context_processor_data})

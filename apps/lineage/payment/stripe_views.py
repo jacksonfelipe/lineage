@@ -100,7 +100,7 @@ def stripe_pagamento_sucesso(request):
                 wallet=wallet,
                 tipo="ENTRADA",
                 valor=pagamento.valor,
-                descricao="Crédito via Stripe (fallback)",
+                descricao="Crédito via Stripe",
                 origem="Stripe",
                 destino=pagamento.usuario.username
             )

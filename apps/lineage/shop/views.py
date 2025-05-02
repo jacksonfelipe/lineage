@@ -11,7 +11,6 @@ from apps.lineage.wallet.models import Wallet
 @login_required
 def shop_home(request):
     items = ShopItem.objects.filter(ativo=True)
-    print(items)
     packages = ShopPackage.objects.filter(ativo=True)
     return render(request, 'shop/home.html', {
         'items': items,
