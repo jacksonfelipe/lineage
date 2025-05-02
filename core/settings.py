@@ -444,8 +444,8 @@ STRIPE_FAILURE_URL = f"https://{RENDER_EXTERNAL_HOSTNAME}/app/payment/stripe/err
 # =========================== PAYMENTS CONFIGS ===========================
 
 METHODS_PAYMENTS = ["MercadoPago", "Stripe"]
-MERCADO_PAGO_ACTIVATE_PAYMENTS = get_env_variable('CONFIG_MERCADO_PAGO_ACTIVATE_PAYMENTS')
-STRIPE_ACTIVATE_PAYMENTS = get_env_variable('CONFIG_STRIPE_ACTIVATE_PAYMENTS')
+MERCADO_PAGO_ACTIVATE_PAYMENTS = str2bool(get_env_variable('CONFIG_MERCADO_PAGO_ACTIVATE_PAYMENTS'))
+STRIPE_ACTIVATE_PAYMENTS = str2bool(get_env_variable('CONFIG_STRIPE_ACTIVATE_PAYMENTS'))
 
 # =========================== HCAPTCHA CONFIGS ===========================
 

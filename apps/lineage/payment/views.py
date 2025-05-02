@@ -29,10 +29,12 @@ def criar_ou_reaproveitar_pedido(request):
             return HttpResponse("Método de pagamento inválido", status=400)
         
         if metodo == "MercadoPago" and not settings.MERCADO_PAGO_ACTIVATE_PAYMENTS:
-            return HttpResponse("Método de pagamento desativado", status=400)
+            messages.error(request, "Método de pagamento desativado.")
+            return redirect('payment:novo_pedido')
         
         if metodo == "Stripe" and not settings.STRIPE_ACTIVATE_PAYMENTS:
-            return HttpResponse("Método de pagamento desativado", status=400)
+            messages.error(request, "Método de pagamento desativado.")
+            return redirect('payment:novo_pedido')
 
         usuario = request.user
         duas_horas_atras = now() - timedelta(hours=2)
