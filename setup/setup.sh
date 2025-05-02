@@ -184,6 +184,9 @@ PROJECT_INSTAGRAM_URL='https://www.instagram.com/seu-perfil'
 CONFIG_STRIPE_WEBHOOK_SECRET='whsec_5dzjceF7LgeYzasdasdasdZpSuPq'
 CONFIG_STRIPE_SECRET_KEY='sk_test_51RK0cORmyaPSbmPDEMjN0DaasdasdadadasdafgagdhhfasdfsfnbgRrtdKRwHRakfrQub9SQ5jQEUNvTfrcFxbw00gsqFR09W'
 
+CONFIG_MERCADO_PAGO_ACTIVATE_PAYMENTS=True
+CONFIG_STRIPE_ACTIVATE_PAYMENTS=True
+
 EOL
   fi
   touch "$INSTALL_DIR/env_created"

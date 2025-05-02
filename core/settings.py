@@ -441,6 +441,12 @@ STRIPE_SECRET_KEY = get_env_variable('CONFIG_STRIPE_SECRET_KEY')
 STRIPE_SUCCESS_URL = f"https://{RENDER_EXTERNAL_HOSTNAME}/app/payment/stripe/sucesso/"
 STRIPE_FAILURE_URL = f"https://{RENDER_EXTERNAL_HOSTNAME}/app/payment/stripe/erro/"
 
+# =========================== PAYMENTS CONFIGS ===========================
+
+METHODS_PAYMENTS = ["MercadoPago", "Stripe"]
+MERCADO_PAGO_ACTIVATE_PAYMENTS = get_env_variable('CONFIG_MERCADO_PAGO_ACTIVATE_PAYMENTS')
+STRIPE_ACTIVATE_PAYMENTS = get_env_variable('CONFIG_STRIPE_ACTIVATE_PAYMENTS')
+
 # =========================== HCAPTCHA CONFIGS ===========================
 
 HCAPTCHA_SITE_KEY = os.environ.get('CONFIG_HCAPTCHA_SITE_KEY')
