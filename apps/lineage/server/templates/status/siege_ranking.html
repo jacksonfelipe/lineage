@@ -79,10 +79,10 @@
                 <strong>{% trans "Clan Proprietário" %}:</strong>
                 <div class="clan-name-container">
                   <div class="crest-group">
-                    <img src="data:image/png;base64,{{ castle.clan_crest_image_base64 }}" alt="Crest do Clã" class="top-clan-crest">
                     {% if clan.ally_crest_image_base64 %}
                       <img src="data:image/png;base64,{{ castle.ally_crest_image_base64 }}" alt="Crest da Aliança" class="top-clan-crest">
                     {% endif %}
+                    <img src="data:image/png;base64,{{ castle.clan_crest_image_base64 }}" alt="Crest do Clã" class="top-clan-crest">
                   </div>
                   {{ castle.clan_name|default:"-" }}
                 </div>

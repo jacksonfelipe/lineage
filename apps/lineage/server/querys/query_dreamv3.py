@@ -206,10 +206,10 @@ class LineageStats:
                 O.points_current AS olympiad_points
             FROM oly_nobles O
             LEFT JOIN characters C ON C.obj_Id = O.char_id
+            LEFT JOIN character_subclasses CS ON CS.char_obj_id = C.obj_Id AND CS.isBase = '1'
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clanid AND D.type = '0'
             LEFT JOIN clan_data CD ON CD.clan_id = C.clanid
-            LEFT JOIN character_subclasses CS ON CS.char_obj_id = C.obj_Id AND CS.isBase = '1'
-            ORDER BY olympiad_points DESC
+            ORDER BY olympiad_points DESC, base ASC, char_name ASC
         """
         return LineageStats._run_query(sql)
 

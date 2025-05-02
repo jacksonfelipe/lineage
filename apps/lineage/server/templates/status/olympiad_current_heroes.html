@@ -48,10 +48,10 @@
             <td>{{ hero.char_name|default:"-" }}</td>
             <td><div class="clan-name-container">
               <div class="crest-group">
-                <img src="data:image/png;base64,{{ hero.clan_crest_image_base64 }}" alt="Crest do Clã" class="top-clan-crest">
                 {% if clan.ally_crest_image_base64 %}
                   <img src="data:image/png;base64,{{ hero.ally_crest_image_base64 }}" alt="Crest da Aliança" class="top-clan-crest">
                 {% endif %}
+                <img src="data:image/png;base64,{{ hero.clan_crest_image_base64 }}" alt="Crest do Clã" class="top-clan-crest">
               </div>
               {{ hero.clan_name|default:"-" }}
             </div></td>

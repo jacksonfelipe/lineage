@@ -184,3 +184,27 @@ def clear_cart(request):
     cart.limpar()
     messages.success(request, "Carrinho esvaziado com sucesso.")
     return redirect('shop:view_cart')
+
+
+@login_required
+def remove_cart_item(request, item_id):
+    cart = get_object_or_404(Cart, user=request.user)
+    try:
+        cart_item = CartItem.objects.get(cart=cart, item_id=item_id)
+        cart_item.delete()
+        messages.success(request, f"{cart_item.item.nome} removido do carrinho.")
+    except CartItem.DoesNotExist:
+        messages.error(request, "Item não encontrado no carrinho.")
+    return redirect('shop:view_cart')
+
+
+@login_required
+def remove_cart_package(request, package_id):
+    cart = get_object_or_404(Cart, user=request.user)
+    try:
+        cart_package = CartPackage.objects.get(cart=cart, pacote_id=package_id)
+        cart_package.delete()
+        messages.success(request, f"Pacote {cart_package.pacote.nome} removido do carrinho.")
+    except CartPackage.DoesNotExist:
+        messages.error(request, "Pacote não encontrado no carrinho.")
+    return redirect('shop:view_cart')

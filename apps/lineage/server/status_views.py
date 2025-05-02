@@ -8,6 +8,7 @@ from django.conf import settings
 from datetime import datetime, timedelta
 from apps.lineage.server.database import LineageDB
 from apps.lineage.server.utils.crest import attach_crests_to_clans
+from utils.resources import get_class_name
 
 from utils.dynamic_import import get_query_class  # importa o helper
 LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
@@ -51,6 +52,8 @@ def olympiad_ranking_view(request):
     db = LineageDB()
     result = LineageStats.olympiad_ranking() if db.is_connected() else []
     result = attach_crests_to_clans(result)
+    for player in result:
+        player['base'] = get_class_name(player['base'])
     return render(request, 'status/olympiad_ranking.html', {'ranking': result})
 
 
@@ -60,6 +63,8 @@ def olympiad_all_heroes_view(request):
     db = LineageDB()
     result = LineageStats.olympiad_all_heroes() if db.is_connected() else []
     result = attach_crests_to_clans(result)
+    for player in result:
+        player['base'] = get_class_name(player['base'])
     return render(request, 'status/olympiad_all_heroes.html', {'heroes': result})
 
 
