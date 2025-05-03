@@ -465,7 +465,7 @@ class LineageAccount:
             print(f"❌ Erro ao alterar tabela 'accounts': {e}")
 
     @staticmethod
-    @cache_lineage_result(timeout=300)
+    @cache_lineage_result(timeout=300, use_cache=False)
     def check_login_exists(login):
         sql = "SELECT * FROM accounts WHERE login = :login LIMIT 1"
         return LineageDB().select(sql, {"login": login})
