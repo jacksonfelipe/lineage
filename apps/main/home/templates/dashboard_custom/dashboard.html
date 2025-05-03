@@ -15,6 +15,79 @@
 
 {% block content %}
 
+<div class="container my-5">
+  <div class="card shadow-lg border-0 bg-white rounded-4">
+    <div class="card-body p-4">
+
+      <!-- Saudação -->
+      <div class="mb-4 text-center">
+        <h2 class="fw-bold text-dark mb-1">{% trans "Bem-vindo," %} {{ request.user.first_name|default:request.user.username }} 👋</h2>
+        <p class="text-muted">{% trans "Este é o seu painel principal. Aqui você encontrará um resumo da sua conta." %}</p>
+      </div>
+
+      <!-- Informações principais -->
+      <div class="row g-4">
+
+        <!-- Carteira -->
+        <div class="col-md-6">
+          <div class="card h-100 border-0 bg-success-subtle">
+            <div class="card-body d-flex align-items-center">
+              <div class="me-3">
+                <i class="fas fa-wallet fa-2x text-success"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold text-success mb-1">{% trans "Carteira" %}</h6>
+                {% if wallet %}
+                  <p class="mb-0">
+                    <strong>{% trans "Saldo:" %}</strong> R$ {{ wallet.saldo|floatformat:2 }}
+                  </p>
+                {% else %}
+                  <p class="text-muted mb-0">{% trans "Nenhuma carteira encontrada." %}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inventários -->
+        <div class="col-md-6">
+          <div class="card h-100 border-0 bg-primary-subtle">
+            <div class="card-body d-flex align-items-center">
+              <div class="me-3">
+                <i class="fas fa-boxes fa-2x text-primary"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold text-primary mb-1">{% trans "Inventários" %}</h6>
+                {% if inventories %}
+                  <ul class="mb-0 ps-3 small">
+                    {% for inv in inventories %}
+                      <li>{{ inv.character_name }} ({{ inv.account_name }})</li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <p class="text-muted mb-0">{% trans "Nenhum inventário encontrado." %}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Ações -->
+      <div class="mt-4 d-flex justify-content-end">
+        <a href="{% url 'auction:listar_leiloes' %}" class="btn btn-outline-primary me-2">
+          <i class="fas fa-gavel me-1"></i> {% trans "Ir para Leilão" %}
+        </a>
+        <a href="{% url 'payment:novo_pedido' %}" class="btn btn-outline-success">
+          <i class="fas fa-store me-1"></i> {% trans "Fazer Doação" %}
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 {% if dashboard %}
   <div class="container-fluid py-5">
     <div class="row justify-content-center">

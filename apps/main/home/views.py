@@ -33,6 +33,9 @@ from apps.lineage.server.models import IndexConfig
 from django.utils import translation
 from utils.render_theme_page import render_theme_page
 
+from apps.lineage.wallet.models import Wallet
+from apps.lineage.inventory.models import Inventory
+
 from utils.dynamic_import import get_query_class  # importa o helper
 LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
 
@@ -428,10 +431,15 @@ def dashboard(request):
         if dashboard:
             translation_obj = dashboard.translations.filter(language=language).first() or dashboard.translations.filter(language='pt').first()
 
+        wallet = Wallet.objects.filter(usuario=request.user).first()
+        inventories = Inventory.objects.filter(user=request.user)
+
         context = {
             'segment': 'dashboard',
             'dashboard': dashboard,
             'translation': translation_obj,
+            'wallet': wallet,
+            'inventories': inventories,
         }
         return render(request, 'dashboard_custom/dashboard.html', context)
     else:
