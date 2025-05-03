@@ -38,9 +38,12 @@
       <li class="nav-item">
         <a href="{% url 'index' %}" class="nav-link d-flex align-items-center">
           <span class="sidebar-icon">
-            <img src="{% static 'assets/img/l2_logo.png' %}" height="60" alt="Lineage2 Logo" />
+            {% if site_logo %}
+              <img src="{{ site_logo.image.url }}" height="60" alt="{{ site_logo.name }}">
+            {% else %}
+              <img src="{% static 'assets/img/l2_logo.png' %}" height="60" alt="Lineage2 Logo" />
+            {% endif %}
           </span>
-
         </a>
       </li>
 

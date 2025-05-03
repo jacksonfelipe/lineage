@@ -14,7 +14,11 @@
         
         <!-- LOGO -->
         <a href="{% url 'index' %}" class="navbar-brand text-light fs-3">
-          <img src="{% static 'assets/img/l2_logo.png' %}" height="60" alt="{% trans 'Lineage2 Logo' %}">
+          {% if site_logo %}
+            <img src="{{ site_logo.image.url }}" height="60" alt="{{ site_logo.name }}">
+          {% else %}
+            <img src="{% static 'assets/img/l2_logo.png' %}" height="60" alt="{% trans 'Lineage2 Logo' %}" />
+          {% endif %}
         </a>
     
         <!-- MENU DESKTOP -->

@@ -87,8 +87,14 @@ class DashboardContentAdmin(BaseModelAdmin):
     get_title.short_description = 'Título (PT)'
 
 
+class SiteLogoAdmin(BaseModelAdmin):
+    list_display = ('name', 'is_active')
+    list_filter = ('is_active',)
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(AddressUser, AddressAdmin)
 admin.site.register(State, StateAdmin)
 admin.site.register(City, CityAdmin)
 admin.site.register(DashboardContent, DashboardContentAdmin)
+admin.site.register(SiteLogo, SiteLogoAdmin)

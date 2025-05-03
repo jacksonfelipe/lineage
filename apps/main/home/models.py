@@ -122,3 +122,11 @@ class DashboardContentTranslation(BaseModel):
     def __str__(self):
         return f"{self.title} ({self.language})"
     
+
+class SiteLogo(BaseModel):
+    name = models.CharField(max_length=100, default="Logo Principal")
+    image = models.ImageField(upload_to='logos/')
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
