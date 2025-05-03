@@ -1,0 +1,55 @@
+{% extends 'base-auth.html' %}
+{% load i18n static %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/registration_success.css' %}">
+<style>
+  .success-container {
+    max-width: 600px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  .success-container h2 {
+    color: #28a745;
+    margin-bottom: 1rem;
+  }
+
+  .success-container p {
+    margin-bottom: 1rem;
+    color: #333;
+    font-size: 1.1rem;
+  }
+
+  .success-container .btn {
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .success-container .btn:hover {
+    background-color: #0056b3;
+  }
+</style>
+{% endblock extrastyle %}
+
+{% block content %}
+<div class="success-container">
+  <h2>{% trans "Conta criada com sucesso!" %}</h2>
+  <p>{% trans "Sua conta mestre foi registrada com sucesso no sistema." %}</p>
+  <p>{% trans "Contudo, ela ainda não permite acesso ao servidor do Lineage 2." %}</p>
+  <p>{% trans "Você precisa criar uma conta específica para jogar." %}</p>
+
+  <a href="{% url 'server:lineage_register' %}" class="btn">
+    {% trans "Criar Conta do Lineage 2" %}
+  </a>
+</div>
+{% endblock content %}

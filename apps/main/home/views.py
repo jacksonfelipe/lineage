@@ -349,7 +349,7 @@ def register_view(request):
             except Exception as e:
                 logger.error(f"Erro ao criar notificação: {str(e)}")
 
-            return redirect('/accounts/login/')
+            return redirect('registration_success')
         else:
             print("Registration failed!")
     else:
@@ -520,3 +520,7 @@ def custom_set_language(request):
             return response
 
     return redirect('/')
+
+
+def registration_success_view(request):
+    return render(request, 'accounts_custom/registration_success.html')
