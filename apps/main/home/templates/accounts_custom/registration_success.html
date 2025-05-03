@@ -2,54 +2,71 @@
 {% load i18n static %}
 
 {% block extrastyle %}
-<link rel="stylesheet" href="{% static 'css/registration_success.css' %}">
 <style>
+  body {
+    background: url("{{ background_url }}") no-repeat center center fixed;
+    background-size: cover;
+  }
+
   .success-container {
     max-width: 600px;
     margin: 3rem auto;
     padding: 2rem;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background-color: rgba(15, 15, 15, 0.92);
+    color: #f0e6d2;
+    border-radius: 1rem;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+    border: 1px solid #e0c36b;
     text-align: center;
   }
 
   .success-container h2 {
-    color: #28a745;
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    color: #e0c36b;
+    text-shadow: 0 0 10px rgba(255, 215, 100, 0.4);
     margin-bottom: 1rem;
   }
 
   .success-container p {
+    color: #dcd4b0;
+    font-size: 1rem;
     margin-bottom: 1rem;
-    color: #333;
-    font-size: 1.1rem;
   }
 
   .success-container .btn {
     padding: 0.7rem 1.5rem;
     font-size: 1rem;
     border-radius: 6px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
+    background: linear-gradient(to right, #b89b56, #d5c170);
+    color: #000;
+    font-weight: bold;
+    text-shadow: 0 0 5px #fff8dc;
+    border: none;
+    transition: background 0.3s ease;
   }
 
   .success-container .btn:hover {
-    background-color: #0056b3;
+    background: linear-gradient(to right, #d5c170, #b89b56);
+    color: #000;
   }
 </style>
 {% endblock extrastyle %}
 
 {% block content %}
-<div class="success-container">
-  <h2>{% trans "Conta criada com sucesso!" %}</h2>
-  <p>{% trans "Sua conta mestre foi registrada com sucesso no sistema." %}</p>
-  <p>{% trans "Contudo, ela ainda não permite acesso ao servidor do Lineage 2." %}</p>
-  <p>{% trans "Você precisa criar uma conta específica para jogar." %}</p>
-
-  <a href="{% url 'server:lineage_register' %}" class="btn">
-    {% trans "Criar Conta do Lineage 2" %}
-  </a>
-</div>
+<section class="vh-100 d-flex align-items-center justify-content-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="success-container">
+          <h2>{% trans "Conta mestre criada com sucesso!" %}</h2>
+          <p>{% trans "Agora você precisa criar uma conta no servidor para jogar." %}</p>
+          <a href="{% url 'server:lineage_register' %}" class="btn mt-3">
+            {% trans "Criar Conta do Lineage 2" %}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock content %}
