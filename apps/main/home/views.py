@@ -422,7 +422,7 @@ def lock(request):
 def dashboard(request):
     if request.user.is_authenticated:
         language = translation.get_language()
-        dashboard = DashboardContent.objects.filter(is_active=True).first() or DashboardContent.objects.first()
+        dashboard = DashboardContent.objects.filter(is_active=True).first()
 
         translation_obj = None
         if dashboard:
