@@ -69,3 +69,9 @@ def theme_variables(request):
     variables = ThemeVariable.objects.all()
     context = {var.nome: var.get_valor_convertido(lang_code) for var in variables}
     return context
+
+
+def slogan_flag(request):
+    return {
+        'SHOW_SLOGAN': settings.SLOGAN
+    }

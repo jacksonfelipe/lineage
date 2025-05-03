@@ -84,7 +84,9 @@
           <a href="{{ PROJECT_INSTAGRAM_URL }}" title="Instagram" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>          
         </div>
         <p>&copy; <span id="footer-year"></span> {{ PROJECT_TITLE }} - {% trans "Todos os direitos reservados." %}</p>
-        <p>{% trans "Feito com ❤️ por aventureiros para aventureiros." %}</p>
+        {% if SHOW_SLOGAN %}
+          <p>{% trans "Feito com ❤️ por aventureiros para aventureiros." %}</p>
+        {% endif %}
         <!-- Seletor de idioma -->
         <form action="{% url 'set_language' %}" method="post" class="d-inline-block">
           {% csrf_token %}

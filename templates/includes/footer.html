@@ -7,7 +7,9 @@
         <p class="mb-1">
           &copy; <span id="footer-year"></span> {{ PROJECT_TITLE }} - {% trans "Todos os direitos reservados." %}
         </p>
-        <p class="mb-0">{% trans "Feito com ❤️ por aventureiros para aventureiros." %}</p>
+        {% if SHOW_SLOGAN %}
+          <p class="mb-0">{% trans "Feito com ❤️ por aventureiros para aventureiros." %}</p>
+        {% endif %}
       </div>
       <div class="col-12 col-md-6 text-center text-md-end">
         <div class="social-icons mb-2">

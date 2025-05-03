@@ -132,6 +132,7 @@ TEMPLATES = [
                 "core.context_processors.active_theme",
                 "core.context_processors.background_setting",
                 "core.context_processors.theme_variables",
+                "core.context_processors.slogan_flag",
                 "apps.main.home.context_processors.site_logo",
             ],
         },
@@ -477,3 +478,7 @@ PROJECT_DISCORD_URL = os.getenv('PROJECT_DISCORD_URL', 'https://discord.gg/seu-l
 PROJECT_YOUTUBE_URL = os.getenv('PROJECT_YOUTUBE_URL', 'https://www.youtube.com/@seu-canal')
 PROJECT_FACEBOOK_URL = os.getenv('PROJECT_FACEBOOK_URL', 'https://www.facebook.com/sua-pagina')
 PROJECT_INSTAGRAM_URL = os.getenv('PROJECT_INSTAGRAM_URL', 'https://www.instagram.com/seu-perfil')
+
+# =========================== OTHERS CONFIGS ===========================
+
+SLOGAN = str2bool(os.getenv('SLOGAN', True))
