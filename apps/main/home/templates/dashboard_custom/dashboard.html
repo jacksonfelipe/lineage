@@ -1,15 +1,35 @@
 {% extends 'layouts/base.html' %}
 {% load static i18n %}
 
+{% block extrahead %}
+
+<style>
+
+.card p span {
+  background-color: transparent !important;
+  color: #fff !important;
+}
+
+</style>
+{% endblock extrahead %}
+
 {% block content %}
 
 {% if dashboard %}
-  {% if translation %}
-    {{ translation.content|safe }}
-  {% else %}
-    {{ dashboard.content|safe }}
-  {% endif %}
-{% else %}
+  <div class="container-fluid py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-10 col-xl-8">
+        <div class="card shadow-sm bg-light rounded p-4">
+          {% if translation %}
+            {{ translation.content|safe }}
+          {% else %}
+            {{ dashboard.content|safe }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
 
 <div class="py-5 bg-dark text-white">
   <div class="container text-center">
