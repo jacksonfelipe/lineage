@@ -24,7 +24,7 @@ def account_dashboard(request):
         return redirect('server:lineage_register')
     
     if cache.get(f"lineage_registro_{request.user.username}"):
-        messages.info(request, "Sua conta foi criada recentemente. Aguarde até 5 minutos para que ela esteja disponível.")
+        messages.info(request, "Sua conta foi criada recentemente. Aguarde até 5 minutos para que ela esteja disponível no painel [VOCÊ JÁ PODE ENTRAR  NO JOGO].")
         return redirect('dashboard')
 
     try:
