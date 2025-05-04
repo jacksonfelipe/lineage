@@ -7,24 +7,32 @@ from django.db.models import Sum
 
 
 def pagar_comissao(apoiador: Apoiador, valor_solicitado: Decimal):
-    # Tenta pegar a compra associada ao apoiador
-    compra = ShopPurchase.objects.filter(apoiador=apoiador, comissao_registrada=False).first()
+    # Tenta pegar o cupom ativo do apoiador
+    try:
+        cupom = PromotionCode.objects.get(apoiador=apoiador, ativo=True)
+        percentual_comissao = cupom.desconto_percentual
+    except PromotionCode.DoesNotExist:
+        return  # Se não houver cupom ativo, sai da função
 
-    # Se não houver uma compra válida, não faz nada
-    if not compra:
+    # Pega todas as compras não pagas associadas ao apoiador
+    todas_as_compras = ShopPurchase.objects.filter(apoiador=apoiador)
+
+    # Se não houver compras não pagas, não faz nada
+    if not todas_as_compras:
         return
 
-    # Registra a comissão com o valor solicitado
-    comissao = Comissao.objects.create(
-        apoiador=apoiador,
-        compra=compra,
-        valor=valor_solicitado,
-        pago=True  # Marca como pago
-    )
+    # Para cada compra não paga, calcula e registra a comissão
+    for compra in todas_as_compras:
+        # Calcula o valor da comissão para esta compra
+        valor_comissao = (compra.total_pago * percentual_comissao) / Decimal('100')
 
-    # Atualiza o status da compra para indicar que a comissão foi registrada
-    compra.comissao_registrada = True
-    compra.save()
+        # Cria a comissão para a compra com o valor calculado
+        comissao = Comissao.objects.create(
+            apoiador=apoiador,
+            compra=compra,
+            valor=valor_comissao,
+            pago=True  # Marca como pago
+        )
 
     # Atualiza a carteira do apoiador
     wallet, _ = Wallet.objects.get_or_create(usuario=apoiador.user)
@@ -48,12 +56,11 @@ def calcular_valor_disponivel(apoiador):
         cupom = PromotionCode.objects.get(apoiador=apoiador, ativo=True)
         percentual_comissao = cupom.desconto_percentual
     except PromotionCode.DoesNotExist:
-        # Se não houver cupom ativo, utilizar um percentual padrão
-        percentual_comissao = Decimal('10.0')
+        return Decimal('0.00')
 
     # Total de vendas associadas ao apoiador (com tratamento de None)
-    compras_nao_pagas = ShopPurchase.objects.filter(apoiador=apoiador).exclude(comissao__pago=True)
-    total_vendas = compras_nao_pagas.aggregate(
+    total_das_compras = ShopPurchase.objects.filter(apoiador=apoiador)
+    total_vendas = total_das_compras.aggregate(
         total=Sum('total_pago')
     )['total'] or Decimal('0.00')
 
