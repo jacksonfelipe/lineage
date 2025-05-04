@@ -14,7 +14,7 @@ from .forms import ApoiadorForm
 from django.db.models import Sum
 from django.utils import timezone
 
-from .forms import SolicitarComissaoForm
+from .forms import SolicitarComissaoForm, ImagemApoiadorForm
 from .utils.apoiador import pagar_comissao, calcular_valor_disponivel
 from decimal import Decimal
 
@@ -220,7 +220,7 @@ def painel_staff(request):
 
                 promocao, created = PromotionCode.objects.get_or_create(
                     apoiador=apoiador,
-                    defaults={'codigo': f"{str(apoiador.user.username).upper()}-{int(desconto_percentual)}",
+                    defaults={'codigo': f"{str(apoiador.nome_publico).upper().replace(" ", "_").replace("-", "_")}-{int(desconto_percentual)}",
                               'desconto_percentual': desconto_percentual,
                               'ativo': True,
                               'validade': timezone.now() + timezone.timedelta(days=30)}
@@ -282,3 +282,21 @@ def solicitar_comissao(request):
         'form': form,
         'valor_disponivel': valor_disponivel
     })
+
+
+@login_required
+def editar_imagem_apoiador(request):
+    try:
+        apoiador = Apoiador.objects.get(user=request.user)
+    except Apoiador.DoesNotExist:
+        return redirect('server:painel_apoiador')  # ou uma página de erro
+
+    if request.method == 'POST':
+        form = ImagemApoiadorForm(request.POST, request.FILES, instance=apoiador)
+        if form.is_valid():
+            form.save()
+            return redirect('server:painel_apoiador')
+    else:
+        form = ImagemApoiadorForm(instance=apoiador)
+
+    return render(request, 'apoiadores/editar_imagem.html', {'form': form})

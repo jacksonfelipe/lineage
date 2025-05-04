@@ -11,11 +11,25 @@
     <!-- Exibir Cupom Ativo -->
     {% if cupom %}
     <div class="card shadow-sm border-0 rounded-3 mb-4">
-        <div class="card-body text-center">
-            <h3 class="h5 text-muted">Seu Cupom Ativo</h3>
-            <p class="h4 text-success">Código: <strong>{{ cupom.codigo }}</strong></p>
-            <p class="text-muted">Desconto: {{ cupom.desconto_percentual }}%</p>
-            <p class="text-muted">Válido até: {{ cupom.validade|date:"d/m/Y" }}</p>
+        <div class="card-body">
+            <div class="row align-items-center">
+                <!-- Imagem do Apoiador -->
+                <div class="col-md-6 text-center mb-3 mb-md-0">
+                    {% if apoiador.imagem %}
+                        <img src="{{ apoiador.imagem.url }}" alt="{{ apoiador.nome_publico }}" class="img-fluid rounded-3 shadow-sm" style="max-height: 250px; object-fit: cover;">
+                    {% else %}
+                        <div class="text-muted">Sem imagem</div>
+                    {% endif %}
+                </div>
+    
+                <!-- Dados do Cupom -->
+                <div class="col-md-6 text-center">
+                    <h3 class="h5 text-muted">Seu Cupom Ativo</h3>
+                    <p class="h4 text-success">Código: <strong>{{ cupom.codigo }}</strong></p>
+                    <p class="text-muted">Desconto: {{ cupom.desconto_percentual }}%</p>
+                    <p class="text-muted">Válido até: {{ cupom.validade|date:"d/m/Y" }}</p>
+                </div>
+            </div>
         </div>
     </div>
     {% else %}
@@ -24,7 +38,7 @@
             <h3 class="h5 text-muted">Ainda não há cupom ativo.</h3>
         </div>
     </div>
-    {% endif %}
+    {% endif %}    
 
     <!-- Estatísticas -->
     <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
@@ -46,12 +60,14 @@
         </div>
     </div>
 
-    <!-- Botão de Solicitar Comissão -->
-    <div class="text-center mb-5">
+    <div class="text-center mb-5 d-flex justify-content-center gap-3 flex-wrap">
         <a href="{% url 'server:solicitar_comissao' %}" class="btn btn-success btn-lg shadow-sm">
             💸 Solicitar Comissão
         </a>
-    </div>
+        <a href="{% url 'server:editar_imagem_apoiador' %}" class="btn btn-outline-primary btn-lg shadow-sm">
+            🖼️ Editar Imagem
+        </a>
+    </div>    
 
     <!-- Tabela de Compras -->
     <div class="card shadow-sm border-0 rounded-3">

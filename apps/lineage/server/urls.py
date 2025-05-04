@@ -55,4 +55,5 @@ urlpatterns = [
     path('apoiador/solicitar/', views.formulario_apoiador, name='formulario_apoiador'),
     path('apoiador/painel/staff/', views.painel_staff, name='painel_staff'),
     path('apoiador/solicitar-comissao/', views.solicitar_comissao, name='solicitar_comissao'),
+    path('apoiador/painel/editar-imagem/', views.editar_imagem_apoiador, name='editar_imagem_apoiador'),
 ]

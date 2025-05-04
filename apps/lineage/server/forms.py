@@ -10,3 +10,12 @@ class ApoiadorForm(forms.ModelForm):
 
 class SolicitarComissaoForm(forms.Form):
     valor = forms.DecimalField(max_digits=10, decimal_places=2, min_value=0.01)
+
+
+class ImagemApoiadorForm(forms.ModelForm):
+    class Meta:
+        model = Apoiador
+        fields = ['imagem']
+        widgets = {
+            'imagem': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }

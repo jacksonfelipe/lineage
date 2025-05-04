@@ -3,6 +3,15 @@ from core.models import BaseModel
 from django.core.exceptions import ValidationError
 from apps.main.home.models import User
 from apps.lineage.shop.models import ShopPurchase
+import os
+import uuid
+from django.utils.text import slugify
+
+
+def caminho_imagem_apoiador(instance, filename):
+    nome_base, extensao = os.path.splitext(filename)
+    novo_nome = f"{slugify(instance.nome_publico)}-{uuid.uuid4().hex[:8]}{extensao}"
+    return os.path.join("apoiadores", novo_nome[:95]) 
 
 
 class ApiEndpointToggle(BaseModel):
@@ -129,7 +138,7 @@ class Apoiador(BaseModel):
     descricao = models.TextField(blank=True)
     link_twitch = models.URLField(blank=True)
     link_youtube = models.URLField(blank=True)
-    imagem = models.ImageField(upload_to='apoiadores/', null=True, blank=True)
+    imagem = models.ImageField(upload_to=caminho_imagem_apoiador, null=True, blank=True)
     ativo = models.BooleanField(default=True)
 
     STATUS_CHOICES = [
