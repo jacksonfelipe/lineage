@@ -93,7 +93,7 @@ def finish_auction(auction: Auction):
             enchant=auction.item_enchant,
             defaults={
                 'quantity': auction.quantity,
-                'item_name': auction.item_name,  # salva o nome certo também
+                'item_name': auction.item_name,
             }
         )
 
@@ -116,7 +116,7 @@ def finish_auction(auction: Auction):
             inventory=seller_inventory,
             item_id=auction.item_id,
             enchant=auction.item_enchant,
-            defaults={'quantity': auction.quantity}
+            defaults={'item_name': auction.item_name, 'quantity': auction.quantity}
         )
 
         if not created:
@@ -124,5 +124,5 @@ def finish_auction(auction: Auction):
             returned_item.save()
 
         # Marca como expirado
-        auction.status = 'expired'
+        auction.status = 'finished'
         auction.save()

@@ -23,12 +23,17 @@ LineageServices = get_query_class("LineageServices")
 def listar_leiloes(request):
     now = timezone.now()
 
-    # Atualizar leilões que já passaram do tempo mas ainda estão como pending
-    auctions_to_expire = Auction.objects.filter(
+    # Atualizar leilões vencidos corretamente com lógica de negócio
+    expired_auctions = Auction.objects.filter(
         status='pending',
         end_time__lte=now
     )
-    auctions_to_expire.update(status='expired')
+
+    for auction in expired_auctions:
+        try:
+            finish_auction(auction)
+        except Exception as e:
+            print(f"Erro ao finalizar leilão {auction.id}: {e}")
 
     # Separação correta
     leiloes_ativos = Auction.objects.filter(
@@ -195,8 +200,7 @@ def encerrar_leilao(request, auction_id):
         return redirect('auction:listar_leiloes')
 
     try:
-        with transaction.atomic():
-            finish_auction(auction)
+        finish_auction(auction)
         messages.success(request, 'Leilão encerrado com sucesso.')
     except ValueError as e:
         messages.error(request, str(e))
