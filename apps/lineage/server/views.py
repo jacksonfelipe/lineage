@@ -220,10 +220,12 @@ def painel_staff(request):
 
                 promocao, created = PromotionCode.objects.get_or_create(
                     apoiador=apoiador,
-                    defaults={'codigo': f"{str(apoiador.nome_publico).upper().replace(" ", "_").replace("-", "_")}-{int(desconto_percentual)}",
-                              'desconto_percentual': desconto_percentual,
-                              'ativo': True,
-                              'validade': timezone.now() + timezone.timedelta(days=30)}
+                    defaults={
+                        'codigo': f"{str(apoiador.nome_publico).upper().replace(' ', '_').replace('-', '_')}-{int(desconto_percentual)}",
+                        'desconto_percentual': desconto_percentual,
+                        'ativo': True,
+                        'validade': timezone.now() + timezone.timedelta(days=30)
+                    }
                 )
 
                 # Se o cupom já existia, atualize o desconto
