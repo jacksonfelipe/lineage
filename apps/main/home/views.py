@@ -162,6 +162,9 @@ def index(request):
             'descricao': descricao
         })
 
+    # Buscar apoiadores ativos e aprovados
+    apoiadores = Apoiador.objects.filter(ativo=True, status='aprovado')
+
     context = {
         'clanes': clanes,  # Passando os clãs com as imagens de crest
         'classes_info': classes_info,
@@ -169,7 +172,8 @@ def index(request):
         'configuracao': config,
         'nome_servidor': nome_servidor,
         'descricao_servidor': descricao_servidor,
-        'jogadores_online_texto': jogadores_online_texto
+        'jogadores_online_texto': jogadores_online_texto,
+        'apoiadores': apoiadores,
     }
 
     return render_theme_page(request, 'public', 'index.html', context)

@@ -1,5 +1,6 @@
 {% extends 'layouts/public.html' %}
 {% load static i18n %}
+{% load custom_split %}
 
 {% block extrahead %}
 <style>
@@ -11,6 +12,7 @@
 <link type="text/css" href="{% static 'public/css/index-hero.css' %}" rel="stylesheet">
 <link type="text/css" href="{% static 'public/css/index-features.css' %}" rel="stylesheet">
 <link type="text/css" href="{% static 'public/css/index-classes.css' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'public/css/index-carousel.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -85,6 +87,49 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- Faixa com o título APOIADORES passando continuamente -->
+<div class="apoiadores-banner">
+  <div class="banner-track">
+    <span>APOIADORES</span>
+    <span>APOIADORES</span>
+    <span>APOIADORES</span>
+    <span>APOIADORES</span>
+    <span>APOIADORES</span>
+    <span>APOIADORES</span>
+    <span>APOIADORES</span>
+    <span>APOIADORES</span>
+    <span>APOIADORES</span>
+    <span>APOIADORES</span>
+  </div>
+</div>
+
+<!-- Carrossel de imagens dos apoiadores -->
+<section class="apoiadores-carousel">
+  <div class="carousel-track">
+    {% with fixas="1,2,3,4,5"|split:"," %}
+      {% with total=apoiadores|length %}
+        {% for apoiador in apoiadores %}
+          <div class="apoiador-card">
+            <img src="{{ apoiador.imagem.url }}" alt="{{ apoiador.nome_publico }}">
+          </div>
+        {% endfor %}
+
+        {% if total < 10 %}
+          {% with restante=10|sub:total %}
+            {% for _ in restante|to_range %}
+              {% with random=fixas|random_item %}
+                <div class="apoiador-card">
+                  <img src="{% static 'assets/img/apoiadores/apoio' %}{{ random }}.png" alt="Apoio {{ random }}">
+                </div>
+              {% endwith %}
+            {% endfor %}
+          {% endwith %}
+        {% endif %}
+      {% endwith %}
+    {% endwith %}
   </div>
 </section>
 
