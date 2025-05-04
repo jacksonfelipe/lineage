@@ -6,42 +6,40 @@ from apps.lineage.shop.models import ShopPurchase, PromotionCode
 from django.db.models import Sum
 
 
-def pagar_comissao(apoiador: Apoiador, valor: Decimal):
-    # Verificar se a comissão já foi paga para alguma compra associada ao apoiador
-    compras_nao_pagas = ShopPurchase.objects.filter(apoiador=apoiador).exclude(comissao__pago=True)
-    
-    # Se não houver comissões não pagas, retornamos sem fazer nada
-    if not compras_nao_pagas:
+def pagar_comissao(apoiador: Apoiador, valor_solicitado: Decimal):
+    # Tenta pegar a compra associada ao apoiador
+    compra = ShopPurchase.objects.filter(apoiador=apoiador, comissao_registrada=False).first()
+
+    # Se não houver uma compra válida, não faz nada
+    if not compra:
         return
 
-    # Registra as comissões para as compras não pagas
-    for compra in compras_nao_pagas:
-        # Criar a comissão
-        comissao = Comissao.objects.create(
-            apoiador=apoiador,
-            compra=compra,
-            valor=valor,
-            pago=True  # Marca como pago
-        )
+    # Registra a comissão com o valor solicitado
+    comissao = Comissao.objects.create(
+        apoiador=apoiador,
+        compra=compra,
+        valor=valor_solicitado,
+        pago=True  # Marca como pago
+    )
 
-        # Atualizar a compra para indicar que a comissão foi paga
-        compra.comissao_registrada = True
-        compra.save()
+    # Atualiza o status da compra para indicar que a comissão foi registrada
+    compra.comissao_registrada = True
+    compra.save()
 
-        # Atualiza a carteira do apoiador
-        wallet, created = Wallet.objects.get_or_create(usuario=apoiador.user)
-        wallet.saldo += valor  # Adiciona o valor da comissão
-        wallet.save()
+    # Atualiza a carteira do apoiador
+    wallet, _ = Wallet.objects.get_or_create(usuario=apoiador.user)
+    wallet.saldo += valor_solicitado
+    wallet.save()
 
-        # Registra a transação na carteira
-        TransacaoWallet.objects.create(
-            wallet=wallet,
-            tipo='ENTRADA',
-            valor=valor,
-            descricao='Comissão por venda',
-            origem='Sistema',
-            destino=apoiador.nome_publico
-        )
+    # Registra a transação na carteira
+    TransacaoWallet.objects.create(
+        wallet=wallet,
+        tipo='ENTRADA',
+        valor=valor_solicitado,
+        descricao='Comissão por venda',
+        origem='Sistema',
+        destino=apoiador.nome_publico
+    )
 
 
 def calcular_valor_disponivel(apoiador):
