@@ -2,32 +2,41 @@
 {% load static i18n %}
 
 {% block extrahead %}
-
 <style>
-
 .card p span {
   background-color: transparent !important;
   color: #000 !important;
 }
 
+.card .btn-link {
+  font-size: 14px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.card .btn-link:hover {
+  text-decoration: underline;
+}
 </style>
 {% endblock extrahead %}
 
 {% block content %}
-
 <div class="container my-5">
   <div class="card shadow-lg border-0 bg-white rounded-4">
     <div class="card-body p-4">
 
       <!-- Saudação -->
       <div class="mb-4 text-center">
-        <h2 class="fw-bold text-dark mb-1">{% trans "Bem-vindo," %} {{ request.user.first_name|default:request.user.username }} 👋</h2>
-        <p class="text-muted">{% trans "Este é o seu painel principal. Aqui você encontrará um resumo da sua conta." %}</p>
+        <h2 class="fw-bold text-dark mb-1">
+          {% trans "Bem-vindo," %} {{ request.user.first_name|default:request.user.username }} 👋
+        </h2>
+        <p class="text-muted">
+          {% trans "Este é o seu painel principal. Aqui você encontrará um resumo da sua conta." %}
+        </p>
       </div>
 
-      <!-- Informações principais -->
+      <!-- Linha 1: Carteira e Inventário -->
       <div class="row g-4">
-
         <!-- Carteira -->
         <div class="col-md-6">
           <div class="card h-100 border-0 bg-success-subtle">
@@ -61,7 +70,11 @@
                 {% if inventories %}
                   <ul class="mb-0 ps-3 small">
                     {% for inv in inventories %}
-                      <li>{{ inv.character_name }} ({{ inv.account_name }})</li>
+                      <li>{{ inv.character_name }} ({{ inv.account_name }}) 
+                        <a href="{% url 'inventory:inventario_dashboard' %}" class="btn-link">
+                          {% trans "Ver Inventário" %}
+                        </a>
+                      </li>
                     {% endfor %}
                   </ul>
                 {% else %}
@@ -71,7 +84,50 @@
             </div>
           </div>
         </div>
+      </div>
 
+      <!-- Linha 2: Status de Apoiador e Leilões -->
+      <div class="row g-4 mt-2">
+        <!-- Apoiador -->
+        <div class="col-md-6">
+          <div class="card h-100 border-0 bg-warning-subtle">
+            <div class="card-body d-flex align-items-center">
+              <div class="me-3">
+                <i class="fas fa-star fa-2x text-warning"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold text-warning mb-1">{% trans "Status de Apoiador" %}</h6>
+                {% if is_apoiador %}
+                  <p class="mb-0">
+                    <strong>{% trans "Status:" %}</strong> {{ status }}
+                    {% if image %}
+                      <br><img src="{{ image }}" alt="Imagem do apoiador" class="img-thumbnail mt-1" width="80">
+                    {% endif %}
+                  </p>
+                {% else %}
+                  <p class="text-muted mb-0">{% trans "Você ainda não é um apoiador." %}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Leilões Criados -->
+        <div class="col-md-6">
+          <div class="card h-100 border-0 bg-info-subtle">
+            <div class="card-body d-flex align-items-center">
+              <div class="me-3">
+                <i class="fas fa-gavel fa-2x text-info"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold text-info mb-1">{% trans "Seus Leilões" %}</h6>
+                <p class="mb-0">
+                  <strong>{% trans "Total criados:" %}</strong> {{ leiloes_user }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Ações -->
@@ -102,83 +158,80 @@
       </div>
     </div>
   </div>
-
 {% else %}
-
-<div class="py-5 bg-dark text-white">
-  <div class="container text-center">
-    <img src="{% static 'assets/img/banner-pdl.png' %}" alt="{% trans 'Logo Lineage 2' %}" class="img-fluid mb-4" style="max-height: 240px;">
-    <h1 class="display-5 fw-bold text-primary">{% trans 'Painel Definitivo Lineage - PDL' %}</h1>
-    <p class="lead mb-4 text-primary">{% trans 'Gerenciamento de Servidores de Lineage 2 com Python e Django' %}</p>
-    <p class="text-primary">{% trans 'A Solução Web Perfeita para Administração e Atração de Jogadores' %}</p>
-  </div>
-</div>
-
-<div class="container py-5">
-  <div class="row align-items-center mb-5">
-    <div class="col-md-6">
-      <h2 class="fw-bold">{% trans 'Por que usar Django e Python?' %}</h2>
-      <p>{% trans 'Django é uma framework poderosa, segura e com uma administração pronta para uso, ideal para gerenciar servidores privados de Lineage 2.' %}</p>
-      <ul>
-        <li>{% trans 'Desenvolvimento rápido e escalável' %}</li>
-        <li>{% trans 'Sistema de administração completo' %}</li>
-        <li>{% trans 'Integração com APIs e bancos de dados' %}</li>
-        <li>{% trans 'Alta segurança e flexibilidade' %}</li>
-      </ul>
-    </div>
-    <div class="col-md-6">
-      <img src="{% static 'assets/img/django-logo.png' %}" class="img-fluid" alt="{% trans 'Django Logo' %}">
+  <!-- Informações de painel se não houver dashboard -->
+  <div class="py-5 bg-dark text-white">
+    <div class="container text-center">
+      <img src="{% static 'assets/img/banner-pdl.png' %}" alt="{% trans 'Logo Lineage 2' %}" class="img-fluid mb-4" style="max-height: 240px;">
+      <h1 class="display-5 fw-bold text-primary">{% trans 'Painel Definitivo Lineage - PDL' %}</h1>
+      <p class="lead mb-4 text-primary">{% trans 'Gerenciamento de Servidores de Lineage 2 com Python e Django' %}</p>
+      <p class="text-primary">{% trans 'A Solução Web Perfeita para Administração e Atração de Jogadores' %}</p>
     </div>
   </div>
 
-  <div class="row mb-5">
-    <div class="col-12">
-      <h2 class="fw-bold text-center mb-4">{% trans 'Tecnologias de Ponta' %}</h2>
-      <div class="row text-center">
-        <div class="col-md-4 mb-4">
-          <h5>{% trans 'Django' %}</h5>
-          <p>{% trans 'Backbone sólido com segurança e escalabilidade.' %}</p>
-        </div>
-        <div class="col-md-4 mb-4">
-          <h5>{% trans 'Docker + Nginx' %}</h5>
-          <p>{% trans 'Deploy e entrega eficientes em qualquer ambiente.' %}</p>
-        </div>
-        <div class="col-md-4 mb-4">
-          <h5>{% trans 'Celery + Redis' %}</h5>
-          <p>{% trans 'Execução de tarefas assíncronas com performance.' %}</p>
+  <div class="container py-5">
+    <div class="row align-items-center mb-5">
+      <div class="col-md-6">
+        <h2 class="fw-bold">{% trans 'Por que usar Django e Python?' %}</h2>
+        <p>{% trans 'Django é uma framework poderosa, segura e com uma administração pronta para uso, ideal para gerenciar servidores privados de Lineage 2.' %}</p>
+        <ul>
+          <li>{% trans 'Desenvolvimento rápido e escalável' %}</li>
+          <li>{% trans 'Sistema de administração completo' %}</li>
+          <li>{% trans 'Integração com APIs e bancos de dados' %}</li>
+          <li>{% trans 'Alta segurança e flexibilidade' %}</li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <img src="{% static 'assets/img/django-logo.png' %}" class="img-fluid" alt="{% trans 'Django Logo' %}">
+      </div>
+    </div>
+  
+    <div class="row mb-5">
+      <div class="col-12">
+        <h2 class="fw-bold text-center mb-4">{% trans 'Tecnologias de Ponta' %}</h2>
+        <div class="row text-center">
+          <div class="col-md-4 mb-4">
+            <h5>{% trans 'Django' %}</h5>
+            <p>{% trans 'Backbone sólido com segurança e escalabilidade.' %}</p>
+          </div>
+          <div class="col-md-4 mb-4">
+            <h5>{% trans 'Docker + Nginx' %}</h5>
+            <p>{% trans 'Deploy e entrega eficientes em qualquer ambiente.' %}</p>
+          </div>
+          <div class="col-md-4 mb-4">
+            <h5>{% trans 'Celery + Redis' %}</h5>
+            <p>{% trans 'Execução de tarefas assíncronas com performance.' %}</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="row mb-5">
-    <div class="col-md-6">
-      <h3 class="fw-bold">{% trans 'Painel Administrativo' %}</h3>
-      <ul>
-        <li>{% trans 'Gerenciamento de jogadores e servidores' %}</li>
-        <li>{% trans 'Eventos, estatísticas e monitoramento' %}</li>
-        <li>{% trans 'Integração com sistemas de pagamento' %}</li>
-      </ul>
+  
+    <div class="row mb-5">
+      <div class="col-md-6">
+        <h3 class="fw-bold">{% trans 'Painel Administrativo' %}</h3>
+        <ul>
+          <li>{% trans 'Gerenciamento de jogadores e servidores' %}</li>
+          <li>{% trans 'Eventos, estatísticas e monitoramento' %}</li>
+          <li>{% trans 'Integração com sistemas de pagamento' %}</li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <h3 class="fw-bold">{% trans 'Site Público' %}</h3>
+        <ul>
+          <li>{% trans 'Cadastro, login e personalização de conta' %}</li>
+          <li>{% trans 'Status do servidor e rankings' %}</li>
+          <li>{% trans 'Notícias e suporte ao jogador' %}</li>
+        </ul>
+      </div>
     </div>
-    <div class="col-md-6">
-      <h3 class="fw-bold">{% trans 'Site Público' %}</h3>
-      <ul>
-        <li>{% trans 'Cadastro, login e personalização de conta' %}</li>
-        <li>{% trans 'Status do servidor e rankings' %}</li>
-        <li>{% trans 'Notícias e suporte ao jogador' %}</li>
-      </ul>
+  
+    <div class="row">
+      <div class="col text-center">
+        <h2 class="fw-bold mb-3">{% trans 'Participe do Futuro dos Servidores Privados' %}</h2>
+        <p class="text-muted">{% trans 'O PDL é open source e está em constante evolução. Contribua, implemente, personalize e transforme a forma como servidores Lineage 2 são administrados.' %}</p>
+        <a href="https://github.com/D3NKYT0/lineage" class="btn btn-primary btn-lg mt-3">{% trans 'Ver Projeto no GitHub' %}</a>
+      </div>
     </div>
   </div>
-
-  <div class="row">
-    <div class="col text-center">
-      <h2 class="fw-bold mb-3">{% trans 'Participe do Futuro dos Servidores Privados' %}</h2>
-      <p class="text-muted">{% trans 'O PDL é open source e está em constante evolução. Contribua, implemente, personalize e transforme a forma como servidores Lineage 2 são administrados.' %}</p>
-      <a href="https://github.com/D3NKYT0/lineage" class="btn btn-primary btn-lg mt-3">{% trans 'Ver Projeto no GitHub' %}</a>
-    </div>
-  </div>
-</div>
-
 {% endif %}
-
 {% endblock content %}

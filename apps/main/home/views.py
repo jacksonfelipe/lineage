@@ -29,12 +29,13 @@ from django.utils.translation import activate
 from django.http import HttpResponseRedirect
 from utils.crests import CrestHandler
 
-from apps.lineage.server.models import IndexConfig
+from apps.lineage.server.models import IndexConfig, Apoiador
 from django.utils import translation
 from utils.render_theme_page import render_theme_page
 
 from apps.lineage.wallet.models import Wallet
 from apps.lineage.inventory.models import Inventory
+from apps.lineage.auction.models import Auction
 
 from utils.dynamic_import import get_query_class  # importa o helper
 LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
@@ -434,12 +435,30 @@ def dashboard(request):
         wallet = Wallet.objects.filter(usuario=request.user).first()
         inventories = Inventory.objects.filter(user=request.user)
 
+        # Verificar se o usuário é um apoiador
+        try:
+            apoiador = Apoiador.objects.get(user=request.user)
+            is_apoiador = True
+            image = apoiador.imagem.url if apoiador.imagem else None
+            status = apoiador.status
+        except Apoiador.DoesNotExist:
+            is_apoiador = False
+            image = None
+            status = None
+
+        # Contagem de leilões do usuário
+        leiloes_user = Auction.objects.filter(seller=request.user).count()
+
         context = {
             'segment': 'dashboard',
             'dashboard': dashboard,
             'translation': translation_obj,
             'wallet': wallet,
             'inventories': inventories,
+            'is_apoiador': is_apoiador,
+            'image': image,
+            'status': status,
+            'leiloes_user': leiloes_user,
         }
         return render(request, 'dashboard_custom/dashboard.html', context)
     else:
