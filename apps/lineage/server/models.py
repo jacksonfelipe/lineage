@@ -1,6 +1,7 @@
 from django.db import models
 from core.models import BaseModel
 from django.core.exceptions import ValidationError
+from apps.main.home.models import User
 
 
 class ApiEndpointToggle(BaseModel):
@@ -119,3 +120,24 @@ class ActiveAdenaExchangeItem(BaseModel):
     def __str__(self):
         status = "Ativo" if self.active else "Inativo"
         return f"Item {self.item_type} - {status}"
+
+
+class Apoiador(BaseModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    nome_publico = models.CharField(max_length=100)
+    descricao = models.TextField(blank=True)
+    link_twitch = models.URLField(blank=True)
+    link_youtube = models.URLField(blank=True)
+    imagem = models.ImageField(upload_to='apoiadores/', null=True, blank=True)
+    ativo = models.BooleanField(default=True)
+
+    STATUS_CHOICES = [
+        ('pendente', 'Pendente'),
+        ('aprovado', 'Aprovado'),
+        ('rejeitado', 'Rejeitado'),
+        ('expirado', 'Expirado'),
+    ]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pendente')
+
+    def __str__(self):
+        return self.nome_publico

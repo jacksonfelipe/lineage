@@ -50,4 +50,8 @@ urlpatterns = [
     path('account/unstuck/<int:char_id>/', unstuck_view, name='unstuck'),
     path('account/change-nickname/<int:char_id>/', change_nickname_view, name='change_nickname'),
     path('configure-service-prices/', configure_service_prices, name='configure_service_prices'),
+
+    path('painel/', views.painel_apoiador, name='painel_apoiador'),
+    path('solicitar/', views.formulario_apoiador, name='formulario_apoiador'),
+    path('painel/staff/', views.painel_staff, name='painel_staff'),
 ]

@@ -88,3 +88,9 @@ class ActiveAdenaExchangeItemAdmin(BaseModelAdmin):
     list_display = ('item_type', 'value_item', 'active', 'created_at')
     list_filter = ('active',)
     search_fields = ('item_type',)
+
+
+@admin.register(Apoiador)
+class ApoiadorAdmin(BaseModelAdmin):
+    list_display = ('nome_publico', 'user', 'ativo')
+    search_fields = ('nome_publico', 'user__username')

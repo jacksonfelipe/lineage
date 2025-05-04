@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from apps.main.home.models import User
 from core.models import BaseModel
+from apps.lineage.server.models import Apoiador
 
 
 class ShopItem(BaseModel):
@@ -20,6 +21,7 @@ class PromotionCode(BaseModel):
     desconto_percentual = models.DecimalField(max_digits=5, decimal_places=2)
     ativo = models.BooleanField(default=True)
     validade = models.DateTimeField(null=True, blank=True)
+    apoiador = models.ForeignKey('server.Apoiador', null=True, blank=True, on_delete=models.SET_NULL)
 
     def is_valido(self):
         if not self.ativo:
@@ -100,7 +102,14 @@ class ShopPurchase(BaseModel):
     character_name = models.CharField(max_length=100)
     total_pago = models.DecimalField(max_digits=10, decimal_places=2)
     promocao_aplicada = models.ForeignKey(PromotionCode, null=True, blank=True, on_delete=models.SET_NULL)
+    apoiador = models.ForeignKey(Apoiador, null=True, blank=True, on_delete=models.SET_NULL)
     data_compra = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        # Se houver promoção, tenta vincular ao apoiador automaticamente
+        if self.promocao_aplicada and self.promocao_aplicada.apoiador:
+            self.apoiador = self.promocao_aplicada.apoiador
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Compra de {self.user.username} — R${self.total_pago} — {self.data_compra.strftime('%d/%m/%Y %H:%M')}"

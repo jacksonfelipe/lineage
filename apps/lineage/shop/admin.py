@@ -21,10 +21,10 @@ class ShopPackageAdmin(BaseModelAdmin):
 
 
 @admin.register(PromotionCode)
-class PromotionCodeAdmin(BaseModelAdmin):
-    list_display = ('codigo', 'desconto_percentual', 'ativo', 'validade')
+class PromotionCodeAdmin(admin.ModelAdmin):
+    list_display = ('codigo', 'desconto_percentual', 'ativo', 'validade', 'apoiador')
     search_fields = ('codigo',)
-    ordering = ('-validade',)
+    list_filter = ('ativo',)
 
 
 # Opcional — se quiser manter acesso rápido ao carrinho

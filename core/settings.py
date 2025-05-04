@@ -270,6 +270,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'apps.lineage.auction.tasks.encerrar_leiloes_expirados',
         'schedule': crontab(minute='*/1'),
     },
+    'encerrar-apoiadores-expirados-cada-minuto': {
+        'task': 'apps.lineage.server.tasks.verificar_cupons_expirados',
+        'schedule': crontab(minute='*/1'),
+    },
 }
 
 # =========================== CHANNELS CONFIGS ===========================
