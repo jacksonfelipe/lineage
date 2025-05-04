@@ -2,6 +2,7 @@ from django.db import models
 from core.models import BaseModel
 from django.core.exceptions import ValidationError
 from apps.main.home.models import User
+from apps.lineage.shop.models import ShopPurchase
 
 
 class ApiEndpointToggle(BaseModel):
@@ -141,3 +142,14 @@ class Apoiador(BaseModel):
 
     def __str__(self):
         return self.nome_publico
+
+
+class Comissao(BaseModel):
+    apoiador = models.ForeignKey(Apoiador, on_delete=models.CASCADE)
+    compra = models.ForeignKey(ShopPurchase, on_delete=models.CASCADE)
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    data_pagamento = models.DateTimeField(auto_now_add=True)
+    pago = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Comissão de {self.apoiador.nome_publico} - R${self.valor}"

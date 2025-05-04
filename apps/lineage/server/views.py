@@ -13,8 +13,10 @@ from django.contrib import messages
 from .forms import ApoiadorForm
 from django.db.models import Sum
 from django.utils import timezone
-import random
-import string
+
+from .forms import SolicitarComissaoForm
+from .utils.apoiador import pagar_comissao, calcular_valor_disponivel
+from decimal import Decimal
 
 
 @endpoint_enabled('players_online')
@@ -244,3 +246,39 @@ def painel_staff(request):
 
     pedidos_pendentes = Apoiador.objects.filter(status='pendente')
     return render(request, 'apoiadores/painel_staff.html', {'pedidos_pendentes': pedidos_pendentes})
+
+
+@login_required
+def solicitar_comissao(request):
+    try:
+        apoiador = Apoiador.objects.get(user=request.user)
+    except Apoiador.DoesNotExist:
+        return redirect('server:painel_apoiador')
+
+    if apoiador.status != 'aprovado':
+        messages.error(request, "Seu cadastro não está aprovado para solicitar comissão.")
+        return redirect('server:painel_apoiador')
+
+    # Valor disponível para saque
+    valor_disponivel = calcular_valor_disponivel(apoiador)
+
+    if request.method == 'POST':
+        form = SolicitarComissaoForm(request.POST)
+        if form.is_valid():
+            valor = form.cleaned_data['valor']
+
+            if valor > valor_disponivel:
+                messages.error(request, f'O valor solicitado excede o disponível (R${valor_disponivel}).')
+            elif valor <= 0:
+                messages.error(request, "O valor solicitado deve ser maior que zero.")
+            else:
+                pagar_comissao(apoiador, Decimal(valor))
+                messages.success(request, f'Comissão de R${valor} solicitada com sucesso!')
+                return redirect('server:painel_apoiador')
+    else:
+        form = SolicitarComissaoForm()
+
+    return render(request, 'apoiadores/solicitar_comissao.html', {
+        'form': form,
+        'valor_disponivel': valor_disponivel
+    })

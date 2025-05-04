@@ -39,8 +39,13 @@
         {% csrf_token %}
         
         <div class="mb-3">
-          <label for="character_name" class="form-label">{% trans "Nome do Personagem" %}</label>
-          <input type="text" name="character_name" id="character_name" class="form-control" required>
+          <label class="form-label fw-semibold">{% trans "Selecione o Personagem" %}</label>
+          <select name="character_name" class="form-select rounded-3" required>
+            <option value="" disabled selected>{% trans "Escolha um personagem" %}</option>
+            {% for p in personagens %}
+              <option value="{{ p.char_name }}">{{ p.char_name }} (Lv.{{ p.base_level }})</option>
+            {% endfor %}
+          </select>
         </div>
       
         <div class="mb-3">

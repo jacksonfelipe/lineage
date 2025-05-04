@@ -49,9 +49,10 @@ urlpatterns = [
     path('account/change-sex/<int:char_id>/', change_sex_view, name='change_sex'),
     path('account/unstuck/<int:char_id>/', unstuck_view, name='unstuck'),
     path('account/change-nickname/<int:char_id>/', change_nickname_view, name='change_nickname'),
-    path('configure-service-prices/', configure_service_prices, name='configure_service_prices'),
+    path('account/configure-service-prices/', configure_service_prices, name='configure_service_prices'),
 
-    path('painel/', views.painel_apoiador, name='painel_apoiador'),
-    path('solicitar/', views.formulario_apoiador, name='formulario_apoiador'),
-    path('painel/staff/', views.painel_staff, name='painel_staff'),
+    path('apoiador/painel/', views.painel_apoiador, name='painel_apoiador'),
+    path('apoiador/solicitar/', views.formulario_apoiador, name='formulario_apoiador'),
+    path('apoiador/painel/staff/', views.painel_staff, name='painel_staff'),
+    path('apoiador/solicitar-comissao/', views.solicitar_comissao, name='solicitar_comissao'),
 ]

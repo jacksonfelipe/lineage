@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import *
 from core.admin import BaseModelAdmin
 from django.contrib import messages
+from django.utils import timezone
 
 
 @admin.register(ApiEndpointToggle)
@@ -94,3 +95,24 @@ class ActiveAdenaExchangeItemAdmin(BaseModelAdmin):
 class ApoiadorAdmin(BaseModelAdmin):
     list_display = ('nome_publico', 'user', 'ativo')
     search_fields = ('nome_publico', 'user__username')
+
+
+@admin.register(Comissao)
+class ComissaoAdmin(admin.ModelAdmin):
+    # Exibir colunas no list display
+    list_display = ('apoiador', 'compra', 'valor', 'pago', 'data_pagamento')
+    # Filtros para facilitar a busca no admin
+    list_filter = ('pago', 'apoiador', 'data_pagamento')
+    # Adicionar campos de pesquisa no admin
+    search_fields = ('apoiador__nome_publico', 'compra__user__username')
+    # Formulários personalizados no admin
+    readonly_fields = ('data_pagamento',)
+
+    # Definir campos editáveis
+    fields = ('apoiador', 'compra', 'valor', 'pago', 'data_pagamento')
+
+    # Mostrar o campo de data de pagamento se já for pago
+    def save_model(self, request, obj, form, change):
+        if obj.pago and not obj.data_pagamento:
+            obj.data_pagamento = timezone.now()
+        super().save_model(request, obj, form, change)

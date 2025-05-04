@@ -15,6 +15,9 @@ from apps.lineage.wallet.signals import aplicar_transacao
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 
+from utils.dynamic_import import get_query_class
+LineageServices = get_query_class("LineageServices")
+
 
 @login_required
 def listar_leiloes(request):
@@ -102,8 +105,14 @@ def fazer_lance(request, auction_id):
         except Exception as e:
             messages.error(request, f'Ocorreu um erro ao realizar o lance: {str(e)}')
             return redirect('auction:fazer_lance', auction_id=auction.id)
+        
+    # Lista os personagens da conta
+    try:
+        personagens = LineageServices.find_chars(request.user.username)
+    except:
+        messages.warning(request, 'Não foi possível carregar seus personagens agora.')
 
-    return render(request, 'auction/fazer_lance.html', {'auction': auction})
+    return render(request, 'auction/fazer_lance.html', {'auction': auction, 'personagens': personagens})
 
 
 @login_required

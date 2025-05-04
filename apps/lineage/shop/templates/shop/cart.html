@@ -102,8 +102,13 @@
     <form method="post" action="{% url 'shop:checkout' %}">
       {% csrf_token %}
       <div class="mb-3">
-        <label class="form-label fw-semibold">{% trans "Personagem para Entrega" %}</label>
-        <input type="text" name="character_name" class="form-control rounded-3" required>
+        <label class="form-label fw-semibold">{% trans "Selecione o Personagem" %}</label>
+        <select name="character_name" class="form-select rounded-3" required>
+          <option value="" disabled selected>{% trans "Escolha um personagem" %}</option>
+          {% for p in personagens %}
+            <option value="{{ p.char_name }}">{{ p.char_name }} (Lv.{{ p.base_level }})</option>
+          {% endfor %}
+        </select>
       </div>
       <div class="text-end">
         <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">

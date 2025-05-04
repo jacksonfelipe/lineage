@@ -7,6 +7,9 @@ from apps.lineage.wallet.signals import aplicar_transacao
 from apps.lineage.inventory.models import InventoryItem, Inventory
 from apps.lineage.wallet.models import Wallet
 
+from utils.dynamic_import import get_query_class
+LineageServices = get_query_class("LineageServices")
+
 
 @login_required
 def shop_home(request):
@@ -21,7 +24,12 @@ def shop_home(request):
 @login_required
 def view_cart(request):
     cart, _ = Cart.objects.get_or_create(user=request.user)
-    return render(request, 'shop/cart.html', {'cart': cart})
+    # Lista os personagens da conta
+    try:
+        personagens = LineageServices.find_chars(request.user.username)
+    except:
+        messages.warning(request, 'Não foi possível carregar seus personagens agora.')
+    return render(request, 'shop/cart.html', {'cart': cart, "personagens": personagens})
 
 
 @login_required
@@ -96,6 +104,11 @@ def checkout(request):
     personagem = request.POST.get('character_name')
     if not personagem or len(personagem.strip()) < 3:
         messages.error(request, "Informe um nome de personagem válido para entrega (mínimo 3 caracteres).")
+        return redirect('shop:view_cart')
+    
+    # Verificar se o personagem existe no inventário do usuário
+    if not Inventory.objects.filter(user=request.user, character_name=personagem).exists():
+        messages.error(request, 'Este personagem não pertence a você.')
         return redirect('shop:view_cart')
 
     if not cart.cartitem_set.exists() and not cart.cartpackage_set.exists():

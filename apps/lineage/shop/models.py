@@ -2,7 +2,6 @@ from django.db import models
 from django.utils import timezone
 from apps.main.home.models import User
 from core.models import BaseModel
-from apps.lineage.server.models import Apoiador
 
 
 class ShopItem(BaseModel):
@@ -102,7 +101,7 @@ class ShopPurchase(BaseModel):
     character_name = models.CharField(max_length=100)
     total_pago = models.DecimalField(max_digits=10, decimal_places=2)
     promocao_aplicada = models.ForeignKey(PromotionCode, null=True, blank=True, on_delete=models.SET_NULL)
-    apoiador = models.ForeignKey(Apoiador, null=True, blank=True, on_delete=models.SET_NULL)
+    apoiador = models.ForeignKey('server.Apoiador', null=True, blank=True, on_delete=models.SET_NULL)
     data_compra = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
