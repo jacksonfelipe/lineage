@@ -13,6 +13,7 @@
 <link type="text/css" href="{% static 'public/css/index-features.css' %}" rel="stylesheet">
 <link type="text/css" href="{% static 'public/css/index-classes.css' %}" rel="stylesheet">
 <link type="text/css" href="{% static 'public/css/index-carousel.css' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'public/css/index-clans.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -108,7 +109,7 @@
 
 <!-- Carrossel de imagens dos apoiadores -->
 <section class="apoiadores-carousel">
-  <div class="carousel-track">
+  <div class="carousel-track" id="carouselTrack">
     {% with fixas="1,2,3,4,5"|split:"," %}
       {% with total=apoiadores|length %}
         {% for apoiador in apoiadores %}
@@ -278,5 +279,39 @@
 </section>
 
 <script src="{% static 'public/js/index.js' %}"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const track = document.getElementById("carouselTrack");
+    const speed = 0.5; // pixels por frame
+    let offset = 0;
+  
+    // Clonar os cards atuais e adicioná-los ao final (repetição visual)
+    const originalCards = Array.from(track.children);
+    originalCards.forEach(card => {
+      const clone = card.cloneNode(true);
+      track.appendChild(clone);
+    });
+  
+    function animate() {
+      offset -= speed;
+      track.style.transform = `translateX(${offset}px)`;
+  
+      const firstCard = track.children[0];
+      const firstCardRect = firstCard.getBoundingClientRect();
+      const trackRect = track.getBoundingClientRect();
+  
+      if (firstCardRect.right < trackRect.left) {
+        const cardWidth = firstCard.offsetWidth + 20;
+        track.appendChild(firstCard);
+        offset += cardWidth;
+      }
+  
+      requestAnimationFrame(animate);
+    }
+  
+    animate();
+  });
+</script>  
 
 {% endblock %}
