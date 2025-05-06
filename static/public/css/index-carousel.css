@@ -19,7 +19,7 @@
 .apoiador-card {
   flex: 0 0 auto;
   height: 100%;
-  margin-right: 20px; /* substitui gap */
+  margin-right: 20px;
 }
 
 .apoiador-card img {
@@ -29,8 +29,6 @@
   object-fit: cover;
 }
 
-
-/* Faixa superior com o título APOIADORES animado */
 .apoiadores-banner {
   width: 100%;
   overflow: hidden;
@@ -38,12 +36,13 @@
   background-size: 300% 300%;
   animation: bgMove 10s linear infinite;
   padding: 10px 0;
+  position: relative;
 }
 
 .banner-track {
   display: flex;
   white-space: nowrap;
-  animation: scroll-banner 20s linear infinite;
+  will-change: transform;
 }
 
 .banner-track span {
@@ -54,17 +53,6 @@
   text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
 }
 
-/* Animação da faixa */
-@keyframes scroll-banner {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-/* Animação do fundo gradiente */
 @keyframes bgMove {
   0% {
     background-position: 0% 50%;
