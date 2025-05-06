@@ -92,6 +92,13 @@
                 {% trans "Mudar Senha" %}
               </a>
 
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'administrator:security_settings' %}">
+                <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm0 2a10 10 0 110-20 10 10 0 010 20zm1-13a3 3 0 00-2 0V7a2 2 0 10-2 0v2h-2a2 2 0 100 4h2v4a2 2 0 102 0v-4h2a2 2 0 100-4h-2V7a3 3 0 00-1-2z" clip-rule="evenodd"></path>
+                </svg>
+                {% trans "Segurança" %}
+              </a>              
+
               {% if request.user.is_staff %}
               <div role="separator" class="dropdown-divider my-1"></div>
               <div class="dropdown-submenu-manual">

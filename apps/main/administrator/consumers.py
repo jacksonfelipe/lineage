@@ -106,8 +106,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
             # Tenta encontrar a solicitação com o protocolo correspondente
             solicitation = Solicitation.objects.get(protocol=protocol)
 
+            # Se o usuário for admin, automaticamente adiciona como participante
+            if user.is_staff:  # Verifica se é admin
+                solicitation.add_participant(user)
+                return True
+            
             # Verifica se o usuário é participante da solicitação
             return solicitation.is_participant(user)
+            
         except Solicitation.DoesNotExist:
             pass
 

@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import News
 from django.utils import translation
-from django.contrib.auth.decorators import login_required
+from apps.main.home.decorator import conditional_otp_required
 from .forms import NewsForm
 
 
-@login_required
+@conditional_otp_required
 def index(request):
     language = translation.get_language()
     private_news_list = News.objects.filter(is_published=True, is_private=True).order_by('-pub_date')[:5]
@@ -28,7 +28,7 @@ def index(request):
     return render(request, 'pages/news_index.html', context)
 
 
-@login_required
+@conditional_otp_required
 def detail(request, slug):
     language = translation.get_language()
     news = get_object_or_404(News, slug=slug)
@@ -44,7 +44,7 @@ def detail(request, slug):
     return render(request, 'pages/news_detail.html', context)
 
 
-@login_required
+@conditional_otp_required
 def create_news(request):
     if request.method == 'POST':
         form = NewsForm(request.POST, request.FILES)

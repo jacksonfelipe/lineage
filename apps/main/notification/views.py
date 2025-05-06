@@ -1,13 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
+from apps.main.home.decorator import conditional_otp_required
 from .models import Notification, PublicNotificationView
 from django.contrib.auth.decorators import permission_required
 from django.db.models import Q
 
 
-@login_required
+@conditional_otp_required
 def get_notifications(request):
     # Notificações privadas do usuário (exclui staff se user não for staff/superuser)
     user_notifications = Notification.objects.filter(
@@ -65,7 +65,7 @@ def get_notifications(request):
     return JsonResponse({'notifications': notifications_list})
 
 
-@login_required
+@conditional_otp_required
 def mark_all_as_read(request):
     # Marcar todas as notificações privadas como lidas
     Notification.objects.filter(user=request.user, viewed=False).update(viewed=True)
@@ -87,13 +87,13 @@ def mark_all_as_read(request):
     return JsonResponse({'status': 'ok'})
 
 
-@login_required
+@conditional_otp_required
 def clear_all_notifications(request):
     Notification.objects.filter(user=request.user).delete()
     return JsonResponse({'status': 'ok'})
 
 
-@login_required
+@conditional_otp_required
 def notification_detail(request, pk):
     notification = get_object_or_404(Notification, pk=pk)
 
@@ -132,7 +132,7 @@ def notification_detail(request, pk):
     return JsonResponse(data)
 
 
-@login_required
+@conditional_otp_required
 def all_notifications(request):
     user = request.user
 
@@ -169,7 +169,7 @@ def all_notifications(request):
     return render(request, 'pages/notifications.html', context)
 
 
-@login_required
+@conditional_otp_required
 def confirm_notification_view(request, pk):
     notification = get_object_or_404(Notification, pk=pk)
 

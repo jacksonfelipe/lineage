@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib.auth.decorators import login_required
+from apps.main.home.decorator import conditional_otp_required
 from django.contrib import messages
 from django.db import transaction
 from django.contrib.auth import authenticate
@@ -19,7 +19,7 @@ TransferFromCharToWallet = get_query_class("TransferFromCharToWallet")
 LineageServices = get_query_class("LineageServices")
 
 
-@login_required
+@conditional_otp_required
 def retirar_item_servidor(request):
     db = LineageDB()
     if not db.is_connected():
@@ -126,7 +126,7 @@ def retirar_item_servidor(request):
     })
 
 
-@login_required
+@conditional_otp_required
 def inserir_item_servidor(request, char_name, item_id):
     db = LineageDB()
     if not db.is_connected():
@@ -188,7 +188,7 @@ def inserir_item_servidor(request, char_name, item_id):
     })
 
 
-@login_required
+@conditional_otp_required
 @transaction.atomic
 def trocar_item_com_jogador(request):
     if request.method == 'POST':
@@ -257,7 +257,7 @@ def trocar_item_com_jogador(request):
     return render(request, 'pages/trocar_item.html', context)
 
 
-@login_required
+@conditional_otp_required
 def inventario_dashboard(request):
     inventories = Inventory.objects.filter(user=request.user)
     inventory_data = []
@@ -275,7 +275,7 @@ def inventario_dashboard(request):
     })
 
 
-@login_required
+@conditional_otp_required
 def inventario_global(request):
     # Agrupar os itens de todos os inventários do usuário e somar as quantidades
     itens_globais = InventoryItem.objects.filter(inventory__user=request.user) \
@@ -288,7 +288,7 @@ def inventario_global(request):
     })
 
 
-@login_required
+@conditional_otp_required
 def get_item_image_url(request, item_id):
     url = item_image_url(item_id)
     return JsonResponse({'url': url})

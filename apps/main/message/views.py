@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import permission_required
-from django.contrib.auth.decorators import login_required
+from apps.main.home.decorator import conditional_otp_required
 from .models import Friendship, Chat, Message
 from apps.main.home.models import User
 from django.db.models import Q
@@ -27,7 +27,7 @@ def create_or_get_chat(user, friend):
     return chat
 
 
-@login_required()
+@conditional_otp_required
 def message(request):
     accepted_friendships = Friendship.objects.filter(user=request.user, accepted=True)
     
@@ -46,7 +46,7 @@ def message(request):
     return render(request, 'pages/chat.html', context)
 
 
-@login_required
+@conditional_otp_required
 def send_friend_request(request, user_id):
     friend = User.objects.get(id=user_id)
 
@@ -79,7 +79,7 @@ def send_friend_request(request, user_id):
     return redirect('message:friends_list')
 
 
-@login_required
+@conditional_otp_required
 def accept_friend_request(request, friendship_id):
     friendship = Friendship.objects.get(id=friendship_id)
 
@@ -93,14 +93,14 @@ def accept_friend_request(request, friendship_id):
     return redirect('message:friends_list')
 
 
-@login_required
+@conditional_otp_required
 def reject_friend_request(request, friendship_id):
     friendship = Friendship.objects.get(id=friendship_id)
     friendship.delete()  # Remove a solicitação de amizade
     return redirect('message:friends_list')
 
 
-@login_required
+@conditional_otp_required
 def remove_friend(request, friendship_id):
     try:
         # Obtém a amizade
@@ -123,7 +123,7 @@ def remove_friend(request, friendship_id):
     return redirect('message:friends_list')
 
 
-@login_required
+@conditional_otp_required
 def friends_list(request):
     # Amigos aceitos
     accepted_friendships = Friendship.objects.filter(user=request.user, accepted=True)
@@ -154,7 +154,7 @@ def friends_list(request):
     })
 
 
-@login_required
+@conditional_otp_required
 def send_message(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -174,7 +174,7 @@ def send_message(request):
     return JsonResponse({'success': False, 'error': 'Método não permitido.'}, status=405)
 
 
-@login_required
+@conditional_otp_required
 def load_messages(request, friend_id):
     try:
         friend = get_object_or_404(User, id=friend_id)
@@ -215,7 +215,7 @@ def load_messages(request, friend_id):
         return JsonResponse({'success': False, 'error': 'Ocorreu um erro inesperado.'}, status=400)
 
 
-@login_required
+@conditional_otp_required
 def get_unread_count(request):
     # Obtenha todos os amigos aceitos
     friendships = Friendship.objects.filter(user=request.user, accepted=True).values('friend')
@@ -241,7 +241,7 @@ def get_unread_count(request):
     return JsonResponse({'unread_counts': unread_counts}, status=200)
 
 
-@login_required
+@conditional_otp_required
 def set_user_active(request):
     user = request.user
     if user.is_authenticated:
@@ -251,7 +251,7 @@ def set_user_active(request):
     return JsonResponse({'status': 'error'}, status=403)
 
 
-@login_required
+@conditional_otp_required
 def check_user_activity(request, user_id):
     last_activity = cache.get(f"user_activity_{user_id}")
     if last_activity:

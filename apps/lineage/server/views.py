@@ -4,7 +4,7 @@ from .decorators import endpoint_enabled, safe_json_response
 from utils.dynamic_import import get_query_class  # importa o helper
 LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
 
-from django.contrib.auth.decorators import login_required
+from apps.main.home.decorator import conditional_otp_required
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import Apoiador
 from apps.lineage.shop.models import ShopPurchase, PromotionCode
@@ -125,7 +125,7 @@ def boss_jewel_locations(request):
     return LineageStats.boss_jewel_locations(boss_jewel_ids=jewel_ids_list)
 
 
-@login_required
+@conditional_otp_required
 def painel_apoiador(request):
     try:
         apoiador = Apoiador.objects.get(user=request.user)
@@ -169,7 +169,7 @@ def painel_apoiador(request):
     })
 
 
-@login_required
+@conditional_otp_required
 def formulario_apoiador(request):
     try:
         apoiador = Apoiador.objects.get(user=request.user)
@@ -250,7 +250,7 @@ def painel_staff(request):
     return render(request, 'apoiadores/painel_staff.html', {'pedidos_pendentes': pedidos_pendentes})
 
 
-@login_required
+@conditional_otp_required
 def solicitar_comissao(request):
     try:
         apoiador = Apoiador.objects.get(user=request.user)
@@ -286,7 +286,7 @@ def solicitar_comissao(request):
     })
 
 
-@login_required
+@conditional_otp_required
 def editar_imagem_apoiador(request):
     try:
         apoiador = Apoiador.objects.get(user=request.user)

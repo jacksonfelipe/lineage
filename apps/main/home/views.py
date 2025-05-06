@@ -12,7 +12,7 @@ from .forms import (UserProfileForm, AddressUserForm, RegistrationForm, LoginFor
                     UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, AvatarForm)
 
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from apps.main.home.decorator import conditional_otp_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import logout
@@ -36,6 +36,15 @@ from utils.render_theme_page import render_theme_page
 from apps.lineage.wallet.models import Wallet
 from apps.lineage.inventory.models import Inventory
 from apps.lineage.auction.models import Auction
+
+from django.contrib.auth import get_user_model
+from django.contrib.auth import login
+
+from django_otp.plugins.otp_totp.models import TOTPDevice
+from django_otp import login as otp_login
+
+import pyotp
+from .resource.twofa import gerar_qr_png
 
 from utils.dynamic_import import get_query_class  # importa o helper
 LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
@@ -191,7 +200,7 @@ def custom_500_view(request):
     return render(request, 'errors/500.html', status=500)
 
 
-@login_required
+@conditional_otp_required
 def profile(request):
     context = {
         'segment': 'profile',
@@ -200,7 +209,7 @@ def profile(request):
     return render(request, 'pages/profile.html', context)
 
 
-@login_required
+@conditional_otp_required
 def edit_profile(request):
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=request.user)
@@ -219,7 +228,7 @@ def edit_profile(request):
     return render(request, 'pages/edit_profile.html', context)
 
 
-@login_required
+@conditional_otp_required
 def edit_avatar(request):
     if request.method == 'POST' and request.FILES.get('avatar'):
         form = AvatarForm(request.POST, request.FILES, instance=request.user)
@@ -232,7 +241,7 @@ def edit_avatar(request):
     return render(request, 'pages/edit_avatar.html', {'form': form})
 
 
-@login_required
+@conditional_otp_required
 def add_or_edit_address(request):
     # Verifica se o usuário já tem um endereço
     address = AddressUser.objects.filter(user=request.user).first()
@@ -327,7 +336,6 @@ def register_view(request):
         elif form.is_valid():
             user = form.save(commit=False)
             user.is_active = True
-            user.is_verified = False
             user.save()
 
             uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -372,13 +380,21 @@ class UserLoginView(LoginView):
     template_name = 'accounts_custom/sign-in.html'
 
     def form_valid(self, form):
-        print("Login successful!")
-        return super().form_valid(form)
+        user = form.get_user()
 
-    def form_invalid(self, form):
-        print("Login failed!")
-        return super().form_invalid(form)
-    
+        # Verifica se o usuário tem 2FA configurado
+        totp_device = TOTPDevice.objects.filter(user=user, confirmed=True).first()
+
+        if totp_device:
+            # Salva o user_id temporariamente na sessão para validar o TOTP depois
+            self.request.session['pre_2fa_user_id'] = user.pk
+            # Salva o estado da requisição para processar a verificação do OTP
+            return redirect('verify_2fa')  # Redireciona para a view de verificação do token
+
+        # Se não tiver 2FA configurado, faz o login normalmente
+        login(self.request, user)
+        return redirect(self.get_success_url())
+       
 
 class UserPasswordChangeView(PasswordChangeView):
     template_name = 'accounts_custom/password-change.html'
@@ -426,7 +442,7 @@ def lock(request):
     return render(request, 'accounts_custom/lock.html')
 
 
-@login_required
+@conditional_otp_required
 def dashboard(request):
     if request.user.is_authenticated:
         language = translation.get_language()
@@ -484,15 +500,15 @@ def verificar_email(request, uidb64, token):
         user = None
 
     if user and default_token_generator.check_token(user, token):
-        user.is_verified = True
-        user.save(update_fields=['is_verified'])
+        user.is_email_verified = True
+        user.save(update_fields=['is_email_verified'])
         context = dict()
         return render_theme_page(request, 'public', 'email_verificado.html', context)
     context = {'erro': True}
     return render_theme_page(request, 'public', 'email_verificado.html', context)
 
 
-@login_required
+@conditional_otp_required
 def reenviar_verificacao_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -500,9 +516,9 @@ def reenviar_verificacao_view(request):
         try:
             user = User.objects.get(email=email)
 
-            if user.is_verified:
-                messages.info(request, 'Sua conta já está verificada.')
-                return redirect('login')
+            if user.is_email_verified:
+                messages.info(request, 'Seu email já está verificado.')
+                return redirect('dashboard')
 
             # Gera novo link
             uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -531,7 +547,7 @@ def reenviar_verificacao_view(request):
             else:
                 messages.error(request, 'O envio de e-mail está desativado no momento.')
 
-            return redirect('login')
+            return redirect('dashboard')
 
         except User.DoesNotExist:
             messages.error(request, 'Nenhuma conta foi encontrada com este e-mail.')
@@ -555,3 +571,94 @@ def custom_set_language(request):
 
 def registration_success_view(request):
     return render(request, 'accounts_custom/registration_success.html')
+
+
+def verify_2fa_view(request):
+    if request.method == 'POST':
+        user_id = request.session.get('pre_2fa_user_id')
+        if not user_id:
+            return redirect('login')
+
+        User = get_user_model()
+        user = User.objects.get(pk=user_id)
+        token = request.POST.get('token')
+        device = TOTPDevice.objects.filter(user=user, confirmed=True).first()
+        
+        if device:
+            if device.verify_token(token):
+                request.user = user  # necessário para otp_login
+                otp_login(request, device)  # <- isto marca o 2FA como verificado
+                login(request, user)        # autentica o usuário na sessão Django
+                del request.session['pre_2fa_user_id']
+                return redirect('dashboard')
+            else:
+                return render(request, 'accounts_custom/verify-2fa.html', {'error': 'Código inválido.'})
+        else:
+            return render(request, 'accounts_custom/verify-2fa.html', {'error': 'Dispositivo 2FA não configurado ou não confirmado.'})
+    
+    return render(request, 'accounts_custom/verify-2fa.html')
+
+
+@conditional_otp_required
+def ativar_2fa(request):
+    user = request.user
+
+    # Verifica se já existe um dispositivo 2FA confirmado
+    if TOTPDevice.objects.filter(user=user, confirmed=True).exists():
+        messages.info(request, "A autenticação em 2 etapas já está ativada.")
+        return redirect('dashboard')
+
+    # Cria ou reutiliza um dispositivo ainda não confirmado
+    device, _ = TOTPDevice.objects.get_or_create(user=user, confirmed=False)
+
+    # Converte a chave hex para base32 (como o pyotp espera)
+    base32_key = base64.b32encode(bytes.fromhex(device.key)).decode('utf-8')
+
+    # Gera o QR Code em PNG (base64) para exibir na página
+    qr_png = gerar_qr_png(user.email, base32_key)
+
+    if request.method == "POST":
+        token = request.POST.get("token")
+        totp = pyotp.TOTP(base32_key)
+
+        if totp.verify(token):
+            device.confirmed = True
+            device.save()
+
+            user.is_2fa_enabled = True
+            user.save()
+
+            messages.success(request, "Autenticação em 2 etapas ativada com sucesso!")
+            return redirect('dashboard')
+        else:
+            messages.error(request, "Código inválido. Tente novamente.")
+
+    return render(request, 'accounts_custom/ativar-2fa.html', {
+        'qr_png': qr_png,
+        'otp_secret': base32_key,  # Opcional: mostrar a chave manualmente
+    })
+
+
+@conditional_otp_required
+def desativar_2fa(request):
+    user = request.user
+
+    if request.method != "POST":
+        messages.warning(request, "Requisição inválida.")
+        return redirect('administrator:security_settings')
+
+    # Remove dispositivos TOTP confirmados
+    devices = TOTPDevice.objects.filter(user=user, confirmed=True)
+    if not devices.exists():
+        messages.info(request, "Você não possui autenticação em duas etapas ativada.")
+        return redirect('administrator:security_settings')
+
+    devices.delete()
+
+    # Atualiza o campo de status no usuário, se houver
+    if hasattr(user, 'is_2fa_enabled'):
+        user.is_2fa_enabled = False
+        user.save()
+
+    messages.success(request, "Autenticação em duas etapas desativada com sucesso.")
+    return redirect('administrator:security_settings')

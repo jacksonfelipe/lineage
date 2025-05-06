@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from apps.main.home.decorator import conditional_otp_required
 from .decorators import require_lineage_connection
 from datetime import datetime
 from django.utils.timezone import make_aware
@@ -13,7 +13,7 @@ LineageAccount = get_query_class("LineageAccount")
 LineageServices = get_query_class("LineageServices")
 
 
-@login_required
+@conditional_otp_required
 @require_lineage_connection
 def account_dashboard(request):
 
@@ -88,7 +88,7 @@ def account_dashboard(request):
     return render(request, 'l2_accounts/dashboard.html', context)
 
 
-@login_required
+@conditional_otp_required
 @require_lineage_connection
 def update_password(request):
     if request.method == "POST":
@@ -117,7 +117,7 @@ def update_password(request):
     return render(request, "l2_accounts/update_password.html")
 
 
-@login_required
+@conditional_otp_required
 @require_lineage_connection
 def register_lineage_account(request):
     user = request.user
@@ -160,6 +160,6 @@ def register_lineage_account(request):
     })
 
 
-@login_required
+@conditional_otp_required
 def register_success(request):
     return render(request, 'l2_accounts/register_success.html')

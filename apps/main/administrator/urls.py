@@ -9,4 +9,5 @@ urlpatterns = [
   path('administrator/error/chat/', error_chat, name='error_chat'),
 
   path('page/<path:file_name>/', serve_theme_file, name='serve_theme_file'),
+  path('security/settings/', security_settings, name='security_settings'),
 ]

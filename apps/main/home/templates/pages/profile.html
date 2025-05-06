@@ -106,10 +106,10 @@
               </div>
 
               <!-- CPF -->
-              <div class="form-group">
+              <div class="form-group mt-4">
                 <label for="cpf">{% trans 'CPF' %}</label>
                 <span class="form-control" id="cpf">
-                  {% if user.cpf %}{{ user.cpf }}{% else %}{% trans 'N/A' %}{% endif %}
+                  {% if user.cpf %}{{ user.cpf }}{% else %}{% trans '000.000.000-00' %}{% endif %}
                 </span>
               </div>
             </div>
@@ -174,7 +174,7 @@
             <a href="{% url 'message:friends_list' %}" class="btn btn-secondary mt-3">{% trans 'Ver Lista de Amigos' %}</a>
           </div>
 
-          {% if not user.is_verified %}
+          {% if not user.is_email_verified %}
             <div class="alert alert-warning text-center mt-4">
               <strong>{% trans 'Conta não verificada' %}</strong><br>
               {% trans 'Seu e-mail ainda não foi verificado.' %}
@@ -185,6 +185,17 @@
               <button type="submit" class="btn btn-outline-warning">{% trans 'Reenviar E-mail de Verificação' %}</button>
             </form>
           {% endif %}
+
+          {% if not user.is_2fa_enabled %}
+            <div class="alert alert-info text-center mt-4">
+              <strong>{% trans '2FA Desativado' %}</strong><br>
+              {% trans 'A autenticação em duas etapas ainda não está ativada em sua conta.' %}
+            </div>
+            <form method="post" action="{% url 'ativar_2fa' %}" class="text-center mt-2">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-outline-primary">{% trans 'Ativar Autenticação 2FA' %}</button>
+            </form>
+          {% endif %}        
 
         </div>
       </div>

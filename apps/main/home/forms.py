@@ -73,10 +73,12 @@ class LoginForm(AuthenticationForm):
       widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"}),
   )
 
+
 class UserPasswordResetForm(PasswordResetForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={
         'class': 'form-control'
     }))
+
 
 class UserSetPasswordForm(SetPasswordForm):
     new_password1 = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
@@ -123,3 +125,19 @@ class DashboardContentTranslationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if language:
             self.fields['language'].initial = language
+
+
+class CustomUserChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = '__all__'
+
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = (
+            'username', 'email', 'password1', 'password2',
+            'avatar', 'bio', 'cpf', 'gender',
+            'is_email_verified', 'is_2fa_enabled'
+        )

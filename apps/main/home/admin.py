@@ -2,22 +2,42 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DefaultUserAdmin
 from .models import *
 from core.admin import BaseModelAdmin, BaseModelAdminAbstratic
-from .forms import DashboardContentForm, DashboardContentTranslationForm
+from .forms import DashboardContentForm, DashboardContentTranslationForm, CustomUserChangeForm, CustomUserCreationForm
 
 
 class UserAdmin(BaseModelAdmin, DefaultUserAdmin):
-    list_display = ('username', 'email', 'display_groups', 'cpf', 'gender', 'created_at', 'updated_at')
+    form = CustomUserChangeForm
+    add_form = CustomUserCreationForm
+    list_display = (
+        'username', 'email', 'display_groups', 'cpf', 'gender',
+        'is_email_verified', 'is_2fa_enabled', 'created_at', 'updated_at'
+    )
     readonly_fields = ('created_at', 'created_by', 'updated_at', 'updated_by', 'uuid')
+    
     fieldsets = (
         (None, {'fields': ('username', 'password', 'uuid')}),
-        ('Informações pessoais', {'fields': ('avatar', 'bio', 'cpf', 'gender')}),  # Adicionei o campo gender
-        ('Permissões', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-        ('Datas importantes', {'fields': ('last_login', 'created_at', 'updated_at', 'created_by', 'updated_by')}),
+        ('Informações pessoais', {
+            'fields': ('email', 'avatar', 'bio', 'cpf', 'gender')
+        }),
+        ('Verificação e segurança', {
+            'fields': ('is_email_verified', 'is_2fa_enabled')
+        }),
+        ('Permissões', {
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')
+        }),
+        ('Datas importantes', {
+            'fields': ('last_login', 'created_at', 'updated_at', 'created_by', 'updated_by')
+        }),
     )
+
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'password1', 'password2', 'avatar', 'bio', 'cpf', 'gender'),  # Adicionei o campo gender
+            'fields': (
+                'username', 'email', 'password1', 'password2',
+                'avatar', 'bio', 'cpf', 'gender',
+                'is_verified', 'is_2fa_enabled'
+            ),
         }),
     )
 
@@ -32,9 +52,7 @@ class UserAdmin(BaseModelAdmin, DefaultUserAdmin):
         super().save_model(request, obj, form, change)
 
     class Media:
-        js = (
-            'js/mask-cpf.js',
-        )
+        js = ('js/mask-cpf.js',)
 
 
 class AddressAdmin(BaseModelAdmin):

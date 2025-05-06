@@ -49,3 +49,8 @@ stripe
 
 # for history-migrates
 django-ckeditor
+
+# Authenticator 2FA
+django-otp 
+qrcode
+pyotp

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+from apps.main.home.decorator import conditional_otp_required
 from django.contrib import messages
 from django.db import transaction
 from .models import ShopItem, ShopPackage, Cart, CartItem, CartPackage, PromotionCode, ShopPurchase
@@ -11,7 +11,7 @@ from utils.dynamic_import import get_query_class
 LineageServices = get_query_class("LineageServices")
 
 
-@login_required
+@conditional_otp_required
 def shop_home(request):
     items = ShopItem.objects.filter(ativo=True)
     packages = ShopPackage.objects.filter(ativo=True)
@@ -21,7 +21,7 @@ def shop_home(request):
     })
 
 
-@login_required
+@conditional_otp_required
 def view_cart(request):
     cart, _ = Cart.objects.get_or_create(user=request.user)
     # Lista os personagens da conta
@@ -32,7 +32,7 @@ def view_cart(request):
     return render(request, 'shop/cart.html', {'cart': cart, "personagens": personagens})
 
 
-@login_required
+@conditional_otp_required
 def add_item_to_cart(request, item_id):
     cart, _ = Cart.objects.get_or_create(user=request.user)
     item = get_object_or_404(ShopItem, id=item_id, ativo=True)
@@ -60,7 +60,7 @@ def add_item_to_cart(request, item_id):
     return redirect('shop:shop_home')
 
 
-@login_required
+@conditional_otp_required
 def add_package_to_cart(request, package_id):
     cart, _ = Cart.objects.get_or_create(user=request.user)
     pacote = get_object_or_404(ShopPackage, id=package_id, ativo=True)
@@ -72,7 +72,7 @@ def add_package_to_cart(request, package_id):
     return redirect('shop:shop_home')
 
 
-@login_required
+@conditional_otp_required
 def apply_promo_code(request):
     if request.method == "POST":
         code = request.POST.get("promo_code")
@@ -90,7 +90,7 @@ def apply_promo_code(request):
     return redirect('shop:view_cart')
 
 
-@login_required
+@conditional_otp_required
 def checkout(request):
     cart, _ = Cart.objects.get_or_create(user=request.user)
     wallet, _ = Wallet.objects.get_or_create(usuario=request.user)
@@ -185,13 +185,13 @@ def checkout(request):
         return redirect('shop:view_cart')
 
 
-@login_required
+@conditional_otp_required
 def purchase_history(request):
     purchases = ShopPurchase.objects.filter(user=request.user).order_by('-data_compra')
     return render(request, 'shop/purchases.html', {'purchases': purchases})
 
 
-@login_required
+@conditional_otp_required
 def clear_cart(request):
     cart, _ = Cart.objects.get_or_create(user=request.user)
     cart.limpar()
@@ -199,7 +199,7 @@ def clear_cart(request):
     return redirect('shop:view_cart')
 
 
-@login_required
+@conditional_otp_required
 def remove_cart_item(request, item_id):
     cart = get_object_or_404(Cart, user=request.user)
     try:
@@ -211,7 +211,7 @@ def remove_cart_item(request, item_id):
     return redirect('shop:view_cart')
 
 
-@login_required
+@conditional_otp_required
 def remove_cart_package(request, package_id):
     cart = get_object_or_404(Cart, user=request.user)
     try:

@@ -30,7 +30,7 @@ AUTH_USER_MODEL = 'home.User'
 WSGI_APPLICATION = "core.wsgi.application"
 ASGI_APPLICATION = "core.asgi.application"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'dashboard'
 
 # =========================== LOGGER CONFIGS ===========================
 
@@ -71,6 +71,8 @@ INSTALLED_APPS = [
     "django_ckeditor_5",
     "widget_tweaks",
     "po_translate",
+    "django_otp",
+    "django_otp.plugins.otp_totp",
 
     "apps.main.administrator",
     "apps.main.auditor",
@@ -102,6 +104,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django_otp.middleware.OTPMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",

@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="{% static 'css/solicitation.css' %}">
 {% endblock extrastyle %}
 
-{% block page_title %}{% trans "Solicitação" %}{% endblock page_title %}
+{% block page_title %}{% trans "Solicitação" %}</h1>{% endblock page_title %}
 
 {% block breadcrumbs %}
   <li class="breadcrumb-item"><a href="#">{% trans "Solicitação" %}</a></li>
@@ -16,13 +16,13 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="mt-4">{% trans "Detalhe da Solicitação" %}</h1>
-    
+    <h1 class="mt-4 text-primary">{% trans "Detalhe da Solicitação" %}</h1>
+
     <div class="row mt-4">
         <!-- Detalhes da Solicitação -->
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
+            <div class="card shadow-lg mb-4 bg-light">
+                <div class="card-header bg-primary text-white">
                     <h5>{% trans "Solicitação" %}</h5>
                 </div>
                 <div class="card-body">
@@ -35,8 +35,8 @@
 
         <!-- Participantes -->
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
+            <div class="card shadow-lg mb-4 bg-light">
+                <div class="card-header bg-primary text-white">
                     <h5>{% trans "Participantes" %}</h5>
                 </div>
                 <div class="card-body">
@@ -57,9 +57,53 @@
     <!-- Botão de Chat -->
     <div class="row mt-4">
         <div class="col-md-12 text-center">
-            <a href="{% url 'administrator:chat_room' solicitation.protocol %}" class="btn btn-primary">{% trans "Ir para o Chat" %}</a>
+            <a href="{% url 'administrator:chat_room' solicitation.protocol %}" class="btn btn-success btn-lg">{% trans "Ir para o Chat" %}</a>
         </div>
     </div>
+
+    <!-- Histórico de Eventos -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h4 class="mb-3 text-primary">{% trans "Histórico de Eventos" %}</h4>
+
+            <!-- Contêiner dos eventos -->
+            <div class="event-box-container">
+                {% for event in solicitation.solicitation_history.all %}
+                    <div class="event-box shadow-lg mb-4 p-4 bg-white rounded">
+                        <div class="event-thumbnail d-flex justify-content-center align-items-center mb-3">
+                            {% if event.image %}
+                                <img src="{{ event.image.url }}" alt="Event Image" class="img-fluid rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
+                            {% else %}
+                                <div class="no-image-placeholder" style="width: 80px; height: 80px; background-color: #f1f1f1; border-radius: 50%;"></div>
+                            {% endif %}
+                        </div>
+                        <div class="timeline-header mb-3">
+                            <p><strong>{{ event.timestamp|date:"d/m/Y H:i" }}</strong></p>
+                            <p><strong>{% trans "Usuário:" %}</strong> {{ event.user.username }}</p>
+                        </div>
+                        <p class="event-action text-muted">{{ event.action }}</p>
+
+                        {% if event.image %}
+                            <div class="event-image mt-3">
+                                <img src="{{ event.image.url }}" alt="Event Image" class="img-fluid" style="max-width: 300px; border-radius: 8px;">
+                            </div>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <p class="text-center text-muted">{% trans "Nenhum evento registrado." %}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Botão para Adicionar Evento -->
+    {% if user.is_staff or user == solicitation.user %}
+    <div class="row mt-4">
+        <div class="col-md-12 text-center">
+            <a href="{% url 'solicitation:add_event_to_history' solicitation.protocol %}" class="btn btn-success btn-lg">{% trans "Adicionar Evento" %}</a>
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock content %}
 

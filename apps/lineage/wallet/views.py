@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-from django.contrib.auth.decorators import login_required
+from apps.main.home.decorator import conditional_otp_required
 from .models import Wallet, TransacaoWallet, CoinConfig
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -19,7 +19,7 @@ TransferFromWalletToChar = get_query_class("TransferFromWalletToChar")
 LineageServices = get_query_class("LineageServices")
 
 
-@login_required
+@conditional_otp_required
 def dashboard_wallet(request):
     wallet, _ = Wallet.objects.get_or_create(usuario=request.user)
     transacoes_query = TransacaoWallet.objects.filter(wallet=wallet).order_by('-created_at')
@@ -35,7 +35,7 @@ def dashboard_wallet(request):
     })
 
 
-@login_required
+@conditional_otp_required
 def transfer_to_server(request):
 
     # Verifica conexão com banco do Lineage
@@ -124,7 +124,7 @@ def transfer_to_server(request):
     })
 
 
-@login_required
+@conditional_otp_required
 def transfer_to_player(request):
     if request.method == 'POST':
         nome_jogador = request.POST.get('jogador')

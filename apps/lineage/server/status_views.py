@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+from apps.main.home.decorator import conditional_otp_required
 from django.utils.translation import gettext as _
 
 import json, os, time
@@ -14,7 +14,7 @@ from utils.dynamic_import import get_query_class  # importa o helper
 LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
 
 
-@login_required
+@conditional_otp_required
 def siege_ranking_view(request):
 
     db = LineageDB()
@@ -46,7 +46,7 @@ def siege_ranking_view(request):
     return render(request, "status/siege_ranking.html", {"castles": castles})
 
 
-@login_required
+@conditional_otp_required
 def olympiad_ranking_view(request):
     # Obtém o ranking de olimpíada
     db = LineageDB()
@@ -57,7 +57,7 @@ def olympiad_ranking_view(request):
     return render(request, 'status/olympiad_ranking.html', {'ranking': result})
 
 
-@login_required
+@conditional_otp_required
 def olympiad_all_heroes_view(request):
     # Obtém todos os heróis da olimpíada
     db = LineageDB()
@@ -68,7 +68,7 @@ def olympiad_all_heroes_view(request):
     return render(request, 'status/olympiad_all_heroes.html', {'heroes': result})
 
 
-@login_required
+@conditional_otp_required
 def olympiad_current_heroes_view(request):
     # Obtém os heróis atuais da olimpíada
     db = LineageDB()
@@ -77,7 +77,7 @@ def olympiad_current_heroes_view(request):
     return render(request, 'status/olympiad_current_heroes.html', {'current_heroes': result})
 
 
-@login_required
+@conditional_otp_required
 def boss_jewel_locations_view(request):
 
     db = LineageDB()
@@ -106,7 +106,7 @@ def boss_jewel_locations_view(request):
     return render(request, 'status/boss_jewel_locations.html', {'jewel_locations': jewel_locations})
 
 
-@login_required
+@conditional_otp_required
 def grandboss_status_view(request):
 
     db = LineageDB()

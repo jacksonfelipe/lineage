@@ -4,7 +4,7 @@ import mercadopago
 import stripe
 from .models import *
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
+from apps.main.home.decorator import conditional_otp_required
 from datetime import timedelta
 from django.utils.timezone import now
 from django.contrib import messages
@@ -14,7 +14,7 @@ from django.db import transaction
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
-@login_required
+@conditional_otp_required
 def criar_ou_reaproveitar_pedido(request):
     if request.method == 'POST':
         try:
@@ -69,7 +69,7 @@ def criar_ou_reaproveitar_pedido(request):
     return render(request, "payment/purchase.html")
 
 
-@login_required
+@conditional_otp_required
 def confirmar_pagamento(request, pedido_id):
     try:
         with transaction.atomic():
@@ -157,7 +157,7 @@ def confirmar_pagamento(request, pedido_id):
         return HttpResponse("Pedido não encontrado.", status=404)
 
 
-@login_required
+@conditional_otp_required
 def detalhes_pedido(request, pedido_id):
     pedido = get_object_or_404(PedidoPagamento, id=pedido_id, usuario=request.user)
 
@@ -170,13 +170,13 @@ def detalhes_pedido(request, pedido_id):
     return render(request, "payment/detalhes_pedido.html", {"pedido": pedido})
 
 
-@login_required
+@conditional_otp_required
 def pedidos_pendentes(request):
     pedidos = PedidoPagamento.objects.filter(usuario=request.user, status='PENDENTE').order_by('-data_criacao')
     return render(request, "payment/pedidos_pendentes.html", {"pedidos": pedidos})
 
 
-@login_required
+@conditional_otp_required
 def cancelar_pedido(request, pedido_id):
     if request.method != 'POST':
         return HttpResponse("Método não permitido", status=405)

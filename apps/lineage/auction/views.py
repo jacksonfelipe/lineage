@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+from apps.main.home.decorator import conditional_otp_required
 from django.contrib import messages
 from django.utils import timezone
 from .models import Auction
@@ -19,7 +19,7 @@ from utils.dynamic_import import get_query_class
 LineageServices = get_query_class("LineageServices")
 
 
-@login_required
+@conditional_otp_required
 def listar_leiloes(request):
     now = timezone.now()
 
@@ -62,7 +62,7 @@ def listar_leiloes(request):
     return render(request, 'auction/listar_leiloes.html', context)
 
 
-@login_required
+@conditional_otp_required
 def fazer_lance(request, auction_id):
     auction = get_object_or_404(Auction, id=auction_id)
 
@@ -120,7 +120,7 @@ def fazer_lance(request, auction_id):
     return render(request, 'auction/fazer_lance.html', {'auction': auction, 'personagens': personagens})
 
 
-@login_required
+@conditional_otp_required
 def criar_leilao(request):
     inventories = Inventory.objects.filter(user=request.user).prefetch_related('items')
 
@@ -191,7 +191,7 @@ def criar_leilao(request):
     return render(request, 'auction/criar_leilao.html', context)
 
 
-@login_required
+@conditional_otp_required
 def encerrar_leilao(request, auction_id):
     auction = get_object_or_404(Auction, id=auction_id)
 
@@ -208,7 +208,7 @@ def encerrar_leilao(request, auction_id):
     return redirect('auction:listar_leiloes')
 
 
-@login_required
+@conditional_otp_required
 def cancelar_leilao(request, auction_id):
     auction = get_object_or_404(Auction, id=auction_id)
 

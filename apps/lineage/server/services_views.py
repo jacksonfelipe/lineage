@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from apps.main.home.decorator import conditional_otp_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.utils.translation import gettext as _
@@ -14,7 +14,7 @@ LineageServices = get_query_class("LineageServices")
 TransferFromCharToWallet = get_query_class("TransferFromCharToWallet")
 
 
-@login_required
+@conditional_otp_required
 @require_lineage_connection
 def change_nickname_view(request, char_id):
     try:
@@ -68,7 +68,7 @@ def change_nickname_view(request, char_id):
     return render(request, "services/change_nickname.html", context)
 
 
-@login_required
+@conditional_otp_required
 @require_lineage_connection
 def change_sex_view(request, char_id):
     try:
@@ -123,7 +123,7 @@ def change_sex_view(request, char_id):
     return render(request, "services/change_sex.html", context)
 
 
-@login_required
+@conditional_otp_required
 @require_lineage_connection
 def unstuck_view(request, char_id):
 

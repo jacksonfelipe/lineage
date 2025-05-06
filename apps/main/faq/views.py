@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from .models import FAQ
 from django.utils.translation import get_language
-from django.contrib.auth.decorators import login_required
+from apps.main.home.decorator import conditional_otp_required
 
 
-@login_required
+@conditional_otp_required
 def faq_list(request):
     language = get_language()  # Obtém o idioma atual
     public_faqs = FAQ.objects.filter(is_public=True)

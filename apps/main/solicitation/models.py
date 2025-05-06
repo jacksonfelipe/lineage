@@ -56,10 +56,12 @@ class SolicitationHistory(BaseModel):
     solicitation = models.ForeignKey(Solicitation, on_delete=models.CASCADE, related_name='solicitation_history')
     action = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to='solicitation_history_images/', null=True, blank=True)  # Adicionando campo de imagem
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)  # Adicionando o usuário que fez a alteração
 
     def __str__(self):
         return f'History for Solicitation {self.solicitation.protocol} - {self.timestamp}'
-    
+
     class Meta:
         verbose_name = 'Histórico da Solicitação'
         verbose_name_plural = 'Históricos da Solicitação'

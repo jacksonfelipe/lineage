@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import Http404, JsonResponse
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import permission_required, login_required
+from django.contrib.auth.decorators import permission_required
+from apps.main.home.decorator import conditional_otp_required
 
 from apps.main.notification.models import Notification
 from apps.main.news.models import News
@@ -10,6 +11,7 @@ from django.http import HttpResponse, Http404
 from django.conf import settings
 import os
 from core.context_processors import active_theme
+from django_otp.plugins.otp_totp.models import TOTPDevice
 
 from .models import *
 
@@ -28,17 +30,23 @@ def get_latest_notifications(request):
     return JsonResponse(data, safe=False)
 
 
-@login_required
+@conditional_otp_required
 def chat_room(request, group_name):
     solicitation = None
     type_chat = None
 
     try:
         solicitation = Solicitation.objects.get(protocol=group_name)
+        # Verifica se o usuário é participante
         is_participant = SolicitationParticipant.objects.filter(
             solicitation=solicitation, user=request.user
         ).exists()
         type_chat = "Solicitação"
+        
+        # Se for um staff, automaticamente adiciona como participante, se não for
+        if request.user.is_staff and not is_participant:
+            SolicitationParticipant.objects.create(solicitation=solicitation, user=request.user)
+            is_participant = True  # Marca como participante
     except Solicitation.DoesNotExist:
         raise Http404(f"Protocolo {group_name} não encontrado.")
 
@@ -78,7 +86,7 @@ def chat_room(request, group_name):
     })
 
 
-@login_required
+@conditional_otp_required
 def error_chat(request):
     return render(request, 'errors/access_denied.html', {
         'message': 'Você não tem permissão para acessar esta sala de chat.'
@@ -102,3 +110,15 @@ def serve_theme_file(request, file_name):
 
     # Renderiza o template
     return render(request, template_relative_path)
+
+
+@conditional_otp_required
+def security_settings(request):
+    user = request.user
+
+    # Verifica se há um dispositivo 2FA confirmado
+    has_2fa = TOTPDevice.objects.filter(user=user, confirmed=True).exists()
+
+    return render(request, 'security/settings.html', {
+        'two_factor_enabled': has_2fa,
+    })
