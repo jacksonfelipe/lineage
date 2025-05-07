@@ -35,8 +35,8 @@ class CustomItemAdmin(BaseModelAdmin):
 
 
 @admin.register(InventoryLog)
-class InventoryLogAdmin(BaseModelAdmin):
-    list_display = ('user', 'item_name', 'quantidade', 'acao', 'origem', 'destino', 'timestamp')
+class InventoryLogAdmin(admin.ModelAdmin):
+    list_display = ('user', 'item_name', 'quantity', 'acao', 'origem', 'destino', 'timestamp')  # Corrigido 'quantidade' para 'quantity'
     list_filter = ('acao', 'user', 'origem', 'destino', 'timestamp')
     search_fields = ('user__username', 'item_name', 'acao', 'origem', 'destino')
     ordering = ('-timestamp',)
@@ -46,7 +46,6 @@ class InventoryLogAdmin(BaseModelAdmin):
     fields = ('user', 'inventory', 'item_id', 'item_name', 'enchant', 'quantity', 'acao', 'origem', 'destino', 'timestamp')
     readonly_fields = ('timestamp',)
 
-    # Personalizando o formato de exibição da data
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         return queryset.select_related('user', 'inventory')
