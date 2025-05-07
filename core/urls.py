@@ -26,6 +26,7 @@ urlpatterns = [
     path('app/inventory/', include('apps.lineage.inventory.urls')),
     path('app/shop/', include('apps.lineage.shop.urls')),
     path('app/auction/', include('apps.lineage.auction.urls')),
+    path('app/games/', include('apps.lineage.games.urls')),
 
     # libs externals
     path('', include('serve_files.urls')),
