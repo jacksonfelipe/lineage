@@ -12,6 +12,9 @@ from django.shortcuts import redirect
 from utils.notifications import send_notification
 import logging
 
+from apps.main.home.models import PerfilGamer
+from apps.main.home.utils import verificar_conquistas
+
 
 logger = logging.getLogger(__name__)
 
@@ -72,6 +75,15 @@ class SolicitationCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         response = super().form_valid(form)
+
+        perfil = PerfilGamer.objects.get(user=self.request.user)
+        perfil.adicionar_xp(50)
+
+        # Verifica se alguma conquista foi desbloqueada
+        conquistas_desbloqueadas = verificar_conquistas(self.request)
+        if conquistas_desbloqueadas:
+            for conquista in conquistas_desbloqueadas:
+                messages.success(self.request, f"🏆 Você desbloqueou a conquista: {conquista.nome}!")
 
         try:
             # Envia notificação para os staffs

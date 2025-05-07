@@ -116,3 +116,26 @@ admin.site.register(State, StateAdmin)
 admin.site.register(City, CityAdmin)
 admin.site.register(DashboardContent, DashboardContentAdmin)
 admin.site.register(SiteLogo, SiteLogoAdmin)
+
+
+@admin.register(Conquista)
+class ConquistaAdmin(BaseModelAdmin):
+    list_display = ('nome', 'codigo', 'descricao')
+    search_fields = ('nome', 'codigo')
+    list_filter = ('codigo',)
+    readonly_fields = ('codigo',)
+
+
+@admin.register(ConquistaUsuario)
+class ConquistaUsuarioAdmin(BaseModelAdmin):
+    list_display = ('usuario', 'conquista', 'data_conquista')
+    search_fields = ('usuario__username', 'conquista__nome')
+    list_filter = ('conquista', 'data_conquista')
+
+
+@admin.register(PerfilGamer)
+class PerfilGamerAdmin(BaseModelAdmin):
+    list_display = ('user', 'level', 'xp', 'last_login_reward')
+    search_fields = ('user__username',)
+    list_filter = ('level', 'last_login_reward')
+    readonly_fields = ('xp', 'level', 'last_login_reward')

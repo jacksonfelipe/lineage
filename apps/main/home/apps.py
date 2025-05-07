@@ -6,4 +6,4 @@ class HomeConfig(AppConfig):
     name = "apps.main.home"
 
     def ready(self):
-        import apps.main.home.signals  # Isso conecta os sinais
+        import apps.main.home.signals

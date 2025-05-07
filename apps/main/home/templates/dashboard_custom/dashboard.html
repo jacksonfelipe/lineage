@@ -3,143 +3,216 @@
 
 {% block extrahead %}
 <style>
-.card p span {
-  background-color: transparent !important;
-  color: #000 !important;
-}
+  /* Tipografia futurista */
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
 
-.card .btn-link {
-  font-size: 14px;
-  color: #007bff;
-  text-decoration: none;
-}
+  .gamer-card {
+    background-color: #ffffff; /* Fundo claro */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 2px solid #6f42c1; /* Roxo neon */
+    border-radius: 1rem;
+    box-shadow: 0 0 15px rgba(111, 66, 193, 0.4);
+    color: #212529;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
 
-.card .btn-link:hover {
-  text-decoration: underline;
-}
+  .gamer-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 25px rgba(111, 66, 193, 0.6);
+  }
+
+  .gamer-card h6 {
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    color: #6f42c1;
+    font-size: 14px;
+  }
+
+  .gamer-inventory li {
+    list-style: none;
+    padding: 4px 0;
+  }
+
+  .gamer-inventory a {
+    color: #0d6efd;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .gamer-inventory a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+  }
+
+  .avatar-frame {
+    border: 2px solid #ffc107;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(255, 193, 7, 0.6);
+  }
+
+  .btn-glow {
+    border-radius: 10px;
+    font-weight: bold;
+    background: linear-gradient(to right, #0dcaf0, #6f42c1);
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    text-shadow: 0 0 2px #000;
+    transition: 0.3s ease-in-out;
+  }
+
+  .btn-glow:hover {
+    box-shadow: 0 0 15px rgba(13, 202, 240, 0.7);
+    transform: scale(1.03);
+  }
+
+  .text-muted {
+    color: #6c757d !important;
+  }
+
+  hr.text-light {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  /* Título principal */
+  h1.text-primary {
+    color: #6f42c1 !important;
+  }
 </style>
 {% endblock extrahead %}
 
 {% block content %}
-<div class="container my-5">
-  <div class="card shadow-lg border-0 bg-white rounded-4">
-    <div class="card-body p-4">
+<div class="container py-5r">
+  <div class="text-center mb-4">
+    <h1 class="text-primary fw-bold">{% trans "Painel do Jogador" %}</h1>
+    <p class="text-primary">{% trans "Tudo que você precisa em um só lugar." %}</p>
+  </div>
 
-      <!-- Saudação -->
-      <div class="mb-4 text-center">
-        <h2 class="fw-bold text-dark mb-1">
-          {% trans "Bem-vindo," %} {{ request.user.first_name|default:request.user.username }} 👋
+  <div class="gamer-card p-4">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-8">
+        <h2 class="fw-bold">
+          {% trans "Olá," %} {{ request.user.first_name|default:request.user.username }} 👾
         </h2>
-        <p class="text-muted">
-          {% trans "Este é o seu painel principal. Aqui você encontrará um resumo da sua conta." %}
-        </p>
+        <p class="text-muted">{% trans "Este é o seu painel principal. Confira seu progresso abaixo." %}</p>
+      </div>
+      <div class="col-lg-4 text-lg-end">
+        {% if image %}
+          <img src="{{ image }}" class="avatar-frame" width="80" alt="avatar">
+        {% endif %}
+      </div>
+    </div>
+
+    <hr class="text-light my-4" />
+
+    <!-- Linha 1: Carteira e Status de Apoiador -->
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="gamer-card p-3 h-100">
+          <h6><i class="fas fa-wallet me-2 text-success"></i>{% trans "Carteira" %}</h6>
+          {% if wallet %}
+            <p class="mb-0"><strong>{% trans "Saldo:" %}</strong> R$ {{ wallet.saldo|floatformat:2 }}</p>
+          {% else %}
+            <p class="text-muted">{% trans "Nenhuma carteira encontrada." %}</p>
+          {% endif %}
+        </div>
       </div>
 
-      <!-- Linha 1: Carteira e Inventário -->
-      <div class="row g-4">
-        <!-- Carteira -->
-        <div class="col-md-6">
-          <div class="card h-100 border-0 bg-success-subtle">
-            <div class="card-body d-flex align-items-center">
-              <div class="me-3">
-                <i class="fas fa-wallet fa-2x text-success"></i>
-              </div>
-              <div>
-                <h6 class="fw-bold text-success mb-1">{% trans "Carteira" %}</h6>
-                {% if wallet %}
-                  <p class="mb-0">
-                    <strong>{% trans "Saldo:" %}</strong> R$ {{ wallet.saldo|floatformat:2 }}
-                  </p>
-                {% else %}
-                  <p class="text-muted mb-0">{% trans "Nenhuma carteira encontrada." %}</p>
+      <div class="col-md-6">
+        <div class="gamer-card p-3 h-100">
+          <h6><i class="fas fa-star me-2 text-warning"></i>{% trans "Status de Apoiador" %}</h6>
+          {% if is_apoiador %}
+            <p class="mb-0"><strong>{% trans "Status:" %}</strong> {{ status }}</p>
+          {% else %}
+            <p class="text-muted">{% trans "Você ainda não é um apoiador." %}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Linha 2: Inventários -->
+    <div class="mt-4">
+      <h6 class="text-info"><i class="fas fa-boxes me-2"></i>{% trans "Inventários" %}</h6>
+      {% if inventories %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 gamer-inventory">
+          {% for inv in inventories %}
+          <div class="col">
+            <div class="gamer-card p-3 h-100">
+              <p class="mb-1">
+                <strong>{{ inv.character_name }}</strong><br>
+                <small class="text-muted">{{ inv.account_name }}</small>
+              </p>
+              <a href="{% url 'inventory:inventario_dashboard' %}" class="btn-link">{% trans "Ver Inventário" %}</a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-muted">{% trans "Nenhum inventário encontrado." %}</p>
+      {% endif %}
+    </div>
+
+    <!-- Linha 3: Leilões -->
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <div class="gamer-card p-3 h-100">
+          <h6><i class="fas fa-gavel me-2 text-info"></i>{% trans "Seus Leilões" %}</h6>
+          <p class="mb-0"><strong>{% trans "Total criados:" %}</strong> {{ leiloes_user }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Experiencia -->
+    <div class="mt-4">
+      <h6 class="text-info"><i class="fas fa-medal me-2 text-primary"></i>{% trans "Experiencia" %}</h6>
+      <div class="card bg-light border shadow-sm p-3 mb-3">
+        <h6 class="fw-bold text-dark mb-2">Nível: {{ perfil.level }}</h6>
+        <div class="progress" style="height: 20px;">
+          <div class="progress-bar bg-success" role="progressbar"
+              style="width: {{ xp_percent }}%;" aria-valuenow="{{ perfil.xp }}"
+              aria-valuemin="0" aria-valuemax="{{ perfil.xp_para_proximo_nivel }}">
+            {{ xp_percent }}%
+          </div>
+        </div>
+        <p class="mt-2 text-muted">XP: {{ perfil.xp }} / {{ perfil.xp_para_proximo_nivel }}</p>
+        {% if ganhou_bonus %}
+          <p class="text-success mt-1">🎉 Bônus diário recebido! +25 XP</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Conquistas -->
+    <div class="row mt-4">
+      <h6 class="text-info">{% trans "🏆 Conquistas" %}</h6>
+      {% if conquistas %}
+        <div class="row g-3">
+          {% for c in conquistas %}
+            <div class="col-md-4">
+              <div class="card border-0 shadow-sm p-3 text-center h-100">
+                {% if c.icone %}
+                  <img src="{{ c.icone.url }}" width="50" class="mb-2" />
                 {% endif %}
+                <h6 class="fw-bold">{{ c.nome }}</h6>
+                <p class="small text-muted">{{ c.descricao }}</p>
               </div>
             </div>
-          </div>
+          {% endfor %}
         </div>
+      {% else %}
+        <p class="text-muted">{% trans "Você ainda não desbloqueou nenhuma conquista." %}</p>
+      {% endif %}
+    </div>
 
-        <!-- Inventários -->
-        <div class="col-md-6">
-          <div class="card h-100 border-0 bg-primary-subtle">
-            <div class="card-body d-flex align-items-center">
-              <div class="me-3">
-                <i class="fas fa-boxes fa-2x text-primary"></i>
-              </div>
-              <div>
-                <h6 class="fw-bold text-primary mb-1">{% trans "Inventários" %}</h6>
-                {% if inventories %}
-                  <ul class="mb-0 ps-3 small">
-                    {% for inv in inventories %}
-                      <li>{{ inv.character_name }} ({{ inv.account_name }}) 
-                        <a href="{% url 'inventory:inventario_dashboard' %}" class="btn-link">
-                          {% trans "Ver Inventário" %}
-                        </a>
-                      </li>
-                    {% endfor %}
-                  </ul>
-                {% else %}
-                  <p class="text-muted mb-0">{% trans "Nenhum inventário encontrado." %}</p>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Linha 2: Status de Apoiador e Leilões -->
-      <div class="row g-4 mt-2">
-        <!-- Apoiador -->
-        <div class="col-md-6">
-          <div class="card h-100 border-0 bg-warning-subtle">
-            <div class="card-body d-flex align-items-center">
-              <div class="me-3">
-                <i class="fas fa-star fa-2x text-warning"></i>
-              </div>
-              <div>
-                <h6 class="fw-bold text-warning mb-1">{% trans "Status de Apoiador" %}</h6>
-                {% if is_apoiador %}
-                  <p class="mb-0">
-                    <strong>{% trans "Status:" %}</strong> {{ status }}
-                    {% if image %}
-                      <br><img src="{{ image }}" alt="Imagem do apoiador" class="img-thumbnail mt-1" width="80">
-                    {% endif %}
-                  </p>
-                {% else %}
-                  <p class="text-muted mb-0">{% trans "Você ainda não é um apoiador." %}</p>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Leilões Criados -->
-        <div class="col-md-6">
-          <div class="card h-100 border-0 bg-info-subtle">
-            <div class="card-body d-flex align-items-center">
-              <div class="me-3">
-                <i class="fas fa-gavel fa-2x text-info"></i>
-              </div>
-              <div>
-                <h6 class="fw-bold text-info mb-1">{% trans "Seus Leilões" %}</h6>
-                <p class="mb-0">
-                  <strong>{% trans "Total criados:" %}</strong> {{ leiloes_user }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Ações -->
-      <div class="mt-4 d-flex justify-content-end">
-        <a href="{% url 'auction:listar_leiloes' %}" class="btn btn-outline-primary me-2">
-          <i class="fas fa-gavel me-1"></i> {% trans "Ir para Leilão" %}
-        </a>
-        <a href="{% url 'payment:novo_pedido' %}" class="btn btn-outline-success">
-          <i class="fas fa-store me-1"></i> {% trans "Fazer Doação" %}
-        </a>
-      </div>
-
+    <!-- Ações -->
+    <div class="mt-5 text-end">
+      <a href="{% url 'auction:listar_leiloes' %}" class="btn btn-outline-info btn-glow me-2">
+        <i class="fas fa-gavel me-1"></i>{% trans "Ir para Leilão" %}
+      </a>
+      <a href="{% url 'payment:novo_pedido' %}" class="btn btn-outline-info btn-glow me-2">
+        <i class="fas fa-donate me-1"></i>{% trans "Fazer Doação" %}
+      </a>
     </div>
   </div>
 </div>

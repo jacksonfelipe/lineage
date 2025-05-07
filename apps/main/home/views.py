@@ -45,6 +45,7 @@ from django_otp import login as otp_login
 
 import pyotp
 from .resource.twofa import gerar_qr_png
+from .utils import verificar_conquistas
 
 from utils.dynamic_import import get_query_class  # importa o helper
 LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
@@ -234,7 +235,19 @@ def edit_avatar(request):
         form = AvatarForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('profile')  # Redireciona para a página de perfil após salvar
+
+            # Adiciona XP ao perfil
+            perfil = PerfilGamer.objects.get(user=request.user)
+            perfil.adicionar_xp(20)  # Pode ajustar a quantidade conforme desejar
+
+            # Verifica conquistas
+            conquistas_desbloqueadas = verificar_conquistas(request)
+            if conquistas_desbloqueadas:
+                for conquista in conquistas_desbloqueadas:
+                    messages.success(request, f"🏆 Você desbloqueou a conquista: {conquista.nome}!")
+
+            messages.success(request, "Avatar atualizado com sucesso! Você ganhou 20 XP.")
+            return redirect('profile')
     else:
         form = AvatarForm(instance=request.user)
 
@@ -252,7 +265,19 @@ def add_or_edit_address(request):
             new_address = form.save(commit=False)
             new_address.user = request.user
             new_address.save()
-            return redirect('profile')  # Redireciona para a página de perfil
+
+            # Dá XP por cadastrar ou atualizar o endereço
+            perfil = PerfilGamer.objects.get(user=request.user)
+            perfil.adicionar_xp(30)  # Altere o valor conforme achar adequado
+
+            # Verifica conquistas
+            conquistas_desbloqueadas = verificar_conquistas(request)
+            if conquistas_desbloqueadas:
+                for conquista in conquistas_desbloqueadas:
+                    messages.success(request, f"🏆 Conquista desbloqueada: {conquista.nome}!")
+
+            messages.success(request, "Endereço salvo com sucesso! Você ganhou 30 XP.")
+            return redirect('profile')
     else:
         form = AddressUserForm(instance=address)
 
@@ -290,6 +315,7 @@ def log_info_dashboard(request):
     }
 
     return render(request, 'pages/logs.html', context)
+
 
 @staff_member_required
 def log_error_dashboard(request):
@@ -469,6 +495,13 @@ def dashboard(request):
         # Contagem de leilões do usuário
         leiloes_user = Auction.objects.filter(seller=request.user).count()
 
+        perfil, _ = PerfilGamer.objects.get_or_create(user=request.user)
+        ganhou_bonus = False
+        if perfil.pode_receber_bonus_diario():
+            ganhou_bonus = perfil.receber_bonus_diario()
+
+        conquistas = verificar_conquistas(request)
+
         context = {
             'segment': 'dashboard',
             'dashboard': dashboard,
@@ -479,6 +512,10 @@ def dashboard(request):
             'image': image,
             'status': status,
             'leiloes_user': leiloes_user,
+            'perfil': perfil,
+            'ganhou_bonus': ganhou_bonus,
+            'xp_percent': int((perfil.xp / perfil.xp_para_proximo_nivel()) * 100),
+            'conquistas': conquistas,
         }
         return render(request, 'dashboard_custom/dashboard.html', context)
     else:
@@ -500,11 +537,29 @@ def verificar_email(request, uidb64, token):
         user = None
 
     if user and default_token_generator.check_token(user, token):
-        user.is_email_verified = True
-        user.save(update_fields=['is_email_verified'])
-        context = dict()
-        return render_theme_page(request, 'public', 'email_verificado.html', context)
-    context = {'erro': True}
+        if not user.is_email_verified:
+            user.is_email_verified = True
+            user.save(update_fields=['is_email_verified'])
+
+            # Adiciona XP
+            perfil = PerfilGamer.objects.get(user=user)
+            perfil.adicionar_xp(40)  # valor de XP por verificar e-mail
+
+            # Verifica conquistas
+            conquistas_desbloqueadas = verificar_conquistas(request)
+
+            # Opcional: Armazena mensagem para exibir no template
+            context = {
+                'sucesso': True,
+                'conquistas': conquistas_desbloqueadas,
+                'xp': 40,
+            }
+        else:
+            # Já verificado anteriormente
+            context = {'ja_verificado': True}
+    else:
+        context = {'erro': True}
+
     return render_theme_page(request, 'public', 'email_verificado.html', context)
 
 
@@ -559,11 +614,24 @@ def custom_set_language(request):
     if request.method == 'POST':
         lang_code = request.POST.get('language')
         next_url = request.POST.get('next', '/')
-        
+
         if lang_code:
             response = HttpResponseRedirect(next_url)
             response.set_cookie('django_language', lang_code)
             activate(lang_code)
+
+            # Verifica se o usuário já trocou de idioma antes
+            if request.user.is_authenticated:
+                perfil = PerfilGamer.objects.get(user=request.user)
+                
+                # Usa uma conquista para marcar se já fez isso antes
+                if not ConquistaUsuario.objects.filter(usuario=request.user, conquista__codigo='idioma_trocado').exists():
+                    perfil.adicionar_xp(20)  # XP por trocar idioma
+                    conquistas = verificar_conquistas(request)
+                    for conquista in conquistas:
+                        messages.success(request, f"🏆 Conquista desbloqueada: {conquista.nome}")
+                    messages.success(request, "Idioma alterado com sucesso! Você ganhou 20 XP.")
+
             return response
 
     return redirect('/')
@@ -628,14 +696,23 @@ def ativar_2fa(request):
             user.is_2fa_enabled = True
             user.save()
 
-            messages.success(request, "Autenticação em 2 etapas ativada com sucesso!")
+            # Dá XP pela ativação
+            perfil = PerfilGamer.objects.get(user=user)
+            perfil.adicionar_xp(60)
+
+            # Verifica conquistas
+            conquistas_desbloqueadas = verificar_conquistas(request)
+            for conquista in conquistas_desbloqueadas:
+                messages.success(request, f"🏆 Conquista desbloqueada: {conquista.nome}!")
+
+            messages.success(request, "Autenticação em 2 etapas ativada com sucesso! Você ganhou 60 XP.")
             return redirect('dashboard')
         else:
             messages.error(request, "Código inválido. Tente novamente.")
 
     return render(request, 'accounts_custom/ativar-2fa.html', {
         'qr_png': qr_png,
-        'otp_secret': base32_key,  # Opcional: mostrar a chave manualmente
+        'otp_secret': base32_key,
     })
 
 

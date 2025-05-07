@@ -14,6 +14,9 @@ from django.core.cache import cache
 
 from utils.notifications import send_notification
 
+from apps.main.home.models import PerfilGamer, ConquistaUsuario
+from apps.main.home.utils import verificar_conquistas
+from django.contrib import messages
 
 import logging
 logger = logging.getLogger(__name__)
@@ -52,18 +55,30 @@ def send_friend_request(request, user_id):
 
     # Verifica se já são amigos
     if Friendship.objects.filter(user=request.user, friend=friend, accepted=True).exists():
-        return redirect('message:friends_list')  # Já são amigos
+        return redirect('message:friends_list')
 
     # Verifica se um pedido de amizade já foi enviado
     if Friendship.objects.filter(user=request.user, friend=friend, accepted=False).exists():
-        return redirect('message:friends_list')  # Pedido já enviado
+        return redirect('message:friends_list')
 
     # Verifica se o amigo já enviou um pedido de amizade para o usuário
     if Friendship.objects.filter(user=friend, friend=request.user, accepted=False).exists():
-        return redirect('message:friends_list')  # Amigo já enviou um pedido pendente
+        return redirect('message:friends_list')
 
     # Cria um novo pedido de amizade
     Friendship.objects.create(user=request.user, friend=friend)
+
+    # Ganha XP e verifica conquista
+    if request.user.is_authenticated:
+        perfil = PerfilGamer.objects.get(user=request.user)
+
+        # Só dá XP se for o primeiro pedido de amizade
+        if not ConquistaUsuario.objects.filter(usuario=request.user, conquista__codigo='primeiro_amigo').exists():
+            perfil.adicionar_xp(30)
+            conquistas = verificar_conquistas(request)
+            for conquista in conquistas:
+                messages.success(request, f"🏆 Conquista desbloqueada: {conquista.nome}")
+            messages.success(request, "Você enviou seu primeiro pedido de amizade! +30 XP")
 
     try:
         message = f"{request.user.username} enviou um pedido de amizade."
@@ -89,6 +104,18 @@ def accept_friend_request(request, friendship_id):
 
     # Cria a relação bidirecional
     Friendship.objects.get_or_create(user=friendship.friend, friend=friendship.user, accepted=True)
+
+    # Ganha XP e verifica conquistas
+    if request.user.is_authenticated:
+        perfil = PerfilGamer.objects.get(user=request.user)
+
+        # Só dá XP se for o primeiro pedido de amizade aceito
+        if not ConquistaUsuario.objects.filter(usuario=request.user, conquista__codigo='primeiro_amigo_aceito').exists():
+            perfil.adicionar_xp(40)
+            conquistas = verificar_conquistas(request)
+            for conquista in conquistas:
+                messages.success(request, f"🏆 Conquista desbloqueada: {conquista.nome}")
+            messages.success(request, "Você aceitou seu primeiro pedido de amizade! +40 XP")
 
     return redirect('message:friends_list')
 

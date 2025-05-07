@@ -8,7 +8,7 @@ from utils.choices import *
 from django.core.validators import validate_email
 from .validators import validate_ascii_username
 from django_ckeditor_5.fields import CKEditor5Field
-from django_otp.plugins.otp_totp.models import TOTPDevice
+from datetime import date
 
 
 class User(BaseModel, AbstractUser):
@@ -133,3 +133,50 @@ class SiteLogo(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class PerfilGamer(BaseModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    xp = models.PositiveIntegerField(default=0)
+    level = models.PositiveIntegerField(default=1)
+    last_login_reward = models.DateField(null=True, blank=True)
+
+    def adicionar_xp(self, quantidade):
+        self.xp += quantidade
+        while self.xp >= self.xp_para_proximo_nivel():
+            self.xp -= self.xp_para_proximo_nivel()
+            self.level += 1
+        self.save()
+
+    def xp_para_proximo_nivel(self):
+        return 100 + (self.level - 1) * 25
+
+    def pode_receber_bonus_diario(self):
+        return self.last_login_reward != date.today()
+
+    def receber_bonus_diario(self):
+        if self.pode_receber_bonus_diario():
+            self.adicionar_xp(25)
+            self.last_login_reward = date.today()
+            self.save()
+            return True
+        return False
+
+
+class Conquista(BaseModel):
+    nome = models.CharField(max_length=100)
+    descricao = models.TextField()
+    icone = models.ImageField(upload_to='conquistas/', null=True, blank=True)
+    codigo = models.CharField(max_length=50, unique=True)  # usado para lógica de desbloqueio
+
+    def __str__(self):
+        return self.nome
+
+
+class ConquistaUsuario(BaseModel):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    conquista = models.ForeignKey(Conquista, on_delete=models.CASCADE)
+    data_conquista = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('usuario', 'conquista')
