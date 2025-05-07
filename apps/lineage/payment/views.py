@@ -10,6 +10,9 @@ from django.utils.timezone import now
 from django.contrib import messages
 from django.db import transaction
 
+from utils.services import verificar_conquistas
+from apps.main.home.models import PerfilGamer
+
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -64,6 +67,11 @@ def criar_ou_reaproveitar_pedido(request):
                 metodo=metodo,
                 status='PENDENTE'
             )
+
+            perfil = PerfilGamer.objects.get(user=request.user)
+            perfil.adicionar_xp(40)
+            verificar_conquistas(request.user, request=request)
+
             return redirect('payment:detalhes_pedido', pedido_id=novo_pedido.id)
 
     return render(request, "payment/purchase.html")
@@ -127,6 +135,10 @@ def confirmar_pagamento(request, pedido_id):
                 pagamento.transaction_code = preference["id"]
                 pagamento.save()
 
+                perfil = PerfilGamer.objects.get(user=request.user)
+                perfil.adicionar_xp(100)
+                verificar_conquistas(request.user, request=request)
+
                 return redirect(preference["init_point"])
 
             elif pedido.metodo == "Stripe":
@@ -148,6 +160,10 @@ def confirmar_pagamento(request, pedido_id):
 
                 pagamento.transaction_code = session.id
                 pagamento.save()
+
+                perfil = PerfilGamer.objects.get(user=request.user)
+                perfil.adicionar_xp(100)
+                verificar_conquistas(request.user, request=request)
 
                 return redirect(session.url, code=303)
 

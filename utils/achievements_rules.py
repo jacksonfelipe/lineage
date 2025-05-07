@@ -1,8 +1,15 @@
 from .validators import registrar_validador
+from django.utils.translation import get_language_from_request
+
 from apps.main.home.models import AddressUser
 from apps.main.solicitation.models import Solicitation
 from apps.main.message.models import Friendship
-from django.utils.translation import get_language_from_request
+
+from apps.lineage.shop.models import ShopPurchase, Cart
+from apps.lineage.auction.models import Bid
+from apps.lineage.payment.models import PedidoPagamento, Pagamento
+from apps.lineage.wallet.models import TransacaoWallet
+from apps.lineage.inventory.models import InventoryItem, InventoryLog
 
 
 @registrar_validador('primeiro_login')
@@ -47,3 +54,51 @@ def primeiro_amigo(user, request=None):
 @registrar_validador('primeiro_amigo_aceito')
 def primeiro_amigo_aceito(user, request=None):
     return Friendship.objects.filter(user=user, accepted=True).exists()
+
+@registrar_validador('primeira_compra')
+def primeira_compra(user, request=None):
+    return ShopPurchase.objects.filter(user=user).exists()
+
+@registrar_validador('primeiro_lance')
+def primeiro_lance(user, request=None):
+    return Bid.objects.filter(user=user).exists()
+
+@registrar_validador('primeiro_cupom')
+def primeiro_cupom(user, request=None):
+    return Cart.objects.filter(user=user, promocao_aplicada__isnull=False).exists()
+
+@registrar_validador('primeiro_pedido_pagamento')
+def primeiro_pedido_pagamento(user, request=None):
+    return PedidoPagamento.objects.filter(usuario=user).exists()
+
+@registrar_validador('primeiro_pagamento_concluido')
+def primeiro_pagamento_concluido(user, request=None):
+    return Pagamento.objects.filter(usuario=user, status='approved').exists()
+
+@registrar_validador('primeira_transferencia_para_o_jogo')
+def primeira_transferencia_para_o_jogo(user, request=None):
+    return TransacaoWallet.objects.filter(
+        wallet__usuario=user,
+        tipo="SAIDA",
+        descricao__icontains="Transferência para o servidor"
+    ).exists()
+
+@registrar_validador('primeira_transferencia_para_jogador')
+def primeira_transferencia_para_jogador(user, request=None):
+    return TransacaoWallet.objects.filter(
+        wallet__usuario=user,
+        tipo="SAIDA",
+        descricao__icontains="Transferência para jogador"
+    ).exists()
+
+@registrar_validador('primeira_retirada_item')
+def primeira_retirada_item(user, request=None):
+    return InventoryItem.objects.filter(inventory__user=user).exists()
+
+@registrar_validador('primeira_retirada_item')
+def primeira_retirada_item(user, request=None):
+    return InventoryItem.objects.filter(inventory__user=user).exists()
+
+@registrar_validador('primeira_troca_itens')
+def primeira_troca_itens(user, request=None):
+    return InventoryLog.objects.filter(user=user, acao='TROCA').exists()

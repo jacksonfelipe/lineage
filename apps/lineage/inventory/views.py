@@ -7,6 +7,9 @@ from django.contrib.auth import authenticate
 from django.db.models import Sum
 from .utils.items import get_itens_json
 
+from utils.services import verificar_conquistas
+from apps.main.home.models import PerfilGamer
+
 from .models import Inventory, InventoryItem, BlockedServerItem
 from apps.lineage.server.database import LineageDB
 from utils.dynamic_import import get_query_class

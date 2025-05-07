@@ -8,6 +8,9 @@ from apps.lineage.inventory.models import InventoryItem, Inventory
 from apps.lineage.wallet.models import Wallet
 from django.core.paginator import Paginator
 
+from utils.services import verificar_conquistas
+from apps.main.home.models import PerfilGamer
+
 from utils.dynamic_import import get_query_class
 LineageServices = get_query_class("LineageServices")
 
@@ -189,6 +192,11 @@ def checkout(request):
 
             cart.limpar()
             messages.success(request, "Compra realizada com sucesso! Itens enviados para o inventário.")
+
+            perfil = PerfilGamer.objects.get(user=request.user)
+            perfil.adicionar_xp(40)
+            verificar_conquistas(request.user, request=request)
+
             return redirect('shop:purchase_history')
 
     except Exception as e:

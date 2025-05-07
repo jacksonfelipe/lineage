@@ -51,7 +51,17 @@ def criar_conquistas_iniciais(sender, **kwargs):
         {'codigo': '2fa_ativado', 'nome': '2FA Ativado', 'descricao': 'Ativou a autenticação de dois fatores (2FA)'},
         {'codigo': 'idioma_trocado', 'nome': 'Idioma Trocado', 'descricao': 'Alterou o idioma do perfil'},
         {'codigo': 'primeiro_amigo', 'nome': 'Primeiro Amigo', 'descricao': 'Fez seu primeiro pedido de amizade'},
-        {'codigo': 'primeiro_amigo_aceito', 'nome': 'Primeiro Amigo Aceito', 'descricao': 'Aceitou seu primeiro pedido de amizade'}
+        {'codigo': 'primeiro_amigo_aceito', 'nome': 'Primeiro Amigo Aceito', 'descricao': 'Aceitou seu primeiro pedido de amizade'},
+        {'codigo': 'primeira_compra', 'nome': 'Primeira Compra', 'descricao': 'Realizou sua primeira compra na loja'},
+        {'codigo': 'primeiro_lance', 'nome': 'Primeiro Lance', 'descricao': 'Realizou seu primeiro lance em um leilão'},
+        {'codigo': 'primeiro_cupom', 'nome': 'Primeiro Cupom', 'descricao': 'Aplicou um código promocional pela primeira vez'},
+        {'codigo': 'primeiro_pedido_pagamento', 'nome': 'Primeira Contribuição', 'descricao': 'Iniciou sua primeira contribuição para o servidor'},
+        {'codigo': 'primeiro_pagamento_concluido', 'nome': 'Patrocinador Oficial', 'descricao': 'Realizou seu primeiro apoio financeiro ao servidor'},
+        {'codigo': 'primeira_transferencia_para_o_jogo', 'nome': 'Mestre da Economia', 'descricao': 'Realizou sua primeira transferência de moedas para o personagem no servidor'},
+        {'codigo': 'primeira_transferencia_para_jogador', 'nome': 'Aliado Generoso', 'descricao': 'Enviou moedas para outro jogador pela primeira vez'},
+        {'codigo': 'primeira_retirada_item', 'nome': 'Caçador de Tesouros', 'descricao': 'Retirou seu primeiro item do jogo para o inventário online'},
+        {'codigo': 'primeira_insercao_item', 'nome': 'De Volta à Batalha', 'descricao': 'Inseriu um item do inventário online no servidor pela primeira vez'},
+        {'codigo': 'primeira_troca_itens', 'nome': 'Comerciante Astuto', 'descricao': 'Realizou sua primeira troca de item entre personagens'},
     ]
 
     for conquista in conquistas:

@@ -55,3 +55,26 @@ class CustomItem(BaseModel):
     class Meta:
         verbose_name = 'Item Customizado'
         verbose_name_plural = 'Itens Customizados'
+
+
+class InventoryLog(BaseModel):
+    ACOES = [
+        ('RETIROU_DO_JOGO', 'Retirou item do jogo'),
+        ('INSERIU_NO_JOGO', 'Inseriu item no jogo'),
+        ('TROCA_ENTRE_PERSONAGENS', 'Trocou entre personagens'),
+        ('RECEBEU_TROCA', 'Recebeu item por troca'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='logs_inventario')
+    inventory = models.ForeignKey(Inventory, on_delete=models.CASCADE, related_name='logs')
+    item_id = models.IntegerField()
+    item_name = models.CharField(max_length=100)
+    enchant = models.IntegerField(default=0)
+    quantity = models.PositiveIntegerField()
+    acao = models.CharField(max_length=30, choices=ACOES)
+    origem = models.CharField(max_length=100, blank=True, null=True, help_text="Personagem ou usuário origem")
+    destino = models.CharField(max_length=100, blank=True, null=True, help_text="Personagem ou usuário destino")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.get_acao_display()} - {self.item_name} x{self.quantity} ({self.timestamp})"

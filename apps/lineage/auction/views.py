@@ -16,6 +16,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 
+from utils.services import verificar_conquistas
+from apps.main.home.models import PerfilGamer
+
 from utils.dynamic_import import get_query_class
 LineageServices = get_query_class("LineageServices")
 
@@ -133,6 +136,10 @@ def fazer_lance(request, auction_id):
                 # Coloca o lance
                 place_bid(auction, request.user, bid_amount, character_name)
 
+            perfil = PerfilGamer.objects.get(user=request.user)
+            perfil.adicionar_xp(40)
+            verificar_conquistas(request.user, request=request)
+
             messages.success(request, 'Lance efetuado com sucesso!')
             return redirect('auction:listar_leiloes')
 
@@ -206,6 +213,10 @@ def criar_leilao(request):
                     end_time=timezone.now() + timedelta(hours=duration_hours),
                     character_name = character_name
                 )
+
+            perfil = PerfilGamer.objects.get(user=request.user)
+            perfil.adicionar_xp(40)
+            verificar_conquistas(request.user, request=request)
 
             messages.success(request, 'Leilão criado com sucesso!')
             return redirect('auction:listar_leiloes')
