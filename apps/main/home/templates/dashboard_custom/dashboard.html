@@ -80,6 +80,10 @@
   h1.text-primary {
     color: #6f42c1 !important;
   }
+
+  .opacity-50 {
+    opacity: 0.5;
+  }
 </style>
 {% endblock extrahead %}
 
@@ -189,16 +193,32 @@
       {% if conquistas %}
         <div class="row g-3">
           {% for c in conquistas %}
-            <div class="col-md-4">
-              <div class="card border-0 shadow-sm p-3 text-center h-100">
-                {% if c.icone %}
-                  <img src="{{ c.icone.url }}" width="50" class="mb-2" />
-                {% endif %}
-                <h6 class="fw-bold">{{ c.nome }}</h6>
-                <p class="small text-muted">{{ c.descricao }}</p>
+            {% with conquista=c.conquista desbloqueada=c.desbloqueada %}
+              <div class="col-md-4">
+                <div class="card border-0 shadow-sm p-3 text-center h-100 {% if not desbloqueada %}opacity-50{% endif %}">
+                  {% if desbloqueada %}
+                    {% if conquista.icone %}
+                      <img src="{{ conquista.icone.url }}" width="50" class="mb-2" alt="{{ conquista.nome }}" />
+                    {% else %}
+                      <i class="fas fa-trophy fa-2x text-warning mb-2"></i>
+                    {% endif %}
+                  {% else %}
+                    <i class="fas fa-lock fa-2x text-muted mb-2" title="{% trans 'Conquista bloqueada' %}"></i>
+                  {% endif %}
+          
+                  <h6 class="fw-bold">{{ conquista.nome }}</h6>
+          
+                  <p class="small text-muted">
+                    {% if desbloqueada %}
+                      {{ conquista.descricao }}
+                    {% else %}
+                      {% trans "Conquista bloqueada. Desbloqueie para ver detalhes." %}
+                    {% endif %}
+                  </p>
+                </div>
               </div>
-            </div>
-          {% endfor %}
+            {% endwith %}
+          {% endfor %}              
         </div>
 
         <!-- Paginação -->

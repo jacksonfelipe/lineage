@@ -502,12 +502,26 @@ def dashboard(request):
 
         verificar_conquistas(request.user, request=request)
 
-        # Todas as conquistas do usuário
-        conquistas_qs = ConquistaUsuario.objects.filter(usuario=request.user).select_related('conquista')
+        # Todas as conquistas disponíveis
+        todas_conquistas = Conquista.objects.all()
+
+        # IDs das conquistas do usuário
+        conquistas_usuario_ids = set(
+            ConquistaUsuario.objects.filter(usuario=request.user).values_list('conquista_id', flat=True)
+        )
+
+        # Lista de conquistas com flag "desbloqueada"
+        conquistas = [
+            {
+                'conquista': conquista,
+                'desbloqueada': conquista.id in conquistas_usuario_ids
+            }
+            for conquista in todas_conquistas
+        ]
 
         # Paginação
         page_number = request.GET.get('page', 1)
-        paginator = Paginator(conquistas_qs, 12)  # 12 conquistas por página
+        paginator = Paginator(conquistas, 12)  # 12 conquistas por página
         page_obj = paginator.get_page(page_number)
 
         context = {
@@ -523,7 +537,7 @@ def dashboard(request):
             'perfil': perfil,
             'ganhou_bonus': ganhou_bonus,
             'xp_percent': int((perfil.xp / perfil.xp_para_proximo_nivel()) * 100),
-            'conquistas': [cu.conquista for cu in page_obj],
+            'conquistas': page_obj.object_list,
             'page_obj': page_obj,
         }
         return render(request, 'dashboard_custom/dashboard.html', context)
