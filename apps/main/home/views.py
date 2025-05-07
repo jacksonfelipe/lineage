@@ -500,7 +500,8 @@ def dashboard(request):
         if perfil.pode_receber_bonus_diario():
             ganhou_bonus = perfil.receber_bonus_diario()
 
-        conquistas = verificar_conquistas(request)
+        verificar_conquistas(request)
+        conquistas = ConquistaUsuario.objects.filter(usuario=request.user).select_related('conquista')
 
         context = {
             'segment': 'dashboard',
