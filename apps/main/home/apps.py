@@ -7,3 +7,4 @@ class HomeConfig(AppConfig):
 
     def ready(self):
         import apps.main.home.signals
+        import utils.achievements_rules

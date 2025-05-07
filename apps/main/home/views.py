@@ -45,7 +45,7 @@ from django_otp import login as otp_login
 
 import pyotp
 from .resource.twofa import gerar_qr_png
-from .utils import verificar_conquistas
+from utils.services import verificar_conquistas
 
 from utils.dynamic_import import get_query_class  # importa o helper
 LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
@@ -241,7 +241,7 @@ def edit_avatar(request):
             perfil.adicionar_xp(20)  # Pode ajustar a quantidade conforme desejar
 
             # Verifica conquistas
-            conquistas_desbloqueadas = verificar_conquistas(request)
+            conquistas_desbloqueadas = verificar_conquistas(request.user, request=request)
             if conquistas_desbloqueadas:
                 for conquista in conquistas_desbloqueadas:
                     messages.success(request, f"🏆 Você desbloqueou a conquista: {conquista.nome}!")
@@ -271,7 +271,7 @@ def add_or_edit_address(request):
             perfil.adicionar_xp(30)  # Altere o valor conforme achar adequado
 
             # Verifica conquistas
-            conquistas_desbloqueadas = verificar_conquistas(request)
+            conquistas_desbloqueadas = verificar_conquistas(request.user, request=request)
             if conquistas_desbloqueadas:
                 for conquista in conquistas_desbloqueadas:
                     messages.success(request, f"🏆 Conquista desbloqueada: {conquista.nome}!")
@@ -500,8 +500,15 @@ def dashboard(request):
         if perfil.pode_receber_bonus_diario():
             ganhou_bonus = perfil.receber_bonus_diario()
 
-        verificar_conquistas(request)
-        conquistas = ConquistaUsuario.objects.filter(usuario=request.user).select_related('conquista')
+        verificar_conquistas(request.user, request=request)
+
+        # Todas as conquistas do usuário
+        conquistas_qs = ConquistaUsuario.objects.filter(usuario=request.user).select_related('conquista')
+
+        # Paginação
+        page_number = request.GET.get('page', 1)
+        paginator = Paginator(conquistas_qs, 12)  # 12 conquistas por página
+        page_obj = paginator.get_page(page_number)
 
         context = {
             'segment': 'dashboard',
@@ -516,7 +523,7 @@ def dashboard(request):
             'perfil': perfil,
             'ganhou_bonus': ganhou_bonus,
             'xp_percent': int((perfil.xp / perfil.xp_para_proximo_nivel()) * 100),
-            'conquistas': [cu.conquista for cu in conquistas],
+            'conquistas': [cu.conquista for cu in page_obj],
         }
         return render(request, 'dashboard_custom/dashboard.html', context)
     else:
@@ -547,7 +554,7 @@ def verificar_email(request, uidb64, token):
             perfil.adicionar_xp(40)  # valor de XP por verificar e-mail
 
             # Verifica conquistas
-            conquistas_desbloqueadas = verificar_conquistas(request)
+            conquistas_desbloqueadas = verificar_conquistas(request.user, request=request)
 
             # Opcional: Armazena mensagem para exibir no template
             context = {
@@ -628,7 +635,7 @@ def custom_set_language(request):
                 # Usa uma conquista para marcar se já fez isso antes
                 if not ConquistaUsuario.objects.filter(usuario=request.user, conquista__codigo='idioma_trocado').exists():
                     perfil.adicionar_xp(20)  # XP por trocar idioma
-                    conquistas = verificar_conquistas(request)
+                    conquistas = verificar_conquistas(request.user, request=request)
                     for conquista in conquistas:
                         messages.success(request, f"🏆 Conquista desbloqueada: {conquista.nome}")
                     messages.success(request, "Idioma alterado com sucesso! Você ganhou 20 XP.")
@@ -702,7 +709,7 @@ def ativar_2fa(request):
             perfil.adicionar_xp(60)
 
             # Verifica conquistas
-            conquistas_desbloqueadas = verificar_conquistas(request)
+            conquistas_desbloqueadas = verificar_conquistas(request.user, request=request)
             for conquista in conquistas_desbloqueadas:
                 messages.success(request, f"🏆 Conquista desbloqueada: {conquista.nome}!")
 

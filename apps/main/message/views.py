@@ -15,7 +15,7 @@ from django.core.cache import cache
 from utils.notifications import send_notification
 
 from apps.main.home.models import PerfilGamer, ConquistaUsuario
-from apps.main.home.utils import verificar_conquistas
+from utils.services import verificar_conquistas
 from django.contrib import messages
 
 import logging
@@ -75,7 +75,7 @@ def send_friend_request(request, user_id):
         # Só dá XP se for o primeiro pedido de amizade
         if not ConquistaUsuario.objects.filter(usuario=request.user, conquista__codigo='primeiro_amigo').exists():
             perfil.adicionar_xp(30)
-            conquistas = verificar_conquistas(request)
+            conquistas = verificar_conquistas(request.user, request=request)
             for conquista in conquistas:
                 messages.success(request, f"🏆 Conquista desbloqueada: {conquista.nome}")
             messages.success(request, "Você enviou seu primeiro pedido de amizade! +30 XP")
@@ -112,7 +112,7 @@ def accept_friend_request(request, friendship_id):
         # Só dá XP se for o primeiro pedido de amizade aceito
         if not ConquistaUsuario.objects.filter(usuario=request.user, conquista__codigo='primeiro_amigo_aceito').exists():
             perfil.adicionar_xp(40)
-            conquistas = verificar_conquistas(request)
+            conquistas = verificar_conquistas(request.user, request=request)
             for conquista in conquistas:
                 messages.success(request, f"🏆 Conquista desbloqueada: {conquista.nome}")
             messages.success(request, "Você aceitou seu primeiro pedido de amizade! +40 XP")

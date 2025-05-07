@@ -11,6 +11,7 @@ from decimal import Decimal, InvalidOperation
 from django.db import transaction
 from apps.lineage.wallet.models import Wallet
 from apps.lineage.wallet.signals import aplicar_transacao
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.core.serializers.json import DjangoJSONEncoder
 import json
@@ -53,12 +54,44 @@ def listar_leiloes(request):
         status='expired'
     )
 
+    # Paginação para cada tipo de leilão
+    paginator_ativos = Paginator(leiloes_ativos, 6)
+    paginator_finalizados = Paginator(leiloes_finalizados, 6)
+    paginator_cancelados = Paginator(leiloes_cancelados, 6)
+    paginator_pendentes_entrega = Paginator(leiloes_pendentes_entrega, 6)
+
+    page_ativos = request.GET.get('page_ativos')
+    page_finalizados = request.GET.get('page_finalizados')
+    page_cancelados = request.GET.get('page_cancelados')
+    page_pendentes_entrega = request.GET.get('page_pendentes_entrega')
+
+    try:
+        leiloes_ativos_paginated = paginator_ativos.get_page(page_ativos)
+        leiloes_finalizados_paginated = paginator_finalizados.get_page(page_finalizados)
+        leiloes_cancelados_paginated = paginator_cancelados.get_page(page_cancelados)
+        leiloes_pendentes_entrega_paginated = paginator_pendentes_entrega.get_page(page_pendentes_entrega)
+
+    except PageNotAnInteger:
+        # Se a página não for um número inteiro, mostrar a primeira página
+        leiloes_ativos_paginated = paginator_ativos.get_page(1)
+        leiloes_finalizados_paginated = paginator_finalizados.get_page(1)
+        leiloes_cancelados_paginated = paginator_cancelados.get_page(1)
+        leiloes_pendentes_entrega_paginated = paginator_pendentes_entrega.get_page(1)
+        
+    except EmptyPage:
+        # Se a página não existir (por exemplo, página 0), mostrar a última página
+        leiloes_ativos_paginated = paginator_ativos.get_page(paginator_ativos.num_pages)
+        leiloes_finalizados_paginated = paginator_finalizados.get_page(paginator_finalizados.num_pages)
+        leiloes_cancelados_paginated = paginator_cancelados.get_page(paginator_cancelados.num_pages)
+        leiloes_pendentes_entrega_paginated = paginator_pendentes_entrega.get_page(paginator_pendentes_entrega.num_pages)
+
     context = {
-        'leiloes_ativos': leiloes_ativos,
-        'leiloes_pendentes_entrega': leiloes_pendentes_entrega,
-        'leiloes_finalizados': leiloes_finalizados,
-        'leiloes_cancelados': leiloes_cancelados,
+        'leiloes_ativos': leiloes_ativos_paginated,
+        'leiloes_pendentes_entrega': leiloes_pendentes_entrega_paginated,
+        'leiloes_finalizados': leiloes_finalizados_paginated,
+        'leiloes_cancelados': leiloes_cancelados_paginated,
     }
+
     return render(request, 'auction/listar_leiloes.html', context)
 
 

@@ -13,7 +13,7 @@ from utils.notifications import send_notification
 import logging
 
 from apps.main.home.models import PerfilGamer
-from apps.main.home.utils import verificar_conquistas
+from utils.services import verificar_conquistas
 
 
 logger = logging.getLogger(__name__)
@@ -80,7 +80,7 @@ class SolicitationCreateView(LoginRequiredMixin, CreateView):
         perfil.adicionar_xp(50)
 
         # Verifica se alguma conquista foi desbloqueada
-        conquistas_desbloqueadas = verificar_conquistas(self.request)
+        conquistas_desbloqueadas = verificar_conquistas(self.request.user, request=self.request)
         if conquistas_desbloqueadas:
             for conquista in conquistas_desbloqueadas:
                 messages.success(self.request, f"🏆 Você desbloqueou a conquista: {conquista.nome}!")

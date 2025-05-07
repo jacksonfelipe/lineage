@@ -2,9 +2,64 @@
 {% load i18n l10n static %}
 {% load itens_extras %}
 
+{% block extrahead %}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+  h2, h3 {
+    font-family: 'Orbitron', sans-serif;
+    color: #6f42c1;
+    text-transform: uppercase;
+  }
+
+  .btn-primary {
+    background: linear-gradient(to right, #0dcaf0, #6f42c1);
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    transition: 0.3s;
+    text-shadow: 0 0 2px #000;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 12px rgba(111, 66, 193, 0.6);
+    transform: scale(1.03);
+  }
+
+  .alert-secondary {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border: 1px solid #dee2e6;
+  }
+
+  .pagination {
+    justify-content: center;
+    padding: 15px 0;
+  }
+
+  .pagination .page-link {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #444;
+    text-shadow: 0 0 2px #000;
+  }
+
+  .pagination .page-item.active .page-link {
+    background-color: #6f42c1;
+    border-color: #6f42c1;
+    box-shadow: 0 0 8px rgba(111, 66, 193, 0.6);
+  }
+
+  .pagination .page-link:hover {
+    background-color: #6f42c1;
+    border-color: #6f42c1;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container my-4">
-
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="mb-0">{% trans "Leilões" %}</h2>
     <a href="{% url 'auction:criar_leilao' %}" class="btn btn-primary">
@@ -12,63 +67,12 @@
     </a>
   </div>
 
-  <!-- Leilões Ativos -->
-  <h3 class="mt-5">{% trans "Leilões Ativos" %}</h3>
-  {% if leiloes_ativos %}
-    <div class="row g-4">
-      {% for leilao in leiloes_ativos %}
-        {% include "auction/partials/_leilao_card.html" %}
-      {% endfor %}
-    </div>
-  {% else %}
-    <div class="alert alert-secondary text-center" role="alert">
-      {% trans "Nenhum leilão ativo no momento." %}
-    </div>
-  {% endif %}
-
-  <!-- Leilões Pendentes de Entrega -->
-  <h3 class="mt-5">{% trans "Leilões Pendentes de Entrega" %}</h3>
-  {% if leiloes_pendentes_entrega %}
-    <div class="row g-4">
-      {% for leilao in leiloes_pendentes_entrega %}
-        {% include "auction/partials/_leilao_card.html" %}
-      {% endfor %}
-    </div>
-  {% else %}
-    <div class="alert alert-secondary text-center" role="alert">
-      {% trans "Nenhum leilão pendente de entrega." %}
-    </div>
-  {% endif %}
+  {% include "auction/partials/_leilao_secao.html" with titulo="Leilões Ativos" lista=leiloes_ativos msg_vazio="Nenhum leilão ativo no momento." page=leiloes_ativos page_param="page_ativos" %}
+  {% include "auction/partials/_leilao_secao.html" with titulo="Leilões Pendentes de Entrega" lista=leiloes_pendentes_entrega msg_vazio="Nenhum leilão pendente de entrega." page=leiloes_pendentes_entrega page_param="page_pendentes_entrega" %}
 
   {% if user.is_staff %}
-    <!-- Leilões Finalizados (visível só para staffs) -->
-    <h3 class="mt-5">{% trans "Leilões Finalizados" %}</h3>
-    {% if leiloes_finalizados %}
-      <div class="row g-4">
-        {% for leilao in leiloes_finalizados %}
-          {% include "auction/partials/_leilao_card.html" %}
-        {% endfor %}
-      </div>
-    {% else %}
-      <div class="alert alert-secondary text-center" role="alert">
-        {% trans "Nenhum leilão finalizado." %}
-      </div>
-    {% endif %}
-
-    <!-- Leilões Cancelados (visível só para staffs) -->
-    <h3 class="mt-5">{% trans "Leilões Cancelados" %}</h3>
-    {% if leiloes_cancelados %}
-      <div class="row g-4">
-        {% for leilao in leiloes_cancelados %}
-          {% include "auction/partials/_leilao_card.html" %}
-        {% endfor %}
-      </div>
-    {% else %}
-      <div class="alert alert-secondary text-center" role="alert">
-        {% trans "Nenhum leilão cancelado." %}
-      </div>
-    {% endif %}
+    {% include "auction/partials/_leilao_secao.html" with titulo="Leilões Finalizados" lista=leiloes_finalizados msg_vazio="Nenhum leilão finalizado." page=leiloes_finalizados page_param="page_finalizados" %}
+    {% include "auction/partials/_leilao_secao.html" with titulo="Leilões Cancelados" lista=leiloes_cancelados msg_vazio="Nenhum leilão cancelado." page=leiloes_cancelados page_param="page_cancelados" %}
   {% endif %}
-
 </div>
 {% endblock %}
