@@ -61,7 +61,7 @@ def primeira_compra(user, request=None):
 
 @registrar_validador('primeiro_lance')
 def primeiro_lance(user, request=None):
-    return Bid.objects.filter(user=user).exists()
+    return Bid.objects.filter(bidder=user).exists()
 
 @registrar_validador('primeiro_cupom')
 def primeiro_cupom(user, request=None):

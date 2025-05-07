@@ -524,6 +524,7 @@ def dashboard(request):
             'ganhou_bonus': ganhou_bonus,
             'xp_percent': int((perfil.xp / perfil.xp_para_proximo_nivel()) * 100),
             'conquistas': [cu.conquista for cu in page_obj],
+            'page_obj': page_obj,
         }
         return render(request, 'dashboard_custom/dashboard.html', context)
     else:
