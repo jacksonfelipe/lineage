@@ -6,6 +6,7 @@ from .models import ShopItem, ShopPackage, Cart, CartItem, CartPackage, Promotio
 from apps.lineage.wallet.signals import aplicar_transacao
 from apps.lineage.inventory.models import InventoryItem, Inventory
 from apps.lineage.wallet.models import Wallet
+from django.core.paginator import Paginator
 
 from utils.dynamic_import import get_query_class
 LineageServices = get_query_class("LineageServices")
@@ -13,8 +14,18 @@ LineageServices = get_query_class("LineageServices")
 
 @conditional_otp_required
 def shop_home(request):
-    items = ShopItem.objects.filter(ativo=True)
-    packages = ShopPackage.objects.filter(ativo=True)
+    item_list = ShopItem.objects.filter(ativo=True)
+    package_list = ShopPackage.objects.filter(ativo=True)
+
+    item_paginator = Paginator(item_list, 6)  # 6 por página
+    package_paginator = Paginator(package_list, 6)
+
+    item_page = request.GET.get('items_page')
+    package_page = request.GET.get('packages_page')
+
+    items = item_paginator.get_page(item_page)
+    packages = package_paginator.get_page(package_page)
+
     return render(request, 'shop/home.html', {
         'items': items,
         'packages': packages
