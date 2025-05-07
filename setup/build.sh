@@ -15,6 +15,10 @@ git pull origin main || { echo "Failed to pull from Git repository"; exit 1; }
 echo "Activating virtual environment..."
 source .venv/bin/activate || { echo "Virtualenv not found. Please create it with 'python -m venv .venv'"; exit 1; }
 
+# Upgrade pip
+echo "Upgrading pip..."
+python -m pip install --upgrade pip || { echo "Failed to upgrade pip"; exit 1; }
+
 # Upgrade installed packages from requirements.txt
 echo "Upgrading packages from requirements.txt..."
 pip install -U -r requirements.txt || { echo "Failed to upgrade packages"; exit 1; }
