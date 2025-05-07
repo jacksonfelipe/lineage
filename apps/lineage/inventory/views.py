@@ -10,7 +10,7 @@ from .utils.items import get_itens_json
 from utils.services import verificar_conquistas
 from apps.main.home.models import PerfilGamer
 
-from .models import Inventory, InventoryItem, BlockedServerItem
+from .models import Inventory, InventoryItem, BlockedServerItem, InventoryLog
 from apps.lineage.server.database import LineageDB
 from utils.dynamic_import import get_query_class
 from django.core.paginator import Paginator
@@ -52,7 +52,6 @@ def retirar_item_servidor(request):
                 return redirect('inventory:retirar_item')
 
             all_items = TransferFromCharToWallet.list_items(char_id)
-
             itens_data = get_itens_json()
 
             # Substitui item_id pelo item_name
@@ -118,6 +117,19 @@ def retirar_item_servidor(request):
         inventory_item.quantity += quantity
         inventory_item.save()
 
+        # Registrar o log
+        InventoryLog.objects.create(
+            user=request.user,
+            inventory=inventory,
+            item_id=item_id,
+            item_name=inventory_item.item_name,
+            enchant=inventory_item.enchant,
+            quantity=quantity,
+            acao='RETIROU_DO_JOGO',
+            origem=personagem[0]['char_name'],
+            destino='Inventário Online'
+        )
+
         messages.success(request, 'Item transferido com sucesso!')
         return redirect(f"{request.path}?char_id={char_id}")
 
@@ -182,6 +194,19 @@ def inserir_item_servidor(request, char_name, item_id):
         else:
             item.save()
 
+        # Registrar o log de inserção
+        InventoryLog.objects.create(
+            user=request.user,
+            inventory=inventory,
+            item_id=item_id,
+            item_name=item.item_name,
+            enchant=item.enchant,
+            quantity=quantity,
+            acao='INSERIU_NO_JOGO',
+            origem='Inventário Online',
+            destino=personagem[0]['char_name']
+        )
+
         messages.success(request, f'{quantity}x {item.item_name} inserido no servidor com sucesso!')
         return redirect('inventory:inventario_dashboard')
 
@@ -223,6 +248,19 @@ def trocar_item_com_jogador(request):
             if not created:
                 item_destino.quantity += quantity
                 item_destino.save()
+
+            # Registrar o log de troca
+            InventoryLog.objects.create(
+                user=request.user,
+                inventory=inventario_origem,
+                item_id=item_id,
+                item_name=item_origem.item_name,
+                enchant=item_origem.enchant,
+                quantity=quantity,
+                acao='TROCA_ENTRE_PERSONAGENS',
+                origem=character_name_origem,
+                destino=character_name_destino
+            )
 
             messages.success(request, 'Troca realizada com sucesso!')
             return redirect('inventory:inventario_dashboard')

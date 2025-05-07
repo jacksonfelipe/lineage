@@ -32,3 +32,21 @@ class BlockedServerItemAdmin(BaseModelAdmin):
 class CustomItemAdmin(BaseModelAdmin):
     list_display = ('nome', 'imagem', 'item_id')
     search_fields = ('nome', 'item_id')
+
+
+@admin.register(InventoryLog)
+class InventoryLogAdmin(BaseModelAdmin):
+    list_display = ('user', 'item_name', 'quantidade', 'acao', 'origem', 'destino', 'timestamp')
+    list_filter = ('acao', 'user', 'origem', 'destino', 'timestamp')
+    search_fields = ('user__username', 'item_name', 'acao', 'origem', 'destino')
+    ordering = ('-timestamp',)
+    date_hierarchy = 'timestamp'
+
+    # Exibição de detalhes
+    fields = ('user', 'inventory', 'item_id', 'item_name', 'enchant', 'quantity', 'acao', 'origem', 'destino', 'timestamp')
+    readonly_fields = ('timestamp',)
+
+    # Personalizando o formato de exibição da data
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.select_related('user', 'inventory')

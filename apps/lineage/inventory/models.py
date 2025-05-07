@@ -1,6 +1,7 @@
 from django.db import models
 from apps.main.home.models import User
 from core.models import BaseModel
+from .choices import *
 
 
 class Inventory(BaseModel):
@@ -58,13 +59,6 @@ class CustomItem(BaseModel):
 
 
 class InventoryLog(BaseModel):
-    ACOES = [
-        ('RETIROU_DO_JOGO', 'Retirou item do jogo'),
-        ('INSERIU_NO_JOGO', 'Inseriu item no jogo'),
-        ('TROCA_ENTRE_PERSONAGENS', 'Trocou entre personagens'),
-        ('RECEBEU_TROCA', 'Recebeu item por troca'),
-    ]
-
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='logs_inventario')
     inventory = models.ForeignKey(Inventory, on_delete=models.CASCADE, related_name='logs')
     item_id = models.IntegerField()
