@@ -40,11 +40,7 @@ class BoxForm(forms.ModelForm):
         fields = ['user', 'box_type']
 
 
-class BoxItemForm(forms.ModelForm):
+class ItemForm(forms.ModelForm):
     class Meta:
-        model = BoxItem
-        fields = ['item', 'probability']
-        widgets = {
-            'item': forms.Select(attrs={'class': 'form-control'}),
-            'probability': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
-        }
+        model = Item
+        fields = ['name', 'enchant', 'item_id', 'image', 'description', 'rarity']

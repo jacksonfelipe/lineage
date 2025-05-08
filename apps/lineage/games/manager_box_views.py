@@ -5,16 +5,18 @@ from apps.lineage.games.models import *
 from apps.lineage.games.forms import *
 
 
+# DASHBOARD (admin)
 @staff_member_required
 def dashboard(request):
     context = {
         'box_type_count': BoxType.objects.count(),
         'box_count': Box.objects.count(),
+        'item_count': Item.objects.count(),
     }
     return render(request, 'box/manager/dashboard.html', context)
 
 
-# VIEWS DA SESSAO BOX (user)
+# VIEWS DA SESSAO BOX (admin)
 @staff_member_required
 def box_list_view(request):
     boxes = Box.objects.select_related('user', 'box_type').all()
@@ -56,53 +58,7 @@ def box_delete_view(request, pk):
     return render(request, 'box/manager/box/delete.html', {'box': box})
 
 
-# VIEWS DA SESSAO BOX ITEM (user)
-@staff_member_required
-def box_item_list_view(request, box_id):
-    box = get_object_or_404(Box, pk=box_id)
-    box_items = box.items.select_related('item').all()
-    return render(request, 'box/manager/box_item/list.html', {'box': box, 'box_items': box_items})
-
-
-@staff_member_required
-def box_item_create_view(request, box_type_id):
-    box_type = get_object_or_404(BoxType, pk=box_type_id)
-    if request.method == 'POST':
-        form = BoxItemForm(request.POST)
-        if form.is_valid():
-            box_item = form.save(commit=False)
-            box_item.box_type = box_type
-            box_item.save()
-            return redirect('games:box_item_list', box_type_id=box_type.id)
-    else:
-        form = BoxItemForm()
-    return render(request, 'box/manager/box_item/form.html', {'form': form, 'box_type': box_type})
-
-
-@staff_member_required
-def box_item_edit_view(request, pk):
-    box_item = get_object_or_404(BoxItem, pk=pk)
-    if request.method == 'POST':
-        form = BoxItemForm(request.POST, instance=box_item)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse('games:box_item_list', args=[box_item.box.id]))
-    else:
-        form = BoxItemForm(instance=box_item)
-    return render(request, 'box/manager/box_item/edit.html', {'form': form, 'box_item': box_item, 'box': box_item.box})
-
-
-@staff_member_required
-def box_item_delete_view(request, pk):
-    box_item = get_object_or_404(BoxItem, pk=pk)
-    box = box_item.box
-    if request.method == 'POST':
-        box_item.delete()
-        return redirect(reverse('games:box_item_list', args=[box.id]))
-    return render(request, 'box/manager/box_item/delete.html', {'box_item': box_item, 'box': box})
-
-
-# VIEWS DA SESSAO BOX TPE (user)
+# VIEWS DA SESSAO BOX TYPE (admin)
 @staff_member_required
 def box_type_list_view(request):
     box_types = BoxType.objects.all()
@@ -141,3 +97,38 @@ def box_type_delete_view(request, pk):
         box_type.delete()
         return redirect('games:box_type_list')
     return render(request, 'box/manager/box_type/delete_confirm.html', {'box_type': box_type})
+
+
+# VIEWS DA SESSAO BOX ITEMS (admin)
+@staff_member_required
+def item_list_view(request):
+    items = Item.objects.all()
+    return render(request, 'box/manager/items/item_list.html', {'items': items})
+
+
+@staff_member_required
+def item_create_view(request):
+    form = ItemForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+        return redirect('games:item_list')
+    return render(request, 'box/manager/items/item_form.html', {'form': form})
+
+
+@staff_member_required
+def item_edit_view(request, pk):
+    item = get_object_or_404(Item, pk=pk)
+    form = ItemForm(request.POST or None, request.FILES or None, instance=item)
+    if form.is_valid():
+        form.save()
+        return redirect('games:item_list')
+    return render(request, 'box/manager/items/item_form.html', {'form': form})
+
+
+@staff_member_required
+def item_delete_view(request, pk):
+    item = get_object_or_404(Item, pk=pk)
+    if request.method == 'POST':
+        item.delete()
+        return redirect('games:item_list')
+    return render(request, 'box/manager/items/item_confirm_delete.html', {'item': item})

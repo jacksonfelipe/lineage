@@ -7,7 +7,7 @@
 
     <!-- Estatísticas -->
     <div class="row g-4">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card shadow-sm text-center">
                 <div class="card-body">
                     <h5 class="card-title">{% trans "Tipos de Caixas" %}</h5>
@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card shadow-sm text-center">
                 <div class="card-body">
                     <h5 class="card-title">{% trans "Caixas Criadas" %}</h5>
@@ -30,11 +30,23 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Itens Cadastrados" %}</h5>
+                    <p class="display-6 fw-bold text-danger">{{ item_count }}</p>
+                    <a href="{% url 'games:item_list' %}" class="btn btn-outline-danger w-100 mt-2">
+                        {% trans "Ver Itens" %}
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Ações rápidas -->
     <div class="row g-4 mt-4">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card shadow-sm h-100 text-center">
                 <div class="card-body">
                     <h5 class="card-title">{% trans "Criar Tipo de Caixa" %}</h5>
@@ -46,7 +58,7 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card shadow-sm h-100 text-center">
                 <div class="card-body">
                     <h5 class="card-title">{% trans "Criar Caixa" %}</h5>
@@ -56,8 +68,19 @@
                     </a>
                 </div>
             </div>
-        </div>        
-    </div>
+        </div>
 
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 text-center">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Cadastrar Item" %}</h5>
+                    <p>{% trans "Cadastre novos itens disponíveis para as caixas." %}</p>
+                    <a href="{% url 'games:item_create' %}" class="btn btn-warning w-100">
+                        {% trans "Novo Item" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

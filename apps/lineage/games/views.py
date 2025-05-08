@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from .models import *
 from apps.main.home.decorator import conditional_otp_required
+from django.shortcuts import redirect
+from django.contrib import messages
 from django.http import JsonResponse
 import random
 from decimal import Decimal
 from apps.lineage.wallet.models import Wallet
 from apps.lineage.wallet.signals import aplicar_transacao
 from .services.box_opening import open_box
+from .services.box_populate import populate_box_with_items
 
 
 @conditional_otp_required
@@ -115,17 +118,49 @@ def comprar_fichas(request):
 
 
 @conditional_otp_required
+def box_dashboard_view(request):
+    box_types = BoxType.objects.all()
+
+    return render(request, 'box/dashboard.html', {'box_types': box_types})
+
+
+@conditional_otp_required
+def box_opening_home(request):
+    boxes = Box.objects.filter(user=request.user).order_by('-id')
+    return render(request, 'box/opening_home.html', {'boxes': boxes})
+
+
+@conditional_otp_required
 def open_box_view(request, box_id):
+    try:
+        box = Box.objects.get(id=box_id)
+    except Box.DoesNotExist:
+        messages.warning(request, "Esta caixa não existe. Você pode comprá-la abaixo.")
+        return redirect('games:box_user_dashboard')  # Dashboard com todas as BoxType
+
+    if box.user != request.user:
+        messages.warning(request, "Essa caixa não pertence a você. Compre uma nova do mesmo tipo.")
+        return redirect('games:box_user_dashboard')
+
     item, error = open_box(request.user, box_id)
 
     if error:
-        return render(request, 'box/error.html', {'error': error})
+        messages.warning(request, error)
+        return redirect('games:box_user_dashboard')
 
     return render(request, 'box/result.html', {'item': item})
 
 
 @conditional_otp_required
-def box_dashboard_view(request):
-    box_types = BoxType.objects.all()
+def buy_and_open_box_view(request, box_type_id):
+    try:
+        box_type = BoxType.objects.get(id=box_type_id)
+    except BoxType.DoesNotExist:
+        messages.error(request, "Tipo de caixa não encontrado.")
+        return redirect('games:box_user_dashboard')
 
-    return render(request, 'box/dashboard.html', {'box_types': box_types})
+    # Aqui você pode verificar saldo, etc., antes de permitir a compra
+
+    box = Box.objects.create(user=request.user, box_type=box_type)
+    populate_box_with_items(box)
+    return redirect('games:box_user_open_box', box_id=box.id)

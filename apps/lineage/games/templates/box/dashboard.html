@@ -1,46 +1,40 @@
 {% extends "layouts/base.html" %}
-{% load static %}
-
-{% block extrastyle %}
-<link rel="stylesheet" href="{% static 'roulette/style.css' %}">
-{% endblock extrastyle %}
+{% load i18n %}
 
 {% block content %}
-<div class="box-dashboard-bg py-5">
-    <div class="container text-center">
-        <h2 class="text-success fw-bold mb-4">🎉 Escolha uma Caixa para Abrir</h2>
+<div class="container mt-4">
+    <h2>{% trans "Tipos de Caixa Disponíveis" %}</h2>
 
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            {% for box_type in box_types %}
-                <div class="col">
-                    <div class="card border-success shadow-lg rounded-4">
-                        <img src="{% static 'images/box_default_image.jpg' %}" class="card-img-top" alt="{{ box_type.name }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ box_type.name }}</h5>
-                            <p class="card-text">
-                                <strong>Preço:</strong> R$ {{ box_type.price }}<br>
-                                <strong>Probabilidades:</strong><br>
-                                <ul>
-                                    <li><strong>Comum:</strong> {{ box_type.chance_common }}%</li>
-                                    <li><strong>Raro:</strong> {{ box_type.chance_rare }}%</li>
-                                    <li><strong>Épico:</strong> {{ box_type.chance_epic }}%</li>
-                                    <li><strong>Lendário:</strong> {{ box_type.chance_legendary }}%</li>
-                                </ul>
-                            </p>
-                            <a href="{% url 'open_box' box_type.id %}" class="btn btn-success rounded-pill px-4 py-2">
-                                <i class="bi bi-box-arrow-up-right me-2"></i>Abrir Caixa
-                            </a>
-                        </div>
-                    </div>
+    <!-- Aqui você pode exibir o saldo do usuário, se necessário -->
+    <!-- Exemplo:
+    <p>{% trans "Seu Saldo:" %} R$ {{ user_balance }}</p>
+    -->
+
+    <div class="row">
+        {% for box_type in box_types %}
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 text-center">
+                <div class="card-body">
+                    <h5 class="card-title">{{ box_type.name }}</h5>
+                    <p class="card-text">
+                        {% trans "Preço:" %} R$ {{ box_type.price }}<br>
+                        {% trans "Quantidade de Boosters:" %} {{ box_type.boosters_amount }}<br>
+                        {% trans "Chance Comum:" %} {{ box_type.chance_common }}%<br>
+                        {% trans "Chance Rara:" %} {{ box_type.chance_rare }}%<br>
+                        {% trans "Chance Épica:" %} {{ box_type.chance_epic }}%<br>
+                        {% trans "Chance Lendária:" %} {{ box_type.chance_legendary }}%
+                    </p>
+
+                    <!-- Botão para o usuário comprar e abrir a caixa -->
+                    <a href="{% url 'games:box_buy_and_open' box_type.id %}" class="btn btn-primary">
+                        {% trans "Comprar e Abrir Caixa" %}
+                    </a>
                 </div>
-            {% endfor %}
+            </div>
         </div>
-
-        <div class="mt-4">
-            <a href="{% url 'dashboard' %}" class="btn btn-secondary rounded-pill px-4 py-2">
-                <i class="bi bi-house-door me-2"></i>Voltar ao Início
-            </a>
-        </div>
+        {% empty %}
+        <p>{% trans "Nenhum tipo de caixa disponível." %}</p>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}
