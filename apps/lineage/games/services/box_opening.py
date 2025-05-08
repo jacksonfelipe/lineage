@@ -1,5 +1,5 @@
 import random
-from apps.lineage.games.models import Box, BoxItem, BagItem, Bag
+from apps.lineage.games.models import *
 
 
 def open_box(user, box_id):
@@ -25,9 +25,9 @@ def open_box(user, box_id):
     bag_item, created = BagItem.objects.get_or_create(
         bag=bag,
         item_id=selected_item.item_id,
-        enchant=selected_item.enchant,
+        enchant=selected_item.item.enchant,  # Acesse o enchant do Item, não de BoxItem
         defaults={
-            'item_name': selected_item.name,
+            'item_name': selected_item.item.name,  # Acesse o nome do Item corretamente
             'quantity': 1,
         }
     )
@@ -36,4 +36,4 @@ def open_box(user, box_id):
         bag_item.quantity += 1
         bag_item.save()
 
-    return selected_item, None
+    return selected_item.item, None
