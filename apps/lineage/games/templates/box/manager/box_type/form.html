@@ -1,0 +1,16 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{% if box_type %}{% trans "Editar Tipo de Caixa" %}{% else %}{% trans "Criar Novo Tipo de Caixa" %}{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success mt-3">
+            {% if box_type %}{% trans "Salvar Alterações" %}{% else %}{% trans "Criar Tipo de Caixa" %}{% endif %}
+        </button>
+    </form>
+    <a href="{% url 'games:box_type_list' %}" class="btn btn-secondary mt-3">{% trans "Cancelar" %}</a>
+</div>
+{% endblock %}

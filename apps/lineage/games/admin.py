@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Prize, SpinHistory, BagItem, Bag
+from .models import *
 from core.admin import BaseModelAdmin
 from django.utils.html import format_html
 
@@ -54,3 +54,38 @@ class BagItemAdmin(BaseModelAdmin):
     list_filter = ('enchant', 'added_at')
     readonly_fields = ('added_at',)
     ordering = ('-added_at',)
+
+
+@admin.register(Item)
+class ItemAdmin(BaseModelAdmin):
+    list_display = ('name', 'item_id', 'enchant', 'rarity', 'description')
+    search_fields = ('name', 'item_id')
+    list_filter = ('rarity', 'enchant')
+    ordering = ('name',)
+
+
+# Admin para BoxType
+@admin.register(BoxType)
+class BoxTypeAdmin(BaseModelAdmin):
+    list_display = ('name', 'price', 'boosters_amount', 'chance_common', 'chance_rare', 'chance_epic', 'chance_legendary')
+    search_fields = ('name',)
+    list_filter = ('price', 'boosters_amount')
+    ordering = ('name',)
+
+
+# Admin para Box
+@admin.register(Box)
+class BoxAdmin(BaseModelAdmin):
+    list_display = ('user', 'box_type', 'opened', 'created_at')
+    search_fields = ('user__username', 'box_type__name')
+    list_filter = ('opened', 'created_at')
+    ordering = ('-created_at',)
+
+
+# Admin para BoxItem
+@admin.register(BoxItem)
+class BoxItemAdmin(BaseModelAdmin):
+    list_display = ('box', 'item', 'opened', 'probability')
+    search_fields = ('box__user__username', 'item__name')
+    list_filter = ('opened',)
+    ordering = ('box', 'item')

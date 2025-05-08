@@ -115,6 +115,12 @@
                 <span class="sidebar-text">{% trans "Roleta" %}</span>
               </a>
             </li>
+
+            <li class="nav-item {% if 'box' in segment %}active{% endif %}">
+              <a class="nav-link" href="{% url 'games:box_user_dashboard' %}">
+                <span class="sidebar-text">{% trans "Caixas" %}</span>
+              </a>
+            </li>
       
           </ul>
         </div>

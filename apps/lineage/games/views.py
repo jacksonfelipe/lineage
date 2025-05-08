@@ -1,12 +1,12 @@
-from django.shortcuts import render, redirect
-from .models import Prize, SpinHistory, Bag, BagItem
+from django.shortcuts import render
+from .models import *
 from apps.main.home.decorator import conditional_otp_required
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 import random
 from decimal import Decimal
 from apps.lineage.wallet.models import Wallet
 from apps.lineage.wallet.signals import aplicar_transacao
+from .services.box_opening import open_box
 
 
 @conditional_otp_required
@@ -112,3 +112,20 @@ def comprar_fichas(request):
             return JsonResponse({'success': True, 'fichas': request.user.fichas})
         except ValueError as e:
             return JsonResponse({'error': str(e)}, status=400)
+
+
+@conditional_otp_required
+def open_box_view(request, box_id):
+    item, error = open_box(request.user, box_id)
+
+    if error:
+        return render(request, 'box/error.html', {'error': error})
+
+    return render(request, 'box/result.html', {'item': item})
+
+
+@conditional_otp_required
+def box_dashboard_view(request):
+    box_types = BoxType.objects.all()
+
+    return render(request, 'box/dashboard.html', {'box_types': box_types})

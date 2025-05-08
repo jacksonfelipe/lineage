@@ -4,3 +4,10 @@ RARITY_CHOICES = [
     ('RARO', 'Raro'),
     ('LENDARIO', 'Lendário'),
 ]
+
+RARITY_CHOICES = (
+    ('common', 'Comum'),
+    ('rare', 'Raro'),
+    ('epic', 'Épico'),
+    ('legendary', 'Lendário'),
+)

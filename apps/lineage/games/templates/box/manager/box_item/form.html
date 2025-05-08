@@ -1,0 +1,16 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{% if box_item %}{% trans "Editar Item de Caixa" %}{% else %}{% trans "Criar Novo Item de Caixa" %}{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success mt-3">
+            {% if box_item %}{% trans "Salvar Alterações" %}{% else %}{% trans "Criar Item de Caixa" %}{% endif %}
+        </button>
+    </form>
+    <a href="{% url 'games:box_item_list' box_type.id %}" class="btn btn-secondary mt-3">{% trans "Cancelar" %}</a>
+</div>
+{% endblock %}

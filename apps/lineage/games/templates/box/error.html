@@ -1,0 +1,24 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'roulette/style.css' %}">
+{% endblock extrastyle %}
+
+{% block content %}
+<div class="roulette-bg py-5">
+  <div class="container text-center">
+    <h2 class="text-danger fw-bold mb-4">⚠️ Ocorreu um erro</h2>
+
+    <div class="alert alert-danger shadow-lg p-4 rounded-4 border border-danger d-inline-block">
+      <p class="mb-0">{{ error }}</p>
+    </div>
+
+    <div class="mt-4">
+      <a href="{% url 'games:box_opening_home' %}" class="btn btn-secondary rounded-pill px-4 py-2">
+        <i class="bi bi-arrow-left-circle me-2"></i>Voltar
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
