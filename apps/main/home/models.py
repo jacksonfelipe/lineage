@@ -34,6 +34,9 @@ class User(BaseModel, AbstractUser):
     is_email_verified = models.BooleanField(default=False)
     is_2fa_enabled = models.BooleanField(default=False)
 
+    # game
+    fichas = models.PositiveIntegerField(default=0)
+
     def save(self, *args, **kwargs):
         # Remove a máscara do CPF antes de salvar no banco
         if self.cpf:

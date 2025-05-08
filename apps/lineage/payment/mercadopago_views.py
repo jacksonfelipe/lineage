@@ -148,7 +148,7 @@ def pagamento_erro(request):
 @require_POST
 def notificacao_mercado_pago(request):
     if not validar_assinatura_hmac(request):
-        return HttpResponse("Assinatura inválida", status=403)
+        return HttpResponse("Assinatura inválida", status=400)
 
     try:
         body = json.loads(request.body) if request.body else {}

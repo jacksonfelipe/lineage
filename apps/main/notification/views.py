@@ -99,7 +99,7 @@ def notification_detail(request, pk):
 
     # Proteção: usuário comum tentando acessar notificação staff
     if notification.notification_type == 'staff' and not (request.user.is_staff or request.user.is_superuser):
-        return JsonResponse({'error': 'Você não tem permissão para ver esta notificação.'}, status=403)
+        return JsonResponse({'error': 'Você não tem permissão para ver esta notificação.'}, status=400)
 
     data = {
         'type': notification.notification_type,
@@ -127,7 +127,7 @@ def notification_detail(request, pk):
 
     else:
         # Caso o usuário tente acessar notificação privada de outro usuário
-        return JsonResponse({'error': 'Você não tem permissão para ver esta notificação.'}, status=403)
+        return JsonResponse({'error': 'Você não tem permissão para ver esta notificação.'}, status=400)
 
     return JsonResponse(data)
 

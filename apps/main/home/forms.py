@@ -139,5 +139,5 @@ class CustomUserCreationForm(UserCreationForm):
         fields = (
             'username', 'email', 'password1', 'password2',
             'avatar', 'bio', 'cpf', 'gender',
-            'is_email_verified', 'is_2fa_enabled'
+            'is_email_verified', 'is_2fa_enabled', 'fichas',
         )

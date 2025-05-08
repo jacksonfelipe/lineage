@@ -6,10 +6,22 @@ from django.utils.html import format_html
 
 @admin.register(Prize)
 class PrizeAdmin(BaseModelAdmin):
-    list_display = ('name', 'image_preview', 'weight', 'created_at', 'updated_at')
-    search_fields = ('name',)
-    list_filter = ('created_at',)
+    # Exibição da lista de prêmios
+    list_display = ('name', 'image_preview', 'weight', 'item_id', 'item_name', 'enchant', 'rarity', 'created_at', 'updated_at')
+    search_fields = ('name', 'item_name')
+    list_filter = ('created_at', 'rarity')  # Filtra por raridade e data
     readonly_fields = ('created_at', 'updated_at')
+    
+    # Campos que podem ser editados no form de detalhes
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'item_id', 'item_name', 'image', 'weight', 'enchant', 'rarity')
+        }),
+        ('Datas', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
 
     def image_preview(self, obj):
         return format_html(

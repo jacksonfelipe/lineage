@@ -9,7 +9,7 @@ class UserAdmin(BaseModelAdmin, DefaultUserAdmin):
     form = CustomUserChangeForm
     add_form = CustomUserCreationForm
     list_display = (
-        'username', 'email', 'display_groups', 'cpf', 'gender',
+        'username', 'email', 'display_groups', 'cpf', 'gender', 'fichas',
         'is_email_verified', 'is_2fa_enabled', 'created_at', 'updated_at'
     )
     readonly_fields = ('created_at', 'created_by', 'updated_at', 'updated_by', 'uuid')

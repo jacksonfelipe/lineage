@@ -275,7 +275,7 @@ def set_user_active(request):
         # Armazena o timestamp da última atividade do usuário
         cache.set(f"user_activity_{user.id}", timezone.now(), timeout=300)  # 300 segundos = 5 minutos
         return JsonResponse({'status': 'success'})
-    return JsonResponse({'status': 'error'}, status=403)
+    return JsonResponse({'status': 'error'}, status=400)
 
 
 @conditional_otp_required
