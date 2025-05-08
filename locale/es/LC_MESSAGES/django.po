@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-23 16:59-0300\n"
+"POT-Creation-Date: 2025-05-08 17:54-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,44 +19,45 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: .\apps\lineage\accountancy\templates\accountancy\dashboard.html:6
-#: .\templates\includes\sidebar.html:360
+#: .\templates\includes\sidebar.html:416
 msgid "Dashboard Contábil"
-msgstr "Tablero de control"
+msgstr "Contabilidad de tablero"
 
 #: .\apps\lineage\accountancy\templates\accountancy\dashboard.html:11
 msgid "Saldo de Usuários"
-msgstr "Saldo de Usuários"
+msgstr "Balance de usuarios"
 
 #: .\apps\lineage\accountancy\templates\accountancy\dashboard.html:12
 #: .\apps\lineage\accountancy\templates\accountancy\dashboard.html:19
 #: .\apps\lineage\accountancy\templates\accountancy\dashboard.html:26
 #: .\apps\lineage\accountancy\templates\accountancy\dashboard.html:33
 msgid "Ver Relatório"
-msgstr "Ver relatório"
+msgstr "Ver informe"
 
 #: .\apps\lineage\accountancy\templates\accountancy\dashboard.html:18
 msgid "Fluxo de Caixa Diário"
-msgstr "Fluxo de Caixa Diário"
+msgstr "Flujo de efectivo diario"
 
 #: .\apps\lineage\accountancy\templates\accountancy\dashboard.html:25
 msgid "Pedidos e Pagamentos"
-msgstr "Pedidos e pagamentos"
+msgstr "Pedidos e Pagamentos"
 
 #: .\apps\lineage\accountancy\templates\accountancy\dashboard.html:32
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_reconciliacao_wallet.html:7
 msgid "Reconciliação de Carteiras"
-msgstr "Reconciliação de carteiras"
+msgstr "Reconciliación de las billeteras"
 
 #: .\apps\lineage\accountancy\templates\accountancy\dashboard.html:39
 msgid "Voltar para o Admin"
-msgstr "Voltar para o administrador"
+msgstr "Volver al administrador"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_fluxo_caixa.html:7
 msgid "Relatório de Fluxo de Caixa"
-msgstr "Relatório de Fluxo de Caixa"
+msgstr "Informe de flujo de caja"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_fluxo_caixa.html:12
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_pedidos_pagamentos.html:19
+#: .\apps\lineage\server\templates\apoiadores\painel.html:81
 #: .\apps\main\news\templates\pages\news_index.html:30
 msgid "Data"
 msgstr "Datos"
@@ -69,49 +70,52 @@ msgstr "Entradas"
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_fluxo_caixa.html:14
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_reconciliacao_wallet.html:15
 msgid "Saídas"
-msgstr "Saídas"
+msgstr "Salidas"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_fluxo_caixa.html:15
 msgid "Saldo do Dia"
-msgstr "Saldo hacer diámetro"
+msgstr "Equilibrio del día"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_fluxo_caixa.html:37
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_pedidos_pagamentos.html:55
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_reconciliacao_wallet.html:41
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_saldo.html:37
+#: .\apps\lineage\games\templates\box\result.html:86
 msgid "Voltar para o Dashboard"
-msgstr "Voltar Para O Panel"
+msgstr "Voltar para o Dashboard"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_pedidos_pagamentos.html:7
 msgid "Relatório de Pedidos e Pagamentos"
-msgstr "Relatório de Pedidos e Pagamentos"
+msgstr "Informe de pedidos y pagos"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_pedidos_pagamentos.html:12
 msgid "ID Pedido"
-msgstr "ID pedido"
+msgstr "ID Pedido"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_pedidos_pagamentos.html:13
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_reconciliacao_wallet.html:12
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_saldo.html:12
+#: .\apps\lineage\games\templates\box\manager\box\list.html:13
+#: .\apps\lineage\server\templates\apoiadores\painel.html:78
 msgid "Usuário"
-msgstr "Usuário"
+msgstr "Usuario"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_pedidos_pagamentos.html:14
 msgid "Valor Pago"
-msgstr "Pago de valor"
+msgstr "Valor Pago"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_pedidos_pagamentos.html:15
-#: .\templates\includes\navigation.html:109
+#: .\templates\includes\navigation.html:116
 msgid "Moedas"
-msgstr "Moedas"
+msgstr "Monedas"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_pedidos_pagamentos.html:16
 msgid "Status Pedido"
-msgstr "Estado Pedido"
+msgstr "Status Pedido"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_pedidos_pagamentos.html:17
 msgid "Status Pagamento"
-msgstr "Estatus de pagamento"
+msgstr "Estado de pago"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_pedidos_pagamentos.html:18
 msgid "Método"
@@ -119,7 +123,7 @@ msgstr "Método"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_pedidos_pagamentos.html:31
 msgid "CONFIRMADO"
-msgstr "Confirmado"
+msgstr "CONFIRMADO"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_pedidos_pagamentos.html:33
 msgid "PENDENTE"
@@ -136,307 +140,733 @@ msgstr "pendiente"
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_reconciliacao_wallet.html:13
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_saldo.html:13
 msgid "Saldo na Wallet"
-msgstr "Billetera saldo na"
+msgstr "Saldo na Wallet"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_reconciliacao_wallet.html:16
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_saldo.html:14
 msgid "Saldo Calculado"
-msgstr "Calculado de saldo"
+msgstr "Saldo Calculado"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_reconciliacao_wallet.html:17
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_saldo.html:15
 msgid "Diferença"
-msgstr "Diferença"
+msgstr "Diferencia"
 
 #: .\apps\lineage\accountancy\templates\accountancy\relatorio_saldo.html:7
 msgid "Relatório de Saldo dos Usuários"
-msgstr "Relatório de Saldo dos Usuários"
+msgstr "Informe de balance de usuario"
 
-#: .\apps\lineage\auction\templates\auction\criar_leilao.html:6
-#: .\apps\lineage\auction\templates\auction\criar_leilao.html:49
-#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:9
+#: .\apps\lineage\auction\templates\auction\criar_leilao.html:7
+#: .\apps\lineage\auction\templates\auction\criar_leilao.html:50
+#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:66
 msgid "Criar Leilão"
-msgstr "Criar Solicitação"
+msgstr "Subasta"
 
-#: .\apps\lineage\auction\templates\auction\criar_leilao.html:12
-#: .\apps\lineage\inventory\templates\pages\retirar_item.html:18
-#: .\apps\lineage\server\templates\tops\top_adena.html:16
-#: .\apps\lineage\server\templates\tops\top_level.html:16
-#: .\apps\lineage\server\templates\tops\top_online.html:15
-#: .\apps\lineage\server\templates\tops\top_pk.html:16
-#: .\apps\lineage\server\templates\tops\top_pvp.html:16
+#: .\apps\lineage\auction\templates\auction\criar_leilao.html:13
+#: .\apps\lineage\inventory\templates\pages\retirar_item.html:19
+#: .\apps\lineage\server\templates\apoiadores\painel.html:79
+#: .\apps\lineage\server\templates\tops\top_adena.html:39
+#: .\apps\lineage\server\templates\tops\top_level.html:39
+#: .\apps\lineage\server\templates\tops\top_online.html:38
+#: .\apps\lineage\server\templates\tops\top_pk.html:39
+#: .\apps\lineage\server\templates\tops\top_pvp.html:39
 msgid "Personagem"
 msgstr "Personaje"
 
-#: .\apps\lineage\auction\templates\auction\criar_leilao.html:14
+#: .\apps\lineage\auction\templates\auction\criar_leilao.html:15
+#: .\apps\lineage\games\templates\pages\bag_dashboard.html:26
+#: .\apps\lineage\games\templates\pages\bag_dashboard.html:62
 msgid "Selecione o personagem"
-msgstr "Seleción o personaje"
+msgstr "Seleccione el personaje"
 
-#: .\apps\lineage\auction\templates\auction\criar_leilao.html:22
-#: .\apps\lineage\inventory\templates\pages\inventario_global.html:23
-#: .\apps\lineage\inventory\templates\pages\retirar_item.html:39
-#: .\apps\lineage\inventory\templates\pages\trocar_item.html:26
-#: .\apps\lineage\server\templates\status\boss_jewel_locations.html:16
+#: .\apps\lineage\auction\templates\auction\criar_leilao.html:23
+#: .\apps\lineage\games\templates\box\manager\items\item_form.html:12
+#: .\apps\lineage\inventory\templates\pages\inventario_global.html:24
+#: .\apps\lineage\inventory\templates\pages\retirar_item.html:40
+#: .\apps\lineage\inventory\templates\pages\trocar_item.html:27
+#: .\apps\lineage\server\templates\status\boss_jewel_locations.html:38
 msgid "Item"
 msgstr "Artículo"
 
-#: .\apps\lineage\auction\templates\auction\criar_leilao.html:24
+#: .\apps\lineage\auction\templates\auction\criar_leilao.html:25
 msgid "Selecione o item"
-msgstr "Seleción o personaje"
+msgstr "Seleccione el artículo"
 
-#: .\apps\lineage\auction\templates\auction\criar_leilao.html:34
-#: .\apps\lineage\inventory\templates\pages\inserir_item_direct.html:31
-#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:51
-#: .\apps\lineage\inventory\templates\pages\retirar_item.html:40
-#: .\apps\lineage\inventory\templates\pages\retirar_item.html:104
-#: .\apps\lineage\inventory\templates\pages\trocar_item.html:38
-#: .\apps\lineage\shop\templates\shop\home.html:23
+#: .\apps\lineage\auction\templates\auction\criar_leilao.html:35
+#: .\apps\lineage\games\templates\pages\bag_dashboard.html:49
+#: .\apps\lineage\inventory\templates\pages\inserir_item_direct.html:32
+#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:53
+#: .\apps\lineage\inventory\templates\pages\retirar_item.html:42
+#: .\apps\lineage\inventory\templates\pages\retirar_item.html:107
+#: .\apps\lineage\inventory\templates\pages\trocar_item.html:39
+#: .\apps\lineage\shop\templates\shop\home.html:121
 msgid "Quantidade"
-msgstr "Comunidad"
+msgstr "Cantidad"
 
-#: .\apps\lineage\auction\templates\auction\criar_leilao.html:39
+#: .\apps\lineage\auction\templates\auction\criar_leilao.html:40
 msgid "Lance Inicial (R$)"
 msgstr "Lance Inicial (R$)"
 
-#: .\apps\lineage\auction\templates\auction\criar_leilao.html:44
+#: .\apps\lineage\auction\templates\auction\criar_leilao.html:45
 msgid "Duração (horas)"
 msgstr "Duración (horas)"
 
-#: .\apps\lineage\auction\templates\auction\fazer_lance.html:7
-#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:51
+#: .\apps\lineage\auction\templates\auction\fazer_lance.html:8
+#: .\apps\lineage\auction\templates\auction\partials\_leilao_card.html:43
 msgid "Dar Lance"
 msgstr "Dar Lance"
 
-#: .\apps\lineage\auction\templates\auction\fazer_lance.html:9
-#: .\apps\lineage\inventory\templates\pages\inventario_global.html:14
+#: .\apps\lineage\auction\templates\auction\fazer_lance.html:10
+#: .\apps\lineage\inventory\templates\pages\inventario_global.html:15
 msgid "Voltar"
 msgstr "Volver"
 
 #: .\apps\lineage\auction\templates\auction\fazer_lance.html:29
 msgid "Lance atual:"
-msgstr "Saldo Atual:"
+msgstr "Oferta actual:"
 
 #: .\apps\lineage\auction\templates\auction\fazer_lance.html:34
 msgid "Tempo restante:"
 msgstr "Tempo restante:"
 
-#: .\apps\lineage\auction\templates\auction\fazer_lance.html:41
+#: .\apps\lineage\auction\templates\auction\fazer_lance.html:42
+#: .\apps\lineage\shop\templates\shop\cart.html:105
+#: .\apps\lineage\wallet\templates\wallet\transfer_to_server.html:32
+msgid "Selecione o Personagem"
+msgstr "Seleccione el personaje"
+
+#: .\apps\lineage\auction\templates\auction\fazer_lance.html:44
+#: .\apps\lineage\shop\templates\shop\cart.html:107
+#: .\apps\lineage\wallet\templates\wallet\transfer_to_server.html:34
+msgid "Escolha um personagem"
+msgstr "Elige un personaje"
+
+#: .\apps\lineage\auction\templates\auction\fazer_lance.html:52
 msgid "Seu lance"
-msgstr "Sin alianza"
+msgstr "Tu oferta"
 
-#: .\apps\lineage\auction\templates\auction\fazer_lance.html:45
+#: .\apps\lineage\auction\templates\auction\fazer_lance.html:57
 msgid "Confirmar Lance"
-msgstr "Confirmar Senha"
+msgstr "Confirmar Lance"
 
-#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:7
+#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:64
+#: .\templates\includes\navigation.html:154
+msgid "Leilões"
+msgstr "Subastas"
+
+#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:70
 msgid "Leilões Ativos"
 msgstr "Subastas activas"
 
-#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:32
-msgid "Vendedor:"
-msgstr "Vendedor:"
-
-#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:36
-msgid "Lance Atual:"
-msgstr "Saldo Atual"
-
-#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:41
-msgid "Restante:"
-msgstr "Restante:"
-
-#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:55
-msgid "Encerrar"
-msgstr "Encerrar"
-
-#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:65
+#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:70
 msgid "Nenhum leilão ativo no momento."
 msgstr "No hay subasta activa en este momento."
 
-#: .\apps\lineage\inventory\templates\pages\inserir_item_direct.html:10
+#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:71
+msgid "Leilões Pendentes de Entrega"
+msgstr "Subastas de entrega pendientes"
+
+#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:71
+msgid "Nenhum leilão pendente de entrega."
+msgstr "No hay subasta pendiente de entrega."
+
+#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:74
+msgid "Leilões Finalizados"
+msgstr "Subastas terminadas"
+
+#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:74
+msgid "Nenhum leilão finalizado."
+msgstr "No hay subasta terminada."
+
+#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:75
+msgid "Leilões Cancelados"
+msgstr "Subastas canceladas"
+
+#: .\apps\lineage\auction\templates\auction\listar_leiloes.html:75
+msgid "Nenhum leilão cancelado."
+msgstr "No hay subasta cancelada."
+
+#: .\apps\lineage\auction\templates\auction\partials\_leilao_card.html:19
+msgid "Vendedor:"
+msgstr "Vendedor:"
+
+#: .\apps\lineage\auction\templates\auction\partials\_leilao_card.html:23
+msgid "Lance Atual:"
+msgstr "Oferta actual:"
+
+#: .\apps\lineage\auction\templates\auction\partials\_leilao_card.html:28
+msgid "Restante:"
+msgstr "Restante:"
+
+#: .\apps\lineage\auction\templates\auction\partials\_leilao_card.html:49
+#: .\apps\lineage\games\templates\box\manager\box\create.html:18
+#: .\apps\lineage\games\templates\box\manager\box\delete.html:14
+#: .\apps\lineage\games\templates\box\manager\box\edit.html:18
+#: .\apps\lineage\games\templates\box\manager\box_type\delete_confirm.html:14
+#: .\apps\lineage\games\templates\box\manager\box_type\form.html:14
+#: .\apps\lineage\games\templates\box\manager\items\item_confirm_delete.html:11
+#: .\apps\lineage\games\templates\box\manager\items\item_form.html:18
+#: .\apps\lineage\payment\templates\payment\pedidos_pendentes.html:25
+#: .\apps\lineage\server\templates\apoiadores\editar_imagem.html:22
+#: .\apps\main\home\templates\pages\address_form.html:59
+#: .\apps\main\solicitation\templates\pages\solicitation_create.html:27
+#: .\templates\admin\themes\delete_confirmation.html:39
+msgid "Cancelar"
+msgstr "Cancelar"
+
+#: .\apps\lineage\auction\templates\auction\partials\_leilao_card.html:52
+msgid "Finalizar"
+msgstr "Finalizar"
+
+#: .\apps\lineage\auction\templates\auction\partials\_leilao_card.html:61
+msgid "Finalizar Entrega"
+msgstr "Finalizar Entrega"
+
+#: .\apps\lineage\games\templates\box\dashboard.html:11
+msgid "Tipos de Caixa Disponíveis"
+msgstr "Tipos de efectivo disponibles"
+
+#: .\apps\lineage\games\templates\box\dashboard.html:23
+msgid "Seu Saldo:"
+msgstr "Tu equilibrio:"
+
+#: .\apps\lineage\games\templates\box\dashboard.html:36
+#: .\apps\lineage\games\templates\box\manager\box_type\list.html:13
+msgid "Preço"
+msgstr "Precio"
+
+#: .\apps\lineage\games\templates\box\dashboard.html:37
+msgid "Boosters"
+msgstr "Refuerzos"
+
+#: .\apps\lineage\games\templates\box\dashboard.html:38
+msgid "Comum"
+msgstr "Común"
+
+#: .\apps\lineage\games\templates\box\dashboard.html:39
+msgid "Rara"
+msgstr "Rara"
+
+#: .\apps\lineage\games\templates\box\dashboard.html:40
+msgid "Épica"
+msgstr "Épica"
+
+#: .\apps\lineage\games\templates\box\dashboard.html:41
+msgid "Lendária"
+msgstr "Legendario"
+
+#: .\apps\lineage\games\templates\box\dashboard.html:46
+msgid "Comprar e Abrir Caixa"
+msgstr "Comprar y abrir cajero"
+
+#: .\apps\lineage\games\templates\box\dashboard.html:55
+msgid "Nenhum tipo de caixa disponível no momento."
+msgstr "No hay caja disponible en este momento."
+
+#: .\apps\lineage\games\templates\box\dashboard.html:64
+msgid "Comprar Fichas"
+msgstr "Comprar Fichas"
+
+#: .\apps\lineage\games\templates\box\dashboard.html:65
+msgid ""
+"Escolha a quantidade de fichas que deseja comprar. Valor: R$0,10 por ficha."
+msgstr ""
+"Elija la cantidad de chips que desea comprar. Valor: R $ 0.10 por archivo."
+
+#: .\apps\lineage\games\templates\box\dashboard.html:67
+msgid "Confirmar Compra"
+msgstr "Confirmar Compra"
+
+#: .\apps\lineage\games\templates\box\manager\box\create.html:8
+#: .\apps\lineage\games\templates\box\manager\box\edit.html:8
+msgid "Editar Caixa"
+msgstr "Editar Caixa"
+
+#: .\apps\lineage\games\templates\box\manager\box\create.html:10
+#: .\apps\lineage\games\templates\box\manager\box\edit.html:10
+msgid "Criar Nova Caixa"
+msgstr "Crear caja nueva"
+
+#: .\apps\lineage\games\templates\box\manager\box\create.html:17
+#: .\apps\lineage\games\templates\box\manager\box\edit.html:17
+#: .\apps\lineage\games\templates\box\manager\items\item_form.html:17
+#: .\apps\lineage\server\templates\apoiadores\editar_imagem.html:21
+#: .\apps\main\home\templates\pages\address_form.html:58
+#: .\apps\main\home\templates\pages\edit_profile.html:43
+msgid "Salvar"
+msgstr "Salvar"
+
+#: .\apps\lineage\games\templates\box\manager\box\delete.html:6
+#: .\apps\lineage\games\templates\box\manager\box_type\delete_confirm.html:6
+msgid "Confirmar Exclusão"
+msgstr "Confirmar la exclusión"
+
+#: .\apps\lineage\games\templates\box\manager\box\delete.html:8
+msgid "Tem certeza que deseja excluir a caixa "
+msgstr "Estás seguro de que quieres eliminar la caja"
+
+#: .\apps\lineage\games\templates\box\manager\box\delete.html:13
+#: .\apps\lineage\games\templates\box\manager\box_type\delete_confirm.html:13
+msgid "Confirmar"
+msgstr "Confirmar"
+
+#: .\apps\lineage\games\templates\box\manager\box\list.html:6
+#: .\apps\lineage\games\templates\box\manager\dashboard.html:25
+msgid "Caixas Criadas"
+msgstr "Cajas creadas"
+
+#: .\apps\lineage\games\templates\box\manager\box\list.html:7
+#: .\apps\lineage\games\templates\box\manager\dashboard.html:67
+msgid "Nova Caixa"
+msgstr "Caja nueva"
+
+#: .\apps\lineage\games\templates\box\manager\box\list.html:12
+#: .\apps\lineage\games\templates\box\manager\items\item_list.html:14
+#: .\apps\lineage\games\templates\box\opening_home.html:13
+#: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:19
+#: .\apps\main\solicitation\templates\pages\solicitation_list.html:35
+msgid "ID"
+msgstr "IDENTIFICACIÓN"
+
+#: .\apps\lineage\games\templates\box\manager\box\list.html:14
+#: .\apps\lineage\games\templates\box\opening_home.html:14
+#: .\apps\main\notification\templates\pages\notifications.html:44
+#: .\apps\main\notification\templates\pages\notifications.html:84
+msgid "Tipo"
+msgstr "Tipo"
+
+#: .\apps\lineage\games\templates\box\manager\box\list.html:15
+#: .\apps\lineage\games\templates\box\opening_home.html:15
+msgid "Aberta?"
+msgstr "¿Abierto?"
+
+#: .\apps\lineage\games\templates\box\manager\box\list.html:16
+#: .\apps\lineage\games\templates\box\manager\box_type\list.html:14
+#: .\apps\lineage\games\templates\box\manager\items\item_list.html:17
+#: .\apps\main\solicitation\templates\pages\solicitation_list.html:39
+msgid "Ações"
+msgstr "Comportamiento"
+
+#: .\apps\lineage\games\templates\box\manager\box\list.html:27
+#: .\apps\lineage\games\templates\box\manager\box_type\list.html:23
+#: .\apps\lineage\games\templates\box\manager\items\item_form.html:8
+#: .\apps\lineage\games\templates\box\manager\items\item_list.html:29
+#: .\apps\lineage\shop\templates\shop\manager\packages.html:29
+msgid "Editar"
+msgstr "Editar"
+
+#: .\apps\lineage\games\templates\box\manager\box\list.html:28
+#: .\apps\lineage\games\templates\box\manager\items\item_confirm_delete.html:10
+#: .\apps\lineage\games\templates\box\manager\items\item_list.html:30
+#: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:58
+msgid "Excluir"
+msgstr "Excluir"
+
+#: .\apps\lineage\games\templates\box\manager\box\list.html:32
+msgid "Nenhuma caixa encontrada."
+msgstr "No se encontró caja."
+
+#: .\apps\lineage\games\templates\box\manager\box\list.html:38
+#: .\apps\lineage\games\templates\box\manager\box_type\list.html:36
+#: .\apps\lineage\games\templates\box\manager\items\item_list.html:40
+msgid "Voltar ao Dashboard"
+msgstr "Volver al tablero"
+
+#: .\apps\lineage\games\templates\box\manager\box_type\delete_confirm.html:8
+msgid "Tem certeza que deseja excluir o tipo de caixa"
+msgstr "Estás seguro de que quieres eliminar el tipo de cajero"
+
+#: .\apps\lineage\games\templates\box\manager\box_type\form.html:6
+msgid "Editar Tipo de Caixa"
+msgstr "Editar Tipo de Caixa"
+
+#: .\apps\lineage\games\templates\box\manager\box_type\form.html:6
+msgid "Criar Novo Tipo de Caixa"
+msgstr "Crear un nuevo tipo de cajero"
+
+#: .\apps\lineage\games\templates\box\manager\box_type\form.html:11
+#: .\apps\lineage\server\templates\pages\api_config_panel.html:38
+msgid "Salvar Alterações"
+msgstr "Guardar cambios"
+
+#: .\apps\lineage\games\templates\box\manager\box_type\form.html:11
+#: .\apps\lineage\games\templates\box\manager\dashboard.html:52
+msgid "Criar Tipo de Caixa"
+msgstr "Tipo de efectivo"
+
+#: .\apps\lineage\games\templates\box\manager\box_type\list.html:6
+msgid "Tipos de Caixa"
+msgstr "Tipos de efectivo"
+
+#: .\apps\lineage\games\templates\box\manager\box_type\list.html:7
+#: .\apps\lineage\games\templates\box\manager\dashboard.html:55
+msgid "Novo Tipo de Caixa"
+msgstr "Nuevo tipo de cajero"
+
+#: .\apps\lineage\games\templates\box\manager\box_type\list.html:12
+#: .\apps\lineage\games\templates\box\manager\items\item_list.html:13
+#: .\apps\lineage\server\templates\status\grandboss_status.html:38
+#: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:18
+#: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:81
+#: .\apps\main\home\templates\pages\profile.html:55
+msgid "Nome"
+msgstr "Nombre"
+
+#: .\apps\lineage\games\templates\box\manager\box_type\list.html:24
+msgid "Deletar"
+msgstr "Borrar"
+
+#: .\apps\lineage\games\templates\box\manager\box_type\list.html:29
+msgid "Nenhum tipo de caixa encontrado."
+msgstr "No se encontró caja."
+
+#: .\apps\lineage\games\templates\box\manager\dashboard.html:6
+msgid "Painel de Gerenciamento de Caixas"
+msgstr "Panel de gestión de cajas"
+
+#: .\apps\lineage\games\templates\box\manager\dashboard.html:13
+msgid "Tipos de Caixas"
+msgstr "Tipos de Caixas"
+
+#: .\apps\lineage\games\templates\box\manager\dashboard.html:16
+msgid "Ver Tipos de Caixa"
+msgstr "Ver tipos de efectivo"
+
+#: .\apps\lineage\games\templates\box\manager\dashboard.html:28
+msgid "Ver Caixas"
+msgstr "Ver cajas"
+
+#: .\apps\lineage\games\templates\box\manager\dashboard.html:37
+#: .\apps\lineage\games\templates\box\manager\items\item_list.html:6
+#: .\apps\lineage\shop\templates\shop\manager\items.html:21
+msgid "Itens Cadastrados"
+msgstr "Artículos registrados"
+
+#: .\apps\lineage\games\templates\box\manager\dashboard.html:40
+msgid "Ver Itens"
+msgstr "Ver artículos"
+
+#: .\apps\lineage\games\templates\box\manager\dashboard.html:53
+msgid "Adicione um novo tipo de caixa com raridades e preços definidos."
+msgstr "Agregue un nuevo tipo de efectivo con rarezas y precios definidos."
+
+#: .\apps\lineage\games\templates\box\manager\dashboard.html:64
+msgid "Criar Caixa"
+msgstr "Cajero"
+
+#: .\apps\lineage\games\templates\box\manager\dashboard.html:65
+msgid "Associe caixas aos usuários com base nos tipos existentes."
+msgstr "Asociar cajas con usuarios según los tipos existentes."
+
+#: .\apps\lineage\games\templates\box\manager\dashboard.html:76
+#: .\apps\lineage\shop\templates\shop\manager\items.html:16
+msgid "Cadastrar Item"
+msgstr "Registrar un artículo"
+
+#: .\apps\lineage\games\templates\box\manager\dashboard.html:77
+msgid "Cadastre novos itens disponíveis para as caixas."
+msgstr "Registre nuevos artículos disponibles para las cajas."
+
+#: .\apps\lineage\games\templates\box\manager\dashboard.html:79
+#: .\apps\lineage\games\templates\box\manager\items\item_list.html:7
+msgid "Novo Item"
+msgstr "Nuevo artículo"
+
+#: .\apps\lineage\games\templates\box\manager\items\item_confirm_delete.html:6
+msgid "Excluir Item"
+msgstr "Excluir Item"
+
+#: .\apps\lineage\games\templates\box\manager\items\item_confirm_delete.html:7
+#, python-format
+msgid "Tem certeza que deseja excluir <strong>%(item.name)s</strong>?"
+msgstr ""
+"¿Estás seguro de que quieres eliminar <strong>%(item.name)s s </strong>?"
+
+#: .\apps\lineage\games\templates\box\manager\items\item_form.html:10
+msgid "Novo"
+msgstr "Nuevo"
+
+#: .\apps\lineage\games\templates\box\manager\items\item_list.html:12
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:53
+msgid "Imagem"
+msgstr "Imagen"
+
+#: .\apps\lineage\games\templates\box\manager\items\item_list.html:15
+msgid "Enchant"
+msgstr "Encantar"
+
+#: .\apps\lineage\games\templates\box\manager\items\item_list.html:16
+msgid "Raridade"
+msgstr "Rareza"
+
+#: .\apps\lineage\games\templates\box\manager\items\item_list.html:34
+#: .\apps\lineage\inventory\templates\pages\inventario_global.html:44
+msgid "Nenhum item encontrado."
+msgstr "No se encuentra el artículo."
+
+#: .\apps\lineage\games\templates\box\opening_home.html:6
+msgid "Suas Caixas"
+msgstr "Tus cajas"
+
+#: .\apps\lineage\games\templates\box\opening_home.html:7
+msgid "Abaixo estão todas as caixas que você comprou e ainda não abriu."
+msgstr ""
+"A continuación se muestran todas las cajas que compró y aún no ha abierto."
+
+#: .\apps\lineage\games\templates\box\opening_home.html:16
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:20
+#: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:22
+msgid "Ação"
+msgstr "Acción"
+
+#: .\apps\lineage\games\templates\box\opening_home.html:28
+msgid "Abrir"
+msgstr "Abrir"
+
+#: .\apps\lineage\games\templates\box\opening_home.html:31
+msgid "Aberta"
+msgstr "Abierto"
+
+#: .\apps\lineage\games\templates\box\opening_home.html:39
+msgid "Você ainda não possui nenhuma caixa para abrir."
+msgstr "Todavía no tienes caja para abrir."
+
+#: .\apps\lineage\games\templates\box\result.html:72
+msgid "Você ganhou um item!"
+msgstr "¡Ganaste un artículo!"
+
+#: .\apps\lineage\games\templates\box\result.html:80
+msgid "O item foi adicionado à sua"
+msgstr "El artículo fue agregado a su"
+
+#: .\apps\lineage\games\templates\box\result.html:80
+msgid "Bag"
+msgstr "Bolsa"
+
+#: .\apps\lineage\games\templates\box\result.html:80
+msgid "com sucesso!"
+msgstr "¡Exitosamente!"
+
+#: .\apps\lineage\games\templates\pages\bag_dashboard.html:12
+#: .\templates\includes\sidebar.html:98
+msgid "Minha Bag"
+msgstr "Mi bolso"
+
+#: .\apps\lineage\games\templates\pages\bag_dashboard.html:32
+msgid "Mover todos para inventário"
+msgstr "Mover todo para el inventario"
+
+#: .\apps\lineage\games\templates\pages\bag_dashboard.html:51
+#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:55
+#: .\apps\lineage\inventory\templates\pages\retirar_item.html:41
+msgid "Encantamento"
+msgstr "Encantamiento"
+
+#: .\apps\lineage\games\templates\pages\bag_dashboard.html:68
+msgid "Mover para inventário"
+msgstr "Inventario"
+
+#: .\apps\lineage\games\templates\pages\bag_dashboard.html:77
+msgid "Nenhum item na bag."
+msgstr "No hay artículo en la bolsa."
+
+#: .\apps\lineage\games\templates\pages\bag_dashboard.html:86
+msgid "Você ainda não possui uma bag."
+msgstr "Todavía no tienes una bolsa."
+
+#: .\apps\lineage\inventory\templates\pages\inserir_item_direct.html:11
 msgid "Devolver Item"
 msgstr "Devolver Item"
 
-#: .\apps\lineage\inventory\templates\pages\inserir_item_direct.html:24
+#: .\apps\lineage\inventory\templates\pages\inserir_item_direct.html:25
 msgid "Disponível"
-msgstr "Chat Indisponível"
+msgstr "Disponible"
 
-#: .\apps\lineage\inventory\templates\pages\inserir_item_direct.html:35
+#: .\apps\lineage\inventory\templates\pages\inserir_item_direct.html:36
 #: .\apps\lineage\server\templates\l2_accounts\register.html:25
 #: .\apps\main\home\templates\accounts_custom\lock.html:114
 msgid "Senha"
-msgstr "Senha"
+msgstr "Contraseña"
 
-#: .\apps\lineage\inventory\templates\pages\inserir_item_direct.html:40
+#: .\apps\lineage\inventory\templates\pages\inserir_item_direct.html:41
 msgid "Confirmar Devolução"
-msgstr "Confirmar ação"
+msgstr "Confirmar la devolución"
 
-#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:11
+#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:12
 msgid "Meu Inventário"
 msgstr "Mi inventario"
 
-#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:15
+#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:16
 msgid "Adicionar Item"
-msgstr "Adicionar Novos Amigos"
+msgstr "Agregar elemento"
 
-#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:18
-#: .\apps\lineage\inventory\templates\pages\inventario_global.html:11
+#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:19
+#: .\apps\lineage\inventory\templates\pages\inventario_global.html:12
 msgid "Inventário Global"
 msgstr "Inventario global"
 
-#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:31
-#: .\apps\lineage\server\templates\status\olympiad_ranking.html:33
-#: .\apps\lineage\server\templates\tops\top_adena.html:20
-#: .\apps\lineage\server\templates\tops\top_level.html:21
-#: .\apps\lineage\server\templates\tops\top_pk.html:20
-#: .\apps\lineage\server\templates\tops\top_pvp.html:20
+#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:32
+#: .\apps\lineage\server\templates\status\olympiad_ranking.html:63
+#: .\apps\lineage\server\templates\tops\top_adena.html:43
+#: .\apps\lineage\server\templates\tops\top_level.html:44
+#: .\apps\lineage\server\templates\tops\top_pk.html:43
+#: .\apps\lineage\server\templates\tops\top_pvp.html:43
 msgid "Online"
 msgstr "En línea"
 
-#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:31
-#: .\apps\lineage\server\templates\status\olympiad_ranking.html:35
+#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:32
+#: .\apps\lineage\server\templates\status\olympiad_ranking.html:65
 msgid "Offline"
 msgstr "Desconectado"
 
-#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:35
+#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:36
 msgid "Itens"
 msgstr "Elementos"
 
-#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:54
+#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:60
 msgid "Devolver"
 msgstr "Devolver"
 
-#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:57
-#: .\apps\lineage\inventory\templates\pages\trocar_item.html:44
+#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:63
+#: .\apps\lineage\inventory\templates\pages\trocar_item.html:45
 msgid "Trocar"
 msgstr "Reemplazar"
 
-#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:66
+#: .\apps\lineage\inventory\templates\pages\inventario_dashboard.html:72
 msgid "Nenhum item no inventário."
-msgstr "Nenhum Log Enntrado."
+msgstr "No hay artículo en el inventario."
 
-#: .\apps\lineage\inventory\templates\pages\inventario_global.html:24
+#: .\apps\lineage\inventory\templates\pages\inventario_global.html:25
 msgid "Quantidade Total"
 msgstr "Cantidad total"
 
-#: .\apps\lineage\inventory\templates\pages\inventario_global.html:43
-msgid "Nenhum item encontrado."
-msgstr "Nenhum Log Enntrado."
-
-#: .\apps\lineage\inventory\templates\pages\retirar_item.html:10
+#: .\apps\lineage\inventory\templates\pages\retirar_item.html:11
 msgid "Retirar Item do Servidor"
-msgstr "Sobre o servidor"
+msgstr "Retirar Item do Servidor"
 
-#: .\apps\lineage\inventory\templates\pages\retirar_item.html:20
+#: .\apps\lineage\inventory\templates\pages\retirar_item.html:21
 msgid "Selecione um personagem"
-msgstr "Seleción o personaje"
+msgstr "Seleccione un personaje"
 
-#: .\apps\lineage\inventory\templates\pages\retirar_item.html:32
+#: .\apps\lineage\inventory\templates\pages\retirar_item.html:33
 msgid "Inventário de"
 msgstr "Inventario de"
 
-#: .\apps\lineage\inventory\templates\pages\retirar_item.html:41
+#: .\apps\lineage\inventory\templates\pages\retirar_item.html:43
 msgid "Localização"
-msgstr "Abogado"
+msgstr "Ubicación"
 
-#: .\apps\lineage\inventory\templates\pages\retirar_item.html:70
 #: .\apps\lineage\inventory\templates\pages\retirar_item.html:73
+#: .\apps\lineage\inventory\templates\pages\retirar_item.html:76
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:231
 #: .\apps\main\home\templates\pages\logs.html:25
 #: .\apps\main\solicitation\templates\pages\solicitation_list.html:73
 msgid "Anterior"
 msgstr "Anterior"
 
-#: .\apps\lineage\inventory\templates\pages\retirar_item.html:80
 #: .\apps\lineage\inventory\templates\pages\retirar_item.html:83
+#: .\apps\lineage\inventory\templates\pages\retirar_item.html:86
 #: .\apps\main\home\templates\pages\logs.html:35
 #: .\apps\main\solicitation\templates\pages\solicitation_list.html:88
 msgid "Próxima"
 msgstr "Próxima"
 
-#: .\apps\lineage\inventory\templates\pages\retirar_item.html:95
+#: .\apps\lineage\inventory\templates\pages\retirar_item.html:98
 msgid "Item Selecionado"
-msgstr "Objetos Selecionados"
+msgstr "Artículo seleccionado"
 
-#: .\apps\lineage\inventory\templates\pages\retirar_item.html:110
+#: .\apps\lineage\inventory\templates\pages\retirar_item.html:113
 msgid "Sua senha"
-msgstr "Sua senha"
+msgstr "Tu contraseña"
 
-#: .\apps\lineage\inventory\templates\pages\retirar_item.html:116
+#: .\apps\lineage\inventory\templates\pages\retirar_item.html:119
 msgid "Retirar"
 msgstr "Retirar"
 
-#: .\apps\lineage\inventory\templates\pages\retirar_item.html:123
+#: .\apps\lineage\inventory\templates\pages\retirar_item.html:126
 msgid "Nenhum item encontrado no inventário deste personagem."
 msgstr "Ningún elemento encontrado en el inventario de este personaje."
 
-#: .\apps\lineage\inventory\templates\pages\retirar_item.html:130
+#: .\apps\lineage\inventory\templates\pages\retirar_item.html:133
 msgid "Voltar para o Inventário"
-msgstr "Voltar para o início"
+msgstr "Volver al inventario"
 
-#: .\apps\lineage\inventory\templates\pages\trocar_item.html:9
+#: .\apps\lineage\inventory\templates\pages\trocar_item.html:10
 msgid "Trocar Item entre Jogadores"
 msgstr "Cambiar el elemento entre los jugadores"
 
-#: .\apps\lineage\inventory\templates\pages\trocar_item.html:16
+#: .\apps\lineage\inventory\templates\pages\trocar_item.html:17
 msgid "Personagem Origem"
-msgstr "Personaje"
+msgstr "Personaje de origen"
 
-#: .\apps\lineage\inventory\templates\pages\trocar_item.html:21
+#: .\apps\lineage\inventory\templates\pages\trocar_item.html:22
 msgid "Personagem Destino"
-msgstr "Personaje"
+msgstr "Personaje de destino"
 
 #: .\apps\lineage\payment\templates\mp\pagamento_erro.html:8
+#: .\apps\lineage\payment\templates\stripe\pagamento_erro.html:8
 msgid "Pagamento Não Concluído"
-msgstr "Pagamento Não Concluído"
+msgstr "Pago no completado"
 
 #: .\apps\lineage\payment\templates\mp\pagamento_erro.html:33
+#: .\apps\lineage\payment\templates\stripe\pagamento_erro.html:33
 msgid "Pagamento não realizado"
-msgstr "Pagamento não realizado"
+msgstr "Pago"
 
 #: .\apps\lineage\payment\templates\mp\pagamento_erro.html:35
+#: .\apps\lineage\payment\templates\stripe\pagamento_erro.html:35
 msgid "Algo deu errado ou o pagamento foi cancelado."
-msgstr "Algo deu errado ou o pagamento foi cancelado."
+msgstr "Algo salió mal o el pago fue cancelado."
 
 #: .\apps\lineage\payment\templates\mp\pagamento_erro.html:36
+#: .\apps\lineage\payment\templates\stripe\pagamento_erro.html:36
 msgid "Tente novamente em alguns instantes."
-msgstr "Tente novato em Alguns instantes."
+msgstr "Inténtalo de nuevo en un momento."
 
 #: .\apps\lineage\payment\templates\mp\pagamento_erro.html:39
 #: .\apps\lineage\payment\templates\payment\pedidos_pendentes.html:41
+#: .\apps\lineage\payment\templates\stripe\pagamento_erro.html:39
 msgid "Voltar para a Carteira"
-msgstr "Voltar para una carta"
+msgstr "Regresa a la billetera"
 
 #: .\apps\lineage\payment\templates\mp\pagamento_erro.html:43
+#: .\apps\lineage\payment\templates\stripe\pagamento_erro.html:43
 msgid "Tentar Novamente"
-msgstr "Novato de tentar"
+msgstr "Intentar otra vez"
 
 #: .\apps\lineage\payment\templates\mp\pagamento_sucesso.html:8
+#: .\apps\lineage\payment\templates\stripe\pagamento_sucesso.html:8
 msgid "Pagamento Aprovado"
-msgstr "Pagamento Aprovado"
+msgstr "Pago aprobado"
 
 #: .\apps\lineage\payment\templates\mp\pagamento_sucesso.html:30
+#: .\apps\lineage\payment\templates\stripe\pagamento_sucesso.html:30
 msgid "Pagamento aprovado!"
-msgstr "Pagamento Aprovado!"
+msgstr "¡Pago aprobado!"
 
 #: .\apps\lineage\payment\templates\mp\pagamento_sucesso.html:32
+#: .\apps\lineage\payment\templates\stripe\pagamento_sucesso.html:32
 msgid "Obrigado por sua compra."
-msgstr "Obrigado por sua compra."
+msgstr "Gracias por su compra."
 
 #: .\apps\lineage\payment\templates\mp\pagamento_sucesso.html:33
+#: .\apps\lineage\payment\templates\stripe\pagamento_sucesso.html:33
 msgid "Seu pagamento foi processado com sucesso."
-msgstr "Seu Pagamento foi Processado com Suceso."
+msgstr "Su pago fue procesado con éxito."
 
 #: .\apps\lineage\payment\templates\mp\pagamento_sucesso.html:36
 #: .\apps\lineage\payment\templates\responses\sucesso.html:10
+#: .\apps\lineage\payment\templates\stripe\pagamento_sucesso.html:36
 msgid "Ir para a Carteira"
-msgstr "Ir para una cartaira"
+msgstr "Ir para a Carteira"
 
 #: .\apps\lineage\payment\templates\payment\detalhes_pedido.html:7
 msgid "Detalhes do Pedido"
-msgstr "Detalhes do pedido"
+msgstr "Detalles del pedido"
 
 #: .\apps\lineage\payment\templates\payment\detalhes_pedido.html:10
 msgid "ID do Pedido:"
-msgstr "ID Do Pedido:"
+msgstr "ID de pedido:"
 
 #: .\apps\lineage\payment\templates\payment\detalhes_pedido.html:11
 msgid "Valor Pago:"
@@ -444,10 +874,11 @@ msgstr "Valor Pago:"
 
 #: .\apps\lineage\payment\templates\payment\detalhes_pedido.html:12
 msgid "Moedas Geradas:"
-msgstr "Moedas Geradas:"
+msgstr "Monedas generadas:"
 
 #: .\apps\lineage\payment\templates\payment\detalhes_pedido.html:13
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:28
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:131
 #: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:30
 msgid "Status:"
 msgstr "Estado:"
@@ -458,19 +889,19 @@ msgstr "Método:"
 
 #: .\apps\lineage\payment\templates\payment\detalhes_pedido.html:15
 msgid "Data de Criação:"
-msgstr "Datos de Criação:"
+msgstr "Fecha de creación:"
 
 #: .\apps\lineage\payment\templates\payment\detalhes_pedido.html:22
 msgid "Confirmar e Ir para o Pagamento"
-msgstr "Confirmar e ir para o pagamento"
+msgstr "Confirmar e Ir para o Pagamento"
 
 #: .\apps\lineage\payment\templates\payment\detalhes_pedido.html:29
 msgid "Voltar para Pedidos Pendentes"
-msgstr "Voltar Para Pedidos Pendencés"
+msgstr "Voltar para Pedidos Pendentes"
 
 #: .\apps\lineage\payment\templates\payment\pedidos_pendentes.html:7
 msgid "Meus Pedidos Pendentes"
-msgstr "Meus pedidos pendences"
+msgstr "Meus Pedidos Pendentes"
 
 #: .\apps\lineage\payment\templates\payment\pedidos_pendentes.html:14
 msgid "Pedido"
@@ -483,64 +914,61 @@ msgstr "Valor:"
 #: .\apps\lineage\payment\templates\payment\pedidos_pendentes.html:16
 #: .\templates\includes\notification.html:33
 msgid "Criado em:"
-msgstr "Criado em:"
+msgstr "Creado en:"
 
 #: .\apps\lineage\payment\templates\payment\pedidos_pendentes.html:20
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:31
 #: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:14
 msgid "Detalhes"
-msgstr "Detalar"
-
-#: .\apps\lineage\payment\templates\payment\pedidos_pendentes.html:25
-#: .\apps\main\home\templates\pages\address_form.html:59
-#: .\apps\main\solicitation\templates\pages\solicitation_create.html:27
-#: .\templates\admin\themes\delete_confirmation.html:39
-msgid "Cancelar"
-msgstr "Cancelar"
+msgstr "Detalles"
 
 #: .\apps\lineage\payment\templates\payment\pedidos_pendentes.html:33
 msgid "Você não possui pedidos pendentes."
-msgstr "Você não posui pedidos pendences."
+msgstr "No tienes órdenes pendientes."
 
 #: .\apps\lineage\payment\templates\payment\pedidos_pendentes.html:38
 msgid "Criar Novo Pedido"
-msgstr "Criar novo pedido"
+msgstr "Crear nueva solicitud"
 
 #: .\apps\lineage\payment\templates\payment\purchase.html:7
 #: .\apps\lineage\wallet\templates\wallet\dashboard.html:86
 msgid "Comprar Moedas"
-msgstr "Comprar moedas"
+msgstr "Monedas"
 
 #: .\apps\lineage\payment\templates\payment\purchase.html:13
 msgid "Valor em Reais (R$)"
-msgstr "Valor em reais (r $)"
+msgstr "Valor en reais (r $)"
 
 #: .\apps\lineage\payment\templates\payment\purchase.html:21
 msgid "Digite o valor que deseja comprar"
-msgstr "Digite o Valor Que Desja Comar"
+msgstr "Ingrese el valor que desea comprar"
 
 #: .\apps\lineage\payment\templates\payment\purchase.html:27
 msgid "Escolha o Meio de Pagamento"
-msgstr "Escolha o meio de Pagamento"
+msgstr "Elija el método de pago"
 
 #: .\apps\lineage\payment\templates\payment\purchase.html:29
 msgid "Mercado Pago"
 msgstr "Mercado Pago"
 
-#: .\apps\lineage\payment\templates\payment\purchase.html:36
+#: .\apps\lineage\payment\templates\payment\purchase.html:30
+msgid "Stripe"
+msgstr "Raya"
+
+#: .\apps\lineage\payment\templates\payment\purchase.html:37
 msgid "Gerar Pedido"
-msgstr "Pedido gerar"
+msgstr "Generar orden"
 
 #: .\apps\lineage\payment\templates\responses\erro.html:7
 msgid "Pagamento Recusado ou Falhou"
-msgstr "Pagamento recusado ou falhou"
+msgstr "Pago rechazado o fallido"
 
 #: .\apps\lineage\payment\templates\responses\erro.html:8
 msgid ""
 "Algo deu errado com o processamento do seu pagamento. Você pode tentar "
 "novamente."
 msgstr ""
-"Algo deu errado Com o Processamento do seu Pagamento. Você Pode Tentar "
-"Novente."
+"Algo salió mal con el procesamiento de su pago. Puedes intentarlo de nuevo."
 
 #: .\apps\lineage\payment\templates\responses\erro.html:10
 #: .\apps\lineage\wallet\templates\wallet\dashboard.html:179
@@ -549,18 +977,18 @@ msgstr "Ver Pedidos Pendentes"
 
 #: .\apps\lineage\payment\templates\responses\sucesso.html:7
 msgid "Pagamento Aprovado!"
-msgstr "Pagamento Aprovado!"
+msgstr "¡Pago aprobado!"
 
 #: .\apps\lineage\payment\templates\responses\sucesso.html:8
 msgid "Suas moedas foram creditadas com sucesso na sua carteira."
-msgstr "Suas Moedas Foram Credamadas com Suceso na sua carteira."
+msgstr "Sus monedas fueron acreditadas con éxito a su billetera."
 
-#: .\apps\lineage\server\services_views.py:22
-#: .\apps\lineage\server\services_views.py:72
+#: .\apps\lineage\server\services_views.py:23
+#: .\apps\lineage\server\services_views.py:77
 msgid "Preço do serviço não configurado."
 msgstr "Precio de servicio no configurado."
 
-#: .\apps\lineage\server\services_views.py:40
+#: .\apps\lineage\server\services_views.py:45
 msgid ""
 "Nickname inválido. Use de 2 a 16 caracteres latinos ou de 3 a 16 caracteres "
 "cirílicos."
@@ -568,48 +996,48 @@ msgstr ""
 "Nickname inválido. Use de 2 a 16 caracteres latinos ou de 3 a 16 caracteres "
 "cirílicos."
 
-#: .\apps\lineage\server\services_views.py:46
-#: .\apps\lineage\server\services_views.py:97
+#: .\apps\lineage\server\services_views.py:51
+#: .\apps\lineage\server\services_views.py:106
 msgid "Saldo insuficiente na carteira."
 msgstr "Saldo insuficiente na carteira."
 
-#: .\apps\lineage\server\services_views.py:53
+#: .\apps\lineage\server\services_views.py:58
 msgid "Nickname alterado com sucesso!"
-msgstr "Senha alterada com suceso"
+msgstr "¡El apodo cambió con éxito!"
 
-#: .\apps\lineage\server\services_views.py:56
+#: .\apps\lineage\server\services_views.py:61
 msgid "Erro ao alterar nickname."
 msgstr "Erro ao alterar nickname."
 
-#: .\apps\lineage\server\services_views.py:88
+#: .\apps\lineage\server\services_views.py:97
 msgid "Sexo inválido selecionado."
-msgstr "Enlace Inválido ou expirado."
+msgstr "Sexo inválido seleccionado."
 
-#: .\apps\lineage\server\services_views.py:104
+#: .\apps\lineage\server\services_views.py:113
 msgid "Sexo alterado com sucesso!"
-msgstr "Senha alterada com suceso"
+msgstr "¡El sexo cambió con éxito!"
 
-#: .\apps\lineage\server\services_views.py:107
+#: .\apps\lineage\server\services_views.py:116
 msgid "Erro ao alterar sexo."
 msgstr "Error al cambiar el sexo."
 
-#: .\apps\lineage\server\services_views.py:137
+#: .\apps\lineage\server\services_views.py:150
 msgid "Personagem desbugado com sucesso!"
-msgstr "Conta Verificada com Suceso!"
+msgstr "¡Personaje de moda exitoso!"
 
-#: .\apps\lineage\server\services_views.py:140
+#: .\apps\lineage\server\services_views.py:153
 msgid "Erro ao desbugar personagem."
-msgstr "Escolha um personaje"
+msgstr "Error de depuración del personaje."
 
-#: .\apps\lineage\server\services_views.py:160
+#: .\apps\lineage\server\services_views.py:173
 msgid "Os preços precisam ser valores numéricos."
 msgstr "Los precios deben ser valores numéricos."
 
-#: .\apps\lineage\server\services_views.py:173
+#: .\apps\lineage\server\services_views.py:186
 msgid "Preços dos serviços atualizados com sucesso!"
 msgstr "¡Precios de servicios actualizados exitosos!"
 
-#: .\apps\lineage\server\services_views.py:176
+#: .\apps\lineage\server\services_views.py:189
 msgid "Erro ao configurar os preços: "
 msgstr "Error al configurar los precios:"
 
@@ -619,15 +1047,312 @@ msgstr "No hay propietario"
 
 #: .\apps\lineage\server\status_views.py:35
 msgid "No Leader"
-msgstr "Ningún líder"
+msgstr "No Leader"
 
 #: .\apps\lineage\server\status_views.py:36
 msgid "No Alliance"
-msgstr "Sin alianza"
+msgstr "No Alliance"
+
+#: .\apps\lineage\server\templates\apoiadores\editar_imagem.html:4
+msgid "Editar Imagem do Apoiador"
+msgstr "Editar imagen de seguidores"
+
+#: .\apps\lineage\server\templates\apoiadores\editar_imagem.html:8
+#: .\apps\lineage\server\templates\apoiadores\painel.html:68
+msgid "Editar Imagem"
+msgstr "Editar imagen"
+
+#: .\apps\lineage\server\templates\apoiadores\expirado.html:4
+#: .\apps\lineage\server\templates\apoiadores\expirado.html:11
+msgid "Apoio Expirado"
+msgstr "Soporte expirado"
+
+#: .\apps\lineage\server\templates\apoiadores\expirado.html:14
+msgid "Seu cupom de apoiador expirou."
+msgstr "Su cupón partidario expiró."
+
+#: .\apps\lineage\server\templates\apoiadores\expirado.html:20
+msgid ""
+"Para continuar como apoiador e receber um novo cupom de desconto, você pode "
+"reenviar sua solicitação agora mesmo."
+msgstr ""
+"Para continuar como seguidor y recibir un nuevo cupón de descuento, puede "
+"reenviar su solicitud en este momento."
+
+#: .\apps\lineage\server\templates\apoiadores\expirado.html:26
+msgid "Enviar Nova Solicitação"
+msgstr "Enviar una nueva solicitud"
+
+#: .\apps\lineage\server\templates\apoiadores\formulario_apoiador.html:4
+msgid "Solicitar Acesso como Apoiador"
+msgstr "Solicitar acceso como seguidor"
+
+#: .\apps\lineage\server\templates\apoiadores\formulario_apoiador.html:9
+msgid "Torne-se um Apoiador"
+msgstr "Convertirse en un partidario"
+
+#: .\apps\lineage\server\templates\apoiadores\formulario_apoiador.html:11
+msgid ""
+"Preencha o formulário abaixo. Após a análise, você poderá acessar benefícios"
+" exclusivos, gerar códigos promocionais e acompanhar seu desempenho!"
+msgstr ""
+"Complete el siguiente formulario. Después del análisis, puede acceder a "
+"beneficios exclusivos, generar códigos promocionales y rastrear su "
+"rendimiento."
+
+#: .\apps\lineage\server\templates\apoiadores\formulario_apoiador.html:18
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:17
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:47
+msgid "Nome Público"
+msgstr "Nome Público"
+
+#: .\apps\lineage\server\templates\apoiadores\formulario_apoiador.html:23
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:18
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:48
+msgid "Descrição"
+msgstr "Descripción"
+
+#: .\apps\lineage\server\templates\apoiadores\formulario_apoiador.html:28
+msgid "Link do Twitch"
+msgstr "Enlace do twitch"
+
+#: .\apps\lineage\server\templates\apoiadores\formulario_apoiador.html:33
+msgid "Link do YouTube"
+msgstr "Enlace Do YouTube"
+
+#: .\apps\lineage\server\templates\apoiadores\formulario_apoiador.html:38
+msgid "Imagem / Avatar"
+msgstr "Imagen / avatar"
+
+#: .\apps\lineage\server\templates\apoiadores\formulario_apoiador.html:44
+msgid "Enviar Solicitação"
+msgstr "Entregar"
+
+#: .\apps\lineage\server\templates\apoiadores\nao_apoiador.html:4
+msgid "Seja um Apoiador"
+msgstr "Ser partidario"
+
+#: .\apps\lineage\server\templates\apoiadores\nao_apoiador.html:10
+msgid "Você ainda não é um apoiador"
+msgstr "Todavía no eres un seguidor"
+
+#: .\apps\lineage\server\templates\apoiadores\nao_apoiador.html:13
+msgid ""
+"Este painel é exclusivo para streamers e parceiros do nosso servidor. Como "
+"apoiador, você poderá gerar códigos promocionais, ter seu próprio painel e "
+"ganhar recompensas por cada indicação."
+msgstr ""
+"Este panel es exclusivo de los streamers y socios de nuestro servidor. Como "
+"seguidor, puede generar códigos promocionales, tener su propio panel y "
+"obtener recompensas para cada indicación."
+
+#: .\apps\lineage\server\templates\apoiadores\nao_apoiador.html:19
+msgid "Solicitar Acesso"
+msgstr "Solicitar acceso"
+
+#: .\apps\lineage\server\templates\apoiadores\nao_apoiador.html:24
+msgid ""
+"Já é apoiador? Entre em contato com a staff caso enfrente problemas de "
+"acesso."
+msgstr ""
+"¿Ya es un seguidor? Póngase en contacto con el personal si enfrenta "
+"problemas de acceso."
+
+#: .\apps\lineage\server\templates\apoiadores\painel.html:4
+#: .\apps\lineage\server\templates\apoiadores\painel.html:9
+msgid "Painel do Apoiador"
+msgstr "Panel de seguidores"
+
+#: .\apps\lineage\server\templates\apoiadores\painel.html:21
+msgid "Sem imagem"
+msgstr "Sin imágenes"
+
+#: .\apps\lineage\server\templates\apoiadores\painel.html:26
+msgid "Seu Cupom Ativo"
+msgstr "Tu cupón activo"
+
+#: .\apps\lineage\server\templates\apoiadores\painel.html:27
+msgid "Código"
+msgstr "Código"
+
+#: .\apps\lineage\server\templates\apoiadores\painel.html:28
+msgid "Desconto"
+msgstr "Descuento"
+
+#: .\apps\lineage\server\templates\apoiadores\painel.html:29
+msgid "Válido até"
+msgstr "Válido até"
+
+#: .\apps\lineage\server\templates\apoiadores\painel.html:37
+msgid "Ainda não há cupom ativo."
+msgstr "Todavía no hay cupón activo."
+
+#: .\apps\lineage\server\templates\apoiadores\painel.html:47
+msgid "Total de Vendas"
+msgstr "Total de Vendas"
+
+#: .\apps\lineage\server\templates\apoiadores\painel.html:55
+msgid "Usuários Impactados"
+msgstr "Usuarios impactados"
+
+#: .\apps\lineage\server\templates\apoiadores\painel.html:65
+#: .\apps\lineage\server\templates\apoiadores\solicitar_comissao.html:4
+#: .\apps\lineage\server\templates\apoiadores\solicitar_comissao.html:10
+#: .\apps\lineage\server\templates\apoiadores\solicitar_comissao.html:35
+msgid "Solicitar Comissão"
+msgstr "Comisión de solicitud"
+
+#: .\apps\lineage\server\templates\apoiadores\painel.html:80
+#: .\apps\lineage\shop\templates\shop\cart.html:98
+msgid "Total"
+msgstr "Total"
+
+#: .\apps\lineage\server\templates\apoiadores\painel.html:95
+msgid "Nenhuma compra registrada ainda."
+msgstr "No hay compra registrada todavía."
+
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:4
+msgid "Painel de Staff"
+msgstr "Paño de personal"
+
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:9
+msgid "Pedidos Pendentes de Apoiadores"
+msgstr "Solicitudes pendientes de los seguidores"
+
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:19
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:49
+msgid "Data de Solicitação"
+msgstr "Fecha de solicitud"
+
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:27
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:48
+msgid "Sem descrição"
+msgstr "Descrito"
+
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:42
+msgid "Detalhes do Apoiador"
+msgstr "Detalles del seguidor"
+
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:44
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:79
+#: .\apps\lineage\shop\templates\shop\cart.html:80
+#: .\apps\lineage\shop\templates\shop\home.html:201
+#: .\apps\lineage\wallet\templates\wallet\transfer_to_player.html:10
+#: .\apps\lineage\wallet\templates\wallet\transfer_to_server.html:10
+#: .\apps\main\notification\templates\pages\notifications.html:39
+#: .\apps\main\notification\templates\pages\notifications.html:79
+#: .\templates\includes\notification.html:9
+#: .\templates\includes\notification.html:15 .\templates\public\index.html:161
+msgid "Fechar"
+msgstr "Para cerrar"
+
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:50
+#: .\apps\lineage\server\templates\status\grandboss_status.html:41
+#: .\apps\lineage\server\templates\status\olympiad_ranking.html:42
+#: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:21
+msgid "Status"
+msgstr "Estado"
+
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:51
+msgid "Link Twitch"
+msgstr "Twitch de enlace"
+
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:51
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:52
+msgid "Nenhum link fornecido"
+msgstr "Sin enlace suministrado"
+
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:52
+msgid "Link YouTube"
+msgstr "Enlace youtube"
+
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:55
+msgid "Imagem do Apoiador"
+msgstr "Imagen de seguidores"
+
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:57
+msgid "Nenhuma imagem fornecida."
+msgstr "No se proporciona imagen."
+
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:66
+msgid "Digite a porcentagem de desconto"
+msgstr "Ingrese el porcentaje de descuento"
+
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:68
+#: .\apps\main\message\templates\pages\friends.html:76
+msgid "Aceitar"
+msgstr "Para aceptar"
+
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:76
+msgid "Rejeitar"
+msgstr "Rechazar"
+
+#: .\apps\lineage\server\templates\apoiadores\painel_staff.html:87
+msgid "Não há pedidos pendentes no momento."
+msgstr "No hay órdenes pendientes en este momento."
+
+#: .\apps\lineage\server\templates\apoiadores\pendente.html:4
+#: .\apps\lineage\server\templates\apoiadores\pendente.html:10
+msgid "Solicitação em Análise"
+msgstr "Solicitud de análisis"
+
+#: .\apps\lineage\server\templates\apoiadores\pendente.html:13
+msgid ""
+"Sua solicitação para se tornar um apoiador está sendo analisada por nossa "
+"equipe."
+msgstr ""
+"Su solicitud de convertirse en un seguidor está siendo analizado por nuestro"
+" equipo."
+
+#: .\apps\lineage\server\templates\apoiadores\pendente.html:16
+msgid "Você receberá uma resposta em breve. Obrigado pelo interesse!"
+msgstr "Recibirá una respuesta pronto. ¡Gracias por el interés!"
+
+#: .\apps\lineage\server\templates\apoiadores\pendente.html:20
+#: .\apps\lineage\server\templates\apoiadores\solicitar_comissao.html:40
+msgid "Voltar para o Painel"
+msgstr "Regresar al panel"
+
+#: .\apps\lineage\server\templates\apoiadores\rejeitado.html:4
+#: .\apps\lineage\server\templates\apoiadores\rejeitado.html:10
+msgid "Solicitação Rejeitada"
+msgstr "Solicitud rechazada"
+
+#: .\apps\lineage\server\templates\apoiadores\rejeitado.html:13
+msgid ""
+"Infelizmente, sua solicitação para se tornar um apoiador foi recusada no "
+"momento."
+msgstr ""
+"Desafortunadamente, su solicitud de convertirse en partidario ha sido "
+"rechazada en este momento."
+
+#: .\apps\lineage\server\templates\apoiadores\rejeitado.html:16
+msgid ""
+"Caso ache que houve um engano ou queira mais informações, entre em contato "
+"com a staff."
+msgstr ""
+"Si cree que hubo un error o desea más información, comuníquese con el "
+"personal."
+
+#: .\apps\lineage\server\templates\apoiadores\solicitar_comissao.html:13
+msgid ""
+"Informe o valor que deseja solicitar como comissão. Ele deve ser compatível "
+"com o valor disponível."
+msgstr ""
+"Ingrese el monto que desea solicitar como comisión. Debe ser compatible con "
+"el valor disponible."
+
+#: .\apps\lineage\server\templates\apoiadores\solicitar_comissao.html:18
+msgid "Valor disponível para saque:"
+msgstr "Valor disponible para retiro:"
+
+#: .\apps\lineage\server\templates\apoiadores\solicitar_comissao.html:26
+msgid "Valor da Comissão"
+msgstr "Valor de la comisión"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:10
 msgid "Informações da Conta"
-msgstr "Informações IMPORTANTES:"
+msgstr "Información de la cuenta"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:16
 msgid "Login:"
@@ -639,78 +1364,78 @@ msgstr "Correo electrónico:"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:18
 msgid "Criada em:"
-msgstr "Criado em:"
+msgstr "Creado en:"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:22
 msgid "Não disponível"
-msgstr "Chat Indisponível"
+msgstr "Indisponible"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:25
 msgid "Último IP:"
-msgstr "Última"
+msgstr "Último IP:"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:29
 msgid "Total de Personagens:"
-msgstr "Consultas totales:"
+msgstr "Personajes totales:"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:33
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:16
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:294
 msgid "Logo Lineage 2"
 msgstr "LOGO LINEAGE 2"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:43
 msgid "Seus Personagens"
-msgstr "Personaje"
+msgstr "Tus personajes"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:62
 msgid "Título:"
 msgstr "Título:"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:63
-#: .\templates\public\index.html:142 .\templates\public\index.html:173
+#: .\templates\public\index.html:183 .\templates\public\index.html:213
 msgid "Nível:"
-msgstr "Nível:"
+msgstr "Nivel:"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:64
 msgid "Classe Base:"
-msgstr "Chasquero"
+msgstr "Clase básica:"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:65
 msgid "Online:"
-msgstr "En línea"
+msgstr "En línea:"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:70
 #: .\apps\lineage\server\templates\services\change_sex.html:7
 #: .\apps\lineage\server\templates\services\change_sex.html:26
 msgid "Alterar Sexo"
-msgstr "Alterar Senha"
+msgstr "Alterar Sexo"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:73
 msgid "Destravar"
-msgstr "Registrador"
+msgstr "Descubrir"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:76
 #: .\apps\lineage\server\templates\services\change_nickname.html:7
 #: .\apps\lineage\server\templates\services\change_nickname.html:23
 msgid "Alterar Nickname"
-msgstr "Alterar Senha"
+msgstr "Alterar Nickname"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:84
 msgid "Nenhum personagem encontrado."
-msgstr "Nenhum Log Enntrado."
+msgstr "No se encontró ningún personaje."
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:92
 msgid "Serviços da Conta"
-msgstr "Criar conta"
+msgstr "Servicios de cuenta"
 
 #: .\apps\lineage\server\templates\l2_accounts\dashboard.html:96
 #: .\apps\lineage\server\templates\l2_accounts\update_password.html:8
 msgid "Alterar Senha"
-msgstr "Alterar Senha"
+msgstr "Cambiar la contraseña"
 
 #: .\apps\lineage\server\templates\l2_accounts\register.html:8
 msgid "Criar Conta L2"
-msgstr "Criar conta l2"
+msgstr "Crear cuenta L2"
 
 #: .\apps\lineage\server\templates\l2_accounts\register.html:17
 msgid "Login"
@@ -723,21 +1448,19 @@ msgstr "Correo electrónico"
 #: .\apps\lineage\server\templates\l2_accounts\register.html:29
 #: .\apps\main\home\templates\accounts_custom\reset-password.html:110
 msgid "Confirmar Senha"
-msgstr "Confirmar Senha"
+msgstr "Confirmar Contraseña"
 
 #: .\apps\lineage\server\templates\l2_accounts\register.html:33
 msgid "Criar Conta"
-msgstr "Criar conta"
+msgstr "Crear una cuenta"
 
 #: .\apps\lineage\server\templates\l2_accounts\register_success.html:8
-#| msgid "Conta verificada com sucesso!"
 msgid "Conta criada com sucesso!"
-msgstr "Conta Verificada com Suceso!"
+msgstr "Cuenta creada con éxito!"
 
 #: .\apps\lineage\server\templates\l2_accounts\register_success.html:11
-#| msgid "Seu pagamento foi processado com sucesso."
 msgid "Seu registro foi concluído com sucesso."
-msgstr "Seu Pagamento foi Processado com Suceso."
+msgstr "Su registro se completó con éxito."
 
 #: .\apps\lineage\server\templates\l2_accounts\register_success.html:12
 msgid ""
@@ -746,39 +1469,34 @@ msgstr ""
 "Puede tomar hasta 5 minutos para estar disponibles en el juego y el panel."
 
 #: .\apps\lineage\server\templates\l2_accounts\register_success.html:17
-#| msgid "Voltar para o painel"
 msgid "Ir para o painel"
-msgstr "Voltar Para O Painel"
+msgstr "Ir al panel"
 
 #: .\apps\lineage\server\templates\l2_accounts\update_password.html:20
 #: .\apps\main\home\templates\accounts_custom\reset-password.html:94
 msgid "Nova Senha"
-msgstr "Nova Senha"
+msgstr "Nueva contraseña"
 
 #: .\apps\lineage\server\templates\l2_accounts\update_password.html:25
 msgid "Confirmar Nova Senha"
-msgstr "Confirmar nova senha"
+msgstr "Confirmar una nueva contraseña"
 
 #: .\apps\lineage\server\templates\l2_accounts\update_password.html:30
 msgid "Salvar Senha"
-msgstr "Salvar Senha"
+msgstr "Guardar contraseña"
 
 #: .\apps\lineage\server\templates\l2_accounts\update_password.html:35
 msgid "Voltar para Dashboard"
-msgstr "Panel de Voltar Para Panel"
+msgstr "Voltar para Dashboard"
 
 #: .\apps\lineage\server\templates\pages\api_config_panel.html:20
 msgid "Configurações de Endpoints da API"
-msgstr "Configuurações de endpoints da api"
-
-#: .\apps\lineage\server\templates\pages\api_config_panel.html:38
-msgid "Salvar Alterações"
-msgstr "Salvar Alterações"
+msgstr "Configuración de punto final de API"
 
 #: .\apps\lineage\server\templates\services\change_nickname.html:10
 #: .\apps\lineage\server\templates\services\change_sex.html:10
 #: .\apps\lineage\server\templates\services\unstuck.html:10
-#: .\templates\public\index.html:145 .\templates\public\index.html:176
+#: .\templates\public\index.html:186 .\templates\public\index.html:216
 msgid "Personagem:"
 msgstr "Personaje:"
 
@@ -803,7 +1521,7 @@ msgstr "Masculino"
 #: .\apps\lineage\server\templates\services\change_sex.html:23
 #: .\apps\main\home\templates\pages\profile.html:124
 msgid "Feminino"
-msgstr "Feminino"
+msgstr "Femenino"
 
 #: .\apps\lineage\server\templates\services\configure_service_prices.html:7
 msgid "Configurar Preços de Serviços"
@@ -811,7 +1529,7 @@ msgstr "Configurar precios de servicio"
 
 #: .\apps\lineage\server\templates\services\configure_service_prices.html:14
 msgid "Preço para Alteração de Nickname"
-msgstr "Alteração de senha"
+msgstr "Precio para el cambio de apodo"
 
 #: .\apps\lineage\server\templates\services\configure_service_prices.html:17
 #: .\apps\lineage\server\templates\services\configure_service_prices.html:25
@@ -820,178 +1538,167 @@ msgstr "Ingrese el valor"
 
 #: .\apps\lineage\server\templates\services\configure_service_prices.html:22
 msgid "Preço para Alteração de Sexo"
-msgstr "Alteração de senha"
+msgstr "Precio para el cambio de sexo"
 
 #: .\apps\lineage\server\templates\services\configure_service_prices.html:29
 msgid "Salvar Configurações"
-msgstr "Configuurações"
+msgstr "Guardar configuración"
 
 #: .\apps\lineage\server\templates\services\unstuck.html:7
 #: .\apps\lineage\server\templates\services\unstuck.html:16
 msgid "Desbugar Personagem"
-msgstr "Personaje"
+msgstr "Desatraillar"
 
-#: .\apps\lineage\server\templates\status\boss_jewel_locations.html:8
-#: .\templates\includes\sidebar.html:270
+#: .\apps\lineage\server\templates\status\boss_jewel_locations.html:30
+#: .\templates\includes\sidebar.html:326
 msgid "Boss Jewel Locations"
 msgstr "Ubicaciones de Boss Jewel"
 
-#: .\apps\lineage\server\templates\status\boss_jewel_locations.html:17
+#: .\apps\lineage\server\templates\status\boss_jewel_locations.html:39
 msgid "Count"
 msgstr "Contar"
 
-#: .\apps\lineage\server\templates\status\boss_jewel_locations.html:18
+#: .\apps\lineage\server\templates\status\boss_jewel_locations.html:40
 msgid "Character"
 msgstr "Personaje"
 
-#: .\apps\lineage\server\templates\status\boss_jewel_locations.html:19
-#: .\apps\lineage\server\templates\status\olympiad_all_heroes.html:17
-#: .\apps\lineage\server\templates\status\olympiad_current_heroes.html:17
-#: .\apps\lineage\server\templates\status\olympiad_ranking.html:17
-#: .\apps\lineage\server\templates\tops\top_adena.html:17
+#: .\apps\lineage\server\templates\status\boss_jewel_locations.html:41
+#: .\apps\lineage\server\templates\status\olympiad_all_heroes.html:39
+#: .\apps\lineage\server\templates\status\olympiad_current_heroes.html:39
+#: .\apps\lineage\server\templates\status\olympiad_ranking.html:39
+#: .\apps\lineage\server\templates\tops\top_adena.html:40
 #: .\apps\lineage\server\templates\tops\top_clans.html:39
-#: .\apps\lineage\server\templates\tops\top_level.html:17
-#: .\apps\lineage\server\templates\tops\top_online.html:19
-#: .\apps\lineage\server\templates\tops\top_pk.html:17
-#: .\apps\lineage\server\templates\tops\top_pvp.html:17
+#: .\apps\lineage\server\templates\tops\top_level.html:40
+#: .\apps\lineage\server\templates\tops\top_online.html:42
+#: .\apps\lineage\server\templates\tops\top_pk.html:40
+#: .\apps\lineage\server\templates\tops\top_pvp.html:40
 msgid "Clan"
 msgstr "Clan"
 
-#: .\apps\lineage\server\templates\status\boss_jewel_locations.html:37
+#: .\apps\lineage\server\templates\status\boss_jewel_locations.html:67
 msgid "Nenhuma localização de Boss Jewel encontrada."
-msgstr "Nenhuma localização de jefe Jewel Encontrada."
+msgstr "No se encontró la ubicación de Jein Jewel."
 
-#: .\apps\lineage\server\templates\status\grandboss_status.html:8
-#: .\templates\includes\sidebar.html:281
+#: .\apps\lineage\server\templates\status\grandboss_status.html:30
+#: .\templates\includes\sidebar.html:337
 msgid "Grand Boss Status"
 msgstr "Estado del gran jefe"
 
-#: .\apps\lineage\server\templates\status\grandboss_status.html:16
-#: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:18
-#: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:81
-#: .\apps\main\home\templates\pages\profile.html:55
-msgid "Nome"
-msgstr "Nome"
-
-#: .\apps\lineage\server\templates\status\grandboss_status.html:17
-#: .\apps\lineage\server\templates\tops\top_adena.html:18
+#: .\apps\lineage\server\templates\status\grandboss_status.html:39
+#: .\apps\lineage\server\templates\tops\top_adena.html:41
 #: .\apps\lineage\server\templates\tops\top_clans.html:42
-#: .\apps\lineage\server\templates\tops\top_level.html:18
+#: .\apps\lineage\server\templates\tops\top_level.html:41
 msgid "Nível"
-msgstr "Nível"
+msgstr "Nivel"
 
-#: .\apps\lineage\server\templates\status\grandboss_status.html:18
+#: .\apps\lineage\server\templates\status\grandboss_status.html:40
 msgid "Respawn"
 msgstr "Reaparición"
 
-#: .\apps\lineage\server\templates\status\grandboss_status.html:19
-#: .\apps\lineage\server\templates\status\olympiad_ranking.html:20
-#: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:21
-msgid "Status"
-msgstr "Estado"
-
-#: .\apps\lineage\server\templates\status\grandboss_status.html:37
+#: .\apps\lineage\server\templates\status\grandboss_status.html:59
 msgid "Nenhum boss encontrado."
-msgstr "Nenhum Boss Encontrado."
+msgstr "No se encontró ningún jefe."
 
-#: .\apps\lineage\server\templates\status\olympiad_all_heroes.html:8
+#: .\apps\lineage\server\templates\status\olympiad_all_heroes.html:30
 msgid "Todos os Heróis Olimpíada"
-msgstr "Todos OS Heróis Olimpíada"
+msgstr "Todos los héroes de los Juegos Olímpicos"
 
-#: .\apps\lineage\server\templates\status\olympiad_all_heroes.html:16
-#: .\apps\lineage\server\templates\status\olympiad_current_heroes.html:16
-#: .\apps\lineage\server\templates\status\olympiad_ranking.html:16
+#: .\apps\lineage\server\templates\status\olympiad_all_heroes.html:38
+#: .\apps\lineage\server\templates\status\olympiad_current_heroes.html:38
+#: .\apps\lineage\server\templates\status\olympiad_ranking.html:38
 msgid "Jogador"
-msgstr "Jogador"
+msgstr "Jugador"
 
-#: .\apps\lineage\server\templates\status\olympiad_all_heroes.html:18
-#: .\apps\lineage\server\templates\status\olympiad_current_heroes.html:18
-#: .\apps\lineage\server\templates\status\olympiad_ranking.html:18
-#: .\apps\lineage\server\templates\status\siege_ranking.html:24
+#: .\apps\lineage\server\templates\status\olympiad_all_heroes.html:40
+#: .\apps\lineage\server\templates\status\olympiad_current_heroes.html:40
+#: .\apps\lineage\server\templates\status\olympiad_ranking.html:40
+#: .\apps\lineage\server\templates\status\siege_ranking.html:95
 msgid "Aliança"
-msgstr "Aliánça"
+msgstr "Alianza"
 
-#: .\apps\lineage\server\templates\status\olympiad_all_heroes.html:19
-#: .\apps\lineage\server\templates\status\olympiad_current_heroes.html:19
+#: .\apps\lineage\server\templates\status\olympiad_all_heroes.html:41
+#: .\apps\lineage\server\templates\status\olympiad_current_heroes.html:41
+#: .\apps\lineage\server\templates\status\olympiad_ranking.html:41
 msgid "Classe"
-msgstr "Chasquero"
+msgstr "Clase"
 
-#: .\apps\lineage\server\templates\status\olympiad_all_heroes.html:20
+#: .\apps\lineage\server\templates\status\olympiad_all_heroes.html:42
 msgid "Contagem de Jogos"
-msgstr "Contagem de jogos"
+msgstr "Recuento de juegos"
 
-#: .\apps\lineage\server\templates\status\olympiad_all_heroes.html:39
-#: .\apps\lineage\server\templates\status\olympiad_current_heroes.html:37
-#: .\apps\lineage\server\templates\status\olympiad_ranking.html:45
-#: .\apps\lineage\server\templates\status\siege_ranking.html:38
-#: .\apps\lineage\server\templates\tops\top_adena.html:41
+#: .\apps\lineage\server\templates\status\olympiad_all_heroes.html:69
+#: .\apps\lineage\server\templates\status\olympiad_current_heroes.html:67
+#: .\apps\lineage\server\templates\status\olympiad_ranking.html:75
+#: .\apps\lineage\server\templates\status\siege_ranking.html:121
+#: .\apps\lineage\server\templates\tops\top_adena.html:72
 #: .\apps\lineage\server\templates\tops\top_clans.html:74
-#: .\apps\lineage\server\templates\tops\top_level.html:43
-#: .\apps\lineage\server\templates\tops\top_online.html:37
-#: .\apps\lineage\server\templates\tops\top_pk.html:41
-#: .\apps\lineage\server\templates\tops\top_pvp.html:41
+#: .\apps\lineage\server\templates\tops\top_level.html:74
+#: .\apps\lineage\server\templates\tops\top_online.html:68
+#: .\apps\lineage\server\templates\tops\top_pk.html:72
+#: .\apps\lineage\server\templates\tops\top_pvp.html:72
 msgid "Nenhum dado encontrado."
-msgstr "Nenhum DADO Encontrado."
+msgstr "No se encontraron datos."
 
-#: .\apps\lineage\server\templates\status\olympiad_current_heroes.html:8
+#: .\apps\lineage\server\templates\status\olympiad_current_heroes.html:30
 msgid "Heróis Atuais Olimpíada"
-msgstr "Heróis Atuais Olimpíada"
+msgstr "Olímpicos de héroes actuales"
 
-#: .\apps\lineage\server\templates\status\olympiad_ranking.html:8
+#: .\apps\lineage\server\templates\status\olympiad_ranking.html:30
 msgid "Ranking Olimpíada"
-msgstr "Clasificación de Olimpíada"
+msgstr "Ranking en olímpicos"
 
-#: .\apps\lineage\server\templates\status\olympiad_ranking.html:19
-msgid "Pontos Olímpicos"
-msgstr "Pontos Olímpicos"
-
-#: .\apps\lineage\server\templates\status\siege_ranking.html:9
+#: .\apps\lineage\server\templates\status\siege_ranking.html:60
 msgid "Castle & Siege Ranking"
-msgstr "Ranking de castillos y asedio"
+msgstr "Castillo y clasificación de asedio"
 
-#: .\apps\lineage\server\templates\status\siege_ranking.html:21
+#: .\apps\lineage\server\templates\status\siege_ranking.html:61
+msgid "Informações atualizadas sobre as guerras dos castelos."
+msgstr "Información actualizada sobre las Guerras de Castles."
+
+#: .\apps\lineage\server\templates\status\siege_ranking.html:74
 msgid "Castle"
 msgstr "Castillo"
 
-#: .\apps\lineage\server\templates\status\siege_ranking.html:22
+#: .\apps\lineage\server\templates\status\siege_ranking.html:79
 msgid "Clan Proprietário"
-msgstr "Clan Proprietário"
+msgstr "Dueño del clan"
 
-#: .\apps\lineage\server\templates\status\siege_ranking.html:23
-msgid "Clan Líder"
-msgstr "Clan"
+#: .\apps\lineage\server\templates\status\siege_ranking.html:91
+#: .\apps\lineage\server\templates\tops\top_clans.html:41
+msgid "Líder"
+msgstr "Líder"
 
-#: .\apps\lineage\server\templates\status\siege_ranking.html:26
-msgid "Próxima Guerra"
-msgstr "PROMA Guerra"
-
-#: .\apps\lineage\server\templates\status\siege_ranking.html:27
+#: .\apps\lineage\server\templates\status\siege_ranking.html:99
 msgid "Taxa"
 msgstr "Taxones"
 
-#: .\apps\lineage\server\templates\status\siege_ranking.html:29
+#: .\apps\lineage\server\templates\status\siege_ranking.html:103
+msgid "Próxima Guerra"
+msgstr "Próxima Guerra"
+
+#: .\apps\lineage\server\templates\status\siege_ranking.html:107
 msgid "Atacantes"
 msgstr "Atacantes"
 
-#: .\apps\lineage\server\templates\status\siege_ranking.html:30
+#: .\apps\lineage\server\templates\status\siege_ranking.html:110
 msgid "Defensores"
 msgstr "Defensores"
 
-#: .\apps\lineage\server\templates\tops\top_adena.html:8
+#: .\apps\lineage\server\templates\tops\top_adena.html:31
 msgid "Ranking Adena"
-msgstr "Clasificación Adena"
+msgstr "Anillo adensa"
 
-#: .\apps\lineage\server\templates\tops\top_adena.html:19
+#: .\apps\lineage\server\templates\tops\top_adena.html:42
 msgid "Adenas"
 msgstr "Adenas"
 
-#: .\apps\lineage\server\templates\tops\top_adena.html:21
-#: .\apps\lineage\server\templates\tops\top_level.html:22
-#: .\apps\lineage\server\templates\tops\top_online.html:18
-#: .\apps\lineage\server\templates\tops\top_pk.html:21
-#: .\apps\lineage\server\templates\tops\top_pvp.html:21
+#: .\apps\lineage\server\templates\tops\top_adena.html:44
+#: .\apps\lineage\server\templates\tops\top_level.html:45
+#: .\apps\lineage\server\templates\tops\top_online.html:41
+#: .\apps\lineage\server\templates\tops\top_pk.html:44
+#: .\apps\lineage\server\templates\tops\top_pvp.html:44
 msgid "Tempo Online"
-msgstr "Tempo en línea"
+msgstr "Tiempo en línea"
 
 #: .\apps\lineage\server\templates\tops\top_clans.html:31
 msgid "Ranking Clans"
@@ -1001,122 +1708,141 @@ msgstr "Clanes de clasificación"
 msgid "Ally"
 msgstr "Aliado"
 
-#: .\apps\lineage\server\templates\tops\top_clans.html:41
-msgid "Líder"
-msgstr "Lisador"
-
 #: .\apps\lineage\server\templates\tops\top_clans.html:43
 msgid "Reputação"
-msgstr "Reputal"
+msgstr "Reputación"
 
 #: .\apps\lineage\server\templates\tops\top_clans.html:44
 msgid "Membros"
-msgstr "Membrana"
+msgstr "Miembros"
 
-#: .\apps\lineage\server\templates\tops\top_level.html:8
+#: .\apps\lineage\server\templates\tops\top_level.html:31
 msgid "Ranking Nível"
-msgstr "Ranking nível"
+msgstr "Clasificación de nivel"
 
-#: .\apps\lineage\server\templates\tops\top_level.html:19
-#: .\apps\lineage\server\templates\tops\top_pk.html:19
-#: .\apps\lineage\server\templates\tops\top_pvp.html:18
+#: .\apps\lineage\server\templates\tops\top_level.html:42
+#: .\apps\lineage\server\templates\tops\top_pk.html:42
+#: .\apps\lineage\server\templates\tops\top_pvp.html:41
 msgid "PvPs"
 msgstr "PVPS"
 
-#: .\apps\lineage\server\templates\tops\top_level.html:20
-#: .\apps\lineage\server\templates\tops\top_pk.html:18
-#: .\apps\lineage\server\templates\tops\top_pvp.html:19
+#: .\apps\lineage\server\templates\tops\top_level.html:43
+#: .\apps\lineage\server\templates\tops\top_pk.html:41
+#: .\apps\lineage\server\templates\tops\top_pvp.html:42
 msgid "PKs"
 msgstr "Pks"
 
-#: .\apps\lineage\server\templates\tops\top_online.html:8
+#: .\apps\lineage\server\templates\tops\top_online.html:31
 msgid "Top Tempo Online"
 msgstr "Tempo superior en línea"
 
-#: .\apps\lineage\server\templates\tops\top_online.html:16
+#: .\apps\lineage\server\templates\tops\top_online.html:39
 msgid "PvP"
 msgstr "PVP"
 
-#: .\apps\lineage\server\templates\tops\top_online.html:17
+#: .\apps\lineage\server\templates\tops\top_online.html:40
 msgid "PK"
 msgstr "PAQUETE"
 
-#: .\apps\lineage\server\templates\tops\top_pk.html:8
+#: .\apps\lineage\server\templates\tops\top_pk.html:31
 msgid "Ranking PK"
 msgstr "Ranking PK"
 
-#: .\apps\lineage\server\templates\tops\top_pvp.html:8
+#: .\apps\lineage\server\templates\tops\top_pvp.html:31
 msgid "Ranking PvP"
 msgstr "Ranking PvP"
 
-#: .\apps\lineage\shop\templates\shop\cart.html:7
+#: .\apps\lineage\shop\templates\shop\cart.html:8
 msgid "Meu Carrinho"
 msgstr "Mi carrito"
 
-#: .\apps\lineage\shop\templates\shop\cart.html:12
+#: .\apps\lineage\shop\templates\shop\cart.html:13
 msgid "Itens no Carrinho"
 msgstr "Artículos en el carrito"
 
-#: .\apps\lineage\shop\templates\shop\cart.html:35
+#: .\apps\lineage\shop\templates\shop\cart.html:29
+msgid "Remover Item"
+msgstr "Artículo de removedor"
+
+#: .\apps\lineage\shop\templates\shop\cart.html:42
+#: .\apps\lineage\shop\templates\shop\home.html:174
+msgid "Visualizar Itens"
+msgstr "Ver elementos"
+
+#: .\apps\lineage\shop\templates\shop\cart.html:49
+msgid "Remover Pacote"
+msgstr "Paquete"
+
+#: .\apps\lineage\shop\templates\shop\cart.html:61
+#: .\apps\lineage\shop\templates\shop\home.html:185
+msgid "Itens do Pacote"
+msgstr "Artículo de paquete"
+
+#: .\apps\lineage\shop\templates\shop\cart.html:75
+#: .\apps\lineage\shop\templates\shop\home.html:196
+msgid "Este pacote não contém itens."
+msgstr "Este paquete no contiene elementos."
+
+#: .\apps\lineage\shop\templates\shop\cart.html:90
 msgid "Código promocional"
 msgstr "Código promocional"
 
-#: .\apps\lineage\shop\templates\shop\cart.html:37
+#: .\apps\lineage\shop\templates\shop\cart.html:92
 msgid "Aplicar"
-msgstr "Multiplicador"
+msgstr "Aplicar"
 
-#: .\apps\lineage\shop\templates\shop\cart.html:43
-msgid "Total"
-msgstr "Tiempo total:"
-
-#: .\apps\lineage\shop\templates\shop\cart.html:50
-msgid "Personagem para Entrega"
-msgstr "Personaje"
-
-#: .\apps\lineage\shop\templates\shop\cart.html:55
+#: .\apps\lineage\shop\templates\shop\cart.html:115
 msgid "Finalizar Compra"
 msgstr "Finalizar Compra"
 
-#: .\apps\lineage\shop\templates\shop\cart.html:61
+#: .\apps\lineage\shop\templates\shop\cart.html:123
+msgid "Esvaziar Carrinho"
+msgstr "Chorrito"
+
+#: .\apps\lineage\shop\templates\shop\cart.html:129
+msgid "Continuar Comprando"
+msgstr "Continuar Comprando"
+
+#: .\apps\lineage\shop\templates\shop\cart.html:134
 msgid "Seu carrinho está vazio."
 msgstr "Tu carro está vacío."
 
-#: .\apps\lineage\shop\templates\shop\home.html:8
-#: .\templates\includes\sidebar.html:71
+#: .\apps\lineage\shop\templates\shop\home.html:105
+#: .\templates\includes\sidebar.html:74
 msgid "Loja Online"
-msgstr "Superior en línea"
+msgstr "Loja Online"
 
-#: .\apps\lineage\shop\templates\shop\home.html:11
+#: .\apps\lineage\shop\templates\shop\home.html:108
 msgid "Ver Carrinho"
-msgstr "Ver relatório"
+msgstr "Ver carrito"
 
-#: .\apps\lineage\shop\templates\shop\home.html:15
+#: .\apps\lineage\shop\templates\shop\home.html:113
 msgid "Itens Disponíveis"
-msgstr "Moedas disponíeis"
+msgstr "Artículos disponibles"
 
-#: .\apps\lineage\shop\templates\shop\home.html:26
+#: .\apps\lineage\shop\templates\shop\home.html:124
 msgid "Adicionar"
 msgstr "Adicionar"
 
-#: .\apps\lineage\shop\templates\shop\home.html:32
+#: .\apps\lineage\shop\templates\shop\home.html:130
 msgid "Nenhum item disponível."
-msgstr "Chat Indisponível"
+msgstr "No hay artículo disponible."
 
-#: .\apps\lineage\shop\templates\shop\home.html:36
+#: .\apps\lineage\shop\templates\shop\home.html:161
 msgid "Pacotes"
 msgstr "Paquetes"
 
-#: .\apps\lineage\shop\templates\shop\home.html:43
+#: .\apps\lineage\shop\templates\shop\home.html:168
 msgid "Itens inclusos"
 msgstr "Artículos incluidos"
 
-#: .\apps\lineage\shop\templates\shop\home.html:46
+#: .\apps\lineage\shop\templates\shop\home.html:171
 msgid "Adicionar Pacote"
 msgstr "Agregar paquete"
 
-#: .\apps\lineage\shop\templates\shop\home.html:52
+#: .\apps\lineage\shop\templates\shop\home.html:207
 msgid "Nenhum pacote disponível."
-msgstr "Chat Indisponível"
+msgstr "No hay paquete disponible."
 
 #: .\apps\lineage\shop\templates\shop\manager\dashboard.html:6
 msgid "Painel de Gerenciamento do Shop"
@@ -1124,7 +1850,7 @@ msgstr "Panel de gestión de la tienda"
 
 #: .\apps\lineage\shop\templates\shop\manager\dashboard.html:13
 msgid "Gerenciar Itens"
-msgstr "Amigos Gerenciar"
+msgstr "Administrar artículos"
 
 #: .\apps\lineage\shop\templates\shop\manager\dashboard.html:14
 msgid "Adicione, edite ou desative itens disponíveis no shop."
@@ -1134,11 +1860,11 @@ msgstr "Agregar, editar o deshabilitar artículos disponibles para la tienda."
 #: .\apps\lineage\shop\templates\shop\manager\dashboard.html:26
 #: .\apps\lineage\shop\templates\shop\manager\dashboard.html:37
 msgid "Acessar"
-msgstr "Acesso Negado"
+msgstr "Acceso"
 
 #: .\apps\lineage\shop\templates\shop\manager\dashboard.html:24
 msgid "Gerenciar Pacotes"
-msgstr "Amigos Gerenciar"
+msgstr "Administrar paquetes"
 
 #: .\apps\lineage\shop\templates\shop\manager\dashboard.html:25
 msgid "Monte pacotes personalizados com itens e promoções."
@@ -1146,7 +1872,7 @@ msgstr "Monte los paquetes personalizados con artículos y promociones."
 
 #: .\apps\lineage\shop\templates\shop\manager\dashboard.html:35
 msgid "Gerenciar Promoções"
-msgstr "Amigos Gerenciar"
+msgstr "Gestionar las promociones"
 
 #: .\apps\lineage\shop\templates\shop\manager\dashboard.html:36
 msgid "Crie e gerencie códigos promocionais para o shop."
@@ -1154,11 +1880,11 @@ msgstr "Crear y administrar códigos promocionales para la tienda."
 
 #: .\apps\lineage\shop\templates\shop\manager\edit_package.html:8
 msgid "Editar Pacote"
-msgstr "Editar perfil"
+msgstr "Paquete de edición"
 
 #: .\apps\lineage\shop\templates\shop\manager\edit_package.html:14
 msgid "Salvar Pacote"
-msgstr "Salvar Senha"
+msgstr "Ahorrar"
 
 #: .\apps\lineage\shop\templates\shop\manager\edit_package.html:19
 msgid "Itens no Pacote"
@@ -1178,7 +1904,7 @@ msgstr "Agregar elementos al paquete"
 
 #: .\apps\lineage\shop\templates\shop\manager\edit_package.html:37
 msgid "Selecione os Itens"
-msgstr "Seleción o personaje"
+msgstr "Seleccione los elementos"
 
 #: .\apps\lineage\shop\templates\shop\manager\edit_package.html:44
 msgid "Adicionar Itens"
@@ -1186,31 +1912,23 @@ msgstr "Agregar elementos"
 
 #: .\apps\lineage\shop\templates\shop\manager\items.html:8
 msgid "Cadastro de Itens"
-msgstr "Perda de itens"
-
-#: .\apps\lineage\shop\templates\shop\manager\items.html:16
-msgid "Cadastrar Item"
-msgstr "CADASTRAR MOEDA"
-
-#: .\apps\lineage\shop\templates\shop\manager\items.html:21
-msgid "Itens Cadastrados"
-msgstr "Artículos registrados"
+msgstr "Registro de artículos"
 
 #: .\apps\lineage\shop\templates\shop\manager\items.html:29
 #: .\apps\lineage\shop\templates\shop\manager\packages.html:25
 #: .\apps\lineage\shop\templates\shop\manager\promotions.html:29
 msgid "Ativo"
-msgstr "Ativa"
+msgstr "Activo"
 
 #: .\apps\lineage\shop\templates\shop\manager\items.html:29
 #: .\apps\lineage\shop\templates\shop\manager\packages.html:27
 #: .\apps\lineage\shop\templates\shop\manager\promotions.html:29
 msgid "Inativo"
-msgstr "Inatuible"
+msgstr "Inactivo"
 
 #: .\apps\lineage\shop\templates\shop\manager\items.html:33
 msgid "Nenhum item cadastrado."
-msgstr "Nenhum participante CADASTRADO."
+msgstr "No hay artículo registrado."
 
 #: .\apps\lineage\shop\templates\shop\manager\packages.html:8
 msgid "Cadastro de Pacotes"
@@ -1218,19 +1936,15 @@ msgstr "Registro de paquetes"
 
 #: .\apps\lineage\shop\templates\shop\manager\packages.html:14
 msgid "Cadastrar Pacote"
-msgstr "CADASTRAR MOEDA"
+msgstr "Paquete de registro"
 
 #: .\apps\lineage\shop\templates\shop\manager\packages.html:19
 msgid "Pacotes Cadastrados"
 msgstr "Paquetes registrados"
 
-#: .\apps\lineage\shop\templates\shop\manager\packages.html:29
-msgid "Editar"
-msgstr "Editar perfil"
-
 #: .\apps\lineage\shop\templates\shop\manager\packages.html:32
 msgid "Nenhum pacote cadastrado."
-msgstr "Nenhum participante CADASTRADO."
+msgstr "No hay paquete registrado."
 
 #: .\apps\lineage\shop\templates\shop\manager\promotions.html:8
 msgid "Cadastro de Códigos Promocionais"
@@ -1238,7 +1952,7 @@ msgstr "Registro de códigos promocionales"
 
 #: .\apps\lineage\shop\templates\shop\manager\promotions.html:16
 msgid "Cadastrar Promoção"
-msgstr "CataStar Enderço"
+msgstr "Promoción de registro"
 
 #: .\apps\lineage\shop\templates\shop\manager\promotions.html:21
 msgid "Códigos Cadastrados"
@@ -1246,66 +1960,53 @@ msgstr "Códigos registrados"
 
 #: .\apps\lineage\shop\templates\shop\manager\promotions.html:33
 msgid "Nenhuma promoção cadastrada."
-msgstr "Nenhuma Solicitação Encontrada."
+msgstr "No hay promoción registrada."
 
 #: .\apps\lineage\shop\templates\shop\purchases.html:7
-#: .\templates\includes\sidebar.html:82
+#: .\templates\includes\sidebar.html:85
 msgid "Histórico de Compras"
 msgstr "Histórico de Compras"
 
 #: .\apps\lineage\shop\templates\shop\purchases.html:23
 msgid "Nenhuma compra realizada ainda."
-msgstr "Nenhuma Transação Registra Ainda."
+msgstr "No hay compra realizada todavía."
 
 #: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:9
 msgid "Configuração de Moeda In-game"
-msgstr "Configuuração de moeda en el juego"
-
-#: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:19
-#: .\apps\main\solicitation\templates\pages\solicitation_list.html:35
-msgid "ID"
-msgstr "IDENTIFICACIÓN"
+msgstr "Configuración de divisas en el juego"
 
 #: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:20
 #: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:89
 msgid "Multiplicador"
 msgstr "Multiplicador"
 
-#: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:22
-msgid "Ação"
-msgstr "Ação"
-
 #: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:33
 msgid "Ativa"
-msgstr "Ativa"
+msgstr "Activo"
 
 #: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:35
 msgid "Inativa"
-msgstr "Inatuible"
+msgstr "Inactivo"
 
 #: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:45
 msgid "Ativar"
-msgstr "Ativar"
+msgstr "Permitir"
 
 #: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:50
 msgid "Atual"
-msgstr "Altual"
+msgstr "Actual"
 
 #: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:54
 msgid "Tem certeza que deseja excluir esta moeda?"
-msgstr "TEM CREZZA QUE DESEJA EXCRUIR ESTA MOEDA?"
-
-#: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:58
-msgid "Excluir"
-msgstr "Excluir"
+msgstr "¿Estás seguro de que quieres eliminar esta moneda?"
 
 #: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:66
 msgid "Nenhuma moeda configurada ainda."
-msgstr "Nenhuma Moeda Configurada Ainda."
+msgstr "No hay moneda configurada todavía."
 
 #: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:76
 msgid "Nova Moeda"
-msgstr "Nova Moeda"
+msgstr "Nueva moneda"
 
 #: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:82
 msgid "Ex: Gold Coin"
@@ -1313,7 +2014,7 @@ msgstr "Ej: moneda de oro"
 
 #: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:85
 msgid "ID (no servidor)"
-msgstr "ID (sin servidor)"
+msgstr "ID (no servidor)"
 
 #: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:86
 msgid "Ex: 4037"
@@ -1325,45 +2026,45 @@ msgstr "Ej: 1.0"
 
 #: .\apps\lineage\wallet\templates\configs\coin_config_panel.html:94
 msgid "Cadastrar Moeda"
-msgstr "CADASTRAR MOEDA"
+msgstr "Registrar moneda"
 
 #: .\apps\lineage\wallet\templates\wallet\dashboard.html:59
 msgid "Minha Carteira"
-msgstr "Carteira de minha"
+msgstr "Mi billetera"
 
 #: .\apps\lineage\wallet\templates\wallet\dashboard.html:66
 msgid "Saldo Atual"
-msgstr "Saldo Atual"
+msgstr "Saldo actual"
 
 #: .\apps\lineage\wallet\templates\wallet\dashboard.html:68
 msgid "moedas disponíveis"
-msgstr "Moedas disponíeis"
+msgstr "Monedas disponibles"
 
 #: .\apps\lineage\wallet\templates\wallet\dashboard.html:76
 #: .\apps\lineage\wallet\templates\wallet\transfer_to_server.html:18
 msgid "Transferir para o Servidor"
-msgstr "Transferir para o servidor"
+msgstr "Transferir para o Servidor"
 
 #: .\apps\lineage\wallet\templates\wallet\dashboard.html:81
 #: .\apps\lineage\wallet\templates\wallet\transfer_to_player.html:18
 msgid "Transferir para Outro Jogador"
-msgstr "Transferir para outro jogador"
+msgstr "Transferir a otro jugador"
 
 #: .\apps\lineage\wallet\templates\wallet\dashboard.html:91
 msgid "Abrir Solicitação"
-msgstr "Abrir Solicitação"
+msgstr "Abierto"
 
 #: .\apps\lineage\wallet\templates\wallet\dashboard.html:98
 msgid "Últimas Transações"
-msgstr "Últimas Transações"
+msgstr "Últimas transacciones"
 
 #: .\apps\lineage\wallet\templates\wallet\dashboard.html:123
 msgid "Nenhuma transação registrada ainda."
-msgstr "Nenhuma Transação Registra Ainda."
+msgstr "No hay transacción registrada todavía."
 
 #: .\apps\lineage\wallet\templates\wallet\dashboard.html:162
 msgid "Sobre a Carteira"
-msgstr "Sobre una carteira"
+msgstr "En la billetera"
 
 #: .\apps\lineage\wallet\templates\wallet\dashboard.html:164
 msgid ""
@@ -1371,17 +2072,17 @@ msgid ""
 "moedas para realizar compras, enviar presentes ou desbloquear recursos "
 "exclusivos dentro do servidor."
 msgstr ""
-"Gerencie Seu Saldo Virtual E Acompanhe Suas Transações recientes. Use como "
-"Moedas para Realizar Compras, Enviar presenta ou desbloquear recursos "
-"exclusivos dentro do servidor."
+"Administre su equilibrio virtual y siga sus transacciones recientes. Use las"
+" monedas para realizar compras, enviar regalos o desbloquear funciones "
+"exclusivas dentro del servidor."
 
 #: .\apps\lineage\wallet\templates\wallet\dashboard.html:167
 msgid "Atualizar Carteira"
-msgstr "Carteira atualizar"
+msgstr "Actualización de billetera"
 
 #: .\apps\lineage\wallet\templates\wallet\dashboard.html:174
 msgid "Pedidos Pendentes"
-msgstr "Pedidos pendentes"
+msgstr "Pedidos Pendentes"
 
 #: .\apps\lineage\wallet\templates\wallet\dashboard.html:176
 msgid ""
@@ -1389,74 +2090,67 @@ msgid ""
 "processados. Evite criar novos pedidos repetidos e acompanhe o andamento dos"
 " seus pagamentos."
 msgstr ""
-"Visualice pedidos de compra de moedas que ainda não foram pagos ou "
-"processados. Evite criar novos pedidos repetidos e acompanhe o andamento dos"
-" seus pagamentos."
-
-#: .\apps\lineage\wallet\templates\wallet\transfer_to_player.html:10
-#: .\apps\lineage\wallet\templates\wallet\transfer_to_server.html:10
-#: .\apps\main\notification\templates\pages\notifications.html:39
-#: .\apps\main\notification\templates\pages\notifications.html:79
-#: .\templates\includes\notification.html:9
-#: .\templates\includes\notification.html:15 .\templates\public\index.html:120
-msgid "Fechar"
-msgstr "Fechar"
+"Visualice los pedidos de compra de divisas que aún no se han pagado o "
+"procesado. Evite la creación de nuevas solicitudes repetidas y siga el "
+"progreso de sus pagos."
 
 #: .\apps\lineage\wallet\templates\wallet\transfer_to_player.html:24
 msgid "Nome do Jogador"
-msgstr "Nome do jogador"
+msgstr "Nombre del jugador"
 
 #: .\apps\lineage\wallet\templates\wallet\transfer_to_player.html:25
 msgid "Ex: Fulano123"
-msgstr "Ej: Fulano123"
+msgstr "Ex: Fulano123"
 
 #: .\apps\lineage\wallet\templates\wallet\transfer_to_player.html:28
 #: .\apps\lineage\wallet\templates\wallet\transfer_to_server.html:41
 msgid "Valor da Transferência"
-msgstr "Valor da Transferência"
+msgstr "Valor de transferencia"
 
 #: .\apps\lineage\wallet\templates\wallet\transfer_to_player.html:35
 #: .\apps\lineage\wallet\templates\wallet\transfer_to_server.html:48
 msgid "Confirme sua senha"
-msgstr "Confirmar sua senha"
+msgstr "Confirma tu contraseña"
 
 #: .\apps\lineage\wallet\templates\wallet\transfer_to_player.html:39
 #: .\apps\lineage\wallet\templates\wallet\transfer_to_server.html:52
 msgid "Confirmar Transferência"
-msgstr "Confirmar Transferência"
+msgstr "Confirmar transferencia"
 
 #: .\apps\lineage\wallet\templates\wallet\transfer_to_server.html:22
+#: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:82
 msgid "Usuário:"
-msgstr "Usuário:"
+msgstr "Usuario:"
 
 #: .\apps\lineage\wallet\templates\wallet\transfer_to_server.html:25
 msgid "Saldo atual:"
-msgstr "Saldo Atual:"
+msgstr "Saldo actual:"
 
-#: .\apps\lineage\wallet\templates\wallet\transfer_to_server.html:32
-msgid "Selecione o Personagem"
-msgstr "Seleción o personaje"
-
-#: .\apps\lineage\wallet\templates\wallet\transfer_to_server.html:34
-msgid "Escolha um personagem"
-msgstr "Escolha um personaje"
+#: .\apps\main\administrator\models.py:231
+msgid ""
+"O nome da variável só pode conter letras, números e underscores (_) e deve "
+"começar com uma letra ou underscore."
+msgstr ""
+"El nombre de la variable solo puede contener letras, números y subrayos (_) "
+"y debe comenzar con una letra o un guión bajo."
 
 #: .\apps\main\administrator\templates\errors\access_denied.html:9
 #: .\apps\main\administrator\templates\errors\solicitation_closed.html:9
+#: .\themes\installed\l2-giran\base.html:70
 msgid "Home"
 msgstr "Hogar"
 
 #: .\apps\main\administrator\templates\errors\access_denied.html:13
 msgid "Acesso Negado"
-msgstr "Acesso Negado"
+msgstr "Acceso denegado"
 
 #: .\apps\main\administrator\templates\errors\access_denied.html:22
 msgid "Acesso Negado!"
-msgstr "¡Acesso Negado!"
+msgstr "¡Acceso denegado!"
 
 #: .\apps\main\administrator\templates\errors\access_denied.html:24
 msgid "Você não tem permissão para acessar esta sala de chat."
-msgstr "Você Não Tem Permissão para Acessar ESTA SALA DE CHAT."
+msgstr "No se le permite acceder a esta sala de chat."
 
 #: .\apps\main\administrator\templates\errors\access_denied.html:28
 #: .\apps\main\administrator\templates\errors\solicitation_closed.html:31
@@ -1467,35 +2161,35 @@ msgstr "Voltar para a página inicial"
 
 #: .\apps\main\administrator\templates\errors\solicitation_closed.html:13
 msgid "Chat Indisponível"
-msgstr "Chat Indisponível"
+msgstr "Chat no disponible"
 
 #: .\apps\main\administrator\templates\errors\solicitation_closed.html:22
 msgid "Chat Indisponível!"
-msgstr "Chat Indisponível!"
+msgstr "¡Chat no disponible!"
 
 #: .\apps\main\administrator\templates\errors\solicitation_closed.html:25
 msgid "A solicitação"
-msgstr "Un Solicitação"
+msgstr "La solicitud"
 
 #: .\apps\main\administrator\templates\errors\solicitation_closed.html:25
 msgid "foi"
-msgstr "foi"
+msgstr "el era"
 
 #: .\apps\main\administrator\templates\errors\solicitation_closed.html:25
 msgid "e não está mais disponível para conversa."
-msgstr "E Não Está Mais Disponível para conversa."
+msgstr "Y ya no está disponible para la conversación."
 
 #: .\apps\main\administrator\templates\errors\solicitation_closed.html:27
 msgid "Se você precisar de mais informações, entre em contato com o suporte."
-msgstr "Se Você Precisar de Mais Informações, Entre em contato Com o Suporte."
+msgstr "Si necesita más información, comuníquese con el soporte."
 
 #: .\apps\main\administrator\templates\pages\group.html:4
 msgid "Chat da Solicitação"
-msgstr "Chat da Solicitação"
+msgstr "Chat de la solicitud"
 
 #: .\apps\main\administrator\templates\pages\group.html:15
 msgid "Conversa sobre a"
-msgstr "Conversa SOBRE A"
+msgstr "Conversa sobre a"
 
 #: .\apps\main\administrator\templates\pages\group.html:20
 #: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:29
@@ -1504,21 +2198,57 @@ msgstr "Protocolo:"
 
 #: .\apps\main\administrator\templates\pages\group.html:55
 msgid "Digite sua mensagem aqui..."
-msgstr "Digite sua Mensagem Aqui ..."
+msgstr "Ingrese su mensaje aquí ..."
 
 #: .\apps\main\administrator\templates\pages\group.html:56
 #: .\apps\main\notification\templates\pages\notifications.html:45
 #: .\apps\main\notification\templates\pages\notifications.html:85
 msgid "Mensagem"
-msgstr "Mensagem"
+msgstr "Mensaje"
 
 #: .\apps\main\administrator\templates\pages\group.html:62
 msgid "Selecionar Emoji"
-msgstr "Emoji selectario"
+msgstr "Seleccionar emoji"
 
 #: .\apps\main\administrator\templates\pages\group.html:70
+#: .\apps\main\message\templates\pages\chat.html:78
 msgid "Enviar"
-msgstr "Envidiar"
+msgstr "Enviar"
+
+#: .\apps\main\administrator\templates\security\settings.html:7
+msgid "Configurações de Segurança"
+msgstr "Configuración de seguridad"
+
+#: .\apps\main\administrator\templates\security\settings.html:8
+msgid ""
+"Mantenha sua conta protegida ativando a autenticação em duas etapas (2FA)."
+msgstr ""
+"Mantenga su cuenta protegida activando la autenticación en dos pasos (2FA)."
+
+#: .\apps\main\administrator\templates\security\settings.html:17
+msgid "Autenticação em Duas Etapas (2FA)"
+msgstr "Autenticación de dos pasos (2fa)"
+
+#: .\apps\main\administrator\templates\security\settings.html:22
+msgid "A autenticação em duas etapas está ativada em sua conta."
+msgstr "La autenticación de dos pasos se activa en su cuenta."
+
+#: .\apps\main\administrator\templates\security\settings.html:27
+msgid "Desativar 2FA"
+msgstr "Desactivar"
+
+#: .\apps\main\administrator\templates\security\settings.html:32
+msgid ""
+"A autenticação em duas etapas não está ativada. Recomendamos ativá-la para "
+"melhorar a segurança."
+msgstr ""
+"La autenticación de dos pasos no está activada. Recomendamos activarlo para "
+"mejorar la seguridad."
+
+#: .\apps\main\administrator\templates\security\settings.html:35
+#: .\apps\main\home\templates\accounts_custom\ativar-2fa.html:97
+msgid "Ativar 2FA"
+msgstr "Activar 2FA"
 
 #: .\apps\main\auditor\templates\pages\auditor.html:8
 msgid "Real-time Auditor Middleware Data"
@@ -1526,11 +2256,11 @@ msgstr "Datos de middleware del auditor en tiempo real"
 
 #: .\apps\main\auditor\templates\pages\auditor.html:13
 msgid "Carregando dados..."
-msgstr "Carregando dados ..."
+msgstr "Cargando datos ..."
 
 #: .\apps\main\auditor\templates\pages\auditor.html:16
 msgid "Erro ao carregar os dados de auditoria. Tente novamente."
-msgstr "ERRO AO CARREGAR OS DADOS DE AUDITORIA. Tente Novente."
+msgstr "Error de carga de los datos de auditoría. Intentar otra vez."
 
 #: .\apps\main\auditor\templates\pages\auditor.html:51
 msgid "Date:"
@@ -1570,31 +2300,32 @@ msgstr "Código de estado de respuesta:"
 
 #: .\apps\main\auditor\templates\pages\auditor.html:64
 msgid "Nenhum dado de auditoria encontrado."
-msgstr "Nenhum Dado de Auditoria Encontrado."
+msgstr "No se encontraron datos de auditoría."
 
 #: .\apps\main\faq\templates\pages\faq.html:4
 #: .\apps\main\faq\templates\pages\faq.html:12
 #: .\apps\main\faq\templates\pages\faq.html:16
 #: .\apps\main\faq\templates\pages\faq.html:26 .\templates\public\faq.html:4
-#: .\templates\public\faq.html:15
+#: .\templates\public\faq.html:15 .\themes\installed\l2-giran\faq.html:4
+#: .\themes\installed\l2-giran\faq.html:13
 msgid "Perguntas Frequentes"
-msgstr "Pérguntas frecuentes"
+msgstr "Preguntas frecuentes"
 
 #: .\apps\main\faq\templates\pages\faq.html:11
 msgid "Ajuda"
-msgstr "Ajuda"
+msgstr "Ayuda"
 
 #: .\apps\main\faq\templates\pages\faq.html:27
 msgid ""
 "Encontre as respostas para as perguntas mais comuns feitas pelos nossos "
 "usuários."
 msgstr ""
-"Encontar como Respostas para como Pergutas Mais Comuns Feitas Pelos Nossos "
-"Usuários."
+"Encuentre las respuestas a las preguntas más comunes que hacen nuestros "
+"usuarios."
 
 #: .\apps\main\faq\templates\pages\faq.html:60
 msgid "Não há perguntas frequentes disponíveis no momento."
-msgstr "Não Há Perguntas frecuenta disponíis sin momento."
+msgstr "No hay preguntas frecuentes disponibles en este momento."
 
 #: .\apps\main\home\forms.py:47
 msgid "Username"
@@ -1620,20 +2351,33 @@ msgstr "Tu nombre de usuario"
 msgid "Your Password"
 msgstr "Tu contraseña"
 
+#: .\apps\main\home\templates\accounts_custom\ativar-2fa.html:81
+msgid "Ativar Autenticação em 2 Etapas"
+msgstr "Activar la autenticación en 2 pasos"
+
+#: .\apps\main\home\templates\accounts_custom\ativar-2fa.html:82
+msgid "Escaneie o QR Code abaixo com o Google Authenticator ou similar."
+msgstr ""
+"Escanee el código QR a continuación con Google Authenticator o similar."
+
+#: .\apps\main\home\templates\accounts_custom\ativar-2fa.html:92
+msgid "Digite o código do aplicativo"
+msgstr "Ingrese el código de aplicación"
+
 #: .\apps\main\home\templates\accounts_custom\forgot-password.html:69
 msgid "Esqueceu sua senha?"
-msgstr "Esqueceu sua Senha?"
+msgstr "¿Olvidaste tu contraseña?"
 
 #: .\apps\main\home\templates\accounts_custom\forgot-password.html:70
 msgid ""
 "Digite seu e-mail abaixo e enviaremos instruções para redefinir sua senha."
 msgstr ""
-"DIGITE SEU Correo electrónico abaixo e enviaremos instruções para redefinir "
-"sua senha."
+"Ingrese su correo electrónico a continuación y enviaremos instrucciones para"
+" redefinir su contraseña."
 
 #: .\apps\main\home\templates\accounts_custom\forgot-password.html:74
 msgid "Seu E-mail"
-msgstr "SEU Correo electrónico"
+msgstr "Tu correo electrónico"
 
 #: .\apps\main\home\templates\accounts_custom\forgot-password.html:80
 msgid "seunome@email.com"
@@ -1641,280 +2385,411 @@ msgstr "seunome@email.com"
 
 #: .\apps\main\home\templates\accounts_custom\forgot-password.html:85
 msgid "Enviar instruções"
-msgstr "Enviar instruções"
+msgstr "Enviar instrucciones"
 
 #: .\apps\main\home\templates\accounts_custom\forgot-password.html:89
 msgid "← Voltar para o login"
-msgstr "← Voltar para o iniciar sesión"
+msgstr "← Volver al inicio de sesión"
 
 #: .\apps\main\home\templates\accounts_custom\lock.html:87
+#: .\apps\main\home\templates\accounts_custom\verify-2fa.html:71
 msgid "Voltar para o painel"
-msgstr "Voltar Para O Painel"
+msgstr "Regresar al panel"
 
 #: .\apps\main\home\templates\accounts_custom\lock.html:99
 msgid "Melhor prevenir do que remediar."
-msgstr "Melhor prevenir do que remediar."
+msgstr "Mejor seguro que curar."
 
 #: .\apps\main\home\templates\accounts_custom\lock.html:104
 msgid "Sua Senha"
-msgstr "Sua senha"
+msgstr "Tu contraseña"
 
 #: .\apps\main\home\templates\accounts_custom\lock.html:119
 msgid "Desbloquear"
-msgstr "Desbloqueado"
+msgstr "Desbloquear"
 
 #: .\apps\main\home\templates\accounts_custom\password-change-done.html:47
 msgid "Senha alterada com sucesso"
-msgstr "Senha alterada com suceso"
+msgstr "Contraseña cambiada con éxito"
 
 #: .\apps\main\home\templates\accounts_custom\password-change-done.html:48
 msgid ""
 "Sua senha foi atualizada com sucesso. Agora você pode fazer login "
 "normalmente."
 msgstr ""
-"Sua Senha Foi Atualizada com Suceso. Agora Você Pode Fazer Login Normalme."
+"Su contraseña se ha actualizado correctamente. Ahora puedes iniciar sesión "
+"normalmente."
 
 #: .\apps\main\home\templates\accounts_custom\password-change-done.html:49
 msgid "→ Ir para o login"
-msgstr "→ IR para o Iniciar sesión"
+msgstr "→ Ir para o login"
 
 #: .\apps\main\home\templates\accounts_custom\password-change.html:63
 #: .\templates\admin\auth\user\change_password.html:40
 #: .\templates\registration\password_change_done.html:15
 msgid "Alterar senha"
-msgstr "Alterar Senha"
+msgstr "Cambiar la contraseña"
 
 #: .\apps\main\home\templates\accounts_custom\password-change.html:116
 msgid "Salvar nova senha"
-msgstr "Salvar Nova Senha"
+msgstr "Ahorrar"
 
 #: .\apps\main\home\templates\accounts_custom\password-reset-complete.html:50
 msgid "Senha redefinida"
-msgstr "Senha redefinida"
+msgstr "Contraseña redefinida"
 
 #: .\apps\main\home\templates\accounts_custom\password-reset-complete.html:51
 msgid ""
 "Sua senha foi redefinida com sucesso. Faça login novamente para continuar "
 "sua jornada."
 msgstr ""
-"Sua Senha Foi Redefinida Com Suceso. FAça Login Novente para Continuar Sua "
-"Jornada."
+"Su contraseña ha sido redefinida correctamente. Inicie sesión nuevamente "
+"para continuar su viaje."
 
 #: .\apps\main\home\templates\accounts_custom\password-reset-complete.html:60
 #: .\apps\main\home\templates\accounts_custom\password-reset-done.html:62
 #: .\apps\main\home\templates\accounts_custom\reset-password.html:85
 msgid "Voltar para o login"
-msgstr "Voltar para o Iniciar sesión"
+msgstr "Vuelve al inicio de sesión"
 
 #: .\apps\main\home\templates\accounts_custom\password-reset-done.html:50
 msgid "Email Enviado"
-msgstr "Enviar enviado por correo electrónico"
+msgstr "Email Enviado"
 
 #: .\apps\main\home\templates\accounts_custom\password-reset-done.html:52
 msgid ""
 "Um link foi enviado para seu email. Acesse-o para redefinir sua senha e "
 "continuar sua jornada."
 msgstr ""
-"Um enlace para enviado para correo electrónico para seu. Acesse-O para "
-"Redefinir sua Senha e Continuar sua jornada."
+"Se envió un enlace a su correo electrónico. Visítelo para redefinir su "
+"contraseña y continuar su viaje."
+
+#: .\apps\main\home\templates\accounts_custom\registration_success.html:62
+msgid "Conta mestre criada com sucesso!"
+msgstr "Cuenta maestra creada con éxito!"
+
+#: .\apps\main\home\templates\accounts_custom\registration_success.html:63
+msgid "Agora você precisa criar uma conta no servidor para jogar."
+msgstr "Ahora necesita crear una cuenta en el servidor para jugar."
+
+#: .\apps\main\home\templates\accounts_custom\registration_success.html:65
+msgid "Criar Conta do Lineage 2"
+msgstr "Crear cuenta de linaje 2"
 
 #: .\apps\main\home\templates\accounts_custom\reset-password.html:90
 #: .\apps\main\home\templates\accounts_custom\reset-password.html:126
 msgid "Redefinir Senha"
-msgstr "Redefinir senha"
+msgstr "Contraseña de redefinición"
 
 #: .\apps\main\home\templates\accounts_custom\sign-in.html:65
 msgid "Entre no Reino"
-msgstr "Entre no reino"
+msgstr "Entre no Reino"
 
 #: .\apps\main\home\templates\accounts_custom\sign-in.html:99
 msgid "Lembrar de mim"
-msgstr "Lembrar de Mim"
+msgstr "Acuérdate de mí"
 
 #: .\apps\main\home\templates\accounts_custom\sign-in.html:102
 msgid "Esqueceu a senha?"
-msgstr "Esqueceu a Senha?"
+msgstr "¿Olvidó la contraseña?"
 
 #: .\apps\main\home\templates\accounts_custom\sign-in.html:107
 msgid "Entrar no Reino"
-msgstr "Envertar no reino"
+msgstr "Entrar no Reino"
 
 #: .\apps\main\home\templates\accounts_custom\sign-in.html:112
 msgid "Ainda não tem conta?"
-msgstr "Ainda Não Tem Conta?"
+msgstr "¿No tienes una cuenta todavía?"
 
 #: .\apps\main\home\templates\accounts_custom\sign-in.html:113
 msgid "Forje seu destino"
-msgstr "Forje Seu Destino"
+msgstr "Forje seu destino"
 
 #: .\apps\main\home\templates\accounts_custom\sign-in.html:119
 msgid "Voltar para o início"
-msgstr "Voltar para o início"
+msgstr "Volver al principio"
 
 #: .\apps\main\home\templates\accounts_custom\sign-up.html:74
-msgid "Crie sua conta"
-msgstr "Crie sua conta"
+msgid "Crie sua conta mestre"
+msgstr "Crea tu cuenta maestra"
 
 #: .\apps\main\home\templates\accounts_custom\sign-up.html:75
 msgid "Preencha os campos abaixo para se juntar à aventura."
-msgstr "Prencha OS Campos Abaixo para Se Juntar à Aventura."
+msgstr "Complete los campos a continuación para unirse a la aventura."
 
 #: .\apps\main\home\templates\accounts_custom\sign-up.html:106
 msgid "Eu concordo com os"
-msgstr "EU Concordo Com OS"
+msgstr "Estoy de acuerdo con"
 
 #: .\apps\main\home\templates\accounts_custom\sign-up.html:106
 msgid "termos e condições"
-msgstr "Termos e condições"
+msgstr "Términos y condiciones"
 
 #: .\apps\main\home\templates\accounts_custom\sign-up.html:113
 msgid "Registrar"
-msgstr "Registrador"
+msgstr "Registrar"
 
 #: .\apps\main\home\templates\accounts_custom\sign-up.html:118
 msgid "← Já tem conta? Faça login"
-msgstr "← Já Tem Conta? Iniciar sesión facha"
+msgstr "← ¿Ya tienes una cuenta? Acceso"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:17
-#| msgid "Painel Definitivo Lineage - PDL 1.0"
+#: .\apps\main\home\templates\accounts_custom\verify-2fa.html:82
+msgid "Verificação em 2 Etapas"
+msgstr "Verificación en 2 pasos"
+
+#: .\apps\main\home\templates\accounts_custom\verify-2fa.html:83
+msgid "Insira o código do Google Authenticator para continuar."
+msgstr "Insira o código do Google Authenticator para continuar."
+
+#: .\apps\main\home\templates\accounts_custom\verify-2fa.html:95
+msgid "Código de Verificação"
+msgstr "Código de verificación"
+
+#: .\apps\main\home\templates\accounts_custom\verify-2fa.html:105
+msgid "Insira o código de 6 dígitos"
+msgstr "Insira o código de 6 dígitos"
+
+#: .\apps\main\home\templates\accounts_custom\verify-2fa.html:110
+msgid "Verificar Código"
+msgstr "Verificar Código"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:93
+msgid "Painel do Jogador"
+msgstr "Panel de jugadores"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:94
+msgid "Tudo que você precisa em um só lugar."
+msgstr "Todo lo que necesitas en un solo lugar."
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:101
+msgid "Olá,"
+msgstr "Hola,"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:103
+msgid "Este é o seu painel principal. Confira seu progresso abaixo."
+msgstr ""
+"Este es su panel principal. Echa un vistazo a tu progreso a continuación."
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:118
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:269
+#: .\templates\includes\navigation.html:140
+msgid "Carteira"
+msgstr "Cartera"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:120
+msgid "Saldo:"
+msgstr "Saldo:"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:122
+msgid "Nenhuma carteira encontrada."
+msgstr "No se encuentra la billetera."
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:129
+msgid "Status de Apoiador"
+msgstr "Estado del seguidor"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:133
+msgid "Você ainda não é um apoiador."
+msgstr "Todavía no eres un partidario."
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:141
+msgid "Inventários"
+msgstr "Inventarios"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:151
+msgid "Ver Inventário"
+msgstr "Ver inventario"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:157
+msgid "Nenhum inventário encontrado."
+msgstr "No se encuentra ningún inventario."
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:165
+msgid "Seus Leilões"
+msgstr "Tus subastas"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:166
+msgid "Total criados:"
+msgstr "Total criados:"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:173
+msgid "Experiencia"
+msgstr "Experiencia"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:185
+msgid "Bônus diário recebido! +25 XP"
+msgstr "¡Bonificación diaria recibida! +25 xp"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:192
+msgid "🏆 Conquistas"
+msgstr "🏆 Conquistas"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:206
+msgid "Conquista bloqueada"
+msgstr "Conquista bloqueada"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:215
+msgid "Conquista bloqueada. Desbloqueie para ver detalhes."
+msgstr "Conquista bloqueada. Desbloquee para ver detalles."
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:245
+msgid "Próximo"
+msgstr "Próximo"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:253
+msgid "Você ainda não desbloqueou nenhuma conquista."
+msgstr "Todavía no has desbloqueado ningún logro."
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:260
+msgid "Ir para Leilão"
+msgstr "Subasta"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:263
+msgid "Fazer Doação"
+msgstr "Donar"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:266
+#: .\templates\includes\navigation.html:133
+msgid "Conta L2"
+msgstr "Conta L2"
+
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:295
 msgid "Painel Definitivo Lineage - PDL"
-msgstr "Linaje definitivo de Painel - PDL 1.0"
+msgstr "Painel Definitivo Lineage - PDL"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:18
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:296
 msgid "Gerenciamento de Servidores de Lineage 2 com Python e Django"
-msgstr "Gerenciamento de servidoros de linajee 2 com python e django"
+msgstr "Administración de servidores de Lineage 2 con Python y Django"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:19
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:297
 msgid "A Solução Web Perfeita para Administração e Atração de Jogadores"
-msgstr "Una web Solução Perfeita para AdministrAção e Atração de Jogadores"
+msgstr ""
+"La solución web perfecta para la administración y la atracción de los "
+"jugadores"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:26
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:304
 msgid "Por que usar Django e Python?"
-msgstr "Por que usar django e python?"
+msgstr "Por que usar Django e Python?"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:27
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:305
 msgid ""
 "Django é uma framework poderosa, segura e com uma administração pronta para "
 "uso, ideal para gerenciar servidores privados de Lineage 2."
 msgstr ""
-"Django é Uma Framework Poderosa, Segura E Com uma AdministrAção Pronta para "
-"para Uso, para paragenciar servidores de paragidos de Lineage 2."
+"Django es una administración potente, segura y lista para usar, ideal para "
+"administrar servidores privados de linaje 2."
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:29
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:307
 msgid "Desenvolvimento rápido e escalável"
-msgstr "Desenvolvimento rápido e escalável"
+msgstr "Desarrollo rápido y escalable"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:30
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:308
 msgid "Sistema de administração completo"
-msgstr "Sistema de AdministrAção completo"
+msgstr "Sistema de administración completo"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:31
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:309
 msgid "Integração com APIs e bancos de dados"
-msgstr "Integração com apis e bancos de dados"
+msgstr "Integración con API y bases de datos"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:32
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:310
 msgid "Alta segurança e flexibilidade"
-msgstr "Alta Segurança E FlexiBilidade"
+msgstr "Alta seguridad y flexibilidad"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:36
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:314
 msgid "Django Logo"
 msgstr "Logotipo de Django"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:42
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:320
 msgid "Tecnologias de Ponta"
-msgstr "Tecnología de Ponta"
+msgstr "Estado de -the -t -Art Technologies"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:45
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:323
 msgid "Django"
 msgstr "Django"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:46
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:324
 msgid "Backbone sólido com segurança e escalabilidade."
-msgstr "Backbone Sólido com segurança e escalabilidada."
+msgstr "Columna vertebral sólida con seguridad y escalabilidad."
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:49
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:327
 msgid "Docker + Nginx"
 msgstr "Docker + nginx"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:50
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:328
 msgid "Deploy e entrega eficientes em qualquer ambiente."
-msgstr "Desplegar e entregas eficientes em Qualquer Ambiente."
+msgstr "Implementar y entregar eficiente en cualquier entorno."
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:53
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:331
 msgid "Celery + Redis"
 msgstr "Celery + Redis"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:54
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:332
 msgid "Execução de tarefas assíncronas com performance."
-msgstr "Execução de Tarefas Assíncronas com actuación."
+msgstr "Tareas asincrónicas de rendimiento."
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:62
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:340
 msgid "Painel Administrativo"
-msgstr "Administrativo de Painel"
+msgstr "Panel administrativo"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:64
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:342
 msgid "Gerenciamento de jogadores e servidores"
-msgstr "Gerenciamento de Jogadores e servidores"
+msgstr "Gestión de jugadores y servidores"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:65
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:343
 msgid "Eventos, estatísticas e monitoramento"
-msgstr "Eventos, Estatínsticas E Monitoramento"
+msgstr "Eventos, estadísticas y monitoreo"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:66
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:344
 msgid "Integração com sistemas de pagamento"
-msgstr "Integração com sistemas de Pagamento"
+msgstr "Integración con sistemas de pago"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:70
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:348
 msgid "Site Público"
-msgstr "Sitio Público"
+msgstr "Site Público"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:72
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:350
 msgid "Cadastro, login e personalização de conta"
-msgstr "Cadastro, login e personalização de Conta"
+msgstr "Registro, inicio de sesión y personalización de cuentas"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:73
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:351
 msgid "Status do servidor e rankings"
 msgstr "Estado Do Ranking de servidor E"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:74
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:352
 msgid "Notícias e suporte ao jogador"
-msgstr "Notícias e Suporte ao Jogador"
+msgstr "Apoyo para noticias y jugadores"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:81
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:359
 msgid "Participe do Futuro dos Servidores Privados"
-msgstr "Participe do Futuro dos Servidorores Privados"
+msgstr "Participe do Futuro dos Servidores Privados"
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:82
-#| msgid ""
-#| "O PDL 1.0 é open source e está em constante evolução. Contribua, implemente,"
-#| " personalize e transforme a forma como servidores Lineage 2 são "
-#| "administrados."
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:360
 msgid ""
 "O PDL é open source e está em constante evolução. Contribua, implemente, "
 "personalize e transforme a forma como servidores Lineage 2 são "
 "administrados."
 msgstr ""
-"O PDL 1.0 É Open Source E Está Em Constante Evolução. Contribua, "
-"implementar, personalizar e Transforme A Forma Como servidore Lineage 2 São "
-"Administrados."
+"El PDL es de código abierto y está constantemente evolucionando. Contribuir,"
+" implementar, personalizar y girar la forma en que se administran los "
+"servidores de Lineage 2."
 
-#: .\apps\main\home\templates\dashboard_custom\dashboard.html:83
+#: .\apps\main\home\templates\dashboard_custom\dashboard.html:361
 msgid "Ver Projeto no GitHub"
-msgstr "Ver ProJeto sin github"
+msgstr "Ver Projeto no GitHub"
 
 #: .\apps\main\home\templates\pages\address_form.html:9
 #: .\apps\main\home\templates\pages\profile.html:91
 msgid "Editar Endereço"
-msgstr "Editar enderço"
+msgstr "Dirección de edición"
 
 #: .\apps\main\home\templates\pages\address_form.html:9
 #: .\apps\main\home\templates\pages\profile.html:93
 msgid "Cadastrar Endereço"
-msgstr "CataStar Enderço"
+msgstr "Registro de la dirección"
 
 #: .\apps\main\home\templates\pages\address_form.html:17
 msgid "Logradouro"
-msgstr "Logradouro"
+msgstr "Mierda"
 
 #: .\apps\main\home\templates\pages\address_form.html:23
 msgid "Número"
@@ -1926,11 +2801,11 @@ msgstr "Complemento"
 
 #: .\apps\main\home\templates\pages\address_form.html:35
 msgid "Bairro"
-msgstr "Bairro"
+msgstr "Vecindario"
 
 #: .\apps\main\home\templates\pages\address_form.html:41
 msgid "Cidade"
-msgstr "Cidas"
+msgstr "Ciudad"
 
 #: .\apps\main\home\templates\pages\address_form.html:47
 msgid "Estado"
@@ -1938,50 +2813,42 @@ msgstr "Estado"
 
 #: .\apps\main\home\templates\pages\address_form.html:53
 msgid "CEP"
-msgstr "CEP"
-
-#: .\apps\main\home\templates\pages\address_form.html:58
-#: .\apps\main\home\templates\pages\edit_profile.html:43
-msgid "Salvar"
-msgstr "Salvar"
+msgstr "BOLSILLO"
 
 #: .\apps\main\home\templates\pages\edit_avatar.html:9
 #: .\apps\main\home\templates\pages\profile.html:165
-#| msgid "Editar Pacote"
 msgid "Editar Avatar"
-msgstr "Editar perfil"
+msgstr "Editar Avatar"
 
 #: .\apps\main\home\templates\pages\edit_avatar.html:16
-#| msgid "Voltar para o painel"
 msgid "Voltar para o perfil"
-msgstr "Voltar Para O Painel"
+msgstr "Voltar para o perfil"
 
 #: .\apps\main\home\templates\pages\edit_avatar.html:17
-#| msgid "Salvar Pacote"
 msgid "Salvar Avatar"
-msgstr "Salvar Senha"
+msgstr "Salvar Avatar"
 
 #: .\apps\main\home\templates\pages\edit_profile.html:16
 #: .\apps\main\home\templates\pages\profile.html:139
 msgid "Editar Perfil"
-msgstr "Editar perfil"
+msgstr "Editar Perfil"
 
 #: .\apps\main\home\templates\pages\logs.html:8
 msgid "Dashboard de Logs"
-msgstr "Panel de registros"
+msgstr "Dashboard de Logs"
 
 #: .\apps\main\home\templates\pages\logs.html:13
 msgid "Nenhum log encontrado."
-msgstr "Nenhum Log Enntrado."
+msgstr "No se encontraron registros."
 
 #: .\apps\main\home\templates\pages\logs.html:18
 msgid "Navegação de páginas"
-msgstr "Navegação de Páginas"
+msgstr "Páginas"
 
 #: .\apps\main\home\templates\pages\logs.html:22
 #: .\apps\main\solicitation\templates\pages\solicitation_list.html:68
 msgid "Primeira"
-msgstr "Primeira"
+msgstr "Primero"
 
 #: .\apps\main\home\templates\pages\logs.html:30
 #: .\apps\main\solicitation\templates\pages\solicitation_list.html:83
@@ -1991,7 +2858,7 @@ msgstr "Página"
 #: .\apps\main\home\templates\pages\logs.html:30
 #: .\apps\main\solicitation\templates\pages\solicitation_list.html:83
 msgid "de"
-msgstr "Delaware"
+msgstr "de"
 
 #: .\apps\main\home\templates\pages\logs.html:38
 #: .\apps\main\solicitation\templates\pages\solicitation_list.html:93
@@ -2000,41 +2867,44 @@ msgstr "Última"
 
 #: .\apps\main\home\templates\pages\profile.html:37
 msgid "Perfil/Biografia"
-msgstr "Perfil/biografia"
+msgstr "Perfil/Biografia"
 
 #: .\apps\main\home\templates\pages\profile.html:45
 msgid "Endereço de Email"
-msgstr "Enderço de correo electrónico"
+msgstr "Dirección de correo electrónico"
 
 #: .\apps\main\home\templates\pages\profile.html:47
 #: .\apps\main\home\templates\pages\profile.html:57
 #: .\apps\main\home\templates\pages\profile.html:67
 #: .\apps\main\home\templates\pages\profile.html:80
 #: .\apps\main\home\templates\pages\profile.html:104
-#: .\apps\main\home\templates\pages\profile.html:112
 #: .\apps\main\home\templates\pages\profile.html:129
 msgid "N/A"
 msgstr "N / A"
 
 #: .\apps\main\home\templates\pages\profile.html:65
 msgid "Sobrenome"
-msgstr "Sobrenombre"
+msgstr "Apellido"
 
 #: .\apps\main\home\templates\pages\profile.html:75
 msgid "Endereço"
-msgstr "Enderço"
+msgstr "DIRECCIÓN"
 
 #: .\apps\main\home\templates\pages\profile.html:102
 msgid "Sobre Você"
-msgstr "Sobre Você"
+msgstr "Acerca de ti"
 
 #: .\apps\main\home\templates\pages\profile.html:110
 msgid "CPF"
 msgstr "CPF"
 
+#: .\apps\main\home\templates\pages\profile.html:112
+msgid "000.000.000-00"
+msgstr "000.000.000-00"
+
 #: .\apps\main\home\templates\pages\profile.html:120
 msgid "Gênero"
-msgstr "Gênero"
+msgstr "Género"
 
 #: .\apps\main\home\templates\pages\profile.html:125
 msgid "Não Binário"
@@ -2042,19 +2912,20 @@ msgstr "No binario"
 
 #: .\apps\main\home\templates\pages\profile.html:126
 msgid "Prefiro não dizer"
-msgstr "Prefiro não dizer"
+msgstr "Prefiero no decir"
 
 #: .\apps\main\home\templates\pages\profile.html:153
 msgid "Imagem de perfil"
-msgstr "Imagem de perfil"
+msgstr "Imagen de perfil"
 
 #: .\apps\main\home\templates\pages\profile.html:156
 msgid "Imagem de perfil padrão"
-msgstr "Imagem de perfil Padrão"
+msgstr "Imagen de perfil predeterminada"
 
 #: .\apps\main\home\templates\pages\profile.html:162
 msgid "O sucesso não é garantido, mas o fracasso é certo se você não tentar."
-msgstr "O Suceso não é garantido, mas o fracasso é certo se você não tentar."
+msgstr ""
+"El éxito no está garantizado, pero el fracaso es seguro si no lo intenta."
 
 #: .\apps\main\home\templates\pages\profile.html:170
 msgid ""
@@ -2062,9 +2933,9 @@ msgid ""
 "crescimento pessoal e profissional. Lembre-se sempre de que o esforço que "
 "você coloca hoje moldará o seu amanhã."
 msgstr ""
-"Encontre inspiração em cada desafio e mantenha-se Comprometido com o seu "
-"crescimento Pessoal e Profisional. Lembre-se Semper de Que o Esforço Que "
-"Você Coloca Hoje Molará o Seu Amanhã."
+"Encuentre inspiración en cada desafío y manténgase comprometido con su "
+"crecimiento personal y profesional. Recuerde siempre que el esfuerzo que "
+"pones hoy dará forma a tu mañana."
 
 #: .\apps\main\home\templates\pages\profile.html:174
 msgid "Ver Lista de Amigos"
@@ -2072,24 +2943,36 @@ msgstr "Ver Lista de Amigos"
 
 #: .\apps\main\home\templates\pages\profile.html:179
 msgid "Conta não verificada"
-msgstr "Conta não verificada"
+msgstr "Cuenta no verificada"
 
 #: .\apps\main\home\templates\pages\profile.html:180
 msgid "Seu e-mail ainda não foi verificado."
-msgstr "SEU Correo electrónico ainda não foi Verificado."
+msgstr "Su correo electrónico aún no ha sido revisado."
 
 #: .\apps\main\home\templates\pages\profile.html:185
 #: .\apps\main\home\templates\verify\reenviar_verificacao.html:14
 msgid "Reenviar E-mail de Verificação"
-msgstr "Reenviar correo electrónico de verificação"
+msgstr "Correo electrónico de verificación de reinicio"
+
+#: .\apps\main\home\templates\pages\profile.html:191
+msgid "2FA Desativado"
+msgstr "2folio"
+
+#: .\apps\main\home\templates\pages\profile.html:192
+msgid "A autenticação em duas etapas ainda não está ativada em sua conta."
+msgstr "La autenticación en dos pasos aún no se activa en su cuenta."
+
+#: .\apps\main\home\templates\pages\profile.html:196
+msgid "Ativar Autenticação 2FA"
+msgstr "Activar la autenticación 2fa"
 
 #: .\apps\main\home\templates\verify\reenviar_verificacao.html:6
 msgid "Reenviar Verificação"
-msgstr "Reenviar VerificAção"
+msgstr "Resolución de verificación"
 
 #: .\apps\main\home\templates\verify\reenviar_verificacao.html:25
 msgid "Seu e-mail"
-msgstr "SEU Correo electrónico"
+msgstr "Tu correo electrónico"
 
 #: .\apps\main\home\templates\verify\reenviar_verificacao.html:28
 msgid "Reenviar"
@@ -2100,13 +2983,13 @@ msgid "Chat"
 msgstr "Charlar"
 
 #: .\apps\main\message\templates\pages\chat.html:22
-#: .\templates\includes\sidebar.html:120
+#: .\templates\includes\sidebar.html:176
 msgid "Mensagens"
-msgstr "Masculanos"
+msgstr "Mensajes"
 
 #: .\apps\main\message\templates\pages\chat.html:23
 msgid "Converse com seus amigos de forma rápida e prática."
-msgstr "Converse Com Seus Amigos de Forma rápida e Prática."
+msgstr "Habla con tus amigos de manera rápida y práctica."
 
 #: .\apps\main\message\templates\pages\chat.html:34
 msgid "Lista de Amigos"
@@ -2114,19 +2997,19 @@ msgstr "Lista de Amigos"
 
 #: .\apps\main\message\templates\pages\chat.html:41
 msgid "Procurar Amigo..."
-msgstr "Procuro Amigo ..."
+msgstr "Procurar Amigo..."
 
 #: .\apps\main\message\templates\pages\chat.html:62
 msgid "Gerenciar Amigos"
-msgstr "Amigos Gerenciar"
+msgstr "Gerenciar Amigos"
 
 #: .\apps\main\message\templates\pages\chat.html:72
 msgid "Clique em um amigo para iniciar o chat."
-msgstr "Clique em um amigo para iniciar o chat."
+msgstr "Haga clic en un amigo para comenzar el chat."
 
 #: .\apps\main\message\templates\pages\chat.html:76
 msgid "Digite uma mensagem..."
-msgstr "Digite Uma Mensagem ..."
+msgstr "Ingrese un mensaje ..."
 
 #: .\apps\main\message\templates\pages\friends.html:4
 msgid "Amigos"
@@ -2134,11 +3017,11 @@ msgstr "Amigos"
 
 #: .\apps\main\message\templates\pages\friends.html:17
 msgid "Amigos e Conexões"
-msgstr "Amigos E Conexões"
+msgstr "Amigos y conexiones"
 
 #: .\apps\main\message\templates\pages\friends.html:23
 msgid "Meus Amigos"
-msgstr "Meus Amigos"
+msgstr "Mis amigos"
 
 #: .\apps\main\message\templates\pages\friends.html:32
 #: .\apps\main\message\templates\pages\friends.html:54
@@ -2147,39 +3030,35 @@ msgstr "Imagen de perfil predeterminada"
 
 #: .\apps\main\message\templates\pages\friends.html:36
 msgid "Deixar de Ser Amigo"
-msgstr "Deixar de ser Amigo"
+msgstr "Deja de ser un amigo"
 
 #: .\apps\main\message\templates\pages\friends.html:39
 msgid "Nenhum amigo adicionado ainda."
-msgstr "Nenhum Amigo Adicionado Ainda."
+msgstr "No hay amigos agregados todavía."
 
 #: .\apps\main\message\templates\pages\friends.html:45
 msgid "Adicionar Novos Amigos"
-msgstr "Adicionar Novos Amigos"
+msgstr "Agregar nuevos amigos"
 
 #: .\apps\main\message\templates\pages\friends.html:59
 msgid "Enviar Pedido"
-msgstr "Enviar pedido"
+msgstr "Enviar Pedido"
 
 #: .\apps\main\message\templates\pages\friends.html:63
 msgid "Nenhum usuário disponível para adicionar."
-msgstr "Nenhum Usuário Disponível Para Adicionar."
+msgstr "No hay usuario disponible para agregar."
 
 #: .\apps\main\message\templates\pages\friends.html:69
 msgid "Convites Pendentes"
-msgstr "Convita Pendentes"
-
-#: .\apps\main\message\templates\pages\friends.html:76
-msgid "Aceitar"
-msgstr "Acúbico"
+msgstr "Invitaciones pendientes"
 
 #: .\apps\main\message\templates\pages\friends.html:77
 msgid "Recusar"
-msgstr "Recusar"
+msgstr "Rechazar"
 
 #: .\apps\main\message\templates\pages\friends.html:81
 msgid "Nenhum convite de amizade recebido."
-msgstr "Nenhum Convite de Amizade Recibido."
+msgstr "No recibió invitación a la amistad."
 
 #: .\apps\main\news\models.py:14
 msgid "date published"
@@ -2187,181 +3066,199 @@ msgstr "fecha publicada"
 
 #: .\apps\main\news\templates\pages\news_detail.html:4
 msgid "Detalhes da Notícia"
-msgstr "Detalhes da nocia"
+msgstr "Detalles de noticias"
 
 #: .\apps\main\news\templates\pages\news_detail.html:77
 #: .\apps\main\news\templates\pages\news_index.html:30
 #: .\templates\public\news_detail.html:29
 #: .\templates\public\news_index.html:25
+#: .\themes\installed\l2-giran\news_detail.html:25
+#: .\themes\installed\l2-giran\news_index.html:25
 msgid "Autor"
 msgstr "Autor"
 
 #: .\apps\main\news\templates\pages\news_detail.html:77
 msgid "Data de Publicação"
-msgstr "Datos de publicação"
+msgstr "Fecha de publicación"
 
 #: .\apps\main\news\templates\pages\news_detail.html:82
 msgid "Voltar para as notícias"
-msgstr "Voltar para como nocias"
+msgstr "Volver a las noticias"
 
 #: .\apps\main\news\templates\pages\news_index.html:4
 #: .\apps\main\news\templates\pages\news_index.html:12
-#: .\templates\includes\sidebar.html:108
-#: .\templates\layouts\base-default.html:25
-#: .\templates\layouts\base-default.html:55
+#: .\templates\includes\sidebar.html:164
+#: .\templates\layouts\base-default.html:29
+#: .\templates\layouts\base-default.html:59
 #: .\templates\public\news_index.html:4
+#: .\themes\installed\l2-giran\base.html:84
+#: .\themes\installed\l2-giran\news_index.html:4
 msgid "Notícias"
-msgstr "Nocias"
+msgstr "Noticias"
 
 #: .\apps\main\news\templates\pages\news_index.html:13
 msgid "Fique por dentro das últimas novidades e atualizações exclusivas."
-msgstr "Fique por dentro das Últimas Novidades E atualizações exclusivas."
+msgstr ""
+"Manténgase al tanto de las últimas noticias y actualizaciones exclusivas."
 
 #: .\apps\main\news\templates\pages\news_index.html:33
 #: .\templates\public\news_index.html:29
+#: .\themes\installed\l2-giran\news_index.html:28
 msgid "Leia mais"
-msgstr "Leia Mais"
+msgstr "leer más"
 
 #: .\apps\main\news\templates\pages\news_index.html:40
 msgid "Não há notícias privadas disponíveis no momento."
-msgstr "Não há nocias privadas disponíis no momento."
+msgstr "No hay noticias privadas disponibles en este momento."
 
 #: .\apps\main\notification\templates\pages\notifications.html:10
 #: .\templates\includes\messages.html:5
 #: .\templates\includes\navigation.html:37
 msgid "Notificações"
-msgstr "NotificAções"
+msgstr "Notificaciones"
 
 #: .\apps\main\notification\templates\pages\notifications.html:14
 msgid "Marcar todas como lidas"
-msgstr "Marcar Todas como lidas"
+msgstr "Marcar todas como lidas"
 
 #: .\apps\main\notification\templates\pages\notifications.html:15
 #: .\templates\includes\navigation.html:42
 msgid "Limpar todas as notificações"
-msgstr "Limpar Todas como NotificAções"
+msgstr "Limpiar todas las notificaciones"
 
 #: .\apps\main\notification\templates\pages\notifications.html:20
 msgid "Notificações Privadas"
-msgstr "NotificAções privadas"
+msgstr "Notificaciones privadas"
 
 #: .\apps\main\notification\templates\pages\notifications.html:30
 #: .\apps\main\notification\templates\pages\notifications.html:70
 msgid "Não lida"
-msgstr "Não lida"
+msgstr "No amado"
 
 #: .\apps\main\notification\templates\pages\notifications.html:38
 #: .\apps\main\notification\templates\pages\notifications.html:78
 #: .\templates\includes\notification.html:8
 msgid "Detalhes da Notificação"
-msgstr "Detales da Notificação"
-
-#: .\apps\main\notification\templates\pages\notifications.html:44
-#: .\apps\main\notification\templates\pages\notifications.html:84
-msgid "Tipo"
-msgstr "TUPO"
+msgstr "Detalles de notificación"
 
 #: .\apps\main\notification\templates\pages\notifications.html:46
 #: .\apps\main\notification\templates\pages\notifications.html:86
 msgid "Criado em"
-msgstr "Criado em"
+msgstr "Creado en"
 
 #: .\apps\main\notification\templates\pages\notifications.html:54
 msgid "Não há notificações privadas."
-msgstr "Não Há Notificações Privadas."
+msgstr "No hay notificaciones privadas."
 
 #: .\apps\main\notification\templates\pages\notifications.html:60
 msgid "Notificações Públicas"
-msgstr "NotificAções Públicas"
+msgstr "Notificaciones públicas"
 
 #: .\apps\main\notification\templates\pages\notifications.html:94
 msgid "Não há notificações públicas."
-msgstr "Não Há Notificações Públicas."
+msgstr "No hay notificaciones públicas."
 
 #: .\apps\main\notification\templates\pages\notifications.html:125
 msgid "Tem certeza que deseja limpar todas as notificações?"
-msgstr "TEM CREZZA QUE DESEJA LIMPAR TODAS AS NOTIFICAJA."
+msgstr "¿Estás seguro de que quieres limpiar todas las notificaciones?"
+
+#: .\apps\main\solicitation\templates\pages\add_event_to_history.html:6
+msgid "Adicionar Evento ao Histórico"
+msgstr "Agregar evento a la historia"
+
+#: .\apps\main\solicitation\templates\pages\add_event_to_history.html:11
+msgid "Descrição do Evento"
+msgstr "Descripción del evento"
+
+#: .\apps\main\solicitation\templates\pages\add_event_to_history.html:15
+msgid "Imagem (opcional)"
+msgstr "Imagen (opcional)"
+
+#: .\apps\main\solicitation\templates\pages\add_event_to_history.html:18
+#: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:103
+msgid "Adicionar Evento"
+msgstr "Adicionar Evento"
 
 #: .\apps\main\solicitation\templates\pages\solicitation_create.html:4
 #: .\apps\main\solicitation\templates\pages\solicitation_create.html:26
 #: .\apps\main\solicitation\templates\pages\solicitation_list.html:27
 msgid "Criar Solicitação"
-msgstr "Criar Solicitação"
+msgstr "Crear solicitud"
 
 #: .\apps\main\solicitation\templates\pages\solicitation_create.html:8
 msgid "Criar Nova Solicitação"
-msgstr "Criar Nova Solicitação"
+msgstr "Crear nueva solicitud"
 
 #: .\apps\main\solicitation\templates\pages\solicitation_create.html:11
 msgid "Informações Importantes:"
-msgstr "Informações IMPORTANTES:"
+msgstr "Información importante:"
 
 #: .\apps\main\solicitation\templates\pages\solicitation_create.html:13
 msgid ""
 "As solicitações são tickets de suporte para iniciar um chat com a "
 "administração."
 msgstr ""
-"Como boletos de Solicitações São de Suporte para Iniciar Um Chat Com a "
-"AdministrAção."
+"Las solicitudes son boletos de soporte para comenzar un chat con la "
+"administración."
 
 #: .\apps\main\solicitation\templates\pages\solicitation_create.html:14
 msgid ""
 "Enquanto o status da solicitação estiver como Pendente, o chat permanecerá "
 "ativo."
 msgstr ""
-"Enquanto o status da Solicitação estiver como pendente, o chat permanecerá "
-"ativo."
+"Mientras el estado de la solicitud está pendiente, el chat permanecerá "
+"activo."
 
 #: .\apps\main\solicitation\templates\pages\solicitation_create.html:15
 msgid ""
 "Após a solicitação ser concluída, o chat será desabilitado e o atendimento "
 "encerrado."
 msgstr ""
-"Após un Solicitação ser concluyda, o Chat será desabilitado e o atendimento "
-"encerrado."
+"Después de completar la solicitud, el chat se deshabilitará y el servicio "
+"finalice."
 
 #: .\apps\main\solicitation\templates\pages\solicitation_create.html:16
 msgid "Somente uma solicitação pendente pode existir por vez."
-msgstr "Somente Uma Solicitação Pendenté Pode existir por Vez."
+msgstr "Solo puede existir una solicitud pendiente a la vez."
 
 #: .\apps\main\solicitation\templates\pages\solicitation_create.html:17
 msgid ""
 "Seja claro e objetivo ao abrir uma solicitação para que a equipe possa "
 "ajudá-lo de forma mais eficaz."
 msgstr ""
-"Seja Claro e Objetivo ao Abrir Uma Solicitação para que un Equipe posa "
-"Ajudá-lo de forma Mais Eficaz."
+"Sea claro y objetivo al abrir una solicitud para que el equipo pueda "
+"ayudarlo de manera más efectiva."
 
 #: .\apps\main\solicitation\templates\pages\solicitation_create.html:18
 msgid ""
 "Após criar a solicitação, acesse o dashboard e clique em Chat para iniciar o"
 " atendimento."
 msgstr ""
-"Após criar un Solicitação, Acés O O Dashboard E Clique em chat para iniciar "
-"o atendimento."
+"Después de crear la solicitud, vaya al tablero y haga clic en chat para "
+"iniciar el servicio."
 
 #: .\apps\main\solicitation\templates\pages\solicitation_create.html:19
 msgid ""
 "O atendimento não é em tempo real, ou seja, você criará a solicitação e "
 "aguardará a resposta da equipe."
 msgstr ""
-"O atendimento não é em tempo real, ou seja, Você criará a Solicitação e "
-"Aguardará una Respta Da Equipe."
+"El servicio no está en tiempo real, es decir, creará la solicitud y esperará"
+" la respuesta del equipo."
 
 #: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:4
 #: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:19
 msgid "Detalhe da Solicitação"
-msgstr "Detalhe da Solicitação"
+msgstr "Detalle de solicitud"
 
 #: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:10
 #: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:13
 #: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:26
 msgid "Solicitação"
-msgstr "Abogado"
+msgstr "Pedido"
 
 #: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:31
 msgid "Data da Solicitação:"
-msgstr "Data da Solicitação:"
+msgstr "Fecha de solicitud:"
 
 #: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:40
 msgid "Participantes"
@@ -2369,16 +3266,24 @@ msgstr "Participantes"
 
 #: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:49
 msgid "Nenhum participante cadastrado."
-msgstr "Nenhum participante CADASTRADO."
+msgstr "No hay participante registrado."
 
 #: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:60
 msgid "Ir para o Chat"
-msgstr "Ir para o chat"
+msgstr "Ir para o Chat"
+
+#: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:67
+msgid "Histórico de Eventos"
+msgstr "Histórico de Eventos"
+
+#: .\apps\main\solicitation\templates\pages\solicitation_dashboard.html:93
+msgid "Nenhum evento registrado."
+msgstr "No hay evento registrado."
 
 #: .\apps\main\solicitation\templates\pages\solicitation_list.html:4
 #: .\apps\main\solicitation\templates\pages\solicitation_list.html:24
 msgid "Lista de Solicitações"
-msgstr "Lista de Solicitações"
+msgstr "Lista de solicitudes"
 
 #: .\apps\main\solicitation\templates\pages\solicitation_list.html:36
 msgid "Protocolo"
@@ -2386,33 +3291,29 @@ msgstr "Protocolo"
 
 #: .\apps\main\solicitation\templates\pages\solicitation_list.html:37
 msgid "Situação"
-msgstr "Situação"
+msgstr "Situación"
 
 #: .\apps\main\solicitation\templates\pages\solicitation_list.html:38
 msgid "Data da Solicitação"
-msgstr "Datos DA Solicitação"
-
-#: .\apps\main\solicitation\templates\pages\solicitation_list.html:39
-msgid "Ações"
-msgstr "Ações"
+msgstr "Fecha de solicitud"
 
 #: .\apps\main\solicitation\templates\pages\solicitation_list.html:51
 msgid "Ver Solicitação"
-msgstr "Ver Solicitação"
+msgstr "Ver solicitud"
 
 #: .\apps\main\solicitation\templates\pages\solicitation_list.html:57
 msgid "Nenhuma solicitação encontrada."
-msgstr "Nenhuma Solicitação Encontrada."
+msgstr "No se encontró solicitud."
 
-#: .\core\settings.py:203
+#: .\core\settings.py:211
 msgid "Português"
-msgstr "Português"
+msgstr "portugués"
 
-#: .\core\settings.py:204
+#: .\core\settings.py:212
 msgid "Inglês"
-msgstr "Inglês"
+msgstr "Inglés"
 
-#: .\core\settings.py:205
+#: .\core\settings.py:213
 msgid "Espanhol"
 msgstr "Español"
 
@@ -2433,7 +3334,9 @@ msgstr "Haga clic aquí para seleccionar los objetos en todas las páginas"
 msgid ""
 "\n"
 "                            Select all %(total_count)s %(module_name)s"
-msgstr "Seleccione todo %(Total_Count) S %(MODULE_NAME) S"
+msgstr ""
+"\n"
+"Seleccione todo %(total_count)s S %(module_name)s S"
 
 #: .\templates\admin\actions.html:32
 msgid "Clear selection"
@@ -2459,22 +3362,23 @@ msgid ""
 "                            <strong>%(username)s</strong>.\n"
 "                        "
 msgstr ""
-"Digite Uma Nova Senha para o Usuário\n"
-"                            <strong>%(nombre de usuario) S </strong>."
+"\n"
+"Ingrese una nueva contraseña para el usuario\n"
+"                            <strong>%(username)s S </strong>."
 
 #: .\templates\admin\auth\user\change_password.html:90
 #: .\templates\registration\password_change_form.html:68
 msgid "Alterar minha senha"
-msgstr "Alterar minha senha"
+msgstr "Cambiar mi contraseña"
 
 #: .\templates\admin\auth\user\change_password.html:105
 msgid "Por favor, corrija o erro abaixo."
-msgstr "Por favor, corrija o erro abaixo."
+msgstr "Corrija el error a continuación."
 
 #: .\templates\admin\auth\user\change_password.html:107
 #: .\templates\registration\password_change_form.html:82
 msgid "Por favor, corrija os erros abaixo."
-msgstr "Por favor, Corrija OS ERROS Abaixo."
+msgstr "Corrija los errores a continuación."
 
 #: .\templates\admin\change_form.html:44
 #, python-format
@@ -2483,13 +3387,13 @@ msgid ""
 "                                %(name)s"
 msgstr ""
 "Agregar\n"
-"                                %(nombre) s"
+"                                %(name)s s"
 
 #: .\templates\admin\change_form.html:62
 #: .\templates\admin\change_list_object_tools.html:11
 #, python-format
 msgid "Add %(name)s"
-msgstr "Agregar %(nombre) s"
+msgstr "Agregar %(name)s s"
 
 #: .\templates\admin\change_form_object_tools.html:8
 #: .\templates\admin\object_history.html:36
@@ -2513,7 +3417,7 @@ msgstr "Retirar de la clasificación"
 #: .\templates\admin\change_list_results.html:24
 #, python-format
 msgid "Sorting priority: %(priority_number)s"
-msgstr "Prioridad de clasificación: %(priority_number) s"
+msgstr "Prioridad de clasificación: %(priority_number)s s"
 
 #: .\templates\admin\change_list_results.html:26
 msgid "Toggle sorting"
@@ -2521,7 +3425,7 @@ msgstr "Clasificación de alternar"
 
 #: .\templates\admin\confirm_action.html:35
 msgid "Confirmar Ação"
-msgstr "Confirmar ação"
+msgstr "Confirmar acción"
 
 #: .\templates\admin\confirm_action.html:50
 #, python-format
@@ -2531,22 +3435,23 @@ msgid ""
 "                                Esta ação não pode ser desfeita.\n"
 "                            "
 msgstr ""
-"TEM CREZZA DE QUE DESEJA EJECUTARIO A Ação \" %(Action_Name) s\" Nos %(Objects_Name) S Selecionados?\n"
-"                                ESTA Ação Não Pode ser desfeita."
+"\n"
+"¿Estás seguro de que quieres realizar la acción \" %(action_name)s s\" Nos %(objects_name)s s seleccionado?\n"
+"                                Esta acción no se puede deshacer."
 
 #: .\templates\admin\confirm_action.html:59
 msgid "Objetos Selecionados"
-msgstr "Objetos Selecionados"
+msgstr "Objetos seleccionados"
 
 #: .\templates\admin\confirm_action.html:75
 #: .\templates\admin\delete_confirmation.html:124
 #: .\templates\admin\delete_selected_confirmation.html:122
 msgid "Sim, tenho certeza"
-msgstr "Sim, Tenho Cereza"
+msgstr "Si, estoy seguro"
 
 #: .\templates\admin\confirm_action.html:78
 msgid "Não, voltar"
-msgstr "Não, voltar"
+msgstr "No, regresa"
 
 #: .\templates\admin\delete_confirmation.html:38
 #: .\templates\admin\import_export\import.html:193
@@ -2563,7 +3468,8 @@ msgid ""
 "                                    following types of objects:\n"
 "                                "
 msgstr ""
-"Eliminar el %(Object_Name) S ' %(Escaped_Object) S' resultaría en eliminar\n"
+"\n"
+"Eliminar el %(object_name)s S ' %(escaped_object)s S' resultaría en eliminar\n"
 "                                    objetos relacionados, pero su cuenta no tiene permiso para eliminar el\n"
 "                                    siguientes tipos de objetos:"
 
@@ -2575,7 +3481,8 @@ msgid ""
 "                                    the following protected related objects:\n"
 "                                "
 msgstr ""
-"Eliminar el %(Object_Name) S ' %(Escaped_object) S' requeriría eliminar\n"
+"\n"
+"Eliminar el %(object_name)s S ' %(escaped_object)s S' requeriría eliminar\n"
 "                                    Los siguientes objetos relacionados protegidos:"
 
 #: .\templates\admin\delete_confirmation.html:89
@@ -2586,7 +3493,8 @@ msgid ""
 "                                    All of the following related items will be deleted:\n"
 "                                "
 msgstr ""
-"¿Estás seguro de que quieres eliminar el %(Object_Name) S \" %(Escaped_object) s\"?\n"
+"\n"
+"¿Estás seguro de que quieres eliminar el %(object_name)s S \" %(escaped_object)s s\"?\n"
 "                                    Se eliminarán todos los siguientes artículos relacionados:"
 
 #: .\templates\admin\delete_confirmation.html:103
@@ -2611,10 +3519,7 @@ msgid ""
 "                                        objects, but your account doesn't have permission to delete the following\n"
 "                                        types of objects:\n"
 "                                    "
-msgstr ""
-"Eliminar el %Seleccionado (Objects_Name) s daría lugar a la eliminación de la eliminación relacionada\n"
-"                                        objetos, pero su cuenta no tiene permiso para eliminar lo siguiente\n"
-"                                        Tipos de objetos:"
+msgstr "\n"
 
 #: .\templates\admin\delete_selected_confirmation.html:72
 #, python-format
@@ -2623,9 +3528,7 @@ msgid ""
 "                                        Deleting the selected %(objects_name)s would require deleting the\n"
 "                                        following protected related objects:\n"
 "                                    "
-msgstr ""
-"Eliminar el %seleccionado (Objects_Name) s requeriría eliminar el\n"
-"                                        Siguiendo objetos relacionados protegidos:"
+msgstr "\n"
 
 #: .\templates\admin\delete_selected_confirmation.html:89
 #, python-format
@@ -2634,9 +3537,7 @@ msgid ""
 "                                        Are you sure you want to delete the selected %(objects_name)s? All of the\n"
 "                                        following objects and their related items will be deleted:\n"
 "                                    "
-msgstr ""
-"¿Estás seguro de que quieres eliminar el %seleccionado (Objects_Name) s? Todo el\n"
-"                                        Se eliminarán los siguientes objetos y sus elementos relacionados:"
+msgstr "\n"
 
 #: .\templates\admin\edit_inline\stacked.html:29
 #: .\templates\admin\edit_inline\tabular.html:60
@@ -2655,7 +3556,7 @@ msgstr "¿Borrar?"
 #: .\templates\admin\filter.html:9
 #, python-format
 msgid " By %(filter_title)s "
-msgstr "Por %(filter_title) s"
+msgstr "Por %(filter_title)s s"
 
 #: .\templates\admin\import_export\change_form.html:8
 #: .\templates\admin\import_export\change_list_export_item.html:6
@@ -2792,8 +3693,8 @@ msgid ""
 "Este objeto não tem um histórico de alterações. Provavelmente não foi "
 "adicionado por meio deste site de administração."
 msgstr ""
-"Este objeto não tem um histórico de alterações. Provavelmento não foi "
-"adicionado por meio destre sitio de administración."
+"Este objeto no tiene antecedentes de cambios. Probablemente no se agregó a "
+"través de este sitio de administración."
 
 #: .\templates\admin\pagination.html:35 .\templates\admin\search_form.html:36
 msgid "Show all"
@@ -2828,7 +3729,9 @@ msgid ""
 "\n"
 "                                    %(full_result_count)s total\n"
 "                                "
-msgstr "%(full_result_count) s total"
+msgstr ""
+"\n"
+"%(full_result_count)s s total"
 
 #: .\templates\admin\submit_line.html:14
 msgid "Save as new"
@@ -2851,26 +3754,24 @@ msgid "Close"
 msgstr "Cerca"
 
 #: .\templates\admin\themes\delete_confirmation.html:9
-#| msgid "Tem certeza que deseja excluir esta moeda?"
 msgid "Tem certeza que deseja excluir os temas selecionados?"
-msgstr "TEM CREZZA QUE DESEJA EXCRUIR ESTA MOEDA?"
+msgstr "¿Estás seguro de que quieres eliminar los temas seleccionados?"
 
 #: .\templates\admin\themes\delete_confirmation.html:33
 msgid "Esta ação não pode ser desfeita!"
 msgstr "¡Esta acción no se puede deshacer!"
 
 #: .\templates\admin\themes\delete_confirmation.html:42
-#| msgid "Confirmar Devolução"
 msgid "Confirmar exclusão"
-msgstr "Confirmar ação"
+msgstr "Confirmar la exclusión"
 
 #: .\templates\errors\400.html:11
 msgid "400 Requisição Inválida"
-msgstr "400 requisição Inválida"
+msgstr "400 requisitos no válidos"
 
 #: .\templates\errors\400.html:12
 msgid "Requisição"
-msgstr "Requisição"
+msgstr "Pedido"
 
 #: .\templates\errors\400.html:12
 msgid "Inválida"
@@ -2878,15 +3779,15 @@ msgstr "Inválida"
 
 #: .\templates\errors\400.html:13
 msgid "A requisição não pôde ser processada devido a um erro do cliente."
-msgstr "Un requisição não pôde ser procesada devido a um erro do cliente."
+msgstr "La solicitud no pudo procesarse debido a un error del cliente."
 
 #: .\templates\errors\404.html:11
 msgid "404 não encontrado"
-msgstr "404 Não Encontrado"
+msgstr "404 no encontrado"
 
 #: .\templates\errors\404.html:12
 msgid "Página não"
-msgstr "Página não"
+msgstr "Página No"
 
 #: .\templates\errors\404.html:12
 msgid "encontrada"
@@ -2897,45 +3798,47 @@ msgid ""
 "Ops! Parece que você seguiu um link quebrado. Se você acha que isso é um "
 "problema nosso, por favor, nos avise."
 msgstr ""
-"¡Ops! Parece Que Você Seguiu Um Link Quebrado. Se Você Acha que isso é um "
-"Problema nosso, por favor, nos Avise."
+"¡Ups! Parece que siguiste un enlace roto. Si cree que este es nuestro "
+"problema, háganoslo saber."
 
 #: .\templates\errors\500.html:10
 msgid "Algo deu"
-msgstr "Algo deu"
+msgstr "Algo dio"
 
 #: .\templates\errors\500.html:10
 msgid "seriamente"
-msgstr "seriamamento"
+msgstr "seriamente"
 
 #: .\templates\errors\500.html:10
 msgid "errado"
-msgstr "errado"
+msgstr "equivocado"
 
 #: .\templates\errors\500.html:11
 msgid ""
 "Sempre é hora de uma pausa para o café. Devemos estar de volta quando você "
 "terminar seu café."
 msgstr ""
-"Semper É Hora de Uma Pausa Para O Café. Devemos Estar de Volta Quando Você "
-"Terminar Seu Café."
+"Siempre es hora de un descanso para desayunar. Deberíamos volver cuando "
+"termine su café."
 
 #: .\templates\errors\500.html:18
 msgid "Erro 500 no Servidor"
-msgstr "ERR 500 sin servidor"
+msgstr "Erro 500 no Servidor"
 
-#: .\templates\includes\footer.html:8 .\templates\layouts\base-default.html:82
+#: .\templates\includes\footer.html:8 .\templates\layouts\base-default.html:86
+#: .\themes\installed\l2-giran\base.html:158
 msgid "Todos os direitos reservados."
-msgstr "Todos OS Direitos Reservados."
+msgstr "Reservados todos los derechos."
 
-#: .\templates\includes\footer.html:10
-#: .\templates\layouts\base-default.html:83
+#: .\templates\includes\footer.html:11
+#: .\templates\layouts\base-default.html:88
+#: .\themes\installed\l2-giran\base.html:159
 msgid "Feito com ❤️ por aventureiros para aventureiros."
-msgstr "Feito com ❤️ por Aventureiros para Aventureiros."
+msgstr "Hecho con ❤️ por aventureros para aventureros."
 
 #: .\templates\includes\nav.html:11 .\templates\includes\nav.html:16
 msgid "Volt logo"
-msgstr "Logotipo de voltio"
+msgstr "Era logo"
 
 #: .\templates\includes\nav.html:27
 msgid "Toggle navigation"
@@ -2947,538 +3850,566 @@ msgstr "Marcar como lidas"
 
 #: .\templates\includes\navigation.html:48
 msgid "Nenhuma notificação"
-msgstr "Nenhuma Notificação"
+msgstr "Sin notificación"
 
 #: .\templates\includes\navigation.html:55
 msgid "Ver todas as notificações"
-msgstr "Ver todas como notificAções"
+msgstr "Ver todas las notificaciones"
 
 #: .\templates\includes\navigation.html:82
 msgid "Meu Perfil"
-msgstr "Meu perfil"
+msgstr "Mi perfil"
 
 #: .\templates\includes\navigation.html:92
 msgid "Mudar Senha"
-msgstr "Senha de Mudo"
+msgstr "Cambiar la contraseña"
 
-#: .\templates\includes\navigation.html:105
+#: .\templates\includes\navigation.html:99
+msgid "Segurança"
+msgstr "Seguridad"
+
+#: .\templates\includes\navigation.html:112
 msgid "Configurações"
-msgstr "Configuurações"
+msgstr "Ajustes"
 
-#: .\templates\includes\navigation.html:108
+#: .\templates\includes\navigation.html:115
 msgid "API"
 msgstr "API"
 
-#: .\templates\includes\navigation.html:110
+#: .\templates\includes\navigation.html:117
 msgid "Shop"
 msgstr "Comercio"
 
-#: .\templates\includes\navigation.html:111
+#: .\templates\includes\navigation.html:118
 msgid "Services"
 msgstr "Servicios"
 
-#: .\templates\includes\navigation.html:124
-msgid "Conta L2"
-msgstr "Conta L2"
+#: .\templates\includes\navigation.html:119
+msgid "Apoiadores"
+msgstr "Seguidores"
 
-#: .\templates\includes\navigation.html:131
-msgid "Carteira"
-msgstr "Cardeira"
+#: .\templates\includes\navigation.html:120
+msgid "Box Manager"
+msgstr "Gerente de caja"
 
-#: .\templates\includes\navigation.html:138
+#: .\templates\includes\navigation.html:147
 msgid "Inventário"
 msgstr "Inventario"
 
-#: .\templates\includes\navigation.html:145
-msgid "Leilões"
-msgstr "Subastas"
+#: .\templates\includes\navigation.html:163
+msgid "Apoiador"
+msgstr "Seguidor"
 
-#: .\templates\includes\navigation.html:157
+#: .\templates\includes\navigation.html:175
 #: .\templates\includes\sidebar.html:22
-#: .\templates\layouts\base-default.html:33
-#: .\templates\layouts\base-default.html:60
+#: .\templates\layouts\base-default.html:37
+#: .\templates\layouts\base-default.html:64
 #: .\templates\registration\password_change_done.html:16
+#: .\themes\installed\l2-giran\base.html:73
 msgid "Sair"
-msgstr "Sair"
+msgstr "Salir"
 
 #: .\templates\includes\notification.html:31
 msgid "Tem certeza de que deseja limpar todas as notificações?"
-msgstr "TEM CREZZA DE QUE DESEJA LIMPRO TODAS AS ASIGHTAJA."
+msgstr "¿Estás seguro de que quieres limpiar todas las notificaciones?"
 
 #: .\templates\includes\notification.html:32
 msgid "Erro ao carregar os detalhes da notificação."
-msgstr "Erro ao carregar os detalhes da NotificAção."
+msgstr "Error de carga de detalles de notificación."
 
-#: .\templates\includes\sidebar.html:55
+#: .\templates\includes\sidebar.html:58
 msgid "Início"
-msgstr "Início"
+msgstr "Comenzar"
 
-#: .\templates\includes\sidebar.html:96
+#: .\templates\includes\sidebar.html:112
+msgid "Games"
+msgstr "Juego"
+
+#: .\templates\includes\sidebar.html:128
+msgid "Roleta"
+msgstr "Ruleta"
+
+#: .\templates\includes\sidebar.html:134
+msgid "Caixas"
+msgstr "Cajas"
+
+#: .\templates\includes\sidebar.html:152
 msgid "Ajuda (FAQ)"
-msgstr "Ajuda (Preguntas frecuentes)"
+msgstr "Ayuda (FAQ)"
 
-#: .\templates\includes\sidebar.html:132
+#: .\templates\includes\sidebar.html:188
 msgid "Solicitações"
-msgstr "Solicitações"
+msgstr "Solicitudes"
 
-#: .\templates\includes\sidebar.html:151
+#: .\templates\includes\sidebar.html:207
 msgid "Tops"
 msgstr "Tops"
 
-#: .\templates\includes\sidebar.html:167
+#: .\templates\includes\sidebar.html:223
 msgid "Top Level"
 msgstr "Nivel superior"
 
-#: .\templates\includes\sidebar.html:173
+#: .\templates\includes\sidebar.html:229
 msgid "Top PK"
 msgstr "PK superior"
 
-#: .\templates\includes\sidebar.html:179
+#: .\templates\includes\sidebar.html:235
 msgid "Top PVP"
 msgstr "PVP superior"
 
-#: .\templates\includes\sidebar.html:185
+#: .\templates\includes\sidebar.html:241
 msgid "Top Adena"
-msgstr "Superior adena"
+msgstr "Adina superior"
 
-#: .\templates\includes\sidebar.html:191
+#: .\templates\includes\sidebar.html:247
 msgid "Top Clans"
 msgstr "Clanes superiores"
 
-#: .\templates\includes\sidebar.html:197
+#: .\templates\includes\sidebar.html:253
 msgid "Top Online"
 msgstr "Superior en línea"
 
-#: .\templates\includes\sidebar.html:216
+#: .\templates\includes\sidebar.html:272
 msgid "Heroes"
 msgstr "Héroes"
 
-#: .\templates\includes\sidebar.html:232
+#: .\templates\includes\sidebar.html:288
 msgid "Top Olympiad"
 msgstr "Top Olympiad"
 
-#: .\templates\includes\sidebar.html:238
+#: .\templates\includes\sidebar.html:294
 msgid "All Heroes"
 msgstr "Todos los héroes"
 
-#: .\templates\includes\sidebar.html:244
+#: .\templates\includes\sidebar.html:300
 msgid "Current Heroes"
 msgstr "Héroes actuales"
 
-#: .\templates\includes\sidebar.html:259
+#: .\templates\includes\sidebar.html:315
 msgid "Castle Siege"
 msgstr "Asedio del castillo"
 
-#: .\templates\includes\sidebar.html:307
+#: .\templates\includes\sidebar.html:363
 msgid "Permissões"
-msgstr "Permissões"
+msgstr "Permisos"
 
-#: .\templates\includes\sidebar.html:375
+#: .\templates\includes\sidebar.html:431
 msgid "Auditoria"
 msgstr "Auditoria"
 
-#: .\templates\includes\sidebar.html:389
+#: .\templates\includes\sidebar.html:445
 msgid "Logs Info"
 msgstr "Información de registros"
 
-#: .\templates\includes\sidebar.html:403
+#: .\templates\includes\sidebar.html:459
 msgid "Logs Errors"
 msgstr "Errores de registro"
 
-#: .\templates\layouts\base-default.html:17
+#: .\templates\layouts\base-default.html:20
 msgid "Lineage2 Logo"
 msgstr "Logotipo de linaje2"
 
-#: .\templates\layouts\base-default.html:22
-#: .\templates\layouts\base-default.html:52
+#: .\templates\layouts\base-default.html:26
+#: .\templates\layouts\base-default.html:56
 msgid "Sobre"
-msgstr "Soldado"
+msgstr "Sobre"
 
-#: .\templates\layouts\base-default.html:23
-#: .\templates\layouts\base-default.html:53
+#: .\templates\layouts\base-default.html:27
+#: .\templates\layouts\base-default.html:57
+#: .\themes\installed\l2-giran\base.html:78
 msgid "Download"
 msgstr "Descargar"
 
-#: .\templates\layouts\base-default.html:24
-#: .\templates\layouts\base-default.html:54
+#: .\templates\layouts\base-default.html:28
+#: .\templates\layouts\base-default.html:58
 msgid "Comunidade"
 msgstr "Comunidad"
 
-#: .\templates\layouts\base-default.html:26
-#: .\templates\layouts\base-default.html:56
+#: .\templates\layouts\base-default.html:30
+#: .\templates\layouts\base-default.html:60
+#: .\themes\installed\l2-giran\base.html:85
 msgid "FAQ"
 msgstr "Preguntas frecuentes"
 
-#: .\templates\layouts\base-default.html:32
-#: .\templates\layouts\base-default.html:59
-msgid "Painel"
-msgstr "Dolor"
-
-#: .\templates\layouts\base-default.html:35
-#: .\templates\layouts\base-default.html:62
-msgid "Minha Conta"
-msgstr "Minha Conta"
-
 #: .\templates\layouts\base-default.html:36
 #: .\templates\layouts\base-default.html:63
+msgid "Painel"
+msgstr "Panel"
+
+#: .\templates\layouts\base-default.html:39
+#: .\templates\layouts\base-default.html:66
+#: .\themes\installed\l2-giran\base.html:72
+msgid "Minha Conta"
+msgstr "Mi cuenta"
+
+#: .\templates\layouts\base-default.html:40
+#: .\templates\layouts\base-default.html:67
 msgid "Jogue Grátis"
-msgstr "Jogue Grátis"
+msgstr "Jugar gratis"
 
 #: .\templates\public\email_verificado.html:6
 msgid "Verificação de E-mail"
-msgstr "VerificAção de correo electrónico"
+msgstr "Cheque por correo electrónico"
 
 #: .\templates\public\email_verificado.html:38
 msgid "Link inválido ou expirado."
-msgstr "Enlace Inválido ou expirado."
+msgstr "Link inválido ou expirado."
 
 #: .\templates\public\email_verificado.html:39
 msgid ""
 "Por favor, solicite um novo e-mail de verificação ou entre em contato com o "
 "suporte."
-msgstr "Por favor, Solicite um Novo Correo electrónico de Verificação ou ent."
+msgstr ""
+"Solicite un nuevo correo electrónico de verificación o comuníquese con el "
+"soporte."
 
 #: .\templates\public\email_verificado.html:40
 msgid "Voltar ao registro"
-msgstr "Voltar AO Registro"
+msgstr "Volver al registro"
 
 #: .\templates\public\email_verificado.html:45
 msgid "Conta verificada com sucesso!"
-msgstr "Conta Verificada com Suceso!"
+msgstr "Cuenta verificada con éxito!"
 
 #: .\templates\public\email_verificado.html:46
 msgid "Agora você pode acessar sua conta com segurança."
-msgstr "Agora Você Pode Acessar Sua Conta Com Segurança."
+msgstr "Ahora puede acceder a su cuenta de manera segura."
 
 #: .\templates\public\email_verificado.html:47
-msgid "Fazer login"
-msgstr "Fazer Iniciar sesión"
+#: .\templates\registration\logged_out.html:11
+#: .\themes\installed\l2-giran\base.html:76
+msgid "Entrar"
+msgstr "Entrar"
 
-#: .\templates\public\faq.html:16
+#: .\templates\public\faq.html:16 .\themes\installed\l2-giran\faq.html:14
 msgid "Veja abaixo as dúvidas mais comuns da comunidade."
-msgstr "Veja Abaixo como Dúvidas Mais Comuns da Comunidade."
+msgstr "Vea a continuación las preguntas más comunes de la comunidad."
 
-#: .\templates\public\faq.html:43
+#: .\templates\public\faq.html:43 .\themes\installed\l2-giran\faq.html:30
 msgid "Nenhuma pergunta frequente disponível no momento."
-msgstr "Nenhuma Pergunta frecuente Disponível No Momento."
+msgstr "No hay una pregunta frecuente disponible en este momento."
 
-#: .\templates\public\index.html:26
+#: .\templates\public\index.html:29 .\themes\installed\l2-giran\index.html:22
 msgid "Lineage 2 PDL"
 msgstr "Linaje 2 PDL"
 
-#: .\templates\public\index.html:33
+#: .\templates\public\index.html:36 .\themes\installed\l2-giran\index.html:29
 msgid "Onde Lendas Nascem, Heróis Lutam e a Glória É Eterna."
-msgstr "Onde Lendas Nascem, Heróis Lutam e A Glória é Eternna."
+msgstr "Donde nacen las leyendas, los héroes luchan y la gloria es eterna."
 
-#: .\templates\public\index.html:37
+#: .\templates\public\index.html:40 .\themes\installed\l2-giran\index.html:33
 msgid "Jogar Agora"
-msgstr "Jogar Agora"
+msgstr "Jugar ahora"
 
-#: .\templates\public\index.html:46
+#: .\templates\public\index.html:49 .\themes\installed\l2-giran\index.html:42
 msgid "Trailer Oficial"
-msgstr "Remolque oficial"
+msgstr "Trailer Oficial"
 
-#: .\templates\public\index.html:53
+#: .\templates\public\index.html:56 .\themes\installed\l2-giran\index.html:49
 msgid "Assista ao trailer e mergulhe no mundo épico do nosso servidor!"
-msgstr "¡ASUSTA AO TRAILER E MERMULHE NO MUNDO ÉPICO DO NOSSO SERVOR!"
+msgstr "¡Mira el trailer y sumérgete en el mundo épico de nuestro servidor!"
 
-#: .\templates\public\index.html:61
+#: .\templates\public\index.html:64 .\themes\installed\l2-giran\index.html:57
 msgid "O Que Torna Nosso Servidor Único?"
-msgstr "O que torna nosso servidor Único?"
+msgstr "¿Qué hace que nuestro servidor sea único?"
 
-#: .\templates\public\index.html:67
+#: .\templates\public\index.html:70 .\themes\installed\l2-giran\index.html:63
 msgid "PvP & Sieges"
 msgstr "PvP y Sieges"
 
-#: .\templates\public\index.html:68
+#: .\templates\public\index.html:71 .\themes\installed\l2-giran\index.html:64
 msgid ""
 "Domine castelos, lute por território e mostre sua força no campo de batalha."
 msgstr ""
-"Domine Castelos, Lute Por Território e Mostre Sua Força no Campo de Batalha."
+"Castillos Domine, lucha territorio y muestran tu fuerza en el campo de "
+"batalla."
 
-#: .\templates\public\index.html:75
+#: .\templates\public\index.html:78 .\themes\installed\l2-giran\index.html:71
 msgid "Missões Personalizadas"
-msgstr "Missões Personalizadas"
+msgstr "Misiones personalizadas"
 
-#: .\templates\public\index.html:76
+#: .\templates\public\index.html:79 .\themes\installed\l2-giran\index.html:72
 msgid "Conteúdo exclusivo com recompensas únicas para jogadores dedicados."
-msgstr "Conteúdo Exclusivo Com Recompensas Únicas para Jogadores Dedicados."
+msgstr "Contenido exclusivo con recompensas únicas para jugadores dedicados."
 
-#: .\templates\public\index.html:83
+#: .\templates\public\index.html:86 .\themes\installed\l2-giran\index.html:79
 msgid "Eventos & Premiações"
-msgstr "Eventos y Premiações"
+msgstr "Eventos y premios"
 
-#: .\templates\public\index.html:84
+#: .\templates\public\index.html:87 .\themes\installed\l2-giran\index.html:80
 msgid "Participe de eventos semanais com itens raros e bônus poderosos."
-msgstr "Participe de eventos semanais com itens raros e bônus poderosos."
+msgstr "Únase a eventos semanales con potentes artículos y bonos raros."
 
-#: .\templates\public\index.html:95
+#: .\templates\public\index.html:136
 msgid "Escolha Sua Classe"
-msgstr "Escolha sua classe"
+msgstr "Elige tu clase"
 
-#: .\templates\public\index.html:133
+#: .\templates\public\index.html:174
 msgid "Top Clãs"
-msgstr "Top Clãs"
+msgstr "Clanes superiores"
 
-#: .\templates\public\index.html:141 .\templates\public\index.html:172
+#: .\templates\public\index.html:182 .\templates\public\index.html:212
 msgid "Clã:"
-msgstr "Clã:"
+msgstr "Clan:"
 
-#: .\templates\public\index.html:143 .\templates\public\index.html:174
+#: .\templates\public\index.html:184 .\templates\public\index.html:214
 msgid "Pontuação de Reputação:"
-msgstr "Pontuação de reputação:"
+msgstr "Puntuación de reputación:"
 
-#: .\templates\public\index.html:144 .\templates\public\index.html:175
+#: .\templates\public\index.html:185 .\templates\public\index.html:215
 msgid "Aliança:"
-msgstr "Aliança:"
+msgstr "Alianza:"
 
-#: .\templates\public\index.html:146 .\templates\public\index.html:177
+#: .\templates\public\index.html:187 .\templates\public\index.html:217
 msgid "Membros:"
-msgstr "Membres:"
+msgstr "Miembros:"
 
-#: .\templates\public\index.html:206
+#: .\templates\public\index.html:245
 msgid "Jogadores online Agora"
-msgstr "Jogadores en línea Agora"
+msgstr "Jugadores en línea ahora"
 
-#: .\templates\public\index.html:214
+#: .\templates\public\index.html:253
 msgid "O campo de batalha está ativo!"
-msgstr "¡Oh Campo de Batalha Está Ativo!"
+msgstr "¡El campo de batalla está activo!"
 
-#: .\templates\public\index.html:221
+#: .\templates\public\index.html:260 .\themes\installed\l2-giran\index.html:90
 msgid "Download & Instalação"
-msgstr "Descargar e instalação"
+msgstr "Descargar e instalación"
 
-#: .\templates\public\index.html:222
+#: .\templates\public\index.html:261 .\themes\installed\l2-giran\index.html:91
 msgid ""
 "Baixe agora o cliente e patch oficial e comece sua jornada em nosso "
 "servidor."
 msgstr ""
-"Baixe Agora o Cliente E Patch Oficial e Comece sua jornada em nossso "
-"servidor."
+"Descargue ahora el cliente oficial y el parche y comience su viaje en "
+"nuestro servidor."
 
-#: .\templates\public\index.html:223
+#: .\templates\public\index.html:262 .\themes\installed\l2-giran\index.html:92
 msgid "Baixar Patch"
-msgstr "Parche de Baixar"
+msgstr "Patch de descarga"
 
-#: .\templates\public\index.html:224
+#: .\templates\public\index.html:263 .\themes\installed\l2-giran\index.html:93
 msgid "Baixar Cliente"
-msgstr "Baixar Cliente"
+msgstr "Descargar cliente"
 
-#: .\templates\public\index.html:231
+#: .\templates\public\index.html:270
+#: .\themes\installed\l2-giran\index.html:100
 msgid "Junte-se à Comunidade"
-msgstr "Junte-se à Comunidade"
+msgstr "Únete a la comunidad"
 
-#: .\templates\public\index.html:232
+#: .\templates\public\index.html:271
+#: .\themes\installed\l2-giran\index.html:101
 msgid ""
 "Conecte-se com outros jogadores, tire dúvidas e participe dos eventos via "
 "Discord."
 msgstr ""
-"Conecte-SE Com Outros Jogadores, Tire Dúvidas e Parte-Eventos a través de "
-"Discord."
+"Conéctese con otros jugadores, haga preguntas y participe en eventos a "
+"través de Discord."
 
-#: .\templates\public\index.html:233
+#: .\templates\public\index.html:272
+#: .\themes\installed\l2-giran\index.html:102
 msgid "Entrar no Discord"
-msgstr "Envertar sin discordia"
+msgstr "Entrar no Discord"
 
 #: .\templates\public\news_detail.html:30
 #: .\templates\public\news_index.html:26
+#: .\themes\installed\l2-giran\news_detail.html:26
+#: .\themes\installed\l2-giran\news_index.html:26
 msgid "Publicado em"
-msgstr "Publicado em"
+msgstr "Publicado en"
 
 #: .\templates\public\news_index.html:8
+#: .\themes\installed\l2-giran\news_index.html:12
 msgid "Notícias Recentes"
-msgstr "Nocias recientes"
+msgstr "Noticias recientes"
 
 #: .\templates\public\news_index.html:36
+#: .\themes\installed\l2-giran\news_index.html:33
 msgid "Não há notícias disponíveis no momento."
-msgstr "Não há nocias disponíis no momento."
+msgstr "No hay noticias disponibles en este momento."
 
-#: .\templates\public\terms.html:8
+#: .\templates\public\terms.html:8 .\themes\installed\l2-giran\terms.html:8
 msgid "Termos e Condições"
-msgstr "Termos e condições"
+msgstr "Términos y condiciones"
 
-#: .\templates\public\terms.html:13
+#: .\templates\public\terms.html:13 .\themes\installed\l2-giran\terms.html:13
 msgid "Termos e Condições de Uso"
-msgstr "Termos e condições de uso"
+msgstr "Términos y condiciones de uso"
 
-#: .\templates\public\terms.html:14
+#: .\templates\public\terms.html:14 .\themes\installed\l2-giran\terms.html:14
 msgid "Última atualização"
-msgstr "Última Atualização"
+msgstr "Última actualización"
 
-#: .\templates\public\terms.html:16
+#: .\templates\public\terms.html:16 .\themes\installed\l2-giran\terms.html:17
 msgid "Sobre o Servidor"
-msgstr "Sobre o servidor"
+msgstr "Sobre o Servidor"
 
-#: .\templates\public\terms.html:17
+#: .\templates\public\terms.html:17 .\themes\installed\l2-giran\terms.html:18
 msgid "O"
-msgstr "O"
+msgstr "EL"
 
-#: .\templates\public\terms.html:17
+#: .\templates\public\terms.html:17 .\themes\installed\l2-giran\terms.html:18
 msgid ""
 "é um servidor privado, sem vínculos com a NCSoft. Criado por fãs e para fins"
 " recreativos."
 msgstr ""
-"é um servidor privado, sem vínculos com a ncsoft. Criado por fãs e para Fins"
-" Recreatros."
+"Es un servidor privado, sin bonos con NCSOFT. Creado por fanáticos y con "
+"fines recreativos."
 
-#: .\templates\public\terms.html:19
+#: .\templates\public\terms.html:19 .\themes\installed\l2-giran\terms.html:22
 msgid "Regras Gerais"
-msgstr "RERAS GERAIS"
+msgstr "Reglas generales"
 
-#: .\templates\public\terms.html:21
+#: .\templates\public\terms.html:21 .\themes\installed\l2-giran\terms.html:24
 msgid "Proibido uso de bots, cheats, exploits ou automações."
-msgstr "Proibido Uso de bots, trucos, explotaciones ou automálices."
+msgstr "Prohibido usar bots, cheques, exploits o automatizaciones."
 
-#: .\templates\public\terms.html:22
+#: .\templates\public\terms.html:22 .\themes\installed\l2-giran\terms.html:25
 msgid "Contas compartilhadas são por sua conta e risco."
-msgstr "Contas compartimes são por sua conta e risco."
+msgstr "Las cuentas compartidas tienen su propio riesgo."
 
-#: .\templates\public\terms.html:23
+#: .\templates\public\terms.html:23 .\themes\installed\l2-giran\terms.html:26
 msgid "Atitudes tóxicas não serão toleradas."
-msgstr "Atitudes Tóxica Não Serão Toleradas."
+msgstr "Las actitudes tóxicas no serán toleradas."
 
-#: .\templates\public\terms.html:24
+#: .\templates\public\terms.html:24 .\themes\installed\l2-giran\terms.html:27
 msgid "Exploração de bugs será punida."
-msgstr "Exploração de Bugs Será Punida."
+msgstr "La exploración de errores será castigada."
 
-#: .\templates\public\terms.html:25
+#: .\templates\public\terms.html:25 .\themes\installed\l2-giran\terms.html:28
 msgid "A Staff pode agir contra comportamentos nocivos."
-msgstr "Un personal de Pode Aguir contra Comportamentos Nocivos."
+msgstr "El personal puede actuar contra comportamientos dañinos."
 
-#: .\templates\public\terms.html:28
+#: .\templates\public\terms.html:28 .\themes\installed\l2-giran\terms.html:33
 msgid "Contas e Segurança"
-msgstr "Contas E Segurança"
+msgstr "Cuentas y seguridad"
 
-#: .\templates\public\terms.html:29
+#: .\templates\public\terms.html:29 .\themes\installed\l2-giran\terms.html:34
 msgid ""
 "Você é responsável por sua conta. Use senhas seguras. Não nos "
 "responsabilizamos por perdas causadas por descuido."
 msgstr ""
-"VOCê é Responsável por sua Conta. Use Senhas Seguras. Não nos responsable "
-"albilizamos por perdas causadas por descuido."
+"Usted es responsable de su cuenta. Use contraseñas seguras. No somos "
+"responsables de las pérdidas causadas por el descuido."
 
-#: .\templates\public\terms.html:31
+#: .\templates\public\terms.html:31 .\themes\installed\l2-giran\terms.html:38
 msgid "Política de Doações"
-msgstr "Política de Doações"
+msgstr "Política de donación"
 
-#: .\templates\public\terms.html:32
+#: .\templates\public\terms.html:32 .\themes\installed\l2-giran\terms.html:39
 msgid ""
 "Doações são voluntárias, sem reembolso, e ajudam na manutenção do servidor. "
 "Os benefícios podem mudar."
 msgstr ""
-"Doações São Volunteárías, Sem Reembolso, E Ajudam na Manutenção do Servidor."
-" OS Benefícios Podem Mudar."
+"Las donaciones son voluntarias, sin reembolso, y ayudan a mantener el "
+"servidor. Los beneficios pueden cambiar."
 
-#: .\templates\public\terms.html:34
+#: .\templates\public\terms.html:34 .\themes\installed\l2-giran\terms.html:43
 msgid "Propriedade Intelectual"
-msgstr "Propriedade Intelectual"
+msgstr "Propiedad intelectual"
 
-#: .\templates\public\terms.html:35
+#: .\templates\public\terms.html:35 .\themes\installed\l2-giran\terms.html:44
 msgid ""
 "Lineage 2 é da NCSoft. Este servidor é feito por fãs e não possui fins "
 "lucrativos."
 msgstr ""
-"Linaje 2 é da ncsoft. Este servidor é feito por fãs e não posui fins "
-"Lucrativos."
+"El linaje 2 es de NCSoft. Este servidor está hecho por los fanáticos y no "
+"tiene ganancias."
 
-#: .\templates\public\terms.html:37
+#: .\templates\public\terms.html:37 .\themes\installed\l2-giran\terms.html:48
 msgid "Responsabilidades da Staff"
-msgstr "Responsabilidades DA Staff"
+msgstr "Responsabilidades da Staff"
 
-#: .\templates\public\terms.html:38
+#: .\templates\public\terms.html:38 .\themes\installed\l2-giran\terms.html:49
 msgid ""
 "A Staff visa manter o servidor justo e estável. Mudanças, resets ou "
 "manutenções podem ocorrer."
 msgstr ""
-"Una visa de personal Manter o servidor justo e estável. Mudanças, reinicia "
-"ou manutenções podem ocorrer."
+"El personal tiene como objetivo mantener el servidor justo y estable. Pueden"
+" ocurrir cambios, reinicios o mantenimiento."
 
-#: .\templates\public\terms.html:40
+#: .\templates\public\terms.html:40 .\themes\installed\l2-giran\terms.html:53
 msgid "Penalidades"
-msgstr "Penalidadas"
+msgstr "Penalidades"
 
-#: .\templates\public\terms.html:41
+#: .\templates\public\terms.html:41 .\themes\installed\l2-giran\terms.html:54
 msgid "Infrações podem resultar em:"
-msgstr "Infrações Podem resultante EM:"
+msgstr "Las infracciones pueden resultar en:"
 
-#: .\templates\public\terms.html:43
+#: .\templates\public\terms.html:43 .\themes\installed\l2-giran\terms.html:56
 msgid "Advertência"
-msgstr "Anuncio"
+msgstr "Advertencia"
 
-#: .\templates\public\terms.html:44
+#: .\templates\public\terms.html:44 .\themes\installed\l2-giran\terms.html:57
 msgid "Mute"
 msgstr "Silenciar"
 
-#: .\templates\public\terms.html:45
+#: .\templates\public\terms.html:45 .\themes\installed\l2-giran\terms.html:58
 msgid "Banimento"
-msgstr "Banimento"
+msgstr "Destierro"
 
-#: .\templates\public\terms.html:46
+#: .\templates\public\terms.html:46 .\themes\installed\l2-giran\terms.html:59
 msgid "Perda de itens"
-msgstr "Perda de itens"
+msgstr "Pérdida de artículos"
 
-#: .\templates\public\terms.html:49
+#: .\templates\public\terms.html:49 .\themes\installed\l2-giran\terms.html:64
 msgid "Alterações nos Termos"
-msgstr "Alterações nos termos"
+msgstr "Cambios en los términos"
 
-#: .\templates\public\terms.html:50
+#: .\templates\public\terms.html:50 .\themes\installed\l2-giran\terms.html:65
 msgid ""
 "Os termos podem mudar. Ao continuar jogando, você aceita as atualizações "
 "automaticamente."
 msgstr ""
-"OS Termos Podem Mudar. AO Continuar Jogando, Você Aceita como Atualizações "
-"Automaticamme."
+"Los términos pueden cambiar. Al continuar jugando, acepta actualizaciones "
+"automáticamente."
 
-#: .\templates\public\terms.html:52
+#: .\templates\public\terms.html:52 .\themes\installed\l2-giran\terms.html:69
 msgid "Contato"
-msgstr "Contango"
+msgstr "Contacto"
 
-#: .\templates\public\terms.html:53
+#: .\templates\public\terms.html:53 .\themes\installed\l2-giran\terms.html:70
 msgid "Fale conosco pelo"
-msgstr "Fale Conosco Pelo"
+msgstr "Contáctenos para"
 
-#: .\templates\public\terms.html:53
+#: .\templates\public\terms.html:53 .\themes\installed\l2-giran\terms.html:70
 msgid "Discord"
 msgstr "Discordia"
 
-#: .\templates\public\terms.html:53
+#: .\templates\public\terms.html:53 .\themes\installed\l2-giran\terms.html:70
 msgid "e-mail"
 msgstr "correo electrónico"
 
-#: .\templates\public\terms.html:53
+#: .\templates\public\terms.html:53 .\themes\installed\l2-giran\terms.html:70
 msgid "ou fórum oficial em caso de dúvidas ou denúncias."
-msgstr "ou fórum Oficial em CASO de Dúvidas Ou Denúncias."
+msgstr "o foro oficial en caso de dudas o quejas."
 
-#: .\templates\public\terms.html:55
+#: .\templates\public\terms.html:55 .\themes\installed\l2-giran\terms.html:73
 msgid "Um mundo para verdadeiros aventureiros."
-msgstr "Um Mundo para Verdadeiros Aventureiros."
-
-#: .\templates\registration\logged_out.html:11
-msgid "Entrar"
-msgstr "Entero"
+msgstr "Un mundo para verdaderos aventureros."
 
 #: .\templates\registration\logged_out.html:12
 #: .\templates\registration\logged_out.html:28
 msgid "Obrigado por passar um tempo de qualidade conosco no site hoje."
-msgstr "Obrigado por Passar Um Tempo de Qualidade conosco No Sitio Hoje."
+msgstr "Gracias por pasar un tiempo de calidad con nosotros en el sitio hoy."
 
 #: .\templates\registration\logged_out.html:16
 msgid "Entrar novamente"
-msgstr "Enver no novato"
+msgstr "Entra"
 
 #: .\templates\registration\password_change_done.html:12
 msgid "Documentação"
-msgstr "Documentação"
+msgstr "Documentación"
 
 #: .\templates\registration\password_change_done.html:33
 #: .\templates\registration\password_change_form.html:22
 msgid "Alteração de senha"
-msgstr "Alteração de senha"
+msgstr "Cambio de contraseña"
 
 #: .\templates\registration\password_change_done.html:47
 #: .\templates\registration\password_change_done.html:61
 msgid "Sua senha foi alterada."
-msgstr "Sua Senha foi alterada."
+msgstr "Su contraseña ha sido cambiada."
 
 #: .\templates\registration\password_change_form.html:37
 msgid ""
@@ -3486,37 +4417,21 @@ msgid ""
 "insira sua nova senha duas vezes para verificarmos se foi digitada "
 "corretamente."
 msgstr ""
-"Por favor, insira sua senha antiga, por motivos de segurança, e depois "
-"insira sua nova senha duas vezes para verificnos se foi digitada "
-"corretamete."
+"Ingrese su contraseña anterior por razones de seguridad y luego ingrese su "
+"nueva contraseña dos veces para verificar si se escribió correctamente."
 
-#~ msgid "Outro"
-#~ msgstr "Outro"
+#: .\themes\installed\l2-giran\base.html:75
+msgid "Jogue Agora"
+msgstr "Jugar ahora"
 
-#~ msgid ""
-#~ "O PDL é um painel que nasceu com a missão de oferecer ferramentas poderosas "
-#~ "para administradores de servidores privados de Lineage 2. Inicialmente "
-#~ "voltado à análise de riscos e estabilidade dos servidores, o projeto evoluiu"
-#~ " e se consolidou como uma solução completa para prospecção, gerenciamento e "
-#~ "operação de servidores — tudo em código aberto."
-#~ msgstr ""
-#~ "O PDL é um painel que nasceu com a missão de oferecer ferramentas poderosas "
-#~ "para administradores de servidores privados de Lineage 2. Inicialmente "
-#~ "voltado à análise de riscos e estabilidade dos servidores, o projeto evoluiu"
-#~ " e se consolidou como uma solução completa para prospecção, Gerenciamento e "
-#~ "Operação de Servidorores - Tudo Em Código Aberto."
+#: .\themes\installed\l2-giran\base.html:79
+msgid "Suporte"
+msgstr "Apoyo"
 
-#~ msgid "lineage l2 painel servidor"
-#~ msgstr "Linaje L2 Servidor Painel"
+#: .\themes\installed\l2-giran\base.html:81
+msgid "Server"
+msgstr "Servidor"
 
-#~ msgid "Lineage 2"
-#~ msgstr "Linaje 2"
-
-#~ msgid "Minha Conta Lineage"
-#~ msgstr "Minha Contage Lineage"
-
-#~ msgid "Nível de Acesso:"
-#~ msgstr "Nível de Acesso:"
-
-#~ msgid "Não foi possível carregar os dados da conta."
-#~ msgstr "Não foi posevel carregar os dadas da Conta."
+#: .\themes\installed\l2-giran\base.html:83
+msgid "Estatística"
+msgstr "Estadística"
