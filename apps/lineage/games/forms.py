@@ -38,9 +38,33 @@ class BoxForm(forms.ModelForm):
     class Meta:
         model = Box
         fields = ['user', 'box_type']
+        widgets = {
+            'user': forms.Select(attrs={'class': 'form-control'}),
+            'box_type': forms.Select(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'user': 'Usuário',
+            'box_type': 'Tipo de Caixa',
+        }
 
 
 class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
         fields = ['name', 'enchant', 'item_id', 'image', 'description', 'rarity']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'enchant': forms.NumberInput(attrs={'class': 'form-control'}),
+            'item_id': forms.NumberInput(attrs={'class': 'form-control'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'rarity': forms.Select(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'name': 'Nome do Item',
+            'enchant': 'Enchant',
+            'item_id': 'ID do Item',
+            'image': 'Imagem',
+            'description': 'Descrição',
+            'rarity': 'Raridade',
+        }
