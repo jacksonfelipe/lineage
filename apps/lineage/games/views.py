@@ -121,7 +121,13 @@ def comprar_fichas(request):
 def box_dashboard_view(request):
     box_types = BoxType.objects.all()
 
-    return render(request, 'box/dashboard.html', {'box_types': box_types})
+    # Recupera o saldo do usuário logado (ajuste o nome do modelo se necessário)
+    wallet = Wallet.objects.filter(usuario=request.user).first()
+
+    return render(request, 'box/dashboard.html', {
+        'box_types': box_types,
+        'user_balance': wallet.saldo
+    })
 
 
 @conditional_otp_required
@@ -142,6 +148,16 @@ def open_box_view(request, box_id):
         messages.warning(request, "Essa caixa não pertence a você. Compre uma nova do mesmo tipo.")
         return redirect('games:box_user_dashboard')
 
+    # Verificar se o usuário possui fichas suficientes
+    if request.user.fichas <= 0:
+        messages.warning(request, "Você não tem fichas suficientes para abrir a caixa.")
+        return redirect('games:box_user_dashboard')
+
+    # Deduzir uma ficha do saldo
+    request.user.fichas -= 1
+    request.user.save()
+
+    # Abrir a caixa
     item, error = open_box(request.user, box_id)
 
     if error:
