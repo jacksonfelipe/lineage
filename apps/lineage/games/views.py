@@ -212,3 +212,18 @@ def buy_and_open_box_view(request, box_type_id):
     except ValueError as e:
         messages.error(request, f"Erro na transação: {str(e)}")
         return redirect('games:box_user_dashboard')
+
+
+@conditional_otp_required
+def bag_dashboard(request):
+    try:
+        bag = request.user.bag
+        bag_items = bag.items.all()
+    except Bag.DoesNotExist:
+        bag = None
+        bag_items = []
+
+    return render(request, 'pages/bag_dashboard.html', {
+        'bag': bag,
+        'items': bag_items,
+    })

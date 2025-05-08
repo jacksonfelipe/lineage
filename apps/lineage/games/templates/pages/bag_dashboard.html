@@ -1,0 +1,64 @@
+{% extends "layouts/base.html" %}
+{% load i18n l10n %}
+{% load static %}
+{% load itens_extras %}
+
+{% block content %}
+<div class="container py-5">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary">
+      <i class="bi bi-bag-fill me-2"></i>{% trans "Minha Bag" %}
+    </h2>
+  </div>
+
+  {% if bag %}
+    <div class="card bg-dark text-white border-0 shadow-lg rounded-4 mb-4">
+      <div class="card-header bg-primary rounded-top-4 p-3 d-flex justify-content-between align-items-center">
+        <div>
+          <i class="bi bi-person-circle me-2 text-secondary"></i>
+          <strong class="text-secondary">{{ request.user.username }}</strong>
+        </div>
+        <span class="badge bg-info">{% trans "Bag Pessoal" %}</span>
+      </div>
+
+      <div class="card-body">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+          {% for item in items %}
+            <div class="col">
+              <div class="card bg-dark border-0 shadow text-white rounded-4 overflow-hidden h-100">
+                <div class="card-body text-center py-4 d-flex flex-column justify-content-between h-100">
+                    <img src="{% item_image_url item.item_id %}" 
+                    alt="{{ item.item_name }}"
+                    class="mb-3 rounded border border-secondary d-block mx-auto"
+                    style="width: 32px; height: 32px;">
+                  <h5 class="fw-bold mb-2 text-primary">{{ item.item_name }}</h5>
+                  <p class="mb-3 small text-primary">
+                    <span class="fw-semibold">{% trans "Quantidade" %}:</span>
+                    <span class="fw-semibold text-primary me-3">{{ item.quantity }}</span>
+                    <span class="fw-semibold">{% trans "Encantamento" %}:</span>
+                    <span class="fw-semibold text-primary">+{{ item.enchant }}</span>
+                  </p>
+                  <!-- Ações como "Mover para Inventário" ou "Vender" podem ser adicionadas aqui futuramente -->
+                </div>
+              </div>
+            </div>
+          {% empty %}
+            <div class="col">
+              <div class="alert alert-info rounded-4 text-center text-primary">
+                {% trans "Nenhum item na bag." %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="alert alert-warning text-center rounded-4">
+      {% trans "Você ainda não possui uma bag." %}
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

@@ -11,6 +11,7 @@ urlpatterns = [
     path('roleta/spin-ajax/', views.spin_ajax, name='spin_ajax'),
 
     path('comprar-fichas/', views.comprar_fichas, name='comprar_fichas'),
+    path('bag/dashboard/', views.bag_dashboard, name='bag_dashboard'),
 
     # Dashboard do User (boxes)
     path('box/dashboard/', views.box_dashboard_view, name='box_user_dashboard'),

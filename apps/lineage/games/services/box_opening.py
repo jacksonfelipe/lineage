@@ -24,7 +24,7 @@ def open_box(user, box_id):
     # Tenta atualizar item existente ou criar novo
     bag_item, created = BagItem.objects.get_or_create(
         bag=bag,
-        item_id=selected_item.item_id,
+        item_id=selected_item.item.item_id,
         enchant=selected_item.item.enchant,  # Acesse o enchant do Item, não de BoxItem
         defaults={
             'item_name': selected_item.item.name,  # Acesse o nome do Item corretamente

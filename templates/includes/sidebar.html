@@ -86,6 +86,19 @@
         </a>
       </li>
 
+      <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
+
+      <li class="nav-item {% if 'bag' in segment %}active{% endif %}">
+        <a href="{% url 'games:bag_dashboard' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 4a3 3 0 016 0h1a2 2 0 012 2v9a3 3 0 01-3 3H5a3 3 0 01-3-3V6a2 2 0 012-2h1zm3-1a1 1 0 00-1 1h2a1 1 0 00-1-1zm0 4a1 1 0 000 2h4a1 1 0 100-2H8z"></path>
+            </svg>
+          </span>
+          <span class="sidebar-text">{% trans "Minha Bag" %}</span>
+        </a>
+      </li>      
+
       <li class="nav-item">
         <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
           data-bs-target="#submenu-components">
