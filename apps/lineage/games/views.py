@@ -159,8 +159,40 @@ def buy_and_open_box_view(request, box_type_id):
         messages.error(request, "Tipo de caixa não encontrado.")
         return redirect('games:box_user_dashboard')
 
-    # Aqui você pode verificar saldo, etc., antes de permitir a compra
+    # Verificar se há itens cadastrados no banco de dados
+    if not Item.objects.exists():
+        messages.error(request, "Não há itens cadastrados para abrir caixas.")
+        return redirect('games:box_user_dashboard')
 
-    box = Box.objects.create(user=request.user, box_type=box_type)
-    populate_box_with_items(box)
-    return redirect('games:box_user_open_box', box_id=box.id)
+    # Verificar se o tipo de caixa tem itens disponíveis para a raridade que ele define
+    if not box_type.boosters_amount:
+        messages.error(request, "Essa caixa não contém itens disponíveis para a abertura.")
+        return redirect('games:box_user_dashboard')
+
+    # Verificar se o usuário tem saldo suficiente para comprar a caixa
+    total = box_type.price  # O preço da caixa é definido no modelo BoxType
+
+    wallet = Wallet.objects.get(usuario=request.user)
+
+    if wallet.saldo < total:
+        messages.error(request, "Saldo insuficiente para comprar a caixa.")
+        return redirect('games:box_user_dashboard')
+
+    # Aplicar a transação de saída da carteira para o sistema de caixas
+    try:
+        aplicar_transacao(
+            wallet=wallet,
+            tipo='SAIDA',
+            valor=total,
+            descricao=f'Compra de caixa {box_type.name}',
+            origem='Wallet',
+            destino='Sistema de Caixas'
+        )
+        # Criar a caixa e preencher com itens
+        box = Box.objects.create(user=request.user, box_type=box_type)
+        populate_box_with_items(box)
+        return redirect('games:box_user_open_box', box_id=box.id)
+
+    except ValueError as e:
+        messages.error(request, f"Erro na transação: {str(e)}")
+        return redirect('games:box_user_dashboard')
