@@ -1,5 +1,6 @@
-{% extends "layouts/base.html" %}
+]{% extends "layouts/base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block extrastyle %}
 <link rel="stylesheet" href="{% static 'roulette/style.css' %}">
@@ -32,7 +33,7 @@
     }
 
     .item-details h3 {
-        color: #17a2b8; /* Azul claro para o nome do item */
+        color: #17a2b8;
         font-size: 1.5rem;
         font-weight: 700;
     }
@@ -43,7 +44,7 @@
     }
 
     .item-details strong {
-        color: #ffcb00; /* Destaque para o texto forte */
+        color: #ffcb00;
     }
 
     .btn {
@@ -68,7 +69,7 @@
 {% block content %}
 <div class="roulette-bg py-5">
   <div class="container text-center">
-    <h2 class="text-white fw-bold mb-4">🎁 Você ganhou um item!</h2>
+    <h2 class="text-white fw-bold mb-4">🎁 {% trans "Você ganhou um item!" %}</h2>
 
     <div class="card bg-dark text-white shadow-lg p-4 rounded-4 border border-purple d-inline-block w-100 w-sm-75 w-md-50">
       <div class="item-details mb-3">
@@ -76,13 +77,13 @@
         <h3 class="text-info mb-2">
           <i class="bi bi-gift me-2"></i>{{ item.name }} +{{ item.enchant }}
         </h3>
-        <p class="mb-0">O item foi adicionado à sua <strong>Bag</strong> com sucesso!</p>
+        <p class="mb-0">{% trans "O item foi adicionado à sua" %} <strong>{% trans "Bag" %}</strong> {% trans "com sucesso!" %}</p>
       </div>
     </div>
 
     <div class="mt-4">
       <a href="{% url 'games:box_user_dashboard' %}" class="btn btn-primary rounded-pill px-4 py-2 mt-3">
-        <i class="bi bi-arrow-left-circle me-2"></i>Voltar para o Dashboard
+        <i class="bi bi-arrow-left-circle me-2"></i>{% trans "Voltar para o Dashboard" %}
       </a>
     </div>
   </div>

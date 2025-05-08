@@ -1,22 +1,23 @@
 {% extends 'layouts/base.html' %}
+{% load i18n %}
 
-{% block title %}Solicitação em Análise{% endblock %}
+{% block title %}{% trans "Solicitação em Análise" %}{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
     <div class="card shadow-sm rounded-3 p-4 text-center">
         <h1 class="display-4 text-primary mb-4">
-            ⏳ Solicitação em Análise
+            ⏳ {% trans "Solicitação em Análise" %}
         </h1>
         <p class="lead text-muted mb-4">
-            Sua solicitação para se tornar um apoiador está sendo analisada por nossa equipe.
+            {% trans "Sua solicitação para se tornar um apoiador está sendo analisada por nossa equipe." %}
         </p>
         <p class="text-secondary mb-5">
-            Você receberá uma resposta em breve. Obrigado pelo interesse!
+            {% trans "Você receberá uma resposta em breve. Obrigado pelo interesse!" %}
         </p>
         <div class="d-flex justify-content-center mt-4">
             <a href="{% url 'server:painel_apoiador' %}" class="btn btn-primary btn-lg">
-                Voltar para o Painel
+                {% trans "Voltar para o Painel" %}
             </a>
         </div>
     </div>

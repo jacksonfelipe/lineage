@@ -59,15 +59,15 @@
 
 <!-- Modal de Compra -->
 <div class="modal fade" id="buyTokensModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content text-center p-4">
-        <h5 class="modal-title mb-3">Comprar Fichas</h5>
-        <p class="text-white">Escolha a quantidade de fichas que deseja comprar. Valor: R$0,10 por ficha.</p>
-        <input type="number" id="buyQuantity" class="form-control mb-3" min="1" value="1">
-        <button class="btn btn-success" onclick="buyFichas()">Confirmar Compra</button>
-      </div>
+  <div class="modal-dialog">
+    <div class="modal-content text-center p-4">
+      <h5 class="modal-title mb-3">{% trans "Comprar Fichas" %}</h5>
+      <p class="text-white">{% trans "Escolha a quantidade de fichas que deseja comprar. Valor: R$0,10 por ficha." %}</p>
+      <input type="number" id="buyQuantity" class="form-control mb-3" min="1" value="1">
+      <button class="btn btn-success" onclick="buyFichas()">{% trans "Confirmar Compra" %}</button>
     </div>
   </div>
+</div>
 
   <meta name="csrf-token" content="{{ csrf_token }}">
 

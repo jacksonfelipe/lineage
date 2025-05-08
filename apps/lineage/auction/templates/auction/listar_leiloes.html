@@ -67,12 +67,12 @@
     </a>
   </div>
 
-  {% include "auction/partials/_leilao_secao.html" with titulo="Leilões Ativos" lista=leiloes_ativos msg_vazio="Nenhum leilão ativo no momento." page=leiloes_ativos page_param="page_ativos" %}
-  {% include "auction/partials/_leilao_secao.html" with titulo="Leilões Pendentes de Entrega" lista=leiloes_pendentes_entrega msg_vazio="Nenhum leilão pendente de entrega." page=leiloes_pendentes_entrega page_param="page_pendentes_entrega" %}
+  {% include "auction/partials/_leilao_secao.html" with titulo=_("Leilões Ativos") lista=leiloes_ativos msg_vazio=_("Nenhum leilão ativo no momento.") page=leiloes_ativos page_param="page_ativos" %}
+  {% include "auction/partials/_leilao_secao.html" with titulo=_("Leilões Pendentes de Entrega") lista=leiloes_pendentes_entrega msg_vazio=_("Nenhum leilão pendente de entrega.") page=leiloes_pendentes_entrega page_param="page_pendentes_entrega" %}
 
   {% if user.is_staff %}
-    {% include "auction/partials/_leilao_secao.html" with titulo="Leilões Finalizados" lista=leiloes_finalizados msg_vazio="Nenhum leilão finalizado." page=leiloes_finalizados page_param="page_finalizados" %}
-    {% include "auction/partials/_leilao_secao.html" with titulo="Leilões Cancelados" lista=leiloes_cancelados msg_vazio="Nenhum leilão cancelado." page=leiloes_cancelados page_param="page_cancelados" %}
+    {% include "auction/partials/_leilao_secao.html" with titulo=_("Leilões Finalizados") lista=leiloes_finalizados msg_vazio=_("Nenhum leilão finalizado.") page=leiloes_finalizados page_param="page_finalizados" %}
+    {% include "auction/partials/_leilao_secao.html" with titulo=_("Leilões Cancelados") lista=leiloes_cancelados msg_vazio=_("Nenhum leilão cancelado.") page=leiloes_cancelados page_param="page_cancelados" %}
   {% endif %}
 </div>
 {% endblock %}
