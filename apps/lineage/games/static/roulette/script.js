@@ -120,15 +120,31 @@ document.addEventListener("DOMContentLoaded", () => {
                     spinBtn.classList.add("pulse");
                     return;
                 }
+            
+                // Verifica se houve falha no giro
+                if (data.fail) {
+                    resultDisplay.textContent = data.message || "Você não ganhou nenhum prêmio.";
+                    spinBtn.disabled = false;
+                    spinBtn.classList.add("pulse");
 
+                    updateUserPanel(data.name);
+            
+                    // Exibe um modal ou alerta especial para falha, se desejar
+                    // Exemplo:
+                    const modal = new bootstrap.Modal(document.getElementById('failModal'));
+                    modal.show();
+                    return;
+                }
+            
+                // Caso contrário, segue o fluxo normal de exibição do prêmio
                 const index = prizes.findIndex(p => p.id === data.id);
                 const itemHeight = 100;
                 const spinRounds = 5;
                 const offset = (itemHeight * index) + (itemHeight / 2);
-
+            
                 rouletteList.style.transition = 'none';
                 rouletteList.style.transform = `translateY(0px)`;
-
+            
                 requestAnimationFrame(() => {
                     rouletteList.style.transition = 'transform 3s ease-out';
                     const totalItems = prizes.length * repeat;
@@ -136,33 +152,32 @@ document.addEventListener("DOMContentLoaded", () => {
                     const totalMove = (itemHeight * targetIndex) + (itemHeight / 2);
                     rouletteList.style.transform = `translateY(-${totalMove}px)`;
                 });
-
+            
                 setTimeout(() => {
                     resultDisplay.textContent = `Você ganhou: ${data.name}!`;
                     spinBtn.disabled = false;
                     spinBtn.classList.add("pulse");
-
-                    // Adiciona o efeito de partículas se o prêmio for especial
+            
                     if (data.rarity === "LENDARIO") {
                         showParticles();
                         createParticles();
                         showFireworks();
                     }
 
-                    // Exibir o modal com informações do prêmio
+                    updateUserPanel(data.name);
+            
                     document.getElementById("modalPrizeImg").src = data.image_url;
                     document.getElementById("modalPrizeName").textContent = data.name;
                     document.getElementById("modalPrizeRarity").textContent = `Raridade: ${data.rarity}`;
-                    // Mensagem personalizada dependendo da raridade
                     const msg = data.rarity === "LENDARIO"
-                    ? `🔥 Parabéns, você ganhou um prêmio Lendário: ${data.name}!`
-                    : `Você ganhou: ${data.name}! Aproveite sua recompensa.`;
-
+                        ? `🔥 Parabéns, você ganhou um prêmio Lendário: ${data.name}!`
+                        : `Você ganhou: ${data.name}! Aproveite sua recompensa.`;
+            
                     document.getElementById("modalPrizeMsg").textContent = msg;
                     const modal = new bootstrap.Modal(document.getElementById('rewardModal'));
                     modal.show();
-
-                    // Reset visual após girar
+            
+                    // Reset visual
                     rouletteList.style.transition = 'none';
                     rouletteList.style.transform = `translateY(0px)`;
                     rouletteList.innerHTML = '';
@@ -171,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             const li = document.createElement("li");
                             li.innerHTML = `
                                 <img src="${prize.image_url}" alt="${prize.name}" />
-                                ${prize.name} - ${prize.item_name} (Enchant: ${prize.enchant}, Raridade: ${prize.rarity})
+                                ${prize.name} +${prize.enchant}- ${prize.rarity}
                             `;
                             rouletteList.appendChild(li);
                         });
@@ -186,3 +201,46 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     });
 });
+
+function buyFichas() {
+    const quantity = parseInt(document.getElementById("buyQuantity").value);
+    const csrfToken = getCookie('csrftoken');
+
+    fetch(FICHAS_URL, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': csrfToken
+        },
+        body: `quantidade=${quantity}`
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert(`Compra realizada! Você agora tem ${data.fichas} ficha(s).`);
+            location.reload(); // Atualiza para refletir no contador de fichas
+        } else {
+            alert(data.error || "Erro ao processar a compra.");
+        }
+    })
+    .catch(error => {
+        alert("Erro de conexão com o servidor.");
+        console.error(error);
+    });
+}
+
+function updateUserPanel(prizeName) {
+    // Atualiza quantidade de fichas
+    let fichasEl = document.getElementById("userFichas");
+    fichasEl.textContent = parseInt(fichasEl.textContent) - 1;
+
+    // Atualiza giros
+    let spinsEl = document.getElementById("userSpins");
+    spinsEl.textContent = parseInt(spinsEl.textContent) + 1;
+
+    // Atualiza último prêmio
+    let prizeInfoEl = document.getElementById("lastPrizeInfo");
+    let prizeNameEl = document.getElementById("lastPrizeName");
+    prizeNameEl.textContent = prizeName;
+    prizeInfoEl.style.display = 'block';
+}

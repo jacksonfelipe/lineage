@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Prize, SpinHistory
+from .models import Prize, SpinHistory, Bag, BagItem
 from apps.main.home.decorator import conditional_otp_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -18,20 +18,47 @@ def spin_ajax(request):
     if not prizes:
         return JsonResponse({'error': 'Nenhum prêmio disponível.'}, status=400)
 
-    weights = [p.weight for p in prizes]
-    chosen = random.choices(prizes, weights=weights, k=1)[0]
+    # Adicione a opção de falha
+    fail_chance = 20  # Representa 20% de chance de falhar
+    total_weight = sum(p.weight for p in prizes)
+    fail_weight = total_weight * (fail_chance / (100 - fail_chance))
+
+    choices = prizes + [None]  # `None` representa a falha
+    weights = [p.weight for p in prizes] + [fail_weight]
+
+    chosen = random.choices(choices, weights=weights, k=1)[0]
 
     # Deduz uma ficha
     request.user.fichas -= 1
     request.user.save()
 
+    if chosen is None:
+        return JsonResponse({'fail': True, 'message': 'Você não ganhou nenhum prêmio.'})
+
     SpinHistory.objects.create(user=request.user, prize=chosen)
+
+    # Certifique-se de que o usuário tenha uma bag
+    bag, _ = Bag.objects.get_or_create(user=request.user)
+
+    # Verifica se o item já existe na bag (mesma id + enchant)
+    bag_item, created = BagItem.objects.get_or_create(
+        bag=bag,
+        item_id=chosen.item_id,
+        enchant=chosen.enchant,
+        defaults={
+            'item_name': chosen.name,
+            'quantity': 1,
+        }
+    )
+
+    if not created:
+        bag_item.quantity += 1
+        bag_item.save()
 
     return JsonResponse({
         'id': chosen.id,
         'name': chosen.name,
         'item_id': chosen.item_id,
-        'item_name': chosen.item_name,
         'enchant': chosen.enchant,
         'rarity': chosen.rarity,
         'image_url': chosen.get_image_url()
@@ -45,7 +72,6 @@ def roulette_page(request):
         'name': prize.name,
         'image_url': prize.get_image_url(),
         'item_id': prize.item_id,
-        'item_name': prize.item_name,
         'enchant': prize.enchant,
         'rarity': prize.rarity
     } for prize in prizes]

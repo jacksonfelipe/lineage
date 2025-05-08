@@ -263,3 +263,146 @@ body {
   color: #0dcaf0;
   text-shadow: 0 0 3px #000;
 }
+
+/* === MODAL DE FALHA === */
+#failModal .modal-content {
+  background: linear-gradient(to bottom right, #1a1a2e, #121220);
+  border: 2px solid #6f42c1;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(111, 66, 193, 0.5), 0 0 30px rgba(13, 202, 240, 0.3);
+  animation: pop-in 0.4s ease-out;
+}
+
+#failModal .modal-header {
+  border-bottom: 2px solid #6f42c1;
+}
+
+#failModal .modal-title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: #fff;
+  text-shadow: 0 0 6px #6f42c1;
+}
+
+#failModal .modal-body {
+  padding: 30px 20px;
+}
+
+#failModal .modal-body p {
+  font-size: 1.2rem;
+  color: #fff;
+  text-shadow: 0 0 3px #000;
+}
+
+#failModal .btn-secondary {
+  background: linear-gradient(to right, #0dcaf0, #6f42c1);
+  border: none;
+  box-shadow: 0 0 10px #6f42c1, 0 0 20px #0dcaf0;
+  color: white;
+  text-shadow: 0 0 5px #000;
+  transition: all 0.3s ease;
+}
+
+#failModal .btn-secondary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #6f42c1, 0 0 25px #0dcaf0;
+}
+
+/* === ANIMAÇÃO POP-IN DO MODAL === */
+@keyframes pop-in {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* === MODAL DE COMPRA DE FICHAS === */
+#buyTokensModal .modal-content {
+  background: linear-gradient(to bottom right, #1a1a2e, #121220);
+  border: 2px solid #6f42c1;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(111, 66, 193, 0.5), 0 0 30px rgba(13, 202, 240, 0.3);
+  animation: pop-in 0.4s ease-out;
+}
+
+#buyTokensModal .modal-header {
+  border-bottom: 2px solid #6f42c1;
+}
+
+#buyTokensModal .modal-title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: #fff;
+  text-shadow: 0 0 6px #6f42c1;
+}
+
+#buyTokensModal .modal-body {
+  padding: 30px 20px;
+}
+
+#buyTokensModal .modal-body p {
+  font-size: 1.2rem;
+  color: #fff;
+  text-shadow: 0 0 3px #000;
+}
+
+#buyTokensModal .form-control {
+  background: #1e1e30;
+  color: #fff;
+  border: 2px solid #6f42c1;
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 1.1rem;
+  text-align: center;
+  transition: border-color 0.3s ease;
+}
+
+#buyTokensModal .form-control:focus {
+  border-color: #0dcaf0;
+  box-shadow: 0 0 10px #6f42c1, 0 0 20px #0dcaf0;
+}
+
+#buyTokensModal .btn-success {
+  background: linear-gradient(to right, #0dcaf0, #6f42c1);
+  border: none;
+  box-shadow: 0 0 10px #6f42c1, 0 0 20px #0dcaf0;
+  color: white;
+  text-shadow: 0 0 5px #000;
+  transition: all 0.3s ease;
+}
+
+#buyTokensModal .btn-success:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #6f42c1, 0 0 25px #0dcaf0;
+}
+
+#buyTokensModal .btn-secondary {
+  background: transparent;
+  border: 2px solid #6f42c1;
+  color: #fff;
+  text-shadow: 0 0 3px #000;
+  transition: all 0.3s ease;
+}
+
+#buyTokensModal .btn-secondary:hover {
+  background: #6f42c1;
+  box-shadow: 0 0 15px #6f42c1, 0 0 25px #0dcaf0;
+}
+
+/* === ANIMAÇÃO POP-IN DO MODAL === */
+@keyframes pop-in {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

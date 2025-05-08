@@ -8,22 +8,27 @@
 {% block content %}
 <div class="roulette-bg py-5">
 
-  <div class="user-panel my-4">
+  <div class="user-panel my-4 mx-3">
     <div class="info-block">
       <strong>🎫 Fichas</strong>
-      <span>{{ fichas }}</span>
+      <span id="userFichas">{{ fichas }}</span>
     </div>
     <div class="info-block">
       <strong>🔁 Giros</strong>
-      <span>{{ total_spins }}</span>
+      <span id="userSpins">{{ total_spins }}</span>
     </div>
-    {% if last_spin %}
-    <div class="info-block">
+    <div class="info-block" id="lastPrizeInfo" {% if not last_spin %}style="display: none;"{% endif %}>
       <strong>🏆 Último prêmio</strong>
-      <span>{{ last_spin.prize.name }}</span>
+      <span id="lastPrizeName">{% if last_spin %}{{ last_spin.prize.name }}{% endif %}</span>
     </div>
-    {% endif %}
-  </div>   
+  </div>    
+
+  <!-- Botão de Comprar Fichas -->
+  <div class="text-center mt-4 mb-4">
+    <button class="btn btn-warning btn-lg rounded-pill" data-bs-toggle="modal" data-bs-target="#buyTokensModal">
+      <i class="bi bi-cart-plus me-2"></i> Comprar Fichas
+    </button>
+  </div>
 
   <div class="container">
     <div class="text-center mb-5">
@@ -36,7 +41,7 @@
     <div class="roulette-wrapper d-flex justify-content-center position-relative">
 
       <!-- GIF esquerdo -->
-      <img src="{% static 'assets/movies/chest.webp' %}" alt="Efeito esquerdo" class="position-absolute start-0 top-50 translate-middle-y" style="max-width: 150px; z-index: 2;">
+      <img src="{% static 'assets/movies/chest.webp' %}" alt="Efeito esquerdo" class="position-absolute start-0 top-50 translate-middle-y d-none d-md-block" style="max-width: 150px; z-index: 2;">
 
       <div class="roulette-card shadow-lg rounded-4 p-4 text-center border border-secondary position-relative overflow-hidden">
         
@@ -59,8 +64,8 @@
       </div>
 
       <!-- GIF direito -->
-      <img src="{% static 'assets/movies/fake-chest.webp' %}" alt="Efeito direito" class="position-absolute end-0 top-50 translate-middle-y" style="max-width: 150px; z-index: 2;">
-      
+      <img src="{% static 'assets/movies/fake-chest.webp' %}" alt="Efeito direito" class="position-absolute end-0 top-50 translate-middle-y d-none d-md-block" style="max-width: 150px; z-index: 2;">      
+    
     </div>    
 
   </div>
@@ -88,11 +93,35 @@
   </div>
 </div>
 
+<!-- Modal de Falha -->
+<div class="modal fade" id="failModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content text-center p-4">
+      <h5 class="modal-title">Que pena!</h5>
+      <p class="text-white">Você não ganhou nenhum prêmio desta vez. Tente novamente!</p>
+      <button class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Compra -->
+<div class="modal fade" id="buyTokensModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content text-center p-4">
+      <h5 class="modal-title mb-3">Comprar Fichas</h5>
+      <p class="text-white">Escolha a quantidade de fichas que deseja comprar. Valor: R$0,10 por ficha.</p>
+      <input type="number" id="buyQuantity" class="form-control mb-3" min="1" value="1">
+      <button class="btn btn-success" onclick="buyFichas()">Confirmar Compra</button>
+    </div>
+  </div>
+</div>
+
 <meta name="csrf-token" content="{{ csrf_token }}">
 
 <script>
   const prizes = {{ prizes|safe }};
   const SPIN_URL = "{% url 'games:spin_ajax' %}";
+  const FICHAS_URL = "{% url 'games:comprar_fichas' %}";
 </script>
 
 <script src="{% static 'roulette/script.js' %}"></script>
