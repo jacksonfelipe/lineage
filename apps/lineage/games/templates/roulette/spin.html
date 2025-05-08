@@ -1,0 +1,40 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'roulette/style.css' %}">
+{% endblock extrastyle %}
+
+{% block content %}
+<div class="roulette-bg py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold text-glow text-white">
+        <i class="bi bi-stars me-2 text-white"></i> Roleta de Prêmios
+      </h2>
+      <p class="text-white">Gire a roleta e conquiste itens lendários!</p>
+    </div>
+
+    <div class="roulette-wrapper d-flex justify-content-center">
+      <div class="roulette-card shadow-lg rounded-4 p-4 text-center border border-secondary">
+        <div class="roulette-window position-relative mb-3">
+          <ul id="rouletteList" class="roulette-list"></ul>
+        </div>
+
+        <button id="spinBtn" class="btn btn-primary btn-lg rounded-pill px-5 mt-3 glow-button">
+          <i class="bi bi-arrow-clockwise me-2"></i> Girar
+        </button>
+
+        <div id="result" class="mt-4 fs-5 text-info fw-semibold"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const prizes = {{ prizes|safe }};
+  const SPIN_URL = "{% url 'games:spin_ajax' %}";
+</script>
+
+<script src="{% static 'roulette/script.js' %}"></script>
+{% endblock %}
