@@ -248,7 +248,7 @@ def transferir_item_bag(request):
             bag_item = BagItem.objects.get(bag=bag, item_id=item_id, enchant=enchant)
             if bag_item.quantity < quantity:
                 messages.error(request, 'Quantidade insuficiente na Bag.')
-                return redirect('inventory:bag_dashboard')
+                return redirect('games:bag_dashboard')
 
             inventario_destino = get_object_or_404(Inventory, character_name=character_name_destino)
 
@@ -286,7 +286,7 @@ def transferir_item_bag(request):
             messages.success(request, 'Item transferido com sucesso.')
         except BagItem.DoesNotExist:
             messages.error(request, 'Item não encontrado na Bag.')
-        return redirect('inventory:bag_dashboard')
+        return redirect('games:bag_dashboard')
 
 
 @conditional_otp_required
@@ -324,4 +324,4 @@ def esvaziar_bag_para_inventario(request):
         # Apagar tudo da bag
         bag.items.all().delete()
         messages.success(request, 'Todos os itens foram transferidos para o inventário.')
-        return redirect('inventory:bag_dashboard')
+        return redirect('games:bag_dashboard')
