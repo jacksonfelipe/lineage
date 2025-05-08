@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import *
 from apps.main.home.decorator import conditional_otp_required
 from django.shortcuts import redirect
@@ -8,8 +8,10 @@ import random
 from decimal import Decimal
 from apps.lineage.wallet.models import Wallet
 from apps.lineage.wallet.signals import aplicar_transacao
+from apps.lineage.inventory.models import Inventory, InventoryLog, InventoryItem
 from .services.box_opening import open_box
 from .services.box_populate import populate_box_with_items
+from django.db import transaction
 
 
 @conditional_otp_required
@@ -223,7 +225,103 @@ def bag_dashboard(request):
         bag = None
         bag_items = []
 
+    personagens = Inventory.objects.filter(user=request.user).values_list('character_name', flat=True)
+
     return render(request, 'pages/bag_dashboard.html', {
         'bag': bag,
         'items': bag_items,
+        'personagens': personagens,
     })
+
+
+@conditional_otp_required
+@transaction.atomic
+def transferir_item_bag(request):
+    if request.method == 'POST':
+        item_id = int(request.POST.get('item_id'))
+        enchant = int(request.POST.get('enchant'))
+        quantity = int(request.POST.get('quantity'))
+        character_name_destino = request.POST.get('character_name_destino')
+
+        bag = request.user.bag
+        try:
+            bag_item = BagItem.objects.get(bag=bag, item_id=item_id, enchant=enchant)
+            if bag_item.quantity < quantity:
+                messages.error(request, 'Quantidade insuficiente na Bag.')
+                return redirect('inventory:bag_dashboard')
+
+            inventario_destino = get_object_or_404(Inventory, character_name=character_name_destino)
+
+            # Remover da Bag
+            bag_item.quantity -= quantity
+            if bag_item.quantity == 0:
+                bag_item.delete()
+            else:
+                bag_item.save()
+
+            # Adicionar ao Inventário
+            inventory_item, created = InventoryItem.objects.get_or_create(
+                inventory=inventario_destino,
+                item_id=item_id,
+                enchant=enchant,
+                defaults={'item_name': bag_item.item_name, 'quantity': quantity}
+            )
+            if not created:
+                inventory_item.quantity += quantity
+                inventory_item.save()
+
+            # Log opcional
+            InventoryLog.objects.create(
+                user=request.user,
+                inventory=inventario_destino,
+                item_id=item_id,
+                item_name=bag_item.item_name,
+                enchant=enchant,
+                quantity=quantity,
+                acao='BAG_PARA_INVENTARIO',
+                origem='BAG',
+                destino=character_name_destino
+            )
+
+            messages.success(request, 'Item transferido com sucesso.')
+        except BagItem.DoesNotExist:
+            messages.error(request, 'Item não encontrado na Bag.')
+        return redirect('inventory:bag_dashboard')
+
+
+@conditional_otp_required
+@transaction.atomic
+def esvaziar_bag_para_inventario(request):
+    if request.method == 'POST':
+        character_name_destino = request.POST.get('character_name_destino')
+        inventario_destino = get_object_or_404(Inventory, character_name=character_name_destino)
+        bag = request.user.bag
+
+        for bag_item in bag.items.all():
+            inventory_item, created = InventoryItem.objects.get_or_create(
+                inventory=inventario_destino,
+                item_id=bag_item.item_id,
+                enchant=bag_item.enchant,
+                defaults={'item_name': bag_item.item_name, 'quantity': bag_item.quantity}
+            )
+            if not created:
+                inventory_item.quantity += bag_item.quantity
+                inventory_item.save()
+
+            # Log opcional
+            InventoryLog.objects.create(
+                user=request.user,
+                inventory=inventario_destino,
+                item_id=bag_item.item_id,
+                item_name=bag_item.item_name,
+                enchant=bag_item.enchant,
+                quantity=bag_item.quantity,
+                acao='BAG_PARA_INVENTARIO_TUDO',
+                origem='BAG',
+                destino=character_name_destino
+            )
+
+        # Apagar tudo da bag
+        bag.items.all().delete()
+        messages.success(request, 'Todos os itens foram transferidos para o inventário.')
+        return redirect('inventory:bag_dashboard')

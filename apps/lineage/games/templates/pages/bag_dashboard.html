@@ -20,7 +20,18 @@
           <i class="bi bi-person-circle me-2 text-secondary"></i>
           <strong class="text-secondary">{{ request.user.username }}</strong>
         </div>
-        <span class="badge bg-info">{% trans "Bag Pessoal" %}</span>
+        <form method="post" action="{% url 'games:esvaziar_bag_para_inventario' %}" class="d-flex gap-2">
+          {% csrf_token %}
+          <select name="character_name_destino" class="form-select form-select-sm mb-2" required>
+            <option value="" disabled selected>{% trans "Selecione o personagem" %}</option>
+            {% for nome in personagens %}
+              <option value="{{ nome }}">{{ nome }}</option>
+            {% endfor %}
+          </select>
+          <button type="submit" class="btn btn-sm btn-warning">
+            <i class="bi bi-box-arrow-in-down me-1"></i> {% trans "Mover todos para inventário" %}
+          </button>
+        </form>
       </div>
 
       <div class="card-body">
@@ -30,9 +41,9 @@
               <div class="card bg-dark border-0 shadow text-white rounded-4 overflow-hidden h-100">
                 <div class="card-body text-center py-4 d-flex flex-column justify-content-between h-100">
                     <img src="{% item_image_url item.item_id %}" 
-                    alt="{{ item.item_name }}"
-                    class="mb-3 rounded border border-secondary d-block mx-auto"
-                    style="width: 32px; height: 32px;">
+                         alt="{{ item.item_name }}"
+                         class="mb-3 rounded border border-secondary d-block mx-auto"
+                         style="width: 32px; height: 32px;">
                   <h5 class="fw-bold mb-2 text-primary">{{ item.item_name }}</h5>
                   <p class="mb-3 small text-primary">
                     <span class="fw-semibold">{% trans "Quantidade" %}:</span>
@@ -40,7 +51,23 @@
                     <span class="fw-semibold">{% trans "Encantamento" %}:</span>
                     <span class="fw-semibold text-primary">+{{ item.enchant }}</span>
                   </p>
-                  <!-- Ações como "Mover para Inventário" ou "Vender" podem ser adicionadas aqui futuramente -->
+
+                  <!-- Formulário de transferência individual -->
+                  <form method="post" action="{% url 'games:transferir_item_bag' %}" class="d-grid gap-2">
+                    {% csrf_token %}
+                    <input type="hidden" name="item_id" value="{{ item.item_id }}">
+                    <input type="hidden" name="enchant" value="{{ item.enchant }}">
+                    <input type="number" name="quantity" value="{{ item.quantity }}" class="form-control form-control-sm mb-1" min="1" max="{{ item.quantity }}" required>
+                    <select name="character_name_destino" class="form-select form-select-sm mb-2" required>
+                      <option value="" disabled selected>{% trans "Selecione o personagem" %}</option>
+                      {% for nome in personagens %}
+                        <option value="{{ nome }}">{{ nome }}</option>
+                      {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-success">
+                      <i class="bi bi-box-arrow-in-down me-1"></i> {% trans "Mover para inventário" %}
+                    </button>
+                  </form>
                 </div>
               </div>
             </div>
