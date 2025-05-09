@@ -1,42 +1,42 @@
 {% extends "layouts/base.html" %}
-{% load humanize %}
+{% load humanize i18n %}
 
 {% block content %}
 
 <div class="container mt-5">
   <div class="card shadow-lg p-4 bg-white text-dark rounded-4">
-    <h2 class="text-center mb-4">📊 <strong>Relatório de Compras</strong></h2>
+    <h2 class="text-center mb-4">📊 <strong>{% trans "Relatório de Compras" %}</strong></h2>
 
     <!-- Resumo Geral de Compras -->
     <div class="row text-center mb-4">
       <div class="col-md-3 mb-3">
         <div class="card shadow-sm p-3 bg-light rounded-3">
-          <h5>Total de Compras</h5>
+          <h5>{% trans "Total de Compras" %}</h5>
           <p class="display-4">{{ total_compras }}</p>
         </div>
       </div>
       <div class="col-md-3 mb-3">
         <div class="card shadow-sm p-3 bg-light rounded-3">
-          <h5>Total Gasto</h5>
+          <h5>{% trans "Total Gasto" %}</h5>
           <p class="display-4">R$ {{ total_pago|floatformat:2 }}</p>
         </div>
       </div>
       <div class="col-md-3 mb-3">
         <div class="card shadow-sm p-3 bg-light rounded-3">
-          <h5>Carrinhos Abandonados</h5>
+          <h5>{% trans "Carrinhos Abandonados" %}</h5>
           <p class="display-4">{{ carrinhos_abandonados }}</p>
         </div>
       </div>
       <div class="col-md-3 mb-3">
         <div class="card shadow-sm p-3 bg-light rounded-3">
-          <h5>Receita da Última Semana</h5>
+          <h5>{% trans "Receita da Última Semana" %}</h5>
           <p class="display-4">R$ {{ receita_periodo|floatformat:2 }}</p>
         </div>
       </div>
     </div>
 
     <!-- Gráfico de Itens Mais Vendidos -->
-    <h3 class="text-center mt-4 mb-3">📦 Itens Mais Vendidos</h3>
+    <h3 class="text-center mt-4 mb-3">{% trans "Itens Mais Vendidos" %}</h3>
     <div class="row">
       <div class="col-md-6">
         <div id="itensMaisVendidos" class="ct-bar ct-perfect-fourth"></div>
@@ -44,14 +44,14 @@
       <div class="col-md-6">
         <ul class="list-group">
           {% for item in itens_mais_vendidos %}
-          <li class="list-group-item">{{ item.nome }} - {{ item.quantidade_vendida|default:"0" }} unidades</li>
+          <li class="list-group-item">{{ item.nome }} - {{ item.quantidade_vendida|default:"0" }} {% trans "unidades" %}</li>
           {% endfor %}
         </ul>
       </div>
     </div>
 
     <!-- Gráfico de Pacotes Populares -->
-    <h3 class="text-center mt-4 mb-3">🎁 Pacotes Populares</h3>
+    <h3 class="text-center mt-4 mb-3">{% trans "Pacotes Populares" %}</h3>
     <div class="row">
       <div class="col-md-6">
         <div id="pacotesPopulares" class="ct-bar ct-perfect-fourth"></div>
@@ -59,14 +59,14 @@
       <div class="col-md-6">
         <ul class="list-group">
           {% for pacote in pacotes_populares %}
-          <li class="list-group-item">{{ pacote.nome }} - {{ pacote.quantidade_vendida|default:"0" }} pacotes</li>
+          <li class="list-group-item">{{ pacote.nome }} - {{ pacote.quantidade_vendida|default:"0" }} {% trans "pacotes" %}</li>
           {% endfor %}
         </ul>
       </div>
     </div>
 
     <!-- Gráfico de Promoções Utilizadas -->
-    <h3 class="text-center mt-4 mb-3">🎟️ Promoções Utilizadas</h3>
+    <h3 class="text-center mt-4 mb-3">{% trans "Promoções Utilizadas" %}</h3>
     <div class="row">
       <div class="col-md-6">
         <div id="promocoesUtilizadas" class="ct-pie"></div>
@@ -74,7 +74,7 @@
       <div class="col-md-6">
         <ul class="list-group">
           {% for promocao in promocoes_utilizadas %}
-          <li class="list-group-item">{{ promocao.codigo }} - {{ promocao.quantidade_utilizada }} vezes</li>
+          <li class="list-group-item">{{ promocao.codigo }} - {{ promocao.quantidade_utilizada }} {% trans "vezes" %}</li>
           {% endfor %}
         </ul>
       </div>
