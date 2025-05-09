@@ -101,4 +101,4 @@ def primeira_retirada_item(user, request=None):
 
 @registrar_validador('primeira_troca_itens')
 def primeira_troca_itens(user, request=None):
-    return InventoryLog.objects.filter(user=user, acao='TROCA').exists()
+    return InventoryLog.objects.filter(user=user, acao='TROCA_ENTRE_PERSONAGENS').exists()

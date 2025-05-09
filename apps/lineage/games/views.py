@@ -326,7 +326,7 @@ def esvaziar_bag_para_inventario(request):
                 item_name=bag_item.item_name,
                 enchant=bag_item.enchant,
                 quantity=bag_item.quantity,
-                acao='BAG_PARA_INVENTARIO_TUDO',
+                acao='BAG_PARA_INVENTARIO',
                 origem='BAG',
                 destino=character_name_destino
             )

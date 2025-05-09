@@ -1,0 +1,123 @@
+{% extends "layouts/base.html" %}
+{% load humanize %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg p-4 bg-dark text-light rounded-4">
+    <h2 class="text-center mb-4">📊 <strong>Relatório de Movimentações de Itens</strong></h2>
+
+    <canvas id="graficoMovimentacoes" height="150" class="mb-4"></canvas>
+
+    <div class="table-responsive">
+      <table class="table table-striped table-dark table-bordered text-center rounded-3">
+        <thead class="bg-secondary text-white">
+          <tr>
+            <th>🔁 Ação</th>
+            <th>📦 Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>❌ Retirados</td>
+            <td>{{ total_retirado }}</td>
+          </tr>
+          <tr>
+            <td>✅ Inseridos</td>
+            <td>{{ total_inserido }}</td>
+          </tr>
+          <tr>
+            <td>🔄 Trocados</td>
+            <td>{{ total_troca }}</td>
+          </tr>
+          <tr>
+            <td>🔁 Recebidos</td>
+            <td>{{ total_recebido }}</td>
+          </tr>
+          <tr>
+            <td>📦 Bag para Inventário</td>
+            <td>{{ total_bag_para_inventario }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-center">
+      <a href="{% url 'accountancy:dashboard' %}" class="btn btn-secondary mt-4">
+        ⬅️ Voltar para Dashboard
+      </a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labels = {{ labels|safe }};
+  const retirados = {{ total_retirado }};
+  const inseridos = {{ total_inserido }};
+  const trocados = {{ total_troca }};
+  const recebidos = {{ total_recebido }};
+  const bag_para_inventario = {{ total_bag_para_inventario }};
+
+  const ctx = document.getElementById('graficoMovimentacoes').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: '❌ Retirados',
+          data: retirados,
+          backgroundColor: 'rgba(244, 67, 54, 0.7)'
+        },
+        {
+          label: '✅ Inseridos',
+          data: inseridos,
+          backgroundColor: 'rgba(0, 200, 83, 0.7)'
+        },
+        {
+          label: '🔄 Trocados',
+          data: trocados,
+          backgroundColor: 'rgba(33, 150, 243, 0.7)'
+        },
+        {
+          label: '🔁 Recebidos',
+          data: recebidos,
+          backgroundColor: 'rgba(255, 165, 0, 0.7)'
+        },
+        {
+          label: '📦 Bag para Inventário',
+          data: bag_para_inventario,
+          backgroundColor: 'rgba(255, 99, 132, 0.7)'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        title: {
+          display: true,
+          text: '📆 Movimentação de Itens nos Últimos Dias',
+          color: 'white',
+          font: {
+            size: 18
+          }
+        },
+        legend: {
+          labels: {
+            color: 'white'
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: 'white' }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: { color: 'white' }
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}
