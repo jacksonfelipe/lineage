@@ -41,6 +41,54 @@
       </table>
     </div>
 
+    <h3 class="text-center mt-4 mb-3">🔄 Itens Mais Trocados</h3>
+    <div class="table-responsive">
+      <table class="table table-striped table-dark table-bordered text-center rounded-3">
+        <thead class="bg-secondary text-white">
+          <tr>
+            <th>📦 Item</th>
+            <th>🔄 Total Trocado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in itens_trocados %}
+            <tr>
+              <td>{{ item.item_name }}</td> <!-- Ajuste aqui -->
+              <td>{{ item.total_trocado }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="2">Nenhum item trocado.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-center mt-4 mb-3">📦 Itens Mais Movimentados</h3>
+    <div class="table-responsive">
+      <table class="table table-striped table-dark table-bordered text-center rounded-3">
+        <thead class="bg-secondary text-white">
+          <tr>
+            <th>📦 Item</th>
+            <th>📈 Total Movimentado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in itens_movimentados %}
+            <tr>
+              <td>{{ item.item_name }}</td> <!-- Ajuste aqui -->
+              <td>{{ item.total_movimentado }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="2">Nenhum item movimentado.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
     <div class="text-center">
       <a href="{% url 'accountancy:dashboard' %}" class="btn btn-secondary mt-4">
         ⬅️ Voltar para Dashboard
@@ -52,11 +100,11 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   const labels = {{ labels|safe }};
-  const retirados = {{ total_retirado }};
-  const inseridos = {{ total_inserido }};
-  const trocados = {{ total_troca }};
-  const recebidos = {{ total_recebido }};
-  const bag_para_inventario = {{ total_bag_para_inventario }};
+  const retirados = {{ retirados|safe }};
+  const inseridos = {{ inseridos|safe }};
+  const trocados = {{ trocados|safe }};
+  const recebidos = {{ recebidos|safe }};
+  const bag_para_inventario = {{ bag_para_inventario|safe }};
 
   const ctx = document.getElementById('graficoMovimentacoes').getContext('2d');
   new Chart(ctx, {

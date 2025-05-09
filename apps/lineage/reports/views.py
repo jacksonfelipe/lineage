@@ -1,9 +1,8 @@
+import json
 from django.shortcuts import render
 from django.db.models import Sum
 from apps.lineage.inventory.models import InventoryLog
 from django.utils.timezone import now, timedelta
-import json
-from decimal import Decimal
 from django.contrib.admin.views.decorators import staff_member_required
 
 
@@ -34,14 +33,37 @@ def relatorio_movimentacoes_inventario(request):
         if acao in dados_por_acao:
             dados_por_acao[acao][idx] = int(log['total'])
 
+    # Itens mais trocados (baseado na ação 'TROCA_ENTRE_PERSONAGENS')
+    itens_trocados = (
+        logs.filter(acao='TROCA_ENTRE_PERSONAGENS')
+        .values('item_name')  # Item Name ao invés de 'item__nome'
+        .annotate(total_trocado=Sum('quantity'))
+        .order_by('-total_trocado')[:5]
+    )
+
+    # Itens mais movimentados
+    itens_movimentados = (
+        logs.values('item_name')  # Item Name ao invés de 'item__nome'
+        .annotate(total_movimentado=Sum('quantity'))
+        .order_by('-total_movimentado')[:5]
+    )
+
     total_retirado = sum(dados_por_acao['RETIROU_DO_JOGO'])
     total_inserido = sum(dados_por_acao['INSERIU_NO_JOGO'])
     total_troca = sum(dados_por_acao['TROCA_ENTRE_PERSONAGENS'])
     total_recebido = sum(dados_por_acao['RECEBEU_TROCA'])
     total_bag_para_inventario = sum(dados_por_acao['BAG_PARA_INVENTARIO'])
 
+    # Enviar dados como listas para o gráfico
     contexto = {
         'labels': json.dumps(dias_labels),
+        'retirados': json.dumps(dados_por_acao['RETIROU_DO_JOGO']),
+        'inseridos': json.dumps(dados_por_acao['INSERIU_NO_JOGO']),
+        'trocados': json.dumps(dados_por_acao['TROCA_ENTRE_PERSONAGENS']),
+        'recebidos': json.dumps(dados_por_acao['RECEBEU_TROCA']),
+        'bag_para_inventario': json.dumps(dados_por_acao['BAG_PARA_INVENTARIO']),
+        'itens_trocados': itens_trocados,
+        'itens_movimentados': itens_movimentados,
         'total_retirado': total_retirado,
         'total_inserido': total_inserido,
         'total_troca': total_troca,
