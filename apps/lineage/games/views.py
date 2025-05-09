@@ -12,6 +12,7 @@ from apps.lineage.inventory.models import Inventory, InventoryLog, InventoryItem
 from .services.box_opening import open_box
 from .services.box_populate import populate_box_with_items
 from django.db import transaction
+from django.db.models import Count, Q
 
 
 @conditional_otp_required
@@ -122,13 +123,22 @@ def comprar_fichas(request):
 @conditional_otp_required
 def box_dashboard_view(request):
     box_types = BoxType.objects.all()
-
-    # Recupera o saldo do usuário logado (ajuste o nome do modelo se necessário)
     wallet = Wallet.objects.filter(usuario=request.user).first()
+
+    # Caixas do usuário com boosters restantes
+    user_boxes = (
+        Box.objects.filter(user=request.user)
+        .annotate(remaining_boosters=Count('items', filter=Q(items__opened=False)))
+        .filter(remaining_boosters__gt=0)
+    )
+
+    # Cria um dicionário com o ID do tipo da caixa como chave
+    box_map = {box.box_type.id: box for box in user_boxes}
 
     return render(request, 'box/dashboard.html', {
         'box_types': box_types,
-        'user_balance': wallet.saldo
+        'user_balance': wallet.saldo if wallet else 0,
+        'user_boxes': box_map
     })
 
 

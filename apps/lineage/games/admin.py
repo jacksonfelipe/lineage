@@ -89,3 +89,19 @@ class BoxItemAdmin(BaseModelAdmin):
     search_fields = ('box__user__username', 'item__name')
     list_filter = ('opened',)
     ordering = ('box', 'item')
+
+
+@admin.register(BoxItemHistory)
+class BoxItemHistoryAdmin(BaseModelAdmin):
+    list_display = ('user', 'item', 'enchant', 'rarity', 'box', 'obtained_at')
+    list_filter = ('rarity', 'obtained_at')
+    search_fields = ('user__username', 'item__name')
+    ordering = ('-obtained_at',)
+    readonly_fields = ('user', 'item', 'box', 'rarity', 'enchant', 'obtained_at')
+
+    def has_add_permission(self, request):
+        return False  # Históricos são criados automaticamente
+
+    def has_change_permission(self, request, obj=None):
+        return False  # Não deve ser editável
+    

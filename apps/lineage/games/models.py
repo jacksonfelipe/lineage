@@ -112,3 +112,15 @@ class BoxItem(BaseModel):
 
     def __str__(self):
         return f"{self.item.name} ({'Aberto' if self.opened else 'Fechado'})"
+
+
+class BoxItemHistory(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='box_item_history')
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    box = models.ForeignKey(Box, on_delete=models.SET_NULL, null=True, blank=True)
+    rarity = models.CharField(max_length=20, choices=RARITY_CHOICES)
+    enchant = models.IntegerField(default=0)
+    obtained_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} ganhou {self.item.name} +{self.enchant} [{self.rarity}]"

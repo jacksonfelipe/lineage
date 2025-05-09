@@ -1,5 +1,6 @@
 from django import forms
 from apps.lineage.games.models import *
+from django.core.exceptions import ValidationError
 
 
 class BoxTypeForm(forms.ModelForm):
@@ -32,6 +33,20 @@ class BoxTypeForm(forms.ModelForm):
             'chance_epic': 'Chance Épica (%)',
             'chance_legendary': 'Chance Lendária (%)',
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        chance_common = cleaned_data.get('chance_common', 0)
+        chance_rare = cleaned_data.get('chance_rare', 0)
+        chance_epic = cleaned_data.get('chance_epic', 0)
+        chance_legendary = cleaned_data.get('chance_legendary', 0)
+
+        # Verifica se a soma das probabilidades é 100%
+        total_chance = chance_common + chance_rare + chance_epic + chance_legendary
+        if total_chance != 100:
+            raise ValidationError("A soma das chances deve ser exatamente 100%. Soma atual: {}".format(total_chance))
+
+        return cleaned_data
 
 
 class BoxForm(forms.ModelForm):
