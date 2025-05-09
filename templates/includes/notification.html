@@ -101,7 +101,7 @@
       const createdAtLabel = document.getElementById('created-at-label').textContent;
       const errorLoadingDetails = document.getElementById('error-loading-details').textContent;
 
-      fetch(`/app/notifications/detail/${notificationId}/`)
+      fetch(`/app/notification/detail/${notificationId}/`)
         .then(response => response.json())
         .then(data => {
           modalBody.innerHTML = `

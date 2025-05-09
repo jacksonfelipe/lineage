@@ -91,6 +91,7 @@ INSTALLED_APPS = [
     "apps.lineage.shop",
     "apps.lineage.auction",
     "apps.lineage.games",
+    "apps.lineage.reports"
 ]
 
 # =========================== MIDDLEWARE CONFIGS ===========================

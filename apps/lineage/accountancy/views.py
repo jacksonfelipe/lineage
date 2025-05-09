@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
 from apps.main.home.models import User
+import json
 
 from .reports.saldo import saldo_usuario
 from .reports.fluxo_caixa import fluxo_caixa_por_dia
@@ -28,9 +29,27 @@ def relatorio_saldo_usuarios(request):
 @staff_member_required
 def relatorio_fluxo_caixa(request):
     relatorio = fluxo_caixa_por_dia()
-    return render(request, 'accountancy/relatorio_fluxo_caixa.html', {
-        'relatorio': relatorio
-    })
+
+    labels = [str(item['data'].strftime('%d/%m')) for item in relatorio]
+    entradas = [float(item['entrada']) for item in relatorio]
+    saidas = [float(item['saida']) for item in relatorio]
+    saldos = [float(item['saldo']) for item in relatorio]
+
+    # Inverter para mostrar da data mais antiga para a mais recente
+    labels.reverse()
+    entradas.reverse()
+    saidas.reverse()
+    saldos.reverse()
+
+    context = {
+        'labels': json.dumps(labels),
+        'entradas': json.dumps(entradas),
+        'saidas': json.dumps(saidas),
+        'saldos': json.dumps(saldos),
+        'relatorio': relatorio,
+    }
+
+    return render(request, 'accountancy/relatorio_fluxo_caixa.html', context)
 
 
 @staff_member_required

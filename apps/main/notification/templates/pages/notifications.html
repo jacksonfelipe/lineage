@@ -105,7 +105,7 @@
             var modalId = $(this).attr('id');
             var notificationId = modalId.replace('notificationModal', '');
             // Chama a URL para confirmar a leitura da notificação
-            $.get(`/app/notifications/confirm_view/${notificationId}/`, function(data) {
+            $.get(`/app/notification/confirm_view/${notificationId}/`, function(data) {
                 // Recarrega a página após a confirmação da leitura da notificação
                 location.reload();
             });
@@ -113,7 +113,7 @@
 
         // Marcar todas como lidas
         $('#mark-all-as-read').click(function() {
-            $.get('/app/notifications/mark_all_as_read/', function(data) {
+            $.get('/app/notification/mark_all_as_read/', function(data) {
                 if (data.status === 'ok') {
                     location.reload();
                 }
@@ -123,7 +123,7 @@
         // Limpar todas as notificações
         $('#clear-all-notifications').click(function() {
             if (confirm('{% trans "Tem certeza que deseja limpar todas as notificações?" %}')) {
-                $.get('/app/notifications/clear_all_notifications/', function(data) {
+                $.get('/app/notification/clear_all_notifications/', function(data) {
                     if (data.status === 'ok') {
                         location.reload();
                     }
