@@ -449,7 +449,19 @@
 
             <li class="nav-item {% if 'movimentacoes-inventario' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'reports:relatorio_movimentacoes_inventario' %}">
-                <span class="sidebar-text">{% trans "Movimentações de Inventário" %}</span>
+                <span class="sidebar-text">{% trans "Movimentações dos Inventários" %}</span>
+              </a>
+            </li>
+
+            <li class="nav-item {% if 'movimentacoes-inventario' in segment %}active{% endif %}">
+              <a class="nav-link" href="{% url 'reports:relatorio_leiloes' %}">
+                <span class="sidebar-text">{% trans "Movimentações dos Leilões" %}</span>
+              </a>
+            </li>
+
+            <li class="nav-item {% if 'movimentacoes-inventario' in segment %}active{% endif %}">
+              <a class="nav-link" href="{% url 'reports:relatorio_compras' %}">
+                <span class="sidebar-text">{% trans "Movimentações da Loja" %}</span>
               </a>
             </li>
 

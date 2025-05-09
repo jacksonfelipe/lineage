@@ -1,0 +1,198 @@
+{% extends "layouts/base.html" %}
+{% load humanize %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg p-4 bg-dark text-light rounded-4">
+    <h2 class="text-center mb-4">📊 <strong>Relatório de Leilões</strong></h2>
+
+    <!-- Sessão Gráfico de Status -->
+    <div class="row">
+      <!-- Gráfico de Status dos Leilões -->
+      <div class="col-md-6">
+        <h3 class="text-center mt-4 mb-3">📈 Status dos Leilões</h3>
+        <div class="chart-container" style="position: relative; height: 300px; width: 100%;">
+          <canvas id="graficoStatusLeiloes"></canvas>
+        </div>
+      </div>
+
+      <!-- Informações sobre o Status -->
+      <div class="col-md-6">
+        <h4 class="text-center mt-4 mb-3">Resumo dos Status dos Leilões</h4>
+        <div class="row text-center">
+          <!-- Bloco de Status -->
+          <div class="col-md-3 mb-3">
+            <div class="status-block bg-danger text-white p-3 rounded shadow">
+              <i class="fas fa-hourglass-start fa-3x mb-2"></i>
+              <h5>Pendentes</h5>
+              <h4>{{ leiloes_pendentes }}</h4>
+            </div>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <div class="status-block bg-primary text-white p-3 rounded shadow">
+              <i class="fas fa-check-circle fa-3x mb-2"></i>
+              <h5>Finalizados</h5>
+              <h4>{{ leiloes_fechados }}</h4>
+            </div>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <div class="status-block bg-warning text-white p-3 rounded shadow">
+              <i class="fas fa-clock fa-3x mb-2"></i>
+              <h5>Expirados</h5>
+              <h4>{{ leiloes_expirados }}</h4>
+            </div>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <div class="status-block bg-success text-white p-3 rounded shadow">
+              <i class="fas fa-ban fa-3x mb-2"></i>
+              <h5>Cancelados</h5>
+              <h4>{{ leiloes_cancelados }}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Outras Informações Abaixo -->
+    <div class="row mt-5">
+      <!-- Leilões Ativos -->
+      <div class="col-md-12">
+        <h3 class="text-center mt-4 mb-3">📦 Leilões Ativos</h3>
+        <div class="table-responsive">
+          <table class="table table-striped table-dark table-bordered text-center rounded-3">
+            <thead class="bg-secondary text-white">
+              <tr>
+                <th>🛒 Item</th>
+                <th>💰 Lance Inicial</th>
+                <th>🛍️ Maior Lance</th>
+                <th>⏳ Tempo Restante</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for leilao in leiloes_ativos %}
+                <tr>
+                  <td>{{ leilao.item_name }}</td>
+                  <td>{{ leilao.starting_bid|floatformat:2 }}</td>
+                  <td>{{ leilao.current_bid|default:"Sem lance" }}</td>
+                  <td>{{ leilao.end_time|timesince }} restante</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="4">Nenhum leilão ativo no momento.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Histórico de Lances -->
+      <div class="col-md-12 mt-4">
+        <h3 class="text-center mt-4 mb-3">🔄 Histórico de Lances</h3>
+        <div class="table-responsive">
+          <table class="table table-striped table-dark table-bordered text-center rounded-3">
+            <thead class="bg-secondary text-white">
+              <tr>
+                <th>👤 Jogador</th>
+                <th>📦 Item</th>
+                <th>💵 Valor do Lance</th>
+                <th>🕒 Data do Lance</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for lance in lances %}
+                <tr>
+                  <td>{{ lance.bidder.username }}</td>
+                  <td>{{ lance.auction.item_name }}</td>
+                  <td>{{ lance.amount|floatformat:2 }}</td>
+                  <td>{{ lance.created_at|date:"d/m/Y H:i" }}</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="4">Nenhum lance registrado.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Leilões mais Populares -->
+      <div class="col-md-12 mt-4">
+        <h3 class="text-center mt-4 mb-3">⭐ Leilões Mais Populares</h3>
+        <div class="table-responsive">
+          <table class="table table-striped table-dark table-bordered text-center rounded-3">
+            <thead class="bg-secondary text-white">
+              <tr>
+                <th>📦 Item</th>
+                <th>🔄 Total de Lances</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for leilao in leiloes_populares %}
+                <tr>
+                  <td>{{ leilao.item_name }}</td>
+                  <td>{{ leilao.num_lances }}</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="2">Nenhum leilão popular no momento.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Dados para o gráfico de status dos leilões
+  const statusLabels = {{ status_labels|safe }};
+  const statusValues = {{ status_values|safe }};
+  const statusColors = ['rgba(244, 67, 54, 0.7)', 'rgba(33, 150, 243, 0.7)', 'rgba(255, 165, 0, 0.7)', 'rgba(0, 200, 83, 0.7)'];
+
+  const ctxStatus = document.getElementById('graficoStatusLeiloes').getContext('2d');
+  new Chart(ctxStatus, {
+    type: 'pie',
+    data: {
+      labels: statusLabels,
+      datasets: [{
+        label: 'Status dos Leilões',
+        data: statusValues,
+        backgroundColor: statusColors,
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        title: {
+          display: true,
+          text: 'Status dos Leilões',
+          color: 'black',
+          font: {
+            size: 18
+          }
+        },
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: {
+            color: 'black',  // Cor ajustada para o fundo branco
+            font: {
+              size: 14
+            },
+            usePointStyle: true // Círculos coloridos ao lado do rótulo
+          }
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}
