@@ -9,36 +9,36 @@ from django.utils.translation import gettext_lazy as _
 
 
 class ChatGroup(BaseModel):
-    group_name = models.CharField(max_length=255)
-    sender = models.ForeignKey(User, on_delete=models.CASCADE)
-    message = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+    group_name = models.CharField(max_length=255, verbose_name=_("Nome do Grupo"))
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Remetente"))
+    message = models.TextField(verbose_name=_("Mensagem"))
+    timestamp = models.DateTimeField(auto_now_add=True, verbose_name=_("Data de Envio"))
 
     def __str__(self):
         return f"{self.sender.username}: {self.message[:20]}"
 
     class Meta:
-        verbose_name = 'Histórico dos Atendimentos'
-        verbose_name_plural = 'Histórico dos Atendimentos'
+        verbose_name = _('Histórico de Atendimentos')
+        verbose_name_plural = _('Históricos de Atendimentos')
 
 
 class Theme(BaseModel):
-    nome = models.CharField(max_length=100, unique=True)
-    slug = models.SlugField(unique=True)
-    descricao = models.TextField(blank=True)
-    ativo = models.BooleanField(default=False)
+    nome = models.CharField(max_length=100, unique=True, verbose_name=_("Nome"))
+    slug = models.SlugField(unique=True, verbose_name=_("Slug"))
+    descricao = models.TextField(blank=True, verbose_name=_("Descrição"))
+    ativo = models.BooleanField(default=False, verbose_name=_("Ativo"))
 
-    version = models.CharField(max_length=50, blank=True)
-    author = models.CharField(max_length=100, blank=True)
+    version = models.CharField(max_length=50, blank=True, verbose_name=_("Versão"))
+    author = models.CharField(max_length=100, blank=True, verbose_name=_("Autor"))
 
-    upload = models.FileField(upload_to='themes/')
+    upload = models.FileField(upload_to='themes/', verbose_name=_("Upload de Arquivo"))
 
-    criado_em = models.DateTimeField(auto_now_add=True)
-    atualizado_em = models.DateTimeField(auto_now=True)
+    criado_em = models.DateTimeField(auto_now_add=True, verbose_name=_("Criado em"))
+    atualizado_em = models.DateTimeField(auto_now=True, verbose_name=_("Atualizado em"))
 
     class Meta:
-        verbose_name = "Tema"
-        verbose_name_plural = "Temas"
+        verbose_name = _("Tema")
+        verbose_name_plural = _("Temas")
 
     def __str__(self):
         return self.nome
@@ -73,9 +73,9 @@ class Theme(BaseModel):
         file = self.upload
         if file:
             if file.size > 20 * 1024 * 1024:
-                raise ValidationError("O arquivo é muito grande. Tente um arquivo menor que 20MB.")
+                raise ValidationError(_("O arquivo é muito grande. Tente um arquivo menor que 20MB."))
             if not zipfile.is_zipfile(file):
-                raise ValidationError("O arquivo não é um ZIP válido.")
+                raise ValidationError(_("O arquivo não é um ZIP válido."))
         return file
 
     def processar_upload(self):
@@ -85,7 +85,7 @@ class Theme(BaseModel):
         upload_file = self.upload.file
 
         if not zipfile.is_zipfile(upload_file):
-            raise ValidationError("O arquivo não é um ZIP válido.")
+            raise ValidationError(_("O arquivo não é um ZIP válido."))
 
         with zipfile.ZipFile(upload_file, 'r') as zip_ref:
             file_names = zip_ref.namelist()
@@ -116,18 +116,18 @@ class Theme(BaseModel):
             for member in zip_ref.infolist():
                 ext = os.path.splitext(member.filename)[1].lower()
                 if ext and ext not in extensoes_permitidas:
-                    raise ValidationError(f"Arquivo com extensão não permitida: {ext}")
+                    raise ValidationError(_("Arquivo com extensão não permitida: %s") % ext)
 
                 extracted_path = os.path.join(settings.BASE_DIR, 'themes/installed', self.slug, member.filename)
                 if not os.path.realpath(extracted_path).startswith(
                     os.path.realpath(os.path.join(settings.BASE_DIR, 'themes/installed', self.slug))
                 ):
-                    raise ValidationError("O tema contém arquivos em caminhos não permitidos.")
+                    raise ValidationError(_("O tema contém arquivos em caminhos não permitidos."))
 
             # Procurando theme.json
             theme_json_path = next((f for f in file_names if f.lower().endswith('theme.json')), None)
             if not theme_json_path:
-                raise ValidationError("O arquivo 'theme.json' não foi encontrado.")
+                raise ValidationError(_("O arquivo 'theme.json' não foi encontrado."))
 
             try:
                 with zip_ref.open(theme_json_path) as f:
@@ -136,7 +136,7 @@ class Theme(BaseModel):
                 obrigatorios = ['name', 'slug']
                 for campo in obrigatorios:
                     if campo not in meta:
-                        raise ValidationError(f"O campo obrigatório '{campo}' está ausente no theme.json.")
+                        raise ValidationError(_("O campo obrigatório '%s' está ausente no theme.json.") % campo)
 
                 self.nome = meta.get('name', self.nome)
                 self.slug = slugify(meta.get('slug', self.slug))
@@ -178,20 +178,20 @@ class Theme(BaseModel):
                 zip_ref.extractall(theme_folder_path)
 
             except json.JSONDecodeError:
-                raise ValidationError("Erro ao interpretar o arquivo theme.json. Verifique se o JSON está bem formado.")
+                raise ValidationError(_("Erro ao interpretar o arquivo theme.json. Verifique se o JSON está bem formado."))
             
             except Exception as e:
-                raise ValidationError(f"Erro ao processar o arquivo do tema: {str(e)}")
+                raise ValidationError(_("Erro ao processar o arquivo do tema: %s") % str(e))
 
 
 class BackgroundSetting(BaseModel):
-    name = models.CharField(max_length=100, help_text="Nome de referência para o background")
-    image = models.ImageField(upload_to='backgrounds/', help_text="Imagem de fundo")
-    is_active = models.BooleanField(default=False, help_text="Define se este background está ativo")
+    name = models.CharField(max_length=100, help_text=_("Nome de referência para o background"), verbose_name=_("Nome"))
+    image = models.ImageField(upload_to='backgrounds/', help_text=_("Imagem de fundo"), verbose_name=_("Imagem"))
+    is_active = models.BooleanField(default=False, help_text=_("Define se este background está ativo"), verbose_name=_("Ativo"))
 
     class Meta:
-        verbose_name = "Background Setting"
-        verbose_name_plural = "Background Settings"
+        verbose_name = _("Configuração de Background")
+        verbose_name_plural = _("Configurações de Background")
 
     def __str__(self):
         return self.name
@@ -203,27 +203,28 @@ class BackgroundSetting(BaseModel):
 
 
 class ThemeVariable(BaseModel):
-    nome = models.CharField(max_length=100, unique=True)
-    valor_pt = models.TextField(verbose_name="Valor em Português", blank=True, default="")
-    valor_en = models.TextField(verbose_name="Valor em Inglês", blank=True, default="")
-    valor_es = models.TextField(verbose_name="Valor em Espanhol", blank=True, default="")
+    nome = models.CharField(max_length=100, unique=True, verbose_name=_("Nome"))
+    valor_pt = models.TextField(verbose_name=_("Valor em Português"), blank=True, default="")
+    valor_en = models.TextField(verbose_name=_("Valor em Inglês"), blank=True, default="")
+    valor_es = models.TextField(verbose_name=_("Valor em Espanhol"), blank=True, default="")
     
     tipo = models.CharField(
         max_length=50,
         choices=(
-            ('string', 'Texto'),
-            ('int', 'Número'),
-            ('boolean', 'Booleano'),
+            ('string', _('Texto')),
+            ('int', _('Número')),
+            ('boolean', _('Booleano')),
         ),
-        default='string'
+        default='string',
+        verbose_name=_("Tipo")
     )
 
-    criado_em = models.DateTimeField(auto_now_add=True)
-    atualizado_em = models.DateTimeField(auto_now=True)
+    criado_em = models.DateTimeField(auto_now_add=True, verbose_name=_("Criado em"))
+    atualizado_em = models.DateTimeField(auto_now=True, verbose_name=_("Atualizado em"))
 
     class Meta:
-        verbose_name = "Variável de Tema"
-        verbose_name_plural = "Variáveis de Tema"
+        verbose_name = _("Variável de Tema")
+        verbose_name_plural = _("Variáveis de Tema")
 
     def clean(self):
         if not re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', self.nome):
@@ -236,12 +237,12 @@ class ThemeVariable(BaseModel):
         """Retorna o valor no idioma atual e converte baseado no tipo"""
         valor = getattr(self, f"valor_{lang_code}", None) or self.valor_pt
 
-        if self.tipo == 'numero':
+        if self.tipo == 'int':
             try:
                 return float(valor)
             except (ValueError, TypeError):
                 return 0
-        elif self.tipo == 'booleano':
+        elif self.tipo == 'boolean':
             return str(valor).lower() in ['true', '1', 'yes', 'sim']
         
         return valor

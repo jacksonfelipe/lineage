@@ -5,108 +5,140 @@
 
 {% block extrastyle %}
 <link rel="stylesheet" href="{% static 'css/solicitation.css' %}">
+<style>
+    .event-box {
+        display: flex;
+        align-items: flex-start;
+        background-color: #f9f9f9;
+        border-left: 6px solid #0d6efd;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .event-box:hover {
+        transform: scale(1.02);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .event-thumbnail {
+        flex: 0 0 100px;
+        margin-right: 20px;
+    }
+
+    .event-thumbnail img, .no-image-placeholder {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .event-content {
+        flex-grow: 1;
+    }
+
+    .page-header {
+        animation: fadeInDown 0.6s ease-out;
+        border-radius: 0.5rem;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .page-header h2 {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    @keyframes fadeInDown {
+        0% {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
 {% endblock extrastyle %}
-
-{% block page_title %}{% trans "Solicitação" %}</h1>{% endblock page_title %}
-
-{% block breadcrumbs %}
-  <li class="breadcrumb-item"><a href="#">{% trans "Solicitação" %}</a></li>
-  <li class="breadcrumb-item active" aria-current="page">{% trans "Detalhes" %}</li>
-{% endblock breadcrumbs %}
 
 {% block content %}
 <div class="container">
-    <h1 class="mt-4 text-primary">{% trans "Detalhe da Solicitação" %}</h1>
 
-    <div class="row mt-4">
-        <!-- Detalhes da Solicitação -->
-        <div class="col-md-6">
-            <div class="card shadow-lg mb-4 bg-light">
-                <div class="card-header bg-primary text-white">
-                    <h5>{% trans "Solicitação" %}</h5>
-                </div>
-                <div class="card-body">
-                    <p><strong>{% trans "Protocolo:" %}</strong> {{ solicitation.protocol }}</p>
-                    <p><strong>{% trans "Status:" %}</strong> {{ solicitation.status }}</p>
-                    <p><strong>{% trans "Data da Solicitação:" %}</strong> {{ solicitation.created_at|date:"d/m/Y" }}</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Participantes -->
-        <div class="col-md-6">
-            <div class="card shadow-lg mb-4 bg-light">
-                <div class="card-header bg-primary text-white">
-                    <h5>{% trans "Participantes" %}</h5>
-                </div>
-                <div class="card-body">
-                    <ul class="list-group">
-                        {% for participant in participants %}
-                            <li class="list-group-item">
-                                {{ participant.user.username | upper }} - {{ participant.user.email }}
-                            </li>
-                        {% empty %}
-                            <li class="list-group-item">{% trans "Nenhum participante cadastrado." %}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
+    <!-- Header da página com botões -->
+    <div class="page-header d-flex justify-content-between align-items-center flex-wrap text-white bg-primary mt-2">
+        <h2 class="mb-3 mb-md-0">
+            {% trans "Detalhe da Solicitação" %}
+        </h2>
+        <div>
+            <a href="{% url 'administrator:chat_room' solicitation.protocol %}" class="btn btn-success me-2 shadow-sm">
+                💬 {% trans "Ir para o Chat" %}
+            </a>
+            {% if user.is_staff or user == solicitation.user %}
+            <a href="{% url 'solicitation:add_event_to_history' solicitation.protocol %}" class="btn btn-warning shadow-sm">
+                ➕ {% trans "Adicionar Evento" %}
+            </a>
+            {% endif %}
         </div>
     </div>
 
-    <!-- Botão de Chat -->
-    <div class="row mt-4">
-        <div class="col-md-12 text-center">
-            <a href="{% url 'administrator:chat_room' solicitation.protocol %}" class="btn btn-success btn-lg">{% trans "Ir para o Chat" %}</a>
+    <!-- Detalhes da Solicitação -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">{% trans "Solicitação" %}</h5>
+        </div>
+        <div class="card-body">
+            <p><strong>{% trans "Protocolo:" %}</strong> {{ solicitation.protocol }}</p>
+            <p><strong>{% trans "Status:" %}</strong> {{ solicitation.status }}</p>
+            <p><strong>{% trans "Data da Solicitação:" %}</strong> {{ solicitation.created_at|date:"d/m/Y" }}</p>
+        </div>
+
+        <!-- Participantes logo abaixo -->
+        <div class="card-footer bg-light">
+            <h6 class="text-primary">{% trans "Participantes" %}</h6>
+            <ul class="list-group list-group-flush">
+                {% for participant in participants %}
+                    <li class="list-group-item">
+                        {{ participant.user.username|upper }} - {{ participant.user.email }}
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">{% trans "Nenhum participante cadastrado." %}</li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 
     <!-- Histórico de Eventos -->
-    <div class="row mt-4">
+    <div class="row mt-5">
         <div class="col-md-12">
-            <h4 class="mb-3 text-primary">{% trans "Histórico de Eventos" %}</h4>
+            <h4 class="mb-4 text-primary">{% trans "Histórico de Eventos" %}</h4>
 
-            <!-- Contêiner dos eventos -->
-            <div class="event-box-container">
-                {% for event in solicitation.solicitation_history.all %}
-                    <div class="event-box shadow-lg mb-4 p-4 bg-white rounded">
-                        <div class="event-thumbnail d-flex justify-content-center align-items-center mb-3">
-                            {% if event.image %}
-                                <img src="{{ event.image.url }}" alt="Event Image" class="img-fluid rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
-                            {% else %}
-                                <div class="no-image-placeholder" style="width: 80px; height: 80px; background-color: #f1f1f1; border-radius: 50%;"></div>
-                            {% endif %}
-                        </div>
-                        <div class="timeline-header mb-3">
-                            <p><strong>{{ event.timestamp|date:"d/m/Y H:i" }}</strong></p>
-                            <p><strong>{% trans "Usuário:" %}</strong> {{ event.user.username }}</p>
-                        </div>
-                        <p class="event-action text-muted">{{ event.action }}</p>
-
+            {% for event in solicitation.solicitation_history.all %}
+                <div class="event-box shadow-sm rounded p-3 mb-4">
+                    <div class="event-thumbnail">
                         {% if event.image %}
-                            <div class="event-image mt-3">
-                                <img src="{{ event.image.url }}" alt="Event Image" class="img-fluid" style="max-width: 300px; border-radius: 8px;">
-                            </div>
+                            <img src="{{ event.image.url }}" alt="Event Image">
+                        {% else %}
+                            <div class="no-image-placeholder bg-primary"></div>
                         {% endif %}
                     </div>
-                {% empty %}
-                    <p class="text-center text-muted">{% trans "Nenhum evento registrado." %}</p>
-                {% endfor %}
-            </div>
+                    <div class="event-content">
+                        <p class="mb-1"><strong>{{ event.timestamp|date:"d/m/Y H:i" }}</strong></p>
+                        <p class="mb-1"><strong>{% trans "Usuário:" %}</strong> {% if event.image %}{{ event.user.username }}{% else %}{% trans "Sistema" %}{% endif %}</p>
+                        <p class="event-action text-muted">{{ event.action }}</p>
+                        {% if event.image %}
+                            <img src="{{ event.image.url }}" alt="Event Image" class="img-fluid mt-2 rounded" style="max-width: 300px;">
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-center text-muted">{% trans "Nenhum evento registrado." %}</p>
+            {% endfor %}
         </div>
     </div>
 
-    <!-- Botão para Adicionar Evento -->
-    {% if user.is_staff or user == solicitation.user %}
-    <div class="row mt-4">
-        <div class="col-md-12 text-center">
-            <a href="{% url 'solicitation:add_event_to_history' solicitation.protocol %}" class="btn btn-success btn-lg">{% trans "Adicionar Evento" %}</a>
-        </div>
-    </div>
-    {% endif %}
 </div>
 {% endblock content %}
 
 {% block extra_js %}
-<!-- Código JS adicional aqui, se necessário -->
+<!-- JS adicional se necessário -->
 {% endblock extra_js %}
