@@ -2,10 +2,15 @@ import pyotp
 import qrcode
 import base64
 from io import BytesIO
+from django.conf import settings
+from utils.protocol import create_protocol
 
 
 def gerar_qr_png(email, secret):
-    uri = pyotp.totp.TOTP(secret).provisioning_uri(name=email, issuer_name="pdl-project")
+    protocol = create_protocol()
+    issuer = f"PDL: {settings.PROJECT_TITLE} - {protocol}"
+    
+    uri = pyotp.totp.TOTP(secret).provisioning_uri(name=email, issuer_name=issuer)
     
     # Gerar o QR Code
     img = qrcode.make(uri)

@@ -683,11 +683,11 @@ def verify_2fa_view(request):
                 del request.session['pre_2fa_user_id']
                 return redirect('dashboard')
             else:
-                return render(request, 'accounts_custom/verify-2fa.html', {'error': 'Código inválido.'})
+                return render(request, 'accounts_custom/verify-2fa.html', {'error': 'Código inválido.', 'user': request.user})
         else:
-            return render(request, 'accounts_custom/verify-2fa.html', {'error': 'Dispositivo 2FA não configurado ou não confirmado.'})
+            return render(request, 'accounts_custom/verify-2fa.html', {'error': 'Dispositivo 2FA não configurado ou não confirmado.', 'user': request.user})
     
-    return render(request, 'accounts_custom/verify-2fa.html')
+    return render(request, 'accounts_custom/verify-2fa.html', {'user': request.user})
 
 
 @conditional_otp_required
