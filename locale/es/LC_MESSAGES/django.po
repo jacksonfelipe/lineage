@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-09 16:12-0300\n"
+"POT-Creation-Date: 2025-05-09 23:10-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,6 +105,60 @@ msgstr "Diferencia"
 msgid "Relatório de Saldo dos Usuários"
 msgstr "Informe de balance de usuario"
 
+msgid "Item ID"
+msgstr "ID de artículo"
+
+msgid "Item Name"
+msgstr "Nombre del artículo"
+
+msgid "Item Enchant"
+msgstr "Artículo encantado"
+
+msgid "Quantity"
+msgstr "Cantidad"
+
+msgid "Seller"
+msgstr "Vendedor"
+
+msgid "Starting Bid"
+msgstr "Oferta inicial"
+
+msgid "Current Bid"
+msgstr "Oferta actual"
+
+msgid "Highest Bidder"
+msgstr "Postor más alto"
+
+msgid "End Time"
+msgstr "Tiempo de finalización"
+
+msgid "Character Name"
+msgstr "Nombre del personaje"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "Auction"
+msgstr "Subasta"
+
+msgid "Auctions"
+msgstr "Subastas"
+
+msgid "Bidder"
+msgstr "Licitador"
+
+msgid "Amount"
+msgstr "Cantidad"
+
+msgid "Created At"
+msgstr "Creado a"
+
+msgid "Bid"
+msgstr "Licitación"
+
+msgid "Bids"
+msgstr "Ofertas"
+
 msgid "Criar Leilão"
 msgstr "Subasta"
 
@@ -197,6 +251,115 @@ msgstr "Finalizar"
 
 msgid "Finalizar Entrega"
 msgstr "Finalizar Entrega"
+
+msgid "Prize Name"
+msgstr "Nombre de premio"
+
+msgid "Image"
+msgstr "Imagen"
+
+msgid "Quanto maior o peso, maior a chance de ser sorteado."
+msgstr ""
+"Cuanto mayor sea el peso, mayores son las posibilidades de ser dibujados."
+
+msgid "Weight"
+msgstr "Peso"
+
+msgid "Enchant Level"
+msgstr "Nivel encantador"
+
+msgid "Rarity"
+msgstr "Rareza"
+
+msgid "Prize"
+msgstr "Premio"
+
+msgid "Prizes"
+msgstr "Premio"
+
+msgid "User"
+msgstr "Usuario"
+
+msgid "Spin History"
+msgstr "Historia de giro"
+
+msgid "Spin Histories"
+msgstr "Historias giratorias"
+
+msgid "Bag"
+msgstr "Bolsa"
+
+msgid "Bags"
+msgstr "Bolsas"
+
+msgid "Added At"
+msgstr "Agregado en"
+
+msgid "Bag Item"
+msgstr "Artículo de la bolsa"
+
+msgid "Bag Items"
+msgstr "Artículo de bolsas"
+
+msgid "Description"
+msgstr "Descripción"
+
+msgid "Items"
+msgstr "Elementos"
+
+msgid "Box Type Name"
+msgstr "Nombre de tipo de caja"
+
+msgid "Price"
+msgstr "Precio"
+
+msgid "Boosters Amount"
+msgstr "Cantidad de refuerzo"
+
+msgid "Chance of Common"
+msgstr "Posibilidad de común"
+
+msgid "Chance of Rare"
+msgstr "Posibilidad de raro"
+
+msgid "Chance of Epic"
+msgstr "Posibilidad de épica"
+
+msgid "Chance of Legendary"
+msgstr "Posibilidad de legendario"
+
+msgid "Box Type"
+msgstr "Tipo de caja"
+
+msgid "Box Types"
+msgstr "Tipos de caja"
+
+msgid "Opened"
+msgstr "Abierto"
+
+msgid "Box"
+msgstr "Caja"
+
+msgid "Boxes"
+msgstr "Cajas"
+
+msgid "Probability"
+msgstr "Probabilidad"
+
+msgid "Box Item"
+msgstr "Artículo de caja"
+
+msgid "Box Items"
+msgstr "Artículo de caja"
+
+msgid "Obtained At"
+msgstr "Obtenido en"
+
+msgid "Box Item History"
+msgstr "Historial de artículos de la caja"
+
+msgid "Box Item Histories"
+msgstr "Historia de artículos de caja"
 
 msgid "Tipos de Caixa Disponíveis"
 msgstr "Tipos de efectivo disponibles"
@@ -419,9 +582,6 @@ msgstr "¡Ganaste un artículo!"
 msgid "O item foi adicionado à sua"
 msgstr "El artículo fue agregado a su"
 
-msgid "Bag"
-msgstr "Bolsa"
-
 msgid "com sucesso!"
 msgstr "¡Exitosamente!"
 
@@ -442,6 +602,69 @@ msgstr "No hay artículo en la bolsa."
 
 msgid "Você ainda não possui uma bag."
 msgstr "Todavía no tienes una bolsa."
+
+msgid "Account Name"
+msgstr "Nombre de cuenta"
+
+msgid "Inventory"
+msgstr "Inventario"
+
+msgid "Inventories"
+msgstr "Inventarios"
+
+msgid "Inventory Item"
+msgstr "Artículo de inventario"
+
+msgid "Inventory Items"
+msgstr "Artículos de inventario"
+
+msgid "ID of the blocked item"
+msgstr "ID del artículo bloqueado"
+
+msgid "Reason for blocking (optional)"
+msgstr "Razón para el bloqueo (opcional)"
+
+msgid "Reason"
+msgstr "Razón"
+
+msgid "Blocked Item for Withdrawal"
+msgstr "Artículo bloqueado para retiro"
+
+msgid "Blocked Items for Withdrawal"
+msgstr "Artículos bloqueados para retiro"
+
+msgid "No specific reason"
+msgstr "Sin razón específica"
+
+msgid "Custom Item"
+msgstr "Artículo personalizado"
+
+msgid "Custom Items"
+msgstr "Artículos personalizados"
+
+msgid "Action"
+msgstr "Acción"
+
+msgid "Origin character or user"
+msgstr "Personaje de origen o usuario"
+
+msgid "Origin"
+msgstr "Origen"
+
+msgid "Destination character or user"
+msgstr "Personaje de destino o usuario"
+
+msgid "Destination"
+msgstr "Destino"
+
+msgid "Timestamp"
+msgstr "Marca de tiempo"
+
+msgid "Inventory Log"
+msgstr "Registro de inventario"
+
+msgid "Inventory Logs"
+msgstr "Registros de inventario"
 
 msgid "Devolver Item"
 msgstr "Devolver Item"
@@ -526,6 +749,63 @@ msgstr "Personaje de origen"
 
 msgid "Personagem Destino"
 msgstr "Personaje de destino"
+
+msgid "Amount Paid"
+msgstr "Monto pagado"
+
+msgid "Coins Generated"
+msgstr "Monedas generadas"
+
+msgid "Payment Method"
+msgstr "Método de pago"
+
+msgid "Purchase of coins via ADMINISTRATOR"
+msgstr "Compra de monedas a través del administrador"
+
+msgid "Payment System"
+msgstr "Sistema de pago"
+
+msgid "Wallet"
+msgstr "Billetera"
+
+msgid "Payment Request"
+msgstr "Solicitud de pago"
+
+msgid "Payment Requests"
+msgstr "Solicitudes de pago"
+
+msgid "Value"
+msgstr "Valor"
+
+msgid "Transaction Code"
+msgstr "Código de transacción"
+
+msgid "Linked Payment Request"
+msgstr "Solicitud de pago vinculada"
+
+msgid "Payment"
+msgstr "Pago"
+
+msgid "Payments"
+msgstr "Pagos"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Data ID"
+msgstr "ID de datos"
+
+msgid "Payload"
+msgstr "Carga útil"
+
+msgid "Received At"
+msgstr "Recibido en"
+
+msgid "Webhook Log"
+msgstr "Registro de webhook"
+
+msgid "Webhook Logs"
+msgstr "Registros de webhook"
 
 msgid "Pagamento Não Concluído"
 msgstr "Pago no completado"
@@ -782,6 +1062,192 @@ msgstr "Voltar para Dashboard"
 msgid "Movimentação de Itens nos Últimos Dias"
 msgstr "Movimiento de elementos en los últimos días"
 
+msgid "Players Online"
+msgstr "Jugadores en línea"
+
+msgid "Top PvP"
+msgstr "PVP superior"
+
+msgid "Top PK"
+msgstr "PK superior"
+
+msgid "Top Clan"
+msgstr "Clan superior"
+
+msgid "Top Rich"
+msgstr "Rico"
+
+msgid "Top Online"
+msgstr "Superior en línea"
+
+msgid "Top Level"
+msgstr "Nivel superior"
+
+msgid "Olympiad Ranking"
+msgstr "Ranking de olímpica"
+
+msgid "Olympiad All Heroes"
+msgstr "Olimpiada Todos los héroes"
+
+msgid "Olympiad Current Heroes"
+msgstr "Olympíada de héroes actuales"
+
+msgid "Grand Boss Status"
+msgstr "Estado del gran jefe"
+
+msgid "Raid Boss Status"
+msgstr "Estado del jefe de ataques"
+
+msgid "Siege"
+msgstr "Cerco"
+
+msgid "Siege Participants"
+msgstr "Participantes de asedio"
+
+msgid "Boss Jewel Locations"
+msgstr "Ubicaciones de Boss Jewel"
+
+msgid "API Endpoint Toggle"
+msgstr "API Punto final Toggle"
+
+msgid "API Endpoint Toggles"
+msgstr "El punto final de la API se alza"
+
+msgid "API Endpoint Configuration"
+msgstr "Configuración de punto final de API"
+
+msgid "Server Name"
+msgstr "Nombre del servidor"
+
+msgid "Onde Lendas Nascem, Heróis Lutam e a Glória É Eterna."
+msgstr "Donde nacen las leyendas, los héroes luchan y la gloria es eterna."
+
+msgid "Server Description"
+msgstr "Descripción del servidor"
+
+msgid "Patch Link"
+msgstr "Enlace de parche"
+
+msgid "Client Link"
+msgstr "Enlace del cliente"
+
+msgid "Discord Link"
+msgstr "Enlace de discordia"
+
+msgid "Trailer Video ID"
+msgstr "ID de video de trailer"
+
+msgid "jogadores online Agora"
+msgstr "Jugadores en línea ahora"
+
+msgid "Players Online Text"
+msgstr "Texto en línea de jugadores"
+
+msgid "Banner Image"
+msgstr "Imagen de banner"
+
+msgid "Index Configuration"
+msgstr "Configuración de índice"
+
+msgid "Only one server configuration is allowed."
+msgstr "Solo se permite una configuración de servidor."
+
+msgid "Configuration"
+msgstr "Configuración"
+
+msgid "Language"
+msgstr "Idioma"
+
+msgid "Index Configuration Translation"
+msgstr "Traducción de configuración del índice"
+
+msgid "Index Configuration Translations"
+msgstr "Traducciones de configuración del índice"
+
+msgid "Change Nickname"
+msgstr "Cambio de apodo"
+
+msgid "Change Gender"
+msgstr "Cambiar de género"
+
+msgid "Service"
+msgstr "Servicio"
+
+msgid "Service Price"
+msgstr "Precio de servicio"
+
+msgid "Service Prices"
+msgstr "Precios de servicio"
+
+msgid "ID of the item used for Adena exchange"
+msgstr "ID del artículo utilizado para Adena Exchange"
+
+msgid "Adena Value"
+msgstr "El mismo valor"
+
+msgid "Amount of Adena each item represents"
+msgstr "Cantidad de adena cada artículo representa"
+
+msgid "Active"
+msgstr "Activo"
+
+msgid "Mark as active to be used in calculation"
+msgstr "Marca como activa para ser utilizada en el cálculo"
+
+msgid "Active Adena Exchange Item"
+msgstr "Artículo de intercambio de Adena activo"
+
+msgid "Active Adena Exchange Items"
+msgstr "Elementos de intercambio de adena activos"
+
+msgid "Inactive"
+msgstr "Inactivo"
+
+msgid "Public Name"
+msgstr "Nombre público"
+
+msgid "Twitch Link"
+msgstr "Enlace de contracción"
+
+msgid "YouTube Link"
+msgstr "Enlace de youtube"
+
+msgid "Pending"
+msgstr "Pendiente"
+
+msgid "Approved"
+msgstr "Aprobado"
+
+msgid "Rejected"
+msgstr "Rechazado"
+
+msgid "Expired"
+msgstr "Venció"
+
+msgid "Supporter"
+msgstr "Seguidor"
+
+msgid "Supporters"
+msgstr "Seguidores"
+
+msgid "Shop Purchase"
+msgstr "Compra de la tienda"
+
+msgid "Payment Date"
+msgstr "Fecha de pago"
+
+msgid "Paid"
+msgstr "Pagado"
+
+msgid "Commission"
+msgstr "Comisión"
+
+msgid "Commissions"
+msgstr "Comisiones"
+
+msgid "Commission from"
+msgstr "Entregar de"
+
 msgid "Preço do serviço não configurado."
 msgstr "Precio de servicio no configurado."
 
@@ -960,9 +1426,6 @@ msgstr "Descrito"
 
 msgid "Detalhes do Apoiador"
 msgstr "Detalles del seguidor"
-
-msgid "Status"
-msgstr "Estado"
 
 msgid "Link Twitch"
 msgstr "Twitch de enlace"
@@ -1171,9 +1634,6 @@ msgstr "Guardar configuración"
 msgid "Desbugar Personagem"
 msgstr "Desatraillar"
 
-msgid "Boss Jewel Locations"
-msgstr "Ubicaciones de Boss Jewel"
-
 msgid "Count"
 msgstr "Contar"
 
@@ -1185,9 +1645,6 @@ msgstr "Clan"
 
 msgid "Nenhuma localização de Boss Jewel encontrada."
 msgstr "No se encontró la ubicación de Jein Jewel."
-
-msgid "Grand Boss Status"
-msgstr "Estado del gran jefe"
 
 msgid "Nível"
 msgstr "Nivel"
@@ -1291,11 +1748,95 @@ msgstr "Ranking PK"
 msgid "Ranking PvP"
 msgstr "Ranking PvP"
 
-msgid "Meu Carrinho"
-msgstr "Mi carrito"
+msgid "ID do Item"
+msgstr "ID Do Artículo"
+
+msgid "Ativo"
+msgstr "Activo"
+
+msgid "Item da Loja"
+msgstr "Artículo de la tienda"
+
+msgid "Itens da Loja"
+msgstr "Artículos de almacenamiento"
+
+msgid "Desconto Percentual"
+msgstr "Descuento porcentual"
+
+msgid "Validade"
+msgstr "Validez"
+
+msgid "Apoiador"
+msgstr "Seguidor"
+
+msgid "Código Promocional"
+msgstr "Código Promocional"
+
+msgid "Códigos Promocionais"
+msgstr "Códigos Promocionais"
+
+msgid "Preço Total"
+msgstr "Precio total"
+
+msgid "Promoção"
+msgstr "Promoción"
+
+msgid "Pacote da Loja"
+msgstr "Paquete de almacenamiento"
+
+msgid "Pacotes da Loja"
+msgstr "Paquetes de almacenamiento"
+
+msgid "Pacote"
+msgstr "Paquete"
+
+msgid "Item do Pacote"
+msgstr "Artículo del paquete"
+
+msgid "Itens do Pacote"
+msgstr "Artículo de paquete"
+
+msgid "Pacotes"
+msgstr "Paquetes"
+
+msgid "Promoção Aplicada"
+msgstr "Promoción aplicada"
+
+msgid "Carrinho"
+msgstr "Carro"
+
+msgid "Carrinhos"
+msgstr "Cochecito"
+
+msgid "Item no Carrinho"
+msgstr "Artículo en el carrito"
 
 msgid "Itens no Carrinho"
 msgstr "Artículos en el carrito"
+
+msgid "Pacote no Carrinho"
+msgstr "Embalar"
+
+msgid "Pacotes no Carrinho"
+msgstr "Paquete en el carrito"
+
+msgid "Nome do Personagem"
+msgstr "Nombre del personaje"
+
+msgid "Total Pago"
+msgstr "Total Pago"
+
+msgid "Data da Compra"
+msgstr "Data da Compra"
+
+msgid "Compra"
+msgstr "Compra"
+
+msgid "Compras"
+msgstr "Compras"
+
+msgid "Meu Carrinho"
+msgstr "Mi carrito"
 
 msgid "Remover Item"
 msgstr "Artículo de removedor"
@@ -1305,9 +1846,6 @@ msgstr "Ver elementos"
 
 msgid "Remover Pacote"
 msgstr "Paquete"
-
-msgid "Itens do Pacote"
-msgstr "Artículo de paquete"
 
 msgid "Este pacote não contém itens."
 msgstr "Este paquete no contiene elementos."
@@ -1344,9 +1882,6 @@ msgstr "Adicionar"
 
 msgid "Nenhum item disponível."
 msgstr "No hay artículo disponible."
-
-msgid "Pacotes"
-msgstr "Paquetes"
 
 msgid "Itens inclusos"
 msgstr "Artículos incluidos"
@@ -1408,9 +1943,6 @@ msgstr "Agregar elementos"
 msgid "Cadastro de Itens"
 msgstr "Registro de artículos"
 
-msgid "Ativo"
-msgstr "Activo"
-
 msgid "Inativo"
 msgstr "Inactivo"
 
@@ -1446,6 +1978,57 @@ msgstr "Histórico de Compras"
 
 msgid "Nenhuma compra realizada ainda."
 msgstr "No hay compra realizada todavía."
+
+msgid "Saldo"
+msgstr "Saldo"
+
+msgid "Carteira"
+msgstr "Cartera"
+
+msgid "Carteiras"
+msgstr "Cartera"
+
+msgid "Entrada"
+msgstr "Entrada"
+
+msgid "Saída"
+msgstr "Salida"
+
+msgid "Valor"
+msgstr "Valor"
+
+msgid "Data da Transação"
+msgstr "Fecha de transacción"
+
+msgid "Origem"
+msgstr "Origen"
+
+msgid "Destino"
+msgstr "Destino"
+
+msgid "Transação da Carteira"
+msgstr "Transacción de billetera"
+
+msgid "Transações da Carteira"
+msgstr "Transacciones de billetera"
+
+msgid "Nome da Moeda"
+msgstr "Nombre de moneda"
+
+msgid "ID da Moeda"
+msgstr "ID de moneda"
+
+msgid "Multiplicador (ex: 2.0 para 2x)"
+msgstr "Multiplicador (ex: 2.0 para 2x)"
+
+msgid "Moeda Ativa"
+msgstr "Moneda activa"
+
+msgid "Configuração de Moeda"
+msgstr "Configuración de divisas"
+
+msgid "Configurações de Moeda"
+msgstr "Configuración de divisas"
 
 msgid "Configuração de Moeda In-game"
 msgstr "Configuración de divisas en el juego"
@@ -1561,6 +2144,118 @@ msgstr "Usuario:"
 msgid "Saldo atual:"
 msgstr "Saldo actual:"
 
+msgid "Nome do Grupo"
+msgstr "Nombre de grupo"
+
+msgid "Remetente"
+msgstr "Remitente"
+
+msgid "Mensagem"
+msgstr "Mensaje"
+
+msgid "Data de Envio"
+msgstr "Data de Envio"
+
+msgid "Histórico de Atendimentos"
+msgstr "Historia de asistencia"
+
+msgid "Históricos de Atendimentos"
+msgstr "Históricos de los servicios"
+
+msgid "Slug"
+msgstr "Babosa"
+
+msgid "Versão"
+msgstr "Versión"
+
+msgid "Autor"
+msgstr "Autor"
+
+msgid "Upload de Arquivo"
+msgstr "Upload de Arquivo"
+
+msgid "Criado em"
+msgstr "Creado en"
+
+msgid "Atualizado em"
+msgstr "Actualizado en"
+
+msgid "Tema"
+msgstr "Tema"
+
+msgid "Temas"
+msgstr "Temas"
+
+msgid "O arquivo é muito grande. Tente um arquivo menor que 20MB."
+msgstr "El archivo es muy grande. Pruebe un archivo de menos de 20 MB."
+
+msgid "O arquivo não é um ZIP válido."
+msgstr "El archivo no es un zip válido."
+
+#, python-format
+msgid "Arquivo com extensão não permitida: %s"
+msgstr "Archivo con extensión incapaz: %s"
+
+msgid "O tema contém arquivos em caminhos não permitidos."
+msgstr "El tema contiene archivos de ruta no permitidos."
+
+msgid "O arquivo 'theme.json' não foi encontrado."
+msgstr "No se encontró el archivo 'thema.json'."
+
+#, python-format
+msgid "O campo obrigatório '%s' está ausente no theme.json."
+msgstr "El campo obligatorio '%s' está ausente en theme.json."
+
+msgid ""
+"Erro ao interpretar o arquivo theme.json. Verifique se o JSON está bem "
+"formado."
+msgstr ""
+"Error de interpretar el archivo theme.json. Asegúrese de que JSON esté bien "
+"formado."
+
+#, python-format
+msgid "Erro ao processar o arquivo do tema: %s"
+msgstr "Error Al procesar el archivo del tema: %s"
+
+msgid "Nome de referência para o background"
+msgstr "Nombre de referencia para el fondo"
+
+msgid "Imagem de fundo"
+msgstr "Fondo"
+
+msgid "Define se este background está ativo"
+msgstr "Define si este fondo está activo"
+
+msgid "Configuração de Background"
+msgstr "Configuración de fondo"
+
+msgid "Configurações de Background"
+msgstr "Configuración de fondo"
+
+msgid "Valor em Português"
+msgstr "Valor en portugués"
+
+msgid "Valor em Inglês"
+msgstr "Valor en inglés"
+
+msgid "Valor em Espanhol"
+msgstr "Valor en español"
+
+msgid "Texto"
+msgstr "Texto"
+
+msgid "Número"
+msgstr "Número"
+
+msgid "Booleano"
+msgstr "Booleano"
+
+msgid "Variável de Tema"
+msgstr "Variable de tema"
+
+msgid "Variáveis de Tema"
+msgstr "Variables de tema"
+
 msgid ""
 "O nome da variável só pode conter letras, números e underscores (_) e deve "
 "começar com uma letra ou underscore."
@@ -1613,9 +2308,6 @@ msgstr "Protocolo:"
 msgid "Digite sua mensagem aqui..."
 msgstr "Ingrese su mensaje aquí ..."
 
-msgid "Mensagem"
-msgstr "Mensaje"
-
 msgid "Selecionar Emoji"
 msgstr "Seleccionar emoji"
 
@@ -1648,6 +2340,57 @@ msgstr ""
 
 msgid "Ativar 2FA"
 msgstr "Activar 2FA"
+
+msgid "Tempo Total"
+msgstr "Tiempo total"
+
+msgid "Tempo Python"
+msgstr "Tempo pitón"
+
+msgid "Tempo DB"
+msgstr "Tempo db"
+
+msgid "Total de Consultas"
+msgstr "Total de Consultas"
+
+msgid "Caminho"
+msgstr "Camino"
+
+msgid "Host"
+msgstr "Anfitrión"
+
+msgid "Porta"
+msgstr "Trayera"
+
+msgid "Tipo de Conteúdo"
+msgstr "Tipo de contenido"
+
+msgid "Corpo"
+msgstr "Cuerpo"
+
+msgid "User Agent"
+msgstr "Agente de usuario"
+
+msgid "Conteúdo da Resposta"
+msgstr "Contenido de respuesta"
+
+msgid "Código de Status da Resposta"
+msgstr "Código de Status da Resposta"
+
+msgid "IP"
+msgstr "IP"
+
+msgid "Proxy Verificado"
+msgstr "Proxy Verificado"
+
+msgid "Auditor"
+msgstr "Auditor"
+
+msgid "Histórico"
+msgstr "Histórico"
+
+msgid "Históricos"
+msgstr "Históricos"
 
 msgid "Real-time Auditor Middleware Data"
 msgstr "Datos de middleware del auditor en tiempo real"
@@ -1688,8 +2431,47 @@ msgstr "Código de estado de respuesta:"
 msgid "Nenhum dado de auditoria encontrado."
 msgstr "No se encontraron datos de auditoría."
 
+msgid "Pergunta"
+msgstr "Pregunta"
+
+msgid "Ordem"
+msgstr "Orden"
+
+msgid "Está público"
+msgstr "Está público"
+
+msgid "Pergunta Frequente"
+msgstr "Cuestión frecuente"
+
 msgid "Perguntas Frequentes"
 msgstr "Preguntas frecuentes"
+
+msgid "Pode visualizar o índice"
+msgstr "Pode visualizar o índice"
+
+msgid "Português"
+msgstr "portugués"
+
+msgid "Inglês"
+msgstr "Inglés"
+
+msgid "Espanhol"
+msgstr "Español"
+
+msgid "FAQ"
+msgstr "Preguntas frecuentes"
+
+msgid "Idioma"
+msgstr "Idioma"
+
+msgid "Resposta"
+msgstr "Respuesta"
+
+msgid "Tradução de FAQ"
+msgstr "Traducción de preguntas frecuentes"
+
+msgid "Traduções de FAQ"
+msgstr "Traducciones de preguntas frecuentes"
 
 msgid "Ajuda"
 msgstr "Ayuda"
@@ -1721,6 +2503,108 @@ msgstr "Tu nombre de usuario"
 
 msgid "Your Password"
 msgstr "Tu contraseña"
+
+msgid "Nome de usuário"
+msgstr "Nombre de usuario"
+
+msgid "Use apenas letras e números. Sem espaços ou símbolos."
+msgstr "Use solo letras y números. Sin espacios o símbolos."
+
+msgid "Foto de perfil"
+msgstr "Foto de perfil"
+
+msgid "Biografia"
+msgstr "Biografía"
+
+msgid "CPF"
+msgstr "CPF"
+
+msgid "Gênero"
+msgstr "Género"
+
+msgid "E-mail verificado"
+msgstr "E-mail verificado"
+
+msgid "2FA habilitado"
+msgstr "2FA habilitado"
+
+msgid "Fichas"
+msgstr "Fichas"
+
+msgid "Usuários"
+msgstr "Usuarios"
+
+msgid "Rua"
+msgstr "Dos"
+
+msgid "Complemento"
+msgstr "Complemento"
+
+msgid "Bairro"
+msgstr "Vecindario"
+
+msgid "Cidade"
+msgstr "Ciudad"
+
+msgid "Estado"
+msgstr "Estado"
+
+msgid "CEP"
+msgstr "BOLSILLO"
+
+msgid "Endereço de Usuário"
+msgstr "Dirección de usuario"
+
+msgid "Endereços de Usuários"
+msgstr "Direcciones de usuario"
+
+msgid "Abreviação"
+msgstr "Abreviatura"
+
+msgid "Estados"
+msgstr "Estados"
+
+msgid "Cidades"
+msgstr "Ciudades"
+
+msgid "Dashboard"
+msgstr "Panel"
+
+msgid "Dashboards"
+msgstr "Paneles"
+
+msgid "Título"
+msgstr "Título"
+
+msgid "Conteúdo"
+msgstr "Contenido"
+
+msgid "Tradução de Dashboard"
+msgstr "Traducción del tablero"
+
+msgid "Traduções de Dashboards"
+msgstr "Traducciones de tablero"
+
+msgid "XP"
+msgstr "XP"
+
+msgid "Último bônus de login"
+msgstr "Último bono de inicio de sesión"
+
+msgid "Ícone"
+msgstr "Icono"
+
+msgid "Conquista"
+msgstr "Conquista"
+
+msgid "Data da Conquista"
+msgstr "Data da Conquista"
+
+msgid "Conquista de Usuário"
+msgstr "Conquista de usuarios"
+
+msgid "Conquistas de Usuários"
+msgstr "Logros de usuario"
 
 msgid "Ativar Autenticação em 2 Etapas"
 msgstr "Activar la autenticación en 2 pasos"
@@ -1886,9 +2770,6 @@ msgid "Este é o seu painel principal. Confira seu progresso abaixo."
 msgstr ""
 "Este es su panel principal. Echa un vistazo a tu progreso a continuación."
 
-msgid "Carteira"
-msgstr "Cartera"
-
 msgid "Saldo:"
 msgstr "Saldo:"
 
@@ -2051,24 +2932,6 @@ msgstr "Registro de la dirección"
 msgid "Logradouro"
 msgstr "Mierda"
 
-msgid "Número"
-msgstr "Número"
-
-msgid "Complemento"
-msgstr "Complemento"
-
-msgid "Bairro"
-msgstr "Vecindario"
-
-msgid "Cidade"
-msgstr "Ciudad"
-
-msgid "Estado"
-msgstr "Estado"
-
-msgid "CEP"
-msgstr "BOLSILLO"
-
 msgid "Editar Avatar"
 msgstr "Editar Avatar"
 
@@ -2120,14 +2983,8 @@ msgstr "DIRECCIÓN"
 msgid "Sobre Você"
 msgstr "Acerca de ti"
 
-msgid "CPF"
-msgstr "CPF"
-
 msgid "000.000.000-00"
 msgstr "000.000.000-00"
-
-msgid "Gênero"
-msgstr "Género"
 
 msgid "Não Binário"
 msgstr "No binario"
@@ -2184,8 +3041,92 @@ msgstr "Tu correo electrónico"
 msgid "Reenviar"
 msgstr "Reenviar"
 
+msgid "Usuário que iniciou a amizade."
+msgstr "Usuario que comenzó la amistad."
+
+msgid "Amigo"
+msgstr "Amigo"
+
+msgid "Usuário que é amigo do primeiro usuário."
+msgstr "Usuario que es amigo del primer usuario."
+
+msgid "Data de Criação"
+msgstr "Fecha de creación"
+
+msgid "Data e hora em que a amizade foi criada."
+msgstr "Fecha y hora cuando se creó la amistad."
+
+msgid "Aceita"
+msgstr "Aceptado"
+
+msgid "Indica se a amizade foi aceita."
+msgstr "Indica si la amistad ha sido aceptada."
+
+msgid "Amizade"
+msgstr "Amistad"
+
+msgid "Amizades"
+msgstr "Amistad"
+
+msgid "Usuário 1"
+msgstr "Usuario 1"
+
+msgid "Primeiro usuário no chat."
+msgstr "Primer usuario en el chat."
+
+msgid "Usuário 2"
+msgstr "Usuario 2"
+
+msgid "Segundo usuário no chat."
+msgstr "Según el usuario en el chat."
+
+msgid "Última Mensagem"
+msgstr "Último mensaje"
+
+msgid "Conteúdo da última mensagem no chat."
+msgstr "Contenido del último mensaje en el chat."
+
+msgid "Última Atualização"
+msgstr "Última actualización"
+
+msgid "Data e hora da última atualização do chat."
+msgstr "Fecha y hora de la última actualización de chat."
+
+msgid "Conversação"
+msgstr "Conversación"
+
+msgid "Conversações"
+msgstr "Conversaciones"
+
 msgid "Chat"
 msgstr "Charlar"
+
+msgid "Chat ao qual a mensagem pertence."
+msgstr "Chatear con el que pertenece el mensaje."
+
+msgid "Usuário que enviou a mensagem."
+msgstr "Usuario que envió el mensaje."
+
+msgid "Conteúdo da mensagem."
+msgstr "Contenido de mensaje."
+
+msgid "Data e Hora"
+msgstr "Data e Hora"
+
+msgid "Data e hora em que a mensagem foi enviada."
+msgstr "Fecha y hora se envió el mensaje."
+
+msgid "Lida"
+msgstr "Lida"
+
+msgid "Indica se a mensagem foi lida."
+msgstr "Indica si el mensaje fue leído."
+
+msgid "Histórico de Conversas"
+msgstr "Histórico de Conversas"
+
+msgid "Históricos de Conversas"
+msgstr "Históricos de Conversas"
 
 msgid "Mensagens"
 msgstr "Mensajes"
@@ -2244,23 +3185,72 @@ msgstr "Rechazar"
 msgid "Nenhum convite de amizade recebido."
 msgstr "No recibió invitación a la amistad."
 
-msgid "date published"
-msgstr "fecha publicada"
+msgid ""
+"Endereço amigável da notícia, gerado automaticamente a partir do título."
+msgstr ""
+"Dirección de noticias amistosas, generada automáticamente a partir del "
+"título."
 
-msgid "Detalhes da Notícia"
-msgstr "Detalles de noticias"
+msgid "Imagem de capa da notícia (opcional)."
+msgstr "Imagen de portada de noticias (opcional)."
 
-msgid "Autor"
-msgstr "Autor"
+msgid "Usuário responsável pela publicação."
+msgstr "Usuario responsable de la publicación."
 
 msgid "Data de Publicação"
 msgstr "Fecha de publicación"
 
-msgid "Voltar para as notícias"
-msgstr "Volver a las noticias"
+msgid "Data e hora em que a notícia foi ou será publicada."
+msgstr "Fecha y hora Las noticias fueron o serán publicadas."
+
+msgid "Publicado"
+msgstr "Publicado"
+
+msgid "Indica se a notícia está visível ao público."
+msgstr "Indica si las noticias son visibles para el público."
+
+msgid "Privado"
+msgstr "Privado"
+
+msgid "Se marcado, a notícia será visível apenas para usuários autorizados."
+msgstr ""
+"Si se marca, las noticias serán visibles solo para los usuarios autorizados."
+
+msgid "Notícia"
+msgstr "Noticias"
 
 msgid "Notícias"
 msgstr "Noticias"
+
+msgid "Pode visualizar a lista de notícias"
+msgstr "Puedes ver la lista de noticias"
+
+msgid "Pode visualizar o detalhe da notícia"
+msgstr "Puedes ver el detalle de las noticias"
+
+msgid "Idioma da tradução."
+msgstr "Lenguaje de traducción."
+
+msgid "Título da notícia neste idioma."
+msgstr "Título da notícia neste idioma."
+
+msgid "Resumo"
+msgstr "Resumen"
+
+msgid "Resumo opcional para exibição em listas."
+msgstr "Resumen opcional para la visualización de la lista."
+
+msgid "Tradução de Notícia"
+msgstr "Traducción de noticias"
+
+msgid "Traduções de Notícias"
+msgstr "Traducciones de noticias"
+
+msgid "Detalhes da Notícia"
+msgstr "Detalles de noticias"
+
+msgid "Voltar para as notícias"
+msgstr "Volver a las noticias"
 
 msgid "Fique por dentro das últimas novidades e atualizações exclusivas."
 msgstr ""
@@ -2272,8 +3262,48 @@ msgstr "leer más"
 msgid "Não há notícias privadas disponíveis no momento."
 msgstr "No hay noticias privadas disponibles en este momento."
 
+msgid ""
+"Usuário relacionado à notificação (pode ser nulo para notificações "
+"públicas)."
+msgstr ""
+"El usuario relacionado con la notificación (puede ser nulo para las "
+"notificaciones públicas)."
+
+msgid "Tipo de Notificação"
+msgstr "Tipo de notificación"
+
+msgid "Tipo ou categoria da notificação."
+msgstr "Tipo de notificación o categoría."
+
+msgid "Mensagem da notificação (criptografada)."
+msgstr "Mensaje de notificación (encriptado)."
+
+msgid "Visualizada"
+msgstr "Visualizada"
+
+msgid "Indica se a notificação foi visualizada pelo usuário."
+msgstr "Indica si el usuario vio la notificación."
+
+msgid "Notificação"
+msgstr "Notificación"
+
 msgid "Notificações"
 msgstr "Notificaciones"
+
+msgid "Usuário que visualizou a notificação pública."
+msgstr "Usuario que visualizó la notificación pública."
+
+msgid "Referência à notificação visualizada."
+msgstr "Referencia a la notificación vista."
+
+msgid "Indica se o usuário visualizou essa notificação pública."
+msgstr "Indica si el usuario ha visto esta notificación pública."
+
+msgid "Visualização de Notificação Pública"
+msgstr "Visualización de notificación pública"
+
+msgid "Visualizações de Notificações Públicas"
+msgstr "Vistas de las notificaciones públicas"
 
 msgid "Marcar todas como lidas"
 msgstr "Marcar todas como lidas"
@@ -2290,9 +3320,6 @@ msgstr "No amado"
 msgid "Detalhes da Notificação"
 msgstr "Detalles de notificación"
 
-msgid "Criado em"
-msgstr "Creado en"
-
 msgid "Não há notificações privadas."
 msgstr "No hay notificaciones privadas."
 
@@ -2304,6 +3331,51 @@ msgstr "No hay notificaciones públicas."
 
 msgid "Tem certeza que deseja limpar todas as notificações?"
 msgstr "¿Estás seguro de que quieres limpiar todas las notificaciones?"
+
+msgid "Protocolo"
+msgstr "Protocolo"
+
+msgid "Código de identificação único da solicitação."
+msgstr "Código de identificación único de la solicitud."
+
+msgid "Status atual da solicitação."
+msgstr "Estado actual de la solicitud."
+
+msgid "Usuário que iniciou a solicitação."
+msgstr "Usuario que comenzó la solicitud."
+
+msgid "Solicitação criada."
+msgstr "Solicitud creada."
+
+msgid "Solicitação"
+msgstr "Pedido"
+
+msgid "Solicitações"
+msgstr "Solicitudes"
+
+msgid "Participante da Solicitação"
+msgstr "Participante de la solicitud"
+
+msgid "Participantes da Solicitação"
+msgstr "Participantes de la solicitud"
+
+msgid "Descrição da ação realizada."
+msgstr "Descripción de la acción realizada."
+
+msgid "Momento em que a ação foi registrada."
+msgstr "Momento en que se registró la acción."
+
+msgid "Imagem opcional associada à ação."
+msgstr "Imagen opcional asociada con la acción."
+
+msgid "Usuário que realizou a ação."
+msgstr "Usuario que realizó la acción."
+
+msgid "Histórico da Solicitação"
+msgstr "Historial de solicitud"
+
+msgid "Históricos da Solicitação"
+msgstr "Historia de la solicitud"
 
 msgid "Adicionar Evento ao Histórico"
 msgstr "Agregar evento a la historia"
@@ -2374,8 +3446,8 @@ msgstr ""
 msgid "Detalhe da Solicitação"
 msgstr "Detalle de solicitud"
 
-msgid "Solicitação"
-msgstr "Pedido"
+msgid "Ir para o Chat"
+msgstr "Ir para o Chat"
 
 msgid "Data da Solicitação:"
 msgstr "Fecha de solicitud:"
@@ -2386,20 +3458,17 @@ msgstr "Participantes"
 msgid "Nenhum participante cadastrado."
 msgstr "No hay participante registrado."
 
-msgid "Ir para o Chat"
-msgstr "Ir para o Chat"
-
 msgid "Histórico de Eventos"
 msgstr "Histórico de Eventos"
+
+msgid "Sistema"
+msgstr "Sistema"
 
 msgid "Nenhum evento registrado."
 msgstr "No hay evento registrado."
 
 msgid "Lista de Solicitações"
 msgstr "Lista de solicitudes"
-
-msgid "Protocolo"
-msgstr "Protocolo"
 
 msgid "Situação"
 msgstr "Situación"
@@ -2412,15 +3481,6 @@ msgstr "Ver solicitud"
 
 msgid "Nenhuma solicitação encontrada."
 msgstr "No se encontró solicitud."
-
-msgid "Português"
-msgstr "portugués"
-
-msgid "Inglês"
-msgstr "Inglés"
-
-msgid "Espanhol"
-msgstr "Español"
 
 msgid "Run the selected action"
 msgstr "Ejecute la acción seleccionada"
@@ -2700,12 +3760,6 @@ msgstr "Corrija el error a continuación."
 msgid "Please correct the errors below."
 msgstr "Corrija los errores a continuación."
 
-msgid "User"
-msgstr "Usuario"
-
-msgid "Action"
-msgstr "Acción"
-
 msgid "Date/time"
 msgstr "Fecha/hora"
 
@@ -2868,9 +3922,6 @@ msgstr "Gerente de caja"
 msgid "Inventário"
 msgstr "Inventario"
 
-msgid "Apoiador"
-msgstr "Seguidor"
-
 msgid "Sair"
 msgstr "Salir"
 
@@ -2895,17 +3946,8 @@ msgstr "Cajas"
 msgid "Ajuda (FAQ)"
 msgstr "Ayuda (FAQ)"
 
-msgid "Solicitações"
-msgstr "Solicitudes"
-
 msgid "Tops"
 msgstr "Tops"
-
-msgid "Top Level"
-msgstr "Nivel superior"
-
-msgid "Top PK"
-msgstr "PK superior"
 
 msgid "Top PVP"
 msgstr "PVP superior"
@@ -2915,9 +3957,6 @@ msgstr "Adina superior"
 
 msgid "Top Clans"
 msgstr "Clanes superiores"
-
-msgid "Top Online"
-msgstr "Superior en línea"
 
 msgid "Heroes"
 msgstr "Héroes"
@@ -2970,9 +4009,6 @@ msgstr "Descargar"
 msgid "Comunidade"
 msgstr "Comunidad"
 
-msgid "FAQ"
-msgstr "Preguntas frecuentes"
-
 msgid "Painel"
 msgstr "Panel"
 
@@ -3015,9 +4051,6 @@ msgstr "No hay una pregunta frecuente disponible en este momento."
 
 msgid "Lineage 2 PDL"
 msgstr "Linaje 2 PDL"
-
-msgid "Onde Lendas Nascem, Heróis Lutam e a Glória É Eterna."
-msgstr "Donde nacen las leyendas, los héroes luchan y la gloria es eterna."
 
 msgid "Jogar Agora"
 msgstr "Jugar ahora"
@@ -3274,3 +4307,6 @@ msgstr "Servidor"
 
 msgid "Estatística"
 msgstr "Estadística"
+
+#~ msgid "date published"
+#~ msgstr "fecha publicada"
