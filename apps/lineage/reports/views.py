@@ -20,15 +20,17 @@ def relatorio_movimentacoes_inventario(request):
 
     # Agrupamento por dia
     agrupado_por_dia = (
-        logs.extra(select={'dia': "DATE(timestamp)"}).
-        values('dia', 'acao').
-        annotate(total=Sum('quantity')).
-        order_by('dia')
+        logs.extra(select={'dia': "DATE(timestamp)"})
+        .values('dia', 'acao')
+        .annotate(total=Sum('quantity'))
+        .order_by('dia')
     )
 
+    # Coleta das datas únicas
     dias_labels = sorted(set(log['dia'] for log in agrupado_por_dia))
-    acoes = ['RETIROU_DO_JOGO', 'INSERIU_NO_JOGO', 'TROCA_ENTRE_PERSONAGENS', 'RECEBEU_TROCA', 'BAG_PARA_INVENTARIO']
+    dias_labels_str = [str(dia) for dia in dias_labels]
 
+    acoes = ['RETIROU_DO_JOGO', 'INSERIU_NO_JOGO', 'TROCA_ENTRE_PERSONAGENS', 'RECEBEU_TROCA', 'BAG_PARA_INVENTARIO']
     dados_por_acao = {acao: [0] * len(dias_labels) for acao in acoes}
 
     for log in agrupado_por_dia:
@@ -38,17 +40,17 @@ def relatorio_movimentacoes_inventario(request):
         if acao in dados_por_acao:
             dados_por_acao[acao][idx] = int(log['total'])
 
-    # Itens mais trocados (baseado na ação 'TROCA_ENTRE_PERSONAGENS')
+    # Itens mais trocados
     itens_trocados = (
         logs.filter(acao='TROCA_ENTRE_PERSONAGENS')
-        .values('item_name')  # Item Name ao invés de 'item__nome'
+        .values('item_name')
         .annotate(total_trocado=Sum('quantity'))
         .order_by('-total_trocado')[:5]
     )
 
     # Itens mais movimentados
     itens_movimentados = (
-        logs.values('item_name')  # Item Name ao invés de 'item__nome'
+        logs.values('item_name')
         .annotate(total_movimentado=Sum('quantity'))
         .order_by('-total_movimentado')[:5]
     )
@@ -59,9 +61,8 @@ def relatorio_movimentacoes_inventario(request):
     total_recebido = sum(dados_por_acao['RECEBEU_TROCA'])
     total_bag_para_inventario = sum(dados_por_acao['BAG_PARA_INVENTARIO'])
 
-    # Enviar dados como listas para o gráfico
     contexto = {
-        'labels': json.dumps(dias_labels),
+        'labels': json.dumps(dias_labels_str),
         'retirados': json.dumps(dados_por_acao['RETIROU_DO_JOGO']),
         'inseridos': json.dumps(dados_por_acao['INSERIU_NO_JOGO']),
         'trocados': json.dumps(dados_por_acao['TROCA_ENTRE_PERSONAGENS']),
@@ -77,7 +78,6 @@ def relatorio_movimentacoes_inventario(request):
     }
 
     return render(request, 'reports/relatorio_movimentacoes_inventario.html', contexto)
-
 
 
 @staff_member_required
