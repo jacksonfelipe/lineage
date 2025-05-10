@@ -33,7 +33,7 @@ class FAQTranslation(BaseModel):
     faq = models.ForeignKey(FAQ, on_delete=models.CASCADE, related_name='translations', verbose_name=_("FAQ"))
     language = models.CharField(max_length=5, choices=LANGUAGES, verbose_name=_("Idioma"))
     question = models.CharField(max_length=255, verbose_name=_("Pergunta"))
-    answer = CKEditor5Field(_('Resposta'), config_name='extends', verbose_name=_("Resposta"))
+    answer = CKEditor5Field(config_name='extends', verbose_name=_("Resposta"))
 
     class Meta:
         unique_together = ('faq', 'language')

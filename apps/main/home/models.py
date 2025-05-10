@@ -119,7 +119,7 @@ class DashboardContentTranslation(BaseModel):
     dashboard = models.ForeignKey(DashboardContent, on_delete=models.CASCADE, related_name='translations', verbose_name=_("Dashboard"))
     language = models.CharField(max_length=5, choices=LANGUAGES, verbose_name=_("Idioma"))
     title = models.CharField(max_length=200, verbose_name=_("Título"))
-    content = CKEditor5Field(_('Conteúdo'), config_name='extends', verbose_name=_("Conteúdo"))
+    content = CKEditor5Field(verbose_name=_("Conteúdo"), config_name='extends')
 
     class Meta:
         unique_together = ('dashboard', 'language')
