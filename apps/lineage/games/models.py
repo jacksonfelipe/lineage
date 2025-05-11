@@ -79,6 +79,7 @@ class Item(BaseModel):
     image = models.ImageField(upload_to='items/', verbose_name=_("Image"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
     rarity = models.CharField(max_length=20, choices=RARITY_CHOICES, verbose_name=_("Rarity"))
+    can_be_populated = models.BooleanField(default=True, verbose_name=_("Can Be Populated"))
     
     def __str__(self):
         return f"{self.name} ({self.get_rarity_display()})"
@@ -98,6 +99,10 @@ class BoxType(BaseModel):
     chance_rare = models.FloatField(default=25, verbose_name=_("Chance of Rare"))
     chance_epic = models.FloatField(default=10, verbose_name=_("Chance of Epic"))
     chance_legendary = models.FloatField(default=5, verbose_name=_("Chance of Legendary"))
+
+    max_epic_items = models.IntegerField(default=0, verbose_name=_("Max Epic Items"))
+    max_legendary_items = models.IntegerField(default=0, verbose_name=_("Max Legendary Items"))
+    allowed_items = models.ManyToManyField(Item, blank=True, related_name='allowed_in_boxes')
 
     def __str__(self):
         return self.name

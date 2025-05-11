@@ -2,17 +2,16 @@ from django.contrib import admin
 from .models import *
 from core.admin import BaseModelAdmin
 from django.utils.html import format_html
+from .forms import BoxTypeAdminForm
 
 
 @admin.register(Prize)
 class PrizeAdmin(BaseModelAdmin):
-    # Exibição da lista de prêmios
     list_display = ('name', 'image_preview', 'weight', 'item_id', 'enchant', 'rarity', 'created_at', 'updated_at')
     search_fields = ('name',)
-    list_filter = ('created_at', 'rarity')  # Filtra por raridade e data
+    list_filter = ('created_at', 'rarity')
     readonly_fields = ('created_at', 'updated_at')
     
-    # Campos que podem ser editados no form de detalhes
     fieldsets = (
         (None, {
             'fields': ('name', 'item_id', 'image', 'weight', 'enchant', 'rarity')
@@ -58,22 +57,48 @@ class BagItemAdmin(BaseModelAdmin):
 
 @admin.register(Item)
 class ItemAdmin(BaseModelAdmin):
-    list_display = ('name', 'item_id', 'enchant', 'rarity', 'description')
+    list_display = ('name', 'item_id', 'enchant', 'rarity', 'can_be_populated', 'description')
+    list_editable = ('can_be_populated',)
     search_fields = ('name', 'item_id')
-    list_filter = ('rarity', 'enchant')
+    list_filter = ('rarity', 'enchant', 'can_be_populated')
     ordering = ('name',)
 
 
-# Admin para BoxType
 @admin.register(BoxType)
 class BoxTypeAdmin(BaseModelAdmin):
-    list_display = ('name', 'price', 'boosters_amount', 'chance_common', 'chance_rare', 'chance_epic', 'chance_legendary')
+    form = BoxTypeAdminForm
+    
+    list_display = (
+        'name', 'price', 'boosters_amount',
+        'chance_common', 'chance_rare', 'chance_epic', 'chance_legendary',
+        'max_epic_items', 'max_legendary_items'
+    )
     search_fields = ('name',)
     list_filter = ('price', 'boosters_amount')
     ordering = ('name',)
+    filter_horizontal = ('allowed_items',)
+
+    fieldsets = (
+        (None, {
+            'fields': (
+                'name', 'price', 'boosters_amount',
+                'allowed_items'
+            )
+        }),
+        ('Chances de Raridade (%)', {
+            'fields': (
+                'chance_common', 'chance_rare',
+                'chance_epic', 'chance_legendary'
+            )
+        }),
+        ('Limites por Raridade', {
+            'fields': (
+                'max_epic_items', 'max_legendary_items',
+            )
+        }),
+    )
 
 
-# Admin para Box
 @admin.register(Box)
 class BoxAdmin(BaseModelAdmin):
     list_display = ('user', 'box_type', 'opened', 'created_at')
@@ -82,7 +107,6 @@ class BoxAdmin(BaseModelAdmin):
     ordering = ('-created_at',)
 
 
-# Admin para BoxItem
 @admin.register(BoxItem)
 class BoxItemAdmin(BaseModelAdmin):
     list_display = ('box', 'item', 'opened', 'probability')
@@ -100,8 +124,7 @@ class BoxItemHistoryAdmin(BaseModelAdmin):
     readonly_fields = ('user', 'item', 'box', 'rarity', 'enchant', 'obtained_at')
 
     def has_add_permission(self, request):
-        return False  # Históricos são criados automaticamente
+        return False
 
     def has_change_permission(self, request, obj=None):
-        return False  # Não deve ser editável
-    
+        return False

@@ -1,5 +1,6 @@
 from django import forms
 from .models import ShopItem, ShopPackage, PromotionCode
+from django.contrib.admin.widgets import FilteredSelectMultiple
 
 
 class ShopItemForm(forms.ModelForm):
@@ -16,15 +17,26 @@ class ShopItemForm(forms.ModelForm):
 
 
 class ShopPackageForm(forms.ModelForm):
+    itens = forms.ModelMultipleChoiceField(
+        queryset=ShopItem.objects.all(),
+        required=False,
+        widget=FilteredSelectMultiple("Itens", is_stacked=False),
+        label="Itens do Pacote"
+    )
+
     class Meta:
         model = ShopPackage
-        fields = ['nome', 'preco_total', 'ativo', 'promocao']
+        fields = ['nome', 'preco_total', 'ativo', 'promocao', 'itens']
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome do pacote'}),
             'preco_total': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Preço total'}),
             'ativo': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'promocao': forms.Select(attrs={'class': 'form-control'}),
         }
+
+    class Media:
+        css = {'all': ('admin/css/widgets.css',)}
+        js = ('admin/js/core.js', 'admin/js/SelectBox.js', 'admin/js/SelectFilter2.js', '/jsi18n/')
 
 
 class PromotionCodeForm(forms.ModelForm):

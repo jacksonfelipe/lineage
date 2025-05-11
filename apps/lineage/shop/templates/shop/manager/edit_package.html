@@ -10,6 +10,7 @@
     <div class="card-body px-5 py-4">
       <form method="post">
         {% csrf_token %}
+        {{ form.media }}
         {{ form.as_p }}
         <button type="submit" class="btn btn-success rounded-pill">{% trans "Salvar Pacote" %}</button>
       </form>
@@ -27,23 +28,23 @@
           <li class="list-group-item">{% trans "Nenhum item no pacote." %}</li>
         {% endfor %}
       </ul>
-
-      <hr class="my-4">
-
-      <h5 class="fw-bold">{% trans "Adicionar Itens ao Pacote" %}</h5>
-      <form method="post" action="{% url 'shop:add_item_to_package' package.id %}">
-        {% csrf_token %}
-        <div class="form-group">
-          <label for="itens">{% trans "Selecione os Itens" %}</label>
-          <select name="itens" id="itens" class="form-control" multiple>
-            {% for item in items %}
-              <option value="{{ item.id }}">{{ item.nome }} — R${{ item.preco }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <button type="submit" class="btn btn-primary rounded-pill mt-3">{% trans "Adicionar Itens" %}</button>
-      </form>
     </div>
   </div>
 </div>
+
+<!-- Inclui o script necessário para ativar o SelectFilter -->
+<script type="text/javascript" src="{% url 'jsi18n' %}"></script>
+<script type="text/javascript">
+  window.addEventListener('load', function() {
+    if (typeof django !== 'undefined' && django.jQuery) {
+      django.jQuery('select.selectfilter, select.selectfilterstacked').each(function() {
+        SelectFilter.init(
+          this.id,
+          this.getAttribute('data-field-name'),
+          this.classList.contains('selectfilterstacked')
+        );
+      });
+    }
+  });
+</script>
 {% endblock %}
