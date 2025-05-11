@@ -5,6 +5,7 @@ from core.admin import BaseModelAdmin, BaseModelAdminAbstratic
 from .forms import DashboardContentForm, DashboardContentTranslationForm, CustomUserChangeForm, CustomUserCreationForm
 
 
+@admin.register(User)
 class UserAdmin(BaseModelAdmin, DefaultUserAdmin):
     form = CustomUserChangeForm
     add_form = CustomUserCreationForm
@@ -55,6 +56,7 @@ class UserAdmin(BaseModelAdmin, DefaultUserAdmin):
         js = ('js/mask-cpf.js',)
 
 
+@admin.register(AddressUser)
 class AddressAdmin(BaseModelAdmin):
     list_display = ('user', 'street', 'number', 'complement', 'neighborhood', 'city', 'state', 'postal_code')
     search_fields = ('user__username', 'street', 'city', 'state', 'postal_code', 'neighborhood')
@@ -65,6 +67,7 @@ class AddressAdmin(BaseModelAdmin):
         return queryset.select_related('user')
     
 
+@admin.register(State)
 class StateAdmin(BaseModelAdminAbstratic):
     list_display = ('name', 'abbreviation')  # Campos a serem exibidos na lista
     search_fields = ('name', 'abbreviation')  # Campos que podem ser pesquisados
@@ -72,6 +75,7 @@ class StateAdmin(BaseModelAdminAbstratic):
     list_filter = ('abbreviation',)  # Filtro para a lista
 
 
+@admin.register(City)
 class CityAdmin(BaseModelAdminAbstratic):
     list_display = ('name', 'state')  # Campos a serem exibidos na lista
     search_fields = ('name',)  # Campos que podem ser pesquisados
@@ -86,6 +90,7 @@ class DashboardContentTranslationInline(admin.TabularInline):
     fields = ['language', 'title', 'content']
 
 
+@admin.register(DashboardContent)
 class DashboardContentAdmin(BaseModelAdmin):
     form = DashboardContentForm
     inlines = [DashboardContentTranslationInline]
@@ -105,17 +110,10 @@ class DashboardContentAdmin(BaseModelAdmin):
     get_title.short_description = 'Título (PT)'
 
 
+@admin.register(SiteLogo)
 class SiteLogoAdmin(BaseModelAdmin):
     list_display = ('name', 'is_active')
     list_filter = ('is_active',)
-
-
-admin.site.register(User, UserAdmin)
-admin.site.register(AddressUser, AddressAdmin)
-admin.site.register(State, StateAdmin)
-admin.site.register(City, CityAdmin)
-admin.site.register(DashboardContent, DashboardContentAdmin)
-admin.site.register(SiteLogo, SiteLogoAdmin)
 
 
 @admin.register(Conquista)

@@ -18,6 +18,7 @@ class NewsTranslationInline(admin.TabularInline):
         return formset
 
 
+@admin.register(News)
 class NewsAdmin(BaseModelAdmin):
     form = NewsForm
     inlines = [NewsTranslationInline]
@@ -36,6 +37,3 @@ class NewsAdmin(BaseModelAdmin):
         pt_translation = obj.translations.filter(language='pt').first()
         return pt_translation.title if pt_translation else f"News {obj.pk}"
     get_title.short_description = 'Título (PT)'
-
-
-admin.site.register(News, NewsAdmin)

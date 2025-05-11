@@ -3,7 +3,6 @@ from .models import Friendship, Chat, Message
 from core.admin import BaseModelAdmin
 
 
-# Configuração para o modelo Friendship
 @admin.register(Friendship)
 class FriendshipAdmin(BaseModelAdmin):
     list_display = ('user', 'friend', 'created_at', 'accepted')
@@ -12,7 +11,6 @@ class FriendshipAdmin(BaseModelAdmin):
     ordering = ('-created_at',)
 
 
-# Configuração para o modelo Chat
 @admin.register(Chat)
 class ChatAdmin(BaseModelAdmin):
     list_display = ('user1', 'user2', 'last_message', 'last_updated')  # Atualize aqui
@@ -21,7 +19,6 @@ class ChatAdmin(BaseModelAdmin):
     ordering = ('-last_updated',)
 
 
-# Configuração para o modelo Message
 @admin.register(Message)
 class MessageAdmin(BaseModelAdmin):
     list_display = ('chat', 'sender', 'text', 'timestamp')

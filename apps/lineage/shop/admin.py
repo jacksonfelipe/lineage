@@ -3,7 +3,6 @@ from core.admin import BaseModelAdmin
 from .models import *
 
 
-# Só deixar ativo o que for realmente útil de emergência ou manutenção
 @admin.register(ShopItem)
 class ShopItemAdmin(BaseModelAdmin):
     list_display = ('nome', 'item_id', 'quantidade', 'preco', 'ativo')
@@ -27,7 +26,6 @@ class PromotionCodeAdmin(admin.ModelAdmin):
     list_filter = ('ativo',)
 
 
-# Opcional — se quiser manter acesso rápido ao carrinho
 @admin.register(Cart)
 class CartAdmin(BaseModelAdmin):
     list_display = ('user', 'promocao_aplicada', 'calcular_total')

@@ -10,7 +10,7 @@ class BaseModel(models.Model):
     created_at = models.DateTimeField(default=timezone.now, editable=False)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        related_name='%(class)s_created',
+        related_name='%(app_label)s_%(class)s_created',
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -19,7 +19,7 @@ class BaseModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        related_name='%(class)s_updated',
+        related_name='%(app_label)s_%(class)s_updated',
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

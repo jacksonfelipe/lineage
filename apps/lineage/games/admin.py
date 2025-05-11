@@ -135,3 +135,11 @@ class RecompensaAdmin(BaseModelAdmin):
     list_display = ('tipo', 'referencia', 'item_name', 'quantity', 'enchant')
     list_filter = ('tipo',)
     search_fields = ('referencia', 'item_name')
+
+
+@admin.register(RecompensaRecebida)
+class RecompensaRecebidaAdmin(admin.ModelAdmin):
+    list_display = ('user', 'recompensa', 'data')
+    list_filter = ('data',)
+    search_fields = ('user__username', 'recompensa__item_name', 'recompensa__tipo')
+    ordering = ('-data',)

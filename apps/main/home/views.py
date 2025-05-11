@@ -176,8 +176,6 @@ def index(request):
     # Buscar apoiadores ativos e aprovados
     apoiadores = Apoiador.objects.filter(ativo=True, status='aprovado')
 
-    verificar_recompensas_por_nivel(request.user, request.user.level, request)
-
     context = {
         'clanes': clanes,  # Passando os clãs com as imagens de crest
         'classes_info': classes_info,
@@ -526,6 +524,8 @@ def dashboard(request):
         page_number = request.GET.get('page', 1)
         paginator = Paginator(conquistas, 12)  # 12 conquistas por página
         page_obj = paginator.get_page(page_number)
+
+        verificar_recompensas_por_nivel(request.user, perfil.level, request)
 
         context = {
             'segment': 'dashboard',

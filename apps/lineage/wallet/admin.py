@@ -7,6 +7,7 @@ from core.admin import BaseModelAdmin
 class WalletAdmin(BaseModelAdmin):
     list_display = ['usuario', 'saldo']
 
+
 @admin.register(TransacaoWallet)
 class TransacaoWalletAdmin(BaseModelAdmin):
     list_display = ['wallet', 'tipo', 'valor', 'descricao', 'data']

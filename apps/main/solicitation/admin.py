@@ -1,10 +1,6 @@
 from django.contrib import admin
 from core.admin import BaseModelAdmin
-from .models import (
-    Solicitation,
-    SolicitationHistory,
-    SolicitationParticipant,
-)
+from .models import *
 
 
 @admin.register(Solicitation)

@@ -186,3 +186,19 @@ class Recompensa(BaseModel):
 
     def __str__(self):
         return f"{self.get_tipo_display()} - {self.referencia} => {self.item_name} +{self.enchant} x{self.quantity}"
+    
+    @property
+    def referencia_como_inteiro(self):
+        try:
+            return int(self.referencia)
+        except (ValueError, TypeError):
+            return None
+
+
+class RecompensaRecebida(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recompensas_recebidas_games")
+    recompensa = models.ForeignKey(Recompensa, on_delete=models.CASCADE)
+    data = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'recompensa')

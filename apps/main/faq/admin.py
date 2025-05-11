@@ -4,7 +4,6 @@ from .models import FAQ, FAQTranslation
 from core.admin import BaseModelAdmin
 
 
-# Formulário do FAQ no Admin
 class FAQAdminForm(forms.ModelForm):
     class Meta:
         model = FAQ
@@ -16,16 +15,14 @@ class FAQAdminForm(forms.ModelForm):
         }
 
 
-# Formulário de tradução do FAQ
 class FAQTranslationInline(admin.TabularInline):
     model = FAQTranslation
-    extra = 1  # Define quantos formulários em branco aparecerão por padrão
+    extra = 1
     fields = ('language', 'question', 'answer')
     verbose_name = 'Tradução de FAQ'
     verbose_name_plural = 'Traduções de FAQ'
 
 
-# Admin da FAQ
 @admin.register(FAQ)
 class FAQAdmin(BaseModelAdmin):
     form = FAQAdminForm
@@ -33,5 +30,4 @@ class FAQAdmin(BaseModelAdmin):
     ordering = ('order',)
     list_filter = ('is_public',)
     search_fields = ('question',)
-    inlines = [FAQTranslationInline]  # Adicionando o Inline para as traduções
-
+    inlines = [FAQTranslationInline]
