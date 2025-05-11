@@ -16,10 +16,8 @@ LineageStats = get_query_class("LineageStats")  # carrega a classe certa com bas
 
 @conditional_otp_required
 def siege_ranking_view(request):
-
     db = LineageDB()
     if db.is_connected():
-
         castles = LineageStats.siege()
 
         for castle in castles:
@@ -34,11 +32,13 @@ def siege_ranking_view(request):
             castle["clan_name"] = castle["clan_name"] or _("No Owner")
             castle["char_name"] = castle["char_name"] or _("No Leader")
             castle["ally_name"] = castle["ally_name"] or _("No Alliance")
-            timestamp_s = castle["sdate"] / 1000
+
+            # CORREÇÃO AQUI: converte Decimal para float
+            timestamp_s = float(castle["sdate"]) / 1000
             castle["sdate"] = datetime.fromtimestamp(timestamp_s)
 
-            # adiciona as crests dos clans
-            castles = attach_crests_to_clans(castles)
+        # move para fora do loop para não sobrescrever a cada iteração
+        castles = attach_crests_to_clans(castles)
 
     else:
         castles = list()
@@ -74,6 +74,8 @@ def olympiad_current_heroes_view(request):
     db = LineageDB()
     result = LineageStats.olympiad_current_heroes() if db.is_connected() else []
     result = attach_crests_to_clans(result)
+    for player in result:
+        player['base'] = get_class_name(player['base'])
     return render(request, 'status/olympiad_current_heroes.html', {'current_heroes': result})
 
 

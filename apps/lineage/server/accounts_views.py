@@ -34,7 +34,8 @@ def account_dashboard(request):
         messages.warning(request, 'Não foi possível carregar seus personagens agora.')
 
     account = account_data[0]
-    account['status'] = "Ativa" if int(account['accessLevel']) >= 0 else "Bloqueada"
+    acesslevel = LineageAccount.get_acess_level()
+    account['status'] = "Ativa" if int(account[acesslevel]) >= 0 else "Bloqueada"
 
     # Formata data de criação
     created_time = None

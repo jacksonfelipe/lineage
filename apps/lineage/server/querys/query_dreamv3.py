@@ -435,6 +435,11 @@ class LineageAccount:
 
     @staticmethod
     @cache_lineage_result(timeout=300)
+    def get_acess_level():
+        return 'accessLevel'
+
+    @staticmethod
+    @cache_lineage_result(timeout=300)
     def ensure_columns():
         if LineageAccount._checked_columns:
             return
