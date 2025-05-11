@@ -128,3 +128,10 @@ class BoxItemHistoryAdmin(BaseModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return False
+
+
+@admin.register(Recompensa)
+class RecompensaAdmin(BaseModelAdmin):
+    list_display = ('tipo', 'referencia', 'item_name', 'quantity', 'enchant')
+    list_filter = ('tipo',)
+    search_fields = ('referencia', 'item_name')

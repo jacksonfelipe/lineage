@@ -1,5 +1,6 @@
 from apps.main.home.models import Conquista, ConquistaUsuario
 from .validators import VALIDADORES_CONQUISTAS
+from apps.lineage.games.utils import verificar_recompensas_por_conquista
 
 
 def verificar_conquistas(user, request=None):
@@ -12,5 +13,6 @@ def verificar_conquistas(user, request=None):
                 if conquista:
                     ConquistaUsuario.objects.create(usuario=user, conquista=conquista)
                     conquistas_ganhas.append(conquista)
+                    verificar_recompensas_por_conquista(user, conquista.codigo, request)
 
     return conquistas_ganhas

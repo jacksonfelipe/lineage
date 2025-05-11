@@ -164,3 +164,25 @@ class BoxItemHistory(BaseModel):
     class Meta:
         verbose_name = _("Box Item History")
         verbose_name_plural = _("Box Item Histories")
+
+
+class Recompensa(BaseModel):
+    TIPO_CHOICES = [
+        ('NIVEL', 'Por Nível'),
+        ('CONQUISTA', 'Por Conquista'),
+        ('CONQUISTAS_MULTIPLAS', 'Por Quantidade de Conquistas'),
+    ]
+
+    tipo = models.CharField(max_length=30, choices=TIPO_CHOICES, verbose_name=_("Tipo de Recompensa"))
+    referencia = models.CharField(max_length=100, verbose_name=_("Referência"))  # nível ou código conquista
+    item_id = models.IntegerField(verbose_name=_("Item ID"))
+    item_name = models.CharField(max_length=100, verbose_name=_("Item Name"))
+    enchant = models.IntegerField(default=0, verbose_name=_("Enchant"))
+    quantity = models.PositiveIntegerField(default=1, verbose_name=_("Quantidade"))
+
+    class Meta:
+        verbose_name = _("Recompensa")
+        verbose_name_plural = _("Recompensas")
+
+    def __str__(self):
+        return f"{self.get_tipo_display()} - {self.referencia} => {self.item_name} +{self.enchant} x{self.quantity}"

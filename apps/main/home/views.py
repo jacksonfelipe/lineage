@@ -46,6 +46,7 @@ from django_otp import login as otp_login
 import pyotp
 from .resource.twofa import gerar_qr_png
 from utils.services import verificar_conquistas
+from apps.lineage.games.utils import verificar_recompensas_por_nivel
 
 from utils.dynamic_import import get_query_class  # importa o helper
 LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
@@ -174,6 +175,8 @@ def index(request):
 
     # Buscar apoiadores ativos e aprovados
     apoiadores = Apoiador.objects.filter(ativo=True, status='aprovado')
+
+    verificar_recompensas_por_nivel(request.user, request.user.level, request)
 
     context = {
         'clanes': clanes,  # Passando os clãs com as imagens de crest
