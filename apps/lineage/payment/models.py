@@ -19,7 +19,7 @@ class PedidoPagamento(BaseModel):
             self.status = 'CONFIRMADO'
             self.save()
 
-            wallet, _ = Wallet.objects.get_or_create(usuario=self.usuario)
+            wallet, wallet_created = Wallet.objects.get_or_create(usuario=self.usuario)
 
             TransacaoWallet.objects.create(
                 wallet=wallet,
