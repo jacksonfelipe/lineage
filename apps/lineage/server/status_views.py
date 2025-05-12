@@ -2,7 +2,7 @@ from django.shortcuts import render
 from apps.main.home.decorator import conditional_otp_required
 from django.utils.translation import gettext as _
 
-import json, os, time, math
+import json, os, time
 from django.conf import settings
 
 from datetime import datetime, timedelta
@@ -135,18 +135,26 @@ def grandboss_status_view(request):
             gmt_offset = int(getattr(settings, 'GMT_OFFSET', 0))
             current_time = time.time()
 
-            # Verificar se o respawn_timestamp é válido
-            if isinstance(respawn_timestamp, (int, float)) and not math.isnan(respawn_timestamp) and respawn_timestamp > current_time:
-                try:
-                    respawn_datetime = datetime.fromtimestamp(respawn_timestamp) - timedelta(hours=gmt_offset)
-                    boss['respawn_human'] = respawn_datetime.strftime('%d/%m/%Y %H:%M')
-                    boss['status'] = "Morto"
-                except (OSError, OverflowError, ValueError) as e:
-                    boss['status'] = "Desconhecido"
-                    boss['respawn_human'] = f"Erro: {str(e)}"
+            # Validar tipo e converter se necessário
+            if isinstance(respawn_timestamp, (int, float)):
+                if respawn_timestamp > 1e12:
+                    # Está em milissegundos, converte para segundos
+                    respawn_timestamp /= 1000
+
+                if respawn_timestamp > current_time:
+                    try:
+                        respawn_datetime = datetime.fromtimestamp(respawn_timestamp) - timedelta(hours=gmt_offset)
+                        boss['respawn_human'] = respawn_datetime.strftime('%d/%m/%Y %H:%M')
+                        boss['status'] = "Morto"
+                    except (OSError, OverflowError, ValueError) as e:
+                        boss['status'] = "Desconhecido"
+                        boss['respawn_human'] = f"Erro: {str(e)}"
+                else:
+                    boss['status'] = "Vivo"
+                    boss['respawn_human'] = '-'
             else:
-                boss['status'] = "Vivo"
-                boss['respawn_human'] = '-'
+                boss['status'] = "Desconhecido"
+                boss['respawn_human'] = 'Timestamp inválido'
 
     else:
         grandboss_status = list()
