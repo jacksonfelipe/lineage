@@ -36,13 +36,11 @@ class CustomItemAdmin(BaseModelAdmin):
 
 @admin.register(InventoryLog)
 class InventoryLogAdmin(admin.ModelAdmin):
-    list_display = ('user', 'item_name', 'quantity', 'acao', 'origem', 'destino', 'timestamp')  # Corrigido 'quantidade' para 'quantity'
+    list_display = ('user', 'item_name', 'quantity', 'acao', 'origem', 'destino', 'timestamp')
     list_filter = ('acao', 'user', 'origem', 'destino', 'timestamp')
     search_fields = ('user__username', 'item_name', 'acao', 'origem', 'destino')
     ordering = ('-timestamp',)
     date_hierarchy = 'timestamp'
-
-    # Exibição de detalhes
     fields = ('user', 'inventory', 'item_id', 'item_name', 'enchant', 'quantity', 'acao', 'origem', 'destino', 'timestamp')
     readonly_fields = ('timestamp',)
 

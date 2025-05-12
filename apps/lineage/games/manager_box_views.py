@@ -51,7 +51,6 @@ def box_edit_view(request, pk):
 @staff_member_required
 def box_delete_view(request, pk):
     box = get_object_or_404(Box, pk=pk)
-    print(box.box_type.name)
     if request.method == 'POST':
         box.delete()
         return redirect(reverse('games:box_list'))

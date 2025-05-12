@@ -35,7 +35,6 @@ def relatorio_fluxo_caixa(request):
     saidas = [float(item['saida']) for item in relatorio]
     saldos = [float(item['saldo']) for item in relatorio]
 
-    # Inverter para mostrar da data mais antiga para a mais recente
     labels.reverse()
     entradas.reverse()
     saidas.reverse()

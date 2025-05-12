@@ -1,7 +1,8 @@
 from django import forms
-from apps.lineage.games.models import *
+from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.contrib.admin.widgets import FilteredSelectMultiple
+from apps.lineage.games.models import *
 
 
 class BoxTypeAdminForm(forms.ModelForm):
@@ -12,7 +13,7 @@ class BoxTypeAdminForm(forms.ModelForm):
     allowed_items = forms.ModelMultipleChoiceField(
         queryset=Item.objects.all(),
         required=False,
-        widget=FilteredSelectMultiple("Itens Permitidos", is_stacked=False)
+        widget=FilteredSelectMultiple(_("Itens Permitidos"), is_stacked=False)
     )
 
 
@@ -21,7 +22,7 @@ class BoxTypeForm(forms.ModelForm):
     allowed_items = forms.ModelMultipleChoiceField(
         queryset=Item.objects.all(),
         required=False,
-        widget=FilteredSelectMultiple("Itens Permitidos", is_stacked=False)
+        widget=FilteredSelectMultiple(_("Itens Permitidos"), is_stacked=False)
     )
 
     class Media:
@@ -29,7 +30,7 @@ class BoxTypeForm(forms.ModelForm):
             'all': ('/static/admin/css/widgets.css',),
         }
         js = ('/admin/jsi18n',)
-        
+
     class Meta:
         model = BoxType
         fields = [
@@ -54,19 +55,18 @@ class BoxTypeForm(forms.ModelForm):
             'chance_legendary': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1'}),
             'max_epic_items': forms.NumberInput(attrs={'class': 'form-control'}),
             'max_legendary_items': forms.NumberInput(attrs={'class': 'form-control'}),
-
         }
         labels = {
-            'name': 'Nome da Caixa',
-            'price': 'Preço (R$)',
-            'boosters_amount': 'Quantidade de Boosters',
-            'chance_common': 'Chance Comum (%)',
-            'chance_rare': 'Chance Rara (%)',
-            'chance_epic': 'Chance Épica (%)',
-            'chance_legendary': 'Chance Lendária (%)',
-            'max_epic_items': 'Máximo de Itens Épicos',
-            'max_legendary_items': 'Máximo de Itens Lendários',
-            'allowed_items': 'Itens Permitidos',
+            'name': _('Nome da Caixa'),
+            'price': _('Preço (R$)'),
+            'boosters_amount': _('Quantidade de Boosters'),
+            'chance_common': _('Chance Comum (%)'),
+            'chance_rare': _('Chance Rara (%)'),
+            'chance_epic': _('Chance Épica (%)'),
+            'chance_legendary': _('Chance Lendária (%)'),
+            'max_epic_items': _('Máximo de Itens Épicos'),
+            'max_legendary_items': _('Máximo de Itens Lendários'),
+            'allowed_items': _('Itens Permitidos'),
         }
 
     def clean(self):
@@ -78,7 +78,7 @@ class BoxTypeForm(forms.ModelForm):
 
         total_chance = chance_common + chance_rare + chance_epic + chance_legendary
         if total_chance != 100:
-            raise ValidationError("A soma das chances deve ser exatamente 100%. Soma atual: {}".format(total_chance))
+            raise ValidationError(_("A soma das chances deve ser exatamente 100%. Soma atual: {}").format(total_chance))
 
         return cleaned_data
 
@@ -92,8 +92,8 @@ class BoxForm(forms.ModelForm):
             'box_type': forms.Select(attrs={'class': 'form-control'}),
         }
         labels = {
-            'user': 'Usuário',
-            'box_type': 'Tipo de Caixa',
+            'user': _('Usuário'),
+            'box_type': _('Tipo de Caixa'),
         }
 
 
@@ -111,11 +111,11 @@ class ItemForm(forms.ModelForm):
             'can_be_populated': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
         labels = {
-            'name': 'Nome do Item',
-            'enchant': 'Enchant',
-            'item_id': 'ID do Item',
-            'image': 'Imagem',
-            'description': 'Descrição',
-            'rarity': 'Raridade',
-            'can_be_populated': 'Pode ser populado em caixas',
+            'name': _('Nome do Item'),
+            'enchant': _('Enchant'),
+            'item_id': _('ID do Item'),
+            'image': _('Imagem'),
+            'description': _('Descrição'),
+            'rarity': _('Raridade'),
+            'can_be_populated': _('Pode ser populado em caixas'),
         }

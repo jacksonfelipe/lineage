@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from apps.main.home.decorator import conditional_otp_required
 from django.contrib import messages
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from .models import Auction
 from apps.lineage.inventory.models import InventoryItem
 from .services import place_bid, finish_auction
@@ -27,7 +28,6 @@ LineageServices = get_query_class("LineageServices")
 def listar_leiloes(request):
     now = timezone.now()
 
-    # Atualizar leilões vencidos corretamente com lógica de negócio
     expired_auctions = Auction.objects.filter(
         status='pending',
         end_time__lte=now
@@ -39,25 +39,11 @@ def listar_leiloes(request):
         except Exception as e:
             print(f"Erro ao finalizar leilão {auction.id}: {e}")
 
-    # Separação correta
-    leiloes_ativos = Auction.objects.filter(
-        end_time__gt=now,
-        status='pending'
-    )
+    leiloes_ativos = Auction.objects.filter(end_time__gt=now, status='pending')
+    leiloes_finalizados = Auction.objects.filter(status='finished')
+    leiloes_cancelados = Auction.objects.filter(status='cancelled')
+    leiloes_pendentes_entrega = Auction.objects.filter(status='expired')
 
-    leiloes_finalizados = Auction.objects.filter(
-        status='finished'
-    )
-
-    leiloes_cancelados = Auction.objects.filter(
-        status='cancelled'
-    )
-
-    leiloes_pendentes_entrega = Auction.objects.filter(
-        status='expired'
-    )
-
-    # Paginação para cada tipo de leilão
     paginator_ativos = Paginator(leiloes_ativos, 6)
     paginator_finalizados = Paginator(leiloes_finalizados, 6)
     paginator_cancelados = Paginator(leiloes_cancelados, 6)
@@ -73,16 +59,12 @@ def listar_leiloes(request):
         leiloes_finalizados_paginated = paginator_finalizados.get_page(page_finalizados)
         leiloes_cancelados_paginated = paginator_cancelados.get_page(page_cancelados)
         leiloes_pendentes_entrega_paginated = paginator_pendentes_entrega.get_page(page_pendentes_entrega)
-
     except PageNotAnInteger:
-        # Se a página não for um número inteiro, mostrar a primeira página
         leiloes_ativos_paginated = paginator_ativos.get_page(1)
         leiloes_finalizados_paginated = paginator_finalizados.get_page(1)
         leiloes_cancelados_paginated = paginator_cancelados.get_page(1)
         leiloes_pendentes_entrega_paginated = paginator_pendentes_entrega.get_page(1)
-        
     except EmptyPage:
-        # Se a página não existir (por exemplo, página 0), mostrar a última página
         leiloes_ativos_paginated = paginator_ativos.get_page(paginator_ativos.num_pages)
         leiloes_finalizados_paginated = paginator_finalizados.get_page(paginator_finalizados.num_pages)
         leiloes_cancelados_paginated = paginator_cancelados.get_page(paginator_cancelados.num_pages)
@@ -103,59 +85,53 @@ def fazer_lance(request, auction_id):
     auction = get_object_or_404(Auction, id=auction_id)
 
     if request.method == 'POST':
-        bid_amount_str = request.POST.get('bid_amount', '').strip()  # Garantir que não haja espaços extras
-        character_name = request.POST.get('character_name', '').strip()  # Captura o nome do personagem
+        bid_amount_str = request.POST.get('bid_amount', '').strip()
+        character_name = request.POST.get('character_name', '').strip()
 
         if not bid_amount_str:
-            messages.error(request, 'Você precisa informar um valor para o lance.')
+            messages.error(request, _('Você precisa informar um valor para o lance.'))
             return redirect('auction:fazer_lance', auction_id=auction.id)
 
         if not character_name:
-            messages.error(request, 'Você precisa informar o nome do personagem.')
+            messages.error(request, _('Você precisa informar o nome do personagem.'))
             return redirect('auction:fazer_lance', auction_id=auction.id)
         
-        # Verificar se o personagem existe no inventário do usuário
         if not Inventory.objects.filter(user=request.user, character_name=character_name).exists():
-            messages.error(request, 'Este personagem não pertence a você.')
+            messages.error(request, _('Este personagem não pertence a você.'))
             return redirect('auction:fazer_lance', auction_id=auction.id)
 
         try:
-            # Remover vírgulas se houver
             bid_amount_str = bid_amount_str.replace(',', '.')
-            bid_amount = Decimal(bid_amount_str)  # Tenta converter para decimal
+            bid_amount = Decimal(bid_amount_str)
 
-            # Garantir que current_bid nunca seja None
             current_bid = auction.current_bid if auction.current_bid is not None else auction.starting_bid
 
-            # Verifica se o valor é válido e maior que o lance atual
             if bid_amount <= current_bid:
-                messages.error(request, f'O lance precisa ser maior que o lance atual ({current_bid}).')
+                messages.error(request, _(f'O lance precisa ser maior que o lance atual ({current_bid}).'))
                 return redirect('auction:fazer_lance', auction_id=auction.id)
 
             with transaction.atomic():
-                # Coloca o lance
                 place_bid(auction, request.user, bid_amount, character_name)
 
             perfil = PerfilGamer.objects.get(user=request.user)
             perfil.adicionar_xp(40)
             verificar_conquistas(request.user, request=request)
 
-            messages.success(request, 'Lance efetuado com sucesso!')
+            messages.success(request, _('Lance efetuado com sucesso!'))
             return redirect('auction:listar_leiloes')
 
         except (ValueError, InvalidOperation) as e:
-            messages.error(request, f'Valor de lance inválido. Erro: {str(e)}')
+            messages.error(request, _(f'Valor de lance inválido. Erro: {str(e)}'))
             return redirect('auction:fazer_lance', auction_id=auction.id)
 
         except Exception as e:
-            messages.error(request, f'Ocorreu um erro ao realizar o lance: {str(e)}')
+            messages.error(request, _(f'Ocorreu um erro ao realizar o lance: {str(e)}'))
             return redirect('auction:fazer_lance', auction_id=auction.id)
         
-    # Lista os personagens da conta
     try:
         personagens = LineageServices.find_chars(request.user.username)
     except:
-        messages.warning(request, 'Não foi possível carregar seus personagens agora.')
+        messages.warning(request, _('Não foi possível carregar seus personagens agora.'))
 
     return render(request, 'auction/fazer_lance.html', {'auction': auction, 'personagens': personagens})
 
@@ -192,12 +168,12 @@ def criar_leilao(request):
             with transaction.atomic():
                 item = InventoryItem.objects.get(inventory=inventory, item_id=item_id)
                 if item.quantity < quantity:
-                    messages.error(request, 'Quantidade insuficiente no inventário.')
+                    messages.error(request, _('Quantidade insuficiente no inventário.'))
                     return redirect('auction:criar_leilao')
 
                 item_name = item.item_name
-
                 item.quantity -= quantity
+
                 if item.quantity == 0:
                     item.delete()
                 else:
@@ -211,22 +187,22 @@ def criar_leilao(request):
                     seller=request.user,
                     starting_bid=starting_bid,
                     end_time=timezone.now() + timedelta(hours=duration_hours),
-                    character_name = character_name
+                    character_name=character_name
                 )
 
             perfil = PerfilGamer.objects.get(user=request.user)
             perfil.adicionar_xp(40)
             verificar_conquistas(request.user, request=request)
 
-            messages.success(request, 'Leilão criado com sucesso!')
+            messages.success(request, _('Leilão criado com sucesso!'))
             return redirect('auction:listar_leiloes')
 
         except InventoryItem.DoesNotExist:
-            messages.error(request, 'Item não encontrado no inventário.')
+            messages.error(request, _('Item não encontrado no inventário.'))
             return redirect('auction:criar_leilao')
 
         except Exception as e:
-            messages.error(request, f'Ocorreu um erro ao criar o leilão: {str(e)}')
+            messages.error(request, _(f'Ocorreu um erro ao criar o leilão: {str(e)}'))
 
     context = {
         'inventories': inventories,
@@ -240,14 +216,14 @@ def encerrar_leilao(request, auction_id):
     auction = get_object_or_404(Auction, id=auction_id)
 
     if request.user != auction.seller:
-        messages.error(request, 'Você não tem permissão para encerrar este leilão.')
+        messages.error(request, _('Você não tem permissão para encerrar este leilão.'))
         return redirect('auction:listar_leiloes')
 
     try:
         finish_auction(auction)
-        messages.success(request, 'Leilão encerrado com sucesso.')
+        messages.success(request, _('Leilão encerrado com sucesso.'))
     except ValueError as e:
-        messages.error(request, str(e))
+        messages.error(request, _(str(e)))
 
     return redirect('auction:listar_leiloes')
 
@@ -257,27 +233,25 @@ def cancelar_leilao(request, auction_id):
     auction = get_object_or_404(Auction, id=auction_id)
 
     if request.user != auction.seller:
-        messages.error(request, 'Você não tem permissão para cancelar este leilão.')
+        messages.error(request, _('Você não tem permissão para cancelar este leilão.'))
         return redirect('auction:listar_leiloes')
 
     if auction.end_time <= timezone.now():
-        messages.error(request, 'Não é possível cancelar um leilão que já terminou.')
+        messages.error(request, _('Não é possível cancelar um leilão que já terminou.'))
         return redirect('auction:listar_leiloes')
 
     try:
         with transaction.atomic():
-            # Devolver os valores dos lances para os usuários
             for bid in auction.bids.all():
                 seller_wallet, _ = Wallet.objects.get_or_create(usuario=bid.bidder)
                 aplicar_transacao(
                     seller_wallet,
                     'ENTRADA',
                     bid.amount,
-                    f"Devolução do leilão #{auction.id}",
+                    _(f"Devolução do leilão #{auction.id}"),
                     origem=str(auction.highest_bidder)
                 )
 
-            # Devolver os itens ao vendedor
             inventory, _ = Inventory.objects.get_or_create(
                 user=request.user,
                 character_name=auction.character_name
@@ -295,13 +269,12 @@ def cancelar_leilao(request, auction_id):
                 item.quantity += auction.quantity
                 item.save()
 
-            # Atualizar o status do leilão para "cancelado"
             auction.status = 'cancelled'
             auction.save()
 
-            messages.success(request, 'Leilão cancelado e recursos devolvidos com sucesso.')
+            messages.success(request, _('Leilão cancelado e recursos devolvidos com sucesso.'))
 
     except Exception as e:
-        messages.error(request, f'Ocorreu um erro ao cancelar o leilão: {str(e)}')
+        messages.error(request, _(f'Ocorreu um erro ao cancelar o leilão: {str(e)}'))
 
     return redirect('auction:listar_leiloes')

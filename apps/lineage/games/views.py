@@ -13,16 +13,17 @@ from .services.box_opening import open_box
 from .services.box_populate import populate_box_with_items
 from django.db import transaction
 from django.db.models import Count, Q
+from django.utils.translation import gettext_lazy as _
 
 
 @conditional_otp_required
 def spin_ajax(request):
     if request.user.fichas <= 0:
-        return JsonResponse({'error': 'Você não tem fichas suficientes.'}, status=400)
+        return JsonResponse({'error': _('Você não tem fichas suficientes.')}, status=400)
 
     prizes = list(Prize.objects.all())
     if not prizes:
-        return JsonResponse({'error': 'Nenhum prêmio disponível.'}, status=400)
+        return JsonResponse({'error': _('Nenhum prêmio disponível.')}, status=400)
 
     # Adicione a opção de falha
     fail_chance = 20  # Representa 20% de chance de falhar
@@ -39,7 +40,7 @@ def spin_ajax(request):
     request.user.save()
 
     if chosen is None:
-        return JsonResponse({'fail': True, 'message': 'Você não ganhou nenhum prêmio.'})
+        return JsonResponse({'fail': True, 'message': _('Você não ganhou nenhum prêmio.')})
 
     SpinHistory.objects.create(user=request.user, prize=chosen)
 
@@ -108,7 +109,7 @@ def comprar_fichas(request):
                 wallet=wallet,
                 tipo='SAIDA',
                 valor=total,
-                descricao=f'Compra de {quantidade} ficha(s)',
+                descricao=f'{quantidade} ficha(s) comprada(s)',
                 origem='Wallet',
                 destino='Sistema de Fichas'
             )
@@ -153,16 +154,16 @@ def open_box_view(request, box_id):
     try:
         box = Box.objects.get(id=box_id)
     except Box.DoesNotExist:
-        messages.warning(request, "Esta caixa não existe. Você pode comprá-la abaixo.")
+        messages.warning(request, _("Esta caixa não existe. Você pode comprá-la abaixo."))
         return redirect('games:box_user_dashboard')  # Dashboard com todas as BoxType
 
     if box.user != request.user:
-        messages.warning(request, "Essa caixa não pertence a você. Compre uma nova do mesmo tipo.")
+        messages.warning(request, _("Essa caixa não pertence a você. Compre uma nova do mesmo tipo."))
         return redirect('games:box_user_dashboard')
 
     # Verificar se o usuário possui fichas suficientes
     if request.user.fichas <= 0:
-        messages.warning(request, "Você não tem fichas suficientes para abrir a caixa.")
+        messages.warning(request, _("Você não tem fichas suficientes para abrir a caixa."))
         return redirect('games:box_user_dashboard')
 
     # Deduzir uma ficha do saldo
@@ -184,17 +185,17 @@ def buy_and_open_box_view(request, box_type_id):
     try:
         box_type = BoxType.objects.get(id=box_type_id)
     except BoxType.DoesNotExist:
-        messages.error(request, "Tipo de caixa não encontrado.")
+        messages.error(request, _("Tipo de caixa não encontrado."))
         return redirect('games:box_user_dashboard')
 
     # Verificar se há itens cadastrados no banco de dados
     if not Item.objects.exists():
-        messages.error(request, "Não há itens cadastrados para abrir caixas.")
+        messages.error(request, _("Não há itens cadastrados para abrir caixas."))
         return redirect('games:box_user_dashboard')
 
     # Verificar se o tipo de caixa tem itens disponíveis para a raridade que ele define
     if not box_type.boosters_amount:
-        messages.error(request, "Essa caixa não contém itens disponíveis para a abertura.")
+        messages.error(request, _("Essa caixa não contém itens disponíveis para a abertura."))
         return redirect('games:box_user_dashboard')
 
     # Verificar se o usuário tem saldo suficiente para comprar a caixa
@@ -203,7 +204,7 @@ def buy_and_open_box_view(request, box_type_id):
     wallet = Wallet.objects.get(usuario=request.user)
 
     if wallet.saldo < total:
-        messages.error(request, "Saldo insuficiente para comprar a caixa.")
+        messages.error(request, _("Saldo insuficiente para comprar a caixa."))
         return redirect('games:box_user_dashboard')
 
     # Aplicar a transação de saída da carteira para o sistema de caixas
@@ -222,7 +223,7 @@ def buy_and_open_box_view(request, box_type_id):
         return redirect('games:box_user_open_box', box_id=box.id)
 
     except ValueError as e:
-        messages.error(request, f"Erro na transação: {str(e)}")
+        messages.error(request, _("Erro na transação: ") + str(e))
         return redirect('games:box_user_dashboard')
 
 
@@ -257,7 +258,7 @@ def transferir_item_bag(request):
         try:
             bag_item = BagItem.objects.get(bag=bag, item_id=item_id, enchant=enchant)
             if bag_item.quantity < quantity:
-                messages.error(request, 'Quantidade insuficiente na Bag.')
+                messages.error(request, _('Quantidade insuficiente na Bag.'))
                 return redirect('games:bag_dashboard')
 
             inventario_destino = get_object_or_404(Inventory, character_name=character_name_destino)
@@ -293,9 +294,9 @@ def transferir_item_bag(request):
                 destino=character_name_destino
             )
 
-            messages.success(request, 'Item transferido com sucesso.')
+            messages.success(request, _('Item transferido com sucesso.'))
         except BagItem.DoesNotExist:
-            messages.error(request, 'Item não encontrado na Bag.')
+            messages.error(request, _('Item não encontrado na Bag.'))
         return redirect('games:bag_dashboard')
 
 
@@ -318,7 +319,6 @@ def esvaziar_bag_para_inventario(request):
                 inventory_item.quantity += bag_item.quantity
                 inventory_item.save()
 
-            # Log opcional
             InventoryLog.objects.create(
                 user=request.user,
                 inventory=inventario_destino,
@@ -331,7 +331,6 @@ def esvaziar_bag_para_inventario(request):
                 destino=character_name_destino
             )
 
-        # Apagar tudo da bag
         bag.items.all().delete()
-        messages.success(request, 'Todos os itens foram transferidos para o inventário.')
+        messages.success(request, _('Todos os itens foram transferidos para o inventário.'))
         return redirect('games:bag_dashboard')

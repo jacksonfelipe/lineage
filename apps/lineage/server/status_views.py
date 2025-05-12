@@ -2,7 +2,7 @@ from django.shortcuts import render
 from apps.main.home.decorator import conditional_otp_required
 from django.utils.translation import gettext as _
 
-import json, os, time
+import json, os, time, math
 from django.conf import settings
 
 from datetime import datetime, timedelta
@@ -131,21 +131,22 @@ def grandboss_status_view(request):
             boss['name'] = boss_info['name']
             boss['level'] = boss_info['level']
 
-            # Ajuste no fuso horário (considerando o GMT)
-            respawn_timestamp = boss['respawn']
-            gmt_offset = int(settings.GMT_OFFSET)  # Certifique-se de que o GMT_OFFSET está configurado corretamente no settings
+            respawn_timestamp = boss.get('respawn')
+            gmt_offset = int(getattr(settings, 'GMT_OFFSET', 0))
             current_time = time.time()
 
-            # Verificar se o boss está vivo ou morto
-            if respawn_timestamp > current_time:
-                respawn_datetime = datetime.fromtimestamp(respawn_timestamp) - timedelta(hours=gmt_offset)
-                respawn_human = respawn_datetime.strftime('%d/%m/%Y %H:%M')
-                # Humanizar o tempo de respawn
-                boss['respawn_human'] = respawn_human
-                boss['status'] = "Morto"
+            # Verificar se o respawn_timestamp é válido
+            if isinstance(respawn_timestamp, (int, float)) and not math.isnan(respawn_timestamp) and respawn_timestamp > current_time:
+                try:
+                    respawn_datetime = datetime.fromtimestamp(respawn_timestamp) - timedelta(hours=gmt_offset)
+                    boss['respawn_human'] = respawn_datetime.strftime('%d/%m/%Y %H:%M')
+                    boss['status'] = "Morto"
+                except (OSError, OverflowError, ValueError) as e:
+                    boss['status'] = "Desconhecido"
+                    boss['respawn_human'] = f"Erro: {str(e)}"
             else:
                 boss['status'] = "Vivo"
-                boss['respawn_human'] = '-'  # Quando vivo, o respawn é '-'
+                boss['respawn_human'] = '-'
 
     else:
         grandboss_status = list()

@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.utils.translation import gettext as _
 from .models import Bid
 from apps.lineage.wallet.models import Wallet
 from apps.lineage.wallet.signals import aplicar_transacao
@@ -9,21 +10,21 @@ from apps.lineage.auction.models import Auction
 @transaction.atomic
 def place_bid(auction, bidder, bid_amount, character_name):
     if auction.seller == bidder:
-        raise ValueError("Você não pode dar lances no seu próprio leilão.")
-    
+        raise ValueError(_("Você não pode dar lances no seu próprio leilão."))
+
     if not auction.is_active:
-        raise ValueError("Leilão encerrado.")
+        raise ValueError(_("Leilão encerrado."))
 
     if bid_amount <= auction.starting_bid:
-        raise ValueError("O lance deve ser maior que o valor inicial.")
+        raise ValueError(_("O lance deve ser maior que o valor inicial."))
 
     if auction.current_bid and bid_amount <= auction.current_bid:
-        raise ValueError("O lance deve ser maior que o lance atual.")
+        raise ValueError(_("O lance deve ser maior que o lance atual."))
 
     wallet, _ = Wallet.objects.get_or_create(usuario=bidder)
 
     if wallet.saldo < bid_amount:
-        raise ValueError("Saldo insuficiente.")
+        raise ValueError(_("Saldo insuficiente."))
 
     # Devolve o valor do último lance ao último usuário
     if auction.highest_bidder:
@@ -36,8 +37,8 @@ def place_bid(auction, bidder, bid_amount, character_name):
             old_wallet,
             'ENTRADA',
             auction.current_bid,
-            f"Devolução de lance no leilão #{auction.id}",
-            origem="Leilão"
+            _("Devolução de lance no leilão #%d") % auction.id,
+            origem=_("Leilão")
         )
 
     # Desconta o valor do novo lance
@@ -45,7 +46,7 @@ def place_bid(auction, bidder, bid_amount, character_name):
         wallet,
         'SAIDA',
         bid_amount,
-        f"Lance no leilão #{auction.id}",
+        _("Lance no leilão #%d") % auction.id,
         destino=str(auction.seller)
     )
 
@@ -64,7 +65,7 @@ def place_bid(auction, bidder, bid_amount, character_name):
 @transaction.atomic
 def finish_auction(auction: Auction):
     if auction.is_active():
-        raise ValueError("Leilão ainda está ativo.")
+        raise ValueError(_("Leilão ainda está ativo."))
 
     if auction.highest_bidder:
         # Transfere o dinheiro para o vendedor
@@ -73,14 +74,14 @@ def finish_auction(auction: Auction):
             seller_wallet,
             'ENTRADA',
             auction.current_bid,
-            f"Venda no leilão #{auction.id}",
+            _("Venda no leilão #%d") % auction.id,
             origem=str(auction.highest_bidder)
         )
 
         # Entrega o item ao comprador
         winning_bid = auction.bids.order_by('-amount', '-created_at').first()
         if not winning_bid:
-            raise ValueError("Não foi possível determinar o lance vencedor.")
+            raise ValueError(_("Não foi possível determinar o lance vencedor."))
 
         dest_inventory = Inventory.objects.get(
             user=auction.highest_bidder,

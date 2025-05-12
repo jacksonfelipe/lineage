@@ -1,6 +1,7 @@
 from .models import *
 from apps.main.home.models import ConquistaUsuario
 from django.contrib import messages
+from django.utils.translation import gettext as _
 
 
 def entregar_item_para_bag(user, item_id, item_name, quantity=1, enchant=0, request=None):
@@ -18,7 +19,11 @@ def entregar_item_para_bag(user, item_id, item_name, quantity=1, enchant=0, requ
     if request:
         messages.success(
             request,
-            f"🎁 Você recebeu: {item_name} +{enchant} x{quantity}!"
+            _("🎁 Você recebeu: {item} +{enchant} x{qty}!").format(
+                item=item_name,
+                enchant=enchant,
+                qty=quantity
+            )
         )
 
 
@@ -32,9 +37,8 @@ def registrar_recompensa_recebida(user, recompensa):
 
 def verificar_recompensas_por_nivel(user, level, request=None):
     recompensas = Recompensa.objects.filter(tipo__iexact='NIVEL')
-    
+
     for recompensa in recompensas:
-        nivel_recompensa = None
         try:
             nivel_recompensa = int(recompensa.referencia)
         except (ValueError, TypeError):
@@ -53,20 +57,16 @@ def verificar_recompensas_por_nivel(user, level, request=None):
 
 
 def verificar_recompensas_por_conquista(user, codigo_conquista, request=None):
-    # Verifica se o usuário possui a conquista (1 query)
     if not ConquistaUsuario.objects.filter(usuario=user, conquista__codigo=codigo_conquista).exists():
         return
 
-    # Puxa todas recompensas já recebidas por esse usuário (1 query)
     recompensas_recebidas_ids = set(
         RecompensaRecebida.objects.filter(user=user).values_list('recompensa_id', flat=True)
     )
 
-    # 🎁 Pega todas recompensas do tipo 'CONQUISTA' com essa referência (1 query)
     recompensas = Recompensa.objects.filter(tipo='CONQUISTA', referencia=codigo_conquista)
 
     for recompensa in recompensas:
-        # Verifica se o usuário já recebeu essa recompensa
         if recompensa.id not in recompensas_recebidas_ids:
             entregar_item_para_bag(
                 user,
@@ -78,18 +78,15 @@ def verificar_recompensas_por_conquista(user, codigo_conquista, request=None):
             )
             registrar_recompensa_recebida(user, recompensa)
 
-    # 🎖️ Verifica as recompensas por quantidade de conquistas
-    total_conquistas = ConquistaUsuario.objects.filter(usuario=user).count()  # 1 query
+    total_conquistas = ConquistaUsuario.objects.filter(usuario=user).count()
     recompensas_qtd = Recompensa.objects.filter(tipo='CONQUISTAS_MULTIPLAS')
 
     for recompensa in recompensas_qtd:
         try:
-            # Tenta pegar o número de conquistas necessárias na referência da recompensa
             numero_conquistas_referencia = int(recompensa.referencia)
         except (ValueError, TypeError):
             continue
 
-        # Verifica se o número de conquistas do usuário é suficiente para a recompensa
         if total_conquistas >= numero_conquistas_referencia and recompensa.id not in recompensas_recebidas_ids:
             entregar_item_para_bag(
                 user,
