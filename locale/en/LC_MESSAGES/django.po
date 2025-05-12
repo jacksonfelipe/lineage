@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-09 23:04-0300\n"
+"POT-Creation-Date: 2025-05-12 14:31-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgid "Dashboard Contábil"
 msgstr "Dashboard accounting"
 
 msgid "Saldo de Usuários"
-msgstr "BALANCE OF USERS"
+msgstr "Balance of Users"
 
 msgid "Ver Relatório"
 msgstr "See report"
@@ -52,13 +52,13 @@ msgid "Saídas"
 msgstr "Exits"
 
 msgid "Saldo do Dia"
-msgstr "BALANCE OF THE DAY"
+msgstr "Balance of the Day"
 
 msgid "Voltar para o Dashboard"
 msgstr "Back to Dashboard"
 
 msgid "Relatório de Pedidos e Pagamentos"
-msgstr "REPORT OF ORDERS AND PAYMENTS"
+msgstr "Report of Orders and Payments"
 
 msgid "ID Pedido"
 msgstr "ID Request"
@@ -159,6 +159,50 @@ msgstr "Bid"
 msgid "Bids"
 msgstr "Bids"
 
+msgid "Você não pode dar lances no seu próprio leilão."
+msgstr "You cannot bid in your own auction."
+
+msgid "Leilão encerrado."
+msgstr "Auction closed."
+
+msgid "O lance deve ser maior que o valor inicial."
+msgstr "The bid must be greater than the initial value."
+
+msgid "O lance deve ser maior que o lance atual."
+msgstr "The bid must be greater than the current bid."
+
+msgid "Saldo insuficiente."
+msgstr "Insufficient balance"
+
+#, python-format
+msgid "Devolução de lance no leilão #%d"
+msgstr "Bid Return on Auction #%d"
+
+msgid "Leilão"
+msgstr "Auction"
+
+#, python-format
+msgid "Lance no leilão #%d"
+msgstr "Bid in the auction #%d"
+
+msgid "Leilão ainda está ativo."
+msgstr "Auction is still active."
+
+#, python-format
+msgid "Venda no leilão #%d"
+msgstr "Sale in Auction #%d"
+
+msgid "Não foi possível determinar o lance vencedor."
+msgstr "It was not possible to determine the winning bid."
+
+#, python-format
+msgid "Erro ao encerrar leilão %(id)s: %(erro)s"
+msgstr "Error when auctioning %(id)s: %(erro)s"
+
+#, python-format
+msgid "%(qtd)d leilões encerrados automaticamente."
+msgstr "%(qtd)d Auctions automatically closed."
+
 msgid "Criar Leilão"
 msgstr "Auction"
 
@@ -178,7 +222,7 @@ msgid "Quantidade"
 msgstr "Amount"
 
 msgid "Lance Inicial (R$)"
-msgstr "Initial bid (R $)"
+msgstr "Initial bid ($)"
 
 msgid "Duração (horas)"
 msgstr "Duration (hours)"
@@ -252,6 +296,102 @@ msgstr "Finish"
 msgid "Finalizar Entrega"
 msgstr "Finish delivery"
 
+msgid "Você precisa informar um valor para o lance."
+msgstr "You need to enter a value for the bid."
+
+msgid "Você precisa informar o nome do personagem."
+msgstr "You need to inform the name of the character."
+
+msgid "Este personagem não pertence a você."
+msgstr "This character does not belong to you."
+
+msgid "Lance efetuado com sucesso!"
+msgstr "Bid made successfully!"
+
+msgid "Não foi possível carregar seus personagens agora."
+msgstr "It was not possible to carry your characters now."
+
+msgid "Quantidade insuficiente no inventário."
+msgstr "Insufficient amount in inventory."
+
+msgid "Leilão criado com sucesso!"
+msgstr "Auction created successfully!"
+
+msgid "Item não encontrado no inventário."
+msgstr "Item not found in the inventory."
+
+msgid "Você não tem permissão para encerrar este leilão."
+msgstr "You are not allowed to end this auction."
+
+msgid "Leilão encerrado com sucesso."
+msgstr "Auctioned auction successfully."
+
+msgid "Você não tem permissão para cancelar este leilão."
+msgstr "You are not allowed to cancel this auction."
+
+msgid "Não é possível cancelar um leilão que já terminou."
+msgstr "It is not possible to cancel a auction that is over."
+
+msgid "Leilão cancelado e recursos devolvidos com sucesso."
+msgstr "Canceled auction and successful returned features."
+
+msgid "Itens Permitidos"
+msgstr "Allowed items"
+
+msgid "Nome da Caixa"
+msgstr "Cashier"
+
+msgid "Preço (R$)"
+msgstr "Price ($)"
+
+msgid "Quantidade de Boosters"
+msgstr "BOOOSTERS"
+
+msgid "Chance Comum (%)"
+msgstr "Common Chance (%)"
+
+msgid "Chance Rara (%)"
+msgstr "Rare Chance (%)"
+
+msgid "Chance Épica (%)"
+msgstr "Epic chance (%)"
+
+msgid "Chance Lendária (%)"
+msgstr "Legendary chance (%)"
+
+msgid "Máximo de Itens Épicos"
+msgstr "Maximum epic items"
+
+msgid "Máximo de Itens Lendários"
+msgstr "Maximum legendary items"
+
+msgid "A soma das chances deve ser exatamente 100%. Soma atual: {}"
+msgstr "The sum of the chances should be exactly 100%. Current sum: {}"
+
+msgid "Tipo de Caixa"
+msgstr "Cash type"
+
+msgid "Nome do Item"
+msgstr "Item name"
+
+msgid "Enchant"
+msgstr "Enchant"
+
+msgid "ID do Item"
+msgstr "ID do Item"
+
+msgid "Imagem"
+msgstr "Image"
+
+msgid "Descrição"
+msgstr "Description"
+
+msgid "Raridade"
+msgstr "Rarity"
+
+msgid "Pode ser populado em caixas"
+msgstr "Can be populated in boxes"
+
 msgid "Prize Name"
 msgstr "Prize Name"
 
@@ -303,6 +443,9 @@ msgstr "Bag Items"
 msgid "Description"
 msgstr "Description"
 
+msgid "Can Be Populated"
+msgstr "Can Be Populated"
+
 msgid "Items"
 msgstr "Items"
 
@@ -326,6 +469,12 @@ msgstr "Chance of Epic"
 
 msgid "Chance of Legendary"
 msgstr "Chance of Legendary"
+
+msgid "Max Epic Items"
+msgstr "Max Epic Items"
+
+msgid "Max Legendary Items"
+msgstr "Max Legendary Items"
 
 msgid "Box Type"
 msgstr "Box Type"
@@ -360,6 +509,18 @@ msgstr "Box Item History"
 msgid "Box Item Histories"
 msgstr "Box Item Histories"
 
+msgid "Tipo de Recompensa"
+msgstr "Type of reward"
+
+msgid "Referência"
+msgstr "Reference"
+
+msgid "Recompensa"
+msgstr "Reward"
+
+msgid "Recompensas"
+msgstr "Rewards"
+
 msgid "Tipos de Caixa Disponíveis"
 msgstr "Available cash types"
 
@@ -385,16 +546,16 @@ msgid "Lendária"
 msgstr "Legendary"
 
 msgid "Caixa já comprada!"
-msgstr "Cashier already bought!"
+msgstr "Box already bought!"
 
 msgid "Boosters restantes"
 msgstr "Boosters restantes"
 
 msgid "Abrir Caixa"
-msgstr "Cashier"
+msgstr "Open Box"
 
 msgid "Comprar e Abrir Caixa"
-msgstr "Buy and open cashier"
+msgstr "Buy and open box"
 
 msgid "Ver Itens"
 msgstr "See items"
@@ -411,9 +572,8 @@ msgstr "Are you sure you want to buy and open this box?"
 msgid "Comprar Fichas"
 msgstr "Buy chips"
 
-msgid ""
-"Escolha a quantidade de fichas que deseja comprar. Valor: R$0,10 por ficha."
-msgstr "Choose the amount of chips you want to buy. VALUE: R $ 0.10 per file."
+msgid "Escolha a quantidade de fichas que deseja comprar. Valor: R$0,10 por ficha."
+msgstr "Choose the amount of chips you want to buy. VALUE: $ 0.10 per file."
 
 msgid "Itens da Caixa, que podem vir!"
 msgstr "Box items that can come!"
@@ -542,15 +702,6 @@ msgstr "Are you sure you want to delete <strong>%(item.name)s s </strong>?"
 msgid "Novo"
 msgstr "Novo"
 
-msgid "Imagem"
-msgstr "Image"
-
-msgid "Enchant"
-msgstr "Enchant"
-
-msgid "Raridade"
-msgstr "Rarity"
-
 msgid "Nenhum item encontrado."
 msgstr "No item found."
 
@@ -598,6 +749,55 @@ msgstr "No item in the bag."
 
 msgid "Você ainda não possui uma bag."
 msgstr "You don't have a bag yet."
+
+#, python-brace-format
+msgid "🎁 Você recebeu: {item} +{enchant} x{qty}!"
+msgstr "🎁 You received: {item} +{enchant} x {qty}!"
+
+msgid "Você não tem fichas suficientes."
+msgstr "You don't have enough chips."
+
+msgid "Nenhum prêmio disponível."
+msgstr "No prize available."
+
+msgid "Você não ganhou nenhum prêmio."
+msgstr "You have not won any prize."
+
+msgid "Esta caixa não existe. Você pode comprá-la abaixo."
+msgstr "This box does not exist. You can buy it below."
+
+msgid "Essa caixa não pertence a você. Compre uma nova do mesmo tipo."
+msgstr "This box does not belong to you. Buy a new one of the same type."
+
+msgid "Você não tem fichas suficientes para abrir a caixa."
+msgstr "You don't have enough chips to open the box."
+
+msgid "Tipo de caixa não encontrado."
+msgstr "Cash type not found."
+
+msgid "Não há itens cadastrados para abrir caixas."
+msgstr "There are no registered items to open boxes."
+
+msgid "Essa caixa não contém itens disponíveis para a abertura."
+msgstr "This box does not contain items available for the opening."
+
+msgid "Saldo insuficiente para comprar a caixa."
+msgstr "Insufficient balance to buy the box."
+
+msgid "Erro na transação: "
+msgstr "Transaction error:"
+
+msgid "Quantidade insuficiente na Bag."
+msgstr "Insufficient amount in the bag."
+
+msgid "Item transferido com sucesso."
+msgstr "Item successfully transferred."
+
+msgid "Item não encontrado na Bag."
+msgstr "Item not found in the bag."
+
+msgid "Todos os itens foram transferidos para o inventário."
+msgstr "All items were transferred to the inventory."
 
 msgid "Account Name"
 msgstr "Account Name"
@@ -888,7 +1088,7 @@ msgid "Comprar Moedas"
 msgstr "Coins"
 
 msgid "Valor em Reais (R$)"
-msgstr "Value in reais (R $)"
+msgstr "Value in reais ($)"
 
 msgid "Digite o valor que deseja comprar"
 msgstr "Enter the value you want to buy"
@@ -908,11 +1108,8 @@ msgstr "Generate order"
 msgid "Pagamento Recusado ou Falhou"
 msgstr "Refused or failed payment"
 
-msgid ""
-"Algo deu errado com o processamento do seu pagamento. Você pode tentar "
-"novamente."
-msgstr ""
-"Something went wrong with the processing of your payment. You can try again."
+msgid "Algo deu errado com o processamento do seu pagamento. Você pode tentar novamente."
+msgstr "Something went wrong with the processing of your payment. You can try again."
 
 msgid "Ver Pedidos Pendentes"
 msgstr "See pending orders"
@@ -1247,12 +1444,8 @@ msgstr "Commission from"
 msgid "Preço do serviço não configurado."
 msgstr "Service price not configured."
 
-msgid ""
-"Nickname inválido. Use de 2 a 16 caracteres latinos ou de 3 a 16 caracteres "
-"cirílicos."
-msgstr ""
-"Invalid Nickname. Use 2 to 16 Latin characters or 3 to 16 Cyrillic "
-"characters."
+msgid "Nickname inválido. Use de 2 a 16 caracteres latinos ou de 3 a 16 caracteres cirílicos."
+msgstr "Invalid Nickname. Use 2 to 16 Latin characters or 3 to 16 Cyrillic characters."
 
 msgid "Saldo insuficiente na carteira."
 msgstr "Insufficient balance in the wallet."
@@ -1308,12 +1501,8 @@ msgstr "Expired support"
 msgid "Seu cupom de apoiador expirou."
 msgstr "His supporter coupon expired."
 
-msgid ""
-"Para continuar como apoiador e receber um novo cupom de desconto, você pode "
-"reenviar sua solicitação agora mesmo."
-msgstr ""
-"To continue as a supporter and receive a new discount coupon, you can resend"
-" your request right now."
+msgid "Para continuar como apoiador e receber um novo cupom de desconto, você pode reenviar sua solicitação agora mesmo."
+msgstr To continue as a supporter and receive a new discount coupon, you can resend your request right now."
 
 msgid "Enviar Nova Solicitação"
 msgstr "Send a new request"
@@ -1324,18 +1513,11 @@ msgstr "Request access as a supporter"
 msgid "Torne-se um Apoiador"
 msgstr "Become a supporter"
 
-msgid ""
-"Preencha o formulário abaixo. Após a análise, você poderá acessar benefícios"
-" exclusivos, gerar códigos promocionais e acompanhar seu desempenho!"
-msgstr ""
-"Fill out the form below. After analysis, you can access exclusive benefits, "
-"generate promotional codes and track your performance!"
+msgid "Preencha o formulário abaixo. Após a análise, você poderá acessar benefícios exclusivos, gerar códigos promocionais e acompanhar seu desempenho!"
+msgstr "Fill out the form below. After analysis, you can access exclusive benefits, generate promotional codes and track your performance!"
 
 msgid "Nome Público"
 msgstr "Public name"
-
-msgid "Descrição"
-msgstr "Description"
 
 msgid "Link do Twitch"
 msgstr "Link do Twitch"
@@ -1355,23 +1537,14 @@ msgstr "Be a supporter"
 msgid "Você ainda não é um apoiador"
 msgstr "You are not yet a supporter"
 
-msgid ""
-"Este painel é exclusivo para streamers e parceiros do nosso servidor. Como "
-"apoiador, você poderá gerar códigos promocionais, ter seu próprio painel e "
-"ganhar recompensas por cada indicação."
-msgstr ""
-"This panel is exclusive to streamers and partners of our server. As a "
-"supporter, you can generate promotional codes, have your own panel and gain "
-"rewards for each indication."
+msgid "Este painel é exclusivo para streamers e parceiros do nosso servidor. Como apoiador, você poderá gerar códigos promocionais, ter seu próprio painel e ganhar recompensas por cada indicação."
+msgstr "This panel is exclusive to streamers and partners of our server. As a supporter, you can generate promotional codes, have your own panel and gain rewards for each indication."
 
 msgid "Solicitar Acesso"
 msgstr "Request access"
 
-msgid ""
-"Já é apoiador? Entre em contato com a staff caso enfrente problemas de "
-"acesso."
-msgstr ""
-"Is it already a supporter? Contact the staff if you face access problems."
+msgid "Já é apoiador? Entre em contato com a staff caso enfrente problemas de acesso."
+msgstr "Is it already a supporter? Contact the staff if you face access problems."
 
 msgid "Painel do Apoiador"
 msgstr "Supporter panel"
@@ -1413,7 +1586,7 @@ msgid "Pedidos Pendentes de Apoiadores"
 msgstr "Pending requests from supporters"
 
 msgid "Data de Solicitação"
-msgstr "REQUEST DATE"
+msgstr "Request Date"
 
 msgid "Sem descrição"
 msgstr "Described"
@@ -1451,9 +1624,7 @@ msgstr "There are no pending orders at the moment."
 msgid "Solicitação em Análise"
 msgstr "Request on Analysis"
 
-msgid ""
-"Sua solicitação para se tornar um apoiador está sendo analisada por nossa "
-"equipe."
+msgid "Sua solicitação para se tornar um apoiador está sendo analisada por nossa equipe."
 msgstr "Your request to become a supporter is being analyzed by our team."
 
 msgid "Você receberá uma resposta em breve. Obrigado pelo interesse!"
@@ -1465,26 +1636,14 @@ msgstr "Return to the Panel"
 msgid "Solicitação Rejeitada"
 msgstr "Rejected Request"
 
-msgid ""
-"Infelizmente, sua solicitação para se tornar um apoiador foi recusada no "
-"momento."
-msgstr ""
-"Unfortunately, your request to become a supporter has been rejected at the "
-"moment."
+msgid "Infelizmente, sua solicitação para se tornar um apoiador foi recusada no momento."
+msgstr "Unfortunately, your request to become a supporter has been rejected at the moment."
 
-msgid ""
-"Caso ache que houve um engano ou queira mais informações, entre em contato "
-"com a staff."
-msgstr ""
-"If you think there was a mistake or want more information, contact the "
-"staff."
+msgid "Caso ache que houve um engano ou queira mais informações, entre em contato com a staff."
+msgstr "If you think there was a mistake or want more information, contact the staff."
 
-msgid ""
-"Informe o valor que deseja solicitar como comissão. Ele deve ser compatível "
-"com o valor disponível."
-msgstr ""
-"Enter the amount you want to request as a commission. It must be compatible "
-"with the available value."
+msgid "Informe o valor que deseja solicitar como comissão. Ele deve ser compatível com o valor disponível."
+msgstr "Enter the amount you want to request as a commission. It must be compatible with the available value."
 
 msgid "Valor disponível para saque:"
 msgstr "Available value for withdrawal:"
@@ -1570,8 +1729,7 @@ msgstr "Account created successfully!"
 msgid "Seu registro foi concluído com sucesso."
 msgstr "Your registration was successfully completed."
 
-msgid ""
-"Pode levar até 5 minutos para a conta estar disponível no jogo e no painel."
+msgid "Pode levar até 5 minutos para a conta estar disponível no jogo e no painel."
 msgstr "It can take up to 5 minutes to be available in the game and panel."
 
 msgid "Ir para o painel"
@@ -1738,9 +1896,6 @@ msgstr "Ranking PK"
 
 msgid "Ranking PvP"
 msgstr "Ranking PvP"
-
-msgid "ID do Item"
-msgstr "ID do Item"
 
 msgid "Ativo"
 msgstr "Active"
@@ -1922,15 +2077,6 @@ msgstr "Remover"
 msgid "Nenhum item no pacote."
 msgstr "No item in the package."
 
-msgid "Adicionar Itens ao Pacote"
-msgstr "Add items to the package"
-
-msgid "Selecione os Itens"
-msgstr "Select the items"
-
-msgid "Adicionar Itens"
-msgstr "Add items"
-
 msgid "Cadastro de Itens"
 msgstr "Registration of items"
 
@@ -2090,14 +2236,8 @@ msgstr "No transaction recorded yet."
 msgid "Sobre a Carteira"
 msgstr "On the wallet"
 
-msgid ""
-"Gerencie seu saldo virtual e acompanhe suas transações recentes. Use as "
-"moedas para realizar compras, enviar presentes ou desbloquear recursos "
-"exclusivos dentro do servidor."
-msgstr ""
-"Manage your virtual balance and follow your recent transactions. Use the "
-"coins to make purchases, send gifts or unlock exclusive features within the "
-"server."
+msgid "Gerencie seu saldo virtual e acompanhe suas transações recentes. Use as moedas para realizar compras, enviar presentes ou desbloquear recursos exclusivos dentro do servidor."
+msgstr "Manage your virtual balance and follow your recent transactions. Use the coins to make purchases, send gifts or unlock exclusive features within the server."
 
 msgid "Atualizar Carteira"
 msgstr "Wallet Update"
@@ -2105,14 +2245,8 @@ msgstr "Wallet Update"
 msgid "Pedidos Pendentes"
 msgstr "Pending orders"
 
-msgid ""
-"Visualize pedidos de compra de moedas que ainda não foram pagos ou "
-"processados. Evite criar novos pedidos repetidos e acompanhe o andamento dos"
-" seus pagamentos."
-msgstr ""
-"Visualize currency purchase orders that have not yet been paid or processed."
-" Avoid creating new requests repeated and follow the progress of your "
-"payments."
+msgid "Visualize pedidos de compra de moedas que ainda não foram pagos ou processados. Evite criar novos pedidos repetidos e acompanhe o andamento dos seus pagamentos."
+msgstr "Visualize currency purchase orders that have not yet been paid or processed. Avoid creating new requests repeated and follow the progress of your payments."
 
 msgid "Nome do Jogador"
 msgstr "Player's name"
@@ -2151,7 +2285,7 @@ msgid "Histórico de Atendimentos"
 msgstr "History of attendance"
 
 msgid "Históricos de Atendimentos"
-msgstr "HISTORICS OF SERVICES"
+msgstr "Historics of Services"
 
 msgid "Slug"
 msgstr "Slug"
@@ -2197,11 +2331,8 @@ msgstr "The 'Theme.json' file was not found."
 msgid "O campo obrigatório '%s' está ausente no theme.json."
 msgstr "The mandatory field '%s' is absent in Theme.json."
 
-msgid ""
-"Erro ao interpretar o arquivo theme.json. Verifique se o JSON está bem "
-"formado."
-msgstr ""
-"Error interpreting the Theme.json file. Make sure JSON is well formed."
+msgid "Erro ao interpretar o arquivo theme.json. Verifique se o JSON está bem formado."
+msgstr "Error interpreting the Theme.json file. Make sure JSON is well formed."
 
 #, python-format
 msgid "Erro ao processar o arquivo do tema: %s"
@@ -2246,12 +2377,8 @@ msgstr "Theme variable"
 msgid "Variáveis de Tema"
 msgstr "Theme variables"
 
-msgid ""
-"O nome da variável só pode conter letras, números e underscores (_) e deve "
-"começar com uma letra ou underscore."
-msgstr ""
-"The name of the variable can only contain letters, numbers and underScores "
-"(_) and should start with a letter or underScore."
+msgid "O nome da variável só pode conter letras, números e underscores (_) e deve começar com uma letra ou underscore."
+msgstr "The name of the variable can only contain letters, numbers and underScores (_) and should start with a letter or underScore."
 
 msgid "Home"
 msgstr "Home"
@@ -2307,10 +2434,8 @@ msgstr "To send"
 msgid "Configurações de Segurança"
 msgstr "Security Settings"
 
-msgid ""
-"Mantenha sua conta protegida ativando a autenticação em duas etapas (2FA)."
-msgstr ""
-"Keep your account protected by activating authentication in two steps (2FA)."
+msgid "Mantenha sua conta protegida ativando a autenticação em duas etapas (2FA)."
+msgstr "Keep your account protected by activating authentication in two steps (2FA)."
 
 msgid "Autenticação em Duas Etapas (2FA)"
 msgstr "Two steps authentication (2FA)"
@@ -2321,12 +2446,8 @@ msgstr "The two -step authentication is activated in your account."
 msgid "Desativar 2FA"
 msgstr "Deactivate"
 
-msgid ""
-"A autenticação em duas etapas não está ativada. Recomendamos ativá-la para "
-"melhorar a segurança."
-msgstr ""
-"The two -step authentication is not activated. We recommend activating it to"
-" improve safety."
+msgid "A autenticação em duas etapas não está ativada. Recomendamos ativá-la para melhorar a segurança."
+msgstr "The two -step authentication is not activated. We recommend activating it to improve safety."
 
 msgid "Ativar 2FA"
 msgstr "Activate 2FA"
@@ -2466,9 +2587,7 @@ msgstr "FAQ translations"
 msgid "Ajuda"
 msgstr "Help"
 
-msgid ""
-"Encontre as respostas para as perguntas mais comuns feitas pelos nossos "
-"usuários."
+msgid "Encontre as respostas para as perguntas mais comuns feitas pelos nossos usuários."
 msgstr "Find the answers to the most common questions asked by our users."
 
 msgid "Não há perguntas frequentes disponíveis no momento."
@@ -2606,11 +2725,8 @@ msgstr "Enter the application code"
 msgid "Esqueceu sua senha?"
 msgstr "Forgot your password?"
 
-msgid ""
-"Digite seu e-mail abaixo e enviaremos instruções para redefinir sua senha."
-msgstr ""
-"Enter your email below and we will send instructions to redefine your "
-"password."
+msgid "Digite seu e-mail abaixo e enviaremos instruções para redefinir sua senha."
+msgstr "Enter your email below and we will send instructions to redefine your password."
 
 msgid "Seu E-mail"
 msgstr "Your email"
@@ -2639,11 +2755,8 @@ msgstr "Unlock"
 msgid "Senha alterada com sucesso"
 msgstr "Successfully changed password"
 
-msgid ""
-"Sua senha foi atualizada com sucesso. Agora você pode fazer login "
-"normalmente."
-msgstr ""
-"Your password has been successfully updated. Now you can login normally."
+msgid "Sua senha foi atualizada com sucesso. Agora você pode fazer login normalmente."
+msgstr "Your password has been successfully updated. Now you can login normally."
 
 msgid "→ Ir para o login"
 msgstr "→ Go to Login"
@@ -2657,12 +2770,8 @@ msgstr "Save"
 msgid "Senha redefinida"
 msgstr "Redefined password"
 
-msgid ""
-"Sua senha foi redefinida com sucesso. Faça login novamente para continuar "
-"sua jornada."
-msgstr ""
-"Your password has been successfully redefined. Login again to continue your "
-"journey."
+msgid "Sua senha foi redefinida com sucesso. Faça login novamente para continuar sua jornada."
+msgstr "Your password has been successfully redefined. Login again to continue your journey."
 
 msgid "Voltar para o login"
 msgstr "Go back to the login"
@@ -2670,12 +2779,8 @@ msgstr "Go back to the login"
 msgid "Email Enviado"
 msgstr "Email sent"
 
-msgid ""
-"Um link foi enviado para seu email. Acesse-o para redefinir sua senha e "
-"continuar sua jornada."
-msgstr ""
-"A link was sent to your email. Visit it to redefine your password and "
-"continue your journey."
+msgid "Um link foi enviado para seu email. Acesse-o para redefinir sua senha e continuar sua jornada."
+msgstr "A link was sent to your email. Visit it to redefine your password and continue your journey."
 
 msgid "Conta mestre criada com sucesso!"
 msgstr "Master account successfully created!"
@@ -2752,8 +2857,17 @@ msgstr "Everything you need in one place."
 msgid "Olá,"
 msgstr "Hello,"
 
-msgid "Este é o seu painel principal. Confira seu progresso abaixo."
-msgstr "This is your main panel. Check out your progress below."
+msgid "Confira seu progresso abaixo."
+msgstr "Check out your progress below."
+
+msgid "Doação"
+msgstr "Donation"
+
+msgid "Conta L2"
+msgstr "Tell L2"
+
+msgid "Bônus diário recebido! +25 XP"
+msgstr "Daily bonus received! +25 xp"
 
 msgid "Saldo:"
 msgstr "Balance:"
@@ -2761,8 +2875,8 @@ msgstr "Balance:"
 msgid "Nenhuma carteira encontrada."
 msgstr "No wallet found."
 
-msgid "Status de Apoiador"
-msgstr "Status of Supporter"
+msgid "Total criados:"
+msgstr "Total Created:"
 
 msgid "Você ainda não é um apoiador."
 msgstr "You are not yet a supporter."
@@ -2776,41 +2890,17 @@ msgstr "See inventory"
 msgid "Nenhum inventário encontrado."
 msgstr "No inventory found."
 
-msgid "Seus Leilões"
-msgstr "Your auctions"
-
-msgid "Total criados:"
-msgstr "Total Created:"
-
-msgid "Experiencia"
-msgstr "Experience"
-
-msgid "Bônus diário recebido! +25 XP"
-msgstr "Daily bonus received! +25 xp"
-
 msgid "🏆 Conquistas"
 msgstr "🏆 achievements"
 
 msgid "Conquista bloqueada"
 msgstr "Blocked conquest"
 
-msgid "Conquista bloqueada. Desbloqueie para ver detalhes."
-msgstr "Blocked conquest. Unlock to see details."
-
 msgid "Próximo"
 msgstr "Next"
 
 msgid "Você ainda não desbloqueou nenhuma conquista."
 msgstr "You have not yet unlocked any achievements."
-
-msgid "Ir para Leilão"
-msgstr "Auction"
-
-msgid "Fazer Doação"
-msgstr "Donate"
-
-msgid "Conta L2"
-msgstr "Tell L2"
 
 msgid "Painel Definitivo Lineage - PDL"
 msgstr "Lineage Definitive Panel - PDL"
@@ -2824,12 +2914,8 @@ msgstr "The perfect web solution for administration and attraction of players"
 msgid "Por que usar Django e Python?"
 msgstr "Why use Django and Python?"
 
-msgid ""
-"Django é uma framework poderosa, segura e com uma administração pronta para "
-"uso, ideal para gerenciar servidores privados de Lineage 2."
-msgstr ""
-"Django is a powerful, secure and ready -to -use administration, ideal for "
-"managing private lineage 2 servers."
+msgid "Django é uma framework poderosa, segura e com uma administração pronta para uso, ideal para gerenciar servidores privados de Lineage 2."
+msgstr "Django is a powerful, secure and ready -to -use administration, ideal for managing private lineage 2 servers."
 
 msgid "Desenvolvimento rápido e escalável"
 msgstr "Rapid and scalable development"
@@ -2894,13 +2980,8 @@ msgstr "News and Player Support"
 msgid "Participe do Futuro dos Servidores Privados"
 msgstr "Participate in the future of private servers"
 
-msgid ""
-"O PDL é open source e está em constante evolução. Contribua, implemente, "
-"personalize e transforme a forma como servidores Lineage 2 são "
-"administrados."
-msgstr ""
-"The PDL is Open Source and is constantly evolving. Contribute, implement, "
-"customize and turn the way Lineage 2 servers are administered."
+msgid "O PDL é open source e está em constante evolução. Contribua, implemente, personalize e transforme a forma como servidores Lineage 2 são administrados."
+msgstr "The PDL is Open Source and is constantly evolving. Contribute, implement, customize and turn the way Lineage 2 servers are administered."
 
 msgid "Ver Projeto no GitHub"
 msgstr "See project at Github"
@@ -2983,14 +3064,8 @@ msgstr "Default profile image"
 msgid "O sucesso não é garantido, mas o fracasso é certo se você não tentar."
 msgstr "Success is not guaranteed, but failure is certain if you don't try."
 
-msgid ""
-"Encontre inspiração em cada desafio e mantenha-se comprometido com o seu "
-"crescimento pessoal e profissional. Lembre-se sempre de que o esforço que "
-"você coloca hoje moldará o seu amanhã."
-msgstr ""
-"Find inspiration in each challenge and stay committed to your personal and "
-"professional growth. Always remember that the effort you put today will "
-"shape your tomorrow."
+msgid "Encontre inspiração em cada desafio e mantenha-se comprometido com o seu crescimento pessoal e profissional. Lembre-se sempre de que o esforço que você coloca hoje moldará o seu amanhã."
+msgstr "Find inspiration in each challenge and stay committed to your personal and professional growth. Always remember that the effort you put today will shape your tomorrow."
 
 msgid "Ver Lista de Amigos"
 msgstr "See List of Friends"
@@ -3005,7 +3080,7 @@ msgid "Reenviar E-mail de Verificação"
 msgstr "Reset Verification Email"
 
 msgid "2FA Desativado"
-msgstr "2Folio"
+msgstr "2FA Desactived"
 
 msgid "A autenticação em duas etapas ainda não está ativada em sua conta."
 msgstr "The authentication in two steps is not yet activated in your account."
@@ -3026,7 +3101,7 @@ msgid "Usuário que iniciou a amizade."
 msgstr "User who started friendship."
 
 msgid "Amigo"
-msgstr "Amigo"
+msgstr "Friend"
 
 msgid "Usuário que é amigo do primeiro usuário."
 msgstr "User who is friend of the first user."
@@ -3098,7 +3173,7 @@ msgid "Data e hora em que a mensagem foi enviada."
 msgstr "Date and time the message was sent."
 
 msgid "Lida"
-msgstr "Lida"
+msgstr "Readed"
 
 msgid "Indica se a mensagem foi lida."
 msgstr "Indicates if the message was read."
@@ -3152,7 +3227,7 @@ msgid "Adicionar Novos Amigos"
 msgstr "Add new friends"
 
 msgid "Enviar Pedido"
-msgstr "Order"
+msgstr "Send Order"
 
 msgid "Nenhum usuário disponível para adicionar."
 msgstr "No user available to add."
@@ -3166,8 +3241,7 @@ msgstr "Refuse"
 msgid "Nenhum convite de amizade recebido."
 msgstr "No friendship invitation received."
 
-msgid ""
-"Endereço amigável da notícia, gerado automaticamente a partir do título."
+msgid "Endereço amigável da notícia, gerado automaticamente a partir do título."
 msgstr "Friendly news address, automatically generated from the title."
 
 msgid "Imagem de capa da notícia (opcional)."
@@ -3239,9 +3313,7 @@ msgstr "read more"
 msgid "Não há notícias privadas disponíveis no momento."
 msgstr "There is no private news available at the moment."
 
-msgid ""
-"Usuário relacionado à notificação (pode ser nulo para notificações "
-"públicas)."
+msgid "Usuário relacionado à notificação (pode ser nulo para notificações públicas)."
 msgstr "User related to notification (may be null for public notifications)."
 
 msgid "Tipo de Notificação"
@@ -3373,46 +3445,26 @@ msgstr "Create new request"
 msgid "Informações Importantes:"
 msgstr "Important Information:"
 
-msgid ""
-"As solicitações são tickets de suporte para iniciar um chat com a "
-"administração."
+msgid "As solicitações são tickets de suporte para iniciar um chat com a administração."
 msgstr "Requests are support tickets to start a chat with the administration."
 
-msgid ""
-"Enquanto o status da solicitação estiver como Pendente, o chat permanecerá "
-"ativo."
+msgid "Enquanto o status da solicitação estiver como Pendente, o chat permanecerá ativo."
 msgstr "While the request status is pending, the chat will remain active."
 
-msgid ""
-"Após a solicitação ser concluída, o chat será desabilitado e o atendimento "
-"encerrado."
-msgstr ""
-"After the request is completed, the chat will be disabled and the service "
-"ended."
+msgid "Após a solicitação ser concluída, o chat será desabilitado e o atendimento encerrado."
+msgstr "After the request is completed, the chat will be disabled and the service ended."
 
 msgid "Somente uma solicitação pendente pode existir por vez."
 msgstr "Only one pending request can exist at a time."
 
-msgid ""
-"Seja claro e objetivo ao abrir uma solicitação para que a equipe possa "
-"ajudá-lo de forma mais eficaz."
-msgstr ""
-"Be clear and objective when opening a request so that the team can help you "
-"more effectively."
+msgid "Seja claro e objetivo ao abrir uma solicitação para que a equipe possa ajudá-lo de forma mais eficaz."
+msgstr "Be clear and objective when opening a request so that the team can help you more effectively."
 
-msgid ""
-"Após criar a solicitação, acesse o dashboard e clique em Chat para iniciar o"
-" atendimento."
-msgstr ""
-"After creating the request, go to Dashboard and click Chat to start the "
-"service."
+msgid "Após criar a solicitação, acesse o dashboard e clique em Chat para iniciar o atendimento."
+msgstr "After creating the request, go to Dashboard and click Chat to start the service."
 
-msgid ""
-"O atendimento não é em tempo real, ou seja, você criará a solicitação e "
-"aguardará a resposta da equipe."
-msgstr ""
-"The service is not in real time, that is, you will create the request and "
-"await the response of the team."
+msgid "O atendimento não é em tempo real, ou seja, você criará a solicitação e aguardará a resposta da equipe."
+msgstr "The service is not in real time, that is, you will create the request and await the response of the team."
 
 msgid "Detalhe da Solicitação"
 msgstr "Request detail"
@@ -3445,7 +3497,7 @@ msgid "Situação"
 msgstr "Situation"
 
 msgid "Data da Solicitação"
-msgstr "REQUEST DATE"
+msgstr "Request Date"
 
 msgid "Ver Solicitação"
 msgstr "See request"
@@ -3462,23 +3514,11 @@ msgstr "Go"
 msgid "Click here to select the objects across all pages"
 msgstr "Click here to select the objects across all pages"
 
-#, python-format
-msgid ""
-"\n"
-"                            Select all %(total_count)s %(module_name)s"
-msgstr ""
-"\n"
-"Select all %(total_count)s %(module_name)s"
-
 msgid "Clear selection"
 msgstr "Clear selection"
 
-msgid ""
-"First, enter a username and password. Then, you'll be able to edit more user"
-" options."
-msgstr ""
-"First, enter a username and password. Then, you'll be able to edit more user"
-" options."
+msgid "First, enter a username and password. Then, you'll be able to edit more user options."
+msgstr "First, enter a username and password. Then, you'll be able to edit more user options."
 
 msgid "Enter a username and password."
 msgstr "Enter a username and password."
@@ -4284,6 +4324,36 @@ msgstr "Server"
 
 msgid "Estatística"
 msgstr "Statistic"
+
+#~ msgid "Adicionar Itens ao Pacote"
+#~ msgstr "Add items to the package"
+
+#~ msgid "Selecione os Itens"
+#~ msgstr "Select the items"
+
+#~ msgid "Adicionar Itens"
+#~ msgstr "Add items"
+
+#~ msgid "Este é o seu painel principal. Confira seu progresso abaixo."
+#~ msgstr "This is your main panel. Check out your progress below."
+
+#~ msgid "Status de Apoiador"
+#~ msgstr "Status of Supporter"
+
+#~ msgid "Seus Leilões"
+#~ msgstr "Your auctions"
+
+#~ msgid "Experiencia"
+#~ msgstr "Experience"
+
+#~ msgid "Conquista bloqueada. Desbloqueie para ver detalhes."
+#~ msgstr "Blocked conquest. Unlock to see details."
+
+#~ msgid "Ir para Leilão"
+#~ msgstr "Auction"
+
+#~ msgid "Fazer Doação"
+#~ msgstr "Donate"
 
 #~ msgid "date published"
 #~ msgstr "date published"

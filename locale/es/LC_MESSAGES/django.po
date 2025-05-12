@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-09 23:10-0300\n"
+"POT-Creation-Date: 2025-05-12 14:34-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -159,6 +159,50 @@ msgstr "Licitación"
 msgid "Bids"
 msgstr "Ofertas"
 
+msgid "Você não pode dar lances no seu próprio leilão."
+msgstr "No puede ofertar en su propia subasta."
+
+msgid "Leilão encerrado."
+msgstr "Subasta cerrada."
+
+msgid "O lance deve ser maior que o valor inicial."
+msgstr "La oferta debe ser mayor que el valor inicial."
+
+msgid "O lance deve ser maior que o lance atual."
+msgstr "La oferta debe ser mayor que la oferta actual."
+
+msgid "Saldo insuficiente."
+msgstr "Saldo insuficiente."
+
+#, python-format
+msgid "Devolução de lance no leilão #%d"
+msgstr "Retorno de la oferta en la subasta #%D"
+
+msgid "Leilão"
+msgstr "Subasta"
+
+#, python-format
+msgid "Lance no leilão #%d"
+msgstr "Oferta en la subasta #%D"
+
+msgid "Leilão ainda está ativo."
+msgstr "La subasta sigue activa."
+
+#, python-format
+msgid "Venda no leilão #%d"
+msgstr "Venta en subasta #%D"
+
+msgid "Não foi possível determinar o lance vencedor."
+msgstr "No fue posible determinar la oferta ganadora."
+
+#, python-format
+msgid "Erro ao encerrar leilão %(id)s: %(erro)s"
+msgstr "Error al subastarse %(id)s s: %(erro)s s"
+
+#, python-format
+msgid "%(qtd)d leilões encerrados automaticamente."
+msgstr "%(qtd)d D Lecciones adjuntas automáticamente."
+
 msgid "Criar Leilão"
 msgstr "Subasta"
 
@@ -252,6 +296,103 @@ msgstr "Finalizar"
 msgid "Finalizar Entrega"
 msgstr "Finalizar Entrega"
 
+msgid "Você precisa informar um valor para o lance."
+msgstr "Debe ingresar un valor para la oferta."
+
+msgid "Você precisa informar o nome do personagem."
+msgstr "Debe informar el nombre del personaje."
+
+msgid "Este personagem não pertence a você."
+msgstr "Este personaje no te pertenece."
+
+msgid "Lance efetuado com sucesso!"
+msgstr "¡Bid hecha con éxito!"
+
+msgid "Não foi possível carregar seus personagens agora."
+msgstr "No era posible llevar a tus personajes ahora."
+
+msgid "Quantidade insuficiente no inventário."
+msgstr "Cantidad insuficiente en inventario."
+
+msgid "Leilão criado com sucesso!"
+msgstr "¡Subasta creada con éxito!"
+
+msgid "Item não encontrado no inventário."
+msgstr "El artículo no se encuentra en el inventario."
+
+msgid "Você não tem permissão para encerrar este leilão."
+msgstr "No se le permite terminar esta subasta."
+
+msgid "Leilão encerrado com sucesso."
+msgstr "Subasta subastada con éxito."
+
+msgid "Você não tem permissão para cancelar este leilão."
+msgstr "No se le permite cancelar esta subasta."
+
+msgid "Não é possível cancelar um leilão que já terminou."
+msgstr "No es posible cancelar una subasta que haya terminado."
+
+msgid "Leilão cancelado e recursos devolvidos com sucesso."
+msgstr "Subasta cancelada y características devueltas exitosas."
+
+msgid "Itens Permitidos"
+msgstr "Artículos permitidos"
+
+msgid "Nome da Caixa"
+msgstr "Cajero"
+
+msgid "Preço (R$)"
+msgstr "Precio (r $)"
+
+msgid "Quantidade de Boosters"
+msgstr "Abucheadores"
+
+msgid "Chance Comum (%)"
+msgstr "Oportunidad común (%)"
+
+msgid "Chance Rara (%)"
+msgstr "Chance Rara (%)"
+
+msgid "Chance Épica (%)"
+msgstr "Chance Épica (%)"
+
+msgid "Chance Lendária (%)"
+msgstr "Oportunidad legendaria (%)"
+
+msgid "Máximo de Itens Épicos"
+msgstr "Elementos épicos máximos"
+
+msgid "Máximo de Itens Lendários"
+msgstr "Artículos legendarios máximos"
+
+msgid "A soma das chances deve ser exatamente 100%. Soma atual: {}"
+msgstr ""
+"La suma de las posibilidades debe ser exactamente 100%. Suma actual: {}"
+
+msgid "Tipo de Caixa"
+msgstr "Tipo de efectivo"
+
+msgid "Nome do Item"
+msgstr "Nombre del artículo"
+
+msgid "Enchant"
+msgstr "Encantar"
+
+msgid "ID do Item"
+msgstr "ID Do Artículo"
+
+msgid "Imagem"
+msgstr "Imagen"
+
+msgid "Descrição"
+msgstr "Descripción"
+
+msgid "Raridade"
+msgstr "Rareza"
+
+msgid "Pode ser populado em caixas"
+msgstr "Se puede poblar en cajas"
+
 msgid "Prize Name"
 msgstr "Nombre de premio"
 
@@ -304,6 +445,9 @@ msgstr "Artículo de bolsas"
 msgid "Description"
 msgstr "Descripción"
 
+msgid "Can Be Populated"
+msgstr "Se puede poblar"
+
 msgid "Items"
 msgstr "Elementos"
 
@@ -327,6 +471,12 @@ msgstr "Posibilidad de épica"
 
 msgid "Chance of Legendary"
 msgstr "Posibilidad de legendario"
+
+msgid "Max Epic Items"
+msgstr "Artículos épicos máximos"
+
+msgid "Max Legendary Items"
+msgstr "Artículos legendarios máximos"
 
 msgid "Box Type"
 msgstr "Tipo de caja"
@@ -360,6 +510,18 @@ msgstr "Historial de artículos de la caja"
 
 msgid "Box Item Histories"
 msgstr "Historia de artículos de caja"
+
+msgid "Tipo de Recompensa"
+msgstr "Tipo de Recompensa"
+
+msgid "Referência"
+msgstr "Referencia"
+
+msgid "Recompensa"
+msgstr "Recompensa"
+
+msgid "Recompensas"
+msgstr "Recompensas"
 
 msgid "Tipos de Caixa Disponíveis"
 msgstr "Tipos de efectivo disponibles"
@@ -545,15 +707,6 @@ msgstr ""
 msgid "Novo"
 msgstr "Nuevo"
 
-msgid "Imagem"
-msgstr "Imagen"
-
-msgid "Enchant"
-msgstr "Encantar"
-
-msgid "Raridade"
-msgstr "Rareza"
-
 msgid "Nenhum item encontrado."
 msgstr "No se encuentra el artículo."
 
@@ -602,6 +755,55 @@ msgstr "No hay artículo en la bolsa."
 
 msgid "Você ainda não possui uma bag."
 msgstr "Todavía no tienes una bolsa."
+
+#, python-brace-format
+msgid "🎁 Você recebeu: {item} +{enchant} x{qty}!"
+msgstr "🎁 ¡Recibió: {item} +{enchant} x {qty}!"
+
+msgid "Você não tem fichas suficientes."
+msgstr "No tienes suficientes chips."
+
+msgid "Nenhum prêmio disponível."
+msgstr "No hay premio disponible."
+
+msgid "Você não ganhou nenhum prêmio."
+msgstr "No has ganado ningún premio."
+
+msgid "Esta caixa não existe. Você pode comprá-la abaixo."
+msgstr "Esta caja no existe. Puedes comprarlo a continuación."
+
+msgid "Essa caixa não pertence a você. Compre uma nova do mesmo tipo."
+msgstr "Esta caja no te pertenece. Compre uno nuevo del mismo tipo."
+
+msgid "Você não tem fichas suficientes para abrir a caixa."
+msgstr "No tienes suficientes chips para abrir la caja."
+
+msgid "Tipo de caixa não encontrado."
+msgstr "Tipo de efectivo no encontrado."
+
+msgid "Não há itens cadastrados para abrir caixas."
+msgstr "No hay artículos registrados para abrir cajas."
+
+msgid "Essa caixa não contém itens disponíveis para a abertura."
+msgstr "Esta caja no contiene elementos disponibles para la apertura."
+
+msgid "Saldo insuficiente para comprar a caixa."
+msgstr "Saldo insuficiente para comprar a caixa."
+
+msgid "Erro na transação: "
+msgstr "Error de transacción:"
+
+msgid "Quantidade insuficiente na Bag."
+msgstr "Cantidad insuficiente en la bolsa."
+
+msgid "Item transferido com sucesso."
+msgstr "Artículo transferido con éxito."
+
+msgid "Item não encontrado na Bag."
+msgstr "Artículo no encontrado en la bolsa."
+
+msgid "Todos os itens foram transferidos para o inventário."
+msgstr "Todos los artículos fueron transferidos al inventario."
 
 msgid "Account Name"
 msgstr "Nombre de cuenta"
@@ -1339,9 +1541,6 @@ msgstr ""
 msgid "Nome Público"
 msgstr "Nome Público"
 
-msgid "Descrição"
-msgstr "Descripción"
-
 msgid "Link do Twitch"
 msgstr "Enlace do twitch"
 
@@ -1748,9 +1947,6 @@ msgstr "Ranking PK"
 msgid "Ranking PvP"
 msgstr "Ranking PvP"
 
-msgid "ID do Item"
-msgstr "ID Do Artículo"
-
 msgid "Ativo"
 msgstr "Activo"
 
@@ -1930,15 +2126,6 @@ msgstr "Remover"
 
 msgid "Nenhum item no pacote."
 msgstr "No hay artículo en el paquete."
-
-msgid "Adicionar Itens ao Pacote"
-msgstr "Agregar elementos al paquete"
-
-msgid "Selecione os Itens"
-msgstr "Seleccione los elementos"
-
-msgid "Adicionar Itens"
-msgstr "Agregar elementos"
 
 msgid "Cadastro de Itens"
 msgstr "Registro de artículos"
@@ -2766,9 +2953,17 @@ msgstr "Todo lo que necesitas en un solo lugar."
 msgid "Olá,"
 msgstr "Hola,"
 
-msgid "Este é o seu painel principal. Confira seu progresso abaixo."
-msgstr ""
-"Este es su panel principal. Echa un vistazo a tu progreso a continuación."
+msgid "Confira seu progresso abaixo."
+msgstr "Echa un vistazo a tu progreso a continuación."
+
+msgid "Doação"
+msgstr "Donación"
+
+msgid "Conta L2"
+msgstr "Conta L2"
+
+msgid "Bônus diário recebido! +25 XP"
+msgstr "¡Bonificación diaria recibida! +25 xp"
 
 msgid "Saldo:"
 msgstr "Saldo:"
@@ -2776,8 +2971,8 @@ msgstr "Saldo:"
 msgid "Nenhuma carteira encontrada."
 msgstr "No se encuentra la billetera."
 
-msgid "Status de Apoiador"
-msgstr "Estado del seguidor"
+msgid "Total criados:"
+msgstr "Total criados:"
 
 msgid "Você ainda não é um apoiador."
 msgstr "Todavía no eres un partidario."
@@ -2791,41 +2986,17 @@ msgstr "Ver inventario"
 msgid "Nenhum inventário encontrado."
 msgstr "No se encuentra ningún inventario."
 
-msgid "Seus Leilões"
-msgstr "Tus subastas"
-
-msgid "Total criados:"
-msgstr "Total criados:"
-
-msgid "Experiencia"
-msgstr "Experiencia"
-
-msgid "Bônus diário recebido! +25 XP"
-msgstr "¡Bonificación diaria recibida! +25 xp"
-
 msgid "🏆 Conquistas"
 msgstr "🏆 Conquistas"
 
 msgid "Conquista bloqueada"
 msgstr "Conquista bloqueada"
 
-msgid "Conquista bloqueada. Desbloqueie para ver detalhes."
-msgstr "Conquista bloqueada. Desbloquee para ver detalles."
-
 msgid "Próximo"
 msgstr "Próximo"
 
 msgid "Você ainda não desbloqueou nenhuma conquista."
 msgstr "Todavía no has desbloqueado ningún logro."
-
-msgid "Ir para Leilão"
-msgstr "Subasta"
-
-msgid "Fazer Doação"
-msgstr "Donar"
-
-msgid "Conta L2"
-msgstr "Conta L2"
 
 msgid "Painel Definitivo Lineage - PDL"
 msgstr "Painel Definitivo Lineage - PDL"
@@ -4307,6 +4478,37 @@ msgstr "Servidor"
 
 msgid "Estatística"
 msgstr "Estadística"
+
+#~ msgid "Adicionar Itens ao Pacote"
+#~ msgstr "Agregar elementos al paquete"
+
+#~ msgid "Selecione os Itens"
+#~ msgstr "Seleccione los elementos"
+
+#~ msgid "Adicionar Itens"
+#~ msgstr "Agregar elementos"
+
+#~ msgid "Este é o seu painel principal. Confira seu progresso abaixo."
+#~ msgstr ""
+#~ "Este es su panel principal. Echa un vistazo a tu progreso a continuación."
+
+#~ msgid "Status de Apoiador"
+#~ msgstr "Estado del seguidor"
+
+#~ msgid "Seus Leilões"
+#~ msgstr "Tus subastas"
+
+#~ msgid "Experiencia"
+#~ msgstr "Experiencia"
+
+#~ msgid "Conquista bloqueada. Desbloqueie para ver detalhes."
+#~ msgstr "Conquista bloqueada. Desbloquee para ver detalles."
+
+#~ msgid "Ir para Leilão"
+#~ msgstr "Subasta"
+
+#~ msgid "Fazer Doação"
+#~ msgstr "Donar"
 
 #~ msgid "date published"
 #~ msgstr "fecha publicada"
