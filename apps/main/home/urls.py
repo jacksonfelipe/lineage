@@ -40,8 +40,8 @@ urlpatterns = [
     path('accounts/deactivate-2fa/', desativar_2fa, name='desativar_2fa'),
 
     # validations
-    path('verificar/<uidb64>/<token>/', verificar_email, name='verificar_email'),
-    path('reenviar-verificacao/', reenviar_verificacao_view, name='reenviar_verificacao'),
+    path('verify/<uidb64>/<token>/', verificar_email, name='verificar_email'),
+    path('resend-verify/', reenviar_verificacao_view, name='reenviar_verificacao'),
 
     # locale
     path('set-language/', custom_set_language, name='set_language'),

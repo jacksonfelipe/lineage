@@ -8,11 +8,11 @@ app_name = "payment"
 
 
 urlpatterns = [
-    path('novo/', views.criar_ou_reaproveitar_pedido, name='novo_pedido'),
-    path('pedido/<int:pedido_id>/', views.detalhes_pedido, name='detalhes_pedido'),
-    path('pedido/<int:pedido_id>/confirmar/', views.confirmar_pagamento, name='confirmar_pagamento'),
-    path('pendentes/', views.pedidos_pendentes, name='pedidos_pendentes'),
-    path('cancelar-pedido/<int:pedido_id>/', views.cancelar_pedido, name='cancelar_pedido'),
+    path('new/', views.criar_ou_reaproveitar_pedido, name='novo_pedido'),
+    path('order/<int:pedido_id>/', views.detalhes_pedido, name='detalhes_pedido'),
+    path('order/<int:pedido_id>/confirm/', views.confirmar_pagamento, name='confirmar_pagamento'),
+    path('pending/', views.pedidos_pendentes, name='pedidos_pendentes'),
+    path('cancel-order/<int:pedido_id>/', views.cancelar_pedido, name='cancelar_pedido'),
 
     path('mercadopago/sucesso/', mercadopago_views.pagamento_sucesso, name='pagamento_sucesso'),
     path('mercadopago/erro/', mercadopago_views.pagamento_erro, name='pagamento_erro'),

@@ -6,7 +6,7 @@ app_name = "reports"
 
 
 urlpatterns = [
-    path('inventario/', views.relatorio_movimentacoes_inventario, name='relatorio_movimentacoes_inventario'),
-    path('leiloes/', views.relatorio_leiloes, name='relatorio_leiloes'),
-    path('compras/', views.relatorio_compras, name='relatorio_compras'),
+    path('inventory/', views.relatorio_movimentacoes_inventario, name='relatorio_movimentacoes_inventario'),
+    path('auctions/', views.relatorio_leiloes, name='relatorio_leiloes'),
+    path('purchases/', views.relatorio_compras, name='relatorio_compras'),
 ]
