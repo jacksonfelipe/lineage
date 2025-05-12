@@ -93,6 +93,11 @@ def transfer_to_server(request):
             messages.error(request, 'Personagem inválido ou não pertence a essa conta.')
             return redirect('wallet:transfer_to_server')
 
+        if not TransferFromWalletToChar.items_delayed:
+            if personagem[0]['online'] != 0:
+                messages.error(request, 'O personagem precisa estar offline.')
+                return redirect('wallet:transfer_to_server')
+
         try:
             with transaction.atomic():
                 aplicar_transacao(

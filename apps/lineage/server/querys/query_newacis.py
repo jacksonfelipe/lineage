@@ -2,8 +2,26 @@ from apps.lineage.server.database import LineageDB
 from apps.lineage.server.utils.cache import cache_lineage_result
 
 import time
-import base64
 import hashlib
+import base64
+
+
+CASTLE_ID_TO_NAME = {
+    1: "Gludio",
+    2: "Dion",
+    3: "Giran",
+    4: "Oren",
+    5: "Aden",
+    6: "Innadril",
+    7: "Goddard",
+    8: "Rune",
+    9: "Schuttgart",
+}
+
+
+def generate_password_hash(password: str) -> str:
+    sha1_hash = hashlib.sha1(password.encode()).digest()
+    return base64.b64encode(sha1_hash).decode()
 
 
 class LineageStats:
@@ -192,7 +210,7 @@ class LineageStats:
                 (SELECT COUNT(*) FROM characters WHERE clanid = C.clan_id) AS membros
             FROM clan_data C
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clan_id AND D.sub_pledge_id = 0
-            LEFT JOIN characters P ON P.obj_Id = D.leader_id
+            LEFT JOIN characters P ON P.char_name = D.leader_name
             ORDER BY C.clan_level DESC, C.reputation_score DESC, membros DESC
             LIMIT :limit
         """
@@ -208,10 +226,10 @@ class LineageStats:
                 D.name AS clan_name,
                 C.clanid AS clan_id,
                 CD.ally_id AS ally_id,
-                CS.class_id AS base, 
+                C.classid AS base, 
                 O.olympiad_points
             FROM olympiad_nobles O
-            LEFT JOIN characters C ON C.obj_Id = O.char_id
+            LEFT JOIN characters C ON C.obj_Id = O.charId
             LEFT JOIN character_subclasses CS ON CS.char_obj_id = C.obj_Id AND CS.class_index = 0
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clanid AND D.sub_pledge_id = 0
             LEFT JOIN clan_data CD ON CD.clan_id = C.clanid
@@ -229,10 +247,10 @@ class LineageStats:
                 D.name AS clan_name, 
                 C.clanid AS clan_id,
                 CLAN.ally_id AS ally_id,
-                CS.class_id AS base, 
+                C.classid AS base, 
                 H.count
             FROM heroes H
-            LEFT JOIN characters C ON C.obj_Id = H.char_id
+            LEFT JOIN characters C ON C.obj_Id = H.charId
             LEFT JOIN character_subclasses CS ON CS.char_obj_id = C.obj_Id AND CS.class_index = 0
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clanid AND D.sub_pledge_id = 0
             LEFT JOIN clan_data CLAN ON CLAN.clan_id = C.clanid
@@ -251,9 +269,9 @@ class LineageStats:
                 D.name AS clan_name,
                 C.clanid AS clan_id,
                 CLAN.ally_id AS ally_id,
-                CS.class_id AS base
+                C.classid AS base
             FROM heroes H
-            LEFT JOIN characters C ON C.obj_Id = H.char_id
+            LEFT JOIN characters C ON C.obj_Id = H.charId
             LEFT JOIN character_subclasses CS ON CS.char_obj_id = C.obj_Id AND CS.class_index = 0
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clanid AND D.sub_pledge_id = 0
             LEFT JOIN clan_data CLAN ON CLAN.clan_id = C.clanid
@@ -278,20 +296,28 @@ class LineageStats:
         sql = """
             SELECT 
                 W.id, 
-                W.name, 
                 W.siegeDate AS sdate, 
                 W.treasury AS stax,
                 P.char_name, 
                 CS.name AS clan_name,
                 C.clan_id,
                 C.ally_id,
-                C.ally_name  -- Obtendo ally_name diretamente de clan_data
+                C.ally_name
             FROM castle W
             LEFT JOIN clan_data C ON C.hasCastle = W.id
             LEFT JOIN clan_subpledges CS ON CS.clan_id = C.clan_id AND CS.sub_pledge_id = 0
-            LEFT JOIN characters P ON P.obj_Id = CS.leader_id
+            LEFT JOIN characters P ON P.char_name = CS.leader_name
         """
-        return LineageStats._run_query(sql)
+        results = LineageStats._run_query(sql)
+
+        castles = []
+        for row in results:
+            row_dict = dict(row)  # transforma RowMapping em dicionário normal
+            castle_id = row_dict.get("id")
+            row_dict["name"] = CASTLE_ID_TO_NAME.get(castle_id, f"Castle {castle_id}")
+            castles.append(row_dict)
+
+        return castles
 
     @staticmethod
     @cache_lineage_result(timeout=300)
@@ -502,7 +528,10 @@ class LineageAccount:
     def register(login, password, access_level, email):
         try:
             LineageAccount.ensure_columns()
-            hashed = base64.b64encode(hashlib.sha1(password.encode()).digest()).decode()
+
+            # Gera o hash no formato Base64 (SHA-256)
+            hashed = generate_password_hash(password)
+
             sql = """
                 INSERT INTO accounts (login, password, accessLevel, email, created_time)
                 VALUES (:login, :password, :access_level, :email, :created_time)
@@ -524,7 +553,9 @@ class LineageAccount:
     @cache_lineage_result(timeout=300)
     def update_password(password, login):
         try:
-            hashed = base64.b64encode(hashlib.sha1(password.encode()).digest()).decode()
+            # Gera o hash no formato Base64 (SHA-256)
+            hashed = generate_password_hash(password)
+
             sql = """
                 UPDATE accounts SET password = :password
                 WHERE login = :login LIMIT 1
@@ -545,12 +576,18 @@ class LineageAccount:
         if not logins_list:
             return None
         try:
-            hashed = base64.b64encode(hashlib.sha1(password.encode()).digest()).decode()
-            sql = "UPDATE accounts SET password = :password WHERE login IN :logins"
-            params = {
-                "password": hashed,
-                "logins": logins_list
-            }
+            # Gera o hash no formato Base64 (SHA-256)
+            hashed = generate_password_hash(password)
+
+            # Ajuste no SQL: precisamos usar uma lista de forma segura com IN
+            placeholders = ','.join([f":login_{i}" for i in range(len(logins_list))])
+            sql = f"UPDATE accounts SET password = :password WHERE login IN ({placeholders})"
+
+            # Cria os parâmetros dinamicamente
+            params = {"password": hashed}
+            for i, login in enumerate(logins_list):
+                params[f"login_{i}"] = login
+
             LineageDB().update(sql, params)
             return True
         except Exception as e:

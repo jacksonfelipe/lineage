@@ -182,6 +182,11 @@ def inserir_item_servidor(request, char_name, item_id):
             messages.error(request, 'Quantidade insuficiente no inventário.')
             return redirect(request.path)
         
+        if not TransferFromWalletToChar.items_delayed:
+            if personagem[0]['online'] != 0:
+                messages.error(request, 'O personagem precisa estar offline.')
+                return redirect(request.path)
+
         success = TransferFromWalletToChar.insert_coin(personagem[0]['char_name'], item_id, quantity, item.enchant)
         if not success:
             messages.error(request, 'Falha ao inserir o item no servidor.')

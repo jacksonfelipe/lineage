@@ -560,6 +560,7 @@ class LineageAccount:
 
 
 class TransferFromWalletToChar:
+    items_delayed = True
 
     @staticmethod
     @cache_lineage_result(timeout=300, use_cache=False)
