@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from apps.main.home.decorator import conditional_otp_required
-from .decorators import require_lineage_connection
+from ..decorators import require_lineage_connection
 from datetime import datetime
 from django.utils.timezone import make_aware
 from django.utils.timezone import now

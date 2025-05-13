@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import ApiEndpointToggle
+from ..models import ApiEndpointToggle
 from django.views.decorators.http import require_http_methods
 from django.contrib.admin.views.decorators import staff_member_required
 

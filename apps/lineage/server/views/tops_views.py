@@ -2,7 +2,7 @@ from django.shortcuts import render
 from apps.main.home.decorator import conditional_otp_required
 from apps.lineage.server.utils.crest import attach_crests_to_clans
 from apps.lineage.server.database import LineageDB
-from .models import ActiveAdenaExchangeItem
+from ..models import ActiveAdenaExchangeItem
 
 from utils.dynamic_import import get_query_class  # importa o helper
 LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env

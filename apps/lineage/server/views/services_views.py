@@ -5,8 +5,8 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 from apps.lineage.wallet.models import Wallet
 from apps.lineage.wallet.signals import aplicar_transacao
-from .models import ServicePrice
-from .decorators import require_lineage_connection
+from ..models import ServicePrice
+from ..decorators import require_lineage_connection
 import re
 
 from utils.dynamic_import import get_query_class  
