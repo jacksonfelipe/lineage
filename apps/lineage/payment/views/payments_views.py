@@ -2,14 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 import mercadopago
 import stripe
-from .models import *
+from ..models import *
 from django.http import HttpResponse
 from apps.main.home.decorator import conditional_otp_required
 from datetime import timedelta
 from django.utils.timezone import now
 from django.contrib import messages
 from django.db import transaction
-
 from utils.services import verificar_conquistas
 from apps.main.home.models import PerfilGamer
 

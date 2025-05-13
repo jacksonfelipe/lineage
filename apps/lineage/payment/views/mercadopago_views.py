@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.conf import settings
 import mercadopago
-from .models import *
+from ..models import *
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST

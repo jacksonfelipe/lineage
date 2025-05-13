@@ -5,12 +5,13 @@ from django.views.decorators.csrf import csrf_exempt
 from apps.lineage.wallet.signals import aplicar_transacao
 from apps.lineage.wallet.models import Wallet
 from utils.notifications import send_notification
-from .models import Pagamento, WebhookLog
+from ..models import Pagamento, WebhookLog
 import logging
-
 from django.shortcuts import render, redirect
 
+
 logger = logging.getLogger(__name__)
+
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 

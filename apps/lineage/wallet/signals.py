@@ -1,7 +1,11 @@
+from decimal import Decimal
 from .models import *
 
 
 def aplicar_transacao(wallet, tipo, valor, descricao="", origem="", destino=""):
+    # Garante que valor seja Decimal
+    valor = Decimal(valor)
+
     if tipo == "SAIDA" and wallet.saldo < valor:
         raise ValueError("Saldo insuficiente.")
     
