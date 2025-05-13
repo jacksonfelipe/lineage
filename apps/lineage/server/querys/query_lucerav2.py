@@ -587,7 +587,7 @@ class LineageAccount:
 
     @staticmethod
     @cache_lineage_result(timeout=60, use_cache=False)
-    def verify_password(login, password):
+    def validate_credentials(login, password):
         try:
             # Busca o hash salvo no banco
             sql = "SELECT password FROM accounts WHERE login = :login LIMIT 1"

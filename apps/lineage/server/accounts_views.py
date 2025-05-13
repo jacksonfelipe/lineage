@@ -27,12 +27,12 @@ def account_dashboard(request):
     # Verifica se a conta já está vinculada
     if not account.get("linked_uuid"):
         messages.warning(request, "Sua conta Lineage ainda não está vinculada. Por favor, vincule sua conta primeiro.")
-        return redirect('server:vincular_conta')
+        return redirect('server:link_lineage_account')
     
     user_uuid = str(request.user.uuid)
     if account.get("linked_uuid") != user_uuid:
         messages.error(request, "Sua conta Lineage está vinculada a outro usuário. Por favor, vincule novamente sua conta corretamente.")
-        return redirect('server:vincular_conta')
+        return redirect('server:link_lineage_account')
 
     try:
         personagens = LineageServices.find_chars(user_login)
@@ -103,12 +103,12 @@ def update_password(request):
     account_data = LineageAccount.check_login_exists(user.username)
     if not account_data or len(account_data) == 0 or not account_data[0].get("linked_uuid"):
         messages.error(request, "Sua conta Lineage não está vinculada. Por favor, vincule sua conta antes de atualizar a senha.")
-        return redirect('server:vincular_conta')
+        return redirect('server:link_lineage_account')
     
     user_uuid = str(request.user.uuid)
     if account_data[0].get("linked_uuid") != user_uuid:
         messages.error(request, "Sua conta Lineage está vinculada a outro usuário. Por favor, vincule novamente sua conta corretamente.")
-        return redirect('server:vincular_conta')
+        return redirect('server:link_lineage_account')
 
     if request.method == "POST":
         senha = request.POST.get("nova_senha")
@@ -197,18 +197,18 @@ def link_lineage_account(request):
 
         if not login_jogo or not senha_jogo:
             messages.error(request, "Preencha todos os campos.")
-            return redirect("server:vincular_conta")
+            return redirect("server:link_lineage_account")
 
         # Verifica se login + senha são válidos
         conta = LineageAccount.validate_credentials(login_jogo, senha_jogo)
         if not conta:
             messages.error(request, "Login ou senha incorretos.")
-            return redirect("server:vincular_conta")
+            return redirect("server:link_lineage_account")
 
         # Já está vinculada?
         if conta.get("linked_uuid"):
             messages.warning(request, "Essa conta já está vinculada a outro usuário.")
-            return redirect("server:vincular_conta")
+            return redirect("server:link_lineage_account")
 
         # Vincula a conta
         user_uuid = str(request.user.uuid)  # Certifique-se de que o User tem um campo `uuid`
@@ -219,6 +219,6 @@ def link_lineage_account(request):
             return redirect("server:account_dashboard")
         else:
             messages.error(request, "Erro ao vincular conta.")
-            return redirect("server:vincular_conta")
+            return redirect("server:link_lineage_account")
 
     return render(request, "l2_accounts/vincular_conta.html")
