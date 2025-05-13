@@ -20,6 +20,7 @@ from .templatetags.itens_extras import item_image_url
 TransferFromWalletToChar = get_query_class("TransferFromWalletToChar")
 TransferFromCharToWallet = get_query_class("TransferFromCharToWallet")
 LineageServices = get_query_class("LineageServices")
+LineageAccount = get_query_class("LineageAccount")
 
 
 @conditional_otp_required
@@ -28,6 +29,17 @@ def retirar_item_servidor(request):
     if not db.is_connected():
         messages.error(request, 'O banco do jogo está indisponível no momento. Tente novamente mais tarde.')
         return redirect('inventory:inventario_dashboard')
+    
+    # Verifica se a conta Lineage está vinculada
+    account_data = LineageAccount.check_login_exists(user.username)
+    if not account_data or len(account_data) == 0 or not account_data[0].get("linked_uuid"):
+        messages.error(request, "Sua conta Lineage não está vinculada. Por favor, vincule sua conta antes de atualizar a senha.")
+        return redirect('server:vincular_conta')
+    
+    user_uuid = str(request.user.uuid)
+    if account_data[0].get("linked_uuid") != user_uuid:
+        messages.error(request, "Sua conta Lineage está vinculada a outro usuário. Por favor, vincule novamente sua conta corretamente.")
+        return redirect('server:vincular_conta')
 
     personagens = []
     try:

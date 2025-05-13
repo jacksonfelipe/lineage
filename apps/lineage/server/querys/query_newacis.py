@@ -481,11 +481,30 @@ class LineageAccount:
         return 'access_level'
 
     @staticmethod
+    @cache_lineage_result(timeout=60, use_cache=False)
+    def link_account_to_user(login, user_uuid):
+        try:
+            sql = """
+                UPDATE accounts
+                SET linked_uuid = :uuid
+                WHERE login = :login AND (linked_uuid IS NULL OR linked_uuid = '')
+                LIMIT 1
+            """
+            params = {
+                "uuid": str(user_uuid),
+                "login": login
+            }
+            return LineageDB().update(sql, params)
+        except Exception as e:
+            print(f"Erro ao vincular conta Lineage a UUID: {e}")
+            return None
+
+    @staticmethod
     @cache_lineage_result(timeout=300)
     def ensure_columns():
         if LineageAccount._checked_columns:
             return
-        
+
         lineage_db = LineageDB()
         columns = lineage_db.get_table_columns("accounts")
 
@@ -505,6 +524,14 @@ class LineageAccount:
                 """
                 lineage_db.execute_raw(sql)
                 print("✅ Coluna 'created_time' adicionada com sucesso.")
+
+            if "linked_uuid" not in columns:
+                sql = """
+                    ALTER TABLE accounts
+                    ADD COLUMN linked_uuid VARCHAR(36) NULL DEFAULT NULL;
+                """
+                lineage_db.execute_raw(sql)
+                print("✅ Coluna 'linked_uuid' adicionada com sucesso.")
 
             LineageAccount._checked_columns = True
 
@@ -610,6 +637,28 @@ class LineageAccount:
         except Exception as e:
             print(f"Erro ao atualizar accessLevel: {e}")
             return None
+
+    @staticmethod
+    @cache_lineage_result(timeout=60, use_cache=False)
+    def verify_password(login, password):
+        try:
+            # Busca o hash salvo no banco
+            sql = "SELECT password FROM accounts WHERE login = :login LIMIT 1"
+            result = LineageDB().select(sql, {"login": login})
+
+            if not result:
+                return False
+
+            # Calcula o hash da senha informada
+            hashed_input = base64.b64encode(hashlib.sha1(password.encode()).digest()).decode()
+
+            # Compara com o valor armazenado
+            stored_hash = result[0]['password']
+            return hashed_input == stored_hash
+
+        except Exception as e:
+            print(f"Erro ao verificar senha: {e}")
+            return False
 
 
 class TransferFromWalletToChar:

@@ -6,7 +6,6 @@ from datetime import datetime
 from django.utils.timezone import make_aware
 from django.utils.timezone import now
 from utils.resources import gen_avatar, get_class_name
-from django.core.cache import cache
 
 from utils.dynamic_import import get_query_class
 LineageAccount = get_query_class("LineageAccount")
@@ -16,16 +15,24 @@ LineageServices = get_query_class("LineageServices")
 @conditional_otp_required
 @require_lineage_connection
 def account_dashboard(request):
-
     user_login = request.user.username
     account_data = LineageAccount.check_login_exists(user_login)
 
+    # Verifica se a conta existe
     if not account_data or len(account_data) == 0:
         return redirect('server:lineage_register')
+
+    account = account_data[0]
+
+    # Verifica se a conta já está vinculada
+    if not account.get("linked_uuid"):
+        messages.warning(request, "Sua conta Lineage ainda não está vinculada. Por favor, vincule sua conta primeiro.")
+        return redirect('server:vincular_conta')
     
-    if cache.get(f"lineage_registro_{request.user.username}"):
-        messages.info(request, "Sua conta foi criada recentemente. Aguarde até 5 minutos para que ela esteja disponível no painel [VOCÊ JÁ PODE ENTRAR  NO JOGO].")
-        return redirect('dashboard')
+    user_uuid = str(request.user.uuid)
+    if account.get("linked_uuid") != user_uuid:
+        messages.error(request, "Sua conta Lineage está vinculada a outro usuário. Por favor, vincule novamente sua conta corretamente.")
+        return redirect('server:vincular_conta')
 
     try:
         personagens = LineageServices.find_chars(user_login)
@@ -33,7 +40,6 @@ def account_dashboard(request):
         personagens = []
         messages.warning(request, 'Não foi possível carregar seus personagens agora.')
 
-    account = account_data[0]
     acesslevel = LineageAccount.get_acess_level()
     account['status'] = "Ativa" if int(account[acesslevel]) >= 0 else "Bloqueada"
 
@@ -51,7 +57,6 @@ def account_dashboard(request):
     # Status dos personagens
     char_list = []
     for char in personagens:
-
         # Verificando se o campo 'level' existe antes de acessá-lo
         level = char.get('base_level', '-')
 
@@ -92,10 +97,22 @@ def account_dashboard(request):
 @conditional_otp_required
 @require_lineage_connection
 def update_password(request):
+    user = request.user
+
+    # Verifica se a conta Lineage está vinculada
+    account_data = LineageAccount.check_login_exists(user.username)
+    if not account_data or len(account_data) == 0 or not account_data[0].get("linked_uuid"):
+        messages.error(request, "Sua conta Lineage não está vinculada. Por favor, vincule sua conta antes de atualizar a senha.")
+        return redirect('server:vincular_conta')
+    
+    user_uuid = str(request.user.uuid)
+    if account_data[0].get("linked_uuid") != user_uuid:
+        messages.error(request, "Sua conta Lineage está vinculada a outro usuário. Por favor, vincule novamente sua conta corretamente.")
+        return redirect('server:vincular_conta')
+
     if request.method == "POST":
         senha = request.POST.get("nova_senha")
         confirmar = request.POST.get("confirmar_senha")
-        user = request.user.username
 
         if not senha or not confirmar:
             messages.error(request, "Por favor, preencha todos os campos.")
@@ -105,7 +122,7 @@ def update_password(request):
             messages.error(request, "As senhas não coincidem.")
             return redirect('server:update_password')
 
-        success = LineageAccount.update_password(senha, user)
+        success = LineageAccount.update_password(senha, user.username)
 
         if success:
             messages.success(request, "Senha atualizada com sucesso!")
@@ -145,12 +162,16 @@ def register_lineage_account(request):
         )
 
         if success:
+            # Vincula automaticamente a conta após o registro
+            user_uuid = str(request.user.uuid)  # Certifique-se de que o User tem um campo `uuid`
+            success_link = LineageAccount.link_account_to_user(user.username, user_uuid)
 
-            # 🧠 Salva no cache por 5 minutos
-            cache.set(f"lineage_registro_{user.username}", True, timeout=300)  # 300 segundos = 5 minutos
-
-            messages.success(request, "Conta Lineage criada com sucesso!")
-            return redirect('server:register_success')
+            if success_link:
+                messages.success(request, "Conta Lineage criada e vinculada com sucesso!")
+                return redirect('server:register_success')
+            else:
+                messages.error(request, "Erro ao vincular a conta.")
+                return redirect('server:lineage_register')
         else:
             messages.error(request, "Erro ao criar conta.")
             return redirect('server:lineage_register')
@@ -162,5 +183,42 @@ def register_lineage_account(request):
 
 
 @conditional_otp_required
+@require_lineage_connection
 def register_success(request):
     return render(request, 'l2_accounts/register_success.html')
+
+
+@conditional_otp_required
+@require_lineage_connection
+def link_lineage_account(request):
+    if request.method == "POST":
+        login_jogo = request.POST.get("login")
+        senha_jogo = request.POST.get("senha")
+
+        if not login_jogo or not senha_jogo:
+            messages.error(request, "Preencha todos os campos.")
+            return redirect("server:vincular_conta")
+
+        # Verifica se login + senha são válidos
+        conta = LineageAccount.validate_credentials(login_jogo, senha_jogo)
+        if not conta:
+            messages.error(request, "Login ou senha incorretos.")
+            return redirect("server:vincular_conta")
+
+        # Já está vinculada?
+        if conta.get("linked_uuid"):
+            messages.warning(request, "Essa conta já está vinculada a outro usuário.")
+            return redirect("server:vincular_conta")
+
+        # Vincula a conta
+        user_uuid = str(request.user.uuid)  # Certifique-se de que o User tem um campo `uuid`
+        success = LineageAccount.link_account_to_user(login_jogo, user_uuid)
+
+        if success:
+            messages.success(request, "Conta vinculada com sucesso!")
+            return redirect("server:account_dashboard")
+        else:
+            messages.error(request, "Erro ao vincular conta.")
+            return redirect("server:vincular_conta")
+
+    return render(request, "l2_accounts/vincular_conta.html")
