@@ -455,6 +455,34 @@ class LineageAccount:
         return 'access_level'
 
     @staticmethod
+    @cache_lineage_result(timeout=300)
+    def find_accounts_by_email(email):
+        sql = """
+            SELECT *
+            FROM accounts
+            WHERE email = :email
+        """
+        try:
+            return LineageDB().select(sql, {"email": email})
+        except:
+            return []
+
+    @staticmethod
+    @cache_lineage_result(timeout=300)
+    def get_account_by_login_and_email(login, email):
+        sql = """
+            SELECT *
+            FROM accounts
+            WHERE login = :login AND email = :email
+            LIMIT 1
+        """
+        try:
+            result = LineageDB().select(sql, {"login": login, "email": email})
+            return result[0] if result else None
+        except:
+            return None
+
+    @staticmethod
     @cache_lineage_result(timeout=60, use_cache=False)
     def link_account_to_user(login, user_uuid):
         try:

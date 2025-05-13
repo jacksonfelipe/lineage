@@ -50,6 +50,8 @@ urlpatterns = [
     path('account/change-nickname/<int:char_id>/', change_nickname_view, name='change_nickname'),
     path('account/configure-service-prices/', configure_service_prices, name='configure_service_prices'),
     path('account/link-lineage-account/', link_lineage_account, name='link_lineage_account'),
+    path('account/link-by-email/', request_link_by_email, name='request_link_by_email'),
+    path('account/link-by-email/<str:token>/', link_by_email_token, name='link_by_email_token'),
 
     path('supporter/panel/', views.painel_apoiador, name='painel_apoiador'),
     path('supporter/request/', views.formulario_apoiador, name='formulario_apoiador'),
