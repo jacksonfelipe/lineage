@@ -286,7 +286,7 @@ def link_by_email_token(request, token):
     if not conta or conta.get("linked_uuid"):
         messages.error(request, "Conta inválida ou já vinculada.")
         return redirect("server:link_lineage_account")
-
+    
     success = LineageAccount.link_account_to_user(login, str(request.user.uuid))
     if success:
         messages.success(request, "Conta vinculada com sucesso!")

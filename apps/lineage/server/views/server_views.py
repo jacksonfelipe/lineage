@@ -1,21 +1,21 @@
 from django.http import JsonResponse
-from .decorators import endpoint_enabled, safe_json_response
+from ..decorators import endpoint_enabled, safe_json_response
 
 from utils.dynamic_import import get_query_class  # importa o helper
 LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
 
 from apps.main.home.decorator import conditional_otp_required
 from django.contrib.admin.views.decorators import staff_member_required
-from .models import Apoiador
+from ..models import Apoiador
 from apps.lineage.shop.models import ShopPurchase, PromotionCode
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import ApoiadorForm
+from ..forms import ApoiadorForm
 from django.db.models import Sum
 from django.utils import timezone
 
-from .forms import SolicitarComissaoForm, ImagemApoiadorForm
-from .utils.apoiador import pagar_comissao, calcular_valor_disponivel
+from ..forms import SolicitarComissaoForm, ImagemApoiadorForm
+from ..utils.apoiador import pagar_comissao, calcular_valor_disponivel
 from decimal import Decimal
 
 
