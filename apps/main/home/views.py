@@ -8,13 +8,11 @@ from django.conf import settings
 from django.utils.translation import get_language
 
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
-from .forms import (UserProfileForm, AddressUserForm, RegistrationForm, LoginForm, 
-                    UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, AvatarForm)
+from .forms import *
 
 from django.shortcuts import render, redirect
 from apps.main.home.decorator import conditional_otp_required
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import logout
 from utils.notifications import send_notification
 import logging
@@ -27,7 +25,7 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django.utils.translation import activate
 from django.http import HttpResponseRedirect
-from utils.crests import CrestHandler
+from apps.lineage.server.utils.crest import attach_crests_to_clans
 
 from apps.lineage.server.models import IndexConfig, Apoiador
 from django.utils import translation
@@ -48,8 +46,8 @@ from .resource.twofa import gerar_qr_png
 from utils.services import verificar_conquistas
 from apps.lineage.games.utils import verificar_recompensas_por_nivel
 
-from utils.dynamic_import import get_query_class  # importa o helper
-LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
+from utils.dynamic_import import get_query_class
+LineageStats = get_query_class("LineageStats")
 
 
 logger = logging.getLogger(__name__)
@@ -73,70 +71,8 @@ def index(request):
     # Pega os clãs mais bem posicionados
     clanes = LineageStats.top_clans(limit=10) or []
 
-    # Pega os IDs dos clãs para pegar os crests
-    clan_ids = [clan.get('clan_id') for clan in clanes if 'clan_id' in clan]
-    ally_ids = [clan.get('ally_id') for clan in clanes if 'ally_id' in clan]
-
-    # Pega as crests para os clãs
-    crests = LineageStats.get_crests(clan_ids) or {}
-    ally_crests = LineageStats.get_crests(ally_ids, type='ally') or {}
-
-    # Processa as imagens dos crests
-    crest_handler = CrestHandler()
-
-    for clan in clanes:
-        crest_id = clan.get('clan_id')
-
-        # Verifique se o crest existe
-        # Ajusta a forma de acessar o crest
-        crest_blob = None
-        for crest in crests:
-            if crest.get('clan_id') == crest_id:
-                crest_blob = crest.get('crest')
-                break
-
-        # Para o caso do clã ter um crest
-        if crest_blob:
-            # Cria a imagem do crest do clã e converte para base64
-            image_bytes = crest_handler.make_image(crest_blob, crest_id, 'clan', show_image=True)
-
-            # Rewind the BytesIO to the beginning before encoding
-            image_bytes.seek(0)  # Coloca o ponteiro de volta ao início
-            crest_image_base64 = base64.b64encode(image_bytes.read()).decode('utf-8')
-            clan['clan_crest_image_base64'] = crest_image_base64
-        else:
-            # Caso não haja crest do clã, cria uma imagem vazia
-            empty_image_bytes = crest_handler.make_empty_image('clan')
-
-            # Rewind the BytesIO to the beginning before encoding
-            empty_image_bytes.seek(0)  # Coloca o ponteiro de volta ao início
-            crest_image_base64 = base64.b64encode(empty_image_bytes.read()).decode('utf-8')
-            clan['clan_crest_image_base64'] = crest_image_base64
-
-        # Se houver ally_id, processa a imagem da aliança também
-        ally_crest_blob = None
-        if clan.get('ally_id'):
-            for crest in ally_crests:
-                if crest.get('ally_id') == clan.get('ally_id'):
-                    ally_crest_blob = crest.get('crest')
-                    break
-
-            if ally_crest_blob:
-                # Cria a imagem do crest da aliança e converte para base64
-                ally_image_bytes = crest_handler.make_image(ally_crest_blob, crest_id, 'ally', show_image=True)
-
-                # Rewind the BytesIO to the beginning before encoding
-                ally_image_bytes.seek(0)  # Coloca o ponteiro de volta ao início
-                ally_crest_image_base64 = base64.b64encode(ally_image_bytes.read()).decode('utf-8')
-                clan['ally_crest_image_base64'] = ally_crest_image_base64
-            else:
-                # Caso não haja crest da aliança, cria uma imagem vazia
-                empty_ally_image_bytes = crest_handler.make_empty_image('ally')
-
-                # Rewind the BytesIO to the beginning before encoding
-                empty_ally_image_bytes.seek(0)  # Coloca o ponteiro de volta ao início
-                ally_crest_image_base64 = base64.b64encode(empty_ally_image_bytes.read()).decode('utf-8')
-                clan['ally_crest_image_base64'] = ally_crest_image_base64
+    # Aplica a lógica das crests usando a função já existente
+    clanes = attach_crests_to_clans(clanes)
 
     # Pega os jogadores online
     online = LineageStats.players_online() or []
@@ -154,12 +90,11 @@ def index(request):
         translation = config.translations.filter(language=current_lang).first()
 
     # Caso não exista o registro de configuração ou tradução, usa valores padrões
-    nome_servidor = "Lineage 2 PDL"  # Valor padrão
-    descricao_servidor = "Onde Lendas Nascem, Heróis Lutam e a Glória É Eterna."  # Valor padrão
-    jogadores_online_texto = "Jogadores online Agora"  # Valor padrão
+    nome_servidor = "Lineage 2 PDL"
+    descricao_servidor = "Onde Lendas Nascem, Heróis Lutam e a Glória É Eterna."
+    jogadores_online_texto = "Jogadores online Agora"
 
     if config:
-        # Verifica se a tradução existe, senão usa os valores do config
         nome_servidor = translation.nome_servidor if translation else config.nome_servidor
         descricao_servidor = translation.descricao_servidor if translation else config.descricao_servidor
         jogadores_online_texto = translation.jogadores_online_texto if translation else config.jogadores_online_texto
@@ -177,7 +112,7 @@ def index(request):
     apoiadores = Apoiador.objects.filter(ativo=True, status='aprovado')
 
     context = {
-        'clanes': clanes,  # Passando os clãs com as imagens de crest
+        'clanes': clanes,
         'classes_info': classes_info,
         'online': online_count,
         'configuracao': config,
