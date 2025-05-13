@@ -20,15 +20,15 @@ class LineageStats:
             return []
 
         # Como ally_data não existe, usaremos clan_data para ambos os tipos
-        table = 'clan_data'
+        table = 'clan'
         
         # Defina a coluna do ID e do emblema com base no tipo (clan ou ally)
         if type == 'ally':
-            id_column = 'ally_id'
-            crest_column = 'ally_crest_id'  # Usando ally_crest_id da tabela clan_data
+            id_column = 'id'
+            crest_column = 'imagenes'  # Usando ally_crest_id da tabela clan_data
         else:
-            id_column = 'clan_id'
-            crest_column = 'crest_id'  # Usando crest_id para clãs
+            id_column = 'id'
+            crest_column = 'imagenes'  # Usando crest_id para clãs
 
         # Construção da consulta SQL para obter as crests dos clãs ou alianças
         sql = f"""
