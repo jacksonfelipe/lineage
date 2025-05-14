@@ -5,24 +5,20 @@ import time
 import base64
 import hashlib
 
+from apps.lineage.server.utils.password_hash import PasswordHash
+
 
 def detect_and_hash(password, stored_hash, login=None):
     hash_len = len(stored_hash)
 
     if hash_len == 28:
-        # SHA-1 + base64
-        return base64.b64encode(hashlib.sha1(password.encode()).digest()).decode()
-    
-    elif hash_len == 64:
-        # SHA-384 + base64
-        return base64.b64encode(hashlib.sha384(password.encode()).digest()).decode()
-    
+        hasher = PasswordHash("sha1")
     elif hash_len == 88:
-        # SHA-512 + base64
-        return base64.b64encode(hashlib.sha512(password.encode()).digest()).decode()
-    
+        hasher = PasswordHash("whirlpool")
     else:
         return None  # hash desconhecido
+
+    return hasher.encrypt(password)
 
 
 class LineageStats:
@@ -642,10 +638,15 @@ class LineageAccount:
             if not result:
                 return False
 
-            stored_hash = result[0]['password']
+            stored_hash: str = result[0]['password']
             hashed_input = detect_and_hash(password, stored_hash)
 
-            return hashed_input == stored_hash
+            print(f"[DEBUG] Login: '{login}'")
+            print(f"[DEBUG] Password: '{password}' (len={len(password)})")
+            print(f"[DEBUG] Stored hash: '{stored_hash}' (len={len(stored_hash)})")
+            print(f"[DEBUG] Hashed input: '{hashed_input}'")
+
+            return hashed_input.lower() == stored_hash.lower()
 
         except Exception as e:
             print(f"Erro ao verificar senha: {e}")
