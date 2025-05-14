@@ -24,7 +24,7 @@ SBOX = [
 ]
 
 # R constantes
-RC = [0L]*11
+RC = [0] * 11
 for r in range(1, 11):
     RC[r] = (SBOX[8*(r-1)] << 56)
     for i in range(1,8):
