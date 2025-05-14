@@ -43,7 +43,7 @@ class Whirlpool:
     def __init__(self):
         self._bitlength = 0
         self._buffer = b''
-        self._hash = [0L]*8
+        self._hash = [0]*8
 
     def update(self, data):
         self._buffer += data
