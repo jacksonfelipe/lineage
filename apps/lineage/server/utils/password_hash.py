@@ -10,8 +10,11 @@ class PasswordHash:
     def encrypt(self, password: str) -> str:
         try:
             if self.name == 'whirlpool':
-                import whirlpool
-                digest = whirlpool.new(password.encode()).digest()
+                from utils.Whirlpool2000 import Whirlpool2000
+                h = Whirlpool2000()
+                h.update(password.encode())
+                digest = h.hexdigest()
+                digest = digest.encode()
             else:
                 hasher = hashlib.new(self.name)
                 hasher.update(password.encode())
