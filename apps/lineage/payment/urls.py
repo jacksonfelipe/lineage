@@ -24,9 +24,4 @@ urlpatterns = [
     path('stripe/sucesso/', stripe_views.stripe_pagamento_sucesso, name='stripe_pagamento_sucesso'),
     path('stripe/erro/', stripe_views.stripe_pagamento_erro, name='stripe_pagamento_erro'),
     path('stripe/webhook/', stripe_views.stripe_webhook, name='stripe_webhook'),
-
-    # PayPal
-    path('paypal/sucesso/', paypal_views.paypal_pagamento_sucesso, name='paypal_pagamento_sucesso'),
-    path('paypal/erro/', paypal_views.paypal_pagamento_erro, name='paypal_pagamento_erro'),
-    path('paypal/webhook/', paypal_views.paypal_webhook, name='paypal_webhook'),
 ]
