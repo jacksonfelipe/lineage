@@ -633,6 +633,7 @@ class LineageAccount:
     @cache_lineage_result(timeout=60, use_cache=False)
     def validate_credentials(login, password):
         try:
+            print(login, password)
             sql = "SELECT password FROM accounts WHERE login = :login LIMIT 1"
             result = LineageDB().select(sql, {"login": login})
 
@@ -640,6 +641,7 @@ class LineageAccount:
                 return False
 
             stored_hash = result[0]['password']
+            print(stored_hash)
             hashed_input = detect_and_hash(password, stored_hash)
 
             return hashed_input == stored_hash
