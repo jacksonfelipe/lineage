@@ -455,6 +455,21 @@ class LineageAccount:
 
     @staticmethod
     @cache_lineage_result(timeout=300)
+    def get_account_by_login(login):
+        sql = """
+            SELECT *
+            FROM accounts
+            WHERE login = :login
+            LIMIT 1
+        """
+        try:
+            result = LineageDB().select(sql, {"login": login})
+            return result[0] if result else None
+        except:
+            return None
+
+    @staticmethod
+    @cache_lineage_result(timeout=300)
     def find_accounts_by_email(email):
         sql = """
             SELECT *
@@ -640,11 +655,6 @@ class LineageAccount:
 
             stored_hash: str = result[0]['password']
             hashed_input = detect_and_hash(password, stored_hash)
-
-            print(f"[DEBUG] Login: '{login}'")
-            print(f"[DEBUG] Password: '{password}' (len={len(password)})")
-            print(f"[DEBUG] Stored hash: '{stored_hash}' (len={len(stored_hash)})")
-            print(f"[DEBUG] Hashed input: '{hashed_input}'")
 
             return hashed_input.lower() == stored_hash.lower()
 

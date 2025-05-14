@@ -202,10 +202,12 @@ def link_lineage_account(request):
         senha_jogo = request.POST.get("senha")
 
         # Verifica se login + senha são válidos
-        conta = LineageAccount.validate_credentials(login_jogo, senha_jogo)
-        if not conta:
+        is_valided = LineageAccount.validate_credentials(login_jogo, senha_jogo)
+        if not is_valided:
             messages.error(request, "Login ou senha incorretos.")
             return redirect("server:link_lineage_account")
+        
+        conta = LineageAccount.get_account_by_login(login_jogo)
 
         # Já está vinculada?
         if conta.get("linked_uuid"):
