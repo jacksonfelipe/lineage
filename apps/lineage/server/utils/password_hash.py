@@ -10,10 +10,10 @@ class PasswordHash:
     def encrypt(self, password: str) -> str:
         try:
             if self.name == 'whirlpool':
-                from utils.Whirlpool2000 import Whirlpool2000
-                h = Whirlpool2000()
-                h.update(password.encode())
-                hash_b64 = base64.b64encode(h.digest()).decode()
+                from utils.Whirlpool2003 import Whirlpool2003
+                whirlpool = Whirlpool2003()
+                whirlpool.update(password.encode())
+                hash_b64 = base64.b64encode(whirlpool.digest()).decode()
             else:
                 hasher = hashlib.new(self.name)
                 hasher.update(password.encode())
