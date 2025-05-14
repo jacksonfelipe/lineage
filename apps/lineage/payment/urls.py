@@ -2,7 +2,6 @@ from django.urls import path
 from .views import payments_views
 from .views import mercadopago_views
 from .views import stripe_views
-from .views import paypal_views
 
 
 app_name = "payment"
