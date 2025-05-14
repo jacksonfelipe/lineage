@@ -32,8 +32,6 @@ tablib
 diff_match_patch
 python-ipware
 passlib[bcrypt]
-pycryptodome
-whirlpool-py311
 requests
 
 # celery

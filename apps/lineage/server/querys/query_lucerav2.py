@@ -1,6 +1,5 @@
 from apps.lineage.server.database import LineageDB
 from apps.lineage.server.utils.cache import cache_lineage_result
-from whirlpool import Whirlpool
 
 import time
 import base64
@@ -19,16 +18,8 @@ def detect_and_hash(password, stored_hash, login=None):
         return base64.b64encode(hashlib.sha384(password.encode()).digest()).decode()
     
     elif hash_len == 88:
-        # Whirlpool2 + base64 (com password + login concatenado)
-        if login:
-            data = (password + login).encode()
-        else:
-            data = password.encode()
-
-        h = Whirlpool()
-        h.update(data)
-        digest = h.digest()
-        return base64.b64encode(digest).decode()
+        # SHA-512 + base64
+        return base64.b64encode(hashlib.sha512(password.encode()).digest()).decode()
     
     else:
         return None  # hash desconhecido
