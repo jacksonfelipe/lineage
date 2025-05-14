@@ -222,6 +222,9 @@ def link_lineage_account(request):
         else:
             messages.error(request, "Erro ao vincular conta.")
             return redirect("server:link_lineage_account")
+        
+    if settings.LINEAGE_QUERY_MODULE in ['dreamv3', 'lucerav2']:
+        return redirect("server:request_link_by_email")
 
     return render(request, "l2_accounts/vincular_conta.html")
 

@@ -491,3 +491,4 @@ PROJECT_INSTAGRAM_URL = os.getenv('PROJECT_INSTAGRAM_URL', 'https://www.instagra
 # =========================== OTHERS CONFIGS ===========================
 
 SLOGAN = str2bool(os.getenv('SLOGAN', True))
+LINEAGE_QUERY_MODULE = os.getenv('LINEAGE_QUERY_MODULE', 'dreamv3')
