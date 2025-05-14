@@ -6,6 +6,22 @@ import base64
 import hashlib
 
 
+def detect_and_hash(password, stored_hash):
+    hash_len = len(stored_hash)
+
+    if hash_len == 28:
+        # SHA-1 + base64
+        return base64.b64encode(hashlib.sha1(password.encode()).digest()).decode()
+    elif hash_len == 64:
+        # SHA-384 + base64
+        return base64.b64encode(hashlib.sha384(password.encode()).digest()).decode()
+    elif hash_len == 88:
+        # SHA-512 + base64
+        return base64.b64encode(hashlib.sha512(password.encode()).digest()).decode()
+    else:
+        return None  # hash desconhecido
+
+
 class LineageStats:
 
     @staticmethod
@@ -617,18 +633,15 @@ class LineageAccount:
     @cache_lineage_result(timeout=60, use_cache=False)
     def validate_credentials(login, password):
         try:
-            # Busca o hash salvo no banco
             sql = "SELECT password FROM accounts WHERE login = :login LIMIT 1"
             result = LineageDB().select(sql, {"login": login})
 
             if not result:
                 return False
 
-            # Calcula o hash da senha informada
-            hashed_input = base64.b64encode(hashlib.sha1(password.encode()).digest()).decode()
-
-            # Compara com o valor armazenado
             stored_hash = result[0]['password']
+            hashed_input = detect_and_hash(password, stored_hash)
+
             return hashed_input == stored_hash
 
         except Exception as e:
