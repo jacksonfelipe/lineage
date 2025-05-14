@@ -171,6 +171,5 @@ if __name__ == '__main__':
     import base64
     h = Whirlpool2000()
     h.update(b"yang")
-    password = h.hexdigest()
-    hash = base64.b64encode(password.encode()).decode()
-    print(hash)
+    hash_b64 = base64.b64encode(h.digest()).decode()
+    print(hash_b64)

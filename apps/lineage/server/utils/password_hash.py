@@ -13,14 +13,14 @@ class PasswordHash:
                 from utils.Whirlpool2000 import Whirlpool2000
                 h = Whirlpool2000()
                 h.update(password.encode())
-                digest = h.hexdigest()
-                digest = digest.encode()
+                hash_b64 = base64.b64encode(h.digest()).decode()
             else:
                 hasher = hashlib.new(self.name)
                 hasher.update(password.encode())
                 digest = hasher.digest()
+                hash_b64 = base64.b64encode(digest).decode()
 
-            return base64.b64encode(digest).decode()
+            return hash_b64
         except Exception as e:
             self.logger.error(f"{self.name}: encryption error!", exc_info=e)
             raise
