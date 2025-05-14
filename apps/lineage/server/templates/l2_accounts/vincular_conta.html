@@ -12,7 +12,7 @@
 
       <div class="mb-3">
         <label class="form-label">{% trans "Login da Conta Lineage" %}</label>
-        <input type="text" name="login" class="form-control" placeholder="{% trans 'Digite o login do jogo' %}" required>
+        <input type="text" class="form-control" value="{{ request.user.username }}" readonly disabled>
       </div>
 
       <div class="mb-3">

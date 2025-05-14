@@ -198,12 +198,8 @@ def register_success(request):
 @require_lineage_connection
 def link_lineage_account(request):
     if request.method == "POST":
-        login_jogo = request.POST.get("login")
+        login_jogo = request.user.username
         senha_jogo = request.POST.get("senha")
-
-        if not login_jogo or not senha_jogo:
-            messages.error(request, "Preencha todos os campos.")
-            return redirect("server:link_lineage_account")
 
         # Verifica se login + senha são válidos
         conta = LineageAccount.validate_credentials(login_jogo, senha_jogo)
