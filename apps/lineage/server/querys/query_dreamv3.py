@@ -1,23 +1,32 @@
 from apps.lineage.server.database import LineageDB
 from apps.lineage.server.utils.cache import cache_lineage_result
+from Crypto.Hash import Whirlpool
 
 import time
 import base64
 import hashlib
 
 
-def detect_and_hash(password, stored_hash):
+def detect_and_hash(password, stored_hash, login=None):
     hash_len = len(stored_hash)
 
     if hash_len == 28:
         # SHA-1 + base64
         return base64.b64encode(hashlib.sha1(password.encode()).digest()).decode()
+    
     elif hash_len == 64:
         # SHA-384 + base64
         return base64.b64encode(hashlib.sha384(password.encode()).digest()).decode()
+    
     elif hash_len == 88:
-        # SHA-512 + base64
-        return base64.b64encode(hashlib.sha512(password.encode()).digest()).decode()
+        # Whirlpool2 + base64 (com password + login concatenado)
+        h = Whirlpool.new()
+        if login:
+            h.update((password + login).encode())
+        else:
+            h.update(password.encode())
+        return base64.b64encode(h.digest()).decode()
+    
     else:
         return None  # hash desconhecido
 
@@ -640,7 +649,7 @@ class LineageAccount:
                 return False
 
             stored_hash = result[0]['password']
-            hashed_input = detect_and_hash(password.strip(), stored_hash)
+            hashed_input = detect_and_hash(password, stored_hash)
 
             print(f"[DEBUG] Login: '{login}'")
             print(f"[DEBUG] Password: '{password}' (len={len(password)})")
