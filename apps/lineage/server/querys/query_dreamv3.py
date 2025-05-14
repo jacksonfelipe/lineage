@@ -1,6 +1,6 @@
 from apps.lineage.server.database import LineageDB
 from apps.lineage.server.utils.cache import cache_lineage_result
-from Crypto.Hash import Whirlpool
+from utils.whirlpool import new as whirlpool_new
 
 import time
 import base64
@@ -20,7 +20,7 @@ def detect_and_hash(password, stored_hash, login=None):
     
     elif hash_len == 88:
         # Whirlpool2 + base64 (com password + login concatenado)
-        h = Whirlpool.new()
+        h = whirlpool_new()
         if login:
             h.update((password + login).encode())
         else:
