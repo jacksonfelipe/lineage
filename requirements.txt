@@ -46,7 +46,6 @@ daphne
 # payments
 mercadopago
 stripe
-paypal-server-sdk
 
 # for history-migrates
 django-ckeditor
