@@ -1,5 +1,4 @@
 from django.conf import settings
-from apps.main.administrator.models import Theme, BackgroundSetting, ThemeVariable
 import os
 from django.utils.text import slugify
 from django.templatetags.static import static
@@ -25,6 +24,8 @@ def project_metadata(request):
 
 
 def active_theme(request):
+    from apps.main.administrator.models import Theme
+
     theme = Theme.objects.filter(ativo=True).first()
     base_template = "layouts/base-default.html"
     theme_files = {}
@@ -52,6 +53,8 @@ def active_theme(request):
 
 
 def background_setting(request):
+    from apps.main.administrator.models import BackgroundSetting
+
     bg = BackgroundSetting.get_active()
     if bg and bg.image:
         bg_url = bg.image.url
@@ -64,6 +67,8 @@ def background_setting(request):
 
 
 def theme_variables(request):
+    from apps.main.administrator.models import ThemeVariable
+
     lang_code = get_language()[:2]  # exemplo: 'pt', 'en', 'es'
 
     variables = ThemeVariable.objects.all()

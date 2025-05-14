@@ -9,6 +9,7 @@ from django.utils.translation import get_language
 
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
 from .forms import *
+from .utils import resolve_templated_path
 
 from django.shortcuts import render, redirect
 from apps.main.home.decorator import conditional_otp_required
@@ -354,6 +355,25 @@ class UserLoginView(LoginView):
             return redirect('verify_2fa')  # Redireciona para a view de verificação do token
 
         # Se não tiver 2FA configurado, faz o login normalmente
+        login(self.request, user)
+        return redirect(self.get_success_url())
+    
+
+class UserLoginView(LoginView):
+    form_class = LoginForm
+
+    def get_template_names(self):
+        # Aqui você retorna o caminho do template com base no tema ativo
+        return [resolve_templated_path(self.request, 'accounts_custom', 'sign-in.html')]
+
+    def form_valid(self, form):
+        user = form.get_user()
+
+        totp_device = TOTPDevice.objects.filter(user=user, confirmed=True).first()
+        if totp_device:
+            self.request.session['pre_2fa_user_id'] = user.pk
+            return redirect('verify_2fa')
+
         login(self.request, user)
         return redirect(self.get_success_url())
        
