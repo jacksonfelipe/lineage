@@ -114,6 +114,7 @@ MIDDLEWARE = [
     "middlewares.access_apps.LoginRequiredAccess",
     "middlewares.forbidden_redirect_middleware.ForbiddenRedirectMiddleware",
     "middlewares.rate_limit_api_external.RateLimitMiddleware",
+    "middlewares.lock_screen_middleware.SessionLockMiddleware",
 ]
 
 # =========================== TEMPLATES CONFIGS ===========================

@@ -1,7 +1,10 @@
 from django.urls import path
-from .views import *
-from .public import public_faq_list, public_news_detail, public_news_list
 from django.contrib.auth import views as auth_views
+
+from .views.views import *
+from .views.public import *
+from .views.accounts import *
+from .views.commons import *
 
 
 urlpatterns = [

@@ -1,71 +1,44 @@
-from .models import *
-import requests
-import json
-import base64
-from django.http import HttpResponse
+import json, base64, logging, pyotp
+
+from ..models import *
+from ..forms import *
+from ..resource.twofa import gerar_qr_png
+
 from django.core.paginator import Paginator
-from django.conf import settings
-from django.utils.translation import get_language
-
-from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
-from .forms import *
-from .utils import resolve_templated_path
-
-from django.shortcuts import render, redirect
-from apps.main.home.decorator import conditional_otp_required
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth import logout
-from utils.notifications import send_notification
-import logging
-
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str
-from django.contrib.auth.tokens import default_token_generator
-from django.urls import reverse
 from django.core.mail import send_mail
+from django.conf import settings
+from django.shortcuts import render, redirect
+from django.urls import reverse
+
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth import authenticate
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
-from django.utils.translation import activate
-from django.http import HttpResponseRedirect
-from apps.lineage.server.utils.crest import attach_crests_to_clans
 
-from apps.lineage.server.models import IndexConfig, Apoiador
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.utils.translation import get_language
 from django.utils import translation
-from utils.render_theme_page import render_theme_page
+from django_otp.plugins.otp_totp.models import TOTPDevice
 
+from apps.lineage.server.utils.crest import attach_crests_to_clans
+from apps.main.home.decorator import conditional_otp_required
+from apps.lineage.server.models import IndexConfig, Apoiador
 from apps.lineage.wallet.models import Wallet
 from apps.lineage.inventory.models import Inventory
 from apps.lineage.auction.models import Auction
-
-from django.contrib.auth import get_user_model
-from django.contrib.auth import login
-
-from django_otp.plugins.otp_totp.models import TOTPDevice
-from django_otp import login as otp_login
-
-import pyotp
-from .resource.twofa import gerar_qr_png
-from utils.services import verificar_conquistas
 from apps.lineage.games.utils import verificar_recompensas_por_nivel
 
+from utils.render_theme_page import render_theme_page
+from utils.services import verificar_conquistas
 from utils.dynamic_import import get_query_class
+
 LineageStats = get_query_class("LineageStats")
-
-
 logger = logging.getLogger(__name__)
 
 
 with open('utils/data/index.json', 'r', encoding='utf-8') as file:
         data_index = json.load(file)
-
-
-def verificar_hcaptcha(token):
-    secret = settings.HCAPTCHA_SECRET_KEY
-    data = {
-        'response': token,
-        'secret': secret,
-    }
-    r = requests.post('https://hcaptcha.com/siteverify', data=data)
-    return r.json().get('success', False)
 
 
 def index(request):
@@ -124,18 +97,6 @@ def index(request):
     }
 
     return render_theme_page(request, 'public', 'index.html', context)
-
-
-def custom_400_view(request, exception):
-    return render(request, 'errors/400.html', status=400)
-
-
-def custom_404_view(request, exception):
-    return render(request, 'errors/404.html', status=404)
-
-
-def custom_500_view(request):
-    return render(request, 'errors/500.html', status=500)
 
 
 @conditional_otp_required
@@ -227,10 +188,6 @@ def add_or_edit_address(request):
     return render(request, 'pages/address_form.html', context)
 
 
-def empty_view(request):
-    return HttpResponse(status=404)
-
-
 @staff_member_required
 def log_info_dashboard(request):
     log_file_path = 'logs/info.log'  # Caminho para o arquivo de log
@@ -277,151 +234,26 @@ def log_error_dashboard(request):
     return render(request, 'pages/logs.html', context)
 
 
-def logout_view(request):
-  logout(request)
-  return redirect('/')
-
-
-def register_view(request):
-    if request.method == 'POST':
-        form = RegistrationForm(request.POST)
-
-        hcaptcha_token = request.POST.get('h-captcha-response')
-        hcaptcha_ok = verificar_hcaptcha(hcaptcha_token)
-
-        # Verifica termos + captcha + formulário
-        if not request.POST.get('terms'):
-            form.add_error(None, 'Você precisa aceitar os termos e condições para se registrar.')
-
-        elif not hcaptcha_ok:
-            form.add_error(None, 'Verificação do hCaptcha falhou. Tente novamente.')
-
-        elif form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = True
-            user.save()
-
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            token = default_token_generator.make_token(user)
-            verification_link = request.build_absolute_uri(
-                reverse('verificar_email', args=[uid, token])
-            )
-
-            try:
-                send_mail(
-                    subject='Verifique seu e-mail',
-                    message=f'Olá {user.username}, clique no link para verificar sua conta: {verification_link}',
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[user.email],
-                    fail_silently=False,
-                )
-            except Exception as e:
-                logger.error(f"Erro ao enviar email: {str(e)}")
-
-            try:
-                send_notification(
-                    user=None,
-                    notification_type='staff',
-                    message=f'Usuário {user.username} de email {user.email} cadastrado com sucesso!',
-                    created_by=None
-                )
-            except Exception as e:
-                logger.error(f"Erro ao criar notificação: {str(e)}")
-
-            return redirect('registration_success')
-        else:
-            print("Registration failed!")
-    else:
-        form = RegistrationForm()
-
-    context = {'form': form, 'hcaptcha_site_key': settings.HCAPTCHA_SITE_KEY}
-    return render(request, 'accounts_custom/sign-up.html', context)
-
-
-class UserLoginView(LoginView):
-    form_class = LoginForm
-    template_name = 'accounts_custom/sign-in.html'
-
-    def form_valid(self, form):
-        user = form.get_user()
-
-        # Verifica se o usuário tem 2FA configurado
-        totp_device = TOTPDevice.objects.filter(user=user, confirmed=True).first()
-
-        if totp_device:
-            # Salva o user_id temporariamente na sessão para validar o TOTP depois
-            self.request.session['pre_2fa_user_id'] = user.pk
-            # Salva o estado da requisição para processar a verificação do OTP
-            return redirect('verify_2fa')  # Redireciona para a view de verificação do token
-
-        # Se não tiver 2FA configurado, faz o login normalmente
-        login(self.request, user)
-        return redirect(self.get_success_url())
-    
-
-class UserLoginView(LoginView):
-    form_class = LoginForm
-
-    def get_template_names(self):
-        # Aqui você retorna o caminho do template com base no tema ativo
-        return [resolve_templated_path(self.request, 'accounts_custom', 'sign-in.html')]
-
-    def form_valid(self, form):
-        user = form.get_user()
-
-        totp_device = TOTPDevice.objects.filter(user=user, confirmed=True).first()
-        if totp_device:
-            self.request.session['pre_2fa_user_id'] = user.pk
-            return redirect('verify_2fa')
-
-        login(self.request, user)
-        return redirect(self.get_success_url())
-       
-
-class UserPasswordChangeView(PasswordChangeView):
-    template_name = 'accounts_custom/password-change.html'
-    form_class = UserPasswordChangeForm
-
-    def form_valid(self, form):
-        print("Password changed successfully!")
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        print("Password change failed!")
-        return super().form_invalid(form)
-    
-
-class UserPasswordResetView(PasswordResetView):
-    template_name = 'accounts_custom/forgot-password.html'
-    form_class = UserPasswordResetForm
-
-    def form_valid(self, form):
-        print("Password reset email sent!")
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        print("Failed to send password reset email!")
-        return super().form_invalid(form)
-    
-
-class UserPasswrodResetConfirmView(PasswordResetConfirmView):
-    template_name = 'accounts_custom/reset-password.html'
-    form_class = UserSetPasswordForm
-
-    def form_valid(self, form):
-        # Apenas atualiza a senha sem mexer em outros campos do modelo
-        form.user.set_password(form.cleaned_data['new_password1'])
-        form.user.save(update_fields=["password"])  # Evita save completo que pode tentar mexer no avatar
-        print("Password has been reset!")
-        return super(PasswordResetConfirmView, self).form_valid(form)
-
-    def form_invalid(self, form):
-        print("Password reset failed!")
-        return super().form_invalid(form)
-    
-
+@conditional_otp_required
 def lock(request):
-    return render(request, 'accounts_custom/lock.html')
+    error = None
+    request.session['is_locked'] = True
+
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        user = request.user
+        authenticated_user = authenticate(request, username=user.username, password=password)
+        if authenticated_user:
+            # Senha correta: remove o bloqueio
+            request.session['is_locked'] = False
+            return redirect('dashboard')
+        else:
+            error = "Senha incorreta. Tente novamente."
+
+    return render(request, 'accounts_custom/lock.html', {
+        'error': error,
+        'user': request.user,
+    })
 
 
 @conditional_otp_required
@@ -503,47 +335,6 @@ def dashboard(request):
         return redirect('/')
 
 
-def terms_view(request):
-    context = {
-        "last_updated": datetime.today().strftime("%d/%m/%Y"),
-    }
-    return render_theme_page(request, 'public', 'terms.html', context)
-
-
-def verificar_email(request, uidb64, token):
-    try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except (User.DoesNotExist, ValueError):
-        user = None
-
-    if user and default_token_generator.check_token(user, token):
-        if not user.is_email_verified:
-            user.is_email_verified = True
-            user.save(update_fields=['is_email_verified'])
-
-            # Adiciona XP
-            perfil = PerfilGamer.objects.get(user=user)
-            perfil.adicionar_xp(40)  # valor de XP por verificar e-mail
-
-            # Verifica conquistas
-            conquistas_desbloqueadas = verificar_conquistas(request.user, request=request)
-
-            # Opcional: Armazena mensagem para exibir no template
-            context = {
-                'sucesso': True,
-                'conquistas': conquistas_desbloqueadas,
-                'xp': 40,
-            }
-        else:
-            # Já verificado anteriormente
-            context = {'ja_verificado': True}
-    else:
-        context = {'erro': True}
-
-    return render_theme_page(request, 'public', 'email_verificado.html', context)
-
-
 @conditional_otp_required
 def reenviar_verificacao_view(request):
     if request.method == 'POST':
@@ -589,63 +380,6 @@ def reenviar_verificacao_view(request):
             messages.error(request, 'Nenhuma conta foi encontrada com este e-mail.')
 
     return render(request, 'verify/reenviar_verificacao.html')
-
-
-def custom_set_language(request):
-    if request.method == 'POST':
-        lang_code = request.POST.get('language')
-        next_url = request.POST.get('next', '/')
-
-        if lang_code:
-            response = HttpResponseRedirect(next_url)
-            response.set_cookie('django_language', lang_code)
-            activate(lang_code)
-
-            # Verifica se o usuário já trocou de idioma antes
-            if request.user.is_authenticated:
-                perfil = PerfilGamer.objects.get(user=request.user)
-                
-                # Usa uma conquista para marcar se já fez isso antes
-                if not ConquistaUsuario.objects.filter(usuario=request.user, conquista__codigo='idioma_trocado').exists():
-                    perfil.adicionar_xp(20)  # XP por trocar idioma
-                    conquistas = verificar_conquistas(request.user, request=request)
-                    for conquista in conquistas:
-                        messages.success(request, f"🏆 Conquista desbloqueada: {conquista.nome}")
-                    messages.success(request, "Idioma alterado com sucesso! Você ganhou 20 XP.")
-
-            return response
-
-    return redirect('/')
-
-
-def registration_success_view(request):
-    return render(request, 'accounts_custom/registration_success.html')
-
-
-def verify_2fa_view(request):
-    if request.method == 'POST':
-        user_id = request.session.get('pre_2fa_user_id')
-        if not user_id:
-            return redirect('login')
-
-        User = get_user_model()
-        user = User.objects.get(pk=user_id)
-        token = request.POST.get('token')
-        device = TOTPDevice.objects.filter(user=user, confirmed=True).first()
-        
-        if device:
-            if device.verify_token(token):
-                request.user = user  # necessário para otp_login
-                otp_login(request, device)  # <- isto marca o 2FA como verificado
-                login(request, user)        # autentica o usuário na sessão Django
-                del request.session['pre_2fa_user_id']
-                return redirect('dashboard')
-            else:
-                return render(request, 'accounts_custom/verify-2fa.html', {'error': 'Código inválido.', 'user': request.user})
-        else:
-            return render(request, 'accounts_custom/verify-2fa.html', {'error': 'Dispositivo 2FA não configurado ou não confirmado.', 'user': request.user})
-    
-    return render(request, 'accounts_custom/verify-2fa.html', {'user': request.user})
 
 
 @conditional_otp_required

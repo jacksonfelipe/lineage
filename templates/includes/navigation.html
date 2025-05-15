@@ -5,6 +5,13 @@
   <div class="container-fluid px-0">
     <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
       <div class="d-flex align-items-center">
+        <!-- Botão de bloqueio -->
+        <a href="{% url 'lock' %}" class="btn btn-link px-2 me-2" title="{% trans 'Bloquear Sessão' %}">
+          <svg class="icon icon-sm text-warning" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5 8V6a5 5 0 1110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V6a3 3 0 016 0z" clip-rule="evenodd" />
+          </svg>
+        </a>
+
         <!-- Search form -->
         <form class="navbar-search form-inline" id="navbar-search-main">
           <div class="input-group input-group-merge search-bar">
@@ -21,6 +28,7 @@
         </form>
         <!-- / Search form -->
       </div>
+
       <!-- Navbar links -->
       <ul class="navbar-nav align-items-center">
         {% if request.user.is_authenticated %}

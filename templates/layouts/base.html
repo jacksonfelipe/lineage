@@ -59,5 +59,30 @@
       });
     });
   </script>
+  <script>
+(function () {
+  const LOCK_URL = "/accounts/lock/";
+  const INACTIVITY_MINUTES = 1;
+  const TIME_LIMIT = INACTIVITY_MINUTES * 60 * 1000; // 5 minutos em milissegundos
+
+  let inactivityTimer;
+
+  function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(() => {
+      window.location.href = LOCK_URL;
+    }, TIME_LIMIT);
+  }
+
+  // Atividade reinicia o timer
+  const activityEvents = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'];
+  activityEvents.forEach(event => {
+    document.addEventListener(event, resetInactivityTimer, true);
+  });
+
+  // Inicia o timer
+  resetInactivityTimer();
+})();
+</script>
 </body>
 </html>
