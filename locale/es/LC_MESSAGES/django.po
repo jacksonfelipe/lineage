@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-12 14:34-0300\n"
+"POT-Creation-Date: 2025-05-15 12:26-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1450,58 +1450,6 @@ msgstr "Comisiones"
 msgid "Commission from"
 msgstr "Entregar de"
 
-msgid "Preço do serviço não configurado."
-msgstr "Precio de servicio no configurado."
-
-msgid ""
-"Nickname inválido. Use de 2 a 16 caracteres latinos ou de 3 a 16 caracteres "
-"cirílicos."
-msgstr ""
-"Nickname inválido. Use de 2 a 16 caracteres latinos ou de 3 a 16 caracteres "
-"cirílicos."
-
-msgid "Saldo insuficiente na carteira."
-msgstr "Saldo insuficiente na carteira."
-
-msgid "Nickname alterado com sucesso!"
-msgstr "¡El apodo cambió con éxito!"
-
-msgid "Erro ao alterar nickname."
-msgstr "Erro ao alterar nickname."
-
-msgid "Sexo inválido selecionado."
-msgstr "Sexo inválido seleccionado."
-
-msgid "Sexo alterado com sucesso!"
-msgstr "¡El sexo cambió con éxito!"
-
-msgid "Erro ao alterar sexo."
-msgstr "Error al cambiar el sexo."
-
-msgid "Personagem desbugado com sucesso!"
-msgstr "¡Personaje de moda exitoso!"
-
-msgid "Erro ao desbugar personagem."
-msgstr "Error de depuración del personaje."
-
-msgid "Os preços precisam ser valores numéricos."
-msgstr "Los precios deben ser valores numéricos."
-
-msgid "Preços dos serviços atualizados com sucesso!"
-msgstr "¡Precios de servicios actualizados exitosos!"
-
-msgid "Erro ao configurar os preços: "
-msgstr "Error al configurar los precios:"
-
-msgid "No Owner"
-msgstr "No hay propietario"
-
-msgid "No Leader"
-msgstr "No Leader"
-
-msgid "No Alliance"
-msgstr "No Alliance"
-
 msgid "Editar Imagem do Apoiador"
 msgstr "Editar imagen de seguidores"
 
@@ -1756,6 +1704,29 @@ msgstr "Servicios de cuenta"
 msgid "Alterar Senha"
 msgstr "Cambiar la contraseña"
 
+msgid "Vincular Conta Lineage via E-mail"
+msgstr "Vincular Conta Lineage via E-mail"
+
+msgid ""
+"Se você não lembra sua senha do jogo, informe o e-mail cadastrado na conta "
+"Lineage."
+msgstr ""
+"Si no recuerda la contraseña de su juego, ingrese el correo electrónico "
+"registrado en la cuenta de linaje."
+
+msgid ""
+"Você receberá um link para confirmar a vinculação com seu usuário atual."
+msgstr "Recibirá un enlace para confirmar el enlace con su usuario actual."
+
+msgid "E-mail da Conta Lineage"
+msgstr "Correo electrónico del linaje del conteo"
+
+msgid "exemplo@dominio.com"
+msgstr "exemplo@dominio.com"
+
+msgid "Enviar Link de Vinculação"
+msgstr "Enviar enlace de enlace"
+
 msgid "Criar Conta L2"
 msgstr "Crear cuenta L2"
 
@@ -1793,6 +1764,27 @@ msgstr "Confirmar una nueva contraseña"
 
 msgid "Salvar Senha"
 msgstr "Guardar contraseña"
+
+msgid "Vincular Conta do Jogo (Lineage 2)"
+msgstr "Enlace la cuenta del juego (linaje 2)"
+
+msgid "Login da Conta Lineage"
+msgstr "Iniciar sesión de linaje"
+
+msgid "Senha da Conta Lineage"
+msgstr "Contraseña de cuenta de linaje"
+
+msgid "Digite a senha do jogo"
+msgstr "Ingrese la contraseña del juego"
+
+msgid "Vincular Conta"
+msgstr "Vincular Conta"
+
+msgid "Certifique-se de que a conta ainda não está vinculada a outro usuário."
+msgstr "Asegúrese de que la cuenta aún no esté vinculada a otro usuario."
+
+msgid "Esqueceu sua senha? Vincular conta via e-mail."
+msgstr "¿Olvidaste tu contraseña? Cuenta de enlace por correo electrónico."
 
 msgid "Configurações de Endpoints da API"
 msgstr "Configuración de punto final de API"
@@ -1946,6 +1938,58 @@ msgstr "Ranking PK"
 
 msgid "Ranking PvP"
 msgstr "Ranking PvP"
+
+msgid "Preço do serviço não configurado."
+msgstr "Precio de servicio no configurado."
+
+msgid ""
+"Nickname inválido. Use de 2 a 16 caracteres latinos ou de 3 a 16 caracteres "
+"cirílicos."
+msgstr ""
+"Nickname inválido. Use de 2 a 16 caracteres latinos ou de 3 a 16 caracteres "
+"cirílicos."
+
+msgid "Saldo insuficiente na carteira."
+msgstr "Saldo insuficiente na carteira."
+
+msgid "Nickname alterado com sucesso!"
+msgstr "¡El apodo cambió con éxito!"
+
+msgid "Erro ao alterar nickname."
+msgstr "Erro ao alterar nickname."
+
+msgid "Sexo inválido selecionado."
+msgstr "Sexo inválido seleccionado."
+
+msgid "Sexo alterado com sucesso!"
+msgstr "¡El sexo cambió con éxito!"
+
+msgid "Erro ao alterar sexo."
+msgstr "Error al cambiar el sexo."
+
+msgid "Personagem desbugado com sucesso!"
+msgstr "¡Personaje de moda exitoso!"
+
+msgid "Erro ao desbugar personagem."
+msgstr "Error de depuración del personaje."
+
+msgid "Os preços precisam ser valores numéricos."
+msgstr "Los precios deben ser valores numéricos."
+
+msgid "Preços dos serviços atualizados com sucesso!"
+msgstr "¡Precios de servicios actualizados exitosos!"
+
+msgid "Erro ao configurar os preços: "
+msgstr "Error al configurar los precios:"
+
+msgid "No Owner"
+msgstr "No hay propietario"
+
+msgid "No Leader"
+msgstr "No Leader"
+
+msgid "No Alliance"
+msgstr "No Alliance"
 
 msgid "Ativo"
 msgstr "Activo"
@@ -3433,6 +3477,12 @@ msgstr "leer más"
 msgid "Não há notícias privadas disponíveis no momento."
 msgstr "No hay noticias privadas disponibles en este momento."
 
+msgid "Abrir link"
+msgstr "Abrir link"
+
+msgid "Link de Redirecionamento"
+msgstr "Enlace de redirección"
+
 msgid ""
 "Usuário relacionado à notificação (pode ser nulo para notificações "
 "públicas)."
@@ -3454,6 +3504,12 @@ msgstr "Visualizada"
 
 msgid "Indica se a notificação foi visualizada pelo usuário."
 msgstr "Indica si el usuario vio la notificación."
+
+msgid "Link da Notificação"
+msgstr "Enlace de notificación"
+
+msgid "URL opcional para redirecionar ao clicar na notificação."
+msgstr "URL opcional para redirigir al hacer clic en la notificación."
 
 msgid "Notificação"
 msgstr "Notificación"
