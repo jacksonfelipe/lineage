@@ -13,6 +13,7 @@ from django.utils import timezone
 from django.core.cache import cache
 
 from utils.notifications import send_notification
+from django.urls import reverse
 
 from apps.main.home.models import PerfilGamer, ConquistaUsuario
 from utils.services import verificar_conquistas
@@ -86,7 +87,8 @@ def send_friend_request(request, user_id):
             user=friend,
             notification_type='user',
             message=message,
-            created_by=request.user
+            created_by=request.user,
+            link=reverse('message:friends_list')
         )
     except Exception as e:
         logger.error(f"Erro ao criar notificação: {str(e)}")

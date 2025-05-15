@@ -10,6 +10,7 @@ from .forms import SolicitationForm
 from django.contrib import messages
 from django.shortcuts import redirect
 from utils.notifications import send_notification
+from django.urls import reverse
 import logging
 
 from apps.main.home.models import PerfilGamer
@@ -91,7 +92,8 @@ class SolicitationCreateView(LoginRequiredMixin, CreateView):
                 user=None,  # None para broadcast para staff
                 notification_type='staff',
                 message='Relatório sigiloso disponível.',
-                created_by=self.request.user
+                created_by=self.request.user,
+                link=reverse('solicitation:solicitation_list')
             )
         except Exception as e:
             logger.error(f"Erro ao criar notificação: {str(e)}")
