@@ -45,6 +45,6 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static('/themes/', document_root=os.path.join(settings.BASE_DIR, 'themes'))
 
 # Error handlers
-handler400 = 'apps.main.home.views.custom_400_view'
-handler404 = 'apps.main.home.views.custom_404_view'
-handler500 = 'apps.main.home.views.custom_500_view'
+handler400 = 'apps.main.home.views.commons.custom_400_view'
+handler404 = 'apps.main.home.views.commons.custom_404_view'
+handler500 = 'apps.main.home.views.commons.custom_500_view'
