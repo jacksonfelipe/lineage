@@ -147,14 +147,24 @@ O projeto é codificado utilizando uma estrutura simples e intuitiva, apresentad
    |    |    |-- solicitation/               # Solicitações e Suporte
    |    |
    |    |-- lineage/
-   |    |    |-- server/                     # Gerenciador do Servidor de Linaage 2
+   |    |    |-- accountancy/                # Módulo de contabilidade e registros financeiros do servidor Lineage 2
+   |    |    |-- auction/                    # Sistema de leilões de itens entre jogadores no servidor Lineage 2
+   |    |    |-- games/                      # Funcionalidades relacionadas a minigames, roletas e caixas de prêmios
+   |    |    |-- inventory/                  # Gerenciamento de inventário dos personagens e movimentações de itens
+   |    |    |-- payment/                    # Integração com sistemas de pagamento (ex: PayPal) para compras no servidor
+   |    |    |-- reports/                    # Geração de relatórios administrativos e estatísticas do servidor
+   |    |    |-- server/                     # Ferramentas de administração e monitoramento do status do servidor Lineage 2
+   |    |    |-- shop/                       # Loja virtual de itens e serviços do servidor Lineage 2
+   |    |    |-- wallet/                     # Sistema de carteira virtual para saldo e transações dos jogadores
    |
    |-- core/
    |    |-- settings.py                      # Configurações do projeto
    |    |-- urls.py                          # Roteamento do projeto
+   |    |-- *.py                             # Demais Arquivos
    |
    |-- requirements.txt                      # Dependências do projeto
    |-- manage.py                             # Script de inicialização do Django
+   |-- ...                                   # Demais Arquivos
    |
    |-- ************************************************************************
 ```
@@ -170,19 +180,22 @@ Quando um arquivo de template é carregado no controlador, o `Django` escaneia t
    |
    |-- templates/                     # Pasta Raiz dos Templates
    |    |          
-   |    |-- accounts/       
+   |    |-- accounts_custom/          # (pasta no app home)    
    |    |    |-- auth-signin.html     # Página de Login
    |    |    |-- auth-signup.html     # Página de Cadastro
+   |    |    |-- *.html               # Demais Paginas
    |    |
    |    |-- includes/       
    |    |    |-- footer.html          # Componente de Rodapé
    |    |    |-- sidebar.html         # Componente da Barra Lateral
    |    |    |-- navigation.html      # Barra de Navegação
    |    |    |-- scripts.html         # Componente de Scripts
+   |    |    |-- *.html               # Demais includes
    |    |
    |    |-- layouts/       
    |    |    |-- base.html            # Página Mestra
    |    |    |-- base-auth.html       # Página Mestra para Páginas de Autenticação
+   |    |    |-- *.html               # Demais layouts
    |    |
    |    |-- pages/       
    |         |-- *.html               # Todas as outras páginas
