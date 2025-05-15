@@ -107,23 +107,16 @@ def notification_detail(request, pk):
     if notification.notification_type == 'staff' and not (request.user.is_staff or request.user.is_superuser):
         return JsonResponse({'error': 'Você não tem permissão para ver esta notificação.'}, status=400)
 
-    data = {
-        'type': notification.notification_type,
-        'message': notification.message,
-        'created_at': notification.created_at.strftime('%Y-%m-%d %H:%M:%S')
-    }
-
+    # Garante que só o dono (ou notificação pública) pode visualizar
     if notification.user == request.user:
         notification.viewed = True
         notification.save()
 
     elif notification.user is None:
-        # Verifica se já existe visualização pública
         public_notification_view = PublicNotificationView.objects.filter(
             user=request.user,
             notification=notification
         ).first()
-
         if not public_notification_view:
             PublicNotificationView.objects.create(
                 user=request.user,
@@ -132,8 +125,14 @@ def notification_detail(request, pk):
             )
 
     else:
-        # Caso o usuário tente acessar notificação privada de outro usuário
         return JsonResponse({'error': 'Você não tem permissão para ver esta notificação.'}, status=400)
+
+    data = {
+        'type': notification.get_notification_type_display(),
+        'message': notification.message,
+        'created_at': notification.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+        'link': notification.link if notification.link else None,
+    }
 
     return JsonResponse(data)
 
