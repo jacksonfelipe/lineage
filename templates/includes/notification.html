@@ -11,7 +11,12 @@
       <div class="modal-body">
         <!-- Os detalhes da notificação serão carregados aqui -->
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer d-flex justify-content-between">
+        <div id="notification-link-container" class="d-none">
+          <a id="notification-link" href="#" class="btn btn-primary" target="_blank">
+            <i class="bi bi-box-arrow-up-right"></i> {% trans "Acessar" %}
+          </a>
+        </div>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Fechar" %}</button>
       </div>
     </div>
@@ -48,6 +53,10 @@
             const listItem = document.createElement('a');
             listItem.href = "#";
             listItem.className = `list-group-item list-group-item-action border-bottom ${notification.viewed ? 'viewed' : ''}`;
+            listItem.setAttribute('data-bs-toggle', 'modal');
+            listItem.setAttribute('data-bs-target', '#notificationModal');
+            listItem.setAttribute('data-notification-id', notification.id);
+
             listItem.innerHTML = `
               <div class="row align-items-center">
                 <div class="col-auto">
@@ -63,13 +72,12 @@
                     </div>
                   </div>
                   <p class="font-small mt-1 mb-0">
-                    <a href="#" class="mark-as-read" data-bs-toggle="modal" data-bs-target="#notificationModal" data-notification-id="${notification.id}">
-                      ${notification.message}
-                    </a>
+                    ${notification.message}
                   </p>
                 </div>
               </div>
             `;
+
             notificationList.appendChild(listItem);
             if (!notification.viewed) notificationCount++;
           });
@@ -113,6 +121,17 @@
               </div>
             </div>
           `;
+
+          const linkContainer = document.getElementById('notification-link-container');
+          const linkButton = document.getElementById('notification-link');
+
+          if (data.link) {
+            linkButton.href = data.link;
+            linkContainer.classList.remove('d-none');
+          } else {
+            linkContainer.classList.add('d-none');
+          }
+
           loadNotifications();
         })
         .catch(() => {

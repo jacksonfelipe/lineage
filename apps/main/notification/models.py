@@ -32,6 +32,13 @@ class Notification(BaseModel):
         verbose_name=_("Visualizada"),
         help_text=_("Indica se a notificação foi visualizada pelo usuário.")
     )
+    link = models.URLField(
+        max_length=500,
+        null=True,
+        blank=True,
+        verbose_name=_("Link da Notificação"),
+        help_text=_("URL opcional para redirecionar ao clicar na notificação.")
+    )
 
     class Meta:
         verbose_name = _("Notificação")

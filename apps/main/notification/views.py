@@ -1,10 +1,9 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.urls import reverse
 from apps.main.home.decorator import conditional_otp_required
 from .models import Notification, PublicNotificationView
-from django.contrib.auth.decorators import permission_required
-from django.db.models import Q
+from django.core.paginator import Paginator
 
 
 @conditional_otp_required
@@ -27,7 +26,10 @@ def get_notifications(request):
         user_notifications = user_notifications | staff_notifications
 
     # Notificações públicas
-    public_notifications = Notification.objects.filter(user=None).order_by('-created_at')
+    public_notifications = Notification.objects.filter(
+        user=None,
+        created_at__gte=request.user.date_joined
+    ).order_by('-created_at')
 
     # Filtra notificações públicas staff apenas para usuários staff/superusers
     if not (request.user.is_staff or request.user.is_superuser):
@@ -69,21 +71,25 @@ def get_notifications(request):
 def mark_all_as_read(request):
     # Marcar todas as notificações privadas como lidas
     Notification.objects.filter(user=request.user, viewed=False).update(viewed=True)
-    
-    # Buscar todas as notificações públicas que ainda não foram visualizadas pelo usuário
-    public_notifications = Notification.objects.filter(user=None)
-    
+
+    # Buscar notificações públicas válidas para este usuário
+    public_notifications = Notification.objects.filter(
+        user=None,
+        created_at__gte=request.user.date_joined
+    )
+
+    if not (request.user.is_staff or request.user.is_superuser):
+        public_notifications = public_notifications.exclude(notification_type='staff')
+
     for notification in public_notifications:
-        # Verificar se já existe um registro em PublicNotificationView para esta notificação e usuário
         public_notification_view, created = PublicNotificationView.objects.get_or_create(
-            user=request.user, 
+            user=request.user,
             notification=notification
         )
-        # Se o registro já existia, atualizar o campo 'viewed' para True
         if not public_notification_view.viewed:
             public_notification_view.viewed = True
             public_notification_view.save()
-    
+
     return JsonResponse({'status': 'ok'})
 
 
@@ -136,29 +142,34 @@ def notification_detail(request, pk):
 def all_notifications(request):
     user = request.user
 
-    # Filtra notificações privadas do usuário
-    private_notifications = Notification.objects.filter(
-        user=user
-    ).order_by('-created_at')
-
-    # Se o usuário não é staff/superuser, removemos notificações staff
+    # Private notifications
+    private_qs = Notification.objects.filter(user=user).order_by('-created_at')
     if not (user.is_staff or user.is_superuser):
-        private_notifications = private_notifications.exclude(notification_type='staff')
+        private_qs = private_qs.exclude(notification_type='staff')
 
-    # Notificações públicas (user=None)
-    public_notifications = Notification.objects.filter(user=None).order_by('-created_at')
-
-    # Se não for staff/superuser, não verá as públicas tipo 'staff'
+    # Public notifications
+    public_qs = Notification.objects.filter(user=None).order_by('-created_at')
     if not (user.is_staff or user.is_superuser):
-        public_notifications = public_notifications.exclude(notification_type='staff')
+        public_qs = public_qs.exclude(notification_type='staff')
 
-    # Ver quais públicas já foram visualizadas
-    public_notifications_viewed = PublicNotificationView.objects.filter(user=user)
-    public_notifications_viewed_ids = {pnv.notification_id for pnv in public_notifications_viewed}
+    # Viewed public notifications
+    viewed_public_ids = set(
+        PublicNotificationView.objects.filter(user=user).values_list('notification_id', flat=True)
+    )
 
-    # Marcar na instância se a notificação pública foi visualizada ou não
-    for notification in public_notifications:
-        notification.viewed = notification.id in public_notifications_viewed_ids
+    # Marcar instância como visualizada
+    for n in public_qs:
+        n.viewed = n.id in viewed_public_ids
+
+    # Paginação
+    private_paginator = Paginator(private_qs, 10)
+    public_paginator = Paginator(public_qs, 10)
+
+    private_page_number = request.GET.get('private_page')
+    public_page_number = request.GET.get('public_page')
+
+    private_notifications = private_paginator.get_page(private_page_number)
+    public_notifications = public_paginator.get_page(public_page_number)
 
     context = {
         'private_notifications': private_notifications,

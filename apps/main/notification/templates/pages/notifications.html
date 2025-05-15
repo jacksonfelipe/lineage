@@ -20,25 +20,24 @@
         <h2 class="h4 mb-3">{% trans "Notificações Privadas" %}</h2>
         {% if private_notifications %}
             {% for notification in private_notifications %}
-                <a href="#" class="list-group-item list-group-item-action {% if notification.viewed %}list-group-item-success{% else %}list-group-item-danger{% endif %}" data-toggle="modal" data-target="#notificationModal{{ notification.id }}" data-notification-id="{{ notification.id }}">
+                <a href="#" class="list-group-item list-group-item-action {% if notification.viewed %}list-group-item-success{% else %}list-group-item-danger{% endif %}"
+                   data-bs-toggle="modal" data-bs-target="#notificationModal{{ notification.id }}">
                     <div class="d-flex w-100 justify-content-between">
                         <h3 class="h5 mb-1">{{ notification.type }}</h3>
                         <small>{{ notification.created_at }}</small>
                     </div>
                     <p class="mb-1">{{ notification.message }}</p>
                     {% if not notification.viewed %}
-                        <span class="badge badge-danger">{% trans "Não lida" %}</span>
+                        <span class="badge bg-danger">{% trans "Não lida" %}</span>
                     {% endif %}
                 </a>
                 <!-- Modal -->
-                <div class="modal fade" id="notificationModal{{ notification.id }}" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel{{ notification.id }}" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                <div class="modal fade" id="notificationModal{{ notification.id }}" tabindex="-1" aria-labelledby="notificationModalLabel{{ notification.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="notificationModalLabel{{ notification.id }}">{% trans "Detalhes da Notificação" %}</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Fechar' %}">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Fechar' %}"></button>
                             </div>
                             <div class="modal-body">
                                 <p><strong>{% trans "Tipo" %}:</strong> {{ notification.notification_type }}</p>
@@ -48,7 +47,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- End Modal -->
             {% endfor %}
         {% else %}
             <p class="text-muted">{% trans "Não há notificações privadas." %}</p>
@@ -60,25 +58,24 @@
         <h2 class="h4 mb-3">{% trans "Notificações Públicas" %}</h2>
         {% if public_notifications %}
             {% for notification in public_notifications %}
-                <a href="#" class="list-group-item list-group-item-action {% if notification.viewed %}list-group-item-success{% else %}list-group-item-danger{% endif %}" data-toggle="modal" data-target="#notificationModal{{ notification.id }}" data-notification-id="{{ notification.id }}">
+                <a href="#" class="list-group-item list-group-item-action {% if notification.viewed %}list-group-item-success{% else %}list-group-item-danger{% endif %}"
+                   data-bs-toggle="modal" data-bs-target="#notificationModalPublic{{ notification.id }}">
                     <div class="d-flex w-100 justify-content-between">
                         <h3 class="h5 mb-1">{{ notification.type }}</h3>
                         <small>{{ notification.created_at }}</small>
                     </div>
                     <p class="mb-1">{{ notification.message }}</p>
                     {% if not notification.viewed %}
-                        <span class="badge badge-danger">{% trans "Não lida" %}</span>
+                        <span class="badge bg-danger">{% trans "Não lida" %}</span>
                     {% endif %}
                 </a>
                 <!-- Modal -->
-                <div class="modal fade" id="notificationModal{{ notification.id }}" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel{{ notification.id }}" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                <div class="modal fade" id="notificationModalPublic{{ notification.id }}" tabindex="-1" aria-labelledby="notificationModalLabelPublic{{ notification.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="notificationModalLabel{{ notification.id }}">{% trans "Detalhes da Notificação" %}</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Fechar' %}">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                <h5 class="modal-title" id="notificationModalLabelPublic{{ notification.id }}">{% trans "Detalhes da Notificação" %}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Fechar' %}"></button>
                             </div>
                             <div class="modal-body">
                                 <p><strong>{% trans "Tipo" %}:</strong> {{ notification.notification_type }}</p>
@@ -88,46 +85,40 @@
                         </div>
                     </div>
                 </div>
-                <!-- End Modal -->
             {% endfor %}
         {% else %}
             <p class="text-muted">{% trans "Não há notificações públicas." %}</p>
         {% endif %}
     </div>
-
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    $(document).ready(function(){
-        // Função para confirmar a leitura da notificação ao fechar o modal
-        $('.modal').on('hidden.bs.modal', function (event) {
-            var modalId = $(this).attr('id');
-            var notificationId = modalId.replace('notificationModal', '');
-            // Chama a URL para confirmar a leitura da notificação
-            $.get(`/app/notification/confirm_view/${notificationId}/`, function(data) {
-                // Recarrega a página após a confirmação da leitura da notificação
-                location.reload();
+    document.addEventListener('DOMContentLoaded', () => {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            modal.addEventListener('hidden.bs.modal', () => {
+                const id = modal.id.replace('notificationModal', '').replace('Public', '');
+                fetch(`/app/notification/confirm-view/${id}/`)
+                    .then(res => res.json())
+                    .then(() => window.location.reload());
             });
         });
 
-        // Marcar todas como lidas
-        $('#mark-all-as-read').click(function() {
-            $.get('/app/notification/mark_all_as_read/', function(data) {
-                if (data.status === 'ok') {
-                    location.reload();
-                }
-            });
-        });
-
-        // Limpar todas as notificações
-        $('#clear-all-notifications').click(function() {
-            if (confirm('{% trans "Tem certeza que deseja limpar todas as notificações?" %}')) {
-                $.get('/app/notification/clear_all_notifications/', function(data) {
-                    if (data.status === 'ok') {
-                        location.reload();
-                    }
+        document.getElementById('mark-all-as-read')?.addEventListener('click', () => {
+            fetch('/app/notification/mark-all-as-read/')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'ok') location.reload();
                 });
+        });
+
+        document.getElementById('clear-all-notifications')?.addEventListener('click', () => {
+            if (confirm('{% trans "Tem certeza que deseja limpar todas as notificações?" %}')) {
+                fetch('/app/notification/clear-all-notifications/')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'ok') location.reload();
+                    });
             }
         });
     });
