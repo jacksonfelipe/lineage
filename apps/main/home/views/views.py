@@ -367,11 +367,9 @@ def reenviar_verificacao_view(request):
                     recipient_list=[user.email],
                     fail_silently=False,
                 )
+                messages.success(request, 'Um novo e-mail de verificação foi enviado.')
             except Exception as e:
                 logger.error(f"Erro ao enviar email: {str(e)}")
-
-                messages.success(request, 'Um novo e-mail de verificação foi enviado.')
-            else:
                 messages.error(request, 'O envio de e-mail está desativado no momento.')
 
             return redirect('dashboard')

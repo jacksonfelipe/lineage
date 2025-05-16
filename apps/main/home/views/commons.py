@@ -65,7 +65,7 @@ def verificar_email(request, uidb64, token):
             perfil.adicionar_xp(40)  # valor de XP por verificar e-mail
 
             # Verifica conquistas
-            conquistas_desbloqueadas = verificar_conquistas(request.user, request=request)
+            conquistas_desbloqueadas = verificar_conquistas(user, request=request)
 
             # Opcional: Armazena mensagem para exibir no template
             context = {
