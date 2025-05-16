@@ -31,7 +31,7 @@ def retirar_item_servidor(request):
         return redirect('inventory:inventario_dashboard')
     
     # Verifica se a conta Lineage está vinculada
-    account_data = LineageAccount.check_login_exists(user.username)
+    account_data = LineageAccount.check_login_exists(request.user.username)
     if not account_data or len(account_data) == 0 or not account_data[0].get("linked_uuid"):
         messages.error(request, "Sua conta Lineage não está vinculada. Por favor, vincule sua conta antes de atualizar a senha.")
         return redirect('server:vincular_conta')
