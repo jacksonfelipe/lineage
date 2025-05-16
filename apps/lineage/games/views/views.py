@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import *
+from ..models import *
 from apps.main.home.decorator import conditional_otp_required
 from django.shortcuts import redirect
 from django.contrib import messages
@@ -9,11 +9,18 @@ from decimal import Decimal
 from apps.lineage.wallet.models import Wallet
 from apps.lineage.wallet.signals import aplicar_transacao
 from apps.lineage.inventory.models import Inventory, InventoryLog, InventoryItem
-from .services.box_opening import open_box
-from .services.box_populate import populate_box_with_items
+from ..services.box_opening import open_box
+from ..services.box_populate import populate_box_with_items
 from django.db import transaction
 from django.db.models import Count, Q
 from django.utils.translation import gettext_lazy as _
+
+
+def parse_int(value, default=0):
+    try:
+        return int(str(value).replace('.', '').replace(',', ''))
+    except (ValueError, TypeError):
+        return default
 
 
 @conditional_otp_required
@@ -249,9 +256,9 @@ def bag_dashboard(request):
 @transaction.atomic
 def transferir_item_bag(request):
     if request.method == 'POST':
-        item_id = int(request.POST.get('item_id'))
-        enchant = int(request.POST.get('enchant'))
-        quantity = int(request.POST.get('quantity'))
+        item_id = parse_int(request.POST.get('item_id'))
+        enchant = parse_int(request.POST.get('enchant'))
+        quantity = parse_int(request.POST.get('quantity'))
         character_name_destino = request.POST.get('character_name_destino')
 
         bag = request.user.bag

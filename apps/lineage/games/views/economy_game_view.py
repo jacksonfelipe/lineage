@@ -8,7 +8,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.http import JsonResponse
 
-from .models import EconomyWeapon, Monster, Bag, BagItem, RewardItem
+from ..models import EconomyWeapon, Monster, Bag, BagItem, RewardItem
 
 
 def add_reward_to_bag(user, item_id, item_name, enchant=0, quantity=1):

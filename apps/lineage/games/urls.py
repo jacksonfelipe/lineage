@@ -1,7 +1,7 @@
 from django.urls import path
-from . import views
-from . import manager_box_views
-from .economy_game_view import *
+from .views import views
+from .views import manager_box_views
+from .views.economy_game_view import *
 
 
 app_name = "games"
