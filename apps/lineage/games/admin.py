@@ -138,8 +138,41 @@ class RecompensaAdmin(BaseModelAdmin):
 
 
 @admin.register(RecompensaRecebida)
-class RecompensaRecebidaAdmin(admin.ModelAdmin):
+class RecompensaRecebidaAdmin(BaseModelAdmin):
     list_display = ('user', 'recompensa', 'data')
     list_filter = ('data',)
     search_fields = ('user__username', 'recompensa__item_name', 'recompensa__tipo')
     ordering = ('-data',)
+
+
+@admin.register(EconomyWeapon)
+class EconomyWeaponAdmin(BaseModelAdmin):
+    list_display = ('user', 'level', 'fragments')
+    search_fields = ('user__username',)
+    list_filter = ('level',)
+    ordering = ('-level',)
+
+
+@admin.register(Monster)
+class MonsterAdmin(BaseModelAdmin):
+    list_display = ('name', 'level', 'required_weapon_level', 'fragment_reward', 'respawn_seconds', 'is_alive_display')
+    readonly_fields = ('last_defeated_at',)
+
+    def is_alive_display(self, obj):
+        return obj.is_alive
+    is_alive_display.boolean = True
+    is_alive_display.short_description = "Disponível para Luta"
+
+
+@admin.register(RewardItem)
+class RewardItemAdmin(BaseModelAdmin):
+    list_display = ('name', 'item_id', 'enchant', 'description', 'amount')
+    search_fields = ('name', 'item_id')
+    list_filter = ('enchant',)
+    ordering = ('name',)
+
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'item_id', 'enchant', 'description', 'amount')
+        }),
+    )

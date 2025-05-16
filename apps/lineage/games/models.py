@@ -4,6 +4,8 @@ from apps.main.home.models import User
 from core.models import BaseModel
 from django.templatetags.static import static
 import random
+from django.utils import timezone
+from datetime import timedelta
 from .choices import *
 
 
@@ -202,3 +204,44 @@ class RecompensaRecebida(BaseModel):
 
     class Meta:
         unique_together = ('user', 'recompensa')
+
+
+class EconomyWeapon(BaseModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    level = models.IntegerField(default=0)  # +0 a +10
+    fragments = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.user.username} [+{self.level}] ({self.fragments} frags)"
+
+
+class Monster(BaseModel):
+    name = models.CharField(max_length=100)
+    level = models.IntegerField()
+    required_weapon_level = models.IntegerField()
+    fragment_reward = models.IntegerField()
+    image = models.ImageField(upload_to='monsters/', null=True, blank=True)  # pode ser .gif
+    respawn_seconds = models.PositiveIntegerField(default=60)
+    last_defeated_at = models.DateTimeField(null=True, blank=True)
+
+    # Atributos básicos
+    attack = models.IntegerField(default=10)
+    defense = models.IntegerField(default=5)
+    hp = models.IntegerField(default=100)
+
+    @property
+    def is_alive(self):
+        if not self.last_defeated_at:
+            return True
+        return timezone.now() >= self.last_defeated_at + timedelta(seconds=self.respawn_seconds)
+
+
+class RewardItem(BaseModel):
+    name = models.CharField(max_length=100)
+    item_id = models.PositiveIntegerField()
+    enchant = models.PositiveIntegerField(default=0)
+    amount = models.PositiveIntegerField(default=1)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.name} +{self.enchant}"

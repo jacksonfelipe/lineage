@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from . import manager_box_views
+from .economy_game_view import *
 
 
 app_name = "games"
@@ -34,4 +35,9 @@ urlpatterns = [
     path('box/manager/item/create/', manager_box_views.item_create_view, name='item_create'),
     path('box/manager/item/edit/<int:pk>/', manager_box_views.item_edit_view, name='item_edit'),
     path('box/manager/item/delete/<int:pk>/', manager_box_views.item_delete_view, name='item_delete'),
+
+    path("economy-game/", economy_game, name="economy-game"),
+    path("economy-game/fight/<int:monster_id>/", fight_monster, name="fight-monster"),
+    path("economy-game/enchant/", enchant_weapon, name="enchant-weapon"),
+    path("economy-game/monster/<int:monster_id>/is_alive/", is_monster_alive, name="monster-is-alive"),
 ]
