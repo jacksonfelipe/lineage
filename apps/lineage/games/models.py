@@ -220,7 +220,7 @@ class Monster(BaseModel):
     level = models.IntegerField()
     required_weapon_level = models.IntegerField()
     fragment_reward = models.IntegerField()
-    image = models.ImageField(upload_to='monsters/', null=True, blank=True)  # pode ser .gif
+    image = models.ImageField(upload_to='monsters/', null=True, blank=True)
     respawn_seconds = models.PositiveIntegerField(default=60)
     last_defeated_at = models.DateTimeField(null=True, blank=True)
 

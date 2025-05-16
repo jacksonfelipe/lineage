@@ -180,7 +180,11 @@ body {
                 <div class="monster-card
                     {% if weapon.level < mon.required_weapon_level or not mon.is_alive %}disabled{% endif %}">
 
-                    <img src="{{ mon.image.url }}" alt="{{ mon.name }}" />
+                    {% if mon.image %}
+                        <img src="{{ mon.image.url }}" alt="{{ mon.name }}" />
+                    {% else %}
+                        <img src="{% static 'assets/img/monsters/default_moster.gif' %}" alt="Imagem padrão de {{ mon.name }}" />
+                    {% endif %}
 
                     <div class="monster-info">
                         <h5>🐉 Lv {{ mon.level }} - {{ mon.name }}</h5>
