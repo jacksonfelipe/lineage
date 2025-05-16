@@ -245,7 +245,11 @@ body {
   </div>
 </div>
 
+<meta name="csrf-token" content="{{ csrf_token }}">
+
 <script>
+const FICHAS_URL = "{% url 'games:comprar_fichas' %}";
+
 document.addEventListener("DOMContentLoaded", function() {
     function updateCountdown() {
         const now = Math.floor(Date.now() / 1000);  // timestamp atual em segundos
@@ -314,6 +318,48 @@ document.querySelectorAll("form[action*='fight-monster']").forEach(form => {
         playSound("attackSound");
     });
 });
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + "=")) {
+                cookieValue = decodeURIComponent(cookie.slice(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function buyFichas() {
+    const quantity = parseInt(document.getElementById("buyQuantity").value);
+    const csrfToken = getCookie('csrftoken');
+
+    fetch(FICHAS_URL, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': csrfToken
+        },
+        body: `quantidade=${quantity}`
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert(`Compra realizada! Você agora tem ${data.fichas} ficha(s).`);
+            location.reload(); // Atualiza para refletir no contador de fichas
+        } else {
+            alert(data.error || "Erro ao processar a compra.");
+        }
+    })
+    .catch(error => {
+        alert("Erro de conexão com o servidor.");
+        console.error(error);
+    });
+}
 </script>
 
 {% endblock %}
