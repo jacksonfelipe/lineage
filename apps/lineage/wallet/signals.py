@@ -1,5 +1,6 @@
 from decimal import Decimal
 from .models import *
+from django.utils.translation import gettext as _
 
 
 def aplicar_transacao(wallet, tipo, valor, descricao="", origem="", destino=""):
@@ -7,7 +8,7 @@ def aplicar_transacao(wallet, tipo, valor, descricao="", origem="", destino=""):
     valor = Decimal(valor)
 
     if tipo == "SAIDA" and wallet.saldo < valor:
-        raise ValueError("Saldo insuficiente.")
+        raise ValueError(_("Saldo insuficiente."))
     
     if tipo == "ENTRADA":
         wallet.saldo += valor

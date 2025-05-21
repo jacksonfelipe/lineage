@@ -1,5 +1,6 @@
 from apps.main.notification.models import Notification
 from django.core.exceptions import PermissionDenied
+from django.utils.translation import gettext as _
 
 
 def send_notification(user=None, notification_type='user', message='', created_by=None, link=None):
@@ -15,11 +16,11 @@ def send_notification(user=None, notification_type='user', message='', created_b
     if notification_type == 'staff':
         if user:
             if not (user.is_staff or user.is_superuser):
-                raise PermissionDenied("Notificações staff só podem ser enviadas para usuários staff ou superusuários.")
+                raise PermissionDenied(_("Notificações staff só podem ser enviadas para usuários staff ou superusuários."))
         else:
             # Notificação pública staff — só deve ser criada se quem envia tem permissão
             if created_by and not (created_by.is_staff or created_by.is_superuser):
-                raise PermissionDenied("Você não tem permissão para criar notificações públicas staff.")
+                raise PermissionDenied(_("Você não tem permissão para criar notificações públicas staff."))
 
     # Criação da notificação
     return Notification.objects.create(

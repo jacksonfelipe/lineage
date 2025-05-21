@@ -170,9 +170,9 @@ class BoxItemHistory(BaseModel):
 
 class Recompensa(BaseModel):
     TIPO_CHOICES = [
-        ('NIVEL', 'Por Nível'),
-        ('CONQUISTA', 'Por Conquista'),
-        ('CONQUISTAS_MULTIPLAS', 'Por Quantidade de Conquistas'),
+        ('NIVEL', _('Por Nível')),
+        ('CONQUISTA', _('Por Conquista')),
+        ('CONQUISTAS_MULTIPLAS', _('Por Quantidade de Conquistas')),
     ]
 
     tipo = models.CharField(max_length=30, choices=TIPO_CHOICES, verbose_name=_("Tipo de Recompensa"))
@@ -198,36 +198,49 @@ class Recompensa(BaseModel):
 
 
 class RecompensaRecebida(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recompensas_recebidas_games")
-    recompensa = models.ForeignKey(Recompensa, on_delete=models.CASCADE)
-    data = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recompensas_recebidas_games", verbose_name=_("User"))
+    recompensa = models.ForeignKey(Recompensa, on_delete=models.CASCADE, verbose_name=_("Reward"))
+    data = models.DateTimeField(auto_now_add=True, verbose_name=_("Date"))
 
     class Meta:
         unique_together = ('user', 'recompensa')
+        verbose_name = _("Received Reward")
+        verbose_name_plural = _("Received Rewards")
+
+    def __str__(self):
+        return f"{self.user.username} - {self.recompensa}"
 
 
 class EconomyWeapon(BaseModel):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    level = models.IntegerField(default=0)  # +0 a +10
-    fragments = models.IntegerField(default=0)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("User"))
+    level = models.IntegerField(default=0, verbose_name=_("Level"))  # +0 a +10
+    fragments = models.IntegerField(default=0, verbose_name=_("Fragments"))
+
+    class Meta:
+        verbose_name = _("Economy Weapon")
+        verbose_name_plural = _("Economy Weapons")
 
     def __str__(self):
         return f"{self.user.username} [+{self.level}] ({self.fragments} frags)"
 
 
 class Monster(BaseModel):
-    name = models.CharField(max_length=100)
-    level = models.IntegerField()
-    required_weapon_level = models.IntegerField()
-    fragment_reward = models.IntegerField()
-    image = models.ImageField(upload_to='monsters/', null=True, blank=True)
-    respawn_seconds = models.PositiveIntegerField(default=60)
-    last_defeated_at = models.DateTimeField(null=True, blank=True)
+    name = models.CharField(max_length=100, verbose_name=_("Name"))
+    level = models.IntegerField(verbose_name=_("Level"))
+    required_weapon_level = models.IntegerField(verbose_name=_("Required Weapon Level"))
+    fragment_reward = models.IntegerField(verbose_name=_("Fragment Reward"))
+    image = models.ImageField(upload_to='monsters/', null=True, blank=True, verbose_name=_("Image"))
+    respawn_seconds = models.PositiveIntegerField(default=60, verbose_name=_("Respawn Time (seconds)"))
+    last_defeated_at = models.DateTimeField(null=True, blank=True, verbose_name=_("Last Defeated At"))
 
     # Atributos básicos
-    attack = models.IntegerField(default=10)
-    defense = models.IntegerField(default=5)
-    hp = models.IntegerField(default=100)
+    attack = models.IntegerField(default=10, verbose_name=_("Attack"))
+    defense = models.IntegerField(default=5, verbose_name=_("Defense"))
+    hp = models.IntegerField(default=100, verbose_name=_("HP"))
+
+    class Meta:
+        verbose_name = _("Monster")
+        verbose_name_plural = _("Monsters")
 
     @property
     def is_alive(self):
@@ -235,13 +248,20 @@ class Monster(BaseModel):
             return True
         return timezone.now() >= self.last_defeated_at + timedelta(seconds=self.respawn_seconds)
 
+    def __str__(self):
+        return f"{self.name} (Level {self.level})"
+
 
 class RewardItem(BaseModel):
-    name = models.CharField(max_length=100)
-    item_id = models.PositiveIntegerField()
-    enchant = models.PositiveIntegerField(default=0)
-    amount = models.PositiveIntegerField(default=1)
-    description = models.TextField(blank=True, null=True)
+    name = models.CharField(max_length=100, verbose_name=_("Name"))
+    item_id = models.PositiveIntegerField(verbose_name=_("Item ID"))
+    enchant = models.PositiveIntegerField(default=0, verbose_name=_("Enchant"))
+    amount = models.PositiveIntegerField(default=1, verbose_name=_("Amount"))
+    description = models.TextField(blank=True, null=True, verbose_name=_("Description"))
+
+    class Meta:
+        verbose_name = _("Reward Item")
+        verbose_name_plural = _("Reward Items")
 
     def __str__(self):
         return f"{self.name} +{self.enchant}"
@@ -249,10 +269,10 @@ class RewardItem(BaseModel):
 
 class BattlePassSeason(BaseModel):
     name = models.CharField(max_length=100)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    is_active = models.BooleanField(default=False)
-    premium_price = models.PositiveIntegerField(default=50)
+    start_date = models.DateTimeField(verbose_name=_("Start Date"))
+    end_date = models.DateTimeField(verbose_name=_("End Date"))
+    is_active = models.BooleanField(default=False, verbose_name=_("Is Active"))
+    premium_price = models.PositiveIntegerField(default=50, verbose_name=_("Premium Price"))
 
     def __str__(self):
         return self.name
@@ -264,29 +284,35 @@ class BattlePassSeason(BaseModel):
 
 
 class BattlePassLevel(BaseModel):
-    season = models.ForeignKey(BattlePassSeason, on_delete=models.CASCADE)
-    level = models.PositiveIntegerField()
-    required_xp = models.PositiveIntegerField()
+    season = models.ForeignKey(BattlePassSeason, on_delete=models.CASCADE, verbose_name=_("Season"))
+    level = models.PositiveIntegerField(verbose_name=_("Level"))
+    required_xp = models.PositiveIntegerField(verbose_name=_("Required XP"))
 
     class Meta:
         unique_together = ('season', 'level')
+        verbose_name = _("Battle Pass Level")
+        verbose_name_plural = _("Battle Pass Levels")
 
     def __str__(self):
-        return f"Nível {self.level} - {self.season.name}"
+        return f"Level {self.level} - {self.season}"
 
 
 class BattlePassReward(BaseModel):
-    level = models.ForeignKey(BattlePassLevel, on_delete=models.CASCADE)
-    description = models.CharField(max_length=255)
-    is_premium = models.BooleanField(default=False)
+    level = models.ForeignKey(BattlePassLevel, on_delete=models.CASCADE, verbose_name=_("Level"))
+    description = models.CharField(max_length=255, verbose_name=_("Description"))
+    is_premium = models.BooleanField(default=False, verbose_name=_("Is Premium"))
     # Campos para itens
     item_id = models.PositiveIntegerField(null=True, blank=True, verbose_name=_("Item ID"))
     item_name = models.CharField(max_length=100, null=True, blank=True, verbose_name=_("Item Name"))
     item_enchant = models.PositiveIntegerField(default=0, verbose_name=_("Item Enchant"))
     item_amount = models.PositiveIntegerField(default=1, verbose_name=_("Item Amount"))
 
+    class Meta:
+        verbose_name = _("Battle Pass Reward")
+        verbose_name_plural = _("Battle Pass Rewards")
+
     def __str__(self):
-        return f"{'[Premium] ' if self.is_premium else ''}{self.description}"
+        return f"{self.description} ({_('Premium') if self.is_premium else _('Free')})"
 
     def add_to_user_bag(self, user):
         if self.item_id and self.item_name:
@@ -308,29 +334,26 @@ class BattlePassReward(BaseModel):
 
 
 class UserBattlePassProgress(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    season = models.ForeignKey(BattlePassSeason, on_delete=models.CASCADE)
-    xp = models.PositiveIntegerField(default=0)
-    claimed_rewards = models.ManyToManyField(BattlePassReward, blank=True)
-    has_premium = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
+    season = models.ForeignKey(BattlePassSeason, on_delete=models.CASCADE, verbose_name=_("Season"))
+    xp = models.PositiveIntegerField(default=0, verbose_name=_("XP"))
+    claimed_rewards = models.ManyToManyField(BattlePassReward, blank=True, verbose_name=_("Claimed Rewards"))
+    has_premium = models.BooleanField(default=False, verbose_name=_("Has Premium"))
 
     class Meta:
         unique_together = ('user', 'season')
+        verbose_name = _("User Battle Pass Progress")
+        verbose_name_plural = _("User Battle Pass Progresses")
 
     def get_current_level(self):
-        levels = BattlePassLevel.objects.filter(season=self.season).order_by('level')
-        current = 0
-        for level in levels:
-            if self.xp >= level.required_xp:
-                current = level.level
-        return current
+        return self.season.battlepasslevel_set.filter(required_xp__lte=self.xp).order_by('-level').first()
 
     def add_xp(self, amount):
         self.xp += amount
         self.save()
 
     def __str__(self):
-        return f"{self.user.username} - {self.season.name}"
+        return f"{self.user.username} - {self.season} (XP: {self.xp})"
 
 
 class BattlePassItemExchange(BaseModel):
@@ -343,8 +366,12 @@ class BattlePassItemExchange(BaseModel):
         help_text=_("0 = sem limite"))
     current_exchanges = models.PositiveIntegerField(default=0, verbose_name=_("Current Exchanges"))
 
+    class Meta:
+        verbose_name = _("Battle Pass Item Exchange")
+        verbose_name_plural = _("Battle Pass Item Exchanges")
+
     def __str__(self):
-        return f"{self.item_name} +{self.item_enchant} = {self.xp_amount} XP"
+        return f"{self.item_name} +{self.item_enchant} -> {self.xp_amount} XP"
 
     def can_exchange(self):
         if not self.is_active:

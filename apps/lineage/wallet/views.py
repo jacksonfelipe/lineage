@@ -20,6 +20,8 @@ from utils.dynamic_import import get_query_class
 TransferFromWalletToChar = get_query_class("TransferFromWalletToChar")
 LineageServices = get_query_class("LineageServices")
 
+from django.utils.translation import gettext as _
+
 
 @conditional_otp_required
 def dashboard_wallet(request):
@@ -116,7 +118,7 @@ def transfer_to_server(request):
                 )
 
                 if not sucesso:
-                    raise Exception("Erro ao adicionar a moeda ao personagem.")
+                    raise Exception(_("Erro ao adicionar a moeda ao personagem."))
 
         except Exception as e:
             messages.error(request, f"Ocorreu um erro durante a transferência: {str(e)}")

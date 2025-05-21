@@ -65,9 +65,9 @@ class IndexConfig(BaseModel):
 
 class IndexConfigTranslation(BaseModel):
     LANGUAGES = [
-        ('pt', 'Português'),
-        ('en', 'English'),
-        ('es', 'Español'),
+        ('pt', _('Português')),
+        ('en', _('English')),
+        ('es', _('Español')),
     ]
 
     config = models.ForeignKey(IndexConfig, on_delete=models.CASCADE, related_name='translations', verbose_name=_("Configuration"))

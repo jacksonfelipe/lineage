@@ -1,12 +1,13 @@
 from django.db import transaction
 from .models import *
 from .signals import aplicar_transacao
+from django.utils.translation import gettext as _
 
 
 def transferir_para_jogador(wallet_origem, wallet_destino, valor, descricao="Transferência entre jogadores"):
 
     if wallet_origem.saldo < valor:
-        raise ValueError("Saldo insuficiente para transferência.")
+        raise ValueError(_("Saldo insuficiente para transferência."))
 
     with transaction.atomic():
         # Debita da carteira de origem

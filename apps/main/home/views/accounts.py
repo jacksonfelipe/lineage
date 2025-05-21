@@ -14,6 +14,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django_otp.plugins.otp_totp.models import TOTPDevice
+from django.utils.translation import gettext as _
 
 from utils.notifications import send_notification
 from utils.dynamic_import import get_query_class
@@ -85,7 +86,7 @@ def register_view(request):
 
             return redirect('registration_success')
         else:
-            print("Registration failed!")
+            print(_("Registration failed!"))
     else:
         form = RegistrationForm()
 
@@ -138,11 +139,11 @@ class UserPasswordChangeView(PasswordChangeView):
     form_class = UserPasswordChangeForm
 
     def form_valid(self, form):
-        print("Password changed successfully!")
+        print(_("Password changed successfully!"))
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        print("Password change failed!")
+        print(_("Password change failed!"))
         return super().form_invalid(form)
     
 
@@ -151,11 +152,11 @@ class UserPasswordResetView(PasswordResetView):
     form_class = UserPasswordResetForm
 
     def form_valid(self, form):
-        print("Password reset email sent!")
+        print(_("Password reset email sent!"))
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        print("Failed to send password reset email!")
+        print(_("Failed to send password reset email!"))
         return super().form_invalid(form)
     
 
@@ -167,10 +168,10 @@ class UserPasswrodResetConfirmView(PasswordResetConfirmView):
         # Apenas atualiza a senha sem mexer em outros campos do modelo
         form.user.set_password(form.cleaned_data['new_password1'])
         form.user.save(update_fields=["password"])  # Evita save completo que pode tentar mexer no avatar
-        print("Password has been reset!")
+        print(_("Password has been reset!"))
         return super(PasswordResetConfirmView, self).form_valid(form)
 
     def form_invalid(self, form):
-        print("Password reset failed!")
+        print(_("Password reset failed!"))
         return super().form_invalid(form)
   

@@ -173,6 +173,10 @@ class Conquista(BaseModel):
     icone = models.ImageField(upload_to='conquistas/', null=True, blank=True, verbose_name=_("Ícone"))
     codigo = models.CharField(max_length=50, unique=True, verbose_name=_("Código"))
 
+    class Meta:
+        verbose_name = _('Conquista')
+        verbose_name_plural = _('Conquistas')
+
     def __str__(self):
         return self.nome
 

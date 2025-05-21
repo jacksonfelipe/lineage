@@ -1,6 +1,7 @@
 from getpass import getpass
 from passlib.hash import bcrypt
 from cryptography.fernet import Fernet
+from django.utils.translation import gettext as _
 
 
 def gerar_chave_fernet():
@@ -14,8 +15,8 @@ def gerar_hash_bcrypt(senha):
 
 
 def main():
-    print("🔐 Gerador de credenciais")
-    senha = getpass("Digite a senha que deseja proteger: ")
+    print(_("🔐 Gerador de credenciais"))
+    senha = getpass(_("Digite a senha que deseja proteger: "))
 
     hash_bcrypt = gerar_hash_bcrypt(senha)
     chave_fernet = gerar_chave_fernet()

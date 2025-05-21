@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-15 12:26-0300\n"
+"POT-Creation-Date: 2025-05-21 00:17-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -511,6 +511,15 @@ msgstr "Historial de artículos de la caja"
 msgid "Box Item Histories"
 msgstr "Historia de artículos de caja"
 
+msgid "Por Nível"
+msgstr "Por nivel"
+
+msgid "Por Conquista"
+msgstr "Por Conquista"
+
+msgid "Por Quantidade de Conquistas"
+msgstr "Por cantidad de logros"
+
 msgid "Tipo de Recompensa"
 msgstr "Tipo de Recompensa"
 
@@ -523,14 +532,246 @@ msgstr "Recompensa"
 msgid "Recompensas"
 msgstr "Recompensas"
 
+msgid "Reward"
+msgstr "Premio"
+
+msgid "Date"
+msgstr "Fecha"
+
+msgid "Received Reward"
+msgstr "Recompensa recibida"
+
+msgid "Received Rewards"
+msgstr "Recompensas recibidas"
+
+msgid "Level"
+msgstr "Nivel"
+
+msgid "Fragments"
+msgstr "Fragmentos"
+
+msgid "Economy Weapon"
+msgstr "Arma económica"
+
+msgid "Economy Weapons"
+msgstr "Armas económicas"
+
+msgid "Name"
+msgstr "Nombre"
+
+msgid "Required Weapon Level"
+msgstr "Nivel de arma requerido"
+
+msgid "Fragment Reward"
+msgstr "Recompensa de fragmento"
+
+msgid "Respawn Time (seconds)"
+msgstr "Tiempo de reaparición (segundos)"
+
+msgid "Last Defeated At"
+msgstr "Última derrota en"
+
+msgid "Attack"
+msgstr "Ataque"
+
+msgid "Defense"
+msgstr "Defensa"
+
+msgid "HP"
+msgstr "HP"
+
+msgid "Monster"
+msgstr "Monstruo"
+
+msgid "Monsters"
+msgstr "Monstruos"
+
+msgid "Reward Item"
+msgstr "Artículo de recompensa"
+
+msgid "Reward Items"
+msgstr "Artículos de recompensa"
+
+msgid "Start Date"
+msgstr "Fecha de inicio"
+
+msgid "End Date"
+msgstr "Fecha final"
+
+msgid "Is Active"
+msgstr "Es activo"
+
+msgid "Premium Price"
+msgstr "Precio premium"
+
+msgid "Season"
+msgstr "Estación"
+
+msgid "Required XP"
+msgstr "Requerido XP"
+
+msgid "Battle Pass Level"
+msgstr "Nivel de pase de batalla"
+
+msgid "Battle Pass Levels"
+msgstr "Niveles de pase de batalla"
+
+msgid "Is Premium"
+msgstr "Es premium"
+
+msgid "Item Amount"
+msgstr "Cantidad de artículo"
+
+msgid "Battle Pass Reward"
+msgstr "Recompensa de pase de batalla"
+
+msgid "Battle Pass Rewards"
+msgstr "Battle Pass recompensas"
+
+msgid "Premium"
+msgstr "De primera calidad"
+
+msgid "Free"
+msgstr "Gratis"
+
+msgid "XP"
+msgstr "XP"
+
+msgid "Claimed Rewards"
+msgstr "Recompensas reclamadas"
+
+msgid "Has Premium"
+msgstr "Tiene prima"
+
+msgid "User Battle Pass Progress"
+msgstr "Progreso de pase de batalla de usuarios"
+
+msgid "User Battle Pass Progresses"
+msgstr "Progresa el pase de batalla de usuarios"
+
+msgid "XP Amount"
+msgstr "Cantidad XP"
+
+msgid "Max Exchanges"
+msgstr "Intercambios máximos"
+
+msgid "0 = sem limite"
+msgstr "0 = Sin límite"
+
+msgid "Current Exchanges"
+msgstr "Intercambios actuales"
+
+msgid "Battle Pass Item Exchange"
+msgstr "Battle Pass Intercambio de elementos"
+
+msgid "Battle Pass Item Exchanges"
+msgstr "Intercambios de elementos de pase de batalla"
+
+msgid "Esta troca não está mais disponível."
+msgstr "Este intercambio ya no está disponible."
+
+msgid "Você não possui quantidade suficiente deste item."
+msgstr "No tienes suficiente de este artículo."
+
+msgid "Troca realizada com sucesso! Você recebeu {} XP."
+msgstr "¡Intercambio exitoso! Recibiste {} xp."
+
+msgid "Você não possui uma bag."
+msgstr "No tienes una bolsa."
+
+msgid "Você não possui este item."
+msgstr "No tienes este artículo."
+
+msgid "Você não possui progresso no Battle Pass atual."
+msgstr "No tienes progreso en el actual Pase de batalla."
+
+msgid "Nível"
+msgstr "Nivel"
+
+msgid "Nível Máximo Atingido!"
+msgstr "¡El nivel máximo alcanzado!"
+
+msgid "Trocar Itens por XP"
+msgstr "Cambiar elementos para XP"
+
+msgid "Comprar Premium"
+msgstr "Comprar Premium"
+
+msgid "Resgatado"
+msgstr "Rescatado"
+
+msgid "Resgatar"
+msgstr "Rescate"
+
+msgid "Confirmar Compra do Passe de Batalha Premium"
+msgstr "Confirme la compra del pase de batalla premium"
+
+msgid "Temporada"
+msgstr "Temporada"
+
+msgid "Preço"
+msgstr "Precio"
+
+msgid "moedas"
+msgstr "monedas"
+
+msgid "Saldo atual"
+msgstr "Saldo actual"
+
+msgid "Confirmar Compra"
+msgstr "Confirmar Compra"
+
+msgid "XP por item"
+msgstr "XP por item"
+
+msgid "Quantidade disponível"
+msgstr "Cantidad disponible"
+
+msgid "Trocas restantes"
+msgstr "Restante"
+
+msgid "Quantidade para trocar"
+msgstr "Cantidad para cambiar"
+
+msgid "XP total"
+msgstr "Total de XP"
+
+msgid "Trocar por XP"
+msgstr "Trocar por XP"
+
+msgid "Você não possui este item"
+msgstr "No tienes este artículo"
+
+msgid "Limite de trocas atingido"
+msgstr "Límite de intercambio alcanzado"
+
+msgid "Você já atingiu o nível máximo do Battle Pass!"
+msgstr "¡Ya has alcanzado el nivel máximo de pase de batalla!"
+
+msgid "Não há itens disponíveis para troca no momento."
+msgstr "No hay artículos disponibles para el intercambio en este momento."
+
+msgid "Passe de Batalha Indisponível"
+msgstr "Batalla no disponible"
+
+msgid "No momento, nenhuma temporada do Passe de Batalha está ativa."
+msgstr "En este momento, ninguna temporada del Pase de batalla está activa."
+
+msgid ""
+"Fique ligado! Em breve uma nova temporada estará disponível com recompensas "
+"exclusivas."
+msgstr ""
+"¡Manténganse al tanto! Pronto habrá una nueva temporada disponible con "
+"recompensas exclusivas."
+
+msgid "Voltar para a página inicial"
+msgstr "Voltar para a página inicial"
+
 msgid "Tipos de Caixa Disponíveis"
 msgstr "Tipos de efectivo disponibles"
 
 msgid "Seu Saldo:"
 msgstr "Tu equilibrio:"
-
-msgid "Preço"
-msgstr "Precio"
 
 msgid "Boosters"
 msgstr "Refuerzos"
@@ -564,9 +805,6 @@ msgstr "Ver artículos"
 
 msgid "Nenhum tipo de caixa disponível no momento."
 msgstr "No hay caja disponible en este momento."
-
-msgid "Confirmar Compra"
-msgstr "Confirmar Compra"
 
 msgid "Você tem certeza de que deseja comprar e abrir esta caixa?"
 msgstr "¿Estás seguro de que quieres comprar y abrir esta caja?"
@@ -696,14 +934,6 @@ msgstr "Registre nuevos artículos disponibles para las cajas."
 msgid "Novo Item"
 msgstr "Nuevo artículo"
 
-msgid "Excluir Item"
-msgstr "Excluir Item"
-
-#, python-format
-msgid "Tem certeza que deseja excluir <strong>%(item.name)s</strong>?"
-msgstr ""
-"¿Estás seguro de que quieres eliminar <strong>%(item.name)s s </strong>?"
-
 msgid "Novo"
 msgstr "Nuevo"
 
@@ -738,6 +968,51 @@ msgstr "El artículo fue agregado a su"
 msgid "com sucesso!"
 msgstr "¡Exitosamente!"
 
+msgid "Minha Arma"
+msgstr "Mi arma"
+
+msgid "Fragmentos"
+msgstr "Fragmentos"
+
+msgid "Fichas restantes"
+msgstr "Fichas restantes"
+
+msgid "Comprar"
+msgstr "Comprar"
+
+msgid "Monstros disponíveis"
+msgstr "Monstruos disponibles"
+
+msgid "Requer arma"
+msgstr "Requiere arma"
+
+msgid "fragmentos"
+msgstr "fragmentos"
+
+msgid "Força"
+msgstr "Fortaleza"
+
+msgid "Defesa"
+msgstr "Defensa"
+
+msgid "Velocidade"
+msgstr "Velocidad"
+
+msgid "Respawn em"
+msgstr "Reaparecer"
+
+msgid "Atacar"
+msgstr "Atacar"
+
+msgid "Encantar Arma"
+msgstr "Encantar Arma"
+
+msgid "Gasta 10 fragmentos para tentar aumentar o nível da arma."
+msgstr "Gasta 10 fragmentos para tratar de aumentar el nivel de armas."
+
+msgid "Tentar Encantar"
+msgstr "Tentar Encantar"
+
 msgid "Minha Bag"
 msgstr "Mi bolso"
 
@@ -759,6 +1034,45 @@ msgstr "Todavía no tienes una bolsa."
 #, python-brace-format
 msgid "🎁 Você recebeu: {item} +{enchant} x{qty}!"
 msgstr "🎁 ¡Recibió: {item} +{enchant} x {qty}!"
+
+msgid "Recompensa resgatada com sucesso!"
+msgstr "¡Recompensa rescatada con éxito!"
+
+msgid "Recompensa resgatada, mas não há item associado."
+msgstr "Recompensa recompensada, pero no hay un artículo asociado."
+
+msgid "Você já resgatou esta recompensa."
+msgstr "Ya has rescatado esta recompensa."
+
+msgid "Você precisa do Passe Premium para resgatar esta recompensa."
+msgstr "Necesita el pase premium para canjear esta recompensa."
+
+msgid "Você ainda não atingiu o nível necessário para esta recompensa."
+msgstr "Todavía no ha alcanzado el nivel requerido para esta recompensa."
+
+msgid "Nenhuma temporada ativa no momento."
+msgstr "No hay temporada activa en este momento."
+
+msgid "Você já possui o Passe de Batalha Premium."
+msgstr "Ya tienes el pase de batalla premium."
+
+msgid "Carteira não encontrada."
+msgstr "Billetera no encontrada."
+
+msgid "Saldo insuficiente para adquirir o Passe Premium."
+msgstr "Saldo insuficiente para adquirir o Passe Premium."
+
+msgid "Passe de Batalha Premium ativado com sucesso!"
+msgstr "Premium Battle pasó con éxito activado con éxito!"
+
+msgid "Erro na transação: "
+msgstr "Error de transacción:"
+
+msgid "Não há temporada ativa no momento."
+msgstr "No hay temporada activa en este momento."
+
+msgid "Quantidade inválida."
+msgstr "Cantidad inválida."
 
 msgid "Você não tem fichas suficientes."
 msgstr "No tienes suficientes chips."
@@ -789,9 +1103,6 @@ msgstr "Esta caja no contiene elementos disponibles para la apertura."
 
 msgid "Saldo insuficiente para comprar a caixa."
 msgstr "Saldo insuficiente para comprar a caixa."
-
-msgid "Erro na transação: "
-msgstr "Error de transacción:"
 
 msgid "Quantidade insuficiente na Bag."
 msgstr "Cantidad insuficiente en la bolsa."
@@ -904,6 +1215,9 @@ msgstr "Devolver"
 msgid "Trocar"
 msgstr "Reemplazar"
 
+msgid "Enviar para Bag"
+msgstr "Enviar para Bag"
+
 msgid "Nenhum item no inventário."
 msgstr "No hay artículo en el inventario."
 
@@ -942,6 +1256,9 @@ msgstr "Ningún elemento encontrado en el inventario de este personaje."
 
 msgid "Voltar para o Inventário"
 msgstr "Volver al inventario"
+
+msgid "Transferir para Bag"
+msgstr "Transferir para Bag"
 
 msgid "Trocar Item entre Jogadores"
 msgstr "Cambiar el elemento entre los jugadores"
@@ -1353,6 +1670,15 @@ msgstr "Configuración de índice"
 
 msgid "Only one server configuration is allowed."
 msgstr "Solo se permite una configuración de servidor."
+
+msgid "Português"
+msgstr "portugués"
+
+msgid "English"
+msgstr "Inglés"
+
+msgid "Español"
+msgstr "Español"
 
 msgid "Configuration"
 msgstr "Configuración"
@@ -1837,9 +2163,6 @@ msgstr "Clan"
 msgid "Nenhuma localização de Boss Jewel encontrada."
 msgstr "No se encontró la ubicación de Jein Jewel."
 
-msgid "Nível"
-msgstr "Nivel"
-
 msgid "Respawn"
 msgstr "Reaparición"
 
@@ -1990,6 +2313,42 @@ msgstr "No Leader"
 
 msgid "No Alliance"
 msgstr "No Alliance"
+
+msgid "Item name"
+msgstr "Nombre del artículo"
+
+msgid "Package Items"
+msgstr "Artículo de paquete"
+
+msgid "Package Name"
+msgstr "Nombre del paquete"
+
+msgid "Total Price"
+msgstr "Precio total"
+
+msgid "Promotion"
+msgstr "Promoción"
+
+msgid "Package name"
+msgstr "Nombre del paquete"
+
+msgid "Total price"
+msgstr "Precio total"
+
+msgid "Expiration Date"
+msgstr "Fecha de expiración"
+
+msgid "Ex: 2025-04-30 18:00"
+msgstr "Ej.: 2025-04-30 18:00"
+
+msgid "Promotion Code"
+msgstr "Código de promoción"
+
+msgid "Discount (%)"
+msgstr "Descuento (%)"
+
+msgid "Promotion code"
+msgstr "Código de promoción"
 
 msgid "Ativo"
 msgstr "Activo"
@@ -2375,6 +2734,12 @@ msgstr "Usuario:"
 msgid "Saldo atual:"
 msgstr "Saldo actual:"
 
+msgid "Saldo insuficiente para transferência."
+msgstr "Balance insuficiente para la transferencia."
+
+msgid "Erro ao adicionar a moeda ao personagem."
+msgstr "Error a agregar la moneda al personaje."
+
 msgid "Nome do Grupo"
 msgstr "Nombre de grupo"
 
@@ -2506,9 +2871,6 @@ msgstr "¡Acceso denegado!"
 msgid "Você não tem permissão para acessar esta sala de chat."
 msgstr "No se le permite acceder a esta sala de chat."
 
-msgid "Voltar para a página inicial"
-msgstr "Voltar para a página inicial"
-
 msgid "Chat Indisponível"
 msgstr "Chat no disponible"
 
@@ -2571,6 +2933,12 @@ msgstr ""
 
 msgid "Ativar 2FA"
 msgstr "Activar 2FA"
+
+msgid "Tema não encontrado."
+msgstr "Tema no encontrado."
+
+msgid "Arquivo não encontrado no tema."
+msgstr "Archivo no se encuentra en el tema."
 
 msgid "Tempo Total"
 msgstr "Tiempo total"
@@ -2680,9 +3048,6 @@ msgstr "Preguntas frecuentes"
 msgid "Pode visualizar o índice"
 msgstr "Pode visualizar o índice"
 
-msgid "Português"
-msgstr "portugués"
-
 msgid "Inglês"
 msgstr "Inglés"
 
@@ -2717,11 +3082,53 @@ msgstr ""
 msgid "Não há perguntas frequentes disponíveis no momento."
 msgstr "No hay preguntas frecuentes disponibles en este momento."
 
-msgid "Username"
-msgstr "Nombre de usuario"
+msgid "First Name"
+msgstr "Nombre de pila"
+
+msgid "Last Name"
+msgstr "Apellido"
 
 msgid "Email"
 msgstr "Correo electrónico"
+
+msgid "Biography"
+msgstr "Biografía"
+
+msgid "CPF"
+msgstr "CPF"
+
+msgid "Gender"
+msgstr "Género"
+
+msgid "Profile Picture"
+msgstr "Foto de perfil"
+
+msgid "Street"
+msgstr "Calle"
+
+msgid "Number"
+msgstr "Número"
+
+msgid "Complement"
+msgstr "Complementar"
+
+msgid "Neighborhood"
+msgstr "Vecindario"
+
+msgid "City"
+msgstr "Ciudad"
+
+msgid "State"
+msgstr "Estado"
+
+msgid "Postal Code"
+msgstr "Código Postal"
+
+msgid "Username"
+msgstr "Nombre de usuario"
+
+msgid "example@company.com"
+msgstr "example@company.com"
 
 msgid "Password"
 msgstr "Contraseña"
@@ -2735,6 +3142,45 @@ msgstr "Tu nombre de usuario"
 msgid "Your Password"
 msgstr "Tu contraseña"
 
+msgid "Enter your email"
+msgstr "Ingrese su correo electrónico"
+
+msgid "New Password"
+msgstr "Nueva contraseña"
+
+msgid "Confirm New Password"
+msgstr "Confirmar una nueva contraseña"
+
+msgid "Old Password"
+msgstr "Contraseña anterior"
+
+msgid "Title"
+msgstr "Título"
+
+msgid "Content"
+msgstr "Contenido"
+
+msgid "Staff Status"
+msgstr "Estado del personal"
+
+msgid "Superuser Status"
+msgstr "Estado de superusuario"
+
+msgid "Groups"
+msgstr "Grupos"
+
+msgid "User Permissions"
+msgstr "Permisos de usuario"
+
+msgid "Email Verified"
+msgstr "Correo electrónico verificado"
+
+msgid "2FA Enabled"
+msgstr "2FA habilitado"
+
+msgid "Credits"
+msgstr "Créditos"
+
 msgid "Nome de usuário"
 msgstr "Nombre de usuario"
 
@@ -2746,9 +3192,6 @@ msgstr "Foto de perfil"
 
 msgid "Biografia"
 msgstr "Biografía"
-
-msgid "CPF"
-msgstr "CPF"
 
 msgid "Gênero"
 msgstr "Género"
@@ -2816,9 +3259,6 @@ msgstr "Traducción del tablero"
 msgid "Traduções de Dashboards"
 msgstr "Traducciones de tablero"
 
-msgid "XP"
-msgstr "XP"
-
 msgid "Último bônus de login"
 msgstr "Último bono de inicio de sesión"
 
@@ -2827,6 +3267,9 @@ msgstr "Icono"
 
 msgid "Conquista"
 msgstr "Conquista"
+
+msgid "Conquistas"
+msgstr "Conquistas"
 
 msgid "Data da Conquista"
 msgstr "Data da Conquista"
@@ -2867,9 +3310,6 @@ msgstr "Enviar instrucciones"
 
 msgid "← Voltar para o login"
 msgstr "← Volver al inicio de sesión"
-
-msgid "Voltar para o painel"
-msgstr "Regresar al panel"
 
 msgid "Melhor prevenir do que remediar."
 msgstr "Mejor seguro que curar."
@@ -2972,6 +3412,9 @@ msgstr "Registrar"
 
 msgid "← Já tem conta? Faça login"
 msgstr "← ¿Ya tienes una cuenta? Acceso"
+
+msgid "Voltar para o painel"
+msgstr "Regresar al panel"
 
 msgid "Verificação em 2 Etapas"
 msgstr "Verificación en 2 pasos"
@@ -3256,6 +3699,34 @@ msgstr "Tu correo electrónico"
 msgid "Reenviar"
 msgstr "Reenviar"
 
+msgid "Registration failed!"
+msgstr "¡Falló en el registro!"
+
+msgid "Password changed successfully!"
+msgstr "¡La contraseña cambió con éxito!"
+
+msgid "Password change failed!"
+msgstr "¡El cambio de contraseña falló!"
+
+msgid "Password reset email sent!"
+msgstr "¡Restablecer la contraseña por correo electrónico enviado!"
+
+msgid "Failed to send password reset email!"
+msgstr ""
+"¡No se pudo enviar el correo electrónico de restablecimiento de contraseña!"
+
+msgid "Password has been reset!"
+msgstr "¡Se ha restablecido la contraseña!"
+
+msgid "Password reset failed!"
+msgstr "¡El reinicio de la contraseña falló!"
+
+msgid "Notícia privada não está disponível."
+msgstr "Las noticias privadas no están disponibles."
+
+msgid "Tradução não disponível para esta notícia."
+msgstr "Traducción no disponible para esta noticia."
+
 msgid "Usuário que iniciou a amizade."
 msgstr "Usuario que comenzó la amistad."
 
@@ -3399,6 +3870,15 @@ msgstr "Rechazar"
 
 msgid "Nenhum convite de amizade recebido."
 msgstr "No recibió invitación a la amistad."
+
+msgid "Published"
+msgstr "Publicado"
+
+msgid "Private"
+msgstr "Privado"
+
+msgid "Summary"
+msgstr "Resumen"
 
 msgid ""
 "Endereço amigável da notícia, gerado automaticamente a partir do título."
@@ -3969,9 +4449,6 @@ msgstr "Actualizar"
 msgid "This importer will import the following fields: "
 msgstr "Este importador importará los siguientes campos:"
 
-msgid "Summary"
-msgstr "Resumen"
-
 msgid ""
 "Something's wrong with your database installation. Make sure the appropriate"
 " database tables have been created, and make sure the database is readable "
@@ -4110,6 +4587,9 @@ msgstr "Era logo"
 msgid "Toggle navigation"
 msgstr "Navegación"
 
+msgid "Bloquear Sessão"
+msgstr "Sesión"
+
 msgid "Marcar como lidas"
 msgstr "Marcar como lidas"
 
@@ -4169,6 +4649,12 @@ msgstr "Ruleta"
 
 msgid "Caixas"
 msgstr "Cajas"
+
+msgid "Economia Mortal"
+msgstr "Economía mortal"
+
+msgid "Battle Pass"
+msgstr "Pase de batalla"
 
 msgid "Ajuda (FAQ)"
 msgstr "Ayuda (FAQ)"
@@ -4523,6 +5009,12 @@ msgstr ""
 "Ingrese su contraseña anterior por razones de seguridad y luego ingrese su "
 "nueva contraseña dos veces para verificar si se escribió correctamente."
 
+msgid "🔐 Gerador de credenciais"
+msgstr "🔐 Generador de credenciales"
+
+msgid "Digite a senha que deseja proteger: "
+msgstr "Ingrese la contraseña que desea proteger:"
+
 msgid "Jogue Agora"
 msgstr "Jugar ahora"
 
@@ -4534,6 +5026,24 @@ msgstr "Servidor"
 
 msgid "Estatística"
 msgstr "Estadística"
+
+msgid ""
+"Notificações staff só podem ser enviadas para usuários staff ou "
+"superusuários."
+msgstr ""
+"Las notificaciones del personal solo se pueden enviar a los usuarios del "
+"personal o los superusores."
+
+msgid "Você não tem permissão para criar notificações públicas staff."
+msgstr "No se le permite crear notificaciones públicas del personal."
+
+#~ msgid "Excluir Item"
+#~ msgstr "Excluir Item"
+
+#, python-format
+#~ msgid "Tem certeza que deseja excluir <strong>%(item.name)s</strong>?"
+#~ msgstr ""
+#~ "¿Estás seguro de que quieres eliminar <strong>%(item.name)s s </strong>?"
 
 #~ msgid "Adicionar Itens ao Pacote"
 #~ msgstr "Agregar elementos al paquete"

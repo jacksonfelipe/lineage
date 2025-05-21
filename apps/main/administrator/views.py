@@ -3,6 +3,7 @@ from django.http import Http404, JsonResponse
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import permission_required
 from apps.main.home.decorator import conditional_otp_required
+from django.utils.translation import gettext as _
 
 from apps.main.notification.models import Notification
 from apps.main.news.models import News
@@ -52,7 +53,7 @@ def chat_room(request, group_name):
 
     # Verifica se o usuário é participante
     if not is_participant:
-        raise Http404("Você não tem permissão para acessar esta sala de chat.")
+        raise Http404(_("Você não tem permissão para acessar esta sala de chat."))
 
     # Verifica se o status é 'pending'
     if solicitation.status != 'pending':
@@ -99,14 +100,14 @@ def serve_theme_file(request, file_name):
     path_theme = context_data.get('path_theme')
 
     if not path_theme:
-        raise Http404("Tema não encontrado.")
+        raise Http404(_("Tema não encontrado."))
 
     # Caminho relativo com separador compatível com Django
     template_relative_path = os.path.join(path_theme, file_name + '.html').replace('\\', '/').replace("/themes/", "")
 
     # Verifica se o arquivo existe no sistema de arquivos
     if not os.path.isfile(os.path.join(settings.BASE_DIR, path_theme.replace("/themes/", "themes/"), file_name + '.html')):
-        raise Http404("Arquivo não encontrado no tema.")
+        raise Http404(_("Arquivo não encontrado no tema."))
 
     # Renderiza o template
     return render(request, template_relative_path)

@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404
 from apps.main.faq.models import FAQ
 from apps.main.news.models import News
-from django.utils.translation import get_language
+from django.utils.translation import get_language, gettext as _
 from utils.render_theme_page import render_theme_page
 
 
@@ -30,13 +30,13 @@ def public_news_list(request):
 def public_news_detail(request, slug):
     news = get_object_or_404(News, slug=slug)
     if news.is_private and not request.user.is_authenticated:
-        raise Http404("Notícia privada não está disponível.")
+        raise Http404(_("Notícia privada não está disponível."))
 
     language = get_language()
     translation = news.translations.filter(language=language).first()
 
     if not translation:
-        raise Http404("Tradução não disponível para esta notícia.")
+        raise Http404(_("Tradução não disponível para esta notícia."))
 
     context = {
         'news': news,
