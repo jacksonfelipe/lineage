@@ -193,46 +193,44 @@
 <section class="clans" id="top-clans">
     <div class="clans-title title container" data-aos="fade-up" data-aos-duration="2000">
         <span><img src="{% static 'default/images/icons/text.png' %}">{% trans "Melhores Clãs" %}</span>
-        <h1>{% trans "Os Clãs Mais Poderosos" %}</h1>
     </div>
 
-    <div class="clans-list container" data-aos="fade-up" data-aos-duration="2000">
-        <!-- First Place -->
-        {% if clanes.0 %}
-        <div class="clan-first">
-            <div class="clan-info">
-                <h3>🏆 1º {{ clanes.0.clan_name }}</h3>
-                <p>{% trans "Nível:" %} {{ clanes.0.clan_level }}</p>
-                <p>{% trans "Reputação:" %} {{ clanes.0.reputation_score }}</p>
-                <p>{% trans "Aliança:" %} {{ clanes.0.ally_name|default:"None" }}</p>
-                <p>{% trans "Líder:" %} {{ clanes.0.char_name }}</p>
-                <p>{% trans "Membros:" %} {{ clanes.0.membros }}</p>
-            </div>
-            <div class="clan-crests">
-                {% if clanes.0.ally_crest_image_base64 %}
-                    <img src="data:image/png;base64,{{ clanes.0.ally_crest_image_base64 }}" alt="Alliance Crest">
-                {% endif %}
-                <img src="data:image/png;base64,{{ clanes.0.clan_crest_image_base64 }}" alt="Clan Crest">
-            </div>
+    <div class="clans-table container" data-aos="fade-up" data-aos-duration="2000">
+        <div class="table-header">
+            <div class="col-rank">#</div>
+            <div class="col-crest">{% trans "Cresta" %}</div>
+            <div class="col-name">{% trans "Nome do Clã" %}</div>
+            <div class="col-level">{% trans "Nível" %}</div>
+            <div class="col-reputation">{% trans "Reputação" %}</div>
+            <div class="col-alliance">{% trans "Aliança" %}</div>
+            <div class="col-leader">{% trans "Líder" %}</div>
+            <div class="col-members">{% trans "Membros" %}</div>
         </div>
-        {% endif %}
 
-        <!-- Other Clans -->
-        <div class="clans-grid">
-            {% for clan in clanes|slice:"1:" %}
-            <div class="clan-card">
-                <h4>{{ forloop.counter|add:"1" }}º {{ clan.clan_name }}</h4>
-                <p>{% trans "Nível:" %} {{ clan.clan_level }}</p>
-                <p>{% trans "Reputação:" %} {{ clan.reputation_score }}</p>
-                <p>{% trans "Aliança:" %} {{ clan.ally_name|default:"None" }}</p>
-                <p>{% trans "Líder:" %} {{ clan.char_name }}</p>
-                <p>{% trans "Membros:" %} {{ clan.membros }}</p>
-                <div class="clan-crests">
-                    {% if clan.ally_crest_image_base64 %}
-                        <img src="data:image/png;base64,{{ clan.ally_crest_image_base64 }}" alt="Alliance Crest">
+        <div class="table-body">
+            {% for clan in clanes %}
+            <div class="table-row {% if forloop.first %}first-place{% endif %}">
+                <div class="col-rank">
+                    {% if forloop.first %}
+                        <span class="rank-icon">👑</span>
+                    {% else %}
+                        {{ forloop.counter }}
                     {% endif %}
-                    <img src="data:image/png;base64,{{ clan.clan_crest_image_base64 }}" alt="Clan Crest">
                 </div>
+                <div class="col-crest">
+                    <div class="crest-container">
+                        {% if clan.ally_crest_image_base64 %}
+                            <img src="data:image/png;base64,{{ clan.ally_crest_image_base64 }}" alt="Alliance Crest" class="alliance-crest">
+                        {% endif %}
+                        <img src="data:image/png;base64,{{ clan.clan_crest_image_base64 }}" alt="Clan Crest" class="clan-crest">
+                    </div>
+                </div>
+                <div class="col-name">{{ clan.clan_name }}</div>
+                <div class="col-level">{{ clan.clan_level }}</div>
+                <div class="col-reputation">{{ clan.reputation_score }}</div>
+                <div class="col-alliance">{{ clan.ally_name|default:"-" }}</div>
+                <div class="col-leader">{{ clan.char_name }}</div>
+                <div class="col-members">{{ clan.membros }}</div>
             </div>
             {% endfor %}
         </div>
@@ -250,9 +248,7 @@
             {% endif %}
         </h2>
         <div class="online-counter">
-            <span class="icon">🧙‍♂️</span>
             <span id="player-count">{{ online }}</span>
-            <span class="icon">🗡️</span>
         </div>
         <p>{% trans "O campo de batalha está ativo!" %}</p>
     </div>

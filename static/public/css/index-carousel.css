@@ -3,7 +3,6 @@
   height: 300px;
   overflow: hidden;
   position: relative;
-  background: linear-gradient(90deg, #0b0b0b, #1a1a1a, #2a2a2a, #1a1a1a, #0b0b0b);
   animation: bgMove 10s linear infinite;
 }
 
@@ -32,7 +31,7 @@
 .apoiadores-banner {
   width: 100%;
   overflow: hidden;
-  background: linear-gradient(90deg, #b88900, #d4af37, #f0e68c, #d4af37, #b88900);
+  background: linear-gradient(90deg, #4b3a00, #5d4a11, #6f5d2a, #5d4a11, #4b3a00);
   background-size: 300% 300%;
   animation: bgMove 10s linear infinite;
   padding: 10px 0;
