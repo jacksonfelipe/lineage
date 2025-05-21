@@ -1,0 +1,131 @@
+{% extends 'wiki/base.html' %}
+{% load static i18n %}
+
+{% block wiki_content %}
+<div class="wiki-page">
+    <h1>{% trans "Server Rates" %}</h1>
+    
+    <div class="wiki-section">
+        <h2>{% trans "Experience Rates" %}</h2>
+        <div class="wiki-rates-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>{% trans "Level Range" %}</th>
+                        <th>{% trans "Experience Rate" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1-20</td>
+                        <td>x5</td>
+                    </tr>
+                    <tr>
+                        <td>21-40</td>
+                        <td>x4</td>
+                    </tr>
+                    <tr>
+                        <td>41-60</td>
+                        <td>x3</td>
+                    </tr>
+                    <tr>
+                        <td>61-80</td>
+                        <td>x2</td>
+                    </tr>
+                    <tr>
+                        <td>81+</td>
+                        <td>x1.5</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="wiki-section">
+        <h2>{% trans "Drop Rates" %}</h2>
+        <div class="wiki-rates-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>{% trans "Item Type" %}</th>
+                        <th>{% trans "Drop Rate" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{% trans "Common Items" %}</td>
+                        <td>x3</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Rare Items" %}</td>
+                        <td>x2</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Epic Items" %}</td>
+                        <td>x1.5</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Legendary Items" %}</td>
+                        <td>x1.2</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="wiki-section">
+        <h2>{% trans "Other Rates" %}</h2>
+        <div class="wiki-rates-grid">
+            <div class="wiki-rate-card">
+                <h3>{% trans "Adena Rate" %}</h3>
+                <p>x3</p>
+            </div>
+            <div class="wiki-rate-card">
+                <h3>{% trans "Quest Reward Rate" %}</h3>
+                <p>x2</p>
+            </div>
+            <div class="wiki-rate-card">
+                <h3>{% trans "Spirit Shot Rate" %}</h3>
+                <p>x2</p>
+            </div>
+            <div class="wiki-rate-card">
+                <h3>{% trans "Spoil Rate" %}</h3>
+                <p>x2</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="wiki-section">
+        <h2>{% trans "VIP Benefits" %}</h2>
+        <div class="wiki-vip-benefits">
+            <div class="wiki-vip-tier">
+                <h3>{% trans "VIP 1" %}</h3>
+                <ul>
+                    <li>{% trans "+10% Experience Rate" %}</li>
+                    <li>{% trans "+10% Drop Rate" %}</li>
+                    <li>{% trans "Access to VIP Shop" %}</li>
+                </ul>
+            </div>
+            <div class="wiki-vip-tier">
+                <h3>{% trans "VIP 2" %}</h3>
+                <ul>
+                    <li>{% trans "+20% Experience Rate" %}</li>
+                    <li>{% trans "+20% Drop Rate" %}</li>
+                    <li>{% trans "Access to VIP Shop" %}</li>
+                    <li>{% trans "Special VIP Skills" %}</li>
+                </ul>
+            </div>
+            <div class="wiki-vip-tier">
+                <h3>{% trans "VIP 3" %}</h3>
+                <ul>
+                    <li>{% trans "+30% Experience Rate" %}</li>
+                    <li>{% trans "+30% Drop Rate" %}</li>
+                    <li>{% trans "Access to VIP Shop" %}</li>
+                    <li>{% trans "Special VIP Skills" %}</li>
+                    <li>{% trans "Custom VIP Items" %}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

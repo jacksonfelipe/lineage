@@ -1,0 +1,130 @@
+{% extends 'wiki/base.html' %}
+{% load static i18n %}
+
+{% block wiki_content %}
+<div class="wiki-page">
+    <h1>{% trans "Server Updates" %}</h1>
+    
+    <div class="wiki-section">
+        <h2>{% trans "Latest Updates" %}</h2>
+        <div class="wiki-updates">
+            <div class="wiki-update">
+                <div class="wiki-update-header">
+                    <h3>{% trans "Version 1.2.0" %}</h3>
+                    <span class="wiki-update-date">{% trans "March 15, 2024" %}</span>
+                </div>
+                <div class="wiki-update-content">
+                    <h4>{% trans "New Features" %}:</h4>
+                    <ul>
+                        <li>{% trans "Added new raid boss: Beleth" %}</li>
+                        <li>{% trans "Implemented new PvP arena" %}</li>
+                        <li>{% trans "Added new custom items" %}</li>
+                    </ul>
+                    <h4>{% trans "Balance Changes" %}:</h4>
+                    <ul>
+                        <li>{% trans "Adjusted class balance" %}</li>
+                        <li>{% trans "Updated drop rates" %}</li>
+                        <li>{% trans "Modified experience rates" %}</li>
+                    </ul>
+                    <h4>{% trans "Bug Fixes" %}:</h4>
+                    <ul>
+                        <li>{% trans "Fixed connection issues" %}</li>
+                        <li>{% trans "Resolved item duplication bug" %}</li>
+                        <li>{% trans "Fixed quest completion issues" %}</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="wiki-update">
+                <div class="wiki-update-header">
+                    <h3>{% trans "Version 1.1.5" %}</h3>
+                    <span class="wiki-update-date">{% trans "February 28, 2024" %}</span>
+                </div>
+                <div class="wiki-update-content">
+                    <h4>{% trans "New Features" %}:</h4>
+                    <ul>
+                        <li>{% trans "Added new instance dungeon" %}</li>
+                        <li>{% trans "Implemented new quest system" %}</li>
+                        <li>{% trans "Added new custom skills" %}</li>
+                    </ul>
+                    <h4>{% trans "Balance Changes" %}:</h4>
+                    <ul>
+                        <li>{% trans "Adjusted PvP balance" %}</li>
+                        <li>{% trans "Updated item stats" %}</li>
+                        <li>{% trans "Modified skill effects" %}</li>
+                    </ul>
+                    <h4>{% trans "Bug Fixes" %}:</h4>
+                    <ul>
+                        <li>{% trans "Fixed inventory bugs" %}</li>
+                        <li>{% trans "Resolved skill delay issues" %}</li>
+                        <li>{% trans "Fixed party system bugs" %}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wiki-section">
+        <h2>{% trans "Upcoming Updates" %}</h2>
+        <div class="wiki-upcoming">
+            <div class="wiki-upcoming-update">
+                <h3>{% trans "Version 1.3.0" %}</h3>
+                <div class="wiki-upcoming-content">
+                    <p><strong>{% trans "Planned Release" %}:</strong> {% trans "April 2024" %}</p>
+                    <h4>{% trans "Planned Features" %}:</h4>
+                    <ul>
+                        <li>{% trans "New class: Mystic" %}</li>
+                        <li>{% trans "New raid boss: Zaken" %}</li>
+                        <li>{% trans "New PvP system" %}</li>
+                        <li>{% trans "New custom items" %}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wiki-section">
+        <h2>{% trans "Update History" %}</h2>
+        <div class="wiki-history">
+            <div class="wiki-history-entry">
+                <h3>{% trans "Version 1.0.0" %}</h3>
+                <span class="wiki-history-date">{% trans "January 1, 2024" %}</span>
+                <p>{% trans "Initial server release" %}</p>
+            </div>
+            <div class="wiki-history-entry">
+                <h3>{% trans "Version 1.0.5" %}</h3>
+                <span class="wiki-history-date">{% trans "January 15, 2024" %}</span>
+                <p>{% trans "First major update" %}</p>
+            </div>
+            <div class="wiki-history-entry">
+                <h3>{% trans "Version 1.1.0" %}</h3>
+                <span class="wiki-history-date">{% trans "February 1, 2024" %}</span>
+                <p>{% trans "Second major update" %}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="wiki-section">
+        <h2>{% trans "Update Policy" %}</h2>
+        <div class="wiki-policy">
+            <div class="wiki-policy-info">
+                <h3>{% trans "Update Schedule" %}</h3>
+                <ul>
+                    <li>{% trans "Major updates: Monthly" %}</li>
+                    <li>{% trans "Minor updates: Bi-weekly" %}</li>
+                    <li>{% trans "Hotfixes: As needed" %}</li>
+                </ul>
+            </div>
+            <div class="wiki-policy-info">
+                <h3>{% trans "Update Process" %}</h3>
+                <ul>
+                    <li>{% trans "Updates are announced in advance" %}</li>
+                    <li>{% trans "Server maintenance required" %}</li>
+                    <li>{% trans "Backup before updates" %}</li>
+                    <li>{% trans "Rollback plan in place" %}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,130 @@
+{% extends 'wiki/base.html' %}
+{% load static i18n %}
+
+{% block wiki_content %}
+<div class="wiki-page">
+    <h1>{% trans "Events Guide" %}</h1>
+    
+    <div class="wiki-section">
+        <h2>{% trans "Regular Events" %}</h2>
+        <div class="wiki-events-grid">
+            <div class="wiki-event-card">
+                <h3>{% trans "Olympiad" %}</h3>
+                <div class="wiki-event-info">
+                    <p><strong>{% trans "Schedule" %}:</strong> {% trans "Every Saturday" %}</p>
+                    <p><strong>{% trans "Time" %}:</strong> {% trans "20:00 - 22:00" %}</p>
+                    <p><strong>{% trans "Requirements" %}:</strong></p>
+                    <ul>
+                        <li>{% trans "Level 80+" %}</li>
+                        <li>{% trans "No clan restrictions" %}</li>
+                        <li>{% trans "No item restrictions" %}</li>
+                    </ul>
+                    <p><strong>{% trans "Rewards" %}:</strong></p>
+                    <ul>
+                        <li>{% trans "Olympiad Points" %}</li>
+                        <li>{% trans "Special Titles" %}</li>
+                        <li>{% trans "Unique Items" %}</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="wiki-event-card">
+                <h3>{% trans "Siege" %}</h3>
+                <div class="wiki-event-info">
+                    <p><strong>{% trans "Schedule" %}:</strong> {% trans "Every Sunday" %}</p>
+                    <p><strong>{% trans "Time" %}:</strong> {% trans "18:00 - 20:00" %}</p>
+                    <p><strong>{% trans "Requirements" %}:</strong></p>
+                    <ul>
+                        <li>{% trans "Clan Level 5+" %}</li>
+                        <li>{% trans "Minimum 20 members" %}</li>
+                        <li>{% trans "Registration required" %}</li>
+                    </ul>
+                    <p><strong>{% trans "Rewards" %}:</strong></p>
+                    <ul>
+                        <li>{% trans "Castle Control" %}</li>
+                        <li>{% trans "Tax Revenue" %}</li>
+                        <li>{% trans "Special Skills" %}</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="wiki-event-card">
+                <h3>{% trans "TvT Tournament" %}</h3>
+                <div class="wiki-event-info">
+                    <p><strong>{% trans "Schedule" %}:</strong> {% trans "Every Friday" %}</p>
+                    <p><strong>{% trans "Time" %}:</strong> {% trans "21:00 - 23:00" %}</p>
+                    <p><strong>{% trans "Requirements" %}:</strong></p>
+                    <ul>
+                        <li>{% trans "Level 85+" %}</li>
+                        <li>{% trans "Party of 9 players" %}</li>
+                        <li>{% trans "Registration required" %}</li>
+                    </ul>
+                    <p><strong>{% trans "Rewards" %}:</strong></p>
+                    <ul>
+                        <li>{% trans "Adena" %}</li>
+                        <li>{% trans "Special Items" %}</li>
+                        <li>{% trans "Tournament Points" %}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wiki-section">
+        <h2>{% trans "Special Events" %}</h2>
+        <div class="wiki-special-events">
+            <div class="wiki-special-event">
+                <h3>{% trans "Double Experience Weekend" %}</h3>
+                <div class="wiki-event-details">
+                    <p><strong>{% trans "Schedule" %}:</strong> {% trans "First weekend of each month" %}</p>
+                    <p><strong>{% trans "Duration" %}:</strong> {% trans "48 hours" %}</p>
+                    <p><strong>{% trans "Features" %}:</strong></p>
+                    <ul>
+                        <li>{% trans "2x Experience" %}</li>
+                        <li>{% trans "2x Drop Rate" %}</li>
+                        <li>{% trans "2x Adena" %}</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="wiki-special-event">
+                <h3>{% trans "Holiday Events" %}</h3>
+                <div class="wiki-event-details">
+                    <p><strong>{% trans "Schedule" %}:</strong> {% trans "During major holidays" %}</p>
+                    <p><strong>{% trans "Duration" %}:</strong> {% trans "Varies by event" %}</p>
+                    <p><strong>{% trans "Features" %}:</strong></p>
+                    <ul>
+                        <li>{% trans "Special quests" %}</li>
+                        <li>{% trans "Unique rewards" %}</li>
+                        <li>{% trans "Limited-time items" %}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wiki-section">
+        <h2>{% trans "Event Participation" %}</h2>
+        <div class="wiki-participation">
+            <div class="wiki-participation-info">
+                <h3>{% trans "How to Join" %}</h3>
+                <ul>
+                    <li>{% trans "Check the event schedule" %}</li>
+                    <li>{% trans "Register in advance if required" %}</li>
+                    <li>{% trans "Join the event channel" %}</li>
+                    <li>{% trans "Follow event rules" %}</li>
+                </ul>
+            </div>
+            <div class="wiki-participation-info">
+                <h3>{% trans "Event Rules" %}</h3>
+                <ul>
+                    <li>{% trans "No cheating or exploiting" %}</li>
+                    <li>{% trans "Respect other players" %}</li>
+                    <li>{% trans "Follow staff instructions" %}</li>
+                    <li>{% trans "Report any issues" %}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

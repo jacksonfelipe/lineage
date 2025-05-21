@@ -3,106 +3,156 @@
 <html lang="{{ LANGUAGE_CODE }}">
   <head>
     {% include 'includes/head.html' %}
-    <link type="text/css" href="{% static 'public/css/layout.css' %}" rel="stylesheet">
-    {% block extrahead %}{% endblock %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Base CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="{% static 'default/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'default/css/media.css' %}">
+    <link rel="stylesheet" href="{% static 'default/css/font.css' %}">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: url({% static 'default/images/bg/5.jpg' %}) top fixed no-repeat;
+            background-position-y: 80px;
+            background-color: black;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 0;
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        nav {
+            position: relative;
+            z-index: 2;
+        }
+
+        footer {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+
+    {% block extrahead %}{% endblock %}
   </head>
   <body>
-
-    <nav class="custom-navbar">
-      <div class="d-flex justify-content-between align-items-center">
-        
-        <!-- LOGO -->
-        <a href="{% url 'index' %}" class="navbar-brand text-light fs-3">
+    <!-- Loading Screen -->
+    <div class="loading">
+      <div class="l-logo">
+        <div class="letters">
           {% if site_logo %}
-            <img src="{{ site_logo.image.url }}" height="60" alt="{{ site_logo.name }}">
+            <img src="{{ site_logo.image.url }}" alt="{{ site_logo.name }}">
           {% else %}
-            <img src="{% static 'assets/img/l2_logo.png' %}" height="60" alt="{% trans 'Lineage2 Logo' %}" />
-          {% endif %}
-        </a>
-    
-        <!-- MENU DESKTOP -->
-        <ul class="nav custom-menu d-none d-lg-flex">
-          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#features" onclick="closeMenu()">{% trans "Sobre" %}</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#download" onclick="closeMenu()">{% trans "Download" %}</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#comunidade" onclick="closeMenu()">{% trans "Comunidade" %}</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'public_news_list' %}" onclick="closeMenu()">{% trans "Notícias" %}</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'public_faq_list' %}" onclick="closeMenu()">{% trans "FAQ" %}</a></li>
-        </ul>
-    
-        <!-- AÇÕES -->
-        <div class="d-none d-lg-flex gap-3">
-          {% if request.user.is_authenticated %}
-            <a href="{% url 'dashboard' %}" class="highlight-btn">{% trans "Painel" %}</a>
-            <a href="{% url 'logout' %}" class="custom-btn">{% trans "Sair" %}</a>
-          {% else %}
-            <a href="{% url 'login' %}" class="custom-btn">{% trans "Minha Conta" %}</a>
-            <a href="{% url 'register' %}" class="highlight-btn">{% trans "Jogue Grátis" %}</a>
+            <img src="{% static 'default/images/logo.png' %}" alt="{% trans 'Lineage2 Logo' %}">
           {% endif %}
         </div>
-    
-        <!-- BOTÃO MOBILE -->
-        <button class="btn btn-outline-light d-lg-none custom-toggle" id="menu-toggle">
-          ☰
-        </button>
+        <div class="circle"><img src="{% static 'default/images/logo-circle.png' %}"></div>
       </div>
-    
-      <!-- MENU MOBILE -->
-      <div class="custom-menu d-lg-none" id="mobile-menu">
-        <button class="custom-close" onclick="toggleMenu()">
-          &times;
-        </button>
-        <ul class="nav flex-column align-items-center">
-          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#features" onclick="closeMenu()">{% trans "Sobre" %}</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#download" onclick="closeMenu()">{% trans "Download" %}</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#comunidade" onclick="closeMenu()">{% trans "Comunidade" %}</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'public_news_list' %}" onclick="closeMenu()">{% trans "Notícias" %}</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'public_faq_list' %}" onclick="closeMenu()">{% trans "FAQ" %}</a></li>
+    </div>
 
-          {% if request.user.is_authenticated %}
-            <li class="nav-item mt-4"><a href="{% url 'dashboard' %}" class="highlight-btn text-center">{% trans "Painel" %}</a></li>
-            <li class="nav-item mt-2"><a href="{% url 'logout' %}" class="custom-btn text-center">{% trans "Sair" %}</a></li>
-          {% else %}
-            <li class="nav-item mt-4"><a href="{% url 'login' %}" class="custom-btn-green text-center">{% trans "Minha Conta" %}</a></li>
-            <li class="nav-item mt-2"><a href="{% url 'register' %}" class="highlight-btn text-center">{% trans "Jogue Grátis" %}</a></li>
-          {% endif %}
-        </ul>
+    {% block video_background %}{% endblock %}
+
+    <!-- Navigation -->
+    <nav>
+      <div class="open"><i class="fa-solid fa-bars"></i></div>
+
+      <ul>
+        <div class="close"><i class="fa-solid fa-xmark"></i></div>
+
+        <span><img src="{% static 'default/images/icons/nav-icon.png' %}"></span>
+
+        <li class="active"><a href="{% url 'index' %}">{% trans "Main" %}</a></li>
+        <li><a href="{% url 'wiki' %}">{% trans "Wiki" %}</a></li>
+        <li><a href="#">{% trans "Store" %}</a></li>
+        <li><a href="{{ PROJECT_DISCORD_URL }}" target="_blank">{% trans "Discord" %}</a></li>
+      </ul>
+
+      <div>
+        {% if request.user.is_authenticated %}
+          <a class="user" href="{% url 'dashboard' %}" target="_blank">
+            <img src="{% static 'default/images/icons/user.png' %}">
+            <span>{% trans "My Account" %}</span>
+          </a>
+        {% else %}
+          <a class="user" href="{% url 'login' %}" target="_blank">
+            <img src="{% static 'default/images/icons/user.png' %}">
+            <span>{% trans "My Account" %}</span>
+          </a>
+        {% endif %}
+        <a class="download" href="#" target="_blank">{% trans "Download" %}</a>
       </div>
     </nav>
-    
 
-    <!-- Conteúdo principal -->
-    {% block content %}{% endblock %}
+    <!-- Main Content -->
+    <div class="main-content">
+      {% block content %}{% endblock %}
+    </div>
 
-    <!-- Rodapé -->
+    <!-- Footer -->
     <footer>
-      <div class="container">
-        <div class="social-icons">
-          <a href="{{ PROJECT_DISCORD_URL }}" title="Discord" target="_blank" rel="noopener"><i class="fab fa-discord"></i></a>
-          <a href="{{ PROJECT_YOUTUBE_URL }}" title="YouTube" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>
-          <a href="{{ PROJECT_FACEBOOK_URL }}" title="Facebook" target="_blank" rel="noopener"><i class="fab fa-facebook"></i></a>
-          <a href="{{ PROJECT_INSTAGRAM_URL }}" title="Instagram" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>          
-        </div>
-        <p>&copy; <span id="footer-year"></span> {{ PROJECT_TITLE }} - {% trans "Todos os direitos reservados." %}</p>
-        {% if SHOW_SLOGAN %}
-          <p>{% trans "Feito com ❤️ por aventureiros para aventureiros." %}</p>
-        {% endif %}
-        <!-- Seletor de idioma -->
-        <form action="{% url 'set_language' %}" method="post" class="d-inline-block">
-          {% csrf_token %}
-          <div class="input-group input-group-sm" style="width: 180px;">
-            <select name="language" class="form-select form-select-sm" onchange="this.form.submit()">
-              <option value="pt" {% if LANGUAGE_CODE == 'pt' %}selected{% endif %}>🇧🇷 Português</option>
-              <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>🇺🇸 English</option>
-              <option value="es" {% if LANGUAGE_CODE == 'es' %}selected{% endif %}>🇪🇸 Español</option>
-            </select>
-            <input type="hidden" name="next" value="{{ request.path }}">
-          </div>
-        </form>
-      </div>
-    </footer>   
+      <div class="language">
+        <span>
+          <span>
+            <img src="{% static 'default/images/icons/world.png' %}">&nbsp;&nbsp;&nbsp;
+            {% if LANGUAGE_CODE == 'pt' %}Português
+            {% elif LANGUAGE_CODE == 'en' %}English
+            {% elif LANGUAGE_CODE == 'es' %}Español
+            {% endif %}
+          </span>
+          <span><img class="cursor" src="{% static 'default/images/icons/downcursor.png' %}"></span>
+        </span>
 
+        <ul class="language-dropdown">
+          <li><a href="{% url 'set_language' %}?language=es&next={{ request.path }}">Español</a></li>
+          <li><a href="{% url 'set_language' %}?language=pt&next={{ request.path }}">Português</a></li>
+          <li><a href="{% url 'set_language' %}?language=en&next={{ request.path }}">English</a></li>
+        </ul>
+      </div>
+
+      <div class="copyright container">
+        <div class="c-link">
+          <a href="#" target="_blank">{% trans "User Agreement" %}</a>
+          <a href="#" target="_blank">{% trans "Terms of Service" %}</a>
+          <a href="#" target="_blank">{% trans "Privacy Policy" %}</a>
+        </div>
+
+        <div class="c-text">
+          {% if site_logo %}
+            <img src="{{ site_logo.image.url }}" alt="{{ site_logo.name }}">
+          {% else %}
+            <img src="{% static 'default/images/logo.png' %}" alt="{% trans 'Lineage2 Logo' %}">
+          {% endif %}
+          <p>© {% now "Y" %} {{ PROJECT_TITLE }}</p>
+          <span>{% trans "Lineage 2 public test server. These servers are an emulator of the Lineage 2 Game. The use of the service is for information purposes only. You can familiarize yourself with the original version of the game Lineage 2 on the official servers of NC Soft." %}</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
     {% include 'includes/scripts.html' %}
     <script src="{% static 'public/js/layout.js' %}"></script>
+    <script src="{% static 'default/js/jquery-3.6.0.min.js' %}"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="{% static 'default/js/main.js' %}"></script>
+    {% block extrascripts %}{% endblock %}
   </body>
 </html>

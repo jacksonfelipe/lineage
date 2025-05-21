@@ -1,0 +1,116 @@
+{% extends 'wiki/base.html' %}
+{% load static i18n %}
+
+{% block wiki_content %}
+<div class="wiki-page">
+    <h1>{% trans "Raid Bosses & Instances" %}</h1>
+    
+    <div class="wiki-section">
+        <h2>{% trans "World Raid Bosses" %}</h2>
+        <div class="wiki-raid-grid">
+            <div class="wiki-raid-card">
+                <h3>{% trans "Baium" %}</h3>
+                <div class="wiki-raid-info">
+                    <p><strong>{% trans "Location" %}:</strong> {% trans "Tower of Insolence" %}</p>
+                    <p><strong>{% trans "Level" %}:</strong> 75</p>
+                    <p><strong>{% trans "Respawn Time" %}:</strong> {% trans "6-8 hours" %}</p>
+                    <p><strong>{% trans "Drops" %}:</strong></p>
+                    <ul>
+                        <li>{% trans "Baium's Ring" %}</li>
+                        <li>{% trans "Baium's Earring" %}</li>
+                        <li>{% trans "Baium's Necklace" %}</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="wiki-raid-card">
+                <h3>{% trans "Valakas" %}</h3>
+                <div class="wiki-raid-info">
+                    <p><strong>{% trans "Location" %}:</strong> {% trans "Valakas Nest" %}</p>
+                    <p><strong>{% trans "Level" %}:</strong> 85</p>
+                    <p><strong>{% trans "Respawn Time" %}:</strong> {% trans "12-14 hours" %}</p>
+                    <p><strong>{% trans "Drops" %}:</strong></p>
+                    <ul>
+                        <li>{% trans "Valakas' Ring" %}</li>
+                        <li>{% trans "Valakas' Earring" %}</li>
+                        <li>{% trans "Valakas' Necklace" %}</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="wiki-raid-card">
+                <h3>{% trans "Antharas" %}</h3>
+                <div class="wiki-raid-info">
+                    <p><strong>{% trans "Location" %}:</strong> {% trans "Antharas Nest" %}</p>
+                    <p><strong>{% trans "Level" %}:</strong> 85</p>
+                    <p><strong>{% trans "Respawn Time" %}:</strong> {% trans "12-14 hours" %}</p>
+                    <p><strong>{% trans "Drops" %}:</strong></p>
+                    <ul>
+                        <li>{% trans "Antharas' Ring" %}</li>
+                        <li>{% trans "Antharas' Earring" %}</li>
+                        <li>{% trans "Antharas' Necklace" %}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wiki-section">
+        <h2>{% trans "Instance Raids" %}</h2>
+        <div class="wiki-instance-grid">
+            <div class="wiki-instance-card">
+                <h3>{% trans "Frintezza" %}</h3>
+                <div class="wiki-instance-info">
+                    <p><strong>{% trans "Level Requirement" %}:</strong> 80+</p>
+                    <p><strong>{% trans "Party Size" %}:</strong> {% trans "9-27 players" %}</p>
+                    <p><strong>{% trans "Reset Time" %}:</strong> {% trans "24 hours" %}</p>
+                    <p><strong>{% trans "Drops" %}:</strong></p>
+                    <ul>
+                        <li>{% trans "Frintezza's Ring" %}</li>
+                        <li>{% trans "Frintezza's Earring" %}</li>
+                        <li>{% trans "Frintezza's Necklace" %}</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="wiki-instance-card">
+                <h3>{% trans "Beleth" %}</h3>
+                <div class="wiki-instance-info">
+                    <p><strong>{% trans "Level Requirement" %}:</strong> 85+</p>
+                    <p><strong>{% trans "Party Size" %}:</strong> {% trans "9-27 players" %}</p>
+                    <p><strong>{% trans "Reset Time" %}:</strong> {% trans "24 hours" %}</p>
+                    <p><strong>{% trans "Drops" %}:</strong></p>
+                    <ul>
+                        <li>{% trans "Beleth's Ring" %}</li>
+                        <li>{% trans "Beleth's Earring" %}</li>
+                        <li>{% trans "Beleth's Necklace" %}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wiki-section">
+        <h2>{% trans "Raid Boss Mechanics" %}</h2>
+        <div class="wiki-mechanics">
+            <div class="wiki-mechanic">
+                <h3>{% trans "General Tips" %}</h3>
+                <ul>
+                    <li>{% trans "Always check the respawn timer before attempting a raid" %}</li>
+                    <li>{% trans "Form a balanced party with healers and buffers" %}</li>
+                    <li>{% trans "Use proper consumables and buffs" %}</li>
+                    <li>{% trans "Coordinate with your party members" %}</li>
+                </ul>
+            </div>
+            <div class="wiki-mechanic">
+                <h3>{% trans "Loot Distribution" %}</h3>
+                <ul>
+                    <li>{% trans "Use the party loot system" %}</li>
+                    <li>{% trans "Agree on loot distribution before starting" %}</li>
+                    <li>{% trans "Respect the party leader's decisions" %}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

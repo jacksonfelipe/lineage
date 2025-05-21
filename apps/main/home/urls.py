@@ -5,6 +5,7 @@ from .views.views import *
 from .views.public import *
 from .views.accounts import *
 from .views.commons import *
+from .views.wiki import *
 
 
 urlpatterns = [
@@ -25,6 +26,16 @@ urlpatterns = [
     path('public/news/<slug:slug>/', public_news_detail, name='public_news_detail'),
     path('public/faq/', public_faq_list, name='public_faq_list'),
     path("public/terms/", terms_view, name="terms"),
+
+    # Wiki views
+    path('wiki/', wiki_home, name='wiki'),
+    path('wiki/general/', wiki_general, name='wiki_general'),
+    path('wiki/rates/', wiki_rates, name='wiki_rates'),
+    path('wiki/raids/', wiki_raids, name='wiki_raids'),
+    path('wiki/assistance/', wiki_assistance, name='wiki_assistance'),
+    path('wiki/events/', wiki_events, name='wiki_events'),
+    path('wiki/updates/', wiki_updates, name='updates'),
+    path('wiki/features/', wiki_features, name='features'),
 
     # Authentication
     path('accounts/register/', register_view, name="register"),
