@@ -246,9 +246,19 @@ def lock(request):
         if authenticated_user:
             # Senha correta: remove o bloqueio
             request.session['is_locked'] = False
-            return redirect('dashboard')
+            
+            # Pega a URL de retorno da sessão ou redireciona para o dashboard
+            return_url = request.session.get('return_url', 'dashboard')
+            if 'return_url' in request.session:
+                del request.session['return_url']
+            return redirect(return_url)
         else:
             error = "Senha incorreta. Tente novamente."
+
+    # Guarda a URL de retorno na sessão se vier como parâmetro
+    return_url = request.GET.get('return_url')
+    if return_url:
+        request.session['return_url'] = return_url
 
     return render(request, 'accounts_custom/lock.html', {
         'error': error,

@@ -70,6 +70,12 @@
   function resetInactivityTimer() {
     clearTimeout(inactivityTimer);
     inactivityTimer = setTimeout(() => {
+      // Não redireciona se já estiver na página de lock
+      if (window.location.pathname === LOCK_URL) {
+        return;
+      }
+      // Guarda a URL atual antes de redirecionar
+      sessionStorage.setItem('returnUrl', window.location.pathname + window.location.search);
       window.location.href = LOCK_URL;
     }, TIME_LIMIT);
   }

@@ -176,3 +176,65 @@ class RewardItemAdmin(BaseModelAdmin):
             'fields': ('name', 'item_id', 'enchant', 'description', 'amount')
         }),
     )
+
+
+@admin.register(BattlePassSeason)
+class BattlePassSeasonAdmin(BaseModelAdmin):
+    list_display = ('name', 'start_date', 'end_date', 'is_active')
+    list_filter = ('is_active',)
+    search_fields = ('name',)
+    ordering = ('-start_date',)
+
+
+class BattlePassRewardInline(admin.TabularInline):
+    model = BattlePassReward
+    extra = 1
+
+
+@admin.register(BattlePassLevel)
+class BattlePassLevelAdmin(BaseModelAdmin):
+    list_display = ('season', 'level', 'required_xp')
+    list_filter = ('season',)
+    ordering = ('season', 'level')
+    inlines = [BattlePassRewardInline]
+
+
+@admin.register(BattlePassReward)
+class BattlePassRewardAdmin(BaseModelAdmin):
+    list_display = ('level', 'description', 'is_premium', 'item_name', 'item_amount', 'item_enchant')
+    list_filter = ('is_premium', 'level__season')
+    search_fields = ('description', 'item_name')
+    fieldsets = (
+        (None, {
+            'fields': ('level', 'description', 'is_premium')
+        }),
+        ('Item da Recompensa', {
+            'fields': ('item_id', 'item_name', 'item_enchant', 'item_amount'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(UserBattlePassProgress)
+class UserBattlePassProgressAdmin(BaseModelAdmin):
+    list_display = ('user', 'season', 'xp', 'has_premium')
+    list_filter = ('season', 'has_premium')
+    search_fields = ('user__username',)
+    filter_horizontal = ('claimed_rewards',)
+
+
+@admin.register(BattlePassItemExchange)
+class BattlePassItemExchangeAdmin(BaseModelAdmin):
+    list_display = ('item_name', 'item_enchant', 'xp_amount', 'is_active', 'current_exchanges', 'max_exchanges')
+    list_filter = ('is_active', 'item_enchant')
+    search_fields = ('item_name',)
+    readonly_fields = ('current_exchanges',)
+    fieldsets = (
+        (None, {
+            'fields': ('item_id', 'item_name', 'item_enchant', 'xp_amount', 'is_active')
+        }),
+        ('Limites de Troca', {
+            'fields': ('max_exchanges', 'current_exchanges'),
+            'description': 'Defina 0 em max_exchanges para trocas ilimitadas'
+        }),
+    )

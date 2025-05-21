@@ -143,7 +143,18 @@
       
           </ul>
         </div>
-      </li>      
+      </li>  
+      
+      <li class="nav-item {% if 'battle-pass' in segment %}active{% endif %}">
+        <a href="{% url 'games:battle_pass' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 3a2 2 0 012-2h8a2 2 0 012 2v1H4V3zm0 3h12v10a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm6 2a1 1 0 100 2 1 1 0 000-2zm-2 3a1 1 0 100 2h4a1 1 0 100-2H8z" />
+            </svg>
+          </span>
+          <span class="sidebar-text">{% trans "Battle Pass" %}</span>
+        </a>
+      </li>
 
       <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
 

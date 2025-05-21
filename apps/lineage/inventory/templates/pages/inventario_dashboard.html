@@ -62,6 +62,9 @@
                       <a href="{% url 'inventory:trocar_item' %}?character_name_origem={{ data.inventory.character_name }}&item_id={{ item.item_id|unlocalize }}" class="btn btn-outline-warning btn-sm rounded-pill">
                         <i class="bi bi-arrow-left-right me-1"></i>{% trans "Trocar" %}
                       </a>
+                      <a href="{% url 'inventory:transferir_para_bag' char_name=data.inventory.character_name item_id=item.item_id|unlocalize %}" class="btn btn-outline-info btn-sm rounded-pill">
+                        <i class="bi bi-bag me-1"></i>{% trans "Enviar para Bag" %}
+                      </a>
                     </div>
                   </div>
                 </div>

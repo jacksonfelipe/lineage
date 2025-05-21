@@ -245,3 +245,155 @@ class RewardItem(BaseModel):
 
     def __str__(self):
         return f"{self.name} +{self.enchant}"
+
+
+class BattlePassSeason(BaseModel):
+    name = models.CharField(max_length=100)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    is_active = models.BooleanField(default=False)
+    premium_price = models.PositiveIntegerField(default=50)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.is_active:
+            BattlePassSeason.objects.filter(is_active=True).exclude(pk=self.pk).update(is_active=False)
+        super().save(*args, **kwargs)
+
+
+class BattlePassLevel(BaseModel):
+    season = models.ForeignKey(BattlePassSeason, on_delete=models.CASCADE)
+    level = models.PositiveIntegerField()
+    required_xp = models.PositiveIntegerField()
+
+    class Meta:
+        unique_together = ('season', 'level')
+
+    def __str__(self):
+        return f"Nível {self.level} - {self.season.name}"
+
+
+class BattlePassReward(BaseModel):
+    level = models.ForeignKey(BattlePassLevel, on_delete=models.CASCADE)
+    description = models.CharField(max_length=255)
+    is_premium = models.BooleanField(default=False)
+    # Campos para itens
+    item_id = models.PositiveIntegerField(null=True, blank=True, verbose_name=_("Item ID"))
+    item_name = models.CharField(max_length=100, null=True, blank=True, verbose_name=_("Item Name"))
+    item_enchant = models.PositiveIntegerField(default=0, verbose_name=_("Item Enchant"))
+    item_amount = models.PositiveIntegerField(default=1, verbose_name=_("Item Amount"))
+
+    def __str__(self):
+        return f"{'[Premium] ' if self.is_premium else ''}{self.description}"
+
+    def add_to_user_bag(self, user):
+        if self.item_id and self.item_name:
+            bag = Bag.objects.get(user=user)
+            bag_item, created = BagItem.objects.get_or_create(
+                bag=bag,
+                item_id=self.item_id,
+                enchant=self.item_enchant,
+                defaults={
+                    'item_name': self.item_name,
+                    'quantity': self.item_amount,
+                }
+            )
+            if not created:
+                bag_item.quantity += self.item_amount
+                bag_item.save()
+            return bag_item
+        return None
+
+
+class UserBattlePassProgress(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    season = models.ForeignKey(BattlePassSeason, on_delete=models.CASCADE)
+    xp = models.PositiveIntegerField(default=0)
+    claimed_rewards = models.ManyToManyField(BattlePassReward, blank=True)
+    has_premium = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('user', 'season')
+
+    def get_current_level(self):
+        levels = BattlePassLevel.objects.filter(season=self.season).order_by('level')
+        current = 0
+        for level in levels:
+            if self.xp >= level.required_xp:
+                current = level.level
+        return current
+
+    def add_xp(self, amount):
+        self.xp += amount
+        self.save()
+
+    def __str__(self):
+        return f"{self.user.username} - {self.season.name}"
+
+
+class BattlePassItemExchange(BaseModel):
+    item_id = models.PositiveIntegerField(verbose_name=_("Item ID"))
+    item_name = models.CharField(max_length=100, verbose_name=_("Item Name"))
+    item_enchant = models.PositiveIntegerField(default=0, verbose_name=_("Item Enchant"))
+    xp_amount = models.PositiveIntegerField(verbose_name=_("XP Amount"))
+    is_active = models.BooleanField(default=True, verbose_name=_("Is Active"))
+    max_exchanges = models.PositiveIntegerField(default=0, verbose_name=_("Max Exchanges"), 
+        help_text=_("0 = sem limite"))
+    current_exchanges = models.PositiveIntegerField(default=0, verbose_name=_("Current Exchanges"))
+
+    def __str__(self):
+        return f"{self.item_name} +{self.item_enchant} = {self.xp_amount} XP"
+
+    def can_exchange(self):
+        if not self.is_active:
+            return False
+        if self.max_exchanges == 0:
+            return True
+        return self.current_exchanges < self.max_exchanges
+
+    def exchange(self, user, quantity=1):
+        if not self.can_exchange():
+            return False, _("Esta troca não está mais disponível.")
+
+        try:
+            bag = Bag.objects.get(user=user)
+            bag_item = BagItem.objects.get(
+                bag=bag,
+                item_id=self.item_id,
+                enchant=self.item_enchant
+            )
+
+            if bag_item.quantity < quantity:
+                return False, _("Você não possui quantidade suficiente deste item.")
+
+            # Remove os itens da bag
+            bag_item.quantity -= quantity
+            if bag_item.quantity == 0:
+                bag_item.delete()
+            else:
+                bag_item.save()
+
+            # Adiciona XP ao progresso do Battle Pass
+            progress = UserBattlePassProgress.objects.get(
+                user=user,
+                season=BattlePassSeason.objects.filter(is_active=True).first()
+            )
+            total_xp = self.xp_amount * quantity
+            progress.add_xp(total_xp)
+
+            # Incrementa o contador de trocas
+            self.current_exchanges += quantity
+            self.save()
+
+            return True, _("Troca realizada com sucesso! Você recebeu {} XP.").format(total_xp)
+
+        except Bag.DoesNotExist:
+            return False, _("Você não possui uma bag.")
+        except BagItem.DoesNotExist:
+            return False, _("Você não possui este item.")
+        except UserBattlePassProgress.DoesNotExist:
+            return False, _("Você não possui progresso no Battle Pass atual.")
+        except Exception as e:
+            return False, str(e)

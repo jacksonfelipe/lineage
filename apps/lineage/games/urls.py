@@ -1,7 +1,5 @@
 from django.urls import path
-from .views import views
-from .views import manager_box_views
-from .views.economy_game_view import *
+from .views import views, manager_box_views, battle_pass, economy_game_view
 
 
 app_name = "games"
@@ -36,8 +34,14 @@ urlpatterns = [
     path('box/manager/item/edit/<int:pk>/', manager_box_views.item_edit_view, name='item_edit'),
     path('box/manager/item/delete/<int:pk>/', manager_box_views.item_delete_view, name='item_delete'),
 
-    path("economy-game/", economy_game, name="economy-game"),
-    path("economy-game/fight/<int:monster_id>/", fight_monster, name="fight-monster"),
-    path("economy-game/enchant/", enchant_weapon, name="enchant-weapon"),
-    path("economy-game/monster/<int:monster_id>/is_alive/", is_monster_alive, name="monster-is-alive"),
+    path("economy-game/", economy_game_view.economy_game, name="economy-game"),
+    path("economy-game/fight/<int:monster_id>/", economy_game_view.fight_monster, name="fight-monster"),
+    path("economy-game/enchant/", economy_game_view.enchant_weapon, name="enchant-weapon"),
+    path("economy-game/monster/<int:monster_id>/is_alive/", economy_game_view.is_monster_alive, name="monster-is-alive"),
+
+    path('battle-pass/', battle_pass.battle_pass_view, name='battle_pass'),
+    path('battle-pass/claim/<int:reward_id>/', battle_pass.claim_reward, name='claim_reward'),
+    path('battle-pass/buy-premium/', battle_pass.buy_battle_pass_premium_view, name='buy_battle_pass_premium'),
+    path('battle-pass/exchange/', battle_pass.exchange_items_view, name='exchange_items'),
+    path('battle-pass/exchange/<int:exchange_id>/', battle_pass.exchange_item, name='exchange_item'),
 ]

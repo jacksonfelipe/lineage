@@ -16,6 +16,7 @@ from utils.dynamic_import import get_query_class
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from .templatetags.itens_extras import item_image_url
+from apps.lineage.games.models import Bag, BagItem
 
 TransferFromWalletToChar = get_query_class("TransferFromWalletToChar")
 TransferFromCharToWallet = get_query_class("TransferFromCharToWallet")
@@ -350,3 +351,77 @@ def inventario_global(request):
 def get_item_image_url(request, item_id):
     url = item_image_url(item_id)
     return JsonResponse({'url': url})
+
+
+@conditional_otp_required
+@transaction.atomic
+def transferir_para_bag(request, char_name, item_id):
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity').replace(',', '').replace('.', ''))
+        
+        try:
+            # Obtém o inventário e o item
+            inventory = get_object_or_404(Inventory, character_name=char_name, user=request.user)
+            inventory_item = get_object_or_404(InventoryItem, inventory=inventory, item_id=item_id)
+            
+            if inventory_item.quantity < quantity:
+                messages.error(request, 'Quantidade insuficiente no inventário.')
+                return redirect(request.path)
+
+            # Obtém ou cria a bag do usuário
+            bag, _ = Bag.objects.get_or_create(user=request.user)
+            
+            # Adiciona o item à bag
+            bag_item, created = BagItem.objects.get_or_create(
+                bag=bag,
+                item_id=item_id,
+                enchant=inventory_item.enchant,
+                defaults={
+                    'item_name': inventory_item.item_name,
+                    'quantity': quantity
+                }
+            )
+            
+            if not created:
+                bag_item.quantity += quantity
+                bag_item.save()
+
+            # Atualiza a quantidade no inventário
+            inventory_item.quantity -= quantity
+            if inventory_item.quantity == 0:
+                inventory_item.delete()
+            else:
+                inventory_item.save()
+
+            # Registra o log
+            InventoryLog.objects.create(
+                user=request.user,
+                inventory=inventory,
+                item_id=item_id,
+                item_name=inventory_item.item_name,
+                enchant=inventory_item.enchant,
+                quantity=quantity,
+                acao='BAG_PARA_INVENTARIO',
+                origem=char_name,
+                destino='Bag'
+            )
+
+            messages.success(request, f'{quantity}x {inventory_item.item_name} transferido para a bag com sucesso!')
+            return redirect('inventory:inventario_dashboard')
+
+        except Exception as e:
+            messages.error(request, f'Erro ao transferir item: {str(e)}')
+            return redirect('inventory:inventario_dashboard')
+
+    # GET: Mostra o formulário
+    try:
+        inventory = get_object_or_404(Inventory, character_name=char_name, user=request.user)
+        item = get_object_or_404(InventoryItem, inventory=inventory, item_id=item_id)
+        
+        return render(request, 'pages/transferir_para_bag.html', {
+            'inventory': inventory,
+            'item': item
+        })
+    except Exception as e:
+        messages.error(request, f'Erro ao carregar item: {str(e)}')
+        return redirect('inventory:inventario_dashboard')
