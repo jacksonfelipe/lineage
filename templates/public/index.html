@@ -1,5 +1,10 @@
 {% extends 'layouts/base-default.html' %}
 {% load static i18n %}
+{% load custom_split %}
+
+{% block extrahead %}
+<link type="text/css" href="{% static 'public/css/index-carousel.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block video_background %}
 <!-- Background Video -->
@@ -12,15 +17,33 @@
 <!-- Hero Section -->
 <section class="h">
     <div class="h-logo" data-aos="fade-up" data-aos-duration="2000">
-        <img class="letters" src="{% static 'default/images/logo.png' %}">
+        {% if site_logo %}
+            <img class="letters" src="{{ site_logo.image.url }}" alt="{{ site_logo.name }}">
+        {% else %}
+            <img class="letters" src="{% static 'default/images/logo.png' %}">
+        {% endif %}
         <img class="circle" src="{% static 'default/images/logo-circle.png' %}">
     </div>
 
-    <h1 data-aos="fade-up" data-aos-duration="2000">{% trans "Start your journey in Lineage now!" %}</h1>
+    <h1 data-aos="fade-up" data-aos-duration="2000">
+        {% if nome_servidor %}
+            {{ nome_servidor }}
+        {% else %}
+            {% trans "Inicie sua Jornada em Lineage Agora!" %}
+        {% endif %}
+    </h1>
+
+    <p class="hero-description" data-aos="fade-up" data-aos-duration="2000">
+        {% if descricao_servidor %}
+            "{{ descricao_servidor }}"
+        {% else %}
+            {% trans "Onde Lendas Nascem, Heróis Lutam e a Glória é Eterna." %}
+        {% endif %}
+    </p>
 
     <div class="h-link" data-aos="fade-up" data-aos-duration="2000">
-        <a href="#" target="_blank">{% trans "Download the Game" %}</a>
-        <a href="{% url 'register' %}" target="_blank">{% trans "Create your Master Account" %}</a>
+        <a href="{% if configuracao %}{{ configuracao.link_cliente }}{% else %}#{% endif %}" target="_blank">{% trans "Baixe o Jogo" %}</a>
+        <a href="{% url 'register' %}" target="_blank">{% trans "Crie sua conta mestra" %}</a>
     </div>
 
     <div class="h-scroll">
@@ -31,15 +54,15 @@
 <!-- Features Section -->
 <section class="f" id="features">
     <div class="f-title title container" data-aos="fade-up" data-aos-duration="2000">
-        <span><img src="{% static 'default/images/icons/text.png' %}">{% trans "Get the best from Lineage" %}</span>
-        <h1>{% trans "The most updated, modern and stable server to play Lineage" %}</h1>
+        <span><img src="{% static 'default/images/icons/text.png' %}">{% trans "Aproveite o melhor do Lineage" %}</span>
+        <h1>{% trans "O servidor mais atualizado, moderno e estável para jogar Lineage" %}</h1>
     </div>
 
     <div class="f-list container" data-aos="fade-up" data-aos-duration="2000">
         <a class="f1" href="{% url 'features' %}" target="_blank">
             <div style="background: url({% static 'default/images/features/1.jpg' %}) top / cover no-repeat;">
                 <span>
-                    <p>{% trans "The latest retail version" %}</p>
+                    <p>{% trans "PvP e Castelos" %}</p>
                     <img src="{% static 'default/images/features/icon.png' %}">
                 </span>
             </div>
@@ -48,7 +71,7 @@
         <a class="f2" href="{% url 'features' %}" target="_blank">
             <div style="background: url({% static 'default/images/features/2.jpg' %}) top / cover no-repeat;">
                 <span>
-                    <p>{% trans "The latest retail version" %}</p>
+                    <p>{% trans "Missões Personalizadas" %}</p>
                     <img src="{% static 'default/images/features/icon.png' %}">
                 </span>
             </div>
@@ -57,7 +80,7 @@
         <a class="f3" href="{% url 'features' %}" target="_blank">
             <div style="background: url({% static 'default/images/features/3.jpg' %}) top / cover no-repeat;">
                 <span>
-                    <p>{% trans "The latest retail version" %}</p>
+                    <p>{% trans "Eventos e Recompensas" %}</p>
                     <img src="{% static 'default/images/features/icon.png' %}">
                 </span>
             </div>
@@ -71,7 +94,7 @@
 <section class="w">
     <div class="w-title title container" data-aos="fade-up" data-aos-duration="2000">
         <span><img src="{% static 'default/images/icons/text.png' %}">{% trans "Wiki" %}</span>
-        <h1>{% trans "Wiki and Updates in Lineage" %}</h1>
+        <h1>{% trans "Wiki e Atualizações do Lineage" %}</h1>
     </div>
 
     <div class="w-list container" data-aos="fade-up" data-aos-duration="2000">
@@ -82,11 +105,11 @@
                 <span>{% trans "Wiki" %}<a href="{% url 'wiki' %}" target="_blank"><img src="{% static 'default/images/icons/more.png' %}"></a></span>
 
                 <ul>
-                    <li><a href="{% url 'wiki_general' %}" target="_blank"><span></span>{% trans "General Information" %}</a></li>
-                    <li><a href="{% url 'wiki_rates' %}" target="_blank"><span></span>{% trans "Rates" %}</a></li>
-                    <li><a href="{% url 'wiki_raids' %}" target="_blank"><span></span>{% trans "Raid Bosses and Instances" %}</a></li>
-                    <li><a href="{% url 'wiki_assistance' %}" target="_blank"><span></span>{% trans "Game Assistance" %}</a></li>
-                    <li><a href="{% url 'wiki_events' %}" target="_blank"><span></span>{% trans "Events Guide" %}</a></li>
+                    <li><a href="{% url 'wiki_general' %}" target="_blank"><span></span>{% trans "Informações Gerais" %}</a></li>
+                    <li><a href="{% url 'wiki_rates' %}" target="_blank"><span></span>{% trans "Taxas de Experiência" %}</a></li>
+                    <li><a href="{% url 'wiki_raids' %}" target="_blank"><span></span>{% trans "Chefes de Raide e Instâncias" %}</a></li>
+                    <li><a href="{% url 'wiki_assistance' %}" target="_blank"><span></span>{% trans "Ajuda no Jogo" %}</a></li>
+                    <li><a href="{% url 'wiki_events' %}" target="_blank"><span></span>{% trans "Guia de Eventos" %}</a></li>
                 </ul>
             </div>
         </div>
@@ -95,7 +118,7 @@
         <a href="{% url 'updates' %}" target="_blank" class="update">
             <div style="background: url({{ update.image.url }}) top / cover no-repeat;">
                 <div>
-                    <span>{% trans "Update" %}</span>
+                    <span>{% trans "Atualização" %}</span>
                     <p>{{ update.title }}</p>
                 </div>
             </div>
@@ -104,21 +127,202 @@
     </div>
 </section>
 
+<!-- Faixa com o título apoiadores -->
+<div class="apoiadores-banner">
+  <div class="banner-track" id="bannerTrack">
+    {% with fixos="APOIADORES"|split:"," %}
+      {% for _ in "1234567890"|make_list %}
+        <span>{{ fixos.0 }}</span>
+      {% endfor %}
+    {% endwith %}
+  </div>
+</div>
+
+<!-- Carrossel de imagens dos apoiadores -->
+<section class="apoiadores-carousel">
+  <div class="carousel-track" id="carouselTrack">
+    {% with fixas="1,2,3,4,5"|split:"," %}
+      {% with total=apoiadores|length %}
+        {% for apoiador in apoiadores %}
+          <div class="apoiador-card">
+            <img src="{{ apoiador.imagem.url }}" alt="{{ apoiador.nome_publico }}">
+          </div>
+        {% endfor %}
+
+        {% if total < 10 %}
+          {% with restante=10|sub:total %}
+            {% for _ in restante|to_range %}
+              {% with random=fixas|random_item %}
+                <div class="apoiador-card">
+                  <img src="{% static 'assets/img/apoiadores/apoio' %}{{ random }}.png" alt="Apoio {{ random }}">
+                </div>
+              {% endwith %}
+            {% endfor %}
+          {% endwith %}
+        {% endif %}
+      {% endwith %}
+    {% endwith %}
+  </div>
+</section>
+
+<!-- Faixa com o título apoiadores -->
+<div class="apoiadores-banner">
+  <div class="banner-track" id="bannerTrack2">
+    {% with fixos="APOIADORES"|split:"," %}
+      {% for _ in "1234567890"|make_list %}
+        <span>{{ fixos.0 }}</span>
+      {% endfor %}
+    {% endwith %}
+  </div>
+</div>
+
+<!-- Trailer / Gameplay -->
+<section class="trailer-section">
+<div class="container text-center">
+    <h2 class="trailer-title">🎬 {% trans "Trailer Oficial" %}</h2>
+
+    <div class="video-wrapper">
+    <div class="video-overlay"></div>
+    <iframe src="https://www.youtube.com/embed/{% if configuracao and configuracao.trailer_video_id %}{{ configuracao.trailer_video_id }}{% else %}CsNutvmrHIA?si=2lF1z1jPFkf8uGJB{% endif %}" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <p class="trailer-description">{% trans "Assista ao trailer e mergulhe no mundo épico do nosso servidor!" %}</p>
+</section>
+
+<!-- Top Clans Section -->
+<section class="clans" id="top-clans">
+    <div class="clans-title title container" data-aos="fade-up" data-aos-duration="2000">
+        <span><img src="{% static 'default/images/icons/text.png' %}">{% trans "Melhores Clãs" %}</span>
+        <h1>{% trans "Os Clãs Mais Poderosos" %}</h1>
+    </div>
+
+    <div class="clans-list container" data-aos="fade-up" data-aos-duration="2000">
+        <!-- First Place -->
+        {% if clanes.0 %}
+        <div class="clan-first">
+            <div class="clan-info">
+                <h3>🏆 1º {{ clanes.0.clan_name }}</h3>
+                <p>{% trans "Nível:" %} {{ clanes.0.clan_level }}</p>
+                <p>{% trans "Reputação:" %} {{ clanes.0.reputation_score }}</p>
+                <p>{% trans "Aliança:" %} {{ clanes.0.ally_name|default:"None" }}</p>
+                <p>{% trans "Líder:" %} {{ clanes.0.char_name }}</p>
+                <p>{% trans "Membros:" %} {{ clanes.0.membros }}</p>
+            </div>
+            <div class="clan-crests">
+                {% if clanes.0.ally_crest_image_base64 %}
+                    <img src="data:image/png;base64,{{ clanes.0.ally_crest_image_base64 }}" alt="Alliance Crest">
+                {% endif %}
+                <img src="data:image/png;base64,{{ clanes.0.clan_crest_image_base64 }}" alt="Clan Crest">
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Other Clans -->
+        <div class="clans-grid">
+            {% for clan in clanes|slice:"1:" %}
+            <div class="clan-card">
+                <h4>{{ forloop.counter|add:"1" }}º {{ clan.clan_name }}</h4>
+                <p>{% trans "Nível:" %} {{ clan.clan_level }}</p>
+                <p>{% trans "Reputação:" %} {{ clan.reputation_score }}</p>
+                <p>{% trans "Aliança:" %} {{ clan.ally_name|default:"None" }}</p>
+                <p>{% trans "Líder:" %} {{ clan.char_name }}</p>
+                <p>{% trans "Membros:" %} {{ clan.membros }}</p>
+                <div class="clan-crests">
+                    {% if clan.ally_crest_image_base64 %}
+                        <img src="data:image/png;base64,{{ clan.ally_crest_image_base64 }}" alt="Alliance Crest">
+                    {% endif %}
+                    <img src="data:image/png;base64,{{ clan.clan_crest_image_base64 }}" alt="Clan Crest">
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Online Players Section -->
+<section class="online">
+    <div class="online-content container" data-aos="fade-up" data-aos-duration="2000">
+        <h2>
+            {% if configuracao %}
+                {{ jogadores_online_texto }}
+            {% else %}
+                {% trans "Jogadores Online Agora" %}
+            {% endif %}
+        </h2>
+        <div class="online-counter">
+            <span class="icon">🧙‍♂️</span>
+            <span id="player-count">{{ online }}</span>
+            <span class="icon">🗡️</span>
+        </div>
+        <p>{% trans "O campo de batalha está ativo!" %}</p>
+    </div>
+</section>
+
 <!-- Community Section -->
 <section class="c">
     <div class="c-title title container" data-aos="fade-up" data-aos-duration="2000">
-        <span><img src="{% static 'default/images/icons/text.png' %}">{% trans "Be part of our community" %}</span>
-        <h1>{% trans "Join our" %} <strong>{% trans "community" %}</strong> {% trans "and stay tuned" %}</h1>
+        <span><img src="{% static 'default/images/icons/text.png' %}">{% trans "Faça parte da nossa comunidade" %}</span>
+        <h1>{% trans "Junte-se à nossa" %} <strong>{% trans "comunidade" %}</strong> {% trans "e fique por dentro" %}</h1>
     </div>
 
     <div class="c-link" data-aos="fade-up" data-aos-duration="2000">
-        <a href="{{ PROJECT_DISCORD_URL }}" target="_blank"><i class="fa-brands fa-discord"></i></a>
+        <a href="{% if configuracao %}{{ configuracao.link_discord }}{% else %}{{ PROJECT_DISCORD_URL }}{% endif %}" target="_blank"><i class="fa-brands fa-discord"></i></a>
     </div>
 </section>
 {% endblock %}
 
 {% block extrascripts %}
 <script>
+      document.addEventListener("DOMContentLoaded", function () {
+    function initInfiniteScroll(trackId, speed, padding = 0) {
+      const track = document.getElementById(trackId);
+      if (!track) return;
+
+      let offset = 0;
+
+      // Clonar os elementos filhos
+      const originalItems = Array.from(track.children);
+      originalItems.forEach(item => {
+        const clone = item.cloneNode(true);
+        track.appendChild(clone);
+      });
+
+      // Calcular o comprimento total dos itens originais
+      const totalWidth = originalItems.reduce((acc, item) => {
+        return acc + item.offsetWidth + padding;
+      }, 0);
+
+      function animate() {
+        offset -= speed;
+        track.style.transform = `translateX(${offset}px)`;
+
+        const firstItem = track.children[0];
+        const firstItemRect = firstItem.getBoundingClientRect();
+        const trackRect = track.getBoundingClientRect();
+
+        if (firstItemRect.right < trackRect.left) {
+          const itemWidth = firstItem.offsetWidth + padding;
+          track.appendChild(firstItem);
+          offset += itemWidth;
+        }
+
+        // Reinicia o offset para evitar números grandes
+        if (Math.abs(offset) > totalWidth) {
+          offset = 0;
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    }
+
+    // Inicializa com velocidades diferentes
+    initInfiniteScroll("carouselTrack", 0.5, 20); // carrossel
+    initInfiniteScroll("bannerTrack", 0.7, 80);   // faixa de texto
+    initInfiniteScroll("bannerTrack2", 0.7, 80);   // faixa de texto
+    
+  });
     // Initialize AOS
     AOS.init();
 </script>

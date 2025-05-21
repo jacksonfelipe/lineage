@@ -39,11 +39,16 @@
         .main-content {
             position: relative;
             z-index: 1;
+            padding-top: 80px;
         }
 
         nav {
-            position: relative;
-            z-index: 2;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.9);
         }
 
         footer {
@@ -62,7 +67,7 @@
           {% if site_logo %}
             <img src="{{ site_logo.image.url }}" alt="{{ site_logo.name }}">
           {% else %}
-            <img src="{% static 'default/images/logo.png' %}" alt="{% trans 'Lineage2 Logo' %}">
+            <img src="{% static 'default/images/logo.png' %}" alt="Logo do Lineage2">
           {% endif %}
         </div>
         <div class="circle"><img src="{% static 'default/images/logo-circle.png' %}"></div>
@@ -80,25 +85,25 @@
 
         <span><img src="{% static 'default/images/icons/nav-icon.png' %}"></span>
 
-        <li class="active"><a href="{% url 'index' %}">{% trans "Main" %}</a></li>
-        <li><a href="{% url 'wiki' %}">{% trans "Wiki" %}</a></li>
-        <li><a href="#">{% trans "Store" %}</a></li>
-        <li><a href="{{ PROJECT_DISCORD_URL }}" target="_blank">{% trans "Discord" %}</a></li>
+        <li class="active"><a href="{% url 'index' %}">Início</a></li>
+        <li><a href="{% url 'wiki' %}">Informações</a></li>
+        <li><a href="{% url 'public_news_list' %}">Notícias</a></li>
+        <li><a href="{% url 'public_faq_list' %}">Perguntas Frequentes</a></li>
       </ul>
 
       <div>
         {% if request.user.is_authenticated %}
           <a class="user" href="{% url 'dashboard' %}" target="_blank">
             <img src="{% static 'default/images/icons/user.png' %}">
-            <span>{% trans "My Account" %}</span>
+            <span>Minha Conta</span>
           </a>
         {% else %}
           <a class="user" href="{% url 'login' %}" target="_blank">
             <img src="{% static 'default/images/icons/user.png' %}">
-            <span>{% trans "My Account" %}</span>
+            <span>Entrar</span>
           </a>
         {% endif %}
-        <a class="download" href="#" target="_blank">{% trans "Download" %}</a>
+        <a class="download" href="#" target="_blank">Download</a>
       </div>
     </nav>
 
@@ -110,7 +115,7 @@
     <!-- Footer -->
     <footer>
       <div class="language">
-        <span>
+        <span style="display: flex; align-items: center; justify-content: center; gap: 8px;">
           <span>
             <img src="{% static 'default/images/icons/world.png' %}">&nbsp;&nbsp;&nbsp;
             {% if LANGUAGE_CODE == 'pt' %}Português
@@ -120,29 +125,54 @@
           </span>
           <span><img class="cursor" src="{% static 'default/images/icons/downcursor.png' %}"></span>
         </span>
-
+      
         <ul class="language-dropdown">
-          <li><a href="{% url 'set_language' %}?language=es&next={{ request.path }}">Español</a></li>
-          <li><a href="{% url 'set_language' %}?language=pt&next={{ request.path }}">Português</a></li>
-          <li><a href="{% url 'set_language' %}?language=en&next={{ request.path }}">English</a></li>
+          <li>
+            <form method="post" action="{% url 'set_language' %}">
+              {% csrf_token %}
+              <input type="hidden" name="language" value="es">
+              <input type="hidden" name="next" value="{{ request.path }}">
+              <a href="#" onclick="this.closest('form').submit(); return false;">Español</a>
+            </form>
+          </li>
+          <li>
+            <form method="post" action="{% url 'set_language' %}">
+              {% csrf_token %}
+              <input type="hidden" name="language" value="pt">
+              <input type="hidden" name="next" value="{{ request.path }}">
+              <a href="#" onclick="this.closest('form').submit(); return false;">Português</a>
+            </form>
+          </li>
+          <li>
+            <form method="post" action="{% url 'set_language' %}">
+              {% csrf_token %}
+              <input type="hidden" name="language" value="en">
+              <input type="hidden" name="next" value="{{ request.path }}">
+              <a href="#" onclick="this.closest('form').submit(); return false;">English</a>
+            </form>
+          </li>
         </ul>
-      </div>
+      </div>  
 
       <div class="copyright container">
         <div class="c-link">
-          <a href="#" target="_blank">{% trans "User Agreement" %}</a>
-          <a href="#" target="_blank">{% trans "Terms of Service" %}</a>
-          <a href="#" target="_blank">{% trans "Privacy Policy" %}</a>
+          <a href="#" target="_blank">Acordo do Usuário</a>
+          <a href="#" target="_blank">Termos de Serviço</a>
+          <a href="#" target="_blank">Política de Privacidade</a>
         </div>
 
         <div class="c-text">
           {% if site_logo %}
             <img src="{{ site_logo.image.url }}" alt="{{ site_logo.name }}">
           {% else %}
-            <img src="{% static 'default/images/logo.png' %}" alt="{% trans 'Lineage2 Logo' %}">
+            <img src="{% static 'default/images/logo.png' %}" alt="Logo do Lineage2">
           {% endif %}
           <p>© {% now "Y" %} {{ PROJECT_TITLE }}</p>
-          <span>{% trans "Lineage 2 public test server. These servers are an emulator of the Lineage 2 Game. The use of the service is for information purposes only. You can familiarize yourself with the original version of the game Lineage 2 on the official servers of NC Soft." %}</span>
+          <span style="text-align: center; display: block;">
+            {% if SHOW_SLOGAN %}
+              {% trans "Feito com ❤️ por aventureiros para aventureiros." %}
+            {% endif %}
+          </span>
         </div>
       </div>
     </footer>
