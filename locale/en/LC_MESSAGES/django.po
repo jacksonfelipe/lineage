@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 23:01-0300\n"
+"POT-Creation-Date: 2025-05-22 01:08-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4957,8 +4957,29 @@ msgstr "Logs Info"
 msgid "Logs Errors"
 msgstr "Logs Errors"
 
+msgid "Logo do Lineage2"
+msgstr "Logo do Lineage2"
+
+msgid "Informações"
+msgstr "Information"
+
+msgid "Minha Conta"
+msgstr "My account"
+
+msgid "Entrar"
+msgstr "To enter"
+
 msgid "Download"
 msgstr "Download"
+
+msgid "Acordo do Usuário"
+msgstr "User Agreement"
+
+msgid "Termos de Serviço"
+msgstr "TERMS OF SERVICE"
+
+msgid "Política de Privacidade"
+msgstr "Privacy Policy"
 
 msgid "Baixe tudo o que você precisa para começar sua jornada"
 msgstr "Download everything you need to start your journey"
@@ -4988,9 +5009,6 @@ msgstr "Account successfully verified!"
 
 msgid "Agora você pode acessar sua conta com segurança."
 msgstr "Now you can access your account safely."
-
-msgid "Entrar"
-msgstr "To enter"
 
 msgid "Veja abaixo as dúvidas mais comuns da comunidade."
 msgstr "See below the most common questions of the community."
@@ -5090,9 +5108,6 @@ msgstr "Recent News"
 
 msgid "Não há notícias disponíveis no momento."
 msgstr "There is no news available at the moment."
-
-msgid "Política de Privacidade"
-msgstr "Privacy Policy"
 
 msgid "Última atualização"
 msgstr "Last update"
@@ -5334,9 +5349,6 @@ msgstr "Contact us for"
 msgid "ou fórum oficial em caso de dúvidas ou denúncias."
 msgstr "or official forum in case of doubts or complaints."
 
-msgid "Acordo do Usuário"
-msgstr "User Agreement"
-
 msgid "Aceitação do Acordo"
 msgstr "ACCEPTANCE OF THE AGREEMENT"
 
@@ -5573,9 +5585,6 @@ msgstr "🔐 credential generator"
 
 msgid "Digite a senha que deseja proteger: "
 msgstr "Enter the password you want to protect:"
-
-msgid "Minha Conta"
-msgstr "My account"
 
 msgid "Jogue Agora"
 msgstr "Play now"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 23:05-0300\n"
+"POT-Creation-Date: 2025-05-22 01:10-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4977,8 +4977,29 @@ msgstr "Información de registros"
 msgid "Logs Errors"
 msgstr "Errores de registro"
 
+msgid "Logo do Lineage2"
+msgstr "LOGO DO LINEAGE2"
+
+msgid "Informações"
+msgstr "Información"
+
+msgid "Minha Conta"
+msgstr "Mi cuenta"
+
+msgid "Entrar"
+msgstr "Entrar"
+
 msgid "Download"
 msgstr "Descargar"
+
+msgid "Acordo do Usuário"
+msgstr "Acuerdo de usuario"
+
+msgid "Termos de Serviço"
+msgstr "Términos de servicio"
+
+msgid "Política de Privacidade"
+msgstr "Política de Privacidade"
 
 msgid "Baixe tudo o que você precisa para começar sua jornada"
 msgstr "Descargue todo lo que necesita para comenzar su viaje"
@@ -5010,9 +5031,6 @@ msgstr "Cuenta verificada con éxito!"
 
 msgid "Agora você pode acessar sua conta com segurança."
 msgstr "Ahora puede acceder a su cuenta de manera segura."
-
-msgid "Entrar"
-msgstr "Entrar"
 
 msgid "Veja abaixo as dúvidas mais comuns da comunidade."
 msgstr "Vea a continuación las preguntas más comunes de la comunidad."
@@ -5113,9 +5131,6 @@ msgstr "Noticias recientes"
 
 msgid "Não há notícias disponíveis no momento."
 msgstr "No hay noticias disponibles en este momento."
-
-msgid "Política de Privacidade"
-msgstr "Política de Privacidade"
 
 msgid "Última atualização"
 msgstr "Última actualización"
@@ -5360,9 +5375,6 @@ msgstr "Contáctenos para"
 msgid "ou fórum oficial em caso de dúvidas ou denúncias."
 msgstr "o foro oficial en caso de dudas o quejas."
 
-msgid "Acordo do Usuário"
-msgstr "Acuerdo de usuario"
-
 msgid "Aceitação do Acordo"
 msgstr "Aceptación del acuerdo"
 
@@ -5598,9 +5610,6 @@ msgstr "🔐 Generador de credenciales"
 
 msgid "Digite a senha que deseja proteger: "
 msgstr "Ingrese la contraseña que desea proteger:"
-
-msgid "Minha Conta"
-msgstr "Mi cuenta"
 
 msgid "Jogue Agora"
 msgstr "Jugar ahora"
