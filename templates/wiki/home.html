@@ -3,37 +3,27 @@
 
 {% block wiki_content %}
 <div class="wiki-page">
-    <h1>{% trans "Welcome to the Lineage 2 Wiki" %}</h1>
+    <h1>{% trans "Welcome to Lineage 2 Wiki" %}</h1>
     
     <div class="wiki-section">
         <h2>{% trans "Getting Started" %}</h2>
-        <p>{% trans "Welcome to our Lineage 2 server wiki. Here you'll find all the information you need to start your adventure." %}</p>
+        <p>{% trans "Welcome to our Lineage 2 server wiki. Here you will find all the information you need to start your adventure." %}</p>
     </div>
 
     <div class="wiki-section">
         <h2>{% trans "Quick Links" %}</h2>
         <div class="wiki-grid">
-            <a href="{% url 'wiki_general' %}" class="wiki-card">
-                <h3>{% trans "General Information" %}</h3>
-                <p>{% trans "Basic information about the server" %}</p>
+            {% for item in pages %}
+            <a href="{% url 'wiki:page' item.page.slug %}" class="wiki-card">
+                <h3>{{ item.translation.title }}</h3>
+                <p>{{ item.translation.content|truncatewords:20 }}</p>
             </a>
-            <a href="{% url 'wiki_rates' %}" class="wiki-card">
-                <h3>{% trans "Server Rates" %}</h3>
-                <p>{% trans "Experience and drop rates" %}</p>
-            </a>
-            <a href="{% url 'wiki_raids' %}" class="wiki-card">
-                <h3>{% trans "Raid Bosses" %}</h3>
-                <p>{% trans "Information about raid bosses" %}</p>
-            </a>
-            <a href="{% url 'wiki_assistance' %}" class="wiki-card">
-                <h3>{% trans "Game Assistance" %}</h3>
-                <p>{% trans "Help and support for players" %}</p>
-            </a>
-            <a href="{% url 'wiki_events' %}" class="wiki-card">
+            {% endfor %}
+            <a href="{% url 'wiki:events' %}" class="wiki-card">
                 <h3>{% trans "Events Guide" %}</h3>
                 <p>{% trans "Information about server events" %}</p>
             </a>
-            <a href="{% url 'updates' %}" class="wiki-card">
+            <a href="{% url 'wiki:updates' %}" class="wiki-card">
                 <h3>{% trans "Updates" %}</h3>
                 <p>{% trans "Latest server updates" %}</p>
             </a>

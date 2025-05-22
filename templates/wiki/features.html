@@ -7,151 +7,85 @@
     
     <div class="wiki-section">
         <h2>{% trans "Custom Features" %}</h2>
-        <div class="wiki-features-grid">
-            <div class="wiki-feature-card">
-                <h3>{% trans "Custom Skills" %}</h3>
-                <div class="wiki-feature-info">
-                    <p>{% trans "Unique skills available for each class:" %}</p>
-                    <ul>
-                        <li>{% trans "Enhanced damage skills" %}</li>
-                        <li>{% trans "New buff effects" %}</li>
-                        <li>{% trans "Custom debuff skills" %}</li>
-                        <li>{% trans "Special utility skills" %}</li>
-                    </ul>
+        <div class="wiki-features">
+            {% for item in custom_features %}
+            <div class="wiki-feature">
+                <h3>{{ item.translation.title }}</h3>
+                <div class="wiki-feature-content">
+                    {{ item.translation.content|safe }}
                 </div>
             </div>
+            {% endfor %}
+        </div>
+    </div>
 
-            <div class="wiki-feature-card">
-                <h3>{% trans "Custom Items" %}</h3>
-                <div class="wiki-feature-info">
-                    <p>{% trans "Exclusive items with unique effects:" %}</p>
-                    <ul>
-                        <li>{% trans "Custom weapons" %}</li>
-                        <li>{% trans "Special armor sets" %}</li>
-                        <li>{% trans "Unique accessories" %}</li>
-                        <li>{% trans "Limited edition items" %}</li>
-                    </ul>
+    <div class="wiki-section">
+        <h2>{% trans "Gameplay Features" %}</h2>
+        <div class="wiki-features">
+            {% for item in gameplay_features %}
+            <div class="wiki-feature">
+                <h3>{{ item.translation.title }}</h3>
+                <div class="wiki-feature-content">
+                    {{ item.translation.content|safe }}
                 </div>
             </div>
-
-            <div class="wiki-feature-card">
-                <h3>{% trans "Custom Instances" %}</h3>
-                <div class="wiki-feature-info">
-                    <p>{% trans "Exclusive instance dungeons:" %}</p>
-                    <ul>
-                        <li>{% trans "Custom boss mechanics" %}</li>
-                        <li>{% trans "Unique rewards" %}</li>
-                        <li>{% trans "Special challenges" %}</li>
-                        <li>{% trans "Team-based content" %}</li>
-                    </ul>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 
     <div class="wiki-section">
         <h2>{% trans "Quality of Life Features" %}</h2>
-        <div class="wiki-qol-features">
-            <div class="wiki-qol-feature">
-                <h3>{% trans "Auto Loot System" %}</h3>
-                <div class="wiki-feature-details">
-                    <p>{% trans "Automatically collect items from defeated monsters:" %}</p>
-                    <ul>
-                        <li>{% trans "Configurable loot filters" %}</li>
-                        <li>{% trans "Item category settings" %}</li>
-                        <li>{% trans "Quality thresholds" %}</li>
-                        <li>{% trans "Inventory management" %}</li>
-                    </ul>
+        <div class="wiki-features">
+            {% for item in qol_features %}
+            <div class="wiki-feature">
+                <h3>{{ item.translation.title }}</h3>
+                <div class="wiki-feature-content">
+                    {{ item.translation.content|safe }}
                 </div>
             </div>
-
-            <div class="wiki-qol-feature">
-                <h3>{% trans "Buff System" %}</h3>
-                <div class="wiki-feature-details">
-                    <p>{% trans "Enhanced buff management:" %}</p>
-                    <ul>
-                        <li>{% trans "Auto-buff feature" %}</li>
-                        <li>{% trans "Buff presets" %}</li>
-                        <li>{% trans "Party buff sharing" %}</li>
-                        <li>{% trans "Buff duration indicators" %}</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="wiki-qol-feature">
-                <h3>{% trans "Teleport System" %}</h3>
-                <div class="wiki-feature-details">
-                    <p>{% trans "Improved travel options:" %}</p>
-                    <ul>
-                        <li>{% trans "Quick teleport to towns" %}</li>
-                        <li>{% trans "Instance teleports" %}</li>
-                        <li>{% trans "Party teleport" %}</li>
-                        <li>{% trans "Custom teleport points" %}</li>
-                    </ul>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 
     <div class="wiki-section">
-        <h2>{% trans "PvP Features" %}</h2>
-        <div class="wiki-pvp-features">
-            <div class="wiki-pvp-feature">
-                <h3>{% trans "Arena System" %}</h3>
-                <div class="wiki-feature-details">
-                    <p>{% trans "Enhanced PvP arenas:" %}</p>
-                    <ul>
-                        <li>{% trans "Ranked matches" %}</li>
-                        <li>{% trans "Tournament system" %}</li>
-                        <li>{% trans "Reward system" %}</li>
-                        <li>{% trans "Spectator mode" %}</li>
-                    </ul>
+        <h2>{% trans "VIP Features" %}</h2>
+        <div class="wiki-features">
+            {% for item in vip_features %}
+            <div class="wiki-feature">
+                <h3>{{ item.translation.title }}</h3>
+                <div class="wiki-feature-content">
+                    {{ item.translation.content|safe }}
                 </div>
             </div>
+            {% endfor %}
+        </div>
+    </div>
 
-            <div class="wiki-pvp-feature">
-                <h3>{% trans "Siege System" %}</h3>
-                <div class="wiki-feature-details">
-                    <p>{% trans "Improved castle sieges:" %}</p>
-                    <ul>
-                        <li>{% trans "Enhanced castle mechanics" %}</li>
-                        <li>{% trans "New siege weapons" %}</li>
-                        <li>{% trans "Improved rewards" %}</li>
-                        <li>{% trans "Better balance" %}</li>
-                    </ul>
+    <div class="wiki-section">
+        <h2>{% trans "Anti-Cheat Features" %}</h2>
+        <div class="wiki-features">
+            {% for item in anti_cheat_features %}
+            <div class="wiki-feature">
+                <h3>{{ item.translation.title }}</h3>
+                <div class="wiki-feature-content">
+                    {{ item.translation.content|safe }}
                 </div>
             </div>
+            {% endfor %}
         </div>
     </div>
 
     <div class="wiki-section">
         <h2>{% trans "Community Features" %}</h2>
-        <div class="wiki-community-features">
-            <div class="wiki-community-feature">
-                <h3>{% trans "Guild System" %}</h3>
-                <div class="wiki-feature-details">
-                    <p>{% trans "Enhanced guild features:" %}</p>
-                    <ul>
-                        <li>{% trans "Guild levels" %}</li>
-                        <li>{% trans "Guild skills" %}</li>
-                        <li>{% trans "Guild storage" %}</li>
-                        <li>{% trans "Guild events" %}</li>
-                    </ul>
+        <div class="wiki-features">
+            {% for item in community_features %}
+            <div class="wiki-feature">
+                <h3>{{ item.translation.title }}</h3>
+                <div class="wiki-feature-content">
+                    {{ item.translation.content|safe }}
                 </div>
             </div>
-
-            <div class="wiki-community-feature">
-                <h3>{% trans "Trading System" %}</h3>
-                <div class="wiki-feature-details">
-                    <p>{% trans "Improved trading features:" %}</p>
-                    <ul>
-                        <li>{% trans "Auction house" %}</li>
-                        <li>{% trans "Player shops" %}</li>
-                        <li>{% trans "Trade security" %}</li>
-                        <li>{% trans "Market statistics" %}</li>
-                    </ul>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </div>

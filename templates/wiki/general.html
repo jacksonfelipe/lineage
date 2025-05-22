@@ -6,63 +6,72 @@
     <h1>{% trans "General Information" %}</h1>
     
     <div class="wiki-section">
-        <h2>{% trans "Server Overview" %}</h2>
-        <p>{% trans "Our Lineage 2 server offers a unique gaming experience with custom features and balanced gameplay." %}</p>
-        
-        <div class="wiki-info-box">
-            <h3>{% trans "Server Features" %}</h3>
-            <ul>
-                <li>{% trans "Custom balanced rates" %}</li>
-                <li>{% trans "Regular events and competitions" %}</li>
-                <li>{% trans "Active staff support" %}</li>
-                <li>{% trans "Anti-bot protection" %}</li>
-                <li>{% trans "Custom items and skills" %}</li>
-            </ul>
+        <h2>{% trans "Server Information" %}</h2>
+        <div class="wiki-server-info">
+            {% for item in server_info %}
+            <div class="wiki-info-item">
+                <h3>{{ item.translation.title }}</h3>
+                <div class="wiki-info-content">
+                    {{ item.translation.content|safe }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="wiki-section">
+        <h2>{% trans "Game Features" %}</h2>
+        <div class="wiki-features">
+            {% for item in features %}
+            <div class="wiki-feature">
+                <h3>{{ item.translation.title }}</h3>
+                <div class="wiki-feature-content">
+                    {{ item.translation.content|safe }}
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 
     <div class="wiki-section">
         <h2>{% trans "Getting Started" %}</h2>
-        <div class="wiki-steps">
-            <div class="wiki-step">
-                <h3>1. {% trans "Download" %}</h3>
-                <p>{% trans "Download our custom client from the downloads page." %}</p>
+        <div class="wiki-getting-started">
+            {% for item in getting_started %}
+            <div class="wiki-guide">
+                <h3>{{ item.translation.title }}</h3>
+                <div class="wiki-guide-content">
+                    {{ item.translation.content|safe }}
+                </div>
             </div>
-            <div class="wiki-step">
-                <h3>2. {% trans "Install" %}</h3>
-                <p>{% trans "Install the client following the installation guide." %}</p>
-            </div>
-            <div class="wiki-step">
-                <h3>3. {% trans "Create Account" %}</h3>
-                <p>{% trans "Register an account on our website." %}</p>
-            </div>
-            <div class="wiki-step">
-                <h3>4. {% trans "Start Playing" %}</h3>
-                <p>{% trans "Log in and begin your adventure!" %}</p>
-            </div>
+            {% endfor %}
         </div>
     </div>
 
     <div class="wiki-section">
-        <h2>{% trans "Server Rules" %}</h2>
-        <div class="wiki-rules">
-            <div class="wiki-rule">
-                <h3>{% trans "General Rules" %}</h3>
-                <ul>
-                    <li>{% trans "No cheating or using third-party software" %}</li>
-                    <li>{% trans "No offensive language or behavior" %}</li>
-                    <li>{% trans "No spamming or advertising" %}</li>
-                    <li>{% trans "Respect other players" %}</li>
-                </ul>
+        <h2>{% trans "Community Guidelines" %}</h2>
+        <div class="wiki-guidelines">
+            {% for item in guidelines %}
+            <div class="wiki-guideline">
+                <h3>{{ item.translation.title }}</h3>
+                <div class="wiki-guideline-content">
+                    {{ item.translation.content|safe }}
+                </div>
             </div>
-            <div class="wiki-rule">
-                <h3>{% trans "Trading Rules" %}</h3>
-                <ul>
-                    <li>{% trans "Use the trading system for all trades" %}</li>
-                    <li>{% trans "No real money trading" %}</li>
-                    <li>{% trans "Report suspicious trading activities" %}</li>
-                </ul>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="wiki-section">
+        <h2>{% trans "Technical Support" %}</h2>
+        <div class="wiki-support">
+            {% for item in support %}
+            <div class="wiki-support-item">
+                <h3>{{ item.translation.title }}</h3>
+                <div class="wiki-support-content">
+                    {{ item.translation.content|safe }}
+                </div>
             </div>
+            {% endfor %}
         </div>
     </div>
 </div>

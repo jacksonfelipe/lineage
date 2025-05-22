@@ -3,25 +3,34 @@
 
 {% block wiki_content %}
 <div class="wiki-page">
-    <h1>{% trans "Game Assistance" %}</h1>
+    <h1>{% trans "Player Assistance" %}</h1>
     
     <div class="wiki-section">
-        <h2>{% trans "Getting Help" %}</h2>
-        <div class="wiki-help-options">
-            <div class="wiki-help-card">
-                <h3>{% trans "Support Ticket" %}</h3>
-                <p>{% trans "Submit a support ticket for technical issues or account problems." %}</p>
-                <a href="{% url 'support' %}" class="wiki-button">{% trans "Submit Ticket" %}</a>
+        <h2>{% trans "Support Channels" %}</h2>
+        <div class="wiki-support-channels">
+            <div class="wiki-support-channel">
+                <h3>{% trans "In-Game Support" %}</h3>
+                <ul>
+                    <li>{% trans "Use /support command" %}</li>
+                    <li>{% trans "Join support channel" %}</li>
+                    <li>{% trans "Contact online GMs" %}</li>
+                </ul>
             </div>
-            <div class="wiki-help-card">
+            <div class="wiki-support-channel">
                 <h3>{% trans "Discord Support" %}</h3>
-                <p>{% trans "Join our Discord server for real-time assistance." %}</p>
-                <a href="https://discord.gg/your-server" class="wiki-button">{% trans "Join Discord" %}</a>
+                <ul>
+                    <li>{% trans "Join our Discord server" %}</li>
+                    <li>{% trans "Use support tickets" %}</li>
+                    <li>{% trans "Chat with community" %}</li>
+                </ul>
             </div>
-            <div class="wiki-help-card">
-                <h3>{% trans "FAQ" %}</h3>
-                <p>{% trans "Check our frequently asked questions for quick answers." %}</p>
-                <a href="{% url 'faq' %}" class="wiki-button">{% trans "View FAQ" %}</a>
+            <div class="wiki-support-channel">
+                <h3>{% trans "Email Support" %}</h3>
+                <ul>
+                    <li>{% trans "Send detailed reports" %}</li>
+                    <li>{% trans "Include screenshots" %}</li>
+                    <li>{% trans "Wait for response" %}</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -29,83 +38,51 @@
     <div class="wiki-section">
         <h2>{% trans "Common Issues" %}</h2>
         <div class="wiki-issues">
+            {% for item in issues %}
             <div class="wiki-issue">
-                <h3>{% trans "Connection Problems" %}</h3>
-                <div class="wiki-solution">
-                    <h4>{% trans "Possible Solutions" %}:</h4>
-                    <ul>
-                        <li>{% trans "Check your internet connection" %}</li>
-                        <li>{% trans "Verify server status" %}</li>
-                        <li>{% trans "Clear game cache" %}</li>
-                        <li>{% trans "Update game client" %}</li>
-                    </ul>
+                <h3>{{ item.translation.title }}</h3>
+                <div class="wiki-issue-content">
+                    {{ item.translation.content|safe }}
                 </div>
             </div>
-
-            <div class="wiki-issue">
-                <h3>{% trans "Game Performance" %}</h3>
-                <div class="wiki-solution">
-                    <h4>{% trans "Performance Tips" %}:</h4>
-                    <ul>
-                        <li>{% trans "Update graphics drivers" %}</li>
-                        <li>{% trans "Adjust game settings" %}</li>
-                        <li>{% trans "Close background applications" %}</li>
-                        <li>{% trans "Check system requirements" %}</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="wiki-issue">
-                <h3>{% trans "Account Issues" %}</h3>
-                <div class="wiki-solution">
-                    <h4>{% trans "Common Solutions" %}:</h4>
-                    <ul>
-                        <li>{% trans "Reset password" %}</li>
-                        <li>{% trans "Verify email address" %}</li>
-                        <li>{% trans "Check account status" %}</li>
-                        <li>{% trans "Contact support" %}</li>
-                    </ul>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 
     <div class="wiki-section">
-        <h2>{% trans "Game Guides" %}</h2>
-        <div class="wiki-guides">
-            <div class="wiki-guide">
-                <h3>{% trans "Beginner's Guide" %}</h3>
-                <ul>
-                    <li>{% trans "Character creation" %}</li>
-                    <li>{% trans "Basic controls" %}</li>
-                    <li>{% trans "Starting quests" %}</li>
-                    <li>{% trans "First steps" %}</li>
-                </ul>
+        <h2>{% trans "FAQ" %}</h2>
+        <div class="wiki-faq">
+            {% for item in faqs %}
+            <div class="wiki-faq-item">
+                <h3>{{ item.translation.question }}</h3>
+                <div class="wiki-faq-answer">
+                    {{ item.translation.answer|safe }}
+                </div>
             </div>
-            <div class="wiki-guide">
-                <h3>{% trans "Advanced Guide" %}</h3>
-                <ul>
-                    <li>{% trans "Class optimization" %}</li>
-                    <li>{% trans "Equipment guide" %}</li>
-                    <li>{% trans "PvP strategies" %}</li>
-                    <li>{% trans "End-game content" %}</li>
-                </ul>
-            </div>
+            {% endfor %}
         </div>
     </div>
 
     <div class="wiki-section">
-        <h2>{% trans "Contact Information" %}</h2>
-        <div class="wiki-contact">
-            <div class="wiki-contact-info">
-                <h3>{% trans "Support Hours" %}</h3>
-                <p>{% trans "24/7 Support Available" %}</p>
-                <p>{% trans "Response Time: Usually within 24 hours" %}</p>
+        <h2>{% trans "Report Guidelines" %}</h2>
+        <div class="wiki-guidelines">
+            <div class="wiki-guideline">
+                <h3>{% trans "Bug Reports" %}</h3>
+                <ul>
+                    <li>{% trans "Describe the issue clearly" %}</li>
+                    <li>{% trans "Include reproduction steps" %}</li>
+                    <li>{% trans "Attach screenshots/videos" %}</li>
+                    <li>{% trans "Specify your client version" %}</li>
+                </ul>
             </div>
-            <div class="wiki-contact-info">
-                <h3>{% trans "Emergency Contact" %}</h3>
-                <p>{% trans "For urgent issues, please use Discord" %}</p>
-                <p>{% trans "Discord: #emergency-support" %}</p>
+            <div class="wiki-guideline">
+                <h3>{% trans "Player Reports" %}</h3>
+                <ul>
+                    <li>{% trans "Provide player name" %}</li>
+                    <li>{% trans "Include timestamp" %}</li>
+                    <li>{% trans "Attach evidence" %}</li>
+                    <li>{% trans "Be specific about violation" %}</li>
+                </ul>
             </div>
         </div>
     </div>

@@ -1,0 +1,19 @@
+{% extends 'wiki/base.html' %}
+{% load static i18n %}
+
+{% block wiki_content %}
+<div class="wiki-page">
+    <h1>{{ translation.title }}</h1>
+    
+    <div class="wiki-section">
+        {{ translation.content|safe }}
+    </div>
+
+    {% for item in sections %}
+    <div class="wiki-section">
+        <h2>{{ item.translation.title }}</h2>
+        {{ item.translation.content|safe }}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %} 
