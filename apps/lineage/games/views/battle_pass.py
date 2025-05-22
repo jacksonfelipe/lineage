@@ -22,6 +22,8 @@ def battle_pass_view(request):
 
     # Obtém o nível atual e o próximo nível
     current_level = progress.get_current_level()
+    if current_level is None:
+        current_level = 0
     next_level = BattlePassLevel.objects.filter(
         season=season,
         level__gt=current_level
@@ -144,6 +146,8 @@ def exchange_items_view(request):
 
     # Obtém o nível atual e o próximo nível
     current_level = progress.get_current_level()
+    if current_level is None:
+        current_level = 0
     next_level = BattlePassLevel.objects.filter(
         season=season,
         level__gt=current_level
