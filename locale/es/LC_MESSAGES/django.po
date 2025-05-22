@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 00:17-0300\n"
+"POT-Creation-Date: 2025-05-21 23:05-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2740,6 +2740,186 @@ msgstr "Balance insuficiente para la transferencia."
 msgid "Erro ao adicionar a moeda ao personagem."
 msgstr "Error a agregar la moneda al personaje."
 
+msgid "Title"
+msgstr "Título"
+
+msgid "Slug"
+msgstr "Babosa"
+
+msgid "Order"
+msgstr "Orden"
+
+msgid "Created at"
+msgstr "Creado a"
+
+msgid "Updated at"
+msgstr "Actualizado en"
+
+msgid "Wiki Page"
+msgstr "Wiki Página"
+
+msgid "Wiki Pages"
+msgstr "Páginas wiki"
+
+msgid "Portuguese"
+msgstr "portugués"
+
+msgid "Spanish"
+msgstr "Español"
+
+msgid "Content"
+msgstr "Contenido"
+
+msgid "Wiki Page Translation"
+msgstr "Traducción de la página wiki"
+
+msgid "Wiki Page Translations"
+msgstr "Traducciones de página wiki"
+
+msgid "Information"
+msgstr "Información"
+
+msgid "Guide"
+msgstr "Guía"
+
+msgid "Warning"
+msgstr "Advertencia"
+
+msgid "Note"
+msgstr "Nota"
+
+msgid "Tip"
+msgstr "Consejo"
+
+msgid "Section Type"
+msgstr "Tipo de sección"
+
+msgid "Icon"
+msgstr "Icono"
+
+msgid "Wiki Section"
+msgstr "Sección Wiki"
+
+msgid "Wiki Sections"
+msgstr "Secciones de wiki"
+
+msgid "Subtitle"
+msgstr "Subtitular"
+
+msgid "Wiki Section Translation"
+msgstr "Traducción de la sección wiki"
+
+msgid "Wiki Section Translations"
+msgstr "Traducciones de la sección wiki"
+
+msgid "Version"
+msgstr "Versión"
+
+msgid "Release Date"
+msgstr "Fecha de lanzamiento"
+
+msgid "Server Update"
+msgstr "Actualización del servidor"
+
+msgid "Server Updates"
+msgstr "Actualizaciones del servidor"
+
+msgid "Server Update Translation"
+msgstr "Traducción de actualización del servidor"
+
+msgid "Server Update Translations"
+msgstr "Traducciones de actualización del servidor"
+
+msgid "Regular"
+msgstr "Regular"
+
+msgid "Special"
+msgstr "Especial"
+
+msgid "Event Type"
+msgstr "Tipo de evento"
+
+msgid "Server Event"
+msgstr "Evento de servidor"
+
+msgid "Server Events"
+msgstr "Eventos del servidor"
+
+msgid "Event"
+msgstr "Evento"
+
+msgid "Schedule"
+msgstr "Cronograma"
+
+msgid "Requirements"
+msgstr "Requisitos"
+
+msgid "Rewards"
+msgstr "Recompensas"
+
+msgid "Server Event Translation"
+msgstr "Traducción de eventos del servidor"
+
+msgid "Server Event Translations"
+msgstr "Traducciones de eventos del servidor"
+
+msgid "Experience"
+msgstr "Experiencia"
+
+msgid "Drop"
+msgstr "Gota"
+
+msgid "Adena"
+msgstr "Influenciado"
+
+msgid "Spoil"
+msgstr "Arruinar"
+
+msgid "Quest"
+msgstr "Búsqueda"
+
+msgid "Wiki Rate"
+msgstr "Tasa de wiki"
+
+msgid "Wiki Rates"
+msgstr "Tasas de wiki"
+
+msgid "Wiki Rate Translation"
+msgstr "Traducción de la tasa de wiki"
+
+msgid "Wiki Rate Translations"
+msgstr "Traducciones de tarifas de wiki"
+
+msgid "Custom"
+msgstr "Costumbre"
+
+msgid "Gameplay"
+msgstr "Jugabilidad"
+
+msgid "Quality of Life"
+msgstr "Calidad de vida"
+
+msgid "VIP"
+msgstr "personaje"
+
+msgid "Anti-Cheat"
+msgstr "Anti-trato"
+
+msgid "Community"
+msgstr "Comunidad"
+
+msgid "Wiki Feature"
+msgstr "Característica wiki"
+
+msgid "Wiki Features"
+msgstr "Características de Wiki"
+
+msgid "Wiki Feature Translation"
+msgstr "Traducción de características wiki"
+
+msgid "Wiki Feature Translations"
+msgstr "Traducciones de características wiki"
+
 msgid "Nome do Grupo"
 msgstr "Nombre de grupo"
 
@@ -2757,9 +2937,6 @@ msgstr "Historia de asistencia"
 
 msgid "Históricos de Atendimentos"
 msgstr "Históricos de los servicios"
-
-msgid "Slug"
-msgstr "Babosa"
 
 msgid "Versão"
 msgstr "Versión"
@@ -3030,11 +3207,59 @@ msgstr "Código de estado de respuesta:"
 msgid "Nenhum dado de auditoria encontrado."
 msgstr "No se encontraron datos de auditoría."
 
-msgid "Pergunta"
-msgstr "Pregunta"
-
 msgid "Ordem"
 msgstr "Orden"
+
+msgid "Categoria de Download"
+msgstr "Categoria de Download"
+
+msgid "Categorias de Download"
+msgstr "Categorias de Download"
+
+msgid "Cliente"
+msgstr "Cliente"
+
+msgid "Patch"
+msgstr "Parche"
+
+msgid "Guia"
+msgstr "Guía"
+
+msgid "Outro"
+msgstr "Otro"
+
+msgid "Link Direto"
+msgstr "Enlace directo"
+
+msgid "Categoria"
+msgstr "Categoría"
+
+msgid "Tipo de Download"
+msgstr "Tipo de Download"
+
+msgid "Tipo de Hospedagem"
+msgstr "Tipo de alojamiento"
+
+msgid "URL"
+msgstr "Url"
+
+msgid "Tamanho do Arquivo"
+msgstr "Tamaño de archivo"
+
+msgid "Contagem de Downloads"
+msgstr "Descargar recuento"
+
+msgid "Link de Download"
+msgstr "Link de Download"
+
+msgid "Links de Download"
+msgstr "Links de Download"
+
+msgid "Downloads"
+msgstr "Descargas"
+
+msgid "Pergunta"
+msgstr "Pregunta"
 
 msgid "Está público"
 msgstr "Está público"
@@ -3153,12 +3378,6 @@ msgstr "Confirmar una nueva contraseña"
 
 msgid "Old Password"
 msgstr "Contraseña anterior"
-
-msgid "Title"
-msgstr "Título"
-
-msgid "Content"
-msgstr "Contenido"
 
 msgid "Staff Status"
 msgstr "Estado del personal"
@@ -3726,6 +3945,54 @@ msgstr "Las noticias privadas no están disponibles."
 
 msgid "Tradução não disponível para esta notícia."
 msgstr "Traducción no disponible para esta noticia."
+
+msgid "Wiki - Lineage 2"
+msgstr "Wiki - linaje 2"
+
+msgid "Complete guide and information about Lineage 2 server"
+msgstr "Guía completa e información sobre Lineage 2 Server"
+
+msgid "General Information - Wiki"
+msgstr "Información general - Wiki"
+
+msgid "General information about the server"
+msgstr "Información general sobre el servidor"
+
+msgid "Server Rates - Wiki"
+msgstr "Tarifas del servidor - Wiki"
+
+msgid "Information about server rates and experience"
+msgstr "Información sobre tarifas y experiencia del servidor"
+
+msgid "Raid Bosses and Instances - Wiki"
+msgstr "Jefes e instancias de RAID - Wiki"
+
+msgid "Information about raid bosses and instances"
+msgstr "Información sobre jefes e instancias de RAID"
+
+msgid "Game Assistance - Wiki"
+msgstr "Asistencia al juego - Wiki"
+
+msgid "Help and assistance for players"
+msgstr "Ayuda y asistencia para los jugadores"
+
+msgid "Events Guide - Wiki"
+msgstr "Guía de eventos - Wiki"
+
+msgid "Guide for server events"
+msgstr "Guía para eventos del servidor"
+
+msgid "Server Updates - Wiki"
+msgstr "Actualizaciones del servidor - Wiki"
+
+msgid "Latest server updates and changes"
+msgstr "Últimas actualizaciones y cambios del servidor"
+
+msgid "Server Features - Wiki"
+msgstr "Características del servidor - wiki"
+
+msgid "Information about server features"
+msgstr "Información sobre las características del servidor"
 
 msgid "Usuário que iniciou a amizade."
 msgstr "Usuario que comenzó la amistad."
@@ -4710,26 +4977,17 @@ msgstr "Información de registros"
 msgid "Logs Errors"
 msgstr "Errores de registro"
 
-msgid "Lineage2 Logo"
-msgstr "Logotipo de linaje2"
-
-msgid "Sobre"
-msgstr "Sobre"
-
 msgid "Download"
 msgstr "Descargar"
 
-msgid "Comunidade"
-msgstr "Comunidad"
+msgid "Baixe tudo o que você precisa para começar sua jornada"
+msgstr "Descargue todo lo que necesita para comenzar su viaje"
 
-msgid "Painel"
-msgstr "Panel"
+msgid "downloads"
+msgstr "descargas"
 
-msgid "Minha Conta"
-msgstr "Mi cuenta"
-
-msgid "Jogue Grátis"
-msgstr "Jugar gratis"
+msgid "Nenhum download disponível no momento."
+msgstr "No hay descarga disponible en este momento."
 
 msgid "Verificação de E-mail"
 msgstr "Cheque por correo electrónico"
@@ -4762,11 +5020,57 @@ msgstr "Vea a continuación las preguntas más comunes de la comunidad."
 msgid "Nenhuma pergunta frequente disponível no momento."
 msgstr "No hay una pregunta frecuente disponible en este momento."
 
-msgid "Lineage 2 PDL"
-msgstr "Linaje 2 PDL"
+msgid "Inicie sua Jornada em Lineage Agora!"
+msgstr "¡Comience su viaje de linaje ahora!"
 
-msgid "Jogar Agora"
-msgstr "Jugar ahora"
+msgid "Onde Lendas Nascem, Heróis Lutam e a Glória é Eterna."
+msgstr "Donde nacen las leyendas, los héroes luchan y la gloria es eterna."
+
+msgid "Baixe o Jogo"
+msgstr "Descargar el juego"
+
+msgid "Crie sua conta mestra"
+msgstr "Crea tu cuenta maestra"
+
+msgid "Aproveite o melhor do Lineage"
+msgstr "Disfruta lo mejor del linaje"
+
+msgid "O servidor mais atualizado, moderno e estável para jogar Lineage"
+msgstr ""
+"El servidor más actualizado, moderno y estable para reproducir el linaje"
+
+msgid "PvP e Castelos"
+msgstr "PvP y castillos"
+
+msgid "Missões Personalizadas"
+msgstr "Misiones personalizadas"
+
+msgid "Eventos e Recompensas"
+msgstr "Eventos e Recompensas"
+
+msgid "Wiki"
+msgstr "Semana"
+
+msgid "Wiki e Atualizações do Lineage"
+msgstr "Actualizaciones de wiki y linaje"
+
+msgid "Informações Gerais"
+msgstr "información general"
+
+msgid "Taxas de Experiência"
+msgstr "Tarifas de experiencia"
+
+msgid "Chefes de Raide e Instâncias"
+msgstr "Raide Heads e instancias"
+
+msgid "Ajuda no Jogo"
+msgstr "Ayuda del juego"
+
+msgid "Guia de Eventos"
+msgstr "Guía de eventos"
+
+msgid "Atualização"
+msgstr "Actualizar"
 
 msgid "Trailer Oficial"
 msgstr "Trailer Oficial"
@@ -4774,82 +5078,32 @@ msgstr "Trailer Oficial"
 msgid "Assista ao trailer e mergulhe no mundo épico do nosso servidor!"
 msgstr "¡Mira el trailer y sumérgete en el mundo épico de nuestro servidor!"
 
-msgid "O Que Torna Nosso Servidor Único?"
-msgstr "¿Qué hace que nuestro servidor sea único?"
+msgid "Melhores Clãs"
+msgstr "Mejores clanes"
 
-msgid "PvP & Sieges"
-msgstr "PvP y Sieges"
+msgid "Cresta"
+msgstr "Cresta"
 
-msgid ""
-"Domine castelos, lute por território e mostre sua força no campo de batalha."
-msgstr ""
-"Castillos Domine, lucha territorio y muestran tu fuerza en el campo de "
-"batalla."
+msgid "Nome do Clã"
+msgstr "Nombre del clan"
 
-msgid "Missões Personalizadas"
-msgstr "Misiones personalizadas"
-
-msgid "Conteúdo exclusivo com recompensas únicas para jogadores dedicados."
-msgstr "Contenido exclusivo con recompensas únicas para jugadores dedicados."
-
-msgid "Eventos & Premiações"
-msgstr "Eventos y premios"
-
-msgid "Participe de eventos semanais com itens raros e bônus poderosos."
-msgstr "Únase a eventos semanales con potentes artículos y bonos raros."
-
-msgid "Escolha Sua Classe"
-msgstr "Elige tu clase"
-
-msgid "Top Clãs"
-msgstr "Clanes superiores"
-
-msgid "Clã:"
-msgstr "Clan:"
-
-msgid "Pontuação de Reputação:"
-msgstr "Puntuación de reputación:"
-
-msgid "Aliança:"
-msgstr "Alianza:"
-
-msgid "Membros:"
-msgstr "Miembros:"
-
-msgid "Jogadores online Agora"
+msgid "Jogadores Online Agora"
 msgstr "Jugadores en línea ahora"
 
 msgid "O campo de batalha está ativo!"
 msgstr "¡El campo de batalla está activo!"
 
-msgid "Download & Instalação"
-msgstr "Descargar e instalación"
+msgid "Faça parte da nossa comunidade"
+msgstr "Sea parte de nuestra comunidad"
 
-msgid ""
-"Baixe agora o cliente e patch oficial e comece sua jornada em nosso "
-"servidor."
-msgstr ""
-"Descargue ahora el cliente oficial y el parche y comience su viaje en "
-"nuestro servidor."
+msgid "Junte-se à nossa"
+msgstr "Unirse a nuestro"
 
-msgid "Baixar Patch"
-msgstr "Patch de descarga"
+msgid "comunidade"
+msgstr "comunidad"
 
-msgid "Baixar Cliente"
-msgstr "Descargar cliente"
-
-msgid "Junte-se à Comunidade"
-msgstr "Únete a la comunidad"
-
-msgid ""
-"Conecte-se com outros jogadores, tire dúvidas e participe dos eventos via "
-"Discord."
-msgstr ""
-"Conéctese con otros jugadores, haga preguntas y participe en eventos a "
-"través de Discord."
-
-msgid "Entrar no Discord"
-msgstr "Entrar no Discord"
+msgid "e fique por dentro"
+msgstr "Y mantente en la cima"
 
 msgid "Publicado em"
 msgstr "Publicado en"
@@ -4860,14 +5114,146 @@ msgstr "Noticias recientes"
 msgid "Não há notícias disponíveis no momento."
 msgstr "No hay noticias disponibles en este momento."
 
+msgid "Política de Privacidade"
+msgstr "Política de Privacidade"
+
+msgid "Última atualização"
+msgstr "Última actualización"
+
+msgid "Informações que Coletamos"
+msgstr "Información que recopilamos"
+
+msgid "Coletamos as seguintes informações:"
+msgstr "Recopilamos la siguiente información:"
+
+msgid "Informações da conta (nome de usuário, e-mail, senha)"
+msgstr ""
+"Información de la cuenta (nombre de usuario, correo electrónico, contraseña)"
+
+msgid "Dados de jogo (personagens, progresso, interações)"
+msgstr "Datos del juego (personajes, progreso, interacciones)"
+
+msgid "Informações técnicas (IP, dispositivo, navegador)"
+msgstr "Información técnica (IP, dispositivo, navegador)"
+
+msgid "Comunicações com a equipe de suporte"
+msgstr "Comunicaciones con el equipo de apoyo"
+
+msgid "Como Usamos Suas Informações"
+msgstr "¿Cómo usamos su información?"
+
+msgid "Utilizamos suas informações para:"
+msgstr "Usamos su información para:"
+
+msgid "Fornecer e manter nossos serviços"
+msgstr "Proporcionar y mantener nuestros servicios"
+
+msgid "Melhorar a experiência do usuário"
+msgstr "Mejorar la experiencia del usuario"
+
+msgid "Prevenir fraudes e abusos"
+msgstr "Prevenir fraudes e abusos"
+
+msgid "Comunicar atualizações importantes"
+msgstr "Comunicar actualizaciones importantes"
+
+msgid "Compartilhamento de Dados"
+msgstr "Intercambio de datos"
+
+msgid ""
+"Não vendemos suas informações pessoais. Podemos compartilhar dados apenas "
+"quando:"
+msgstr ""
+"No vendemos su información personal. Podemos compartir datos solo cuando:"
+
+msgid "Exigido por lei"
+msgstr "Exigido por lei"
+
+msgid "Necessário para proteger nossos direitos"
+msgstr "Necesario para proteger nuestros derechos"
+
+msgid "Com seu consentimento explícito"
+msgstr "Con su consentimiento explícito"
+
+msgid "Segurança dos Dados"
+msgstr "Seguridad de datos"
+
+msgid ""
+"Implementamos medidas de segurança para proteger suas informações, "
+"incluindo:"
+msgstr ""
+"Implementamos medidas de seguridad para proteger su información, incluida:"
+
+msgid "Criptografia de dados sensíveis"
+msgstr "Cifrado de datos confidencial"
+
+msgid "Monitoramento de segurança"
+msgstr "Monitoreo de seguridad"
+
+msgid "Acesso restrito às informações"
+msgstr "Acceso restringido a la información"
+
+msgid "Seus Direitos"
+msgstr "Sus derechos"
+
+msgid "Você tem direito a:"
+msgstr "Tienes derecho a:"
+
+msgid "Acessar seus dados pessoais"
+msgstr "Acceda a sus datos personales"
+
+msgid "Corrigir informações imprecisas"
+msgstr "Información inexacta correcta"
+
+msgid "Solicitar a exclusão de dados"
+msgstr "Solicitar la eliminación de datos"
+
+msgid "Retirar seu consentimento"
+msgstr "Elimina tu consentimiento"
+
+msgid "Cookies e Tecnologias Similares"
+msgstr "Cookies e Tecnologias Similares"
+
+msgid ""
+"Utilizamos cookies e tecnologias similares para melhorar sua experiência e "
+"coletar informações sobre o uso do serviço."
+msgstr ""
+"Utilizamos cookies y tecnologías similares para mejorar su experiencia y "
+"recopilar información sobre el uso del servicio."
+
+msgid "Alterações na Política"
+msgstr "Cambios en la política"
+
+msgid ""
+"Podemos atualizar esta política periodicamente. Notificaremos sobre mudanças"
+" significativas."
+msgstr ""
+"Podemos actualizar esta política periódicamente. Notificaremos cambios "
+"significativos."
+
+msgid "Contato"
+msgstr "Contacto"
+
+msgid "Para questões sobre privacidade, entre em contato através do"
+msgstr "Para problemas de privacidad, contáctenos a través del"
+
+msgid "Discord"
+msgstr "Discordia"
+
+msgid "ou"
+msgstr "o"
+
+msgid "e-mail"
+msgstr "correo electrónico"
+
+msgid "Um mundo para verdadeiros aventureiros."
+msgstr "Un mundo para verdaderos aventureros."
+
 msgid "Termos e Condições"
 msgstr "Términos y condiciones"
 
 msgid "Termos e Condições de Uso"
 msgstr "Términos y condiciones de uso"
-
-msgid "Última atualização"
-msgstr "Última actualización"
 
 msgid "Sobre o Servidor"
 msgstr "Sobre o Servidor"
@@ -4968,23 +5354,113 @@ msgstr ""
 "Los términos pueden cambiar. Al continuar jugando, acepta actualizaciones "
 "automáticamente."
 
-msgid "Contato"
-msgstr "Contacto"
-
 msgid "Fale conosco pelo"
 msgstr "Contáctenos para"
-
-msgid "Discord"
-msgstr "Discordia"
-
-msgid "e-mail"
-msgstr "correo electrónico"
 
 msgid "ou fórum oficial em caso de dúvidas ou denúncias."
 msgstr "o foro oficial en caso de dudas o quejas."
 
-msgid "Um mundo para verdadeiros aventureiros."
-msgstr "Un mundo para verdaderos aventureros."
+msgid "Acordo do Usuário"
+msgstr "Acuerdo de usuario"
+
+msgid "Aceitação do Acordo"
+msgstr "Aceptación del acuerdo"
+
+msgid ""
+"Ao criar uma conta e utilizar nossos serviços, você concorda com todos os "
+"termos deste acordo. Este documento estabelece as regras e responsabilidades"
+" para o uso do servidor."
+msgstr ""
+"Al crear una cuenta y usar nuestros servicios, usted acepta todos los "
+"términos de este Acuerdo. Este documento establece las reglas y "
+"responsabilidades para el uso del servidor."
+
+msgid "Conta e Segurança"
+msgstr "Cuenta y seguridad"
+
+msgid "Você deve ter pelo menos 13 anos de idade para criar uma conta."
+msgstr "Debe tener al menos 13 años para crear una cuenta."
+
+msgid "Você é responsável por manter a segurança de sua conta."
+msgstr "Usted es responsable de mantener la seguridad de su cuenta."
+
+msgid "Não compartilhe suas credenciais de acesso com terceiros."
+msgstr "No comparta sus credenciales de acceso con terceros."
+
+msgid "Notifique-nos imediatamente sobre qualquer uso não autorizado."
+msgstr "Notifíquenos de inmediato sobre cualquier uso no autorizado."
+
+msgid "Comportamento do Usuário"
+msgstr "Comportamiento del usuario"
+
+msgid "Ao utilizar nossos serviços, você concorda em:"
+msgstr "Al usar nuestros servicios, usted acepta:"
+
+msgid "Respeitar outros jogadores e membros da equipe."
+msgstr "Respeta a otros jugadores y miembros del equipo."
+
+msgid "Não utilizar linguagem ofensiva ou discriminatória."
+msgstr "No use lenguaje ofensivo o discriminatorio."
+
+msgid ""
+"Não realizar atividades que prejudiquem a experiência de outros jogadores."
+msgstr "No realice actividades que socaven la experiencia de otros jugadores."
+
+msgid "Não utilizar programas ou métodos que dêem vantagens injustas."
+msgstr "No use programas o métodos que brinden ventajas injustas."
+
+msgid "Conteúdo do Usuário"
+msgstr "Contenido de usuario"
+
+msgid ""
+"Você mantém os direitos sobre o conteúdo que cria, mas nos concede permissão"
+" para utilizá-lo em relação aos serviços."
+msgstr ""
+"Usted mantiene los derechos sobre el contenido que crea, pero nos da permiso"
+" para usarlo en relación con los servicios."
+
+msgid "Modificações do Serviço"
+msgstr "Modificaciones de servicio"
+
+msgid ""
+"Reservamo-nos o direito de modificar, suspender ou encerrar qualquer aspecto"
+" do serviço a qualquer momento."
+msgstr ""
+"Nos reservamos el derecho de modificar, suspender o terminar cualquier "
+"aspecto del servicio en cualquier momento."
+
+msgid "Limitação de Responsabilidade"
+msgstr "Limitación de responsabilidad"
+
+msgid ""
+"Não nos responsabilizamos por perdas de dados, interrupções do serviço ou "
+"outros danos que possam ocorrer durante o uso."
+msgstr ""
+"No somos responsables de las pérdidas de datos, interrupciones del servicio "
+"u otros daños que pueden ocurrir durante el uso."
+
+msgid "Rescisão"
+msgstr "Terminación"
+
+msgid ""
+"Podemos encerrar ou suspender sua conta se você violar este acordo ou as "
+"regras do servidor."
+msgstr ""
+"Podemos finalizar o suspender su cuenta si viola este acuerdo o las reglas "
+"del servidor."
+
+msgid "Alterações no Acordo"
+msgstr "Cambios en el acuerdo"
+
+msgid ""
+"Podemos modificar este acordo a qualquer momento. As alterações entram em "
+"vigor após a publicação."
+msgstr ""
+"Podemos modificar este acuerdo en cualquier momento. Los cambios entran en "
+"vigor después de la publicación."
+
+msgid "Para questões sobre este acordo, entre em contato através do"
+msgstr "Para preguntas sobre este acuerdo, contáctenos a través del"
 
 msgid "Obrigado por passar um tempo de qualidade conosco no site hoje."
 msgstr "Gracias por pasar un tiempo de calidad con nosotros en el sitio hoy."
@@ -5009,11 +5485,122 @@ msgstr ""
 "Ingrese su contraseña anterior por razones de seguridad y luego ingrese su "
 "nueva contraseña dos veces para verificar si se escribió correctamente."
 
+msgid "Assistência do Jogo"
+msgstr "Ayuda del juego"
+
+msgid "Problemas Comuns"
+msgstr "Problemas Comuns"
+
+msgid "Suporte Técnico"
+msgstr "Apoyo técnico"
+
+msgid "Guia Wiki"
+msgstr "Guía de wiki"
+
+msgid "Taxas"
+msgstr "Tarifa"
+
+msgid "Chefes de Raid"
+msgstr "Chefes de Raid"
+
+msgid "Atualizações"
+msgstr "Actualizaciones"
+
+msgid "Recursos"
+msgstr "Recursos"
+
+msgid "Eventos Regulares"
+msgstr "Eventos Regulares"
+
+msgid "Requisitos"
+msgstr "Requisitos"
+
+msgid "Eventos Especiais"
+msgstr "Eventos especiales"
+
+msgid "Recursos do Servidor"
+msgstr "Recursos do Servidor"
+
+msgid "Recursos Personalizados"
+msgstr "Recursos Personalizados"
+
+msgid "Recursos de Gameplay"
+msgstr "Recursos de Gameplay"
+
+msgid "Recursos de Qualidade de Vida"
+msgstr "Recursos de calidad de vida"
+
+msgid "Recursos VIP"
+msgstr "Recursos VIP"
+
+msgid "Recursos Anti-Cheat"
+msgstr "Recursos Anti-Cheat"
+
+msgid "Recursos da Comunidade"
+msgstr "Recursos comunitarios"
+
+msgid "Informações do Servidor"
+msgstr "Información del servidor"
+
+msgid "Recursos do Jogo"
+msgstr "Recursos de juego"
+
+msgid "Começando"
+msgstr "A partir de"
+
+msgid "Diretrizes da Comunidade"
+msgstr "Directrices de la comunidad"
+
+msgid "Bem-vindo ao Guia Wiki"
+msgstr "Bienvenido a la guía wiki"
+
+msgid "Encontre todas as informações que você precisa sobre o servidor"
+msgstr "Encuentre toda la información que necesita sobre el servidor"
+
+msgid "Raid Bosses"
+msgstr "Jefes de ruidos"
+
+msgid "Raids Regulares"
+msgstr "Raids Regulares"
+
+msgid "Horários"
+msgstr "Cronograma"
+
+msgid "Raids Especiais"
+msgstr "Incursiones especiales"
+
+msgid "Raids Mundiais"
+msgstr "Incursiones mundiales"
+
+msgid "Taxas do Servidor"
+msgstr "Taxas do Servidor"
+
+msgid "Taxas de Drop"
+msgstr "Taxas de Drop"
+
+msgid "Taxas de Adena"
+msgstr "Taxas de Adena"
+
+msgid "Taxas de Spoil"
+msgstr "Taxas de Spoil"
+
+msgid "Taxas de Quest"
+msgstr "Taxas de Quest"
+
+msgid "Atualizações do Servidor"
+msgstr "Actualizaciones del servidor"
+
+msgid "Nenhuma atualização disponível no momento."
+msgstr "No hay actualización disponible en este momento."
+
 msgid "🔐 Gerador de credenciais"
 msgstr "🔐 Generador de credenciales"
 
 msgid "Digite a senha que deseja proteger: "
 msgstr "Ingrese la contraseña que desea proteger:"
+
+msgid "Minha Conta"
+msgstr "Mi cuenta"
 
 msgid "Jogue Agora"
 msgstr "Jugar ahora"
@@ -5027,6 +5614,62 @@ msgstr "Servidor"
 msgid "Estatística"
 msgstr "Estadística"
 
+msgid "Lineage 2 PDL"
+msgstr "Linaje 2 PDL"
+
+msgid "Jogar Agora"
+msgstr "Jugar ahora"
+
+msgid "O Que Torna Nosso Servidor Único?"
+msgstr "¿Qué hace que nuestro servidor sea único?"
+
+msgid "PvP & Sieges"
+msgstr "PvP y Sieges"
+
+msgid ""
+"Domine castelos, lute por território e mostre sua força no campo de batalha."
+msgstr ""
+"Castillos Domine, lucha territorio y muestran tu fuerza en el campo de "
+"batalla."
+
+msgid "Conteúdo exclusivo com recompensas únicas para jogadores dedicados."
+msgstr "Contenido exclusivo con recompensas únicas para jugadores dedicados."
+
+msgid "Eventos & Premiações"
+msgstr "Eventos y premios"
+
+msgid "Participe de eventos semanais com itens raros e bônus poderosos."
+msgstr "Únase a eventos semanales con potentes artículos y bonos raros."
+
+msgid "Download & Instalação"
+msgstr "Descargar e instalación"
+
+msgid ""
+"Baixe agora o cliente e patch oficial e comece sua jornada em nosso "
+"servidor."
+msgstr ""
+"Descargue ahora el cliente oficial y el parche y comience su viaje en "
+"nuestro servidor."
+
+msgid "Baixar Patch"
+msgstr "Patch de descarga"
+
+msgid "Baixar Cliente"
+msgstr "Descargar cliente"
+
+msgid "Junte-se à Comunidade"
+msgstr "Únete a la comunidad"
+
+msgid ""
+"Conecte-se com outros jogadores, tire dúvidas e participe dos eventos via "
+"Discord."
+msgstr ""
+"Conéctese con otros jugadores, haga preguntas y participe en eventos a "
+"través de Discord."
+
+msgid "Entrar no Discord"
+msgstr "Entrar no Discord"
+
 msgid ""
 "Notificações staff só podem ser enviadas para usuários staff ou "
 "superusuários."
@@ -5036,6 +5679,42 @@ msgstr ""
 
 msgid "Você não tem permissão para criar notificações públicas staff."
 msgstr "No se le permite crear notificaciones públicas del personal."
+
+#~ msgid "Lineage2 Logo"
+#~ msgstr "Logotipo de linaje2"
+
+#~ msgid "Sobre"
+#~ msgstr "Sobre"
+
+#~ msgid "Comunidade"
+#~ msgstr "Comunidad"
+
+#~ msgid "Painel"
+#~ msgstr "Panel"
+
+#~ msgid "Jogue Grátis"
+#~ msgstr "Jugar gratis"
+
+#~ msgid "Escolha Sua Classe"
+#~ msgstr "Elige tu clase"
+
+#~ msgid "Top Clãs"
+#~ msgstr "Clanes superiores"
+
+#~ msgid "Clã:"
+#~ msgstr "Clan:"
+
+#~ msgid "Pontuação de Reputação:"
+#~ msgstr "Puntuación de reputación:"
+
+#~ msgid "Aliança:"
+#~ msgstr "Alianza:"
+
+#~ msgid "Membros:"
+#~ msgstr "Miembros:"
+
+#~ msgid "Jogadores online Agora"
+#~ msgstr "Jugadores en línea ahora"
 
 #~ msgid "Excluir Item"
 #~ msgstr "Excluir Item"
