@@ -247,11 +247,23 @@ def lock(request):
             # Senha correta: remove o bloqueio
             request.session['is_locked'] = False
             
-            # Pega a URL de retorno do parâmetro next
-            next_url = request.GET.get('next', 'dashboard')
+            # Debug da sessão
+            logger.info(f"Lock - Session contents before redirect: {dict(request.session)}")
+            
+            # Pega a URL de retorno da sessão ou usa dashboard como fallback
+            next_url = request.session.get('next', 'dashboard')
+            logger.info(f"Lock - Next URL from session: {next_url}")
+            
+            # Limpa a URL da sessão após usar
+            if 'next' in request.session:
+                del request.session['next']
+                logger.info("Lock - Removed 'next' from session")
+            
+            logger.info(f"Lock - Redirecting to: {next_url}")
             return redirect(next_url)
         else:
             error = "Senha incorreta. Tente novamente."
+            logger.info("Lock - Authentication failed")
 
     return render(request, 'accounts_custom/lock.html', {
         'error': error,
@@ -265,7 +277,9 @@ def activate_lock(request):
     View para ativar o bloqueio da tela manualmente.
     """
     # Salva a URL atual para retornar após desbloquear
-    request.session['next'] = request.META.get('HTTP_REFERER', 'dashboard')
+    referer = request.META.get('HTTP_REFERER', 'dashboard')
+    logger.info(f"Activate Lock - Referer URL: {referer}")
+    request.session['next'] = referer
     request.session['is_locked'] = True
     return redirect('lock')
 
