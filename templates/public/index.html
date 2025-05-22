@@ -42,8 +42,8 @@
     </p>
 
     <div class="h-link" data-aos="fade-up" data-aos-duration="2000">
-        <a href="{% url 'downloads:download_list' %}" target="_blank">{% trans "Baixe o Jogo" %}</a>
-        <a href="{% url 'register' %}" target="_blank">{% trans "Crie sua conta mestra" %}</a>
+        <a href="{% url 'downloads:download_list' %}">{% trans "Baixe o Jogo" %}</a>
+        <a href="{% url 'register' %}">{% trans "Crie sua conta mestra" %}</a>
     </div>
 
     <div class="h-scroll">
@@ -59,7 +59,7 @@
     </div>
 
     <div class="f-list container" data-aos="fade-up" data-aos-duration="2000">
-        <a class="f1" href="{% url 'features' %}" target="_blank">
+        <a class="f1" href="{% url 'features' %}">
             <div style="background: url({% static 'default/images/features/1.jpg' %}) top / cover no-repeat;">
                 <span>
                     <p>{% trans "PvP e Castelos" %}</p>
@@ -68,7 +68,7 @@
             </div>
         </a>
 
-        <a class="f2" href="{% url 'features' %}" target="_blank">
+        <a class="f2" href="{% url 'features' %}">
             <div style="background: url({% static 'default/images/features/2.jpg' %}) top / cover no-repeat;">
                 <span>
                     <p>{% trans "Missões Personalizadas" %}</p>
@@ -77,7 +77,7 @@
             </div>
         </a>
 
-        <a class="f3" href="{% url 'features' %}" target="_blank">
+        <a class="f3" href="{% url 'features' %}">
             <div style="background: url({% static 'default/images/features/3.jpg' %}) top / cover no-repeat;">
                 <span>
                     <p>{% trans "Eventos e Recompensas" %}</p>
@@ -102,20 +102,20 @@
 
         <div class="wiki">
             <div>
-                <span>{% trans "Wiki" %}<a href="{% url 'wiki' %}" target="_blank"><img src="{% static 'default/images/icons/more.png' %}"></a></span>
+                <span>{% trans "Wiki" %}<a href="{% url 'wiki' %}"><img src="{% static 'default/images/icons/more.png' %}"></a></span>
 
                 <ul>
-                    <li><a href="{% url 'wiki_general' %}" target="_blank"><span></span>{% trans "Informações Gerais" %}</a></li>
-                    <li><a href="{% url 'wiki_rates' %}" target="_blank"><span></span>{% trans "Taxas de Experiência" %}</a></li>
-                    <li><a href="{% url 'wiki_raids' %}" target="_blank"><span></span>{% trans "Chefes de Raide e Instâncias" %}</a></li>
-                    <li><a href="{% url 'wiki_assistance' %}" target="_blank"><span></span>{% trans "Ajuda no Jogo" %}</a></li>
-                    <li><a href="{% url 'wiki_events' %}" target="_blank"><span></span>{% trans "Guia de Eventos" %}</a></li>
+                    <li><a href="{% url 'wiki_general' %}"><span></span>{% trans "Informações Gerais" %}</a></li>
+                    <li><a href="{% url 'wiki_rates' %}"><span></span>{% trans "Taxas de Experiência" %}</a></li>
+                    <li><a href="{% url 'wiki_raids' %}"><span></span>{% trans "Chefes de Raide e Instâncias" %}</a></li>
+                    <li><a href="{% url 'wiki_assistance' %}"><span></span>{% trans "Ajuda no Jogo" %}</a></li>
+                    <li><a href="{% url 'wiki_events' %}"><span></span>{% trans "Guia de Eventos" %}</a></li>
                 </ul>
             </div>
         </div>
 
         {% for update in latest_updates %}
-        <a href="{% url 'updates' %}" target="_blank" class="update">
+        <a href="{% url 'updates' %}" class="update">
             <div style="background: url({{ update.image.url }}) top / cover no-repeat;">
                 <div>
                     <span>{% trans "Atualização" %}</span>

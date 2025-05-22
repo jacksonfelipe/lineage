@@ -63,17 +63,17 @@
 
       <div>
         {% if request.user.is_authenticated %}
-          <a class="user" href="{% url 'dashboard' %}" target="_blank">
+          <a class="user" href="{% url 'dashboard' %}">
             <img src="{% static 'default/images/icons/user.png' %}">
             <span>Minha Conta</span>
           </a>
         {% else %}
-          <a class="user" href="{% url 'login' %}" target="_blank">
+          <a class="user" href="{% url 'login' %}">
             <img src="{% static 'default/images/icons/user.png' %}">
             <span>Entrar</span>
           </a>
         {% endif %}
-        <a class="download" href="{% url 'downloads:download_list' %}" target="_blank">{% trans "Download" %}</a>
+        <a class="download" href="{% url 'downloads:download_list' %}">{% trans "Download" %}</a>
       </div>
     </nav>
 
@@ -126,9 +126,9 @@
 
       <div class="copyright container">
         <div class="c-link">
-          <a href="{% url 'user_agreement' %}" target="_blank">Acordo do Usuário</a>
-          <a href="{% url 'terms' %}" target="_blank">Termos de Serviço</a>
-          <a href="{% url 'privacy_policy' %}" target="_blank">Política de Privacidade</a>
+          <a href="{% url 'user_agreement' %}">Acordo do Usuário</a>
+          <a href="{% url 'terms' %}">Termos de Serviço</a>
+          <a href="{% url 'privacy_policy' %}">Política de Privacidade</a>
         </div>
 
         <div class="c-text">
