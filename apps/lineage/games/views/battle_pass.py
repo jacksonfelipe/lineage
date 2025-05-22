@@ -23,18 +23,24 @@ def battle_pass_view(request):
     # Obtém o nível atual e o próximo nível
     current_level = progress.get_current_level()
     if current_level is None:
-        current_level = 0
+        current_level_number = 0
+    else:
+        current_level_number = current_level.level
+
     next_level = BattlePassLevel.objects.filter(
         season=season,
-        level__gt=current_level
+        level__gt=current_level_number
     ).order_by('level').first()
 
     # Calcula o progresso para o próximo nível
     if next_level:
-        current_level_xp = BattlePassLevel.objects.get(
-            season=season,
-            level=current_level
-        ).required_xp
+        if current_level_number == 0:
+            current_level_xp = 0
+        else:
+            current_level_xp = BattlePassLevel.objects.get(
+                season=season,
+                level=current_level_number
+            ).required_xp
         xp_for_next_level = next_level.required_xp - current_level_xp
         current_xp = progress.xp - current_level_xp
         progress_percentage = min(100, int((current_xp / xp_for_next_level) * 100))
@@ -48,7 +54,7 @@ def battle_pass_view(request):
         'season': season,
         'progress': progress,
         'levels': levels,
-        'current_level': current_level,
+        'current_level': current_level_number,
         'next_level': next_level.level if next_level else None,
         'current_xp': current_xp,
         'xp_for_next_level': xp_for_next_level,

@@ -1,7 +1,7 @@
 from .models import *
 from apps.main.home.models import ConquistaUsuario
 from django.contrib import messages
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as gettext_lazy
 
 
 def entregar_item_para_bag(user, item_id, item_name, quantity=1, enchant=0, request=None):
@@ -19,7 +19,7 @@ def entregar_item_para_bag(user, item_id, item_name, quantity=1, enchant=0, requ
     if request:
         messages.success(
             request,
-            _("🎁 Você recebeu: {item} +{enchant} x{qty}!").format(
+            gettext_lazy("🎁 Você recebeu: {item} +{enchant} x{qty}!").format(
                 item=item_name,
                 enchant=enchant,
                 qty=quantity

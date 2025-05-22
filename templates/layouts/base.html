@@ -74,9 +74,9 @@
       if (window.location.pathname === LOCK_URL) {
         return;
       }
-      // Guarda a URL atual antes de redirecionar
-      sessionStorage.setItem('returnUrl', window.location.pathname + window.location.search);
-      window.location.href = LOCK_URL;
+      // Usa o parâmetro next como Django faz
+      const currentPath = window.location.pathname + window.location.search;
+      window.location.href = `${LOCK_URL}?next=${encodeURIComponent(currentPath)}`;
     }, TIME_LIMIT);
   }
 

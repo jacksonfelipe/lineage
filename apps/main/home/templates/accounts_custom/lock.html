@@ -119,21 +119,4 @@
     </div>
   </div>
 </section>
-
-<script>
-  // Recupera a URL de retorno do sessionStorage e adiciona ao formulário
-  document.addEventListener('DOMContentLoaded', function() {
-    const returnUrl = sessionStorage.getItem('returnUrl');
-    if (returnUrl) {
-      const form = document.querySelector('form');
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = 'return_url';
-      input.value = returnUrl;
-      form.appendChild(input);
-      // Limpa o sessionStorage após recuperar a URL
-      sessionStorage.removeItem('returnUrl');
-    }
-  });
-</script>
 {% endblock %}

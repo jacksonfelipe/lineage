@@ -32,12 +32,13 @@ class SessionLockMiddleware:
         is_locked_path = path == reverse('lock')
 
         if request.user.is_authenticated and locked and not is_locked_path:
-            request.session['return_url'] = request.get_full_path()
-            return redirect('lock')
+            # Usa o parâmetro next como Django faz
+            return redirect(f"{reverse('lock')}?next={request.get_full_path()}")
 
         # Se estiver desbloqueando (na página de lock e não está mais bloqueado)
-        if is_locked_path and not locked and 'return_url' in request.session:
-            return_url = request.session.pop('return_url', '/')
-            return redirect(return_url)
+        if is_locked_path and not locked:
+            # Pega a URL de retorno do parâmetro next
+            next_url = request.GET.get('next', '/')
+            return redirect(next_url)
 
         return self.get_response(request)

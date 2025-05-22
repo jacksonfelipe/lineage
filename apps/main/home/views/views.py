@@ -247,21 +247,11 @@ def lock(request):
             # Senha correta: remove o bloqueio
             request.session['is_locked'] = False
             
-            # Pega a URL de retorno da sessão ou do POST (que vem do sessionStorage)
-            return_url = request.POST.get('return_url') or request.session.get('return_url', 'dashboard')
-            
-            # Limpa a URL de retorno da sessão
-            if 'return_url' in request.session:
-                del request.session['return_url']
-                
-            return redirect(return_url)
+            # Pega a URL de retorno do parâmetro next
+            next_url = request.GET.get('next', 'dashboard')
+            return redirect(next_url)
         else:
             error = "Senha incorreta. Tente novamente."
-
-    # Guarda a URL de retorno na sessão se vier como parâmetro
-    return_url = request.GET.get('return_url')
-    if return_url:
-        request.session['return_url'] = return_url
 
     return render(request, 'accounts_custom/lock.html', {
         'error': error,
