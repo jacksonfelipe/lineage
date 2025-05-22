@@ -14,7 +14,6 @@ class SessionLockMiddleware:
             '/public/',
             '/wiki/',
             '/pages/',
-            '/index.html',
             '/set-language/',
             '/verify/',
             '/components/',
@@ -25,6 +24,12 @@ class SessionLockMiddleware:
 
         # Verifica se o caminho está na lista de caminhos permitidos
         if any(path.startswith(allowed_path) for allowed_path in self.allowed_paths):
+            if path == reverse('dashboard'):
+                pass
+            else:
+                return self.get_response(request)
+        
+        if path == reverse('index'):
             return self.get_response(request)
 
         # Verifica se o usuário está bloqueado
