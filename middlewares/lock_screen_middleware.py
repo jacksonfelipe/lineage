@@ -32,7 +32,6 @@ class SessionLockMiddleware:
         is_locked_path = path == reverse('lock')
 
         if request.user.is_authenticated and locked and not is_locked_path:
-            # Guarda a URL atual na sessão antes de redirecionar
             request.session['return_url'] = request.get_full_path()
             return redirect('lock')
 
