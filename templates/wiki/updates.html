@@ -2,47 +2,56 @@
 {% load static i18n %}
 
 {% block wiki_content %}
-<div class="wiki-page">
-    <h1>{% trans "Server Updates" %}</h1>
-    
-    <div class="wiki-section">
-        <h2>{% trans "Latest Updates" %}</h2>
-        <div class="wiki-updates">
-            {% for update in updates %}
-            <div class="wiki-update">
-                <div class="wiki-update-header">
-                    <h3>{% trans "Version" %} {{ update.version }}</h3>
-                    <span class="wiki-update-date">{{ update.release_date|date:"d F, Y" }}</span>
-                </div>
-                <div class="wiki-update-content">
-                    {{ update.translations.get.content|safe }}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
+<div class="updates-container">
+    <h1>{% trans "Atualizações do Servidor" %}</h1>
 
-    <div class="wiki-section">
-        <h2>{% trans "Update Policy" %}</h2>
-        <div class="wiki-policy">
-            <div class="wiki-policy-info">
-                <h3>{% trans "Update Schedule" %}</h3>
-                <ul>
-                    <li>{% trans "Major updates: Monthly" %}</li>
-                    <li>{% trans "Minor updates: Bi-weekly" %}</li>
-                    <li>{% trans "Hotfixes: As needed" %}</li>
-                </ul>
-            </div>
-            <div class="wiki-policy-info">
-                <h3>{% trans "Update Process" %}</h3>
-                <ul>
-                    <li>{% trans "Updates are announced in advance" %}</li>
-                    <li>{% trans "Server maintenance required" %}</li>
-                    <li>{% trans "Backup before updates" %}</li>
-                    <li>{% trans "Rollback plan in place" %}</li>
-                </ul>
+    <div class="updates-list">
+        {% for update in updates %}
+        <div class="update-card mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="update-version">v{{ update.version }}</h2>
+                    <div class="update-date">{{ update.release_date|date:"d/m/Y" }}</div>
+                </div>
+                <div class="card-body">
+                    {{ update.translation.content|safe }}
+                </div>
             </div>
         </div>
+        {% empty %}
+        <div class="no-updates">
+            <p>{% trans "Nenhuma atualização disponível no momento." %}</p>
+        </div>
+        {% endfor %}
     </div>
 </div>
+
+<style>
+    .updates-container {
+        padding: 20px;
+    }
+
+    .update-card .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--bg-secondary);
+    }
+
+    .update-version {
+        margin: 0;
+        color: var(--primary-color);
+    }
+
+    .update-date {
+        color: var(--text-muted);
+    }
+
+    .no-updates {
+        text-align: center;
+        padding: 2rem;
+        background-color: var(--bg-secondary);
+        border-radius: 0.5rem;
+    }
+</style>
 {% endblock %} 

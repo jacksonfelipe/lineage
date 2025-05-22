@@ -2,31 +2,28 @@
 {% load static i18n %}
 
 {% block wiki_content %}
-<div class="wiki-page">
-    <h1>{% trans "Welcome to Lineage 2 Wiki" %}</h1>
-    
-    <div class="wiki-section">
-        <h2>{% trans "Getting Started" %}</h2>
-        <p>{% trans "Welcome to our Lineage 2 server wiki. Here you will find all the information you need to start your adventure." %}</p>
+<div class="wiki-home">
+    <div class="welcome-section text-center mb-5">
+        <h1>{% trans "Bem-vindo ao Guia Wiki" %}</h1>
+        <p class="lead">{% trans "Encontre todas as informações que você precisa sobre o servidor" %}</p>
     </div>
 
-    <div class="wiki-section">
-        <h2>{% trans "Quick Links" %}</h2>
-        <div class="wiki-grid">
+    <div class="wiki-categories">
+        <div class="row">
             {% for item in pages %}
-            <a href="{% url 'wiki:page' item.page.slug %}" class="wiki-card">
-                <h3>{{ item.translation.title }}</h3>
-                <p>{{ item.translation.content|truncatewords:20 }}</p>
-            </a>
+            <div class="col-md-4 mb-4">
+                <div class="wiki-category-card">
+                    <a href="{% url 'wiki:page' item.page.slug %}" class="text-decoration-none">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.translation.title }}</h5>
+                                <p class="card-text">{{ item.translation.content|striptags|truncatewords:30 }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
             {% endfor %}
-            <a href="{% url 'wiki:events' %}" class="wiki-card">
-                <h3>{% trans "Events Guide" %}</h3>
-                <p>{% trans "Information about server events" %}</p>
-            </a>
-            <a href="{% url 'wiki:updates' %}" class="wiki-card">
-                <h3>{% trans "Updates" %}</h3>
-                <p>{% trans "Latest server updates" %}</p>
-            </a>
         </div>
     </div>
 </div>

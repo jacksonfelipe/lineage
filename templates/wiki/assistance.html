@@ -2,89 +2,93 @@
 {% load static i18n %}
 
 {% block wiki_content %}
-<div class="wiki-page">
-    <h1>{% trans "Player Assistance" %}</h1>
-    
-    <div class="wiki-section">
-        <h2>{% trans "Support Channels" %}</h2>
-        <div class="wiki-support-channels">
-            <div class="wiki-support-channel">
-                <h3>{% trans "In-Game Support" %}</h3>
-                <ul>
-                    <li>{% trans "Use /support command" %}</li>
-                    <li>{% trans "Join support channel" %}</li>
-                    <li>{% trans "Contact online GMs" %}</li>
-                </ul>
-            </div>
-            <div class="wiki-support-channel">
-                <h3>{% trans "Discord Support" %}</h3>
-                <ul>
-                    <li>{% trans "Join our Discord server" %}</li>
-                    <li>{% trans "Use support tickets" %}</li>
-                    <li>{% trans "Chat with community" %}</li>
-                </ul>
-            </div>
-            <div class="wiki-support-channel">
-                <h3>{% trans "Email Support" %}</h3>
-                <ul>
-                    <li>{% trans "Send detailed reports" %}</li>
-                    <li>{% trans "Include screenshots" %}</li>
-                    <li>{% trans "Wait for response" %}</li>
-                </ul>
-            </div>
-        </div>
-    </div>
+<div class="assistance-container">
+    <h1>{% trans "Assistência do Jogo" %}</h1>
 
-    <div class="wiki-section">
-        <h2>{% trans "Common Issues" %}</h2>
-        <div class="wiki-issues">
-            {% for item in issues %}
-            <div class="wiki-issue">
-                <h3>{{ item.translation.title }}</h3>
-                <div class="wiki-issue-content">
-                    {{ item.translation.content|safe }}
+    <!-- Common Issues -->
+    <div class="assistance-section mb-5">
+        <h2>{% trans "Problemas Comuns" %}</h2>
+        <div class="row">
+            {% for issue in common_issues %}
+            <div class="col-md-6 mb-4">
+                <div class="issue-card">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ issue.translation.title }}</h3>
+                            <div class="issue-content">
+                                {{ issue.translation.content|safe }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
 
-    <div class="wiki-section">
-        <h2>{% trans "FAQ" %}</h2>
-        <div class="wiki-faq">
-            {% for item in faqs %}
-            <div class="wiki-faq-item">
-                <h3>{{ item.translation.question }}</h3>
-                <div class="wiki-faq-answer">
-                    {{ item.translation.answer|safe }}
+    <!-- FAQ -->
+    <div class="assistance-section mb-5">
+        <h2>{% trans "Perguntas Frequentes" %}</h2>
+        <div class="row">
+            {% for faq in faqs %}
+            <div class="col-md-6 mb-4">
+                <div class="faq-card">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ faq.translation.title }}</h3>
+                            <div class="faq-content">
+                                {{ faq.translation.content|safe }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
 
-    <div class="wiki-section">
-        <h2>{% trans "Report Guidelines" %}</h2>
-        <div class="wiki-guidelines">
-            <div class="wiki-guideline">
-                <h3>{% trans "Bug Reports" %}</h3>
-                <ul>
-                    <li>{% trans "Describe the issue clearly" %}</li>
-                    <li>{% trans "Include reproduction steps" %}</li>
-                    <li>{% trans "Attach screenshots/videos" %}</li>
-                    <li>{% trans "Specify your client version" %}</li>
-                </ul>
+    <!-- Technical Support -->
+    <div class="assistance-section">
+        <h2>{% trans "Suporte Técnico" %}</h2>
+        <div class="row">
+            {% for support in technical_support %}
+            <div class="col-md-6 mb-4">
+                <div class="support-card">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ support.translation.title }}</h3>
+                            <div class="support-content">
+                                {{ support.translation.content|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="wiki-guideline">
-                <h3>{% trans "Player Reports" %}</h3>
-                <ul>
-                    <li>{% trans "Provide player name" %}</li>
-                    <li>{% trans "Include timestamp" %}</li>
-                    <li>{% trans "Attach evidence" %}</li>
-                    <li>{% trans "Be specific about violation" %}</li>
-                </ul>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
+
+<style>
+    .assistance-container {
+        padding: 20px;
+    }
+
+    .issue-card,
+    .faq-card,
+    .support-card {
+        height: 100%;
+    }
+
+    .issue-content,
+    .faq-content,
+    .support-content {
+        margin-top: 1rem;
+    }
+
+    .card-title {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+</style>
 {% endblock %} 

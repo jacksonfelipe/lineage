@@ -3,16 +3,12 @@
 
 {% block wiki_content %}
 <div class="wiki-page">
-    <h1>{{ translation.title }}</h1>
+    <h1>{{ page.translation.title }}</h1>
     
+    {% for section in sections %}
     <div class="wiki-section">
-        {{ translation.content|safe }}
-    </div>
-
-    {% for item in sections %}
-    <div class="wiki-section">
-        <h2>{{ item.translation.title }}</h2>
-        {{ item.translation.content|safe }}
+        <h2>{{ section.translation.title }}</h2>
+        {{ section.translation.content|safe }}
     </div>
     {% endfor %}
 </div>

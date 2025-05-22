@@ -2,77 +2,105 @@
 {% load static i18n %}
 
 {% block wiki_content %}
-<div class="wiki-page">
-    <h1>{% trans "Events Guide" %}</h1>
-    
-    <div class="wiki-section">
-        <h2>{% trans "Regular Events" %}</h2>
-        <div class="wiki-events-grid">
-            {% for item in regular_events %}
-            <div class="wiki-event-card">
-                <h3>{{ item.translation.title }}</h3>
-                <div class="wiki-event-info">
-                    <p><strong>{% trans "Schedule" %}:</strong> {{ item.translation.schedule }}</p>
-                    {% if item.translation.requirements %}
-                    <p><strong>{% trans "Requirements" %}:</strong></p>
-                    {{ item.translation.requirements|safe }}
-                    {% endif %}
-                    {% if item.translation.rewards %}
-                    <p><strong>{% trans "Rewards" %}:</strong></p>
-                    {{ item.translation.rewards|safe }}
-                    {% endif %}
+<div class="events-container">
+    <h1>{% trans "Guia de Eventos" %}</h1>
+
+    <!-- Regular Events -->
+    <div class="events-section mb-5">
+        <h2>{% trans "Eventos Regulares" %}</h2>
+        <div class="row">
+            {% for event in regular_events %}
+            <div class="col-md-6 mb-4">
+                <div class="event-card">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ event.translation.title }}</h3>
+                            <div class="event-schedule">
+                                <i class="fas fa-clock"></i> {{ event.translation.schedule }}
+                            </div>
+                            <div class="event-description">
+                                {{ event.translation.description|safe }}
+                            </div>
+                            {% if event.translation.requirements %}
+                            <div class="event-requirements">
+                                <h4>{% trans "Requisitos" %}</h4>
+                                {{ event.translation.requirements|safe }}
+                            </div>
+                            {% endif %}
+                            {% if event.translation.rewards %}
+                            <div class="event-rewards">
+                                <h4>{% trans "Recompensas" %}</h4>
+                                {{ event.translation.rewards|safe }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
 
-    <div class="wiki-section">
-        <h2>{% trans "Special Events" %}</h2>
-        <div class="wiki-special-events">
-            {% for item in special_events %}
-            <div class="wiki-special-event">
-                <h3>{{ item.translation.title }}</h3>
-                <div class="wiki-event-details">
-                    <p><strong>{% trans "Schedule" %}:</strong> {{ item.translation.schedule }}</p>
-                    <p><strong>{% trans "Description" %}:</strong></p>
-                    {{ item.translation.description|safe }}
-                    {% if item.translation.requirements %}
-                    <p><strong>{% trans "Requirements" %}:</strong></p>
-                    {{ item.translation.requirements|safe }}
-                    {% endif %}
-                    {% if item.translation.rewards %}
-                    <p><strong>{% trans "Rewards" %}:</strong></p>
-                    {{ item.translation.rewards|safe }}
-                    {% endif %}
+    <!-- Special Events -->
+    <div class="events-section">
+        <h2>{% trans "Eventos Especiais" %}</h2>
+        <div class="row">
+            {% for event in special_events %}
+            <div class="col-md-6 mb-4">
+                <div class="event-card">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ event.translation.title }}</h3>
+                            <div class="event-schedule">
+                                <i class="fas fa-clock"></i> {{ event.translation.schedule }}
+                            </div>
+                            <div class="event-description">
+                                {{ event.translation.description|safe }}
+                            </div>
+                            {% if event.translation.requirements %}
+                            <div class="event-requirements">
+                                <h4>{% trans "Requisitos" %}</h4>
+                                {{ event.translation.requirements|safe }}
+                            </div>
+                            {% endif %}
+                            {% if event.translation.rewards %}
+                            <div class="event-rewards">
+                                <h4>{% trans "Recompensas" %}</h4>
+                                {{ event.translation.rewards|safe }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
             {% endfor %}
-        </div>
-    </div>
-
-    <div class="wiki-section">
-        <h2>{% trans "Event Participation" %}</h2>
-        <div class="wiki-participation">
-            <div class="wiki-participation-info">
-                <h3>{% trans "How to Participate" %}</h3>
-                <ul>
-                    <li>{% trans "Check event schedule" %}</li>
-                    <li>{% trans "Register in advance if required" %}</li>
-                    <li>{% trans "Join event channel" %}</li>
-                    <li>{% trans "Follow event rules" %}</li>
-                </ul>
-            </div>
-            <div class="wiki-participation-info">
-                <h3>{% trans "Event Rules" %}</h3>
-                <ul>
-                    <li>{% trans "No cheating or exploitation" %}</li>
-                    <li>{% trans "Respect other players" %}</li>
-                    <li>{% trans "Follow staff instructions" %}</li>
-                    <li>{% trans "Report any issues" %}</li>
-                </ul>
-            </div>
         </div>
     </div>
 </div>
+
+<style>
+    .events-container {
+        padding: 20px;
+    }
+
+    .event-card {
+        height: 100%;
+    }
+
+    .event-schedule {
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+    }
+
+    .event-requirements, .event-rewards {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .event-requirements h4, .event-rewards h4 {
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+</style>
 {% endblock %} 
