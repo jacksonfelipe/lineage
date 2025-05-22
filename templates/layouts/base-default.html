@@ -88,7 +88,7 @@
         <span style="display: flex; align-items: center; justify-content: center; gap: 8px;">
           <span>
             <img src="{% static 'default/images/icons/world.png' %}">&nbsp;&nbsp;&nbsp;
-            {% if LANGUAGE_CODE == 'pt-br' %}{% trans "Português" %}
+            {% if LANGUAGE_CODE == 'pt' %}{% trans "Português" %}
             {% elif LANGUAGE_CODE == 'en' %}{% trans "English" %}
             {% elif LANGUAGE_CODE == 'es' %}{% trans "Español" %}
             {% endif %}
@@ -108,7 +108,7 @@
           <li>
             <form method="post" action="{% url 'set_language' %}">
               {% csrf_token %}
-              <input type="hidden" name="language" value="pt-br">
+              <input type="hidden" name="language" value="pt">
               <input type="hidden" name="next" value="{{ request.path }}">
               <a href="#" onclick="this.closest('form').submit(); return false;">{% trans "Português" %}</a>
             </form>

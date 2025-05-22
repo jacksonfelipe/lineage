@@ -152,6 +152,7 @@
             border-radius: 100%;
             color: rgba(255, 255, 255, 0.39);
             cursor: pointer;
+            background-color: transparent !important;
         }
 
         ul {
@@ -180,6 +181,7 @@
                 border-radius: 100%;
                 color: rgba(255, 255, 255, 0.39);
                 cursor: pointer;
+                background-color: transparent !important;
             }
 
             &.active {
