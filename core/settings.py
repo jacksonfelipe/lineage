@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     "apps.main.news",
     "apps.main.notification",
     "apps.main.solicitation",
+    "apps.main.downloads",
 
     "apps.lineage.server",
     "apps.lineage.wallet",

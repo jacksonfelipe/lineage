@@ -6,16 +6,25 @@ from django.urls import reverse
 class SessionLockMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
+        # Lista de caminhos que não requerem autenticação
+        self.allowed_paths = [
+            settings.STATIC_URL,
+            settings.MEDIA_URL,
+            '/decrypted-file/',
+            '/public/',
+            '/wiki/',
+            '/pages/',
+            '/index.html',
+            '/set-language/',
+            '/verify/',
+            '/components/',
+        ]
 
     def __call__(self, request):
         path = request.path
 
-        # Libera acesso a arquivos estáticos, de mídia e arquivos descriptografados
-        if (
-            path.startswith(settings.STATIC_URL)
-            or path.startswith(settings.MEDIA_URL)
-            or path.startswith('/decrypted-file/')
-        ):
+        # Verifica se o caminho está na lista de caminhos permitidos
+        if any(path.startswith(allowed_path) for allowed_path in self.allowed_paths):
             return self.get_response(request)
 
         # Verifica se o usuário está bloqueado
@@ -23,6 +32,13 @@ class SessionLockMiddleware:
         is_locked_path = path == reverse('lock')
 
         if request.user.is_authenticated and locked and not is_locked_path:
+            # Guarda a URL atual na sessão antes de redirecionar
+            request.session['return_url'] = request.get_full_path()
             return redirect('lock')
+
+        # Se estiver desbloqueando (na página de lock e não está mais bloqueado)
+        if is_locked_path and not locked and 'return_url' in request.session:
+            return_url = request.session.pop('return_url', '/')
+            return redirect(return_url)
 
         return self.get_response(request)

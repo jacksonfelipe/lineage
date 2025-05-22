@@ -73,7 +73,7 @@
             <span>Entrar</span>
           </a>
         {% endif %}
-        <a class="download" href="#" target="_blank">Download</a>
+        <a class="download" href="{% url 'downloads:download_list' %}" target="_blank">{% trans "Download" %}</a>
       </div>
     </nav>
 
@@ -126,9 +126,9 @@
 
       <div class="copyright container">
         <div class="c-link">
-          <a href="#" target="_blank">Acordo do Usuário</a>
-          <a href="#" target="_blank">Termos de Serviço</a>
-          <a href="#" target="_blank">Política de Privacidade</a>
+          <a href="{% url 'user_agreement' %}" target="_blank">Acordo do Usuário</a>
+          <a href="{% url 'terms' %}" target="_blank">Termos de Serviço</a>
+          <a href="{% url 'privacy_policy' %}" target="_blank">Política de Privacidade</a>
         </div>
 
         <div class="c-text">

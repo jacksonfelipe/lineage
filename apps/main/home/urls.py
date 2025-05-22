@@ -26,6 +26,8 @@ urlpatterns = [
     path('public/news/<slug:slug>/', public_news_detail, name='public_news_detail'),
     path('public/faq/', public_faq_list, name='public_faq_list'),
     path("public/terms/", terms_view, name="terms"),
+    path("public/user-agreement/", user_agreement_view, name="user_agreement"),
+    path("public/privacy-policy/", privacy_policy_view, name="privacy_policy"),
 
     # Wiki views
     path('wiki/', wiki_home, name='wiki'),

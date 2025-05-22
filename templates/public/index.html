@@ -42,7 +42,7 @@
     </p>
 
     <div class="h-link" data-aos="fade-up" data-aos-duration="2000">
-        <a href="{% if configuracao %}{{ configuracao.link_cliente }}{% else %}#{% endif %}" target="_blank">{% trans "Baixe o Jogo" %}</a>
+        <a href="{% url 'downloads:download_list' %}" target="_blank">{% trans "Baixe o Jogo" %}</a>
         <a href="{% url 'register' %}" target="_blank">{% trans "Crie sua conta mestra" %}</a>
     </div>
 

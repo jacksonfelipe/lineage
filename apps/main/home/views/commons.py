@@ -48,6 +48,20 @@ def terms_view(request):
     return render_theme_page(request, 'public', 'terms.html', context)
 
 
+def user_agreement_view(request):
+    context = {
+        "last_updated": datetime.today().strftime("%d/%m/%Y"),
+    }
+    return render_theme_page(request, 'public', 'user_agreement.html', context)
+
+
+def privacy_policy_view(request):
+    context = {
+        "last_updated": datetime.today().strftime("%d/%m/%Y"),
+    }
+    return render_theme_page(request, 'public', 'privacy_policy.html', context)
+
+
 def verificar_email(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))

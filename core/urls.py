@@ -18,6 +18,7 @@ urlpatterns = [
     path('app/auditor/', include('apps.main.auditor.urls')),
     path('app/notification/', include('apps.main.notification.urls')),
     path('app/solicitation/', include('apps.main.solicitation.urls')),
+    path('', include('apps.main.downloads.urls')),
 
     # apps lineage
     path('app/wallet/', include('apps.lineage.wallet.urls')),
@@ -29,7 +30,7 @@ urlpatterns = [
     path('app/auction/', include('apps.lineage.auction.urls')),
     path('app/game/', include('apps.lineage.games.urls')),
     path('app/report/', include('apps.lineage.reports.urls')),
-    path('app/wiki/', include('apps.lineage.wiki.urls')),
+    path('', include('apps.lineage.wiki.urls')),
 
     # libs externals
     path('', include('serve_files.urls')),
