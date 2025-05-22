@@ -50,6 +50,7 @@ urlpatterns = [
     path('accounts/password-reset-done/', auth_views.PasswordResetDoneView.as_view(template_name='accounts_custom/password-reset-done.html'), name='password_reset_done'),
     path('accounts/password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='accounts_custom/password-reset-complete.html'), name='password_reset_complete'),
     path('accounts/lock/', lock, name="lock"),
+    path('accounts/activate-lock/', activate_lock, name="activate_lock"),
     path('accounts/registration/success/', registration_success_view, name='registration_success'),
     path('accounts/2fa/', verify_2fa_view, name='verify_2fa'),
     path('accounts/activate-2fa/', ativar_2fa, name='ativar_2fa'),

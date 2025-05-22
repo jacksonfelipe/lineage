@@ -260,6 +260,17 @@ def lock(request):
 
 
 @conditional_otp_required
+def activate_lock(request):
+    """
+    View para ativar o bloqueio da tela manualmente.
+    """
+    # Salva a URL atual para retornar após desbloquear
+    request.session['next'] = request.META.get('HTTP_REFERER', 'dashboard')
+    request.session['is_locked'] = True
+    return redirect('lock')
+
+
+@conditional_otp_required
 def dashboard(request):
     if request.user.is_authenticated:
         language = translation.get_language()
