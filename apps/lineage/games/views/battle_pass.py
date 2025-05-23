@@ -67,7 +67,10 @@ def claim_reward(request, reward_id):
     reward = get_object_or_404(BattlePassReward, id=reward_id)
     progress = get_object_or_404(UserBattlePassProgress, user=request.user, season=reward.level.season)
 
-    if reward.level.level <= progress.get_current_level():
+    current_level = progress.get_current_level()
+    current_level_number = current_level.level if current_level is not None else 0
+
+    if reward.level.level <= current_level_number:
         if not reward.is_premium or progress.has_premium:
             if reward not in progress.claimed_rewards.all():
                 # Adiciona o item à bag do usuário
