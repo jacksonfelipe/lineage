@@ -5,7 +5,7 @@ from django.shortcuts import redirect, get_object_or_404
 from apps.lineage.wallet.models import Wallet
 from apps.lineage.wallet.signals import aplicar_transacao
 from django.contrib import messages
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as gettext
 
 
 @conditional_otp_required
@@ -76,16 +76,16 @@ def claim_reward(request, reward_id):
                 # Adiciona o item à bag do usuário
                 bag_item = reward.add_to_user_bag(request.user)
                 if bag_item:
-                    messages.success(request, _("Recompensa resgatada com sucesso!"))
+                    messages.success(request, gettext("Recompensa resgatada com sucesso!"))
                 else:
-                    messages.warning(request, _("Recompensa resgatada, mas não há item associado."))
+                    messages.warning(request, gettext("Recompensa resgatada, mas não há item associado."))
                 progress.claimed_rewards.add(reward)
             else:
-                messages.info(request, _("Você já resgatou esta recompensa."))
+                messages.info(request, gettext("Você já resgatou esta recompensa."))
         else:
-            messages.error(request, _("Você precisa do Passe Premium para resgatar esta recompensa."))
+            messages.error(request, gettext("Você precisa do Passe Premium para resgatar esta recompensa."))
     else:
-        messages.error(request, _("Você ainda não atingiu o nível necessário para esta recompensa."))
+        messages.error(request, gettext("Você ainda não atingiu o nível necessário para esta recompensa."))
 
     return redirect('games:battle_pass')
 
@@ -95,13 +95,13 @@ def buy_battle_pass_premium_view(request):
     season = BattlePassSeason.objects.filter(is_active=True).first()
 
     if not season:
-        messages.error(request, _("Nenhuma temporada ativa no momento."))
+        messages.error(request, gettext("Nenhuma temporada ativa no momento."))
         return redirect('games:battle_pass')
 
     progress, _ = UserBattlePassProgress.objects.get_or_create(user=request.user, season=season)
 
     if progress.has_premium:
-        messages.info(request, _("Você já possui o Passe de Batalha Premium."))
+        messages.info(request, gettext("Você já possui o Passe de Batalha Premium."))
         return redirect('games:battle_pass')
 
     PREMIUM_PRICE = season.premium_price
@@ -109,13 +109,13 @@ def buy_battle_pass_premium_view(request):
     try:
         wallet = Wallet.objects.get(usuario=request.user)
     except Wallet.DoesNotExist:
-        messages.error(request, _("Carteira não encontrada."))
+        messages.error(request, gettext("Carteira não encontrada."))
         return redirect('games:battle_pass')
 
     if request.method == 'POST':
         # Confirmação da compra
         if wallet.saldo < PREMIUM_PRICE:
-            messages.error(request, _("Saldo insuficiente para adquirir o Passe Premium."))
+            messages.error(request, gettext("Saldo insuficiente para adquirir o Passe Premium."))
             return redirect('games:battle_pass')
 
         try:
@@ -129,10 +129,10 @@ def buy_battle_pass_premium_view(request):
             )
             progress.has_premium = True
             progress.save()
-            messages.success(request, _("Passe de Batalha Premium ativado com sucesso!"))
+            messages.success(request, gettext("Passe de Batalha Premium ativado com sucesso!"))
             return redirect('games:battle_pass')
         except ValueError as e:
-            messages.error(request, _("Erro na transação: ") + str(e))
+            messages.error(request, gettext("Erro na transação: ") + str(e))
             return redirect('games:battle_pass')
 
     # GET: Mostrar tela de confirmação
@@ -147,7 +147,7 @@ def buy_battle_pass_premium_view(request):
 def exchange_items_view(request):
     season = BattlePassSeason.objects.filter(is_active=True).first()
     if not season:
-        messages.error(request, _("Não há temporada ativa no momento."))
+        messages.error(request, gettext("Não há temporada ativa no momento."))
         return redirect('games:battle_pass')
 
     progress = UserBattlePassProgress.objects.get(user=request.user, season=season)
@@ -217,7 +217,7 @@ def exchange_item(request, exchange_id):
     if request.method == 'POST':
         quantity = int(request.POST.get('quantity', 1))
         if quantity < 1:
-            messages.error(request, _("Quantidade inválida."))
+            messages.error(request, gettext("Quantidade inválida."))
             return redirect('games:exchange_items')
             
         success, message = exchange.exchange(request.user, quantity)
