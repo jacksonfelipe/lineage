@@ -20,7 +20,7 @@
                     </a>
                 </li>
                 <li class="wiki-nav-item">
-                    <a href="{% url 'wiki:general' %}" {% if request.resolver_match.url_name == 'general' %}class="wiki-nav-link active"{% else %}class="wiki-nav-link"{% endif %}>
+                    <a href="{% url 'wiki:general_list' %}" {% if request.resolver_match.url_name == 'general' %}class="wiki-nav-link active"{% else %}class="wiki-nav-link"{% endif %}>
                         <i class="fas fa-info-circle"></i>{% trans "Informações Gerais" %}
                     </a>
                 </li>
@@ -30,12 +30,12 @@
                     </a>
                 </li>
                 <li class="wiki-nav-item">
-                    <a href="{% url 'wiki:raids' %}" {% if request.resolver_match.url_name == 'raids' %}class="wiki-nav-link active"{% else %}class="wiki-nav-link"{% endif %}>
+                    <a href="{% url 'wiki:raid_list' %}" {% if request.resolver_match.url_name == 'raids' %}class="wiki-nav-link active"{% else %}class="wiki-nav-link"{% endif %}>
                         <i class="fas fa-dragon"></i>{% trans "Chefes de Raid" %}
                     </a>
                 </li>
                 <li class="wiki-nav-item">
-                    <a href="{% url 'wiki:assistance' %}" {% if request.resolver_match.url_name == 'assistance' %}class="wiki-nav-link active"{% else %}class="wiki-nav-link"{% endif %}>
+                    <a href="{% url 'wiki:assistance_list' %}" {% if request.resolver_match.url_name == 'assistance' %}class="wiki-nav-link active"{% else %}class="wiki-nav-link"{% endif %}>
                         <i class="fas fa-hands-helping"></i>{% trans "Assistência do Jogo" %}
                     </a>
                 </li>

@@ -1,6 +1,8 @@
 {% extends 'wiki/base.html' %}
 {% load static i18n %}
 
+{% block title %}{{ page.translation.title }}{% endblock %}
+
 {% block wiki_content %}
 <div class="wiki-page">
     <h1>{{ page.translation.title }}</h1>
