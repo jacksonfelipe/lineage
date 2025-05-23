@@ -148,313 +148,67 @@ class WikiAssistanceDetailView(WikiPagesMixin, DetailView):
 class WikiGeneralView(WikiPagesMixin, TemplateView):
     template_name = 'wiki/general.html'
 
+    def get_queryset(self):
+        language = get_language()
+        return WikiGeneral.objects.filter(
+            is_active=True,
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiGeneralTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        )
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         language = get_language()
         
-        # Get about server information
-        about_info = WikiGeneral.objects.filter(
-            is_active=True,
-            general_type='about',
-            translations__language=language
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiGeneralTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
+        # Get all general information types
+        general_types = [
+            'about', 'rules', 'commands', 'classes', 'races',
+            'noblesse', 'subclass', 'hero', 'clan', 'siege',
+            'olympiad', 'castle', 'fortress', 'territory', 'other'
+        ]
         
-        # Get server rules
-        rules = WikiGeneral.objects.filter(
-            is_active=True,
-            general_type='rules',
-            translations__language=language
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiGeneralTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
+        # Create a dictionary to store all general information
+        general_info = {}
         
-        # Get game commands
-        commands = WikiGeneral.objects.filter(
-            is_active=True,
-            general_type='commands',
-            translations__language=language
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiGeneralTranslation.objects.filter(language=language),
-                to_attr='_translation'
+        for general_type in general_types:
+            # Get general information for each type
+            generals = WikiGeneral.objects.filter(
+                is_active=True,
+                general_type=general_type,
+                translations__language=language
+            ).prefetch_related(
+                Prefetch(
+                    'translations',
+                    queryset=WikiGeneralTranslation.objects.filter(language=language),
+                    to_attr='_translation'
+                )
             )
-        )
-        
-        # Get character classes
-        classes = WikiGeneral.objects.filter(
-            is_active=True,
-            general_type='classes',
-            translations__language=language
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiGeneralTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
-        
-        # Get character races
-        races = WikiGeneral.objects.filter(
-            is_active=True,
-            general_type='races',
-            translations__language=language
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiGeneralTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
-        
-        # Get noblesse system
-        noblesse = WikiGeneral.objects.filter(
-            is_active=True,
-            general_type='noblesse',
-            translations__language=language
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiGeneralTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
-        
-        # Get subclass system
-        subclass = WikiGeneral.objects.filter(
-            is_active=True,
-            general_type='subclass',
-            translations__language=language
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiGeneralTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
-        
-        # Get hero system
-        hero = WikiGeneral.objects.filter(
-            is_active=True,
-            general_type='hero',
-            translations__language=language
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiGeneralTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
-        
-        # Get clan system
-        clan = WikiGeneral.objects.filter(
-            is_active=True,
-            general_type='clan',
-            translations__language=language
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiGeneralTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
-        
-        # Get siege system
-        siege = WikiGeneral.objects.filter(
-            is_active=True,
-            general_type='siege',
-            translations__language=language
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiGeneralTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
-        
-        # Get olympiad system
-        olympiad = WikiGeneral.objects.filter(
-            is_active=True,
-            general_type='olympiad',
-            translations__language=language
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiGeneralTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
-        
-        # Get castle system
-        castle = WikiGeneral.objects.filter(
-            is_active=True,
-            general_type='castle',
-            translations__language=language
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiGeneralTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
-        
-        # Get fortress system
-        fortress = WikiGeneral.objects.filter(
-            is_active=True,
-            general_type='fortress',
-            translations__language=language
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiGeneralTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
-        
-        # Get territory system
-        territory = WikiGeneral.objects.filter(
-            is_active=True,
-            general_type='territory',
-            translations__language=language
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiGeneralTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
-        
-        # Get other information
-        other = WikiGeneral.objects.filter(
-            is_active=True,
-            general_type='other',
-            translations__language=language
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiGeneralTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
+            
+            # Add to context with proper key
+            context_key = f'{general_type}_info'
+            general_info[context_key] = [
+                {
+                    'general': general,
+                    'translation': general._translation[0] if general._translation else None
+                }
+                for general in generals
+            ]
         
         # Add all general information to context
-        context.update({
-            'about_info': [
-                {
-                    'general': general,
-                    'translation': general._translation[0] if general._translation else None
-                }
-                for general in about_info
-            ],
-            'rules': [
-                {
-                    'general': general,
-                    'translation': general._translation[0] if general._translation else None
-                }
-                for general in rules
-            ],
-            'commands': [
-                {
-                    'general': general,
-                    'translation': general._translation[0] if general._translation else None
-                }
-                for general in commands
-            ],
-            'classes': [
-                {
-                    'general': general,
-                    'translation': general._translation[0] if general._translation else None
-                }
-                for general in classes
-            ],
-            'races': [
-                {
-                    'general': general,
-                    'translation': general._translation[0] if general._translation else None
-                }
-                for general in races
-            ],
-            'noblesse': [
-                {
-                    'general': general,
-                    'translation': general._translation[0] if general._translation else None
-                }
-                for general in noblesse
-            ],
-            'subclass': [
-                {
-                    'general': general,
-                    'translation': general._translation[0] if general._translation else None
-                }
-                for general in subclass
-            ],
-            'hero': [
-                {
-                    'general': general,
-                    'translation': general._translation[0] if general._translation else None
-                }
-                for general in hero
-            ],
-            'clan': [
-                {
-                    'general': general,
-                    'translation': general._translation[0] if general._translation else None
-                }
-                for general in clan
-            ],
-            'siege': [
-                {
-                    'general': general,
-                    'translation': general._translation[0] if general._translation else None
-                }
-                for general in siege
-            ],
-            'olympiad': [
-                {
-                    'general': general,
-                    'translation': general._translation[0] if general._translation else None
-                }
-                for general in olympiad
-            ],
-            'castle': [
-                {
-                    'general': general,
-                    'translation': general._translation[0] if general._translation else None
-                }
-                for general in castle
-            ],
-            'fortress': [
-                {
-                    'general': general,
-                    'translation': general._translation[0] if general._translation else None
-                }
-                for general in fortress
-            ],
-            'territory': [
-                {
-                    'general': general,
-                    'translation': general._translation[0] if general._translation else None
-                }
-                for general in territory
-            ],
-            'other': [
-                {
-                    'general': general,
-                    'translation': general._translation[0] if general._translation else None
-                }
-                for general in other
-            ]
-        })
+        context.update(general_info)
+        
+        # Add debug information
+        context['debug_info'] = {
+            'language': language,
+            'general_types': general_types,
+            'general_info_keys': list(general_info.keys()),
+            'general_info_counts': {k: len(v) for k, v in general_info.items()}
+        }
         
         return context
 
