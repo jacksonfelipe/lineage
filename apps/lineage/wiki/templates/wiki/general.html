@@ -3,33 +3,66 @@
 
 {% block wiki_content %}
 <div class="general-container">
+    <!-- Debug Information -->
+    {% if debug_info %}
+    <div class="debug-section mb-4 p-3 bg-light">
+        <h3>Debug Information</h3>
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Context Keys:</h4>
+                <ul>
+                    {% for key in debug_info.general_info_keys %}
+                    <li>{{ key }}: {{ key|length }} items</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h4>General Types:</h4>
+                <ul>
+                    {% for type in debug_info.general_types %}
+                    <li>{{ type }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <h4>Current Language:</h4>
+                <p>{{ debug_info.language }}</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <h1>{% trans "Informações Gerais" %}</h1>
 
     <!-- About Server -->
     <div class="general-section mb-5">
         <h2>{% trans "Sobre o Servidor" %}</h2>
         <div class="row">
-            {% for item in about_info %}
-            <div class="col-md-6 mb-4">
-                <div class="general-card">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h3 class="card-title">{{ item.translation.title }}</h3>
-                            <div class="type-badge">
-                                {{ item.general.get_general_type_display }}
-                            </div>
-                            <div class="general-content">
-                                {{ item.translation.content|safe }}
+            {% if about %}
+                {% for item in about %}
+                <div class="col-md-6 mb-4">
+                    <div class="general-card">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ item.translation.title }}</h3>
+                                <div class="type-badge">
+                                    {{ item.general.get_general_type_display }}
+                                </div>
+                                <div class="general-content">
+                                    {{ item.translation.content|safe }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-                <p class="text-center">{% trans "Nenhuma informação sobre o servidor encontrada." %}</p>
-            </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center">{% trans "Nenhuma informação sobre o servidor encontrada." %}</p>
+                </div>
+            {% endif %}
         </div>
     </div>
 
@@ -37,27 +70,29 @@
     <div class="general-section mb-5">
         <h2>{% trans "Regras do Servidor" %}</h2>
         <div class="row">
-            {% for item in rules %}
-            <div class="col-md-6 mb-4">
-                <div class="general-card">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h3 class="card-title">{{ item.translation.title }}</h3>
-                            <div class="type-badge">
-                                {{ item.general.get_general_type_display }}
-                            </div>
-                            <div class="general-content">
-                                {{ item.translation.content|safe }}
+            {% if rules %}
+                {% for item in rules %}
+                <div class="col-md-6 mb-4">
+                    <div class="general-card">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ item.translation.title }}</h3>
+                                <div class="type-badge">
+                                    {{ item.general.get_general_type_display }}
+                                </div>
+                                <div class="general-content">
+                                    {{ item.translation.content|safe }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-                <p class="text-center">{% trans "Nenhuma regra do servidor encontrada." %}</p>
-            </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center">{% trans "Nenhuma regra do servidor encontrada." %}</p>
+                </div>
+            {% endif %}
         </div>
     </div>
 
@@ -65,27 +100,29 @@
     <div class="general-section mb-5">
         <h2>{% trans "Comandos do Jogo" %}</h2>
         <div class="row">
-            {% for item in commands %}
-            <div class="col-md-6 mb-4">
-                <div class="general-card">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h3 class="card-title">{{ item.translation.title }}</h3>
-                            <div class="type-badge">
-                                {{ item.general.get_general_type_display }}
-                            </div>
-                            <div class="general-content">
-                                {{ item.translation.content|safe }}
+            {% if commands %}
+                {% for item in commands %}
+                <div class="col-md-6 mb-4">
+                    <div class="general-card">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ item.translation.title }}</h3>
+                                <div class="type-badge">
+                                    {{ item.general.get_general_type_display }}
+                                </div>
+                                <div class="general-content">
+                                    {{ item.translation.content|safe }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-                <p class="text-center">{% trans "Nenhum comando do jogo encontrado." %}</p>
-            </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center">{% trans "Nenhum comando do jogo encontrado." %}</p>
+                </div>
+            {% endif %}
         </div>
     </div>
 
@@ -93,27 +130,29 @@
     <div class="general-section mb-5">
         <h2>{% trans "Classes de Personagem" %}</h2>
         <div class="row">
-            {% for item in classes %}
-            <div class="col-md-6 mb-4">
-                <div class="general-card">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h3 class="card-title">{{ item.translation.title }}</h3>
-                            <div class="type-badge">
-                                {{ item.general.get_general_type_display }}
-                            </div>
-                            <div class="general-content">
-                                {{ item.translation.content|safe }}
+            {% if classes %}
+                {% for item in classes %}
+                <div class="col-md-6 mb-4">
+                    <div class="general-card">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ item.translation.title }}</h3>
+                                <div class="type-badge">
+                                    {{ item.general.get_general_type_display }}
+                                </div>
+                                <div class="general-content">
+                                    {{ item.translation.content|safe }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-                <p class="text-center">{% trans "Nenhuma classe de personagem encontrada." %}</p>
-            </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center">{% trans "Nenhuma classe de personagem encontrada." %}</p>
+                </div>
+            {% endif %}
         </div>
     </div>
 
@@ -121,27 +160,29 @@
     <div class="general-section mb-5">
         <h2>{% trans "Raças de Personagem" %}</h2>
         <div class="row">
-            {% for item in races %}
-            <div class="col-md-6 mb-4">
-                <div class="general-card">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h3 class="card-title">{{ item.translation.title }}</h3>
-                            <div class="type-badge">
-                                {{ item.general.get_general_type_display }}
-                            </div>
-                            <div class="general-content">
-                                {{ item.translation.content|safe }}
+            {% if races %}
+                {% for item in races %}
+                <div class="col-md-6 mb-4">
+                    <div class="general-card">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ item.translation.title }}</h3>
+                                <div class="type-badge">
+                                    {{ item.general.get_general_type_display }}
+                                </div>
+                                <div class="general-content">
+                                    {{ item.translation.content|safe }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-                <p class="text-center">{% trans "Nenhuma raça de personagem encontrada." %}</p>
-            </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center">{% trans "Nenhuma raça de personagem encontrada." %}</p>
+                </div>
+            {% endif %}
         </div>
     </div>
 
@@ -149,27 +190,29 @@
     <div class="general-section mb-5">
         <h2>{% trans "Sistema Noblesse" %}</h2>
         <div class="row">
-            {% for item in noblesse %}
-            <div class="col-md-6 mb-4">
-                <div class="general-card">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h3 class="card-title">{{ item.translation.title }}</h3>
-                            <div class="type-badge">
-                                {{ item.general.get_general_type_display }}
-                            </div>
-                            <div class="general-content">
-                                {{ item.translation.content|safe }}
+            {% if noblesse %}
+                {% for item in noblesse %}
+                <div class="col-md-6 mb-4">
+                    <div class="general-card">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ item.translation.title }}</h3>
+                                <div class="type-badge">
+                                    {{ item.general.get_general_type_display }}
+                                </div>
+                                <div class="general-content">
+                                    {{ item.translation.content|safe }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-                <p class="text-center">{% trans "Nenhuma informação sobre o sistema Noblesse encontrada." %}</p>
-            </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center">{% trans "Nenhuma informação sobre o sistema Noblesse encontrada." %}</p>
+                </div>
+            {% endif %}
         </div>
     </div>
 
@@ -177,27 +220,29 @@
     <div class="general-section mb-5">
         <h2>{% trans "Sistema de Subclasse" %}</h2>
         <div class="row">
-            {% for item in subclass %}
-            <div class="col-md-6 mb-4">
-                <div class="general-card">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h3 class="card-title">{{ item.translation.title }}</h3>
-                            <div class="type-badge">
-                                {{ item.general.get_general_type_display }}
-                            </div>
-                            <div class="general-content">
-                                {{ item.translation.content|safe }}
+            {% if subclass %}
+                {% for item in subclass %}
+                <div class="col-md-6 mb-4">
+                    <div class="general-card">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ item.translation.title }}</h3>
+                                <div class="type-badge">
+                                    {{ item.general.get_general_type_display }}
+                                </div>
+                                <div class="general-content">
+                                    {{ item.translation.content|safe }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-                <p class="text-center">{% trans "Nenhuma informação sobre o sistema de subclasse encontrada." %}</p>
-            </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center">{% trans "Nenhuma informação sobre o sistema de subclasse encontrada." %}</p>
+                </div>
+            {% endif %}
         </div>
     </div>
 
@@ -205,27 +250,29 @@
     <div class="general-section mb-5">
         <h2>{% trans "Sistema de Herói" %}</h2>
         <div class="row">
-            {% for item in hero %}
-            <div class="col-md-6 mb-4">
-                <div class="general-card">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h3 class="card-title">{{ item.translation.title }}</h3>
-                            <div class="type-badge">
-                                {{ item.general.get_general_type_display }}
-                            </div>
-                            <div class="general-content">
-                                {{ item.translation.content|safe }}
+            {% if hero %}
+                {% for item in hero %}
+                <div class="col-md-6 mb-4">
+                    <div class="general-card">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ item.translation.title }}</h3>
+                                <div class="type-badge">
+                                    {{ item.general.get_general_type_display }}
+                                </div>
+                                <div class="general-content">
+                                    {{ item.translation.content|safe }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-                <p class="text-center">{% trans "Nenhuma informação sobre o sistema de herói encontrada." %}</p>
-            </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center">{% trans "Nenhuma informação sobre o sistema de herói encontrada." %}</p>
+                </div>
+            {% endif %}
         </div>
     </div>
 
@@ -233,27 +280,29 @@
     <div class="general-section mb-5">
         <h2>{% trans "Sistema de Clã" %}</h2>
         <div class="row">
-            {% for item in clan %}
-            <div class="col-md-6 mb-4">
-                <div class="general-card">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h3 class="card-title">{{ item.translation.title }}</h3>
-                            <div class="type-badge">
-                                {{ item.general.get_general_type_display }}
-                            </div>
-                            <div class="general-content">
-                                {{ item.translation.content|safe }}
+            {% if clan %}
+                {% for item in clan %}
+                <div class="col-md-6 mb-4">
+                    <div class="general-card">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ item.translation.title }}</h3>
+                                <div class="type-badge">
+                                    {{ item.general.get_general_type_display }}
+                                </div>
+                                <div class="general-content">
+                                    {{ item.translation.content|safe }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-                <p class="text-center">{% trans "Nenhuma informação sobre o sistema de clã encontrada." %}</p>
-            </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center">{% trans "Nenhuma informação sobre o sistema de clã encontrada." %}</p>
+                </div>
+            {% endif %}
         </div>
     </div>
 

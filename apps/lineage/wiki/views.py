@@ -189,9 +189,8 @@ class WikiGeneralView(WikiPagesMixin, TemplateView):
                 )
             ).order_by('order')
             
-            # Add to context with proper key
-            context_key = f'{general_type}_info'
-            general_info[context_key] = [
+            # Add to context with proper key (without _info suffix)
+            context[general_type] = [
                 {
                     'general': general,
                     'translation': general._translation[0] if general._translation else None
@@ -199,15 +198,11 @@ class WikiGeneralView(WikiPagesMixin, TemplateView):
                 for general in generals
             ]
         
-        # Add all general information to context
-        context.update(general_info)
-        
         # Add debug information
         context['debug_info'] = {
             'language': language,
             'general_types': general_types,
-            'general_info_keys': list(general_info.keys()),
-            'general_info_counts': {k: len(v) for k, v in general_info.items()}
+            'general_info_keys': list(context.keys())
         }
         
         # Add title to context
