@@ -172,9 +172,6 @@ class WikiGeneralView(WikiPagesMixin, TemplateView):
             'olympiad', 'castle', 'fortress', 'territory', 'other'
         ]
         
-        # Create a dictionary to store all general information
-        general_info = {}
-        
         for general_type in general_types:
             # Get general information for each type
             generals = WikiGeneral.objects.filter(
@@ -197,13 +194,6 @@ class WikiGeneralView(WikiPagesMixin, TemplateView):
                 }
                 for general in generals
             ]
-        
-        # Add debug information
-        context['debug_info'] = {
-            'language': language,
-            'general_types': general_types,
-            'general_info_keys': list(context.keys())
-        }
         
         # Add title to context
         context['title'] = _('General Information')
