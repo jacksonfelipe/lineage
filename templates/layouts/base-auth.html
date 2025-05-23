@@ -18,16 +18,17 @@
   <script>
     (function () {
       const LOCK_URL = "{% url 'activate_lock' %}";
+      const LOCK_URL_ALT = "{% url 'lock' %}";
       const INACTIVITY_MINUTES = 5;
       const TIME_LIMIT = INACTIVITY_MINUTES * 60 * 1000; // 5 minutos em milissegundos
-    
+
       let inactivityTimer;
-    
+
       function resetInactivityTimer() {
         clearTimeout(inactivityTimer);
         inactivityTimer = setTimeout(() => {
-          // Não redireciona se já estiver na página de lock
-          if (window.location.pathname === LOCK_URL) {
+          // Não redireciona se já estiver em qualquer uma das páginas de lock
+          if (window.location.pathname === LOCK_URL || window.location.pathname === LOCK_URL_ALT) {
             return;
           }
           // Usa o parâmetro next como Django faz
@@ -35,13 +36,13 @@
           window.location.href = `${LOCK_URL}?next=${encodeURIComponent(currentPath)}`;
         }, TIME_LIMIT);
       }
-    
+
       // Atividade reinicia o timer
       const activityEvents = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'];
       activityEvents.forEach(event => {
         document.addEventListener(event, resetInactivityTimer, true);
       });
-    
+
       // Inicia o timer
       resetInactivityTimer();
     })();
