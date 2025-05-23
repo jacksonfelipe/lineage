@@ -15,7 +15,36 @@ from .models import (
 )
 
 
-class WikiHomeView(ListView):
+class WikiPagesMixin:
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        language = get_language()
+        
+        # Get all active pages with translations
+        pages = WikiPage.objects.filter(
+            is_active=True,
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiPageTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        ).order_by('order')
+        
+        # Add pages to context
+        context['pages'] = [
+            {
+                'page': page,
+                'translation': page._translation[0] if page._translation else None
+            }
+            for page in pages
+        ]
+        
+        return context
+
+
+class WikiHomeView(WikiPagesMixin, ListView):
     model = WikiPage
     template_name = 'wiki/home.html'
     context_object_name = 'pages'
@@ -32,7 +61,7 @@ class WikiHomeView(ListView):
         return context
 
 
-class WikiGeneralListView(ListView):
+class WikiGeneralListView(WikiPagesMixin, ListView):
     model = WikiGeneral
     template_name = 'wiki/general.html'
     context_object_name = 'generals'
@@ -46,7 +75,7 @@ class WikiGeneralListView(ListView):
         return context
 
 
-class WikiGeneralDetailView(DetailView):
+class WikiGeneralDetailView(WikiPagesMixin, DetailView):
     model = WikiGeneral
     template_name = 'wiki/general.html'
     context_object_name = 'general'
@@ -60,7 +89,7 @@ class WikiGeneralDetailView(DetailView):
         return context
 
 
-class WikiRaidListView(ListView):
+class WikiRaidListView(WikiPagesMixin, ListView):
     model = WikiRaid
     template_name = 'wiki/raids.html'
     context_object_name = 'raids'
@@ -74,7 +103,7 @@ class WikiRaidListView(ListView):
         return context
 
 
-class WikiRaidDetailView(DetailView):
+class WikiRaidDetailView(WikiPagesMixin, DetailView):
     model = WikiRaid
     template_name = 'wiki/raids.html'
     context_object_name = 'raid'
@@ -88,7 +117,7 @@ class WikiRaidDetailView(DetailView):
         return context
 
 
-class WikiAssistanceListView(ListView):
+class WikiAssistanceListView(WikiPagesMixin, ListView):
     model = WikiAssistance
     template_name = 'wiki/assistance.html'
     context_object_name = 'assistances'
@@ -102,7 +131,7 @@ class WikiAssistanceListView(ListView):
         return context
 
 
-class WikiAssistanceDetailView(DetailView):
+class WikiAssistanceDetailView(WikiPagesMixin, DetailView):
     model = WikiAssistance
     template_name = 'wiki/assistance.html'
     context_object_name = 'assistance'
@@ -116,7 +145,7 @@ class WikiAssistanceDetailView(DetailView):
         return context
 
 
-class WikiGeneralView(TemplateView):
+class WikiGeneralView(WikiPagesMixin, TemplateView):
     template_name = 'wiki/general.html'
 
     def get_context_data(self, **kwargs):
@@ -430,7 +459,7 @@ class WikiGeneralView(TemplateView):
         return context
 
 
-class WikiRatesView(TemplateView):
+class WikiRatesView(WikiPagesMixin, TemplateView):
     template_name = 'wiki/rates.html'
 
     def get_context_data(self, **kwargs):
@@ -540,7 +569,7 @@ class WikiRatesView(TemplateView):
         return context
 
 
-class WikiRaidsView(TemplateView):
+class WikiRaidsView(WikiPagesMixin, TemplateView):
     template_name = 'wiki/raids.html'
 
     def get_context_data(self, **kwargs):
@@ -654,7 +683,7 @@ class WikiRaidsView(TemplateView):
         return context
 
 
-class WikiAssistanceView(TemplateView):
+class WikiAssistanceView(WikiPagesMixin, TemplateView):
     template_name = 'wiki/assistance.html'
 
     def get_context_data(self, **kwargs):
@@ -768,7 +797,7 @@ class WikiAssistanceView(TemplateView):
         return context
 
 
-class WikiEventsView(ListView):
+class WikiEventsView(WikiPagesMixin, ListView):
     template_name = 'wiki/events.html'
     context_object_name = 'events'
 
@@ -836,7 +865,7 @@ class WikiEventsView(ListView):
         return context
 
 
-class WikiUpdatesView(ListView):
+class WikiUpdatesView(WikiPagesMixin, ListView):
     template_name = 'wiki/updates.html'
     context_object_name = 'updates'
 
@@ -868,7 +897,7 @@ class WikiUpdatesView(ListView):
         return context
 
 
-class WikiFeaturesView(TemplateView):
+class WikiFeaturesView(WikiPagesMixin, TemplateView):
     template_name = 'wiki/features.html'
 
     def get_context_data(self, **kwargs):
@@ -997,7 +1026,7 @@ class WikiFeaturesView(TemplateView):
         return context
 
 
-class WikiPageDetailView(DetailView):
+class WikiPageDetailView(WikiPagesMixin, DetailView):
     template_name = 'wiki/page.html'
     model = WikiPage
     context_object_name = 'page'
@@ -1047,7 +1076,7 @@ class WikiPageDetailView(DetailView):
         return context
 
 
-class WikiSectionDetailView(DetailView):
+class WikiSectionDetailView(WikiPagesMixin, DetailView):
     template_name = 'wiki/section.html'
     model = WikiSection
     context_object_name = 'section'
