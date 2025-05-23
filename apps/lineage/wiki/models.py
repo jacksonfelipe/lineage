@@ -329,7 +329,8 @@ class WikiFeature(BaseModel):
         ordering = ['feature_type', 'created_at']
 
     def __str__(self):
-        return self.translations.get().title
+        pt_translation = self.translations.filter(language='pt').first()
+        return pt_translation.title if pt_translation else f"{_('Feature')} {self.pk}"
 
 
 class WikiFeatureTranslation(BaseModel):
