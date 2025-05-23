@@ -346,3 +346,218 @@ class WikiFeatureTranslation(BaseModel):
 
     def __str__(self):
         return f"{self.title} ({self.language})"
+
+
+class WikiGeneral(BaseModel):
+    """Model for general wiki information"""
+    GENERAL_TYPES = [
+        ('about', _('About Server')),
+        ('rules', _('Server Rules')),
+        ('commands', _('Game Commands')),
+        ('classes', _('Character Classes')),
+        ('races', _('Character Races')),
+        ('noblesse', _('Noblesse System')),
+        ('subclass', _('Subclass System')),
+        ('hero', _('Hero System')),
+        ('clan', _('Clan System')),
+        ('siege', _('Siege System')),
+        ('olympiad', _('Olympiad System')),
+        ('castle', _('Castle System')),
+        ('fortress', _('Fortress System')),
+        ('territory', _('Territory System')),
+        ('other', _('Other')),
+    ]
+
+    general_type = models.CharField(
+        max_length=50,
+        choices=GENERAL_TYPES,
+        verbose_name=_("Type")
+    )
+    order = models.IntegerField(_('Order'), default=0)
+    is_active = models.BooleanField(_('Active'), default=True)
+    created_at = models.DateTimeField(_('Created at'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('Updated at'), auto_now=True)
+
+    class Meta:
+        verbose_name = _('Wiki General')
+        verbose_name_plural = _('Wiki General')
+        ordering = ['order', 'general_type']
+
+    def __str__(self):
+        pt_translation = self.translations.filter(language='pt').first()
+        return pt_translation.title if pt_translation else f"{self.get_general_type_display()}"
+
+
+class WikiGeneralTranslation(BaseModel):
+    general = models.ForeignKey(
+        WikiGeneral,
+        on_delete=models.CASCADE,
+        related_name='translations',
+        verbose_name=_("Wiki General")
+    )
+    language = models.CharField(
+        max_length=10,
+        choices=settings.LANGUAGES,
+        verbose_name=_("Language")
+    )
+    title = models.CharField(
+        max_length=200,
+        verbose_name=_("Title")
+    )
+    content = CKEditor5Field(
+        verbose_name=_("Content"),
+        config_name='extends'
+    )
+
+    class Meta:
+        unique_together = ('general', 'language')
+        verbose_name = _("Wiki General Translation")
+        verbose_name_plural = _("Wiki General Translations")
+
+    def __str__(self):
+        return f"{self.title} ({self.get_language_display()})"
+
+
+class WikiRaid(BaseModel):
+    """Model for raid information"""
+    RAID_TYPES = [
+        ('boss', _('Boss Raid')),
+        ('epic', _('Epic Raid')),
+        ('world', _('World Raid')),
+        ('siege', _('Siege Raid')),
+        ('other', _('Other')),
+    ]
+
+    raid_type = models.CharField(
+        max_length=50,
+        choices=RAID_TYPES,
+        verbose_name=_("Type")
+    )
+    level = models.IntegerField(_('Level'), default=1)
+    order = models.IntegerField(_('Order'), default=0)
+    is_active = models.BooleanField(_('Active'), default=True)
+    created_at = models.DateTimeField(_('Created at'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('Updated at'), auto_now=True)
+
+    class Meta:
+        verbose_name = _('Wiki Raid')
+        verbose_name_plural = _('Wiki Raids')
+        ordering = ['raid_type', 'level', 'order']
+
+    def __str__(self):
+        pt_translation = self.translations.filter(language='pt').first()
+        return pt_translation.title if pt_translation else f"{self.get_raid_type_display()} Lv.{self.level}"
+
+
+class WikiRaidTranslation(BaseModel):
+    raid = models.ForeignKey(
+        WikiRaid,
+        on_delete=models.CASCADE,
+        related_name='translations',
+        verbose_name=_("Wiki Raid")
+    )
+    language = models.CharField(
+        max_length=10,
+        choices=settings.LANGUAGES,
+        verbose_name=_("Language")
+    )
+    title = models.CharField(
+        max_length=200,
+        verbose_name=_("Title")
+    )
+    content = CKEditor5Field(
+        verbose_name=_("Content"),
+        config_name='extends'
+    )
+    location = models.CharField(
+        max_length=200,
+        verbose_name=_("Location")
+    )
+    schedule = models.CharField(
+        max_length=200,
+        verbose_name=_("Schedule"),
+        blank=True
+    )
+    requirements = CKEditor5Field(
+        verbose_name=_("Requirements"),
+        config_name='extends',
+        blank=True
+    )
+    rewards = CKEditor5Field(
+        verbose_name=_("Rewards"),
+        config_name='extends',
+        blank=True
+    )
+
+    class Meta:
+        unique_together = ('raid', 'language')
+        verbose_name = _("Wiki Raid Translation")
+        verbose_name_plural = _("Wiki Raid Translations")
+
+    def __str__(self):
+        return f"{self.title} ({self.get_language_display()})"
+
+
+class WikiAssistance(BaseModel):
+    """Model for assistance information"""
+    ASSISTANCE_TYPES = [
+        ('guide', _('Guide')),
+        ('tutorial', _('Tutorial')),
+        ('faq', _('FAQ')),
+        ('support', _('Support')),
+        ('other', _('Other')),
+    ]
+
+    assistance_type = models.CharField(
+        max_length=50,
+        choices=ASSISTANCE_TYPES,
+        verbose_name=_("Type")
+    )
+    order = models.IntegerField(_('Order'), default=0)
+    is_active = models.BooleanField(_('Active'), default=True)
+    created_at = models.DateTimeField(_('Created at'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('Updated at'), auto_now=True)
+
+    class Meta:
+        verbose_name = _('Wiki Assistance')
+        verbose_name_plural = _('Wiki Assistance')
+        ordering = ['assistance_type', 'order']
+
+    def __str__(self):
+        pt_translation = self.translations.filter(language='pt').first()
+        return pt_translation.title if pt_translation else f"{self.get_assistance_type_display()}"
+
+
+class WikiAssistanceTranslation(BaseModel):
+    assistance = models.ForeignKey(
+        WikiAssistance,
+        on_delete=models.CASCADE,
+        related_name='translations',
+        verbose_name=_("Wiki Assistance")
+    )
+    language = models.CharField(
+        max_length=10,
+        choices=settings.LANGUAGES,
+        verbose_name=_("Language")
+    )
+    title = models.CharField(
+        max_length=200,
+        verbose_name=_("Title")
+    )
+    content = CKEditor5Field(
+        verbose_name=_("Content"),
+        config_name='extends'
+    )
+    category = models.CharField(
+        max_length=100,
+        verbose_name=_("Category"),
+        blank=True
+    )
+
+    class Meta:
+        unique_together = ('assistance', 'language')
+        verbose_name = _("Wiki Assistance Translation")
+        verbose_name_plural = _("Wiki Assistance Translations")
+
+    def __str__(self):
+        return f"{self.title} ({self.get_language_display()})"

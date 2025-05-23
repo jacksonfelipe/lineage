@@ -9,38 +9,109 @@ from .models import (
     WikiUpdate, WikiUpdateTranslation,
     WikiEvent, WikiEventTranslation,
     WikiRate, WikiRateTranslation,
-    WikiFeature, WikiFeatureTranslation
+    WikiFeature, WikiFeatureTranslation,
+    WikiGeneral, WikiRaid, WikiAssistance
 )
 
 
-class WikiHomeView(TemplateView):
+class WikiHomeView(ListView):
+    model = WikiPage
     template_name = 'wiki/home.html'
+    context_object_name = 'pages'
+
+    def get_queryset(self):
+        return WikiPage.objects.filter(is_active=True).order_by('order')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        language = get_language()
-        
-        # Get active pages with translations
-        pages = WikiPage.objects.filter(
-            is_active=True,
-            translations__language=language
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiPageTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
-        
-        # Add pages with their translations to context
-        context['pages'] = [
-            {
-                'page': page,
-                'translation': page._translation[0] if page._translation else None
-            }
-            for page in pages
-        ]
-        
+        context['updates'] = WikiUpdate.objects.filter(is_active=True).order_by('-release_date')[:5]
+        context['events'] = WikiEvent.objects.filter(is_active=True).order_by('-created_at')[:5]
+        context['rates'] = WikiRate.objects.filter(is_active=True)
+        context['features'] = WikiFeature.objects.filter(is_active=True)
+        return context
+
+
+class WikiGeneralListView(ListView):
+    model = WikiGeneral
+    template_name = 'wiki/general/list.html'
+    context_object_name = 'generals'
+
+    def get_queryset(self):
+        return WikiGeneral.objects.filter(is_active=True).order_by('order')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = _('General Information')
+        return context
+
+
+class WikiGeneralDetailView(DetailView):
+    model = WikiGeneral
+    template_name = 'wiki/general/detail.html'
+    context_object_name = 'general'
+
+    def get_queryset(self):
+        return WikiGeneral.objects.filter(is_active=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.object.get_general_type_display()
+        return context
+
+
+class WikiRaidListView(ListView):
+    model = WikiRaid
+    template_name = 'wiki/raid/list.html'
+    context_object_name = 'raids'
+
+    def get_queryset(self):
+        return WikiRaid.objects.filter(is_active=True).order_by('raid_type', 'level', 'order')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = _('Raids')
+        return context
+
+
+class WikiRaidDetailView(DetailView):
+    model = WikiRaid
+    template_name = 'wiki/raid/detail.html'
+    context_object_name = 'raid'
+
+    def get_queryset(self):
+        return WikiRaid.objects.filter(is_active=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.object.get_raid_type_display()
+        return context
+
+
+class WikiAssistanceListView(ListView):
+    model = WikiAssistance
+    template_name = 'wiki/assistance/list.html'
+    context_object_name = 'assistances'
+
+    def get_queryset(self):
+        return WikiAssistance.objects.filter(is_active=True).order_by('assistance_type', 'order')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = _('Assistance')
+        return context
+
+
+class WikiAssistanceDetailView(DetailView):
+    model = WikiAssistance
+    template_name = 'wiki/assistance/detail.html'
+    context_object_name = 'assistance'
+
+    def get_queryset(self):
+        return WikiAssistance.objects.filter(is_active=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.object.get_assistance_type_display()
         return context
 
 

@@ -6,15 +6,20 @@ from .models import (
     WikiUpdate, WikiUpdateTranslation,
     WikiEvent, WikiEventTranslation,
     WikiRate, WikiRateTranslation,
-    WikiFeature, WikiFeatureTranslation
+    WikiFeature, WikiFeatureTranslation,
+    WikiGeneral, WikiGeneralTranslation,
+    WikiRaid, WikiRaidTranslation,
+    WikiAssistance, WikiAssistanceTranslation,
 )
 from core.admin import BaseModelAdmin
 
 
-class WikiPageTranslationInline(admin.StackedInline):
-    model = WikiPageTranslation
+class TranslationInline(admin.StackedInline):
     extra = 1
-    min_num = 1
+
+
+class WikiPageTranslationInline(TranslationInline):
+    model = WikiPageTranslation
 
 
 @admin.register(WikiPage)
@@ -31,10 +36,8 @@ class WikiPageAdmin(BaseModelAdmin):
     get_title.short_description = _('Title')
 
 
-class WikiSectionTranslationInline(admin.StackedInline):
+class WikiSectionTranslationInline(TranslationInline):
     model = WikiSectionTranslation
-    extra = 1
-    min_num = 1
 
 
 @admin.register(WikiSection)
@@ -51,10 +54,8 @@ class WikiSectionAdmin(BaseModelAdmin):
     get_title.short_description = _('Title')
 
 
-class WikiUpdateTranslationInline(admin.StackedInline):
+class WikiUpdateTranslationInline(TranslationInline):
     model = WikiUpdateTranslation
-    extra = 1
-    min_num = 1
 
 
 @admin.register(WikiUpdate)
@@ -66,10 +67,8 @@ class WikiUpdateAdmin(BaseModelAdmin):
     inlines = [WikiUpdateTranslationInline]
 
 
-class WikiEventTranslationInline(admin.StackedInline):
+class WikiEventTranslationInline(TranslationInline):
     model = WikiEventTranslation
-    extra = 1
-    min_num = 1
 
 
 @admin.register(WikiEvent)
@@ -91,9 +90,8 @@ class WikiEventAdmin(BaseModelAdmin):
     get_title.short_description = _('Title')
 
 
-class WikiRateTranslationInline(admin.StackedInline):
+class WikiRateTranslationInline(TranslationInline):
     model = WikiRateTranslation
-    extra = 1
 
 
 @admin.register(WikiRate)
@@ -105,9 +103,8 @@ class WikiRateAdmin(BaseModelAdmin):
     inlines = [WikiRateTranslationInline]
 
 
-class WikiFeatureTranslationInline(admin.StackedInline):
+class WikiFeatureTranslationInline(TranslationInline):
     model = WikiFeatureTranslation
-    extra = 1
 
 
 @admin.register(WikiFeature)
@@ -117,3 +114,42 @@ class WikiFeatureAdmin(BaseModelAdmin):
     search_fields = ('feature_type', 'translations__title', 'translations__content')
     ordering = ('feature_type', '-created_at')
     inlines = [WikiFeatureTranslationInline]
+
+
+class WikiGeneralTranslationInline(TranslationInline):
+    model = WikiGeneralTranslation
+
+
+@admin.register(WikiGeneral)
+class WikiGeneralAdmin(BaseModelAdmin):
+    list_display = ('general_type', 'order', 'is_active')
+    list_filter = ('is_active', 'general_type')
+    search_fields = ('translations__title', 'translations__content')
+    ordering = ['order', 'general_type']
+    inlines = [WikiGeneralTranslationInline]
+
+
+class WikiRaidTranslationInline(TranslationInline):
+    model = WikiRaidTranslation
+
+
+@admin.register(WikiRaid)
+class WikiRaidAdmin(BaseModelAdmin):
+    list_display = ('raid_type', 'level', 'order', 'is_active')
+    list_filter = ('is_active', 'raid_type', 'level')
+    search_fields = ('translations__title', 'translations__content', 'translations__location')
+    ordering = ['raid_type', 'level', 'order']
+    inlines = [WikiRaidTranslationInline]
+
+
+class WikiAssistanceTranslationInline(TranslationInline):
+    model = WikiAssistanceTranslation
+
+
+@admin.register(WikiAssistance)
+class WikiAssistanceAdmin(BaseModelAdmin):
+    list_display = ('assistance_type', 'order', 'is_active')
+    list_filter = ('is_active', 'assistance_type')
+    search_fields = ('translations__title', 'translations__content', 'translations__category')
+    ordering = ['assistance_type', 'order']
+    inlines = [WikiAssistanceTranslationInline]

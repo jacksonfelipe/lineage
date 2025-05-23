@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">{{ title }}</h1>
+    
+    <div class="row">
+        {% for assistance in assistances %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {% with pt_translation=assistance.translations.all|first %}
+                                {{ pt_translation.title }}
+                            {% endwith %}
+                        </h5>
+                        <p class="card-text">
+                            <span class="badge bg-primary">{{ assistance.get_assistance_type_display }}</span>
+                            {% with pt_translation=assistance.translations.all|first %}
+                                {% if pt_translation.category %}
+                                    <span class="badge bg-secondary">{{ pt_translation.category }}</span>
+                                {% endif %}
+                            {% endwith %}
+                        </p>
+                        <a href="{% url 'wiki:assistance_detail' assistance.pk %}" class="btn btn-primary">
+                            {% trans "Read Guide" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "No assistance guides available." %}</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

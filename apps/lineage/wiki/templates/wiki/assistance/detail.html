@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'wiki:home' %}">{% trans "Wiki" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'wiki:assistance_list' %}">{% trans "Assistance" %}</a></li>
+            <li class="breadcrumb-item active">{{ title }}</li>
+        </ol>
+    </nav>
+
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title mb-4">
+                {% with pt_translation=assistance.translations.all|first %}
+                    {{ pt_translation.title }}
+                {% endwith %}
+            </h1>
+            
+            <div class="mb-4">
+                <span class="badge bg-primary">{{ assistance.get_assistance_type_display }}</span>
+                {% with pt_translation=assistance.translations.all|first %}
+                    {% if pt_translation.category %}
+                        <span class="badge bg-secondary">{{ pt_translation.category }}</span>
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <div class="content">
+                {% with pt_translation=assistance.translations.all|first %}
+                    {{ pt_translation.content|safe }}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">{{ title }}</h1>
+    
+    <div class="row">
+        {% for raid in raids %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {% with pt_translation=raid.translations.all|first %}
+                                {{ pt_translation.title }}
+                            {% endwith %}
+                        </h5>
+                        <p class="card-text">
+                            <span class="badge bg-primary">{{ raid.get_raid_type_display }}</span>
+                            <span class="badge bg-secondary">Level {{ raid.level }}</span>
+                        </p>
+                        <p class="card-text text-muted">
+                            {% with pt_translation=raid.translations.all|first %}
+                                {{ pt_translation.location }}
+                            {% endwith %}
+                        </p>
+                        <a href="{% url 'wiki:raid_detail' raid.pk %}" class="btn btn-primary">
+                            {% trans "View Details" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "No raids available." %}</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 
