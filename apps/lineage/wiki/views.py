@@ -572,7 +572,7 @@ class WikiFeaturesView(TemplateView):
         
         anti_cheat_features = WikiFeature.objects.filter(
             is_active=True,
-            feature_type='anti_cheat',
+            feature_type='anticheat',
             translations__language=language
         ).prefetch_related(
             Prefetch(
