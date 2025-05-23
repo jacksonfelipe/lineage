@@ -22,6 +22,10 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhuma taxa de experiência encontrada." %}</p>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -42,6 +46,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhuma taxa de drop encontrada." %}</p>
             </div>
             {% endfor %}
         </div>
@@ -64,6 +72,10 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhuma taxa de adena encontrada." %}</p>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -85,6 +97,10 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhuma taxa de spoil encontrada." %}</p>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -105,6 +121,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhuma taxa de quest encontrada." %}</p>
             </div>
             {% endfor %}
         </div>

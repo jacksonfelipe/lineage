@@ -22,6 +22,10 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhum recurso personalizado encontrado." %}</p>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -43,11 +47,15 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhum recurso de gameplay encontrado." %}</p>
+            </div>
             {% endfor %}
         </div>
     </div>
 
-    <!-- Quality of Life Features -->
+    <!-- QoL Features -->
     <div class="features-section mb-5">
         <h2>{% trans "Recursos de Qualidade de Vida" %}</h2>
         <div class="row">
@@ -63,6 +71,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhum recurso de qualidade de vida encontrado." %}</p>
             </div>
             {% endfor %}
         </div>
@@ -85,6 +97,10 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhum recurso VIP encontrado." %}</p>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -106,6 +122,10 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhum recurso anti-cheat encontrado." %}</p>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -126,6 +146,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhum recurso da comunidade encontrado." %}</p>
             </div>
             {% endfor %}
         </div>

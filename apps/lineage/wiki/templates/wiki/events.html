@@ -37,6 +37,10 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhum evento regular encontrado." %}</p>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -73,6 +77,10 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhum evento especial encontrado." %}</p>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -90,6 +98,10 @@
     .event-schedule {
         color: var(--text-muted);
         margin-bottom: 1rem;
+    }
+
+    .event-description {
+        margin-top: 1rem;
     }
 
     .event-requirements, .event-rewards {

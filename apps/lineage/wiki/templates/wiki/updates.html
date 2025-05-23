@@ -5,24 +5,30 @@
 <div class="updates-container">
     <h1>{% trans "Atualizações do Servidor" %}</h1>
 
-    <div class="updates-list">
-        {% for update in updates %}
-        <div class="update-card mb-4">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="update-version">v{{ update.version }}</h2>
-                    <div class="update-date">{{ update.release_date|date:"d/m/Y" }}</div>
-                </div>
-                <div class="card-body">
-                    {{ update.translation.content|safe }}
+    <div class="updates-section">
+        <div class="row">
+            {% for update in updates %}
+            <div class="col-md-6 mb-4">
+                <div class="update-card">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ update.translation.title }}</h3>
+                            <div class="update-date">
+                                <i class="fas fa-calendar"></i> {{ update.release_date|date:"d/m/Y" }}
+                            </div>
+                            <div class="update-content">
+                                {{ update.translation.content|safe }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhuma atualização encontrada." %}</p>
+            </div>
+            {% endfor %}
         </div>
-        {% empty %}
-        <div class="no-updates">
-            <p>{% trans "Nenhuma atualização disponível no momento." %}</p>
-        </div>
-        {% endfor %}
     </div>
 </div>
 
@@ -31,27 +37,22 @@
         padding: 20px;
     }
 
-    .update-card .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: var(--bg-secondary);
-    }
-
-    .update-version {
-        margin: 0;
-        color: var(--primary-color);
+    .update-card {
+        height: 100%;
     }
 
     .update-date {
         color: var(--text-muted);
+        margin-bottom: 1rem;
     }
 
-    .no-updates {
-        text-align: center;
-        padding: 2rem;
-        background-color: var(--bg-secondary);
-        border-radius: 0.5rem;
+    .update-content {
+        margin-top: 1rem;
+    }
+
+    .card-title {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
     }
 </style>
 {% endblock %} 

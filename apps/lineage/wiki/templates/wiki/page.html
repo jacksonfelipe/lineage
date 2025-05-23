@@ -12,6 +12,10 @@
         <h2>{{ section.translation.title }}</h2>
         {{ section.translation.content|safe }}
     </div>
+    {% empty %}
+    <div class="col-12">
+        <p class="text-center">{% trans "Nenhuma seção encontrada." %}</p>
+    </div>
     {% endfor %}
 </div>
 {% endblock %} 

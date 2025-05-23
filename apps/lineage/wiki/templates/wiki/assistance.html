@@ -30,6 +30,10 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhum guia encontrado." %}</p>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -59,11 +63,15 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhum tutorial encontrado." %}</p>
+            </div>
             {% endfor %}
         </div>
     </div>
 
-    <!-- FAQ -->
+    <!-- FAQs -->
     <div class="assistance-section mb-5">
         <h2>{% trans "Perguntas Frequentes" %}</h2>
         <div class="row">
@@ -87,6 +95,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhuma pergunta frequente encontrada." %}</p>
             </div>
             {% endfor %}
         </div>
@@ -117,13 +129,17 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhuma informação de suporte técnico encontrada." %}</p>
+            </div>
             {% endfor %}
         </div>
     </div>
 
     <!-- Other Assistance -->
     <div class="assistance-section">
-        <h2>{% trans "Outras Informações" %}</h2>
+        <h2>{% trans "Outras Assistências" %}</h2>
         <div class="row">
             {% for item in other_assistance %}
             <div class="col-md-6 mb-4">
@@ -145,6 +161,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhuma outra assistência encontrada." %}</p>
             </div>
             {% endfor %}
         </div>
