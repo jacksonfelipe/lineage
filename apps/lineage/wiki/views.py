@@ -33,7 +33,7 @@ class WikiHomeView(ListView):
 
 class WikiGeneralListView(ListView):
     model = WikiGeneral
-    template_name = 'wiki/general/list.html'
+    template_name = 'wiki/general.html'
     context_object_name = 'generals'
 
     def get_queryset(self):
@@ -47,7 +47,7 @@ class WikiGeneralListView(ListView):
 
 class WikiGeneralDetailView(DetailView):
     model = WikiGeneral
-    template_name = 'wiki/general/detail.html'
+    template_name = 'wiki/general.html'
     context_object_name = 'general'
 
     def get_queryset(self):
@@ -61,7 +61,7 @@ class WikiGeneralDetailView(DetailView):
 
 class WikiRaidListView(ListView):
     model = WikiRaid
-    template_name = 'wiki/raid/list.html'
+    template_name = 'wiki/raids.html'
     context_object_name = 'raids'
 
     def get_queryset(self):
@@ -75,7 +75,7 @@ class WikiRaidListView(ListView):
 
 class WikiRaidDetailView(DetailView):
     model = WikiRaid
-    template_name = 'wiki/raid/detail.html'
+    template_name = 'wiki/raids.html'
     context_object_name = 'raid'
 
     def get_queryset(self):
@@ -89,7 +89,7 @@ class WikiRaidDetailView(DetailView):
 
 class WikiAssistanceListView(ListView):
     model = WikiAssistance
-    template_name = 'wiki/assistance/list.html'
+    template_name = 'wiki/assistance.html'
     context_object_name = 'assistances'
 
     def get_queryset(self):
@@ -103,7 +103,7 @@ class WikiAssistanceListView(ListView):
 
 class WikiAssistanceDetailView(DetailView):
     model = WikiAssistance
-    template_name = 'wiki/assistance/detail.html'
+    template_name = 'wiki/assistance.html'
     context_object_name = 'assistance'
 
     def get_queryset(self):
