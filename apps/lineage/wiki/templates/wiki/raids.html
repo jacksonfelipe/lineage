@@ -3,25 +3,47 @@
 
 {% block wiki_content %}
 <div class="raids-container">
-    <h1>{% trans "Raid Bosses" %}</h1>
+    <h1>{% trans "Raids do Jogo" %}</h1>
 
-    <!-- Regular Raids -->
-    <div class="raids-section mb-5">
-        <h2>{% trans "Raids Regulares" %}</h2>
+    <!-- Boss Raids -->
+    <div class="raid-section mb-5">
+        <h2>{% trans "Raids de Chefes" %}</h2>
         <div class="row">
-            {% for raid in regular_raids %}
+            {% for item in boss_raids %}
             <div class="col-md-6 mb-4">
                 <div class="raid-card">
                     <div class="card h-100">
                         <div class="card-body">
-                            <h3 class="card-title">{{ raid.translation.title }}</h3>
-                            <div class="raid-content">
-                                {{ raid.translation.content|safe }}
+                            <h3 class="card-title">{{ item.translation.title }}</h3>
+                            <div class="type-badge">
+                                {{ item.raid.get_raid_type_display }}
                             </div>
-                            {% if raid.schedule %}
-                            <div class="raid-schedule mt-3">
-                                <h4>{% trans "Horários" %}</h4>
-                                {{ raid.schedule|safe }}
+                            <div class="level-badge">
+                                {% trans "Nível" %}: {{ item.raid.level }}
+                            </div>
+                            <div class="raid-content">
+                                {{ item.translation.content|safe }}
+                            </div>
+                            {% if item.translation.location %}
+                            <div class="raid-location">
+                                <strong>{% trans "Localização" %}:</strong> {{ item.translation.location }}
+                            </div>
+                            {% endif %}
+                            {% if item.translation.schedule %}
+                            <div class="raid-schedule">
+                                <strong>{% trans "Horário" %}:</strong> {{ item.translation.schedule }}
+                            </div>
+                            {% endif %}
+                            {% if item.translation.requirements %}
+                            <div class="raid-requirements">
+                                <strong>{% trans "Requisitos" %}:</strong>
+                                {{ item.translation.requirements|safe }}
+                            </div>
+                            {% endif %}
+                            {% if item.translation.rewards %}
+                            <div class="raid-rewards">
+                                <strong>{% trans "Recompensas" %}:</strong>
+                                {{ item.translation.rewards|safe }}
                             </div>
                             {% endif %}
                         </div>
@@ -32,23 +54,45 @@
         </div>
     </div>
 
-    <!-- Special Raids -->
-    <div class="raids-section mb-5">
-        <h2>{% trans "Raids Especiais" %}</h2>
+    <!-- Epic Raids -->
+    <div class="raid-section mb-5">
+        <h2>{% trans "Raids Épicas" %}</h2>
         <div class="row">
-            {% for raid in special_raids %}
+            {% for item in epic_raids %}
             <div class="col-md-6 mb-4">
                 <div class="raid-card">
                     <div class="card h-100">
                         <div class="card-body">
-                            <h3 class="card-title">{{ raid.translation.title }}</h3>
-                            <div class="raid-content">
-                                {{ raid.translation.content|safe }}
+                            <h3 class="card-title">{{ item.translation.title }}</h3>
+                            <div class="type-badge">
+                                {{ item.raid.get_raid_type_display }}
                             </div>
-                            {% if raid.schedule %}
-                            <div class="raid-schedule mt-3">
-                                <h4>{% trans "Horários" %}</h4>
-                                {{ raid.schedule|safe }}
+                            <div class="level-badge">
+                                {% trans "Nível" %}: {{ item.raid.level }}
+                            </div>
+                            <div class="raid-content">
+                                {{ item.translation.content|safe }}
+                            </div>
+                            {% if item.translation.location %}
+                            <div class="raid-location">
+                                <strong>{% trans "Localização" %}:</strong> {{ item.translation.location }}
+                            </div>
+                            {% endif %}
+                            {% if item.translation.schedule %}
+                            <div class="raid-schedule">
+                                <strong>{% trans "Horário" %}:</strong> {{ item.translation.schedule }}
+                            </div>
+                            {% endif %}
+                            {% if item.translation.requirements %}
+                            <div class="raid-requirements">
+                                <strong>{% trans "Requisitos" %}:</strong>
+                                {{ item.translation.requirements|safe }}
+                            </div>
+                            {% endif %}
+                            {% if item.translation.rewards %}
+                            <div class="raid-rewards">
+                                <strong>{% trans "Recompensas" %}:</strong>
+                                {{ item.translation.rewards|safe }}
                             </div>
                             {% endif %}
                         </div>
@@ -60,22 +104,142 @@
     </div>
 
     <!-- World Raids -->
-    <div class="raids-section">
+    <div class="raid-section mb-5">
         <h2>{% trans "Raids Mundiais" %}</h2>
         <div class="row">
-            {% for raid in world_raids %}
+            {% for item in world_raids %}
             <div class="col-md-6 mb-4">
                 <div class="raid-card">
                     <div class="card h-100">
                         <div class="card-body">
-                            <h3 class="card-title">{{ raid.translation.title }}</h3>
-                            <div class="raid-content">
-                                {{ raid.translation.content|safe }}
+                            <h3 class="card-title">{{ item.translation.title }}</h3>
+                            <div class="type-badge">
+                                {{ item.raid.get_raid_type_display }}
                             </div>
-                            {% if raid.schedule %}
-                            <div class="raid-schedule mt-3">
-                                <h4>{% trans "Horários" %}</h4>
-                                {{ raid.schedule|safe }}
+                            <div class="level-badge">
+                                {% trans "Nível" %}: {{ item.raid.level }}
+                            </div>
+                            <div class="raid-content">
+                                {{ item.translation.content|safe }}
+                            </div>
+                            {% if item.translation.location %}
+                            <div class="raid-location">
+                                <strong>{% trans "Localização" %}:</strong> {{ item.translation.location }}
+                            </div>
+                            {% endif %}
+                            {% if item.translation.schedule %}
+                            <div class="raid-schedule">
+                                <strong>{% trans "Horário" %}:</strong> {{ item.translation.schedule }}
+                            </div>
+                            {% endif %}
+                            {% if item.translation.requirements %}
+                            <div class="raid-requirements">
+                                <strong>{% trans "Requisitos" %}:</strong>
+                                {{ item.translation.requirements|safe }}
+                            </div>
+                            {% endif %}
+                            {% if item.translation.rewards %}
+                            <div class="raid-rewards">
+                                <strong>{% trans "Recompensas" %}:</strong>
+                                {{ item.translation.rewards|safe }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Siege Raids -->
+    <div class="raid-section mb-5">
+        <h2>{% trans "Raids de Cerco" %}</h2>
+        <div class="row">
+            {% for item in siege_raids %}
+            <div class="col-md-6 mb-4">
+                <div class="raid-card">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ item.translation.title }}</h3>
+                            <div class="type-badge">
+                                {{ item.raid.get_raid_type_display }}
+                            </div>
+                            <div class="level-badge">
+                                {% trans "Nível" %}: {{ item.raid.level }}
+                            </div>
+                            <div class="raid-content">
+                                {{ item.translation.content|safe }}
+                            </div>
+                            {% if item.translation.location %}
+                            <div class="raid-location">
+                                <strong>{% trans "Localização" %}:</strong> {{ item.translation.location }}
+                            </div>
+                            {% endif %}
+                            {% if item.translation.schedule %}
+                            <div class="raid-schedule">
+                                <strong>{% trans "Horário" %}:</strong> {{ item.translation.schedule }}
+                            </div>
+                            {% endif %}
+                            {% if item.translation.requirements %}
+                            <div class="raid-requirements">
+                                <strong>{% trans "Requisitos" %}:</strong>
+                                {{ item.translation.requirements|safe }}
+                            </div>
+                            {% endif %}
+                            {% if item.translation.rewards %}
+                            <div class="raid-rewards">
+                                <strong>{% trans "Recompensas" %}:</strong>
+                                {{ item.translation.rewards|safe }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Other Raids -->
+    <div class="raid-section">
+        <h2>{% trans "Outras Raids" %}</h2>
+        <div class="row">
+            {% for item in other_raids %}
+            <div class="col-md-6 mb-4">
+                <div class="raid-card">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ item.translation.title }}</h3>
+                            <div class="type-badge">
+                                {{ item.raid.get_raid_type_display }}
+                            </div>
+                            <div class="level-badge">
+                                {% trans "Nível" %}: {{ item.raid.level }}
+                            </div>
+                            <div class="raid-content">
+                                {{ item.translation.content|safe }}
+                            </div>
+                            {% if item.translation.location %}
+                            <div class="raid-location">
+                                <strong>{% trans "Localização" %}:</strong> {{ item.translation.location }}
+                            </div>
+                            {% endif %}
+                            {% if item.translation.schedule %}
+                            <div class="raid-schedule">
+                                <strong>{% trans "Horário" %}:</strong> {{ item.translation.schedule }}
+                            </div>
+                            {% endif %}
+                            {% if item.translation.requirements %}
+                            <div class="raid-requirements">
+                                <strong>{% trans "Requisitos" %}:</strong>
+                                {{ item.translation.requirements|safe }}
+                            </div>
+                            {% endif %}
+                            {% if item.translation.rewards %}
+                            <div class="raid-rewards">
+                                <strong>{% trans "Recompensas" %}:</strong>
+                                {{ item.translation.rewards|safe }}
                             </div>
                             {% endif %}
                         </div>
@@ -100,14 +264,39 @@
         margin-top: 1rem;
     }
 
-    .raid-schedule {
-        border-top: 1px solid var(--border-color);
-        padding-top: 1rem;
-    }
-
     .card-title {
         color: var(--primary-color);
         margin-bottom: 1rem;
+    }
+
+    .type-badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        background-color: var(--secondary-color);
+        color: white;
+        border-radius: 0.25rem;
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+        margin-right: 0.5rem;
+    }
+
+    .level-badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 0.25rem;
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+    }
+
+    .raid-location,
+    .raid-schedule,
+    .raid-requirements,
+    .raid-rewards {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
     }
 </style>
 {% endblock %} 

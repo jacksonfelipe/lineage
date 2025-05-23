@@ -10,7 +10,8 @@ from .models import (
     WikiEvent, WikiEventTranslation,
     WikiRate, WikiRateTranslation,
     WikiFeature, WikiFeatureTranslation,
-    WikiGeneral, WikiRaid, WikiAssistance
+    WikiGeneral, WikiRaid, WikiAssistance,
+    WikiGeneralTranslation, WikiRaidTranslation, WikiAssistanceTranslation
 )
 
 
@@ -122,107 +123,307 @@ class WikiGeneralView(TemplateView):
         context = super().get_context_data(**kwargs)
         language = get_language()
         
-        # Get server information
-        server_info = WikiPage.objects.filter(
+        # Get about server information
+        about_info = WikiGeneral.objects.filter(
             is_active=True,
-            translations__language=language,
-            translations__title__icontains='server'
-        ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiPageTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
-        
-        # Get game features
-        game_features = WikiFeature.objects.filter(
-            is_active=True,
-            feature_type='gameplay',
+            general_type='about',
             translations__language=language
         ).prefetch_related(
             Prefetch(
                 'translations',
-                queryset=WikiFeatureTranslation.objects.filter(language=language),
+                queryset=WikiGeneralTranslation.objects.filter(language=language),
                 to_attr='_translation'
             )
         )
         
-        # Get getting started guides
-        getting_started = WikiPage.objects.filter(
+        # Get server rules
+        rules = WikiGeneral.objects.filter(
             is_active=True,
-            translations__language=language,
-            translations__title__icontains='getting started'
+            general_type='rules',
+            translations__language=language
         ).prefetch_related(
             Prefetch(
                 'translations',
-                queryset=WikiPageTranslation.objects.filter(language=language),
+                queryset=WikiGeneralTranslation.objects.filter(language=language),
                 to_attr='_translation'
             )
         )
         
-        # Get community guidelines
-        community_guidelines = WikiPage.objects.filter(
+        # Get game commands
+        commands = WikiGeneral.objects.filter(
             is_active=True,
-            translations__language=language,
-            translations__title__icontains='guidelines'
+            general_type='commands',
+            translations__language=language
         ).prefetch_related(
             Prefetch(
                 'translations',
-                queryset=WikiPageTranslation.objects.filter(language=language),
+                queryset=WikiGeneralTranslation.objects.filter(language=language),
                 to_attr='_translation'
             )
         )
         
-        # Get technical support
-        technical_support = WikiPage.objects.filter(
+        # Get character classes
+        classes = WikiGeneral.objects.filter(
             is_active=True,
-            translations__language=language,
-            translations__title__icontains='support'
+            general_type='classes',
+            translations__language=language
         ).prefetch_related(
             Prefetch(
                 'translations',
-                queryset=WikiPageTranslation.objects.filter(language=language),
+                queryset=WikiGeneralTranslation.objects.filter(language=language),
                 to_attr='_translation'
             )
         )
         
-        # Add all data to context
+        # Get character races
+        races = WikiGeneral.objects.filter(
+            is_active=True,
+            general_type='races',
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiGeneralTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        )
+        
+        # Get noblesse system
+        noblesse = WikiGeneral.objects.filter(
+            is_active=True,
+            general_type='noblesse',
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiGeneralTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        )
+        
+        # Get subclass system
+        subclass = WikiGeneral.objects.filter(
+            is_active=True,
+            general_type='subclass',
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiGeneralTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        )
+        
+        # Get hero system
+        hero = WikiGeneral.objects.filter(
+            is_active=True,
+            general_type='hero',
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiGeneralTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        )
+        
+        # Get clan system
+        clan = WikiGeneral.objects.filter(
+            is_active=True,
+            general_type='clan',
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiGeneralTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        )
+        
+        # Get siege system
+        siege = WikiGeneral.objects.filter(
+            is_active=True,
+            general_type='siege',
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiGeneralTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        )
+        
+        # Get olympiad system
+        olympiad = WikiGeneral.objects.filter(
+            is_active=True,
+            general_type='olympiad',
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiGeneralTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        )
+        
+        # Get castle system
+        castle = WikiGeneral.objects.filter(
+            is_active=True,
+            general_type='castle',
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiGeneralTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        )
+        
+        # Get fortress system
+        fortress = WikiGeneral.objects.filter(
+            is_active=True,
+            general_type='fortress',
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiGeneralTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        )
+        
+        # Get territory system
+        territory = WikiGeneral.objects.filter(
+            is_active=True,
+            general_type='territory',
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiGeneralTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        )
+        
+        # Get other information
+        other = WikiGeneral.objects.filter(
+            is_active=True,
+            general_type='other',
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiGeneralTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        )
+        
+        # Add all general information to context
         context.update({
-            'server_info': [
+            'about_info': [
                 {
-                    'page': info,
-                    'translation': info._translation[0] if info._translation else None
+                    'general': general,
+                    'translation': general._translation[0] if general._translation else None
                 }
-                for info in server_info
+                for general in about_info
             ],
-            'game_features': [
+            'rules': [
                 {
-                    'feature': feature,
-                    'translation': feature._translation[0] if feature._translation else None
+                    'general': general,
+                    'translation': general._translation[0] if general._translation else None
                 }
-                for feature in game_features
+                for general in rules
             ],
-            'getting_started': [
+            'commands': [
                 {
-                    'page': guide,
-                    'translation': guide._translation[0] if guide._translation else None
+                    'general': general,
+                    'translation': general._translation[0] if general._translation else None
                 }
-                for guide in getting_started
+                for general in commands
             ],
-            'community_guidelines': [
+            'classes': [
                 {
-                    'page': guideline,
-                    'translation': guideline._translation[0] if guideline._translation else None
+                    'general': general,
+                    'translation': general._translation[0] if general._translation else None
                 }
-                for guideline in community_guidelines
+                for general in classes
             ],
-            'technical_support': [
+            'races': [
                 {
-                    'page': support,
-                    'translation': support._translation[0] if support._translation else None
+                    'general': general,
+                    'translation': general._translation[0] if general._translation else None
                 }
-                for support in technical_support
+                for general in races
+            ],
+            'noblesse': [
+                {
+                    'general': general,
+                    'translation': general._translation[0] if general._translation else None
+                }
+                for general in noblesse
+            ],
+            'subclass': [
+                {
+                    'general': general,
+                    'translation': general._translation[0] if general._translation else None
+                }
+                for general in subclass
+            ],
+            'hero': [
+                {
+                    'general': general,
+                    'translation': general._translation[0] if general._translation else None
+                }
+                for general in hero
+            ],
+            'clan': [
+                {
+                    'general': general,
+                    'translation': general._translation[0] if general._translation else None
+                }
+                for general in clan
+            ],
+            'siege': [
+                {
+                    'general': general,
+                    'translation': general._translation[0] if general._translation else None
+                }
+                for general in siege
+            ],
+            'olympiad': [
+                {
+                    'general': general,
+                    'translation': general._translation[0] if general._translation else None
+                }
+                for general in olympiad
+            ],
+            'castle': [
+                {
+                    'general': general,
+                    'translation': general._translation[0] if general._translation else None
+                }
+                for general in castle
+            ],
+            'fortress': [
+                {
+                    'general': general,
+                    'translation': general._translation[0] if general._translation else None
+                }
+                for general in fortress
+            ],
+            'territory': [
+                {
+                    'general': general,
+                    'translation': general._translation[0] if general._translation else None
+                }
+                for general in territory
+            ],
+            'other': [
+                {
+                    'general': general,
+                    'translation': general._translation[0] if general._translation else None
+                }
+                for general in other
             ]
         })
         
@@ -346,58 +547,86 @@ class WikiRaidsView(TemplateView):
         context = super().get_context_data(**kwargs)
         language = get_language()
         
-        # Get all raid types
-        regular_raids = WikiPage.objects.filter(
+        # Get boss raids
+        boss_raids = WikiRaid.objects.filter(
             is_active=True,
-            translations__language=language,
-            translations__title__icontains='regular raid'
+            raid_type='boss',
+            translations__language=language
         ).prefetch_related(
             Prefetch(
                 'translations',
-                queryset=WikiPageTranslation.objects.filter(language=language),
+                queryset=WikiRaidTranslation.objects.filter(language=language),
                 to_attr='_translation'
             )
         )
         
-        special_raids = WikiPage.objects.filter(
+        # Get epic raids
+        epic_raids = WikiRaid.objects.filter(
             is_active=True,
-            translations__language=language,
-            translations__title__icontains='special raid'
+            raid_type='epic',
+            translations__language=language
         ).prefetch_related(
             Prefetch(
                 'translations',
-                queryset=WikiPageTranslation.objects.filter(language=language),
+                queryset=WikiRaidTranslation.objects.filter(language=language),
                 to_attr='_translation'
             )
         )
         
-        world_raids = WikiPage.objects.filter(
+        # Get world raids
+        world_raids = WikiRaid.objects.filter(
             is_active=True,
-            translations__language=language,
-            translations__title__icontains='world raid'
+            raid_type='world',
+            translations__language=language
         ).prefetch_related(
             Prefetch(
                 'translations',
-                queryset=WikiPageTranslation.objects.filter(language=language),
+                queryset=WikiRaidTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        )
+        
+        # Get siege raids
+        siege_raids = WikiRaid.objects.filter(
+            is_active=True,
+            raid_type='siege',
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiRaidTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        )
+        
+        # Get other raids
+        other_raids = WikiRaid.objects.filter(
+            is_active=True,
+            raid_type='other',
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiRaidTranslation.objects.filter(language=language),
                 to_attr='_translation'
             )
         )
         
         # Add all raids to context
         context.update({
-            'regular_raids': [
+            'boss_raids': [
                 {
                     'raid': raid,
                     'translation': raid._translation[0] if raid._translation else None
                 }
-                for raid in regular_raids
+                for raid in boss_raids
             ],
-            'special_raids': [
+            'epic_raids': [
                 {
                     'raid': raid,
                     'translation': raid._translation[0] if raid._translation else None
                 }
-                for raid in special_raids
+                for raid in epic_raids
             ],
             'world_raids': [
                 {
@@ -405,6 +634,20 @@ class WikiRaidsView(TemplateView):
                     'translation': raid._translation[0] if raid._translation else None
                 }
                 for raid in world_raids
+            ],
+            'siege_raids': [
+                {
+                    'raid': raid,
+                    'translation': raid._translation[0] if raid._translation else None
+                }
+                for raid in siege_raids
+            ],
+            'other_raids': [
+                {
+                    'raid': raid,
+                    'translation': raid._translation[0] if raid._translation else None
+                }
+                for raid in other_raids
             ]
         })
         
@@ -418,67 +661,107 @@ class WikiAssistanceView(TemplateView):
         context = super().get_context_data(**kwargs)
         language = get_language()
         
-        # Get common issues
-        common_issues = WikiPage.objects.filter(
+        # Get guides and guilds
+        guides = WikiAssistance.objects.filter(
             is_active=True,
-            translations__language=language,
-            translations__title__icontains='issue'
+            assistance_type='guide',
+            translations__language=language
         ).prefetch_related(
             Prefetch(
                 'translations',
-                queryset=WikiPageTranslation.objects.filter(language=language),
+                queryset=WikiAssistanceTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        )
+        
+        # Get tutorials
+        tutorials = WikiAssistance.objects.filter(
+            is_active=True,
+            assistance_type='tutorial',
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiAssistanceTranslation.objects.filter(language=language),
                 to_attr='_translation'
             )
         )
         
         # Get FAQs
-        faqs = WikiPage.objects.filter(
+        faqs = WikiAssistance.objects.filter(
             is_active=True,
-            translations__language=language,
-            translations__title__icontains='faq'
+            assistance_type='faq',
+            translations__language=language
         ).prefetch_related(
             Prefetch(
                 'translations',
-                queryset=WikiPageTranslation.objects.filter(language=language),
+                queryset=WikiAssistanceTranslation.objects.filter(language=language),
                 to_attr='_translation'
             )
         )
         
         # Get technical support
-        technical_support = WikiPage.objects.filter(
+        technical_support = WikiAssistance.objects.filter(
             is_active=True,
-            translations__language=language,
-            translations__title__icontains='support'
+            assistance_type='support',
+            translations__language=language
         ).prefetch_related(
             Prefetch(
                 'translations',
-                queryset=WikiPageTranslation.objects.filter(language=language),
+                queryset=WikiAssistanceTranslation.objects.filter(language=language),
                 to_attr='_translation'
             )
         )
         
-        # Add all data to context
+        # Get other assistance types
+        other_assistance = WikiAssistance.objects.filter(
+            is_active=True,
+            assistance_type='other',
+            translations__language=language
+        ).prefetch_related(
+            Prefetch(
+                'translations',
+                queryset=WikiAssistanceTranslation.objects.filter(language=language),
+                to_attr='_translation'
+            )
+        )
+        
+        # Add all assistance to context
         context.update({
-            'common_issues': [
+            'guides': [
                 {
-                    'issue': issue,
-                    'translation': issue._translation[0] if issue._translation else None
+                    'assistance': assistance,
+                    'translation': assistance._translation[0] if assistance._translation else None
                 }
-                for issue in common_issues
+                for assistance in guides
+            ],
+            'tutorials': [
+                {
+                    'assistance': assistance,
+                    'translation': assistance._translation[0] if assistance._translation else None
+                }
+                for assistance in tutorials
             ],
             'faqs': [
                 {
-                    'faq': faq,
-                    'translation': faq._translation[0] if faq._translation else None
+                    'assistance': assistance,
+                    'translation': assistance._translation[0] if assistance._translation else None
                 }
-                for faq in faqs
+                for assistance in faqs
             ],
             'technical_support': [
                 {
-                    'support': support,
-                    'translation': support._translation[0] if support._translation else None
+                    'assistance': assistance,
+                    'translation': assistance._translation[0] if assistance._translation else None
                 }
-                for support in technical_support
+                for assistance in technical_support
+            ],
+            'other_assistance': [
+                {
+                    'assistance': assistance,
+                    'translation': assistance._translation[0] if assistance._translation else None
+                }
+                for assistance in other_assistance
             ]
         })
         

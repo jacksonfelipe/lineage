@@ -5,18 +5,55 @@
 <div class="assistance-container">
     <h1>{% trans "Assistência do Jogo" %}</h1>
 
-    <!-- Common Issues -->
+    <!-- Guides -->
     <div class="assistance-section mb-5">
-        <h2>{% trans "Problemas Comuns" %}</h2>
+        <h2>{% trans "Guias" %}</h2>
         <div class="row">
-            {% for issue in common_issues %}
+            {% for item in guides %}
             <div class="col-md-6 mb-4">
                 <div class="issue-card">
                     <div class="card h-100">
                         <div class="card-body">
-                            <h3 class="card-title">{{ issue.translation.title }}</h3>
+                            <h3 class="card-title">{{ item.translation.title }}</h3>
+                            <div class="type-badge">
+                                {{ item.assistance.get_assistance_type_display }}
+                            </div>
+                            {% if item.translation.category %}
+                            <div class="category-badge">
+                                {{ item.translation.category }}
+                            </div>
+                            {% endif %}
                             <div class="issue-content">
-                                {{ issue.translation.content|safe }}
+                                {{ item.translation.content|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Tutorials -->
+    <div class="assistance-section mb-5">
+        <h2>{% trans "Tutoriais" %}</h2>
+        <div class="row">
+            {% for item in tutorials %}
+            <div class="col-md-6 mb-4">
+                <div class="tutorial-card">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ item.translation.title }}</h3>
+                            <div class="type-badge">
+                                {{ item.assistance.get_assistance_type_display }}
+                            </div>
+                            {% if item.translation.category %}
+                            <div class="category-badge">
+                                {{ item.translation.category }}
+                            </div>
+                            {% endif %}
+                            <div class="tutorial-content">
+                                {{ item.translation.content|safe }}
                             </div>
                         </div>
                     </div>
@@ -30,14 +67,22 @@
     <div class="assistance-section mb-5">
         <h2>{% trans "Perguntas Frequentes" %}</h2>
         <div class="row">
-            {% for faq in faqs %}
+            {% for item in faqs %}
             <div class="col-md-6 mb-4">
                 <div class="faq-card">
                     <div class="card h-100">
                         <div class="card-body">
-                            <h3 class="card-title">{{ faq.translation.title }}</h3>
+                            <h3 class="card-title">{{ item.translation.title }}</h3>
+                            <div class="type-badge">
+                                {{ item.assistance.get_assistance_type_display }}
+                            </div>
+                            {% if item.translation.category %}
+                            <div class="category-badge">
+                                {{ item.translation.category }}
+                            </div>
+                            {% endif %}
                             <div class="faq-content">
-                                {{ faq.translation.content|safe }}
+                                {{ item.translation.content|safe }}
                             </div>
                         </div>
                     </div>
@@ -48,17 +93,54 @@
     </div>
 
     <!-- Technical Support -->
-    <div class="assistance-section">
+    <div class="assistance-section mb-5">
         <h2>{% trans "Suporte Técnico" %}</h2>
         <div class="row">
-            {% for support in technical_support %}
+            {% for item in technical_support %}
             <div class="col-md-6 mb-4">
                 <div class="support-card">
                     <div class="card h-100">
                         <div class="card-body">
-                            <h3 class="card-title">{{ support.translation.title }}</h3>
+                            <h3 class="card-title">{{ item.translation.title }}</h3>
+                            <div class="type-badge">
+                                {{ item.assistance.get_assistance_type_display }}
+                            </div>
+                            {% if item.translation.category %}
+                            <div class="category-badge">
+                                {{ item.translation.category }}
+                            </div>
+                            {% endif %}
                             <div class="support-content">
-                                {{ support.translation.content|safe }}
+                                {{ item.translation.content|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Other Assistance -->
+    <div class="assistance-section">
+        <h2>{% trans "Outras Informações" %}</h2>
+        <div class="row">
+            {% for item in other_assistance %}
+            <div class="col-md-6 mb-4">
+                <div class="other-card">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ item.translation.title }}</h3>
+                            <div class="type-badge">
+                                {{ item.assistance.get_assistance_type_display }}
+                            </div>
+                            {% if item.translation.category %}
+                            <div class="category-badge">
+                                {{ item.translation.category }}
+                            </div>
+                            {% endif %}
+                            <div class="other-content">
+                                {{ item.translation.content|safe }}
                             </div>
                         </div>
                     </div>
@@ -75,19 +157,44 @@
     }
 
     .issue-card,
+    .tutorial-card,
     .faq-card,
-    .support-card {
+    .support-card,
+    .other-card {
         height: 100%;
     }
 
     .issue-content,
+    .tutorial-content,
     .faq-content,
-    .support-content {
+    .support-content,
+    .other-content {
         margin-top: 1rem;
     }
 
     .card-title {
         color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .type-badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        background-color: var(--secondary-color);
+        color: white;
+        border-radius: 0.25rem;
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+        margin-right: 0.5rem;
+    }
+
+    .category-badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 0.25rem;
+        font-size: 0.875rem;
         margin-bottom: 1rem;
     }
 </style>
