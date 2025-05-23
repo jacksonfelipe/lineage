@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-22 01:10-0300\n"
+"POT-Creation-Date: 2025-05-23 19:08-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2914,11 +2914,416 @@ msgstr "Característica wiki"
 msgid "Wiki Features"
 msgstr "Características de Wiki"
 
+msgid "Feature"
+msgstr "Característica"
+
 msgid "Wiki Feature Translation"
 msgstr "Traducción de características wiki"
 
 msgid "Wiki Feature Translations"
 msgstr "Traducciones de características wiki"
+
+msgid "About Server"
+msgstr "Acerca del servidor"
+
+msgid "Server Rules"
+msgstr "Reglas del servidor"
+
+msgid "Game Commands"
+msgstr "Comandos del juego"
+
+msgid "Character Classes"
+msgstr "Clases de personajes"
+
+msgid "Character Races"
+msgstr "Carreras de personajes"
+
+msgid "Noblesse System"
+msgstr "Sistema noble"
+
+msgid "Subclass System"
+msgstr "Sistema de subclase"
+
+msgid "Hero System"
+msgstr "Sistema de héroes"
+
+msgid "Clan System"
+msgstr "Sistema de clanes"
+
+msgid "Siege System"
+msgstr "Sistema de victoria"
+
+msgid "Olympiad System"
+msgstr "Sistema Olympiad"
+
+msgid "Castle System"
+msgstr "Sistema de castillo"
+
+msgid "Fortress System"
+msgstr "Sistema de fortaleza"
+
+msgid "Territory System"
+msgstr "Sistema de territorio"
+
+msgid "Other"
+msgstr "Otro"
+
+msgid "Wiki General"
+msgstr "Wiki general"
+
+msgid "Wiki General Translation"
+msgstr "Wiki Traducción general"
+
+msgid "Wiki General Translations"
+msgstr "Traducciones generales de wiki"
+
+msgid "Boss Raid"
+msgstr "Ataques de jefe"
+
+msgid "Epic Raid"
+msgstr "Incursión épica"
+
+msgid "World Raid"
+msgstr "Incursión mundial"
+
+msgid "Siege Raid"
+msgstr "RAID de la victoria"
+
+msgid "Wiki Raid"
+msgstr "Wiki Raid"
+
+msgid "Wiki Raids"
+msgstr "Wiki Raids"
+
+msgid "Location"
+msgstr "Ubicación"
+
+msgid "Wiki Raid Translation"
+msgstr "Traducción de la incursión de wiki"
+
+msgid "Wiki Raid Translations"
+msgstr "Traducciones de Wiki Raid"
+
+msgid "Tutorial"
+msgstr "Tutorial"
+
+msgid "FAQ"
+msgstr "Preguntas frecuentes"
+
+msgid "Support"
+msgstr "Apoyo"
+
+msgid "Wiki Assistance"
+msgstr "Asistencia wiki"
+
+msgid "Category"
+msgstr "Categoría"
+
+msgid "Wiki Assistance Translation"
+msgstr "Traducción de asistencia wiki"
+
+msgid "Wiki Assistance Translations"
+msgstr "Traducciones de asistencia wiki"
+
+msgid "Assistência do Jogo"
+msgstr "Ayuda del juego"
+
+msgid "Guias"
+msgstr "Guias"
+
+msgid "Nenhum guia encontrado."
+msgstr "No se encontró ninguna guía."
+
+msgid "Tutoriais"
+msgstr "Tutoriales"
+
+msgid "Nenhum tutorial encontrado."
+msgstr "No se encontró ningún tutorial."
+
+msgid "Perguntas Frequentes"
+msgstr "Preguntas frecuentes"
+
+msgid "Nenhuma pergunta frequente encontrada."
+msgstr "No se encuentra ninguna pregunta frecuente."
+
+msgid "Suporte Técnico"
+msgstr "Apoyo técnico"
+
+msgid "Nenhuma informação de suporte técnico encontrada."
+msgstr "No se encontró información de soporte técnico."
+
+msgid "Outras Assistências"
+msgstr "Otras asistencias"
+
+msgid "Nenhuma outra assistência encontrada."
+msgstr "No se encontró otra ayuda."
+
+msgid "Guia Wiki"
+msgstr "Guía de wiki"
+
+msgid "Início"
+msgstr "Comenzar"
+
+msgid "Informações Gerais"
+msgstr "información general"
+
+msgid "Taxas"
+msgstr "Tarifa"
+
+msgid "Chefes de Raid"
+msgstr "Chefes de Raid"
+
+msgid "Guia de Eventos"
+msgstr "Guía de eventos"
+
+msgid "Atualizações"
+msgstr "Actualizaciones"
+
+msgid "Recursos"
+msgstr "Recursos"
+
+msgid "Eventos Regulares"
+msgstr "Eventos Regulares"
+
+msgid "Requisitos"
+msgstr "Requisitos"
+
+msgid "Nenhum evento regular encontrado."
+msgstr "No se encuentra ningún evento regular."
+
+msgid "Eventos Especiais"
+msgstr "Eventos especiales"
+
+msgid "Nenhum evento especial encontrado."
+msgstr "No se encontró ningún evento especial."
+
+msgid "Recursos do Servidor"
+msgstr "Recursos do Servidor"
+
+msgid "Recursos Personalizados"
+msgstr "Recursos Personalizados"
+
+msgid "Nenhum recurso personalizado encontrado."
+msgstr "No se encontraron características personalizadas."
+
+msgid "Recursos de Gameplay"
+msgstr "Recursos de Gameplay"
+
+msgid "Nenhum recurso de gameplay encontrado."
+msgstr "No se encontraron características de juego."
+
+msgid "Recursos de Qualidade de Vida"
+msgstr "Recursos de calidad de vida"
+
+msgid "Nenhum recurso de qualidade de vida encontrado."
+msgstr "No se encontró un atractivo de calidad de vida."
+
+msgid "Recursos VIP"
+msgstr "Recursos VIP"
+
+msgid "Nenhum recurso VIP encontrado."
+msgstr "No se encontró ningún recurso VIP."
+
+msgid "Recursos Anti-Cheat"
+msgstr "Recursos Anti-Cheat"
+
+msgid "Nenhum recurso anti-cheat encontrado."
+msgstr "No se encontró ningún recurso anti-trato."
+
+msgid "Recursos da Comunidade"
+msgstr "Recursos comunitarios"
+
+msgid "Nenhum recurso da comunidade encontrado."
+msgstr "No se encontró ningún recurso de la comunidad."
+
+msgid "Sobre o Servidor"
+msgstr "Sobre o Servidor"
+
+msgid "Nenhuma informação sobre o servidor encontrada."
+msgstr "No se encuentra información sobre el servidor."
+
+msgid "Regras do Servidor"
+msgstr "Regras do Servidor"
+
+msgid "Nenhuma regra do servidor encontrada."
+msgstr "No se encontró una regla del servidor."
+
+msgid "Comandos do Jogo"
+msgstr "Comandos del juego"
+
+msgid "Nenhum comando do jogo encontrado."
+msgstr "No se encontró el mando del juego."
+
+msgid "Classes de Personagem"
+msgstr "Clases de personajes"
+
+msgid "Nenhuma classe de personagem encontrada."
+msgstr "No se encontró clase de personaje."
+
+msgid "Raças de Personagem"
+msgstr "Carreras de personajes"
+
+msgid "Nenhuma raça de personagem encontrada."
+msgstr "Ningún personaje de personaje encontrado."
+
+msgid "Sistema Noblesse"
+msgstr "Sistema Noblesse"
+
+msgid "Nenhuma informação sobre o sistema Noblesse encontrada."
+msgstr "No se encontró información sobre el sistema noblesse."
+
+msgid "Sistema de Subclasse"
+msgstr "Sistema de Subclasse"
+
+msgid "Nenhuma informação sobre o sistema de subclasse encontrada."
+msgstr "No se encuentra información sobre el sistema de subclase."
+
+msgid "Sistema de Herói"
+msgstr "Sistema de héroes"
+
+msgid "Nenhuma informação sobre o sistema de herói encontrada."
+msgstr "No se encuentra información sobre el sistema de héroes."
+
+msgid "Sistema de Clã"
+msgstr "Sistema de Clã"
+
+msgid "Nenhuma informação sobre o sistema de clã encontrada."
+msgstr "No se encuentra información sobre el sistema de clan."
+
+msgid "Sistema de Cerco"
+msgstr "Sistema de Cerco"
+
+msgid "Nenhuma informação sobre o sistema de cerco encontrada."
+msgstr "No se encuentra información sobre el sistema de asedio."
+
+msgid "Sistema de Olimpíada"
+msgstr "Sistema de Olimpíada"
+
+msgid "Nenhuma informação sobre o sistema de olimpíada encontrada."
+msgstr "No se encontró información sobre el sistema Olímpicos."
+
+msgid "Sistema de Castelo"
+msgstr "Sistema de Castelo"
+
+msgid "Nenhuma informação sobre o sistema de castelo encontrada."
+msgstr "No se encuentra información sobre el sistema de castillos."
+
+msgid "Sistema de Fortaleza"
+msgstr "Sistema de Fortaleza"
+
+msgid "Nenhuma informação sobre o sistema de fortaleza encontrada."
+msgstr "No se encuentra información sobre el sistema Fortaleza."
+
+msgid "Sistema de Território"
+msgstr "Sistema de territorio"
+
+msgid "Nenhuma informação sobre o sistema de território encontrada."
+msgstr "No se encuentra información sobre el sistema de territorio."
+
+msgid "Outras Informações"
+msgstr "Otra información"
+
+msgid "Nenhuma outra informação encontrada."
+msgstr "Ninguna otra información encontrada."
+
+msgid "Wiki"
+msgstr "Semana"
+
+msgid "Bem-vindo ao Guia Wiki"
+msgstr "Bienvenido a la guía wiki"
+
+msgid "Encontre todas as informações que você precisa sobre o servidor"
+msgstr "Encuentre toda la información que necesita sobre el servidor"
+
+msgid "Nenhuma página encontrada."
+msgstr "No se encontró página."
+
+msgid "Nenhuma seção encontrada."
+msgstr "No se encontró sección."
+
+msgid "Raids do Jogo"
+msgstr "Raids of the Game"
+
+msgid "Raids de Chefes"
+msgstr "Ataques de la cabeza"
+
+msgid "Horário"
+msgstr "Tiempo"
+
+msgid "Nenhuma raid de chefe encontrada."
+msgstr "No se encontró ninguna redada de jefe."
+
+msgid "Raids Épicas"
+msgstr "Raids Épicas"
+
+msgid "Nenhuma raid épica encontrada."
+msgstr "No se encontró una incursión épica."
+
+msgid "Raids Mundiais"
+msgstr "Incursiones mundiales"
+
+msgid "Nenhuma raid mundial encontrada."
+msgstr "No se encontró ninguna redada mundial."
+
+msgid "Raids de Cerco"
+msgstr "Raids de Cerco"
+
+msgid "Nenhuma raid de cerco encontrada."
+msgstr "No se encontró ninguna redada de asedio."
+
+msgid "Outras Raids"
+msgstr "Otras incursiones"
+
+msgid "Nenhuma outra raid encontrada."
+msgstr "Ninguna otra incursión encontrada."
+
+msgid "Taxas do Servidor"
+msgstr "Taxas do Servidor"
+
+msgid "Taxas de Experiência"
+msgstr "Tarifas de experiencia"
+
+msgid "Nenhuma taxa de experiência encontrada."
+msgstr "No se encontró tasa de experiencia."
+
+msgid "Taxas de Drop"
+msgstr "Taxas de Drop"
+
+msgid "Nenhuma taxa de drop encontrada."
+msgstr "No se encontraron tasas de caída."
+
+msgid "Taxas de Adena"
+msgstr "Taxas de Adena"
+
+msgid "Nenhuma taxa de adena encontrada."
+msgstr "No se encontró tasa de adena."
+
+msgid "Taxas de Spoil"
+msgstr "Taxas de Spoil"
+
+msgid "Nenhuma taxa de spoil encontrada."
+msgstr "No se encontró tasa de botín."
+
+msgid "Taxas de Quest"
+msgstr "Taxas de Quest"
+
+msgid "Nenhuma taxa de quest encontrada."
+msgstr "No se encontró tasa de búsqueda."
+
+msgid "Atualizações do Servidor"
+msgstr "Actualizaciones del servidor"
+
+msgid "Nenhuma atualização encontrada."
+msgstr "No se encontró actualización."
+
+msgid "General Information"
+msgstr "Información general"
+
+msgid "Raids"
+msgstr "Ataques"
+
+msgid "Assistance"
+msgstr "Asistencia"
 
 msgid "Nome do Grupo"
 msgstr "Nombre de grupo"
@@ -3267,9 +3672,6 @@ msgstr "Está público"
 msgid "Pergunta Frequente"
 msgstr "Cuestión frecuente"
 
-msgid "Perguntas Frequentes"
-msgstr "Preguntas frecuentes"
-
 msgid "Pode visualizar o índice"
 msgstr "Pode visualizar o índice"
 
@@ -3278,9 +3680,6 @@ msgstr "Inglés"
 
 msgid "Espanhol"
 msgstr "Español"
-
-msgid "FAQ"
-msgstr "Preguntas frecuentes"
 
 msgid "Idioma"
 msgstr "Idioma"
@@ -4905,9 +5304,6 @@ msgstr "¿Estás seguro de que quieres limpiar todas las notificaciones?"
 msgid "Erro ao carregar os detalhes da notificação."
 msgstr "Error de carga de detalles de notificación."
 
-msgid "Início"
-msgstr "Comenzar"
-
 msgid "Games"
 msgstr "Juego"
 
@@ -5066,26 +5462,14 @@ msgstr "Misiones personalizadas"
 msgid "Eventos e Recompensas"
 msgstr "Eventos e Recompensas"
 
-msgid "Wiki"
-msgstr "Semana"
-
 msgid "Wiki e Atualizações do Lineage"
 msgstr "Actualizaciones de wiki y linaje"
-
-msgid "Informações Gerais"
-msgstr "información general"
-
-msgid "Taxas de Experiência"
-msgstr "Tarifas de experiencia"
 
 msgid "Chefes de Raide e Instâncias"
 msgstr "Raide Heads e instancias"
 
 msgid "Ajuda no Jogo"
 msgstr "Ayuda del juego"
-
-msgid "Guia de Eventos"
-msgstr "Guía de eventos"
 
 msgid "Atualização"
 msgstr "Actualizar"
@@ -5269,9 +5653,6 @@ msgstr "Términos y condiciones"
 
 msgid "Termos e Condições de Uso"
 msgstr "Términos y condiciones de uso"
-
-msgid "Sobre o Servidor"
-msgstr "Sobre o Servidor"
 
 msgid "O"
 msgstr "EL"
@@ -5497,114 +5878,6 @@ msgstr ""
 "Ingrese su contraseña anterior por razones de seguridad y luego ingrese su "
 "nueva contraseña dos veces para verificar si se escribió correctamente."
 
-msgid "Assistência do Jogo"
-msgstr "Ayuda del juego"
-
-msgid "Problemas Comuns"
-msgstr "Problemas Comuns"
-
-msgid "Suporte Técnico"
-msgstr "Apoyo técnico"
-
-msgid "Guia Wiki"
-msgstr "Guía de wiki"
-
-msgid "Taxas"
-msgstr "Tarifa"
-
-msgid "Chefes de Raid"
-msgstr "Chefes de Raid"
-
-msgid "Atualizações"
-msgstr "Actualizaciones"
-
-msgid "Recursos"
-msgstr "Recursos"
-
-msgid "Eventos Regulares"
-msgstr "Eventos Regulares"
-
-msgid "Requisitos"
-msgstr "Requisitos"
-
-msgid "Eventos Especiais"
-msgstr "Eventos especiales"
-
-msgid "Recursos do Servidor"
-msgstr "Recursos do Servidor"
-
-msgid "Recursos Personalizados"
-msgstr "Recursos Personalizados"
-
-msgid "Recursos de Gameplay"
-msgstr "Recursos de Gameplay"
-
-msgid "Recursos de Qualidade de Vida"
-msgstr "Recursos de calidad de vida"
-
-msgid "Recursos VIP"
-msgstr "Recursos VIP"
-
-msgid "Recursos Anti-Cheat"
-msgstr "Recursos Anti-Cheat"
-
-msgid "Recursos da Comunidade"
-msgstr "Recursos comunitarios"
-
-msgid "Informações do Servidor"
-msgstr "Información del servidor"
-
-msgid "Recursos do Jogo"
-msgstr "Recursos de juego"
-
-msgid "Começando"
-msgstr "A partir de"
-
-msgid "Diretrizes da Comunidade"
-msgstr "Directrices de la comunidad"
-
-msgid "Bem-vindo ao Guia Wiki"
-msgstr "Bienvenido a la guía wiki"
-
-msgid "Encontre todas as informações que você precisa sobre o servidor"
-msgstr "Encuentre toda la información que necesita sobre el servidor"
-
-msgid "Raid Bosses"
-msgstr "Jefes de ruidos"
-
-msgid "Raids Regulares"
-msgstr "Raids Regulares"
-
-msgid "Horários"
-msgstr "Cronograma"
-
-msgid "Raids Especiais"
-msgstr "Incursiones especiales"
-
-msgid "Raids Mundiais"
-msgstr "Incursiones mundiales"
-
-msgid "Taxas do Servidor"
-msgstr "Taxas do Servidor"
-
-msgid "Taxas de Drop"
-msgstr "Taxas de Drop"
-
-msgid "Taxas de Adena"
-msgstr "Taxas de Adena"
-
-msgid "Taxas de Spoil"
-msgstr "Taxas de Spoil"
-
-msgid "Taxas de Quest"
-msgstr "Taxas de Quest"
-
-msgid "Atualizações do Servidor"
-msgstr "Actualizaciones del servidor"
-
-msgid "Nenhuma atualização disponível no momento."
-msgstr "No hay actualización disponible en este momento."
-
 msgid "🔐 Gerador de credenciais"
 msgstr "🔐 Generador de credenciales"
 
@@ -5688,6 +5961,36 @@ msgstr ""
 
 msgid "Você não tem permissão para criar notificações públicas staff."
 msgstr "No se le permite crear notificaciones públicas del personal."
+
+#~ msgid "Problemas Comuns"
+#~ msgstr "Problemas Comuns"
+
+#~ msgid "Informações do Servidor"
+#~ msgstr "Información del servidor"
+
+#~ msgid "Recursos do Jogo"
+#~ msgstr "Recursos de juego"
+
+#~ msgid "Começando"
+#~ msgstr "A partir de"
+
+#~ msgid "Diretrizes da Comunidade"
+#~ msgstr "Directrices de la comunidad"
+
+#~ msgid "Raid Bosses"
+#~ msgstr "Jefes de ruidos"
+
+#~ msgid "Raids Regulares"
+#~ msgstr "Raids Regulares"
+
+#~ msgid "Horários"
+#~ msgstr "Cronograma"
+
+#~ msgid "Raids Especiais"
+#~ msgstr "Incursiones especiales"
+
+#~ msgid "Nenhuma atualização disponível no momento."
+#~ msgstr "No hay actualización disponible en este momento."
 
 #~ msgid "Lineage2 Logo"
 #~ msgstr "Logotipo de linaje2"
