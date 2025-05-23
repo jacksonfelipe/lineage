@@ -187,7 +187,7 @@ class WikiGeneralView(WikiPagesMixin, TemplateView):
                     queryset=WikiGeneralTranslation.objects.filter(language=language),
                     to_attr='_translation'
                 )
-            )
+            ).order_by('order')
             
             # Add to context with proper key
             context_key = f'{general_type}_info'
@@ -209,6 +209,9 @@ class WikiGeneralView(WikiPagesMixin, TemplateView):
             'general_info_keys': list(general_info.keys()),
             'general_info_counts': {k: len(v) for k, v in general_info.items()}
         }
+        
+        # Add title to context
+        context['title'] = _('General Information')
         
         return context
 
@@ -330,105 +333,92 @@ class WikiRaidsView(WikiPagesMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         language = get_language()
         
-        # Get boss raids
+        # Debug: Print all raids without filters
+        all_raids = WikiRaid.objects.all()
+        active_raids = WikiRaid.objects.filter(is_active=True)
+        raids_with_translations = WikiRaid.objects.filter(translations__language=language)
+        
+        # Debug: Print all raid types
+        raid_types = WikiRaid.objects.values_list('raid_type', flat=True).distinct()
+        
+        # Get boss raids with debug info
         boss_raids = WikiRaid.objects.filter(
             is_active=True,
-            raid_type='boss',
-            translations__language=language
+            raid_type='boss'
         ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiRaidTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
+            'translations'
+        ).order_by('level', 'order')
         
         # Get epic raids
         epic_raids = WikiRaid.objects.filter(
             is_active=True,
-            raid_type='epic',
-            translations__language=language
+            raid_type='epic'
         ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiRaidTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
+            'translations'
+        ).order_by('level', 'order')
         
         # Get world raids
         world_raids = WikiRaid.objects.filter(
             is_active=True,
-            raid_type='world',
-            translations__language=language
+            raid_type='world'
         ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiRaidTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
+            'translations'
+        ).order_by('level', 'order')
         
         # Get siege raids
         siege_raids = WikiRaid.objects.filter(
             is_active=True,
-            raid_type='siege',
-            translations__language=language
+            raid_type='siege'
         ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiRaidTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
+            'translations'
+        ).order_by('level', 'order')
         
         # Get other raids
         other_raids = WikiRaid.objects.filter(
             is_active=True,
-            raid_type='other',
-            translations__language=language
+            raid_type='other'
         ).prefetch_related(
-            Prefetch(
-                'translations',
-                queryset=WikiRaidTranslation.objects.filter(language=language),
-                to_attr='_translation'
-            )
-        )
+            'translations'
+        ).order_by('level', 'order')
         
-        # Add all raids to context
+        # Helper function to get translation
+        def get_translation(raid):
+            return raid.translations.filter(language=language).first()
+        
+        # Add all raids to context with proper structure
         context.update({
             'boss_raids': [
                 {
                     'raid': raid,
-                    'translation': raid._translation[0] if raid._translation else None
+                    'translation': get_translation(raid)
                 }
                 for raid in boss_raids
             ],
             'epic_raids': [
                 {
                     'raid': raid,
-                    'translation': raid._translation[0] if raid._translation else None
+                    'translation': get_translation(raid)
                 }
                 for raid in epic_raids
             ],
             'world_raids': [
                 {
                     'raid': raid,
-                    'translation': raid._translation[0] if raid._translation else None
+                    'translation': get_translation(raid)
                 }
                 for raid in world_raids
             ],
             'siege_raids': [
                 {
                     'raid': raid,
-                    'translation': raid._translation[0] if raid._translation else None
+                    'translation': get_translation(raid)
                 }
                 for raid in siege_raids
             ],
             'other_raids': [
                 {
                     'raid': raid,
-                    'translation': raid._translation[0] if raid._translation else None
+                    'translation': get_translation(raid)
                 }
                 for raid in other_raids
             ]

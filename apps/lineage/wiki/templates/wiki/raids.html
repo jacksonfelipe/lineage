@@ -50,6 +50,10 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhuma raid de chefe encontrada." %}</p>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -98,6 +102,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhuma raid épica encontrada." %}</p>
             </div>
             {% endfor %}
         </div>
@@ -148,6 +156,10 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhuma raid mundial encontrada." %}</p>
+            </div>
             {% endfor %}
         </div>
     </div>
@@ -197,12 +209,16 @@
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhuma raid de cerco encontrada." %}</p>
+            </div>
             {% endfor %}
         </div>
     </div>
 
     <!-- Other Raids -->
-    <div class="raid-section">
+    <div class="raid-section mb-5">
         <h2>{% trans "Outras Raids" %}</h2>
         <div class="row">
             {% for item in other_raids %}
@@ -245,6 +261,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">{% trans "Nenhuma outra raid encontrada." %}</p>
             </div>
             {% endfor %}
         </div>
