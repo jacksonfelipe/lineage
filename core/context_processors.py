@@ -20,6 +20,8 @@ def project_metadata(request):
         'PROJECT_YOUTUBE_URL': settings.PROJECT_YOUTUBE_URL,
         'PROJECT_FACEBOOK_URL': settings.PROJECT_FACEBOOK_URL,
         'PROJECT_INSTAGRAM_URL': settings.PROJECT_INSTAGRAM_URL,
+        'project_name': settings.PROJECT_NAME if hasattr(settings, 'PROJECT_NAME') else 'Lineage2',
+        'version': settings.VERSION if hasattr(settings, 'VERSION') else '1.0.0',
     }
 
 

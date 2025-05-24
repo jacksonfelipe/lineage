@@ -16,6 +16,9 @@ load_dotenv()  # take environment variables from .env.
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# System Version
+VERSION = '1.7.2'
+
 # Enable/Disable DEBUG Mode
 DEBUG = str2bool(os.environ.get('DEBUG', False))
 
