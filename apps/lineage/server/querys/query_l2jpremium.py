@@ -4,6 +4,7 @@ from apps.lineage.server.utils.cache import cache_lineage_result
 import time
 import base64
 import hashlib
+from datetime import datetime
 
 
 class LineageStats:
@@ -32,7 +33,7 @@ class LineageStats:
     @staticmethod
     @cache_lineage_result(timeout=300)
     def players_online():
-        sql = "SELECT COUNT(*) AS quant FROM characters WHERE online > 0 AND access_level = '0'"
+        sql = "SELECT COUNT(*) AS quant FROM characters WHERE online > 0 AND accessLevel = '0'"
         return LineageStats._run_query(sql)
     
     @staticmethod
@@ -316,22 +317,22 @@ class LineageServices:
                 C.classid AS base_class,
                 C.level AS base_level,
                 (SELECT S1.class_id FROM character_subclasses AS S1 
-                WHERE S1.char_obj_id = C.charId AND S1.class_index > 0 
+                WHERE S1.charId = C.charId AND S1.class_index > 0 
                 LIMIT 0,1) AS subclass1,
                 (SELECT S1.level FROM character_subclasses AS S1 
-                WHERE S1.char_obj_id = C.charId AND S1.class_index > 0 
+                WHERE S1.charId = C.charId AND S1.class_index > 0 
                 LIMIT 0,1) AS subclass1_level,
                 (SELECT S2.class_id FROM character_subclasses AS S2 
-                WHERE S2.char_obj_id = C.charId AND S2.class_index > 0 
+                WHERE S2.charId = C.charId AND S2.class_index > 0 
                 LIMIT 1,1) AS subclass2,
                 (SELECT S2.level FROM character_subclasses AS S2 
-                WHERE S2.char_obj_id = C.charId AND S2.class_index > 0 
+                WHERE S2.charId = C.charId AND S2.class_index > 0 
                 LIMIT 1,1) AS subclass2_level,
                 (SELECT S3.class_id FROM character_subclasses AS S3 
-                WHERE S3.char_obj_id = C.charId AND S3.class_index > 0 
+                WHERE S3.charId = C.charId AND S3.class_index > 0 
                 LIMIT 2,1) AS subclass3,
                 (SELECT S3.level FROM character_subclasses AS S3 
-                WHERE S3.char_obj_id = C.charId AND S3.class_index > 0 
+                WHERE S3.charId = C.charId AND S3.class_index > 0 
                 LIMIT 2,1) AS subclass3_level,
                 D.clan_name,
                 D.ally_name
@@ -413,7 +414,7 @@ class LineageAccount:
     @staticmethod
     @cache_lineage_result(timeout=300)
     def get_acess_level():
-        return 'access_level'
+        return 'accessLevel'
 
     @staticmethod
     @cache_lineage_result(timeout=300)
@@ -534,6 +535,7 @@ class LineageAccount:
         try:
             LineageAccount.ensure_columns()
             hashed = base64.b64encode(hashlib.sha1(password.encode()).digest()).decode()
+            current_time = datetime.fromtimestamp(int(time.time()))
             sql = """
                 INSERT INTO accounts (login, password, accessLevel, email, created_time)
                 VALUES (:login, :password, :access_level, :email, :created_time)
@@ -543,7 +545,7 @@ class LineageAccount:
                 "password": hashed,
                 "access_level": access_level,
                 "email": email,
-                "created_time": int(time.time())
+                "created_time": current_time
             }
             LineageDB().insert(sql, params)
             return True
