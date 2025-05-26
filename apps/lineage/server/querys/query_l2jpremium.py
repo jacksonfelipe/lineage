@@ -760,31 +760,51 @@ class TransferFromWalletToChar:
     def insert_coin(char_name: str, coin_id: int, amount: int, enchant: int = 0):
         db = LineageDB()
 
+        # Get character ID
         char_query = "SELECT charId FROM characters WHERE char_name = :char_name"
         char_result = db.select(char_query, {"char_name": char_name})
         if not char_result:
             return None
 
         owner_id = char_result[0]["charId"]
-        object_id = owner_id
 
-        if object_id != 0:
+        # Check if item already exists in inventory
+        check_query = """
+            SELECT object_id FROM items 
+            WHERE owner_id = :owner_id 
+            AND item_id = :coin_id 
+            AND loc = 'INVENTORY' 
+            LIMIT 1
+        """
+        existing_item = db.select(check_query, {
+            "owner_id": owner_id,
+            "coin_id": coin_id
+        })
+
+        if existing_item:
+            # Item exists, update count
+            object_id = existing_item[0]["object_id"]
             update_query = """
-                UPDATE items SET count = count + :amount
-                WHERE object_id = :object_id AND owner_id = :owner_id
+                UPDATE items 
+                SET count = count + :amount 
+                WHERE object_id = :object_id 
+                AND owner_id = :owner_id 
+                LIMIT 1
             """
-            db.update(update_query, {
+            result = db.update(update_query, {
                 "amount": amount,
                 "object_id": object_id,
                 "owner_id": owner_id
             })
-            return True
+            if not result:
+                print(f"Erro ao atualizar item existente: {object_id}")
+            else:
+                print(f"Item existente atualizado com sucesso: {object_id}")
+            return result
 
-        last_object_query = """
-            SELECT object_id FROM items 
-            WHERE object_id LIKE '7%' 
-            ORDER BY object_id DESC LIMIT 1
-        """
+        # Item doesn't exist, create new one
+        # Get last object_id
+        last_object_query = "SELECT object_id FROM items ORDER BY object_id DESC LIMIT 1"
         last_object_result = db.select(last_object_query)
         if not last_object_result:
             new_object_id = 700000000
@@ -792,6 +812,7 @@ class TransferFromWalletToChar:
             last_object_id = int(last_object_result[0]["object_id"])
             new_object_id = last_object_id + 1
 
+        # Get last loc_data for this owner
         last_loc_query = """
             SELECT loc_data FROM items 
             WHERE owner_id = :owner_id 
@@ -804,13 +825,19 @@ class TransferFromWalletToChar:
             last_loc_data = int(last_loc_result[0]["loc_data"])
             new_loc_data = last_loc_data + 1
 
+        # Get current timestamp
+        creation_time = int(time.time())
+
+        # Insert new item with all required fields
         insert_query = """
             INSERT INTO items (
                 owner_id, object_id, item_id, count,
-                enchant_level, loc, loc_data
+                enchant_level, loc, loc_data, process,
+                creator_id, first_owner_id, creation_time
             ) VALUES (
                 :owner_id, :object_id, :coin_id, :amount,
-                :enchant, 'INVENTORY', :loc_data
+                :enchant, 'INVENTORY', :loc_data, 'admin_create',
+                268501254, 268501254, :creation_time
             )
         """
         result = db.insert(insert_query, {
@@ -819,8 +846,14 @@ class TransferFromWalletToChar:
             "coin_id": coin_id,
             "amount": amount,
             "enchant": enchant,
-            "loc_data": new_loc_data
+            "loc_data": new_loc_data,
+            "creation_time": creation_time
         })
+
+        if not result:
+            print(f"Erro ao criar novo item: {new_object_id}")
+        else:
+            print(f"Novo item criado com sucesso: {new_object_id}")
 
         return result is not None
 
