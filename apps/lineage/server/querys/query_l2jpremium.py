@@ -51,7 +51,7 @@ class LineageStats:
                 D.ally_id
             FROM characters C
             LEFT JOIN clan_data D ON D.clan_id = C.clanid
-            WHERE C.access_level = '0'
+            WHERE C.accessLevel = '0'
             ORDER BY pvpkills DESC, pkkills DESC, onlinetime DESC, char_name ASC
             LIMIT :limit
         """
@@ -72,7 +72,7 @@ class LineageStats:
                 D.ally_id
             FROM characters C
             LEFT JOIN clan_data D ON D.clan_id = C.clanid
-            WHERE C.access_level = '0'
+            WHERE C.accessLevel = '0'
             ORDER BY pkkills DESC, pvpkills DESC, onlinetime DESC, char_name ASC
             LIMIT :limit
         """
@@ -93,7 +93,7 @@ class LineageStats:
                 D.ally_id
             FROM characters C
             LEFT JOIN clan_data D ON D.clan_id = C.clanid
-            WHERE C.access_level = '0'
+            WHERE C.accessLevel = '0'
             ORDER BY onlinetime DESC, pvpkills DESC, pkkills DESC, char_name ASC
             LIMIT :limit
         """
@@ -115,7 +115,7 @@ class LineageStats:
                 D.ally_id
             FROM characters C
             LEFT JOIN clan_data D ON D.clan_id = C.clanid
-            WHERE C.access_level = '0'
+            WHERE C.accessLevel = '0'
             ORDER BY level DESC, exp DESC, onlinetime DESC, char_name ASC
             LIMIT :limit
         """
@@ -150,7 +150,7 @@ class LineageStats:
                 ) AS adenas
             FROM characters C
             LEFT JOIN clan_data D ON D.clan_id = C.clanid
-            WHERE C.access_level = '0'
+            WHERE C.accessLevel = '0'
             ORDER BY adenas DESC, onlinetime DESC, char_name ASC
             LIMIT :limit
         """
@@ -243,10 +243,111 @@ class LineageStats:
             SELECT 
                 B.boss_id, 
                 B.respawn_time AS respawn, 
-                B.name, 
-                B.level
+                CASE B.boss_id
+                    WHEN 29001 THEN 'Queen Ant'
+                    WHEN 29006 THEN 'Core'
+                    WHEN 29014 THEN 'Orfen'
+                    WHEN 29019 THEN 'Antharas'
+                    WHEN 29020 THEN 'Baium'
+                    WHEN 29022 THEN 'Zaken'
+                    WHEN 29028 THEN 'Valakas'
+                    WHEN 29045 THEN 'Frintezza'
+                    WHEN 29046 THEN 'Frintezza'
+                    WHEN 29047 THEN 'Frintezza'
+                    WHEN 29048 THEN 'Frintezza'
+                    WHEN 29049 THEN 'Frintezza'
+                    WHEN 29050 THEN 'Frintezza'
+                    WHEN 29051 THEN 'Frintezza'
+                    WHEN 29052 THEN 'Frintezza'
+                    WHEN 29054 THEN 'Frintezza'
+                    WHEN 29056 THEN 'Frintezza'
+                    WHEN 29057 THEN 'Frintezza'
+                    WHEN 29058 THEN 'Frintezza'
+                    WHEN 29059 THEN 'Frintezza'
+                    WHEN 29060 THEN 'Frintezza'
+                    WHEN 29061 THEN 'Frintezza'
+                    WHEN 29062 THEN 'Frintezza'
+                    WHEN 29063 THEN 'Frintezza'
+                    WHEN 29064 THEN 'Frintezza'
+                    WHEN 29065 THEN 'Frintezza'
+                    WHEN 29066 THEN 'Frintezza'
+                    WHEN 29067 THEN 'Frintezza'
+                    WHEN 29068 THEN 'Frintezza'
+                    WHEN 29069 THEN 'Frintezza'
+                    WHEN 29070 THEN 'Frintezza'
+                    WHEN 29071 THEN 'Frintezza'
+                    WHEN 29072 THEN 'Frintezza'
+                    WHEN 29073 THEN 'Frintezza'
+                    WHEN 29074 THEN 'Frintezza'
+                    WHEN 29075 THEN 'Frintezza'
+                    WHEN 29076 THEN 'Frintezza'
+                    WHEN 29077 THEN 'Frintezza'
+                    WHEN 29078 THEN 'Frintezza'
+                    WHEN 29079 THEN 'Frintezza'
+                    WHEN 29080 THEN 'Frintezza'
+                    WHEN 29081 THEN 'Frintezza'
+                    WHEN 29082 THEN 'Frintezza'
+                    WHEN 29083 THEN 'Frintezza'
+                    WHEN 29084 THEN 'Frintezza'
+                    WHEN 29085 THEN 'Frintezza'
+                    WHEN 29086 THEN 'Frintezza'
+                    WHEN 29087 THEN 'Frintezza'
+                    WHEN 29088 THEN 'Frintezza'
+                    WHEN 29089 THEN 'Frintezza'
+                    WHEN 29090 THEN 'Frintezza'
+                    WHEN 29091 THEN 'Frintezza'
+                    WHEN 29092 THEN 'Frintezza'
+                    WHEN 29093 THEN 'Frintezza'
+                    WHEN 29094 THEN 'Frintezza'
+                    WHEN 29095 THEN 'Frintezza'
+                    WHEN 29096 THEN 'Frintezza'
+                    WHEN 29097 THEN 'Frintezza'
+                    WHEN 29098 THEN 'Frintezza'
+                    WHEN 29099 THEN 'Frintezza'
+                    WHEN 29100 THEN 'Frintezza'
+                    WHEN 29118 THEN 'Beleth'
+                    WHEN 29163 THEN 'Frintezza'
+                    WHEN 29164 THEN 'Frintezza'
+                    WHEN 29165 THEN 'Frintezza'
+                    WHEN 29166 THEN 'Frintezza'
+                    WHEN 29167 THEN 'Frintezza'
+                    WHEN 29168 THEN 'Frintezza'
+                    WHEN 29169 THEN 'Frintezza'
+                    WHEN 29170 THEN 'Frintezza'
+                    WHEN 29171 THEN 'Frintezza'
+                    WHEN 29172 THEN 'Frintezza'
+                    WHEN 29173 THEN 'Frintezza'
+                    WHEN 29174 THEN 'Frintezza'
+                    WHEN 29175 THEN 'Frintezza'
+                    WHEN 29176 THEN 'Frintezza'
+                    WHEN 29177 THEN 'Frintezza'
+                    WHEN 29178 THEN 'Frintezza'
+                    WHEN 29179 THEN 'Frintezza'
+                    WHEN 29180 THEN 'Frintezza'
+                    WHEN 29181 THEN 'Frintezza'
+                    WHEN 29182 THEN 'Frintezza'
+                    WHEN 29183 THEN 'Frintezza'
+                    WHEN 29184 THEN 'Frintezza'
+                    WHEN 29185 THEN 'Frintezza'
+                    WHEN 29186 THEN 'Frintezza'
+                    WHEN 29187 THEN 'Frintezza'
+                    WHEN 29188 THEN 'Frintezza'
+                    WHEN 29189 THEN 'Frintezza'
+                    WHEN 29190 THEN 'Frintezza'
+                    WHEN 29191 THEN 'Frintezza'
+                    WHEN 29192 THEN 'Frintezza'
+                    WHEN 29193 THEN 'Frintezza'
+                    WHEN 29194 THEN 'Frintezza'
+                    WHEN 29195 THEN 'Frintezza'
+                    WHEN 29196 THEN 'Frintezza'
+                    WHEN 29197 THEN 'Frintezza'
+                    WHEN 29198 THEN 'Frintezza'
+                    WHEN 29199 THEN 'Frintezza'
+                    WHEN 29200 THEN 'Frintezza'
+                    ELSE 'Unknown Boss'
+                END AS name
             FROM grandboss_data B
-            ORDER BY respawn DESC, level DESC, name ASC
+            ORDER BY respawn DESC, name ASC
         """
         return LineageStats._run_query(sql)
 
@@ -314,6 +415,7 @@ class LineageServices:
         sql = """
             SELECT
                 C.*, 
+                C.charId AS obj_Id,
                 C.classid AS base_class,
                 C.level AS base_level,
                 (SELECT S1.class_id FROM character_subclasses AS S1 
