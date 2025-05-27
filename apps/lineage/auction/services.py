@@ -12,7 +12,7 @@ def place_bid(auction, bidder, bid_amount, character_name):
     if auction.seller == bidder:
         raise ValueError(_("Você não pode dar lances no seu próprio leilão."))
 
-    if not auction.is_active:
+    if not auction.is_active():
         raise ValueError(_("Leilão encerrado."))
 
     if bid_amount <= auction.starting_bid:
