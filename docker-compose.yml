@@ -85,7 +85,6 @@ services:
       - "80:6085"
     volumes:
       - ./nginx/django.conf:/etc/nginx/conf.d/django.conf
-      - ./nginx/domain.conf:/etc/nginx/conf.d/domain.conf
       - ./nginx/.htpasswd:/etc/nginx/.htpasswd
       - ./nginx/custom_401.html:/usr/share/nginx/html/custom_401.html
       - static_data:/usr/share/nginx/html/static
