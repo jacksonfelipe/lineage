@@ -16,6 +16,13 @@ echo
 UBUNTU_VERSION=$(lsb_release -cs)
 echo "📦 Detectada versão do Ubuntu: $UBUNTU_VERSION"
 
+# Set Docker Compose command based on Ubuntu version
+if [ "$UBUNTU_VERSION" = "focal" ]; then
+  DOCKER_COMPOSE="docker-compose"
+else
+  DOCKER_COMPOSE="docker compose"
+fi
+
 # Map Ubuntu versions to Docker repository versions
 case $UBUNTU_VERSION in
   "focal")
@@ -41,7 +48,7 @@ if [ -f "$INSTALL_DIR/.install_done" ]; then
 
   if [[ "$OPCAO" == "s" || "$OPCAO" == "S" ]]; then
     pushd lineage > /dev/null
-    docker compose up -d
+    $DOCKER_COMPOSE up -d
     popd > /dev/null
     echo "✅ Containers iniciados."
     exit 0
@@ -127,7 +134,7 @@ if [ ! -f "$INSTALL_DIR/docker_ready" ]; then
   fi
 
   # Install Docker Compose
-  if ! docker compose version &> /dev/null; then
+  if ! $DOCKER_COMPOSE version &> /dev/null; then
     echo "❌ Docker Compose não encontrado. Instalando..."
     if [ "$UBUNTU_VERSION" = "focal" ]; then
       echo "📦 Instalando Docker Compose standalone para Ubuntu 20.04..."
@@ -135,15 +142,15 @@ if [ ! -f "$INSTALL_DIR/docker_ready" ]; then
       sudo chmod +x /usr/local/bin/docker-compose
       sudo rm -f /usr/bin/docker-compose
       sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-      docker-compose --version
+      $DOCKER_COMPOSE --version
     else
       echo "📦 Instalando Docker Compose plugin para Ubuntu 22.04/24.04..."
       sudo apt-get update
       sudo apt-get install -y docker-compose-plugin
-      docker compose version
+      $DOCKER_COMPOSE version
     fi
   else
-    docker compose version
+    $DOCKER_COMPOSE version
   fi
 
   touch "$INSTALL_DIR/docker_ready"
@@ -331,7 +338,7 @@ if [ ! -f "$INSTALL_DIR/superuser_created" ]; then
     exit 1
   fi
 
-  docker compose exec site python3 manage.py shell -c "
+  $DOCKER_COMPOSE exec site python3 manage.py shell -c "
 from django.contrib.auth import get_user_model
 User = get_user_model()
 if not User.objects.filter(username='$DJANGO_SUPERUSER_USERNAME').exists():
