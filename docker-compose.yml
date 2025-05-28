@@ -82,7 +82,7 @@ services:
     restart: always
     image: "nginx:latest"
     ports:
-      - "80:6085"
+      - "6085:6085"
     volumes:
       - ./nginx/django.conf:/etc/nginx/conf.d/django.conf
       - ./nginx/.htpasswd:/etc/nginx/.htpasswd
