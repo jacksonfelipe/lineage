@@ -86,6 +86,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx/django.conf:/etc/nginx/conf.d/django.conf
+      - ./nginx/upstream.conf:/etc/nginx/conf.d/upstream.conf
       - ./nginx/domain.conf:/etc/nginx/conf.d/domain.conf
       - ./nginx/.htpasswd:/etc/nginx/.htpasswd
       - ./nginx/custom_401.html:/usr/share/nginx/html/custom_401.html
