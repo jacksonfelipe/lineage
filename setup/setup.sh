@@ -93,27 +93,24 @@ if [ ! -f "$INSTALL_DIR/docker_ready" ]; then
     gnupg \
     lsb-release
 
-  # Add Docker's official GPG key
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-
-  # Add Docker repository
-  echo \
-    "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-    $DOCKER_REPO stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-  # Update package index
-  sudo apt update
-
-  # For Ubuntu 20.04, we need to install a specific version of containerd.io
   if [ "$UBUNTU_VERSION" = "focal" ]; then
-    echo "📦 Instalando versão específica do containerd.io para Ubuntu 20.04..."
-    sudo apt install -y containerd.io=1.6.4-1
+    echo "📦 Instalando Docker do repositório do Ubuntu para Ubuntu 20.04..."
+    sudo apt install -y docker.io
   else
-    sudo apt install -y containerd.io
-  fi
+    # Add Docker's official GPG key
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
-  # Install Docker Engine
-  sudo apt install -y docker-ce docker-ce-cli
+    # Add Docker repository
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+      $DOCKER_REPO stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+    # Update package index
+    sudo apt update
+
+    # Install Docker Engine
+    sudo apt install -y docker-ce docker-ce-cli containerd.io
+  fi
 
   # Start and enable Docker
   sudo systemctl start docker
