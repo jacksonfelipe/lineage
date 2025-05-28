@@ -5,7 +5,7 @@ from django.utils.translation import gettext as gettext_lazy
 
 
 def entregar_item_para_bag(user, item_id, item_name, quantity=1, enchant=0, request=None):
-    bag, _ = Bag.objects.get_or_create(user=user)
+    bag, created = Bag.objects.get_or_create(user=user)
     bag_item, created = BagItem.objects.get_or_create(
         bag=bag,
         item_id=item_id,

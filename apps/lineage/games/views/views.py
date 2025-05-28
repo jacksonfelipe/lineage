@@ -52,7 +52,7 @@ def spin_ajax(request):
     SpinHistory.objects.create(user=request.user, prize=chosen)
 
     # Certifique-se de que o usuário tenha uma bag
-    bag, _ = Bag.objects.get_or_create(user=request.user)
+    bag, created = Bag.objects.get_or_create(user=request.user)
 
     # Verifica se o item já existe na bag (mesma id + enchant)
     bag_item, created = BagItem.objects.get_or_create(

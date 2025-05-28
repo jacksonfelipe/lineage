@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 def create_or_get_chat(user, friend):
     user1, user2 = sorted([user, friend], key=lambda u: u.id)
 
-    chat, _ = Chat.objects.get_or_create(user1=user1, user2=user2)
+    chat, created = Chat.objects.get_or_create(user1=user1, user2=user2)
 
     return chat
 

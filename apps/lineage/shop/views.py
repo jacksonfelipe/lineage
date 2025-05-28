@@ -37,7 +37,7 @@ def shop_home(request):
 
 @conditional_otp_required
 def view_cart(request):
-    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart, created = Cart.objects.get_or_create(user=request.user)
     # Lista os personagens da conta
     try:
         personagens = LineageServices.find_chars(request.user.username)
@@ -48,7 +48,7 @@ def view_cart(request):
 
 @conditional_otp_required
 def add_item_to_cart(request, item_id):
-    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart, created = Cart.objects.get_or_create(user=request.user)
     item = get_object_or_404(ShopItem, id=item_id, ativo=True)
     
     quantidade = int(request.POST.get('quantidade', 1))
@@ -76,7 +76,7 @@ def add_item_to_cart(request, item_id):
 
 @conditional_otp_required
 def add_package_to_cart(request, package_id):
-    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart, created = Cart.objects.get_or_create(user=request.user)
     pacote = get_object_or_404(ShopPackage, id=package_id, ativo=True)
     cart_package, created = CartPackage.objects.get_or_create(cart=cart, pacote=pacote)
     if not created:
@@ -90,7 +90,7 @@ def add_package_to_cart(request, package_id):
 def apply_promo_code(request):
     if request.method == "POST":
         code = request.POST.get("promo_code")
-        cart, _ = Cart.objects.get_or_create(user=request.user)
+        cart, created = Cart.objects.get_or_create(user=request.user)
         try:
             promo = PromotionCode.objects.get(codigo=code, ativo=True)
             if not promo.is_valido():
@@ -106,8 +106,8 @@ def apply_promo_code(request):
 
 @conditional_otp_required
 def checkout(request):
-    cart, _ = Cart.objects.get_or_create(user=request.user)
-    wallet, _ = Wallet.objects.get_or_create(usuario=request.user)
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    wallet, created = Wallet.objects.get_or_create(usuario=request.user)
 
     total = cart.calcular_total()
 
@@ -135,7 +135,7 @@ def checkout(request):
             aplicar_transacao(wallet, 'SAIDA', total, descricao="Compra no Shop")
 
             # Enviar itens e pacotes para o inventário
-            inventory, _ = Inventory.objects.get_or_create(
+            inventory, created = Inventory.objects.get_or_create(
                 user=request.user,
                 account_name=request.user.username,
                 character_name=personagem
@@ -212,7 +212,7 @@ def purchase_history(request):
 
 @conditional_otp_required
 def clear_cart(request):
-    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart, created = Cart.objects.get_or_create(user=request.user)
     cart.limpar()
     messages.success(request, "Carrinho esvaziado com sucesso.")
     return redirect('shop:view_cart')

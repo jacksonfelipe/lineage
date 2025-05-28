@@ -7,7 +7,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 @staff_member_required
 @require_http_methods(["GET", "POST"])
 def api_config_panel(request):
-    toggle, _ = ApiEndpointToggle.objects.get_or_create(pk=1)
+    toggle, created = ApiEndpointToggle.objects.get_or_create(pk=1)
 
     # Campos que devem ser ignorados
     ignore_fields = {"id", "uuid", "created_at", "created_by", "updated_at", "updated_by"}

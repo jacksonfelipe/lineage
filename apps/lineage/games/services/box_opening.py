@@ -24,7 +24,7 @@ def open_box(user, box_id):
     selected_item.save()
 
     # Garante que o usuário tem uma bag
-    bag, _ = Bag.objects.get_or_create(user=user)
+    bag, created = Bag.objects.get_or_create(user=user)
 
     # Adiciona o item à bag
     bag_item, created = BagItem.objects.get_or_create(

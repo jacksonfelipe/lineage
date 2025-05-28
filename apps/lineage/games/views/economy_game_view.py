@@ -34,7 +34,7 @@ def add_reward_to_bag(user, item_id, item_name, enchant=0, quantity=1):
 
 @conditional_otp_required
 def economy_game(request):
-    weapon, _ = EconomyWeapon.objects.get_or_create(user=request.user)
+    weapon, created = EconomyWeapon.objects.get_or_create(user=request.user)
     monsters = Monster.objects.all().order_by('level')
 
     for mon in monsters:

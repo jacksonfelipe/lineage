@@ -311,7 +311,7 @@ def dashboard(request):
         # Contagem de leilões do usuário
         leiloes_user = Auction.objects.filter(seller=request.user).count()
 
-        perfil, _ = PerfilGamer.objects.get_or_create(user=request.user)
+        perfil, created = PerfilGamer.objects.get_or_create(user=request.user)
         ganhou_bonus = False
         if perfil.pode_receber_bonus_diario():
             ganhou_bonus = perfil.receber_bonus_diario()
@@ -418,7 +418,7 @@ def ativar_2fa(request):
         return redirect('dashboard')
 
     # Cria ou reutiliza um dispositivo ainda não confirmado
-    device, _ = TOTPDevice.objects.get_or_create(user=user, confirmed=False)
+    device, created = TOTPDevice.objects.get_or_create(user=user, confirmed=False)
 
     # Converte a chave hex para base32 (como o pyotp espera)
     base32_key = base64.b32encode(bytes.fromhex(device.key)).decode('utf-8')

@@ -98,7 +98,7 @@ def buy_battle_pass_premium_view(request):
         messages.error(request, gettext("Nenhuma temporada ativa no momento."))
         return redirect('games:battle_pass')
 
-    progress, _ = UserBattlePassProgress.objects.get_or_create(user=request.user, season=season)
+    progress, created = UserBattlePassProgress.objects.get_or_create(user=request.user, season=season)
 
     if progress.has_premium:
         messages.info(request, gettext("Você já possui o Passe de Batalha Premium."))

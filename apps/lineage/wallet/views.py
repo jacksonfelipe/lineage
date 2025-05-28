@@ -25,7 +25,7 @@ from django.utils.translation import gettext as _
 
 @conditional_otp_required
 def dashboard_wallet(request):
-    wallet, _ = Wallet.objects.get_or_create(usuario=request.user)
+    wallet, created = Wallet.objects.get_or_create(usuario=request.user)
     transacoes_query = TransacaoWallet.objects.filter(wallet=wallet).order_by('-created_at')
     
     paginator = Paginator(transacoes_query, 10)
@@ -53,7 +53,7 @@ def transfer_to_server(request):
         messages.error(request, 'Nenhuma moeda configurada está ativa no momento.')
         return redirect('wallet:transfer_to_server')
 
-    wallet, _ = Wallet.objects.get_or_create(usuario=request.user)
+    wallet, created = Wallet.objects.get_or_create(usuario=request.user)
     personagens = []
 
     # Lista os personagens da conta
@@ -171,8 +171,8 @@ def transfer_to_player(request):
             messages.error(request, 'Você não pode transferir para si mesmo.')
             return redirect('wallet:transfer_to_player')
 
-        wallet_origem, _ = Wallet.objects.get_or_create(usuario=request.user)
-        wallet_destino, _ = Wallet.objects.get_or_create(usuario=destinatario)
+        wallet_origem, created = Wallet.objects.get_or_create(usuario=request.user)
+        wallet_destino, created = Wallet.objects.get_or_create(usuario=destinatario)
 
         try:
             transferir_para_jogador(wallet_origem, wallet_destino, valor)

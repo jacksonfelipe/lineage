@@ -15,7 +15,7 @@ def processar_pedidos_aprovados():
     for pagamento in pagamentos:
         try:
             with transaction.atomic():
-                wallet, _ = Wallet.objects.get_or_create(usuario=pagamento.usuario)
+                wallet, created = Wallet.objects.get_or_create(usuario=pagamento.usuario)
                 aplicar_transacao(
                     wallet=wallet,
                     tipo="ENTRADA",

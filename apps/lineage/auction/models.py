@@ -18,6 +18,7 @@ class Auction(BaseModel):
     character_name = models.CharField(max_length=100, blank=True, verbose_name=_("Character Name"))
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', verbose_name=_("Status"))
 
+    @property
     def is_active(self):
         from django.utils import timezone
         return self.end_time > timezone.now() and self.status == 'pending'

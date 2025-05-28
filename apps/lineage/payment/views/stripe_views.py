@@ -51,7 +51,7 @@ def stripe_webhook(request):
             try:
                 pagamento = Pagamento.objects.get(id=pagamento_id)
                 if pagamento.status == "pending":
-                    wallet, _ = Wallet.objects.get_or_create(usuario=pagamento.usuario)
+                    wallet, created = Wallet.objects.get_or_create(usuario=pagamento.usuario)
                     aplicar_transacao(
                         wallet=wallet,
                         tipo="ENTRADA",
@@ -96,7 +96,7 @@ def stripe_pagamento_sucesso(request):
         pagamento = Pagamento.objects.get(id=pagamento_id)
 
         if session.payment_status == "paid" and pagamento.status != "paid":
-            wallet, _ = Wallet.objects.get_or_create(usuario=pagamento.usuario)
+            wallet, created = Wallet.objects.get_or_create(usuario=pagamento.usuario)
             aplicar_transacao(
                 wallet=wallet,
                 tipo="ENTRADA",

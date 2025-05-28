@@ -23,13 +23,7 @@ urlpatterns = [
     path("api/siege/", siege, name="api_siege"),
     path("api/siege-participants/<int:castle_id>/", siege_participants, name="api_siege_participants"),
     path("api/boss-jewel-locations/", boss_jewel_locations, name="api_boss_jewel_locations"),
-
     path("api/config/", api_config_panel, name="api_config_panel"),
-
-    path('account/update-password/', update_password, name='update_password'),
-    path('account/dashboard/', account_dashboard, name='account_dashboard'),
-    path('account/register/', register_lineage_account, name='lineage_register'),
-    path('account/register/success/', register_success, name='register_success'),
 
     path('status/top-pvp/', top_pvp_view, name='top_pvp'),
     path('status/top-pk/', top_pk_view, name='top_pk'),
@@ -37,7 +31,6 @@ urlpatterns = [
     path('status/top-clans/', top_clans_view, name='top_clans'),
     path('status/top-level/', top_level_view, name='top_level'),
     path("status/top-online/", top_online_view, name="top_online"),
-
     path("status/siege-ranking/", siege_ranking_view, name="siege_ranking"),
     path('status/olympiad-ranking/', olympiad_ranking_view, name='olympiad_ranking'),
     path('status/olympiad-all-heroes/', olympiad_all_heroes_view, name='olympiad_all_heroes'),
@@ -45,6 +38,10 @@ urlpatterns = [
     path('status/boss-jewel-locations/', boss_jewel_locations_view, name='boss_jewel_locations'),
     path('status/grandboss/', grandboss_status_view, name='grandboss_status'),
 
+    path('account/update-password/', update_password, name='update_password'),
+    path('account/dashboard/', account_dashboard, name='account_dashboard'),
+    path('account/register/', register_lineage_account, name='lineage_register'),
+    path('account/register/success/', register_success, name='register_success'),
     path('account/change-sex/<int:char_id>/', change_sex_view, name='change_sex'),
     path('account/unstuck/<int:char_id>/', unstuck_view, name='unstuck'),
     path('account/change-nickname/<int:char_id>/', change_nickname_view, name='change_nickname'),

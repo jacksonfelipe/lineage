@@ -12,7 +12,7 @@ def place_bid(auction, bidder, bid_amount, character_name):
     if auction.seller == bidder:
         raise ValueError(_("Você não pode dar lances no seu próprio leilão."))
 
-    if not auction.is_active():
+    if not auction.is_active:
         raise ValueError(_("Leilão encerrado."))
 
     if bid_amount <= auction.starting_bid:
@@ -21,7 +21,7 @@ def place_bid(auction, bidder, bid_amount, character_name):
     if auction.current_bid and bid_amount <= auction.current_bid:
         raise ValueError(_("O lance deve ser maior que o lance atual."))
 
-    wallet, _ = Wallet.objects.get_or_create(usuario=bidder)
+    wallet, created = Wallet.objects.get_or_create(usuario=bidder)
 
     if wallet.saldo < bid_amount:
         raise ValueError(_("Saldo insuficiente."))
@@ -37,7 +37,7 @@ def place_bid(auction, bidder, bid_amount, character_name):
             old_wallet,
             'ENTRADA',
             auction.current_bid,
-            _("Devolução de lance no leilão #%d") % auction.id,
+            _("Devolução de lance no leilão"),
             origem=_("Leilão")
         )
 
@@ -46,7 +46,7 @@ def place_bid(auction, bidder, bid_amount, character_name):
         wallet,
         'SAIDA',
         bid_amount,
-        _("Lance no leilão #%d") % auction.id,
+        _("Lance no leilão"),
         destino=str(auction.seller)
     )
 
@@ -64,12 +64,12 @@ def place_bid(auction, bidder, bid_amount, character_name):
 
 @transaction.atomic
 def finish_auction(auction: Auction):
-    if auction.is_active():
+    if auction.is_active:
         raise ValueError(_("Leilão ainda está ativo."))
 
     if auction.highest_bidder:
         # Transfere o dinheiro para o vendedor
-        seller_wallet, _ = Wallet.objects.get_or_create(usuario=auction.seller)
+        seller_wallet, created = Wallet.objects.get_or_create(usuario=auction.seller)
         aplicar_transacao(
             seller_wallet,
             'ENTRADA',

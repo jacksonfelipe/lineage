@@ -35,7 +35,7 @@ def pagar_comissao(apoiador: Apoiador, valor_solicitado: Decimal):
         )
 
     # Atualiza a carteira do apoiador
-    wallet, _ = Wallet.objects.get_or_create(usuario=apoiador.user)
+    wallet, created = Wallet.objects.get_or_create(usuario=apoiador.user)
     wallet.saldo += valor_solicitado
     wallet.save()
 

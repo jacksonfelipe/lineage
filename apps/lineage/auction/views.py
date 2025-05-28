@@ -97,7 +97,7 @@ def fazer_lance(request, auction_id):
             return redirect('auction:fazer_lance', auction_id=auction.id)
         
         if not Inventory.objects.filter(user=request.user, character_name=character_name).exists():
-            messages.error(request, _('Este personagem não pertence a você.'))
+            messages.error(request, _('Este personagem não tem inventário.'))
             return redirect('auction:fazer_lance', auction_id=auction.id)
 
         try:
@@ -243,7 +243,7 @@ def cancelar_leilao(request, auction_id):
     try:
         with transaction.atomic():
             for bid in auction.bids.all():
-                seller_wallet, _ = Wallet.objects.get_or_create(usuario=bid.bidder)
+                seller_wallet, created = Wallet.objects.get_or_create(usuario=bid.bidder)
                 aplicar_transacao(
                     seller_wallet,
                     'ENTRADA',
@@ -252,7 +252,7 @@ def cancelar_leilao(request, auction_id):
                     origem=str(auction.highest_bidder)
                 )
 
-            inventory, _ = Inventory.objects.get_or_create(
+            inventory, created = Inventory.objects.get_or_create(
                 user=request.user,
                 character_name=auction.character_name
             )

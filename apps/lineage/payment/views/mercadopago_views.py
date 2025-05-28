@@ -106,7 +106,7 @@ def pagamento_sucesso(request):
         # garantia do pagamento
         if status_pagamento == "approved" and pagamento.status != "paid" and pagamento.status == "approved":
             with transaction.atomic():
-                wallet, _ = Wallet.objects.get_or_create(usuario=pagamento.usuario)
+                wallet, created = Wallet.objects.get_or_create(usuario=pagamento.usuario)
                 aplicar_transacao(
                     wallet=wallet,
                     tipo="ENTRADA",
@@ -199,7 +199,7 @@ def notificacao_mercado_pago(request):
                         pagamento = Pagamento.objects.get(id=pagamento_id)
                         if status == "approved" and pagamento.status == "pending":
                             with transaction.atomic():
-                                wallet, _ = Wallet.objects.get_or_create(usuario=pagamento.usuario)
+                                wallet, created = Wallet.objects.get_or_create(usuario=pagamento.usuario)
                                 aplicar_transacao(
                                     wallet=wallet,
                                     tipo="ENTRADA",

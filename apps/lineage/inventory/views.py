@@ -33,14 +33,17 @@ def retirar_item_servidor(request):
     
     # Verifica se a conta Lineage está vinculada
     account_data = LineageAccount.check_login_exists(request.user.username)
-    if not account_data or len(account_data) == 0 or not account_data[0].get("linked_uuid"):
+    if not account_data or len(account_data) == 0:
+        return redirect('server:lineage_register')
+    
+    if not account_data[0].get("linked_uuid"):
         messages.error(request, "Sua conta Lineage não está vinculada. Por favor, vincule sua conta antes de atualizar a senha.")
-        return redirect('server:vincular_conta')
+        return redirect('server:link_lineage_account')
     
     user_uuid = str(request.user.uuid)
     if account_data[0].get("linked_uuid") != user_uuid:
         messages.error(request, "Sua conta Lineage está vinculada a outro usuário. Por favor, vincule novamente sua conta corretamente.")
-        return redirect('server:vincular_conta')
+        return redirect('server:link_lineage_account')
 
     personagens = []
     try:
@@ -112,14 +115,14 @@ def retirar_item_servidor(request):
             return redirect(f"{request.path}?char_id={char_id}")
         
         # Localiza ou cria o inventário online do personagem
-        inventory, _ = Inventory.objects.get_or_create(
+        inventory, created = Inventory.objects.get_or_create(
             user=request.user,
             account_name=request.user.username,
             character_name=personagem[0]['char_name'],
         )
 
         # Verifica se já existe esse item no inventário
-        inventory_item, _ = InventoryItem.objects.get_or_create(
+        inventory_item, created = InventoryItem.objects.get_or_create(
             inventory=inventory,
             item_id=item_id,
             enchant=item_status['enchant'],
@@ -369,7 +372,7 @@ def transferir_para_bag(request, char_name, item_id):
                 return redirect(request.path)
 
             # Obtém ou cria a bag do usuário
-            bag, _ = Bag.objects.get_or_create(user=request.user)
+            bag, created = Bag.objects.get_or_create(user=request.user)
             
             # Adiciona o item à bag
             bag_item, created = BagItem.objects.get_or_create(
