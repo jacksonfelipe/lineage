@@ -150,6 +150,7 @@ if [ ! -f "$INSTALL_DIR/python_ready" ]; then
   python3 -m venv .venv
   source .venv/bin/activate
   pip install --upgrade pip
+  pip install --upgrade setuptools wheel
 
   # Modificar requirements.txt para incluir o repositório do GitHub
   echo "📦 Atualizando requirements.txt..."
