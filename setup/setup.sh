@@ -73,7 +73,11 @@ if [ ! -f "$INSTALL_DIR/system_ready" ]; then
   echo
   echo "🔄 Atualizando pacotes e instalando dependências..."
   sudo apt update && sudo apt upgrade -y
-  sudo apt install -y apt-transport-https ca-certificates curl software-properties-common python3-venv python3-pip gettext
+  sudo apt install -y software-properties-common
+  sudo add-apt-repository -y ppa:deadsnakes/ppa
+  sudo apt update
+  sudo apt install -y python3.13 python3.13-venv python3.13-dev
+  sudo apt install -y apt-transport-https ca-certificates curl gettext
   touch "$INSTALL_DIR/system_ready"
 fi
 
@@ -147,7 +151,7 @@ pushd lineage > /dev/null
 if [ ! -f "$INSTALL_DIR/python_ready" ]; then
   echo
   echo "🐍 Configurando ambiente Python (virtualenv)..."
-  python3 -m venv .venv
+  python3.13 -m venv .venv
   source .venv/bin/activate
   pip install --upgrade pip
   pip install --upgrade setuptools wheel
