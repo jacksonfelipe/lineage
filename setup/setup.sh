@@ -12,6 +12,28 @@ echo "  🚀 Bem-vindo ao Instalador do Projeto Lineage 2 PDL!   "
 echo "========================================================="
 echo
 
+# Detect Ubuntu version
+UBUNTU_VERSION=$(lsb_release -cs)
+echo "📦 Detectada versão do Ubuntu: $UBUNTU_VERSION"
+
+# Map Ubuntu versions to Docker repository versions
+case $UBUNTU_VERSION in
+  "focal")
+    DOCKER_REPO="focal"
+    ;;
+  "jammy")
+    DOCKER_REPO="jammy"
+    ;;
+  "noble")
+    DOCKER_REPO="jammy"  # Ubuntu 24.04 uses jammy repository for now
+    ;;
+  *)
+    echo "❌ Versão do Ubuntu não suportada: $UBUNTU_VERSION"
+    echo "Por favor, use Ubuntu 20.04 (Focal), 22.04 (Jammy) ou 24.04 (Noble)"
+    exit 1
+    ;;
+esac
+
 if [ -f "$INSTALL_DIR/.install_done" ]; then
   echo "⚠️  Instalação já foi concluída anteriormente."
   echo
@@ -59,7 +81,7 @@ if [ ! -f "$INSTALL_DIR/docker_ready" ]; then
   echo
   echo "🐳 Instalando Docker e Docker Compose..."
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu jammy stable"
+  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $DOCKER_REPO stable"
   sudo apt update
   sudo apt install -y docker-ce
   sudo systemctl enable docker
