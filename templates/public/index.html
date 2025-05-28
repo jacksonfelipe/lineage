@@ -1,6 +1,7 @@
 {% extends 'layouts/base-default.html' %}
 {% load static i18n %}
 {% load custom_split %}
+{% load apoiador_extras %}
 
 {% block extrahead %}
 <link type="text/css" href="{% static 'public/css/index-carousel.css' %}" rel="stylesheet">
@@ -145,7 +146,7 @@
       {% with total=apoiadores|length %}
         {% for apoiador in apoiadores %}
           <div class="apoiador-card">
-            <img src="{{ apoiador.imagem.url }}" alt="{{ apoiador.nome_publico }}">
+            <img src="{% apoiador_image_url apoiador %}" alt="{{ apoiador.nome_publico }}">
           </div>
         {% endfor %}
 

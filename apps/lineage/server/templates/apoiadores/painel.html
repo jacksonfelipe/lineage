@@ -1,5 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load i18n %}
+{% load apoiador_extras %}
 
 {% block title %}{% trans "Painel do Apoiador" %}{% endblock %}
 
@@ -15,11 +16,7 @@
         <div class="card-body">
             <div class="row align-items-center">
                 <div class="col-md-6 text-center mb-3 mb-md-0">
-                    {% if apoiador.imagem %}
-                        <img src="{{ apoiador.imagem.url }}" alt="{{ apoiador.nome_publico }}" class="img-fluid rounded-3 shadow-sm" style="max-height: 250px; object-fit: cover;">
-                    {% else %}
-                        <div class="text-muted">{% trans "Sem imagem" %}</div>
-                    {% endif %}
+                    <img src="{% apoiador_image_url apoiador %}" alt="{{ apoiador.nome_publico }}" class="img-fluid rounded-3 shadow-sm" style="max-height: 250px; object-fit: cover;">
                 </div>
 
                 <div class="col-md-6 text-center">
