@@ -128,11 +128,19 @@ if [ ! -f "$INSTALL_DIR/docker_ready" ]; then
 
   # Install Docker Compose
   if ! docker compose version &> /dev/null; then
-    echo "❌ Docker Compose não encontrado. Instalando versão standalone..."
-    sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    sudo chmod +x /usr/local/bin/docker-compose
-    sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-    docker-compose --version
+    echo "❌ Docker Compose não encontrado. Instalando..."
+    if [ "$UBUNTU_VERSION" = "focal" ]; then
+      echo "📦 Instalando Docker Compose standalone para Ubuntu 20.04..."
+      sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+      sudo chmod +x /usr/local/bin/docker-compose
+      sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+      docker-compose --version
+    else
+      echo "📦 Instalando Docker Compose plugin para Ubuntu 22.04/24.04..."
+      sudo apt-get update
+      sudo apt-get install -y docker-compose-plugin
+      docker compose version
+    fi
   else
     docker compose version
   fi

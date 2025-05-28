@@ -3,6 +3,14 @@
 # Exit on any error
 set -e
 
+# Detect Ubuntu version
+UBUNTU_VERSION=$(lsb_release -cs)
+if [ "$UBUNTU_VERSION" = "focal" ]; then
+  DOCKER_COMPOSE="docker-compose"
+else
+  DOCKER_COMPOSE="docker compose"
+fi
+
 echo "=============================="
 echo "Starting deployment process"
 echo "=============================="
@@ -33,7 +41,7 @@ python3 manage.py makemigrations || { echo "Failed to make migrations"; exit 1; 
 
 # Stop running containers
 echo "Stopping containers..."
-docker compose down || { echo "Failed to stop running containers"; }
+$DOCKER_COMPOSE down || { echo "Failed to stop running containers"; }
 
 # Remove old containers
 echo "Removing old containers..."
@@ -50,22 +58,22 @@ docker volume rm $(docker volume ls -q --filter name=static_data) || echo "Volum
 
 # Build Docker images
 echo "Building Docker images..."
-docker compose build || { echo "Failed to build Docker images"; exit 1; }
+$DOCKER_COMPOSE build || { echo "Failed to build Docker images"; exit 1; }
 
 # Start containers
 echo "Starting containers..."
-docker compose up -d || { echo "Failed to start containers"; exit 1; }
+$DOCKER_COMPOSE up -d || { echo "Failed to start containers"; exit 1; }
 
 # Wait for DB (direct)
 echo "Waiting for database..."
-until docker compose exec postgres pg_isready -U db_user > /dev/null 2>&1; do
+until $DOCKER_COMPOSE exec postgres pg_isready -U db_user > /dev/null 2>&1; do
   echo "$(date '+%H:%M:%S') - PostgreSQL is not ready yet. Waiting..."
   sleep 2
 done
 
 # Run migration inside container (applies what was created on host)
 echo "Applying migrations inside container..."
-docker compose exec site python3 manage.py migrate || { echo "Failed to apply migrations"; exit 1; }
+$DOCKER_COMPOSE exec site python3 manage.py migrate || { echo "Failed to apply migrations"; exit 1; }
 
 # Clean up
 echo "Cleaning up..."
