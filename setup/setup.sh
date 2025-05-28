@@ -150,7 +150,16 @@ if [ ! -f "$INSTALL_DIR/python_ready" ]; then
   python3 -m venv .venv
   source .venv/bin/activate
   pip install --upgrade pip
+
+  # Modificar requirements.txt para incluir o repositório do GitHub
+  echo "📦 Atualizando requirements.txt..."
+  sed -i '/django-encrypted-fields-and-files/d' requirements.txt
+  echo "git+https://github.com/denky/django-encrypted-fields-and-files.git" >> requirements.txt
+
+  # Instalar dependências
+  echo "📦 Instalando dependências Python..."
   pip install -r requirements.txt
+
   mkdir -p logs
   touch "$INSTALL_DIR/python_ready"
 else
