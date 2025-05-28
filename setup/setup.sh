@@ -80,21 +80,50 @@ fi
 if [ ! -f "$INSTALL_DIR/docker_ready" ]; then
   echo
   echo "🐳 Instalando Docker e Docker Compose..."
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $DOCKER_REPO stable"
+  
+  # Remove old versions if they exist
+  sudo apt remove -y docker docker-engine docker.io containerd runc || true
+  
+  # Install prerequisites
   sudo apt update
-  sudo apt install -y docker-ce
-  sudo systemctl enable docker
-  sudo systemctl start docker
+  sudo apt install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
 
+  # Add Docker's official GPG key
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+  # Add Docker repository
+  echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+    $DOCKER_REPO stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+  # Update package index
+  sudo apt update
+
+  # Install containerd.io first
+  sudo apt install -y containerd.io
+
+  # Install Docker Engine
+  sudo apt install -y docker-ce docker-ce-cli
+
+  # Start and enable Docker
+  sudo systemctl start docker
+  sudo systemctl enable docker
+
+  # Verify installation
   if ! docker info &> /dev/null; then
     echo "❌ Docker não está rodando corretamente. Verifique a instalação."
     exit 1
   fi
 
+  # Install Docker Compose
   if ! docker compose version &> /dev/null; then
     echo "❌ Docker Compose não encontrado. Instalando versão standalone..."
-    sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
     docker-compose --version
   else
