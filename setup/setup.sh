@@ -104,8 +104,13 @@ if [ ! -f "$INSTALL_DIR/docker_ready" ]; then
   # Update package index
   sudo apt update
 
-  # Install containerd.io first
-  sudo apt install -y containerd.io
+  # For Ubuntu 20.04, we need to install a specific version of containerd.io
+  if [ "$UBUNTU_VERSION" = "focal" ]; then
+    echo "📦 Instalando versão específica do containerd.io para Ubuntu 20.04..."
+    sudo apt install -y containerd.io=1.6.4-1
+  else
+    sudo apt install -y containerd.io
+  fi
 
   # Install Docker Engine
   sudo apt install -y docker-ce docker-ce-cli
