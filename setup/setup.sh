@@ -175,7 +175,10 @@ if [ ! -f "$INSTALL_DIR/python_ready" ]; then
   echo "📦 Instalando dependências Python..."
   pip install -r requirements.txt
 
+  # Criar diretórios necessários
+  echo "📁 Criando diretórios necessários..."
   mkdir -p logs
+  mkdir -p themes
   touch "$INSTALL_DIR/python_ready"
 else
   source .venv/bin/activate
