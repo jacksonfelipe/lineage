@@ -82,7 +82,8 @@ services:
     restart: always
     image: "nginx:latest"
     ports:
-      - "80:6085"
+      - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/django.conf:/etc/nginx/conf.d/django.conf
       - ./nginx/domain.conf:/etc/nginx/conf.d/domain.conf
@@ -91,12 +92,22 @@ services:
       - static_data:/usr/share/nginx/html/static
       - media_data:/usr/share/nginx/html/media
       - ./themes:/usr/share/nginx/html/themes
+      - certbot_data:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
     environment:
       - ALLOWED_DOMAIN=${RENDER_EXTERNAL_HOSTNAME}
     networks:
       - lineage_network
     depends_on: 
       - site
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - certbot_data:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+    depends_on:
+      - nginx
 
   redis:
     container_name: redis
@@ -129,3 +140,5 @@ volumes:
   media_data:
   logs_data:
   postgres_data:
+  certbot_data:
+  certbot_www:
