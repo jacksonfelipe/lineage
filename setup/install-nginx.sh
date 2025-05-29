@@ -30,18 +30,45 @@ apt-get remove -y nginx nginx-common nginx-full nginx-core
 # Instala o Nginx
 apt-get install -y nginx
 
+# Cria as pastas sites-available e sites-enabled caso não existam
+mkdir -p /etc/nginx/sites-available
+mkdir -p /etc/nginx/sites-enabled
+
+# Ajusta o nginx.conf para incluir sites-enabled, se ainda não estiver incluído
+NGINX_CONF="/etc/nginx/nginx.conf"
+INCLUDE_LINE="    include /etc/nginx/sites-enabled/*;"
+
+if ! grep -qF "$INCLUDE_LINE" "$NGINX_CONF"; then
+    # Insere o include dentro do bloco http
+    # Faz um backup antes
+    cp "$NGINX_CONF" "${NGINX_CONF}.bak"
+
+    # Usa sed para inserir antes da última linha do bloco http (antes da última chave '}')
+    sed -i "/http {/{
+        :a
+        n
+        /}/!ba
+        i\\
+$INCLUDE_LINE
+    }" "$NGINX_CONF"
+
+    echo "Linha para incluir sites-enabled adicionada no nginx.conf"
+else
+    echo "Linha para incluir sites-enabled já presente no nginx.conf"
+fi
+
 # Verifica a instalação
 nginx -v
 
 # Habilita e inicia o serviço
 systemctl enable nginx
-systemctl start nginx
+systemctl restart nginx
 
 # Verifica o status
 systemctl status nginx --no-pager
 
-echo "Nginx instalado com sucesso!"
+echo "Nginx instalado e configurado com sucesso!"
 echo "Para verificar a versão instalada: nginx -v"
 echo "Para iniciar: systemctl start nginx"
 echo "Para parar: systemctl stop nginx"
-echo "Para reiniciar: systemctl restart nginx" 
+echo "Para reiniciar: systemctl restart nginx"

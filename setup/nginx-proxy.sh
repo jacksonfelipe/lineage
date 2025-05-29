@@ -6,6 +6,29 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+# Função para garantir que a linha de include esteja presente no nginx.conf
+configure_nginx_conf() {
+    NGINX_CONF="/etc/nginx/nginx.conf"
+    INCLUDE_LINE="    include /etc/nginx/sites-enabled/*;"
+
+    # Cria backup
+    cp "$NGINX_CONF" "${NGINX_CONF}.bak"
+
+    if ! grep -qF "$INCLUDE_LINE" "$NGINX_CONF"; then
+        # Insere o include dentro do bloco http
+        sed -i "/http {/{
+            :a
+            n
+            /}/!ba
+            i\\
+$INCLUDE_LINE
+        }" "$NGINX_CONF"
+        echo "Linha para incluir sites-enabled adicionada no nginx.conf"
+    else
+        echo "Linha para incluir sites-enabled já presente no nginx.conf"
+    fi
+}
+
 # Instala o Nginx se não estiver instalado
 if ! command -v nginx &> /dev/null; then
     echo "Instalando Nginx..."
@@ -13,17 +36,24 @@ if ! command -v nginx &> /dev/null; then
     apt-get install -y nginx
 fi
 
+# Garante que os diretórios existam
+mkdir -p /etc/nginx/sites-available
+mkdir -p /etc/nginx/sites-enabled
+
+# Configura o nginx.conf para incluir sites-enabled
+configure_nginx_conf
+
 # Instala o Certbot para SSL
 if ! command -v certbot &> /dev/null; then
     echo "Instalando Certbot..."
     apt-get install -y certbot python3-certbot-nginx
 fi
 
-# Cria a configuração do Nginx
+# Cria a configuração do Nginx para proxy reverso
 cat > /etc/nginx/sites-available/lineage-proxy << 'EOL'
 server {
     listen 80;
-    server_name _;  # Substitua pelo seu domínio
+    server_name seu-dominio.com;  # Domínio atualizado
 
     location / {
         proxy_pass http://localhost:6085;
@@ -42,7 +72,7 @@ EOL
 # Cria link simbólico para habilitar o site
 ln -sf /etc/nginx/sites-available/lineage-proxy /etc/nginx/sites-enabled/
 
-# Remove a configuração padrão do Nginx
+# Remove a configuração padrão do Nginx, se existir
 rm -f /etc/nginx/sites-enabled/default
 
 # Testa a configuração do Nginx
@@ -55,4 +85,4 @@ echo "Configuração do Nginx concluída!"
 echo "Para configurar o SSL, execute:"
 echo "sudo certbot --nginx -d seu-dominio.com"
 echo ""
-echo "Lembre-se de substituir 'seu-dominio.com' pelo seu domínio real" 
+echo "Lembre-se de substituir 'seu-dominio.com' pelo seu domínio real"
