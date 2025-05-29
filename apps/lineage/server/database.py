@@ -28,7 +28,13 @@ class LineageDB:
         self.engine: Optional[Engine] = None
         self.cache: Dict[Tuple[str, Tuple[Any, ...]], Tuple[List[Dict], float]] = {}
         self.cache_ttl = 60  # segundos
-        self._connect()
+        self.enabled = os.getenv("LINEAGE_DB_ENABLED", "false").lower() == "true"
+        
+        if self.enabled:
+            self._connect()
+        else:
+            print("ℹ️ Banco Lineage desativado via configuração")
+            
         self._initialized = True
 
     def _connect(self):
@@ -75,6 +81,8 @@ class LineageDB:
         self.cache[(query, params)] = (data, time.time())
 
     def _safe_execute_read(self, query: str, params: Dict[str, Any]) -> Optional[Result]:
+        if not self.enabled:
+            return None
         if not self.engine:
             print("⚠️ Sem conexão com o banco")
             return None
@@ -88,6 +96,8 @@ class LineageDB:
             return None
 
     def _safe_execute_write(self, query: str, params: Dict[str, Any]) -> Optional[Result]:
+        if not self.enabled:
+            return None
         if not self.engine:
             print("⚠️ Sem conexão com o banco")
             return None
@@ -101,6 +111,8 @@ class LineageDB:
             return None
 
     def is_connected(self) -> bool:
+        if not self.enabled:
+            return False
         if not self.engine:
             return False
         try:
@@ -112,6 +124,8 @@ class LineageDB:
             return False
 
     def select(self, query: str, params: Dict[str, Any] = {}, use_cache: bool = False) -> Optional[List[Dict]]:
+        if not self.enabled:
+            return []
         params = params or {}
         query_exp, params_exp = self._normalize_params(query, params)
         param_tuple = tuple(sorted(params_exp.items()))
@@ -122,7 +136,7 @@ class LineageDB:
 
         result = self._safe_execute_read(query, params)
         if result is None:
-            return None
+            return []
 
         rows = result.mappings().all()
         if use_cache:
@@ -130,13 +144,19 @@ class LineageDB:
         return rows
 
     def insert(self, query: str, params: Dict[str, Any] = {}) -> Optional[int]:
+        if not self.enabled:
+            return None
         return self._execute_and_get(query, params, "lastrowid")
 
     def update(self, query: str, params: Dict[str, Any] = {}) -> Optional[int]:
+        if not self.enabled:
+            return None
         affected_rows = self._execute_and_get(query, params, "rowcount")
         return affected_rows
 
     def delete(self, query: str, params: Dict[str, Any] = {}) -> Optional[int]:
+        if not self.enabled:
+            return None
         return self._execute_and_get(query, params, "rowcount")
 
     def _execute_and_get(self, query: str, params: Dict[str, Any], attr: str) -> Optional[int]:
@@ -146,12 +166,16 @@ class LineageDB:
         return getattr(result, attr, None)
 
     def execute_raw(self, query: str, params: Dict[str, Any] = {}) -> bool:
+        if not self.enabled:
+            return False
         return self._safe_execute_write(query, params) is not None
     
     def get_table_columns(self, table_name: str) -> List[str]:
         """
         Retorna uma lista com os nomes das colunas da tabela.
         """
+        if not self.enabled:
+            return []
         if not self.engine:
             print("⚠️ Sem conexão com o banco")
             return []

@@ -530,24 +530,24 @@ class LineageAccount:
                     ALTER TABLE accounts
                     ADD COLUMN email VARCHAR(100) NOT NULL DEFAULT '';
                 """
-                lineage_db.execute_raw(sql)
-                print("✅ Coluna 'email' adicionada com sucesso.")
+                if lineage_db.execute_raw(sql):
+                    print("✅ Coluna 'email' adicionada com sucesso.")
 
             if "created_time" not in columns:
                 sql = """
                     ALTER TABLE accounts
                     ADD COLUMN created_time INT(11) NULL DEFAULT NULL;
                 """
-                lineage_db.execute_raw(sql)
-                print("✅ Coluna 'created_time' adicionada com sucesso.")
+                if lineage_db.execute_raw(sql):
+                    print("✅ Coluna 'created_time' adicionada com sucesso.")
 
             if "linked_uuid" not in columns:
                 sql = """
                     ALTER TABLE accounts
                     ADD COLUMN linked_uuid VARCHAR(36) NULL DEFAULT NULL;
                 """
-                lineage_db.execute_raw(sql)
-                print("✅ Coluna 'linked_uuid' adicionada com sucesso.")
+                if lineage_db.execute_raw(sql):
+                    print("✅ Coluna 'linked_uuid' adicionada com sucesso.")
 
             LineageAccount._checked_columns = True
 

@@ -54,6 +54,18 @@ cat > /etc/nginx/sites-available/lineage-proxy << 'EOL'
 server {
     listen 80;
     server_name seu-dominio.com;  # Domínio atualizado
+    
+    # Redirect all HTTP traffic to HTTPS
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name seu-dominio.com;  # Domínio atualizado
+
+    # SSL configuration will be added by certbot
+    # ssl_certificate /etc/letsencrypt/live/seu-dominio.com/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/seu-dominio.com/privkey.pem;
 
     location / {
         proxy_pass http://localhost:6085;

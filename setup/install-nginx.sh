@@ -34,6 +34,11 @@ apt-get install -y nginx
 mkdir -p /etc/nginx/sites-available
 mkdir -p /etc/nginx/sites-enabled
 
+# Cria diretório para verificação do Certbot
+mkdir -p /var/www/html/.well-known/acme-challenge
+chown -R www-data:www-data /var/www/html/.well-known
+chmod -R 755 /var/www/html/.well-known
+
 # Ajusta o nginx.conf para incluir sites-enabled, se ainda não estiver incluído
 NGINX_CONF="/etc/nginx/nginx.conf"
 INCLUDE_LINE="    include /etc/nginx/sites-enabled/*;"
@@ -56,6 +61,10 @@ $INCLUDE_LINE
 else
     echo "Linha para incluir sites-enabled já presente no nginx.conf"
 fi
+
+# Copia e habilita a configuração de negação de acesso por IP
+cp "$(dirname "$0")/nginx-default-deny.conf" /etc/nginx/sites-available/default-deny
+ln -sf /etc/nginx/sites-available/default-deny /etc/nginx/sites-enabled/default-deny
 
 # Verifica a instalação
 nginx -v
