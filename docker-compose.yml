@@ -90,8 +90,6 @@ services:
       - static_data:/usr/share/nginx/html/static
       - media_data:/usr/share/nginx/html/media
       - ./themes:/usr/share/nginx/html/themes
-    environment:
-      - ALLOWED_DOMAIN=${RENDER_EXTERNAL_HOSTNAME}
     networks:
       - lineage_network
     depends_on: 
