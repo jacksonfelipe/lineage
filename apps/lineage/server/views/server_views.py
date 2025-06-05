@@ -232,6 +232,7 @@ def painel_staff(request):
                 if not created:
                     promocao.desconto_percentual = desconto_percentual
                     promocao.validade = timezone.now() + timezone.timedelta(days=30)
+                    promocao.ativo = True
                     promocao.save()
 
                 messages.success(request, f'Apoiador {apoiador.nome_publico} aprovado e cupom gerado ou atualizado!')
