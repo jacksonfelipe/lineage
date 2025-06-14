@@ -361,7 +361,7 @@ touch "$INSTALL_DIR/.install_done"
 
 echo
 echo "🎉 Instalação concluída com sucesso!"
-echo "Acesse: http://localhost:80"
+echo "Acesse: http://localhost:6085"
 echo "Para gerenciar o projeto, use:"
 echo " - docker compose up -d         # Para iniciar"
 echo " - docker compose down          # Para parar"
