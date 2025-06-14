@@ -41,17 +41,26 @@ LOGGING = is_LOGGING
 
 # =========================== CORS CONFIGS ===========================
 
-ALLOWED_HOSTS = ['*']
-CORS_ALLOW_ALL_ORIGINS = True
+ALLOWED_HOSTS = [] if not DEBUG else ['*']
+
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True  # Permitir todas as origens no desenvolvimento
+else:
+    CORS_ALLOWED_ORIGINS = ['http://127.0.0.1', 'http://localhost']
+
 CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'http://localhost', 'http://127.0.0.1:6085', 'http://localhost:6085',]
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME and not DEBUG:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    CORS_ALLOWED_ORIGINS.append(f'https://{RENDER_EXTERNAL_HOSTNAME}')
     CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_EXTERNAL_HOSTNAME}')
 
 RENDER_EXTERNAL_FRONTEND = os.environ.get('RENDER_EXTERNAL_FRONTEND')
 if RENDER_EXTERNAL_FRONTEND and not DEBUG:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_FRONTEND)
+    CORS_ALLOWED_ORIGINS.append(f'https://{RENDER_EXTERNAL_FRONTEND}')
     CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_EXTERNAL_FRONTEND}')
 
 # =========================== INSTALLED APPS CONFIGS ===========================
@@ -187,18 +196,28 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 12,
+        }
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# =========================== AUTHENTICATION BACKENDS CONFIGS ===========================
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'core.backends.LicenseBackend',
+)
 
 # =========================== INTERNATIONALIZATION CONFIGS ===========================
 
@@ -316,6 +335,12 @@ else:
 
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 # =========================== ENCRYPTION CONFIG ===========================
 
