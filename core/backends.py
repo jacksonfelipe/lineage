@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from utils.license_manager import check_license_status
 
+
 class LicenseBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
         user = super().authenticate(request, username, password, **kwargs)
