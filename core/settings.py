@@ -42,7 +42,7 @@ LOGGING = is_LOGGING
 
 # =========================== CORS CONFIGS ===========================
 
-ALLOWED_HOSTS = [] if not DEBUG else ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1'] if not DEBUG else ['*']
 
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True  # Permitir todas as origens no desenvolvimento
