@@ -22,18 +22,41 @@
       const INACTIVITY_MINUTES = 5;
       const TIME_LIMIT = INACTIVITY_MINUTES * 60 * 1000; // 5 minutos em milissegundos
 
+      // Lista de caminhos permitidos (mesmos do middleware)
+      const ALLOWED_PATHS = [
+        "{{ settings.STATIC_URL }}",
+        "{{ settings.MEDIA_URL }}",
+        '/decrypted-file/',
+        '/public/',
+        '/wiki/',
+        '/pages/',
+        '/set-language/',
+        '/verify/',
+        '/components/',
+        '/accounts/',
+      ];
+
       let inactivityTimer;
+
+      function isPathAllowed(path) {
+        return ALLOWED_PATHS.some(allowedPath => path.startsWith(allowedPath));
+      }
 
       function resetInactivityTimer() {
         clearTimeout(inactivityTimer);
         inactivityTimer = setTimeout(() => {
-          // Não redireciona se já estiver em qualquer uma das páginas de lock
-          if (window.location.pathname === LOCK_URL || window.location.pathname === LOCK_URL_ALT) {
+          const currentPath = window.location.pathname;
+          
+          // Não redireciona se estiver em páginas de lock ou em caminhos permitidos
+          if (currentPath === LOCK_URL || 
+              currentPath === LOCK_URL_ALT || 
+              isPathAllowed(currentPath)) {
             return;
           }
+
           // Usa o parâmetro next como Django faz
-          const currentPath = window.location.pathname + window.location.search;
-          window.location.href = `${LOCK_URL}?next=${encodeURIComponent(currentPath)}`;
+          const fullPath = currentPath + window.location.search;
+          window.location.href = `${LOCK_URL}?next=${encodeURIComponent(fullPath)}`;
         }, TIME_LIMIT);
       }
 

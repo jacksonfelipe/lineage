@@ -66,26 +66,13 @@ $colors: ("blue": $blue,
 // scss-docs-end colors-map
 
 // Color scheme
-$primary  : #1F2937 !default;
-$secondary: #f0bc74 !default;
-$tertiary : #31316A !default;
-
-// Series names and colors. This can be extended or customized as desired. Just add more series and colors.
-$ct-series-names: (a, b, c, d, e, f, g) !default !default;
-$ct-series-colors: (#262B40,
-    #F8BD7A,
-    #2CA58D,
-    #31316A,
-    #C96480,
-    #ffffff,
-    #F8BD7A,
-
-) !default;
-
+$primary  : #1F2937 !default; // EDIT
+$secondary: #f0bc74 !default; // EDIT 
+$tertiary : #31316A !default; // EDIT
 
 $success: $green !default;
 $info   : $blue !default;
-$warning: $yellow !default;
+$warning: $orange !default;
 $danger : $red !default;
 $gray   : $gray-900 !default;
 $light  : $gray-400 !default;
@@ -308,8 +295,8 @@ $gradient: linear-gradient(180deg, rgba($white, .15), rgba($white, 0)) !default;
 
 $spacer: 1rem !default;
 $spacers: (0: 0,
-    1: $spacer * 0.25,
-    2: $spacer * 0.5,
+    1: $spacer / 4,
+    2: $spacer / 2,
     3: $spacer,
     4: $spacer * 1.5,
     5: $spacer * 3,
@@ -501,12 +488,12 @@ $h4-font-size: $font-size-base * 1.5 !default;
 $h5-font-size: $font-size-base * 1.25 !default;
 $h6-font-size: $font-size-base !default;
 
-$headings-margin-bottom: $spacer * 0.5 !default;
+$headings-margin-bottom: $spacer / 2 !default;
 $headings-font-family  : null !default;
 $headings-font-style   : null !default;
 $headings-font-weight  : $font-weight-bold !default;
 $headings-line-height  : 1.3 !default;
-$headings-color        : $dark !default;
+$headings-color        : $gray-900 !default;
 
 // Display headings
 $display1-size: 5rem !default;
@@ -627,7 +614,7 @@ $accordion-padding-x    : 1.25rem !default;
 $accordion-color        : $body-color !default;
 $accordion-bg           : transparent !default;
 $accordion-border-width : $border-width !default;
-$accordion-border-color : $gray-400 !default;
+$accordion-border-color : $gray-200 !default;
 $accordion-border-radius: $border-radius !default;
 
 $accordion-body-padding-y: $accordion-padding-y !default;
@@ -637,8 +624,8 @@ $accordion-button-padding-y   : $accordion-padding-y !default;
 $accordion-button-padding-x   : $accordion-padding-x !default;
 $accordion-button-color       : $accordion-color !default;
 $accordion-button-bg          : $accordion-bg !default;
-$accordion-button-active-bg   : $light !default;
-$accordion-button-active-color: shade-color($primary, 10%) !default;
+$accordion-button-active-bg   : $gray-100 !default;
+$accordion-button-active-color: $gray-600 !default;
 
 
 $accordion-icon-width       : 1.25rem !default !default;
@@ -724,7 +711,6 @@ background-color .15s ease-in-out,
 border-color .15s ease-in-out,
 box-shadow .15s ease-in-out !default;
 
-
 $btn-close-width:            1em !default;
 $btn-close-height:           $btn-close-width !default;
 $btn-close-padding-x:        .25em !default;
@@ -796,7 +782,7 @@ $input-height-border: $input-border-width * 2 !default;
 
 $input-height-inner        : add($input-line-height * 1em, $input-padding-y * 2) !default;
 $input-height-inner-half   : add($input-line-height * .5em, $input-padding-y) !default;
-$input-height-inner-quarter: add($input-line-height * .25em, $input-padding-y * 0.5) !default;
+$input-height-inner-quarter: add($input-line-height * .25em, $input-padding-y / 2) !default;
 
 $input-height   : add($input-line-height * 1em, add($input-padding-y * 2, $input-height-border, false)) !default;
 $input-height-sm: add($input-line-height * 1em, add($input-padding-y-sm * 2, $input-height-border, false)) !default;
@@ -904,9 +890,6 @@ $form-switch-checked-bg-position: right center !default;
 
 $form-check-inline-margin-right: 1rem !default;
 
-$input-group-addon-color       : $input-color !default;
-$input-group-addon-border-color: $input-border-color !default;
-
 // Input groups
 
 // scss-docs-start input-group-variables
@@ -917,6 +900,7 @@ $input-group-addon-color:               $gray-400 !default;
 $input-group-addon-bg:                  $white !default;
 $input-group-addon-border-color:        $input-border-color !default;
 // scss-docs-end input-group-variables
+
 
 $form-select-padding-y            : $input-padding-y !default;
 $form-select-padding-x            : $input-padding-x !default;
@@ -1187,7 +1171,7 @@ $dropdown-border-radius      : $border-radius-sm !default;
 $dropdown-border-width       : $border-width !default;
 $dropdown-inner-border-radius: subtract($dropdown-border-radius, $dropdown-border-width) !default;
 $dropdown-divider-bg         : $gray-200 !default;
-$dropdown-divider-margin-y   : $spacer * 0.5 !default;
+$dropdown-divider-margin-y   : $spacer / 2 !default;
 $dropdown-box-shadow         : 0 10px 15px -3px rgba(0, 0, 0, 0.1),0 4px 6px -2px rgba(0, 0, 0, 0.05) !default;
 
 $dropdown-link-color      : $gray-900 !default;
@@ -1199,7 +1183,7 @@ $dropdown-link-active-bg   : $gray-200 !default;
 
 $dropdown-link-disabled-color: $gray-600 !default;
 
-$dropdown-item-padding-y: $spacer * 0.25 !default;
+$dropdown-item-padding-y: $spacer / 4 !default;
 $dropdown-item-padding-x: $spacer !default;
 
 $dropdown-header-color      : $gray-900 !default;
@@ -1259,7 +1243,7 @@ $card-bg                 : $white !default;
 
 $card-img-overlay-padding: $spacer !default;
 
-$card-group-margin     : $grid-gutter-width * 0.5 !default;
+$card-group-margin     : $grid-gutter-width / 2 !default;
 $transition-bezier-card: cubic-bezier(0.34, 1.45, 0.7, 1) !default;
 
 //Timelines
@@ -1273,6 +1257,7 @@ $timeline-border-width     : $border-width !default;
 $timeline-circle-radius    : 50% !default;
 $timeline-spacer-y         : 1.25rem !default;
 $timeline-spacer-x         : 2.75rem !default;
+
 
 // Icons & Shapes sizes
 
@@ -1307,7 +1292,7 @@ $tooltip-color        : $white !default;
 $tooltip-bg           : $dark !default;
 $tooltip-border-radius: $border-radius !default;
 $tooltip-opacity      : .99 !default;
-$tooltip-padding-y    : .5rem !default;
+$tooltip-padding-y    : .375rem !default;
 $tooltip-padding-x    : .55rem !default;
 $tooltip-margin       : 2rem !default;
 
@@ -1327,7 +1312,7 @@ $form-feedback-tooltip-border-radius: $tooltip-border-radius !default;
 // Popovers
 
 $popover-font-size          : $font-size-sm !default;
-$popover-bg                 : $dark !default;
+$popover-bg                 : $gray-800 !default;
 $popover-max-width          : 276px !default;
 $popover-border-width       : $border-width !default;
 $popover-border-color       : rgba($black, .2) !default;
@@ -1336,7 +1321,7 @@ $popover-inner-border-radius: subtract($popover-border-radius, $popover-border-w
 $popover-box-shadow         : $box-shadow !default;
 
 $popover-header-bg       : darken($popover-bg, 3%) !default;
-$popover-header-color    : $headings-color !default;
+$popover-header-color    : $white !default;
 $popover-header-padding-y: .5rem !default;
 $popover-header-padding-x: $spacer !default;
 
@@ -1464,7 +1449,7 @@ $progress-sm-size: .2rem !default;
 
 // List group
 
-$list-group-color        : null !default;
+$list-group-color        : $gray-700 !default;
 $list-group-bg           : $white !default;
 $list-group-border-color : rgba($black, .125) !default;
 $list-group-border-width : $border-width !default;
@@ -1473,7 +1458,7 @@ $list-group-border-radius: $border-radius !default;
 $list-group-sm-item-padding-y: .625rem !default;
 $list-group-sm-item-padding-x: .875rem !default;
 
-$list-group-item-padding-y    : $spacer * 0.5 !default;
+$list-group-item-padding-y    : $spacer / 2 !default;
 $list-group-item-padding-x    : $spacer !default;
 $list-group-item-bg-level     : -9 !default;
 $list-group-item-color-level  : 6 !default;
@@ -1512,7 +1497,7 @@ $figure-caption-color    : $gray-600 !default;
 // Breadcrumbs
 
 $breadcrumb-font-size     : null !default;
-$breadcrumb-padding-y     : $spacer * 0.5 !default;
+$breadcrumb-padding-y     : $spacer / 2 !default;
 $breadcrumb-padding-x     : $spacer !default;
 $breadcrumb-item-padding-x: .5rem !default;
 $breadcrumb-margin-bottom : 1rem !default;
@@ -1643,6 +1628,203 @@ $avatar-lg-x: 4.5rem !default;
 
 $avatar-xl-y: 8rem !default;
 $avatar-xl-x: 8rem !default;
+
+//Sweet alerts
+
+$swal2-white:         rgba(255, 255, 255, 0.55)  !default;
+$swal2-black:         rgba($dark, 0.9)  !default;
+$swal2-outline-color: $gray-500 !default;
+
+// BACKDROP
+$swal2-backdrop: rgba(255, 255, 255, 0.9) !default;
+$swal2-backdrop-transition: background-color .1s !default;
+
+
+// CONTAINER
+$swal2-container-padding: .625em !default;
+
+// BOX MODEL
+$swal2-width: 28em !default;
+$swal2-padding: 1.25em !default;
+$swal2-border: none !default;
+$swal2-border-radius: $border-radius !default;
+$swal2-box-shadow: $box-shadow-sm !default;
+
+// ANIMATIONS
+$swal2-show-animation: swal2-show .3s !default;
+$swal2-hide-animation: swal2-hide .15s forwards !default;
+
+// BACKGROUND
+$swal2-background: $swal2-white !default;
+
+// TYPOGRAPHY
+$swal2-font: $font-family-sans-serif !default;
+$swal2-font-size: 1rem !default;
+
+// HEADER
+$swal2-header-padding: 0 1.8em !default;
+
+// ICONS
+$swal2-icon-size: 3em !default;
+$swal2-icon-animations: true !default;
+$swal2-icon-margin: 1.25em auto 1.875em !default;
+$swal2-icon-zoom: null !default;
+$swal2-success: $success !default;
+$swal2-success-border: 0 !default;
+$swal2-error: $danger !default;
+$swal2-warning: $warning !default;
+$swal2-info: $info !default;
+$swal2-question: $gray-500 !default;
+$swal2-icon-font-family: inherit !default;
+
+// IMAGE
+$swal2-image-margin: 1.25em auto !default;
+
+// TITLE
+$swal2-title-margin: 0 0 .4em !default;
+$swal2-title-color: $gray-900 !default;
+$swal2-title-font-size: 1.5em !default;
+
+// CONTENT
+$swal2-content-justify-content: center !default;
+$swal2-content-margin: 0 !default;
+$swal2-content-padding: 0 1.6em !default;
+$swal2-content-color: $gray-600 !default;
+$swal2-content-font-size: 1.125em !default;
+$swal2-content-font-weight: normal !default;
+$swal2-content-line-height: normal !default;
+$swal2-content-text-align: center !default;
+$swal2-content-word-wrap: break-word !default;
+
+// INPUT
+$swal2-input-margin: 1em auto !default;
+$swal2-input-width: 100% !default;
+$swal2-input-height: 2.625em !default;
+$swal2-input-padding: 0 .75em !default;
+$swal2-input-border: 1px solid lighten($swal2-black, 85) !default;
+$swal2-input-border-radius: .1875em !default;
+$swal2-input-box-shadow: inset 0 1px 1px rgba($swal2-black, .06) !default;
+$swal2-input-focus-border: 1px solid #b4dbed !default;
+$swal2-input-focus-outline: none !default;
+$swal2-input-focus-box-shadow: 0 0 3px #c4e6f5 !default;
+$swal2-input-font-size: 1.125em !default;
+$swal2-input-background: inherit !default;
+$swal2-input-color: inherit !default;
+$swal2-input-transition: border-color .3s, box-shadow .3s !default;
+
+// TEXTAREA SPECIFIC VARIABLES
+$swal2-textarea-height: 6.75em !default;
+$swal2-textarea-padding: .75em !default;
+
+// VALIDATION MESSAGE
+$swal2-validation-message-justify-content: center !default;
+$swal2-validation-message-padding: .625em !default;
+$swal2-validation-message-background: lighten($success, 94) !default;
+$swal2-validation-message-color: lighten($swal2-black, 40) !default;
+$swal2-validation-message-font-size: 1em !default;
+$swal2-validation-message-font-weight: 300 !default;
+$swal2-validation-message-icon-background: $swal2-error !default;
+$swal2-validation-message-icon-color: $swal2-white !default;
+$swal2-validation-message-icon-zoom: null !default;
+
+// PROGRESS STEPS
+$swal2-progress-steps-background: inherit !default;
+$swal2-progress-steps-margin: 0 0 1.25em !default;
+$swal2-progress-steps-padding: 0 !default;
+$swal2-progress-steps-font-weight: 600 !default;
+$swal2-progress-steps-distance: 2.5em !default;
+$swal2-progress-step-width: 2em;
+$swal2-progress-step-height: 2em;
+$swal2-progress-step-border-radius: 2em;
+$swal2-progress-step-background: #add8e6 !default;
+$swal2-progress-step-color: $swal2-white !default;
+$swal2-active-step-background: #3085d6 !default;
+$swal2-active-step-color: $swal2-white !default;
+
+// FOOTER
+$swal2-footer-margin: 1.25em 0 0 !default;
+$swal2-footer-padding: 1em 0 0 !default;
+$swal2-footer-border-color: $white !default;
+$swal2-footer-color: $gray-600 !default;
+$swal2-footer-font-size: 1em !default;
+
+// TIMER POGRESS BAR
+$swal2-timer-progress-bar-height: .25em;
+$swal2-timer-progress-bar-background: rgba($swal2-black, .2) !default;
+
+// CLOSE BUTTON
+$swal2-close-button-align-items: center !default;
+$swal2-close-button-justify-content: center !default;
+$swal2-close-button-width: 1.2em !default;
+$swal2-close-button-height: 1.2em !default;
+$swal2-close-button-line-height: 1.2 !default;
+$swal2-close-button-position: absolute !default;
+$swal2-close-button-gap: 0 !default;
+$swal2-close-button-transition: color .1s ease-out !default;
+$swal2-close-button-border: none !default;
+$swal2-close-button-border-radius: 0 !default;
+$swal2-close-button-outline: null !default;
+$swal2-close-button-background: transparent !default;
+$swal2-close-button-color: $danger !default;
+$swal2-close-button-font-family: serif !default;
+$swal2-close-button-font-size: 2.5em !default;
+
+// CLOSE BUTTON:HOVER
+$swal2-close-button-hover-transform: none !default;
+$swal2-close-button-hover-color: $swal2-error !default;
+$swal2-close-button-hover-background: transparent !default;
+
+// ACTIONS
+$swal2-actions-flex-wrap: wrap !default;
+$swal2-actions-align-items: center !default;
+$swal2-actions-justify-content: center !default;
+$swal2-actions-width: 100% !default;
+$swal2-actions-margin: 1.25em auto 0 !default;
+
+// CONFIRM BUTTON
+$swal2-confirm-button-border: 0 !default;
+$swal2-confirm-button-border-radius: $border-radius !default;
+$swal2-confirm-button-background-color: $primary !default;
+$swal2-confirm-button-color: $swal2-white !default;
+$swal2-confirm-button-font-size: 1.0625em !default;
+
+// CANCEL BUTTON
+$swal2-cancel-button-border: 0 !default;
+$swal2-cancel-button-border-radius: .25em !default;
+$swal2-cancel-button-background-color: $danger !default;
+$swal2-cancel-button-color: $swal2-white !default;
+$swal2-cancel-button-font-size: 1.0625em !default;
+
+// COMMON VARIABLES FOR CONFIRM AND CANCEL BUTTONS
+$swal2-button-darken-hover: rgba($dark, .1) !default;
+$swal2-button-darken-active: rgba($dark, .2) !default;
+$swal2-button-focus-outline: none !default;
+$swal2-button-focus-background-color: null !default;
+$swal2-button-focus-box-shadow: 0 0 0 1px $white, 0 0 0 3px $primary !default;
+
+// TOASTS
+$swal2-toast-show-animation: swal2-toast-show .5s !default;
+$swal2-toast-hide-animation: swal2-toast-hide .1s forwards !default;
+$swal2-toast-border: none !default;
+$swal2-toast-box-shadow: 0 0 .625em #d9d9d9 !default;
+$swal2-toast-background: $swal2-white !default;
+$swal2-toast-close-button-width: .8em !default;
+$swal2-toast-close-button-height: .8em !default;
+$swal2-toast-close-button-line-height: .8 !default;
+$swal2-toast-width: auto !default;
+$swal2-toast-padding: .625em !default;
+$swal2-toast-header-padding: 0 !default;
+$swal2-toast-title-margin: 0 .6em !default;
+$swal2-toast-title-font-size: 1em !default;
+$swal2-toast-content-padding: 0 !default;
+$swal2-toast-content-font-size: 1em !default;
+$swal2-toast-input-font-size: 1em !default;
+$swal2-toast-validation-font-size: 1em !default;
+$swal2-toast-buttons-font-size: 1em !default;
+$swal2-toast-button-focus-box-shadow: 0 0 0 1px $swal2-background, 0 0 0 3px $swal2-outline-color !default;
+$swal2-toast-footer-margin: .5em 0 0 !default;
+$swal2-toast-footer-padding: .5em 0 0 !default;
+$swal2-toast-footer-font-size: .8em !default;
 
 // Footer
 

@@ -353,70 +353,7 @@
           </span>
           <span class="sidebar-text">{% trans "Grand Boss Status" %}</span>
         </a>
-      </li>      
-
-      <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
-
-      {% admin_get_menu as app_list %}
-      {% if app_list %}
-        {% for app in app_list %}
-          {% if app.has_perms and not app.pinned %}
-            <li class="nav-item">
-              <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-dashboard{{app.app_label}}">
-                <span>
-
-                  <!-- ICONE DO APLICATIVO -->
-                  {% with "icons/"|add:app.label|add:".html"|lower as dinamics_template %}
-                    {% include_if_exists dinamics_template as template_to_include %}
-                    {% if template_to_include %}
-                      {% include template_to_include %}
-                    {% else %}
-                      {% include "icons/default.html" %}
-                    {% endif %}
-                  {% endwith %}
-
-                  <!-- TEXTO DO APLICATIVO -->
-                  {% if app.label == 'Autenticação e Autorização' %} 
-                    <span class="sidebar-text">{% trans "Permissões" %}</span>
-                  {% else %} 
-                    <span class="sidebar-text">{{ app.label|slice:15 }}{% if app.label|length > 15 %}..{% endif %}</span>
-                  {% endif %}
-
-                </span>
-                <span class="link-arrow">
-                  <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                      clip-rule="evenodd"></path>
-                  </svg>
-                </span>
-              </span>
-              {% if app.models %}
-                <div 
-                  class="multi-level collapse {% if 'tables-bootstrap-' in segment or app_label == app.label or app.url in request.path|urlencode %} show {% endif %}" 
-                  role="list" 
-                  id="submenu-dashboard{{app.app_label}}" 
-                  aria-expanded="{% if app_label == app.label or app.url in request.path|urlencode %}true{% else %}false{% endif %}">
-                  <ul class="flex-column nav">
-                    {% for model in app.models %}
-                      {% if model.url %}
-                        <li class="nav-item {% if 'bootstrap-tables' in segment or model.url in request.path|urlencode %} active {% endif %}">
-                          <a class="nav-link" href="{{ model.url }}">
-                            <span class="sidebar-text-contracted"> A </span>
-                            <span class="sidebar-text">{{ model.label }}</span>
-                          </a>
-                        </li>
-                      {% else %}
-                        <li class="nav-item">{{ model.label }}</li>
-                      {% endif %}
-                    {% endfor %}
-                  </ul>
-                </div> 
-              {% endif %}
-            </li>
-          {% endif %}
-        {% endfor %}
-      {% endif %}
+      </li>
 
       {% if request.user.is_superuser %}
       <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>

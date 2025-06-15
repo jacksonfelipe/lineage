@@ -1,10 +1,18 @@
 # Core
 django
+django-allauth
+PyJWT
 python-dotenv
 str2bool
+django-quill-editor
+
+# Misc
+celery
+hiredis
+Pillow
 
 # django libs extensions
-django-admin-volt
+django-jazzmin
 django-cors-headers
 django-redis
 django_ratelimit
@@ -14,6 +22,14 @@ django-celery-beat
 django-ckeditor-5
 django-widget-tweaks
 django-po-translate
+
+# Tools
+django-celery-results
+djangorestframework
+django-api-generator
+django-debug-toolbar
+django-webpack-loader
+drf-spectacular
 
 # Deployment
 whitenoise
@@ -27,16 +43,13 @@ redis
 
 # especials
 cryptography
-pillow
 tablib
 diff_match_patch
 python-ipware
 passlib[bcrypt]
 requests
-
-# celery
-celery
-flower
+anthropic
+astor
 
 # websockets
 channels

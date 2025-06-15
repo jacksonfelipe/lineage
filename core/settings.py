@@ -8,6 +8,7 @@ from .logger import LOGGING as is_LOGGING
 from urllib.parse import urlparse
 from django.utils.translation import gettext_lazy as _
 from celery.schedules import crontab
+from django.contrib import messages
 
 # =========================== MAIN CONFIGS ===========================
 
@@ -17,7 +18,7 @@ load_dotenv()  # take environment variables from .env.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # System Version
-VERSION = '1.7.4'
+VERSION = '1.8.0'
 
 # Enable/Disable DEBUG Mode
 DEBUG = str2bool(os.environ.get('DEBUG', False))
@@ -67,7 +68,9 @@ if RENDER_EXTERNAL_FRONTEND and not DEBUG:
 
 INSTALLED_APPS = [
 
-    "admin_volt.apps.AdminVoltConfig",
+    'jazzmin',
+    "webpack_loader",
+    "frontend",
 
     "django.contrib.admin",
     "django.contrib.auth",
@@ -106,6 +109,21 @@ INSTALLED_APPS = [
     "apps.lineage.games",
     "apps.lineage.reports",
     "apps.lineage.wiki",
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.discord',
+
+    'django_celery_results',
+    'debug_toolbar',
+    'django_quill',
+
+    'rest_framework',
+    'drf_spectacular',
+    'django_api_gen',
 ]
 
 # =========================== MIDDLEWARE CONFIGS ===========================
@@ -124,6 +142,9 @@ MIDDLEWARE = [
     "django.middleware.locale.LocaleMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+    'allauth.account.middleware.AccountMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 
     "middlewares.access_apps.LoginRequiredAccess",
     "middlewares.forbidden_redirect_middleware.ForbiddenRedirectMiddleware",
@@ -214,10 +235,40 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # =========================== AUTHENTICATION BACKENDS CONFIGS ===========================
 
+ACCOUNT_EMAIL_VERIFICATION =  os.getenv('ACCOUNT_EMAIL_VERIFICATION', 'none')
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_UNIQUE_EMAIL = True
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
     'core.backends.LicenseBackend',
 )
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': os.getenv('GOOGLE_CLIENT_ID', default=""),
+            'secret': os.getenv('GOOGLE_SECRET_KEY', default=""),
+        }
+    },
+    'github': {
+        'APP': {
+            'client_id': os.getenv('GITHUB_CLINET_ID', default=""),
+            'secret': os.getenv('GITHUB_SECRET_KEY', default=""),
+        }
+    },
+    'discord': {
+        'APP': {
+            'client_id': os.getenv('DISCORD_CLIENT_ID', default=""),
+            'secret': os.getenv('DISCORD_SECRET_KEY', default=""),
+        }
+    }
+}
 
 # =========================== INTERNATIONALIZATION CONFIGS ===========================
 
@@ -524,3 +575,284 @@ PROJECT_INSTAGRAM_URL = os.getenv('PROJECT_INSTAGRAM_URL', 'https://www.instagra
 
 SLOGAN = str2bool(os.getenv('SLOGAN', True))
 LINEAGE_QUERY_MODULE = os.getenv('LINEAGE_QUERY_MODULE', 'dreamv3')
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
+
+DYNAMIC_API = {
+    # SLUG -> Import_PATH 
+}
+
+DYNAMIC_DATATB = {
+    # SLUG -> Import_PATH 
+}
+
+# =========================== JAZZMIN CONFIGURATION ===========================
+
+JAZZMIN_SETTINGS = {
+    # title of the window (Will default to current_admin_site.site_title if absent or None)
+    "site_title": PROJECT_TITLE,
+    # Title on the login screen (19 chars max) (Will default to current_admin_site.site_header if absent or None)
+    "site_header": PROJECT_TITLE,
+    # Title on the brand (19 chars max) (Will default to current_admin_site.site_header if absent or None)
+    "site_brand": PROJECT_TITLE,
+    # Logo to use for your site, must be present in static files, used for brand on top left
+    "site_logo": None,
+    # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
+    "login_logo": "assets/img/l2_logo.png",
+    # CSS classes that are applied to the logo above
+    "site_logo_classes": "img-circle",
+    # Relative path to a favicon for your site, will default to site_logo if absent (ideally 32x32 px)
+    "site_icon": "assets/img/ico.jpg",
+    # Welcome text on the login screen
+    "welcome_sign": "Welcome to PDL",
+    # Copyright on the footer
+    "copyright": "PDL",
+    # The model admin to search from the search bar, search bar omitted if excluded
+    "search_model": "auth.User",
+    # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
+    "user_avatar": None,
+    # URL for the login page
+    "login_url": "login",
+    # URL for the logout page
+    "logout_url": "logout",
+    # URL for the password change page
+    "password_change_url": "password_change",
+    # URL for the password reset page
+    "password_reset_url": "password_reset",
+    # Whether to show the UI customizer on the sidebar
+    "show_ui_builder": False,
+    ############
+    # Top Menu #
+    ############
+    # Links to put along the top menu
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Site", "url": "dashboard"},
+        {"model": "auth.User"},
+        {"app": "books"},
+    ],
+    #############
+    # Side Menu #
+    #############
+    # Whether to display the side menu
+    "show_sidebar": True,
+    # Whether to aut expand the menu
+    "navigation_expanded": True,
+    # Custom icons for side menu apps/models
+    "icons": {
+        # Auth
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        
+        # Administrator
+        "administrator.ChatGroup": "fas fa-comments",
+        "administrator.Theme": "fas fa-paint-brush",
+        "administrator.BackgroundSetting": "fas fa-image",
+        "administrator.ThemeVariable": "fas fa-palette",
+        
+        # Auditor
+        "auditor.Auditor": "fas fa-history",
+        
+        # FAQ
+        "faq.FAQ": "fas fa-question-circle",
+        "faq.FAQCategory": "fas fa-folder",
+        
+        # Home
+        "home.User": "fas fa-user",
+        "home.Profile": "fas fa-id-card",
+        "home.State": "fas fa-map-marker-alt",
+        "home.City": "fas fa-city",
+        "home.DashboardContent": "fas fa-tachometer-alt",
+        "home.user": "fas fa-user",
+        "home.state": "fas fa-map-marker-alt",
+        "home.city": "fas fa-city",
+        "home.dashboardcontent": "fas fa-tachometer-alt",
+        "home.dashboardcontenttranslation": "fas fa-language",
+        "home.sitelogo": "fas fa-image",
+        "home.conquista": "fas fa-trophy",
+        "home.conquistausuario": "fas fa-medal",
+        "home.perfilgamer": "fas fa-gamepad",
+        "home.addressuser": "fas fa-map-marker-alt",
+        
+        # Message
+        "message.Friendship": "fas fa-user-friends",
+        "message.Chat": "fas fa-comments",
+        "message.Message": "fas fa-envelope",
+        "message.MessageGroup": "fas fa-envelope-open",
+        
+        # News
+        "news.News": "fas fa-newspaper",
+        "news.NewsCategory": "fas fa-folder",
+        
+        # Notification
+        "notification.Notification": "fas fa-bell",
+        "notification.PublicNotificationView": "fas fa-eye",
+        
+        # Solicitation
+        "solicitation.Solicitation": "fas fa-clipboard-list",
+        "solicitation.SolicitationParticipant": "fas fa-users",
+        "solicitation.SolicitationHistory": "fas fa-history",
+        
+        # Downloads
+        "downloads.Download": "fas fa-download",
+        "downloads.DownloadCategory": "fas fa-folder",
+        "downloads.DownloadLink": "fas fa-download",
+        
+        # Server
+        "server.Server": "fas fa-server",
+        "server.ServerStatus": "fas fa-signal",
+        "server.ServerConfig": "fas fa-cogs",
+        "server.ApiEndpointToggle": "fas fa-toggle-on",
+        "server.ActiveAdenaExchangeItem": "fas fa-coins",
+        
+        # Wallet
+        "wallet.Wallet": "fas fa-wallet",
+        "wallet.TransacaoWallet": "fas fa-exchange-alt",
+        "wallet.CoinConfig": "fas fa-coins",
+        
+        # Payment
+        "payment.PedidoPagamento": "fas fa-money-bill-wave",
+        "payment.Pagamento": "fas fa-credit-card",
+        "payment.WebhookLog": "fas fa-history",
+        
+        # Accountancy
+        "accountancy.Account": "fas fa-calculator",
+        "accountancy.Transaction": "fas fa-file-invoice-dollar",
+        
+        # Inventory
+        "inventory.Inventory": "fas fa-box",
+        "inventory.InventoryItem": "fas fa-boxes",
+        "inventory.BlockedServerItem": "fas fa-ban",
+        "inventory.CustomItem": "fas fa-box-open",
+        "inventory.InventoryLog": "fas fa-history",
+        
+        # Shop
+        "shop.ShopItem": "fas fa-box-open",
+        "shop.ShopPackage": "fas fa-box",
+        "shop.ShopPackageItem": "fas fa-boxes",
+        "shop.PromotionCode": "fas fa-tag",
+        "shop.Cart": "fas fa-shopping-cart",
+        "shop.CartItem": "fas fa-shopping-basket",
+        "shop.CartPackage": "fas fa-boxes-stacked",
+        "shop.ShopPurchase": "fas fa-receipt",
+        
+        # Auction
+        "auction.Auction": "fas fa-gavel",
+        "auction.Bid": "fas fa-hand-holding-usd",
+        
+        # Games
+        "games.Prize": "fas fa-trophy",
+        "games.SpinHistory": "fas fa-history",
+        "games.Bag": "fas fa-briefcase",
+        "games.BagItem": "fas fa-box",
+        "games.Item": "fas fa-box-open",
+        "games.BoxType": "fas fa-boxes",
+        "games.Box": "fas fa-gift",
+        "games.BoxItem": "fas fa-boxes-stacked",
+        "games.BoxItemHistory": "fas fa-history",
+        "games.Recompensa": "fas fa-gift",
+        "games.RecompensaRecebida": "fas fa-gift",
+        "games.EconomyWeapon": "fas fa-khanda",
+        "games.Monster": "fas fa-dragon",
+        "games.RewardItem": "fas fa-gift",
+        "games.BattlePassSeason": "fas fa-calendar-alt",
+        "games.BattlePassLevel": "fas fa-level-up-alt",
+        "games.BattlePassReward": "fas fa-medal",
+        "games.UserBattlePassProgress": "fas fa-tasks",
+        "games.BattlePassItemExchange": "fas fa-exchange-alt",
+        
+        # Reports
+        "reports.Report": "fas fa-chart-bar",
+        "reports.ReportType": "fas fa-chart-line",
+        
+        # Wiki
+        "wiki.WikiPage": "fas fa-book",
+        "wiki.WikiSection": "fas fa-bookmark",
+        "wiki.WikiUpdate": "fas fa-code-branch",
+        "wiki.WikiEvent": "fas fa-calendar-alt",
+        "wiki.WikiRate": "fas fa-percentage",
+        "wiki.WikiFeature": "fas fa-star",
+        "wiki.WikiGeneral": "fas fa-info-circle",
+        "wiki.WikiRaid": "fas fa-dragon",
+        "wiki.WikiAssistance": "fas fa-hands-helping",
+        
+        # Server
+        "server.IndexConfig": "fas fa-cogs",
+        "server.IndexConfigTranslation": "fas fa-language",
+        "server.ServicePrice": "fas fa-tags",
+        "server.Apoiador": "fas fa-star",
+        "server.Comissao": "fas fa-percentage",
+    },
+    # Icons that are used when one is not manually specified
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    #############
+    # UI Tweaks #
+    #############
+    # Relative paths to custom CSS/JS files (must be present in static files)
+    "custom_css": "custom/admin-custom.css",
+    "custom_js": "custom/admin-custom.js",
+    ###############
+    # Change view #
+    ###############
+    # Render out the change view as a single form, or in tabs, current options are
+    # - single
+    # - horizontal_tabs (default)
+    # - vertical_tabs
+    # - collapsible
+    # - carousel
+    "changeform_format": "horizontal_tabs",
+    # override change forms on a per modeladmin basis
+    "changeform_format_overrides": {
+        "auth.user": "collapsible",
+        "auth.group": "vertical_tabs",
+    },
+    # Add a language dropdown into the admin
+    "language_chooser": False,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-primary",
+    "accent": "accent-primary",
+    "navbar": "navbar-dark",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "default",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    }
+}

@@ -3,8 +3,12 @@ from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.i18n import JavaScriptCatalog
+from django.contrib.auth.views import redirect_to_login
+from django.shortcuts import redirect
 import os
 
+def admin_login_redirect(request):
+    return redirect('login')
 
 urlpatterns = [
     # main app start
@@ -34,12 +38,14 @@ urlpatterns = [
 
     # libs externals
     path('', include('serve_files.urls')),
-    path('', include('admin_volt.urls')),
 
     # libs core's
+    path('admin/login/', admin_login_redirect, name='admin:login'),
     path('admin/', admin.site.urls),
     path('ckeditor5/', include('django_ckeditor_5.urls')),
     path('jsi18n/', JavaScriptCatalog.as_view(), name='jsi18n'),
+
+    path('accounts/', include('allauth.urls')),
 ]
 
 # Static/media routes

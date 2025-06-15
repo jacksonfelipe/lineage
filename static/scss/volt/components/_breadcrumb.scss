@@ -12,35 +12,12 @@
       font-size: $font-size-sm;
     }
   }
-
-  &.active {
-    font-weight: $breadcrumb-active-font-weight;
-  }
-
+  
 }
 
 .breadcrumb-transparent {
   background: transparent;
   padding: 0;
-}
-
-@each $color, $value in $theme-colors {
-  .breadcrumb-#{$color}  {
-      background: $value;
-      .breadcrumb-item{
-          &.active {
-              color: $white;
-          }
-      }
-      &.breadcrumb-transparent {
-        background: transparent;
-        .breadcrumb-item {
-          &.active {
-            color: $value;
-          }
-        }
-      }
-  }
 }
 
 .breadcrumb-text-light {

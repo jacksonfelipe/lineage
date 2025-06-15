@@ -17,6 +17,7 @@ class SessionLockMiddleware:
             '/set-language/',
             '/verify/',
             '/components/',
+            '/accounts/',
         ]
 
     def __call__(self, request):
