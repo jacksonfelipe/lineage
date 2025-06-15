@@ -40,7 +40,7 @@ urlpatterns = [
     path('', include('serve_files.urls')),
 
     # libs core's
-    path('admin/login/', admin_login_redirect, name='admin:login'),
+    path('admin/login/', admin_login_redirect, name='admin_login'),
     path('admin/', admin.site.urls),
     path('ckeditor5/', include('django_ckeditor_5.urls')),
     path('jsi18n/', JavaScriptCatalog.as_view(), name='jsi18n'),
