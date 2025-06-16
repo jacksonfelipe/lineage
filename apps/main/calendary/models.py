@@ -9,24 +9,25 @@ User = get_user_model()
 
 
 class Event(BaseModel):
-    title = models.CharField(max_length=200)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(_('Título'), max_length=200)
+    start_date = models.DateTimeField(_('Data de início'))
+    end_date = models.DateTimeField(_('Data de término'))
+    created_at = models.DateTimeField(_('Criado em'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('Atualizado em'), auto_now=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('Usuário'))
     className = models.CharField(
+        _('Cor'),
         max_length=20,
         default='bg-red',
         choices=[
-            ('bg-red', 'Vermelho'),
-            ('bg-orange', 'Laranja'),
-            ('bg-green', 'Verde'),
-            ('bg-blue', 'Azul'),
-            ('bg-purple', 'Roxo'),
-            ('bg-info', 'Info'),
-            ('bg-yellow', 'Amarelo'),
-            ('bg-secondary', 'Cinza')
+            ('bg-red', _('Vermelho')),
+            ('bg-orange', _('Laranja')),
+            ('bg-green', _('Verde')),
+            ('bg-blue', _('Azul')),
+            ('bg-purple', _('Roxo')),
+            ('bg-info', _('Info')),
+            ('bg-yellow', _('Amarelo')),
+            ('bg-secondary', _('Cinza'))
         ]
     )
 
@@ -37,6 +38,8 @@ class Event(BaseModel):
 
     class Meta:
         ordering = ['-created_at']
+        verbose_name = _('Evento')
+        verbose_name_plural = _('Eventos')
 
     def __str__(self):
         return self.title

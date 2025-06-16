@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const calendarEl = document.getElementById('custom-calendar');
     if (!calendarEl) {
-        console.error('Elemento do calendário não encontrado');
+        console.error(TRANSLATIONS.calendarNotFound);
         return;
     }
 
@@ -13,9 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
         initialView: 'dayGridMonth',
         themeSystem: 'bootstrap',
         headerToolbar: {
-            left: 'prev,next today',
+            left: `${TRANSLATIONS.prev},${TRANSLATIONS.next} ${TRANSLATIONS.today}`,
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            right: `${TRANSLATIONS.month},${TRANSLATIONS.week},${TRANSLATIONS.day}`
         },
         views: {
             dayGridMonth: {
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         events: {
             url: GET_EVENT_URL,
             failure: function(error) {
-                console.error('Erro ao carregar eventos:', error);
+                console.error(TRANSLATIONS.loadEventsError, error);
             }
         },
         eventClick: function(info) {

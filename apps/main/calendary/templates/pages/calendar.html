@@ -1,7 +1,8 @@
 {% extends "layouts/base.html" %}
 {% load static %}
+{% load i18n %}
 
-{% block title %} Calendário {% endblock %}
+{% block title %} {% trans "Calendário" %} {% endblock %}
 
 {% block content %}
     <div class="card border-0 shadow">
@@ -13,25 +14,25 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="eventDetailsModalLabel">Detalhes do Evento</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="eventDetailsModalLabel">{% trans "Detalhes do Evento" %}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Fechar' %}"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <h6 class="text-muted mb-2">Título</h6>
+                        <h6 class="text-muted mb-2">{% trans "Título" %}</h6>
                         <p id="eventTitle" class="mb-0"></p>
                     </div>
                     <div class="mb-3">
-                        <h6 class="text-muted mb-2">Data de Início</h6>
+                        <h6 class="text-muted mb-2">{% trans "Data de Início" %}</h6>
                         <p id="eventStart" class="mb-0"></p>
                     </div>
                     <div class="mb-3">
-                        <h6 class="text-muted mb-2">Data de Término</h6>
+                        <h6 class="text-muted mb-2">{% trans "Data de Término" %}</h6>
                         <p id="eventEnd" class="mb-0"></p>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Fechar" %}</button>
                 </div>
             </div>
         </div>
@@ -41,6 +42,18 @@
 {% block extra_js %}
 <script>
   const GET_EVENT_URL = "{% url 'calendary:get_events' %}";
+  
+  // Passando as traduções do Django para o JavaScript
+  const TRANSLATIONS = {
+    calendarNotFound: "{% trans 'Elemento do calendário não encontrado' %}",
+    loadEventsError: "{% trans 'Erro ao carregar eventos:' %}",
+    today: "{% trans 'Hoje' %}",
+    month: "{% trans 'Mês' %}",
+    week: "{% trans 'Semana' %}",
+    day: "{% trans 'Dia' %}",
+    prev: "{% trans 'Anterior' %}",
+    next: "{% trans 'Próximo' %}"
+  };
 </script>
 <script src="{% static 'js/calendar.js' %}"></script>
 {% endblock extra_js %}
