@@ -8,8 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializa o modal
     const eventDetailsModal = new bootstrap.Modal(document.getElementById('eventDetailsModal'));
 
-    console.log('URL dos eventos:', GET_EVENT_URL);
-
     const calendar = new FullCalendar.Calendar(calendarEl, {
         locale: 'pt-br',
         initialView: 'dayGridMonth',
@@ -31,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         },
         selectable: true,
-        editable: false,
+        editable: true,
         height: 'auto',
         contentHeight: 'auto',
         dayMaxEventRows: 5,
@@ -44,9 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
             url: GET_EVENT_URL,
             failure: function(error) {
                 console.error('Erro ao carregar eventos:', error);
-            },
-            success: function(events) {
-                console.log('Eventos carregados:', events);
             }
         },
         eventClick: function(info) {
@@ -61,23 +56,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Mostra o modal
             eventDetailsModal.show();
-        },
-        eventRender: function(info) {
-            // Adiciona tooltip
-            $(info.el).tooltip({
-                title: info.event.title,
-                placement: 'top',
-                trigger: 'hover',
-                container: 'body'
-            });
-        },
-        loading: function(isLoading) {
-            if (isLoading) {
-                console.log('Carregando eventos...');
-            } else {
-                console.log('Eventos carregados');
-                calendar.render();
-            }
         }
     });
     

@@ -1,14 +1,8 @@
-import json
 from .models import Event
 
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
 from apps.main.home.decorator import conditional_otp_required
-
-from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseForbidden
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.dateparse import parse_datetime
 
 
 @conditional_otp_required
@@ -21,87 +15,33 @@ def calendar(request):
 
 @conditional_otp_required
 def get_events(request):
+    # Mapa de cores
+    color_map = {
+        'bg-red': {'color': '#dc3545', 'textColor': 'white'},
+        'bg-orange': {'color': '#fd7e14', 'textColor': 'white'},
+        'bg-green': {'color': '#198754', 'textColor': 'white'},
+        'bg-blue': {'color': '#0d6efd', 'textColor': 'white'},
+        'bg-purple': {'color': '#6f42c1', 'textColor': 'white'},
+        'bg-info': {'color': '#0dcaf0', 'textColor': 'white'},
+        'bg-yellow': {'color': '#ffc107', 'textColor': 'black'},
+        'bg-secondary': {'color': '#6c757d', 'textColor': 'white'}
+    }
+
     events = Event.objects.filter(user=request.user)
     data = []
     for event in events:
-        data.append({
+        event_data = {
             "id": event.id,
             "title": event.title,
             "start": event.start_date.strftime('%Y-%m-%d'),
             "end": event.end_date.strftime('%Y-%m-%d'),
             "className": event.className
-        })
+        }
+        
+        # Adiciona as cores baseado na className
+        if event.className in color_map:
+            event_data.update(color_map[event.className])
+        
+        data.append(event_data)
+    
     return JsonResponse(data, safe=False)
-
-
-@csrf_exempt
-@conditional_otp_required
-@require_http_methods(["POST"])
-def create_event(request):
-    try:
-        data = json.loads(request.body)
-        title = data.get("title")
-        start = parse_datetime(data.get("start"))
-        end = parse_datetime(data.get("end"))
-        className = data.get("className", "bg-red")
-
-        if not title or not start or not end:
-            return HttpResponseBadRequest("Dados incompletos")
-
-        event = Event.objects.create(
-            user=request.user,
-            title=title,
-            start_date=start,
-            end_date=end,
-            className=className
-        )
-        return JsonResponse({
-            "id": event.id,
-            "title": event.title,
-            "start": event.start_date.strftime('%Y-%m-%d'),
-            "end": event.end_date.strftime('%Y-%m-%d'),
-            "className": event.className
-        })
-    except Exception as e:
-        return HttpResponseBadRequest(str(e))
-
-
-@csrf_exempt
-@conditional_otp_required
-@require_http_methods(["POST"])
-def update_event(request, event_id):
-    try:
-        data = json.loads(request.body)
-        event = Event.objects.get(id=event_id, user=request.user)
-
-        event.title = data.get("title", event.title)
-        event.start_date = parse_datetime(data.get("start")) or event.start_date
-        event.end_date = parse_datetime(data.get("end")) or event.end_date
-        event.className = data.get("className", event.className)
-        event.save()
-
-        return JsonResponse({
-            "id": event.id,
-            "title": event.title,
-            "start": event.start_date.strftime('%Y-%m-%d'),
-            "end": event.end_date.strftime('%Y-%m-%d'),
-            "className": event.className
-        })
-    except Event.DoesNotExist:
-        return HttpResponseForbidden("Evento não encontrado ou sem permissão")
-    except Exception as e:
-        return HttpResponseBadRequest(str(e))
-
-
-@csrf_exempt
-@conditional_otp_required
-@require_http_methods(["POST"])
-def delete_event(request, event_id):
-    try:
-        event = Event.objects.get(id=event_id, user=request.user)
-        event.delete()
-        return JsonResponse({"status": "deleted"})
-    except Event.DoesNotExist:
-        return HttpResponseForbidden("Evento não encontrado ou sem permissão")
-    except Exception as e:
-        return HttpResponseBadRequest(str(e))
