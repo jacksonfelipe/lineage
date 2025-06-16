@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     "apps.main.notification",
     "apps.main.solicitation",
     "apps.main.downloads",
+    "apps.main.calendary",
 
     "apps.lineage.server",
     "apps.lineage.wallet",

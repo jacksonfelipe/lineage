@@ -1,0 +1,48 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %} Calendário {% endblock %}
+
+{% block content %}
+
+    <div class="card border-0 shadow">
+      <div id="custom-calendar" class="p-4"></div>
+    </div>
+
+    <!-- Modal de Detalhes do Evento -->
+    <div class="modal fade" id="eventDetailsModal" tabindex="-1" role="dialog" aria-labelledby="eventDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventDetailsModalLabel">Detalhes do Evento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <h6 class="text-muted mb-2">Título</h6>
+                        <p id="eventTitle" class="mb-0"></p>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="text-muted mb-2">Data de Início</h6>
+                        <p id="eventStart" class="mb-0"></p>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="text-muted mb-2">Data de Término</h6>
+                        <p id="eventEnd" class="mb-0"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+  const GET_EVENT_URL = "{% url 'calendary:get_events' %}";
+</script>
+<script src="{% static 'js/calendar.js' %}"></script>
+{% endblock extra_js %}

@@ -22,6 +22,7 @@ urlpatterns = [
     path('app/auditor/', include('apps.main.auditor.urls')),
     path('app/notification/', include('apps.main.notification.urls')),
     path('app/solicitation/', include('apps.main.solicitation.urls')),
+    path('app/calendary/', include('apps.main.calendary.urls')),
     path('', include('apps.main.downloads.urls')),
 
     # apps lineage

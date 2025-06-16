@@ -1,0 +1,95 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const calendarEl = document.getElementById('custom-calendar');
+    if (!calendarEl) {
+        console.error('Elemento do calendário não encontrado');
+        return;
+    }
+
+    // Inicializa o modal
+    const eventDetailsModal = new bootstrap.Modal(document.getElementById('eventDetailsModal'));
+
+    console.log('URL dos eventos:', GET_EVENT_URL);
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'pt-br',
+        initialView: 'dayGridMonth',
+        themeSystem: 'bootstrap',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        views: {
+            dayGridMonth: {
+                titleFormat: { year: 'numeric', month: 'long' }
+            },
+            timeGridWeek: {
+                titleFormat: { year: 'numeric', month: 'long', day: '2-digit' }
+            },
+            timeGridDay: {
+                titleFormat: { year: 'numeric', month: 'long', day: '2-digit' }
+            }
+        },
+        selectable: true,
+        editable: false,
+        height: 'auto',
+        contentHeight: 'auto',
+        dayMaxEventRows: 5,
+        eventTimeFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        },
+        events: {
+            url: GET_EVENT_URL,
+            failure: function(error) {
+                console.error('Erro ao carregar eventos:', error);
+            },
+            success: function(events) {
+                console.log('Eventos carregados:', events);
+            }
+        },
+        eventClick: function(info) {
+            // Formata as datas
+            const startDate = new Date(info.event.start).toLocaleDateString('pt-BR');
+            const endDate = new Date(info.event.end).toLocaleDateString('pt-BR');
+
+            // Atualiza o conteúdo do modal
+            document.getElementById('eventTitle').textContent = info.event.title;
+            document.getElementById('eventStart').textContent = startDate;
+            document.getElementById('eventEnd').textContent = endDate;
+
+            // Mostra o modal
+            eventDetailsModal.show();
+        },
+        eventRender: function(info) {
+            // Adiciona tooltip
+            $(info.el).tooltip({
+                title: info.event.title,
+                placement: 'top',
+                trigger: 'hover',
+                container: 'body'
+            });
+        },
+        loading: function(isLoading) {
+            if (isLoading) {
+                console.log('Carregando eventos...');
+            } else {
+                console.log('Eventos carregados');
+                calendar.render();
+            }
+        }
+    });
+    
+    calendar.render();
+
+    // Força uma atualização do layout após a renderização inicial
+    setTimeout(() => {
+        calendar.updateSize();
+    }, 100);
+
+    // Atualiza o tamanho quando a janela for redimensionada
+    window.addEventListener('resize', function() {
+        calendar.updateSize();
+    });
+}); 
