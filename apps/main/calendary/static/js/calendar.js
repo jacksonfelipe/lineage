@@ -13,10 +13,11 @@ document.addEventListener('DOMContentLoaded', function() {
         initialView: 'dayGridMonth',
         themeSystem: 'bootstrap',
         headerToolbar: {
-            left: `${TRANSLATIONS.prev},${TRANSLATIONS.next} ${TRANSLATIONS.today}`,
+            left: 'prev,next today',
             center: 'title',
-            right: `${TRANSLATIONS.month},${TRANSLATIONS.week},${TRANSLATIONS.day}`
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
+        buttonText: TRANSLATIONS.buttonText,
         views: {
             dayGridMonth: {
                 titleFormat: { year: 'numeric', month: 'long' }
