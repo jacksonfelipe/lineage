@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 19:08-0300\n"
+"POT-Creation-Date: 2025-06-16 17:56-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -174,16 +174,14 @@ msgstr "La oferta debe ser mayor que la oferta actual."
 msgid "Saldo insuficiente."
 msgstr "Saldo insuficiente."
 
-#, python-format
-msgid "Devolução de lance no leilão #%d"
-msgstr "Retorno de la oferta en la subasta #%D"
+msgid "Devolução de lance no leilão"
+msgstr "Devolución de la oferta en la subasta"
 
 msgid "Leilão"
 msgstr "Subasta"
 
-#, python-format
-msgid "Lance no leilão #%d"
-msgstr "Oferta en la subasta #%D"
+msgid "Lance no leilão"
+msgstr "Oferta en la subasta"
 
 msgid "Leilão ainda está ativo."
 msgstr "La subasta sigue activa."
@@ -302,8 +300,8 @@ msgstr "Debe ingresar un valor para la oferta."
 msgid "Você precisa informar o nome do personagem."
 msgstr "Debe informar el nombre del personaje."
 
-msgid "Este personagem não pertence a você."
-msgstr "Este personaje no te pertenece."
+msgid "Este personagem não tem inventário."
+msgstr "Este personaje no tiene inventario."
 
 msgid "Lance efetuado com sucesso!"
 msgstr "¡Bid hecha con éxito!"
@@ -1854,9 +1852,6 @@ msgstr ""
 
 msgid "Painel do Apoiador"
 msgstr "Panel de seguidores"
-
-msgid "Sem imagem"
-msgstr "Sin imágenes"
 
 msgid "Seu Cupom Ativo"
 msgstr "Tu cupón activo"
@@ -3612,6 +3607,87 @@ msgstr "Código de estado de respuesta:"
 msgid "Nenhum dado de auditoria encontrado."
 msgstr "No se encontraron datos de auditoría."
 
+msgid "Título"
+msgstr "Título"
+
+msgid "Data de início"
+msgstr "Fecha de inicio"
+
+msgid "Data de término"
+msgstr "Data de término"
+
+msgid "Cor"
+msgstr "Corre"
+
+msgid "Vermelho"
+msgstr "Rojo"
+
+msgid "Laranja"
+msgstr "Naranja"
+
+msgid "Verde"
+msgstr "Verde"
+
+msgid "Azul"
+msgstr "Azul"
+
+msgid "Roxo"
+msgstr "Púrpura"
+
+msgid "Info"
+msgstr "Información"
+
+msgid "Amarelo"
+msgstr "Amarillo"
+
+msgid "Cinza"
+msgstr "Gris"
+
+msgid "A data de término não pode ser anterior à data de início."
+msgstr "La fecha de finalización no puede ser antes de la fecha de inicio."
+
+msgid "Evento"
+msgstr "Evento"
+
+msgid "Eventos"
+msgstr "Eventos"
+
+msgid "Calendário"
+msgstr "Calendario"
+
+msgid "Detalhes do Evento"
+msgstr "Detalles del evento"
+
+msgid "Data de Início"
+msgstr "Fecha de inicio"
+
+msgid "Data de Término"
+msgstr "Data de Término"
+
+msgid "Elemento do calendário não encontrado"
+msgstr "Elemento calendario no se encuentra"
+
+msgid "Erro ao carregar eventos:"
+msgstr "Error al llevar eventos:"
+
+msgid "Próximo"
+msgstr "Próximo"
+
+msgid "Hoje"
+msgstr "Hoy"
+
+msgid "Mês"
+msgstr "Mes"
+
+msgid "Semana"
+msgstr "Semana"
+
+msgid "Dia"
+msgstr "Es"
+
+msgid "Lista"
+msgstr "Lista"
+
 msgid "Ordem"
 msgstr "Orden"
 
@@ -3865,9 +3941,6 @@ msgstr "Panel"
 msgid "Dashboards"
 msgstr "Paneles"
 
-msgid "Título"
-msgstr "Título"
-
 msgid "Conteúdo"
 msgstr "Contenido"
 
@@ -4004,6 +4077,9 @@ msgstr "¿Olvidó la contraseña?"
 msgid "Entrar no Reino"
 msgstr "Entrar no Reino"
 
+msgid "Ou faça login com:"
+msgstr "O iniciar sesión con:"
+
 msgid "Ainda não tem conta?"
 msgstr "¿No tienes una cuenta todavía?"
 
@@ -4096,9 +4172,6 @@ msgstr "🏆 Conquistas"
 
 msgid "Conquista bloqueada"
 msgstr "Conquista bloqueada"
-
-msgid "Próximo"
-msgstr "Próximo"
 
 msgid "Você ainda não desbloqueou nenhuma conquista."
 msgstr "Todavía no has desbloqueado ningún logro."
@@ -4855,345 +4928,6 @@ msgstr "Ver solicitud"
 msgid "Nenhuma solicitação encontrada."
 msgstr "No se encontró solicitud."
 
-msgid "Run the selected action"
-msgstr "Ejecute la acción seleccionada"
-
-msgid "Go"
-msgstr "Ir"
-
-msgid "Click here to select the objects across all pages"
-msgstr "Haga clic aquí para seleccionar los objetos en todas las páginas"
-
-#, python-format
-msgid ""
-"\n"
-"                            Select all %(total_count)s %(module_name)s"
-msgstr ""
-"\n"
-"Seleccione todo %(total_count)s S %(module_name)s S"
-
-msgid "Clear selection"
-msgstr "Selección clara"
-
-msgid ""
-"First, enter a username and password. Then, you'll be able to edit more user"
-" options."
-msgstr ""
-"Primero, ingrese un nombre de usuario y contraseña. Luego, podrá editar más "
-"opciones de usuario."
-
-msgid "Enter a username and password."
-msgstr "Ingrese un nombre de usuario y contraseña."
-
-#, python-format
-msgid ""
-"\n"
-"                            Digite uma nova senha para o usuário\n"
-"                            <strong>%(username)s</strong>.\n"
-"                        "
-msgstr ""
-"\n"
-"Ingrese una nueva contraseña para el usuario\n"
-"                            <strong>%(username)s S </strong>."
-
-msgid "Alterar minha senha"
-msgstr "Cambiar mi contraseña"
-
-msgid "Por favor, corrija o erro abaixo."
-msgstr "Corrija el error a continuación."
-
-msgid "Por favor, corrija os erros abaixo."
-msgstr "Corrija los errores a continuación."
-
-#, python-format
-msgid ""
-"Add\n"
-"                                %(name)s"
-msgstr ""
-"Agregar\n"
-"                                %(name)s s"
-
-#, python-format
-msgid "Add %(name)s"
-msgstr "Agregar %(name)s s"
-
-msgid "History"
-msgstr "Historia"
-
-msgid "View on site"
-msgstr "Ver en el sitio"
-
-msgid "Filter"
-msgstr "Filtrar"
-
-msgid "Remove from sorting"
-msgstr "Retirar de la clasificación"
-
-#, python-format
-msgid "Sorting priority: %(priority_number)s"
-msgstr "Prioridad de clasificación: %(priority_number)s s"
-
-msgid "Toggle sorting"
-msgstr "Clasificación de alternar"
-
-msgid "Confirmar Ação"
-msgstr "Confirmar acción"
-
-#, python-format
-msgid ""
-"\n"
-"                                Tem certeza de que deseja executar a ação \"%(action_name)s\" nos %(objects_name)s selecionados?\n"
-"                                Esta ação não pode ser desfeita.\n"
-"                            "
-msgstr ""
-"\n"
-"¿Estás seguro de que quieres realizar la acción \" %(action_name)s s\" Nos %(objects_name)s s seleccionado?\n"
-"                                Esta acción no se puede deshacer."
-
-msgid "Objetos Selecionados"
-msgstr "Objetos seleccionados"
-
-msgid "Sim, tenho certeza"
-msgstr "Si, estoy seguro"
-
-msgid "Não, voltar"
-msgstr "No, regresa"
-
-msgid "Delete"
-msgstr "Borrar"
-
-#, python-format
-msgid ""
-"\n"
-"                                    Deleting the %(object_name)s '%(escaped_object)s' would result in deleting\n"
-"                                    related objects, but your account doesn't have permission to delete the\n"
-"                                    following types of objects:\n"
-"                                "
-msgstr ""
-"\n"
-"Eliminar el %(object_name)s S ' %(escaped_object)s S' resultaría en eliminar\n"
-"                                    objetos relacionados, pero su cuenta no tiene permiso para eliminar el\n"
-"                                    siguientes tipos de objetos:"
-
-#, python-format
-msgid ""
-"\n"
-"                                    Deleting the %(object_name)s ' %(escaped_object)s' would require deleting\n"
-"                                    the following protected related objects:\n"
-"                                "
-msgstr ""
-"\n"
-"Eliminar el %(object_name)s S ' %(escaped_object)s S' requeriría eliminar\n"
-"                                    Los siguientes objetos relacionados protegidos:"
-
-#, python-format
-msgid ""
-"\n"
-"                                    Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"?\n"
-"                                    All of the following related items will be deleted:\n"
-"                                "
-msgstr ""
-"\n"
-"¿Estás seguro de que quieres eliminar el %(object_name)s S \" %(escaped_object)s s\"?\n"
-"                                    Se eliminarán todos los siguientes artículos relacionados:"
-
-msgid "Objects"
-msgstr "Objetos"
-
-msgid "No, take me back"
-msgstr "No, llévame de vuelta"
-
-msgid "Delete multiple objects"
-msgstr "Eliminar múltiples objetos"
-
-#, python-format
-msgid ""
-"\n"
-"                                        Deleting the selected %(objects_name)s would result in deleting related\n"
-"                                        objects, but your account doesn't have permission to delete the following\n"
-"                                        types of objects:\n"
-"                                    "
-msgstr "\n"
-
-#, python-format
-msgid ""
-"\n"
-"                                        Deleting the selected %(objects_name)s would require deleting the\n"
-"                                        following protected related objects:\n"
-"                                    "
-msgstr "\n"
-
-#, python-format
-msgid ""
-"\n"
-"                                        Are you sure you want to delete the selected %(objects_name)s? All of the\n"
-"                                        following objects and their related items will be deleted:\n"
-"                                    "
-msgstr "\n"
-
-msgid "Change"
-msgstr "Cambiar"
-
-msgid "View"
-msgstr "Vista"
-
-msgid "Delete?"
-msgstr "¿Borrar?"
-
-#, python-format
-msgid " By %(filter_title)s "
-msgstr "Por %(filter_title)s s"
-
-msgid "Export"
-msgstr "Exportar"
-
-msgid "Import"
-msgstr "Importar"
-
-#, python-format
-msgid ""
-"\n"
-"        Export %(len)s selected item.\n"
-"        "
-msgid_plural ""
-"\n"
-"        Export %(len)s selected items.\n"
-"      "
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "This exporter will export the following fields: "
-msgstr "Este exportador exportará los siguientes campos:"
-
-msgid "Submit"
-msgstr "Entregar"
-
-msgid ""
-"Below is a preview of data to be imported. If you are satisfied with the "
-"results, click 'Confirm import'"
-msgstr ""
-"A continuación se muestra una vista previa de los datos a importar. Si está "
-"satisfecho con los resultados, haga clic en 'Confirmar importar'"
-
-msgid "Confirm import"
-msgstr "Confirmar la importación"
-
-msgid "Errors"
-msgstr "Errores"
-
-msgid "Line number"
-msgstr "Número de línea"
-
-msgid "Some rows failed to validate"
-msgstr "Algunas filas no pudieron validar"
-
-msgid ""
-"Please correct these errors in your data where possible, then reupload it "
-"using the form above."
-msgstr ""
-"Corrija estos errores en sus datos cuando sea posible, luego vuelva a "
-"cargarlos utilizando el formulario anterior."
-
-msgid "Row"
-msgstr "Fila"
-
-msgid "Non field specific"
-msgstr "No campo específico"
-
-msgid "Preview"
-msgstr "Avance"
-
-msgid "New"
-msgstr "Nuevo"
-
-msgid "Skipped"
-msgstr "Salto"
-
-msgid "Update"
-msgstr "Actualizar"
-
-msgid "This importer will import the following fields: "
-msgstr "Este importador importará los siguientes campos:"
-
-msgid ""
-"Something's wrong with your database installation. Make sure the appropriate"
-" database tables have been created, and make sure the database is readable "
-"by the appropriate user."
-msgstr ""
-"Algo está mal con la instalación de su base de datos. Asegúrese de que se "
-"hayan creado las tablas de la base de datos apropiadas y asegúrese de que el"
-" usuario apropiado sea legible."
-
-msgid "Please correct the error below."
-msgstr "Corrija el error a continuación."
-
-msgid "Please correct the errors below."
-msgstr "Corrija los errores a continuación."
-
-msgid "Date/time"
-msgstr "Fecha/hora"
-
-msgid ""
-"Este objeto não tem um histórico de alterações. Provavelmente não foi "
-"adicionado por meio deste site de administração."
-msgstr ""
-"Este objeto no tiene antecedentes de cambios. Probablemente no se agregó a "
-"través de este sitio de administración."
-
-msgid "Show all"
-msgstr "Mostrar todo"
-
-msgid "Save"
-msgstr "Ahorrar"
-
-msgid "Search"
-msgstr "Buscar"
-
-#, python-format
-msgid ""
-"\n"
-"                                    %(counter)s result\n"
-"                                "
-msgid_plural ""
-"\n"
-"                                    %(counter)s results\n"
-"                                "
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-format
-msgid ""
-"\n"
-"                                    %(full_result_count)s total\n"
-"                                "
-msgstr ""
-"\n"
-"%(full_result_count)s s total"
-
-msgid "Save as new"
-msgstr "Guardar como nuevo"
-
-msgid "Save and add another"
-msgstr "Guardar y agregar otro"
-
-msgid "Save and continue editing"
-msgstr "Guardar y continuar editando"
-
-msgid "Save and view"
-msgstr "Guardar y ver"
-
-msgid "Close"
-msgstr "Cerca"
-
-msgid "Tem certeza que deseja excluir os temas selecionados?"
-msgstr "¿Estás seguro de que quieres eliminar los temas seleccionados?"
-
-msgid "Esta ação não pode ser desfeita!"
-msgstr "¡Esta acción no se puede deshacer!"
-
-msgid "Confirmar exclusão"
-msgstr "Confirmar la exclusión"
-
 msgid "400 Requisição Inválida"
 msgstr "400 requisitos no válidos"
 
@@ -5247,6 +4981,9 @@ msgstr "Reservados todos los derechos."
 msgid "Feito com ❤️ por aventureiros para aventureiros."
 msgstr "Hecho con ❤️ por aventureros para aventureros."
 
+msgid "Close"
+msgstr "Cerca"
+
 msgid "Volt logo"
 msgstr "Era logo"
 
@@ -5255,6 +4992,12 @@ msgstr "Navegación"
 
 msgid "Bloquear Sessão"
 msgstr "Sesión"
+
+msgid "Search"
+msgstr "Buscar"
+
+msgid "Acessar Admin"
+msgstr "Acceder a administrador"
 
 msgid "Marcar como lidas"
 msgstr "Marcar como lidas"
@@ -5348,9 +5091,6 @@ msgstr "Héroes actuales"
 
 msgid "Castle Siege"
 msgstr "Asedio del castillo"
-
-msgid "Permissões"
-msgstr "Permisos"
 
 msgid "Relatórios"
 msgstr "Informes"
@@ -5878,6 +5618,12 @@ msgstr ""
 "Ingrese su contraseña anterior por razones de seguridad y luego ingrese su "
 "nueva contraseña dos veces para verificar si se escribió correctamente."
 
+msgid "Alterar minha senha"
+msgstr "Cambiar mi contraseña"
+
+msgid "Por favor, corrija os erros abaixo."
+msgstr "Corrija los errores a continuación."
+
 msgid "🔐 Gerador de credenciais"
 msgstr "🔐 Generador de credenciales"
 
@@ -5961,6 +5707,326 @@ msgstr ""
 
 msgid "Você não tem permissão para criar notificações públicas staff."
 msgstr "No se le permite crear notificaciones públicas del personal."
+
+#, python-format
+#~ msgid "Devolução de lance no leilão #%d"
+#~ msgstr "Retorno de la oferta en la subasta #%D"
+
+#, python-format
+#~ msgid "Lance no leilão #%d"
+#~ msgstr "Oferta en la subasta #%D"
+
+#~ msgid "Este personagem não pertence a você."
+#~ msgstr "Este personaje no te pertenece."
+
+#~ msgid "Sem imagem"
+#~ msgstr "Sin imágenes"
+
+#~ msgid "Run the selected action"
+#~ msgstr "Ejecute la acción seleccionada"
+
+#~ msgid "Go"
+#~ msgstr "Ir"
+
+#~ msgid "Click here to select the objects across all pages"
+#~ msgstr "Haga clic aquí para seleccionar los objetos en todas las páginas"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                            Select all %(total_count)s %(module_name)s"
+#~ msgstr ""
+#~ "\n"
+#~ "Seleccione todo %(total_count)s S %(module_name)s S"
+
+#~ msgid "Clear selection"
+#~ msgstr "Selección clara"
+
+#~ msgid ""
+#~ "First, enter a username and password. Then, you'll be able to edit more user"
+#~ " options."
+#~ msgstr ""
+#~ "Primero, ingrese un nombre de usuario y contraseña. Luego, podrá editar más "
+#~ "opciones de usuario."
+
+#~ msgid "Enter a username and password."
+#~ msgstr "Ingrese un nombre de usuario y contraseña."
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                            Digite uma nova senha para o usuário\n"
+#~ "                            <strong>%(username)s</strong>.\n"
+#~ "                        "
+#~ msgstr ""
+#~ "\n"
+#~ "Ingrese una nueva contraseña para el usuario\n"
+#~ "                            <strong>%(username)s S </strong>."
+
+#~ msgid "Por favor, corrija o erro abaixo."
+#~ msgstr "Corrija el error a continuación."
+
+#, python-format
+#~ msgid ""
+#~ "Add\n"
+#~ "                                %(name)s"
+#~ msgstr ""
+#~ "Agregar\n"
+#~ "                                %(name)s s"
+
+#, python-format
+#~ msgid "Add %(name)s"
+#~ msgstr "Agregar %(name)s s"
+
+#~ msgid "History"
+#~ msgstr "Historia"
+
+#~ msgid "View on site"
+#~ msgstr "Ver en el sitio"
+
+#~ msgid "Filter"
+#~ msgstr "Filtrar"
+
+#~ msgid "Remove from sorting"
+#~ msgstr "Retirar de la clasificación"
+
+#, python-format
+#~ msgid "Sorting priority: %(priority_number)s"
+#~ msgstr "Prioridad de clasificación: %(priority_number)s s"
+
+#~ msgid "Toggle sorting"
+#~ msgstr "Clasificación de alternar"
+
+#~ msgid "Confirmar Ação"
+#~ msgstr "Confirmar acción"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                Tem certeza de que deseja executar a ação \"%(action_name)s\" nos %(objects_name)s selecionados?\n"
+#~ "                                Esta ação não pode ser desfeita.\n"
+#~ "                            "
+#~ msgstr ""
+#~ "\n"
+#~ "¿Estás seguro de que quieres realizar la acción \" %(action_name)s s\" Nos %(objects_name)s s seleccionado?\n"
+#~ "                                Esta acción no se puede deshacer."
+
+#~ msgid "Objetos Selecionados"
+#~ msgstr "Objetos seleccionados"
+
+#~ msgid "Sim, tenho certeza"
+#~ msgstr "Si, estoy seguro"
+
+#~ msgid "Não, voltar"
+#~ msgstr "No, regresa"
+
+#~ msgid "Delete"
+#~ msgstr "Borrar"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                    Deleting the %(object_name)s '%(escaped_object)s' would result in deleting\n"
+#~ "                                    related objects, but your account doesn't have permission to delete the\n"
+#~ "                                    following types of objects:\n"
+#~ "                                "
+#~ msgstr ""
+#~ "\n"
+#~ "Eliminar el %(object_name)s S ' %(escaped_object)s S' resultaría en eliminar\n"
+#~ "                                    objetos relacionados, pero su cuenta no tiene permiso para eliminar el\n"
+#~ "                                    siguientes tipos de objetos:"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                    Deleting the %(object_name)s ' %(escaped_object)s' would require deleting\n"
+#~ "                                    the following protected related objects:\n"
+#~ "                                "
+#~ msgstr ""
+#~ "\n"
+#~ "Eliminar el %(object_name)s S ' %(escaped_object)s S' requeriría eliminar\n"
+#~ "                                    Los siguientes objetos relacionados protegidos:"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                    Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"?\n"
+#~ "                                    All of the following related items will be deleted:\n"
+#~ "                                "
+#~ msgstr ""
+#~ "\n"
+#~ "¿Estás seguro de que quieres eliminar el %(object_name)s S \" %(escaped_object)s s\"?\n"
+#~ "                                    Se eliminarán todos los siguientes artículos relacionados:"
+
+#~ msgid "Objects"
+#~ msgstr "Objetos"
+
+#~ msgid "No, take me back"
+#~ msgstr "No, llévame de vuelta"
+
+#~ msgid "Delete multiple objects"
+#~ msgstr "Eliminar múltiples objetos"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                        Deleting the selected %(objects_name)s would result in deleting related\n"
+#~ "                                        objects, but your account doesn't have permission to delete the following\n"
+#~ "                                        types of objects:\n"
+#~ "                                    "
+#~ msgstr "\n"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                        Deleting the selected %(objects_name)s would require deleting the\n"
+#~ "                                        following protected related objects:\n"
+#~ "                                    "
+#~ msgstr "\n"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                        Are you sure you want to delete the selected %(objects_name)s? All of the\n"
+#~ "                                        following objects and their related items will be deleted:\n"
+#~ "                                    "
+#~ msgstr "\n"
+
+#~ msgid "Change"
+#~ msgstr "Cambiar"
+
+#~ msgid "View"
+#~ msgstr "Vista"
+
+#~ msgid "Delete?"
+#~ msgstr "¿Borrar?"
+
+#, python-format
+#~ msgid " By %(filter_title)s "
+#~ msgstr "Por %(filter_title)s s"
+
+#~ msgid "Export"
+#~ msgstr "Exportar"
+
+#~ msgid "Import"
+#~ msgstr "Importar"
+
+#~ msgid "This exporter will export the following fields: "
+#~ msgstr "Este exportador exportará los siguientes campos:"
+
+#~ msgid "Submit"
+#~ msgstr "Entregar"
+
+#~ msgid ""
+#~ "Below is a preview of data to be imported. If you are satisfied with the "
+#~ "results, click 'Confirm import'"
+#~ msgstr ""
+#~ "A continuación se muestra una vista previa de los datos a importar. Si está "
+#~ "satisfecho con los resultados, haga clic en 'Confirmar importar'"
+
+#~ msgid "Confirm import"
+#~ msgstr "Confirmar la importación"
+
+#~ msgid "Errors"
+#~ msgstr "Errores"
+
+#~ msgid "Line number"
+#~ msgstr "Número de línea"
+
+#~ msgid "Some rows failed to validate"
+#~ msgstr "Algunas filas no pudieron validar"
+
+#~ msgid ""
+#~ "Please correct these errors in your data where possible, then reupload it "
+#~ "using the form above."
+#~ msgstr ""
+#~ "Corrija estos errores en sus datos cuando sea posible, luego vuelva a "
+#~ "cargarlos utilizando el formulario anterior."
+
+#~ msgid "Row"
+#~ msgstr "Fila"
+
+#~ msgid "Non field specific"
+#~ msgstr "No campo específico"
+
+#~ msgid "Preview"
+#~ msgstr "Avance"
+
+#~ msgid "New"
+#~ msgstr "Nuevo"
+
+#~ msgid "Skipped"
+#~ msgstr "Salto"
+
+#~ msgid "Update"
+#~ msgstr "Actualizar"
+
+#~ msgid "This importer will import the following fields: "
+#~ msgstr "Este importador importará los siguientes campos:"
+
+#~ msgid ""
+#~ "Something's wrong with your database installation. Make sure the appropriate"
+#~ " database tables have been created, and make sure the database is readable "
+#~ "by the appropriate user."
+#~ msgstr ""
+#~ "Algo está mal con la instalación de su base de datos. Asegúrese de que se "
+#~ "hayan creado las tablas de la base de datos apropiadas y asegúrese de que el"
+#~ " usuario apropiado sea legible."
+
+#~ msgid "Please correct the error below."
+#~ msgstr "Corrija el error a continuación."
+
+#~ msgid "Please correct the errors below."
+#~ msgstr "Corrija los errores a continuación."
+
+#~ msgid "Date/time"
+#~ msgstr "Fecha/hora"
+
+#~ msgid ""
+#~ "Este objeto não tem um histórico de alterações. Provavelmente não foi "
+#~ "adicionado por meio deste site de administração."
+#~ msgstr ""
+#~ "Este objeto no tiene antecedentes de cambios. Probablemente no se agregó a "
+#~ "través de este sitio de administración."
+
+#~ msgid "Show all"
+#~ msgstr "Mostrar todo"
+
+#~ msgid "Save"
+#~ msgstr "Ahorrar"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                    %(full_result_count)s total\n"
+#~ "                                "
+#~ msgstr ""
+#~ "\n"
+#~ "%(full_result_count)s s total"
+
+#~ msgid "Save as new"
+#~ msgstr "Guardar como nuevo"
+
+#~ msgid "Save and add another"
+#~ msgstr "Guardar y agregar otro"
+
+#~ msgid "Save and continue editing"
+#~ msgstr "Guardar y continuar editando"
+
+#~ msgid "Save and view"
+#~ msgstr "Guardar y ver"
+
+#~ msgid "Tem certeza que deseja excluir os temas selecionados?"
+#~ msgstr "¿Estás seguro de que quieres eliminar los temas seleccionados?"
+
+#~ msgid "Esta ação não pode ser desfeita!"
+#~ msgstr "¡Esta acción no se puede deshacer!"
+
+#~ msgid "Confirmar exclusão"
+#~ msgstr "Confirmar la exclusión"
+
+#~ msgid "Permissões"
+#~ msgstr "Permisos"
 
 #~ msgid "Problemas Comuns"
 #~ msgstr "Problemas Comuns"

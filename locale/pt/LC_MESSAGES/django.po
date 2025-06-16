@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-22 01:13-0300\n"
+"POT-Creation-Date: 2025-06-16 18:11-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -174,16 +174,14 @@ msgstr "O lance deve ser maior que o lance atual."
 msgid "Saldo insuficiente."
 msgstr "Saldo insuficiente."
 
-#, python-format
-msgid "Devolução de lance no leilão #%d"
-msgstr "Devolução de lance no leilão #%d"
+msgid "Devolução de lance no leilão"
+msgstr "Devolução de lance no leilão"
 
 msgid "Leilão"
 msgstr "Leilão"
 
-#, python-format
-msgid "Lance no leilão #%d"
-msgstr "Lance no leilão #%d"
+msgid "Lance no leilão"
+msgstr "Lance no leilão"
 
 msgid "Leilão ainda está ativo."
 msgstr "Leilão ainda está ativo."
@@ -302,8 +300,8 @@ msgstr "Você precisa informar um valor para o lance."
 msgid "Você precisa informar o nome do personagem."
 msgstr "Você precisa informar o nome do personagem."
 
-msgid "Este personagem não pertence a você."
-msgstr "Este personagem não pertence a você."
+msgid "Este personagem não tem inventário."
+msgstr "Este personagem não tem inventário."
 
 msgid "Lance efetuado com sucesso!"
 msgstr "Lance efetuado com sucesso!"
@@ -1852,9 +1850,6 @@ msgstr ""
 msgid "Painel do Apoiador"
 msgstr "Painel do Apoiador"
 
-msgid "Sem imagem"
-msgstr "Sem imagem"
-
 msgid "Seu Cupom Ativo"
 msgstr "Seu Cupom Ativo"
 
@@ -2913,11 +2908,416 @@ msgstr "Recurso wiki"
 msgid "Wiki Features"
 msgstr "Recursos wiki"
 
+msgid "Feature"
+msgstr "Recurso"
+
 msgid "Wiki Feature Translation"
 msgstr "Tradução do recurso wiki"
 
 msgid "Wiki Feature Translations"
 msgstr "Traduções do recurso wiki"
+
+msgid "About Server"
+msgstr "Sobre servidor"
+
+msgid "Server Rules"
+msgstr "Regras do servidor"
+
+msgid "Game Commands"
+msgstr "Comandos de jogo"
+
+msgid "Character Classes"
+msgstr "Classes de personagens"
+
+msgid "Character Races"
+msgstr "Corridas de personagens"
+
+msgid "Noblesse System"
+msgstr "Sistema nobleses"
+
+msgid "Subclass System"
+msgstr "Sistema de subclasse"
+
+msgid "Hero System"
+msgstr "Sistema de heróis"
+
+msgid "Clan System"
+msgstr "Sistema de clãs"
+
+msgid "Siege System"
+msgstr "Sistema de vitória"
+
+msgid "Olympiad System"
+msgstr "Sistema Olympiad"
+
+msgid "Castle System"
+msgstr "Sistema de Castelo"
+
+msgid "Fortress System"
+msgstr "Sistema de fortaleza"
+
+msgid "Territory System"
+msgstr "Sistema território"
+
+msgid "Other"
+msgstr "Outro"
+
+msgid "Wiki General"
+msgstr "Wiki General"
+
+msgid "Wiki General Translation"
+msgstr "Tradução geral do Wiki"
+
+msgid "Wiki General Translations"
+msgstr "Traduções gerais do Wiki"
+
+msgid "Boss Raid"
+msgstr "Raid Boss"
+
+msgid "Epic Raid"
+msgstr "Raid épico"
+
+msgid "World Raid"
+msgstr "Raid mundial"
+
+msgid "Siege Raid"
+msgstr "Victory Raid"
+
+msgid "Wiki Raid"
+msgstr "Wiki Raid"
+
+msgid "Wiki Raids"
+msgstr "Wiki Raids"
+
+msgid "Location"
+msgstr "Localização"
+
+msgid "Wiki Raid Translation"
+msgstr "Tradução do Wiki Raid"
+
+msgid "Wiki Raid Translations"
+msgstr "Traduções do Wiki Raid"
+
+msgid "Tutorial"
+msgstr "Tutorial"
+
+msgid "FAQ"
+msgstr "Perguntas frequentes"
+
+msgid "Support"
+msgstr "Apoiar"
+
+msgid "Wiki Assistance"
+msgstr "Assistência Wiki"
+
+msgid "Category"
+msgstr "Categoria"
+
+msgid "Wiki Assistance Translation"
+msgstr "Tradução de assistência do wiki"
+
+msgid "Wiki Assistance Translations"
+msgstr "Traduções de assistência do wiki"
+
+msgid "Assistência do Jogo"
+msgstr "Assistência do Jogo"
+
+msgid "Guias"
+msgstr "Guias"
+
+msgid "Nenhum guia encontrado."
+msgstr "Nenhum guia encontrado."
+
+msgid "Tutoriais"
+msgstr "Tutoriais"
+
+msgid "Nenhum tutorial encontrado."
+msgstr "Nenhum tutorial encontrado."
+
+msgid "Perguntas Frequentes"
+msgstr "Perguntas Frequentes"
+
+msgid "Nenhuma pergunta frequente encontrada."
+msgstr "Nenhuma pergunta frequente encontrada."
+
+msgid "Suporte Técnico"
+msgstr "Suporte Técnico"
+
+msgid "Nenhuma informação de suporte técnico encontrada."
+msgstr "Nenhuma informação de suporte técnico encontrada."
+
+msgid "Outras Assistências"
+msgstr "Outras Assistências"
+
+msgid "Nenhuma outra assistência encontrada."
+msgstr "Nenhuma outra assistência encontrada."
+
+msgid "Guia Wiki"
+msgstr "Guia Wiki"
+
+msgid "Início"
+msgstr "Início"
+
+msgid "Informações Gerais"
+msgstr "Informações Gerais"
+
+msgid "Taxas"
+msgstr "Taxas"
+
+msgid "Chefes de Raid"
+msgstr "Chefes de Raid"
+
+msgid "Guia de Eventos"
+msgstr "Guia de Eventos"
+
+msgid "Atualizações"
+msgstr "Atualizações"
+
+msgid "Recursos"
+msgstr "Recursos"
+
+msgid "Eventos Regulares"
+msgstr "Eventos Regulares"
+
+msgid "Requisitos"
+msgstr "Requisitos"
+
+msgid "Nenhum evento regular encontrado."
+msgstr "Nenhum evento regular encontrado."
+
+msgid "Eventos Especiais"
+msgstr "Eventos Especiais"
+
+msgid "Nenhum evento especial encontrado."
+msgstr "Nenhum evento especial encontrado."
+
+msgid "Recursos do Servidor"
+msgstr "Recursos do Servidor"
+
+msgid "Recursos Personalizados"
+msgstr "Recursos Personalizados"
+
+msgid "Nenhum recurso personalizado encontrado."
+msgstr "Nenhum recurso personalizado encontrado."
+
+msgid "Recursos de Gameplay"
+msgstr "Recursos de Gameplay"
+
+msgid "Nenhum recurso de gameplay encontrado."
+msgstr "Nenhum recurso de gameplay encontrado."
+
+msgid "Recursos de Qualidade de Vida"
+msgstr "Recursos de Qualidade de Vida"
+
+msgid "Nenhum recurso de qualidade de vida encontrado."
+msgstr "Nenhum recurso de qualidade de vida encontrado."
+
+msgid "Recursos VIP"
+msgstr "Recursos VIP"
+
+msgid "Nenhum recurso VIP encontrado."
+msgstr "Nenhum recurso VIP encontrado."
+
+msgid "Recursos Anti-Cheat"
+msgstr "Recursos Anti-Cheat"
+
+msgid "Nenhum recurso anti-cheat encontrado."
+msgstr "Nenhum recurso anti-cheat encontrado."
+
+msgid "Recursos da Comunidade"
+msgstr "Recursos da Comunidade"
+
+msgid "Nenhum recurso da comunidade encontrado."
+msgstr "Nenhum recurso da comunidade encontrado."
+
+msgid "Sobre o Servidor"
+msgstr "Sobre o Servidor"
+
+msgid "Nenhuma informação sobre o servidor encontrada."
+msgstr "Nenhuma informação sobre o servidor encontrada."
+
+msgid "Regras do Servidor"
+msgstr "Regras do Servidor"
+
+msgid "Nenhuma regra do servidor encontrada."
+msgstr "Nenhuma regra do servidor encontrada."
+
+msgid "Comandos do Jogo"
+msgstr "Comandos do Jogo"
+
+msgid "Nenhum comando do jogo encontrado."
+msgstr "Nenhum comando do jogo encontrado."
+
+msgid "Classes de Personagem"
+msgstr "Classes de Personagem"
+
+msgid "Nenhuma classe de personagem encontrada."
+msgstr "Nenhuma classe de personagem encontrada."
+
+msgid "Raças de Personagem"
+msgstr "Raças de Personagem"
+
+msgid "Nenhuma raça de personagem encontrada."
+msgstr "Nenhuma raça de personagem encontrada."
+
+msgid "Sistema Noblesse"
+msgstr "Sistema Noblesse"
+
+msgid "Nenhuma informação sobre o sistema Noblesse encontrada."
+msgstr "Nenhuma informação sobre o sistema Noblesse encontrada."
+
+msgid "Sistema de Subclasse"
+msgstr "Sistema de Subclasse"
+
+msgid "Nenhuma informação sobre o sistema de subclasse encontrada."
+msgstr "Nenhuma informação sobre o sistema de subclasse encontrada."
+
+msgid "Sistema de Herói"
+msgstr "Sistema de Herói"
+
+msgid "Nenhuma informação sobre o sistema de herói encontrada."
+msgstr "Nenhuma informação sobre o sistema de herói encontrada."
+
+msgid "Sistema de Clã"
+msgstr "Sistema de Clã"
+
+msgid "Nenhuma informação sobre o sistema de clã encontrada."
+msgstr "Nenhuma informação sobre o sistema de clã encontrada."
+
+msgid "Sistema de Cerco"
+msgstr "Sistema de Cerco"
+
+msgid "Nenhuma informação sobre o sistema de cerco encontrada."
+msgstr "Nenhuma informação sobre o sistema de cerco encontrada."
+
+msgid "Sistema de Olimpíada"
+msgstr "Sistema de Olimpíada"
+
+msgid "Nenhuma informação sobre o sistema de olimpíada encontrada."
+msgstr "Nenhuma informação sobre o sistema de olimpíada encontrada."
+
+msgid "Sistema de Castelo"
+msgstr "Sistema de Castelo"
+
+msgid "Nenhuma informação sobre o sistema de castelo encontrada."
+msgstr "Nenhuma informação sobre o sistema de castelo encontrada."
+
+msgid "Sistema de Fortaleza"
+msgstr "Sistema de Fortaleza"
+
+msgid "Nenhuma informação sobre o sistema de fortaleza encontrada."
+msgstr "Nenhuma informação sobre o sistema de fortaleza encontrada."
+
+msgid "Sistema de Território"
+msgstr "Sistema de Território"
+
+msgid "Nenhuma informação sobre o sistema de território encontrada."
+msgstr "Nenhuma informação sobre o sistema de território encontrada."
+
+msgid "Outras Informações"
+msgstr "Outras Informações"
+
+msgid "Nenhuma outra informação encontrada."
+msgstr "Nenhuma outra informação encontrada."
+
+msgid "Wiki"
+msgstr "Semana"
+
+msgid "Bem-vindo ao Guia Wiki"
+msgstr "Bem-vindo ao Guia Wiki"
+
+msgid "Encontre todas as informações que você precisa sobre o servidor"
+msgstr "Encontre todas as informações que você precisa sobre o servidor"
+
+msgid "Nenhuma página encontrada."
+msgstr "Nenhuma página encontrada."
+
+msgid "Nenhuma seção encontrada."
+msgstr "Nenhuma seção encontrada."
+
+msgid "Raids do Jogo"
+msgstr "Raids do Jogo"
+
+msgid "Raids de Chefes"
+msgstr "Raids de Chefes"
+
+msgid "Horário"
+msgstr "Horário"
+
+msgid "Nenhuma raid de chefe encontrada."
+msgstr "Nenhuma raid de chefe encontrada."
+
+msgid "Raids Épicas"
+msgstr "Raids Épicas"
+
+msgid "Nenhuma raid épica encontrada."
+msgstr "Nenhuma raid épica encontrada."
+
+msgid "Raids Mundiais"
+msgstr "Raids Mundiais"
+
+msgid "Nenhuma raid mundial encontrada."
+msgstr "Nenhuma raid mundial encontrada."
+
+msgid "Raids de Cerco"
+msgstr "Raids de Cerco"
+
+msgid "Nenhuma raid de cerco encontrada."
+msgstr "Nenhuma raid de cerco encontrada."
+
+msgid "Outras Raids"
+msgstr "Outras Raids"
+
+msgid "Nenhuma outra raid encontrada."
+msgstr "Nenhuma outra raid encontrada."
+
+msgid "Taxas do Servidor"
+msgstr "Taxas do Servidor"
+
+msgid "Taxas de Experiência"
+msgstr "Taxas de Experiência"
+
+msgid "Nenhuma taxa de experiência encontrada."
+msgstr "Nenhuma taxa de experiência encontrada."
+
+msgid "Taxas de Drop"
+msgstr "Taxas de Drop"
+
+msgid "Nenhuma taxa de drop encontrada."
+msgstr "Nenhuma taxa de drop encontrada."
+
+msgid "Taxas de Adena"
+msgstr "Taxas de Adena"
+
+msgid "Nenhuma taxa de adena encontrada."
+msgstr "Nenhuma taxa de adena encontrada."
+
+msgid "Taxas de Spoil"
+msgstr "Taxas de Spoil"
+
+msgid "Nenhuma taxa de spoil encontrada."
+msgstr "Nenhuma taxa de spoil encontrada."
+
+msgid "Taxas de Quest"
+msgstr "Taxas de Quest"
+
+msgid "Nenhuma taxa de quest encontrada."
+msgstr "Nenhuma taxa de quest encontrada."
+
+msgid "Atualizações do Servidor"
+msgstr "Atualizações do Servidor"
+
+msgid "Nenhuma atualização encontrada."
+msgstr "Nenhuma atualização encontrada."
+
+msgid "General Information"
+msgstr "Informações gerais"
+
+msgid "Raids"
+msgstr "Ataques"
+
+msgid "Assistance"
+msgstr "Assistência"
 
 msgid "Nome do Grupo"
 msgstr "Nome do Grupo"
@@ -3206,6 +3606,87 @@ msgstr "Código de status da resposta:"
 msgid "Nenhum dado de auditoria encontrado."
 msgstr "Nenhum dado de auditoria encontrado."
 
+msgid "Título"
+msgstr "Título"
+
+msgid "Data de início"
+msgstr "Data de início"
+
+msgid "Data de término"
+msgstr "Data de término"
+
+msgid "Cor"
+msgstr "Cor"
+
+msgid "Vermelho"
+msgstr "Vermelho"
+
+msgid "Laranja"
+msgstr "Laranja"
+
+msgid "Verde"
+msgstr "Verde"
+
+msgid "Azul"
+msgstr "Azul"
+
+msgid "Roxo"
+msgstr "Roxo"
+
+msgid "Info"
+msgstr "Informações"
+
+msgid "Amarelo"
+msgstr "Amarelo"
+
+msgid "Cinza"
+msgstr "Cinza"
+
+msgid "A data de término não pode ser anterior à data de início."
+msgstr "A data de término não pode ser anterior à data de início."
+
+msgid "Evento"
+msgstr "Evento"
+
+msgid "Eventos"
+msgstr "Eventos"
+
+msgid "Calendário"
+msgstr "Calendário"
+
+msgid "Detalhes do Evento"
+msgstr "Detalhes do Evento"
+
+msgid "Data de Início"
+msgstr "Data de Início"
+
+msgid "Data de Término"
+msgstr "Data de Término"
+
+msgid "Elemento do calendário não encontrado"
+msgstr "Elemento do calendário não encontrado"
+
+msgid "Erro ao carregar eventos:"
+msgstr "Erro ao carregar eventos:"
+
+msgid "Próximo"
+msgstr "Próximo"
+
+msgid "Hoje"
+msgstr "Hoje"
+
+msgid "Mês"
+msgstr "Mês"
+
+msgid "Semana"
+msgstr "Semana"
+
+msgid "Dia"
+msgstr "Dia"
+
+msgid "Lista"
+msgstr "Lista"
+
 msgid "Ordem"
 msgstr "Ordem"
 
@@ -3266,9 +3747,6 @@ msgstr "Está público"
 msgid "Pergunta Frequente"
 msgstr "Pergunta Frequente"
 
-msgid "Perguntas Frequentes"
-msgstr "Perguntas Frequentes"
-
 msgid "Pode visualizar o índice"
 msgstr "Pode visualizar o índice"
 
@@ -3277,9 +3755,6 @@ msgstr "Inglês"
 
 msgid "Espanhol"
 msgstr "Espanhol"
-
-msgid "FAQ"
-msgstr "Perguntas frequentes"
 
 msgid "Idioma"
 msgstr "Idioma"
@@ -3465,9 +3940,6 @@ msgstr "Painel"
 msgid "Dashboards"
 msgstr "Painéis"
 
-msgid "Título"
-msgstr "Título"
-
 msgid "Conteúdo"
 msgstr "Conteúdo"
 
@@ -3602,6 +4074,9 @@ msgstr "Esqueceu a senha?"
 msgid "Entrar no Reino"
 msgstr "Entrar no Reino"
 
+msgid "Ou faça login com:"
+msgstr "Ou faça login com:"
+
 msgid "Ainda não tem conta?"
 msgstr "Ainda não tem conta?"
 
@@ -3694,9 +4169,6 @@ msgstr "🏆 Conquistas"
 
 msgid "Conquista bloqueada"
 msgstr "Conquista bloqueada"
-
-msgid "Próximo"
-msgstr "Próximo"
 
 msgid "Você ainda não desbloqueou nenhuma conquista."
 msgstr "Você ainda não desbloqueou nenhuma conquista."
@@ -4446,345 +4918,6 @@ msgstr "Ver Solicitação"
 msgid "Nenhuma solicitação encontrada."
 msgstr "Nenhuma solicitação encontrada."
 
-msgid "Run the selected action"
-msgstr "Execute a ação selecionada"
-
-msgid "Go"
-msgstr "Ir"
-
-msgid "Click here to select the objects across all pages"
-msgstr "Clique aqui para selecionar os objetos em todas as páginas"
-
-#, python-format
-msgid ""
-"\n"
-"                            Select all %(total_count)s %(module_name)s"
-msgstr ""
-"\n"
-"Selecione All %(total_count)s S %(module_name)s s"
-
-msgid "Clear selection"
-msgstr "Seleção clara"
-
-msgid ""
-"First, enter a username and password. Then, you'll be able to edit more user"
-" options."
-msgstr ""
-"Primeiro, digite um nome de usuário e senha. Em seguida, você poderá editar "
-"mais opções de usuário."
-
-msgid "Enter a username and password."
-msgstr "Digite um nome de usuário e senha."
-
-#, python-format
-msgid ""
-"\n"
-"                            Digite uma nova senha para o usuário\n"
-"                            <strong>%(username)s</strong>.\n"
-"                        "
-msgstr ""
-"\n"
-"Digite uma nova senha para o usuário\n"
-"                            <strong>%(username)s</strong>."
-
-msgid "Alterar minha senha"
-msgstr "Alterar minha senha"
-
-msgid "Por favor, corrija o erro abaixo."
-msgstr "Por favor, corrija o erro abaixo."
-
-msgid "Por favor, corrija os erros abaixo."
-msgstr "Por favor, corrija os erros abaixo."
-
-#, python-format
-msgid ""
-"Add\n"
-"                                %(name)s"
-msgstr ""
-"Adicionar\n"
-"                                %(name)s s"
-
-#, python-format
-msgid "Add %(name)s"
-msgstr "Adicione %(name)s s"
-
-msgid "History"
-msgstr "História"
-
-msgid "View on site"
-msgstr "Ver no local"
-
-msgid "Filter"
-msgstr "Filtro"
-
-msgid "Remove from sorting"
-msgstr "Retire da classificação"
-
-#, python-format
-msgid "Sorting priority: %(priority_number)s"
-msgstr "Prioridade de classificação: %(priority_number)s s"
-
-msgid "Toggle sorting"
-msgstr "Alternar a classificação"
-
-msgid "Confirmar Ação"
-msgstr "Confirmar Ação"
-
-#, python-format
-msgid ""
-"\n"
-"                                Tem certeza de que deseja executar a ação \"%(action_name)s\" nos %(objects_name)s selecionados?\n"
-"                                Esta ação não pode ser desfeita.\n"
-"                            "
-msgstr ""
-"\n"
-"Tem certeza de que deseja executar a ação \"%(action_name)s\" nos %(objects_name)s selecionados?\n"
-"                                Esta ação não pode ser desfeita."
-
-msgid "Objetos Selecionados"
-msgstr "Objetos Selecionados"
-
-msgid "Sim, tenho certeza"
-msgstr "Sim, tenho certeza"
-
-msgid "Não, voltar"
-msgstr "Não, voltar"
-
-msgid "Delete"
-msgstr "Excluir"
-
-#, python-format
-msgid ""
-"\n"
-"                                    Deleting the %(object_name)s '%(escaped_object)s' would result in deleting\n"
-"                                    related objects, but your account doesn't have permission to delete the\n"
-"                                    following types of objects:\n"
-"                                "
-msgstr ""
-"\n"
-"Excluir o %(object_name)s s ' %(escaped_object)s s' resultaria na exclusão\n"
-"                                    objetos relacionados, mas sua conta não tem permissão para excluir o\n"
-"                                    A seguir, tipos de objetos:"
-
-#, python-format
-msgid ""
-"\n"
-"                                    Deleting the %(object_name)s ' %(escaped_object)s' would require deleting\n"
-"                                    the following protected related objects:\n"
-"                                "
-msgstr ""
-"\n"
-"Excluir o %(object_name)s s ' %(escaped_object)s s' exigiria a exclusão\n"
-"                                    Os seguintes objetos relacionados protegidos:"
-
-#, python-format
-msgid ""
-"\n"
-"                                    Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"?\n"
-"                                    All of the following related items will be deleted:\n"
-"                                "
-msgstr ""
-"\n"
-"Tem certeza de que deseja excluir o %(object_name)s s \" %(escaped_object)s s\"?\n"
-"                                    Todos os seguintes itens relacionados serão excluídos:"
-
-msgid "Objects"
-msgstr "Objetos"
-
-msgid "No, take me back"
-msgstr "Não, leve -me de volta"
-
-msgid "Delete multiple objects"
-msgstr "Exclua vários objetos"
-
-#, python-format
-msgid ""
-"\n"
-"                                        Deleting the selected %(objects_name)s would result in deleting related\n"
-"                                        objects, but your account doesn't have permission to delete the following\n"
-"                                        types of objects:\n"
-"                                    "
-msgstr "\n"
-
-#, python-format
-msgid ""
-"\n"
-"                                        Deleting the selected %(objects_name)s would require deleting the\n"
-"                                        following protected related objects:\n"
-"                                    "
-msgstr "\n"
-
-#, python-format
-msgid ""
-"\n"
-"                                        Are you sure you want to delete the selected %(objects_name)s? All of the\n"
-"                                        following objects and their related items will be deleted:\n"
-"                                    "
-msgstr "\n"
-
-msgid "Change"
-msgstr "Mudar"
-
-msgid "View"
-msgstr "Visualizar"
-
-msgid "Delete?"
-msgstr "Excluir?"
-
-#, python-format
-msgid " By %(filter_title)s "
-msgstr "Por %(filter_title)s s"
-
-msgid "Export"
-msgstr "Exportar"
-
-msgid "Import"
-msgstr "Importar"
-
-#, python-format
-msgid ""
-"\n"
-"        Export %(len)s selected item.\n"
-"        "
-msgid_plural ""
-"\n"
-"        Export %(len)s selected items.\n"
-"      "
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "This exporter will export the following fields: "
-msgstr "Este exportador exportará os seguintes campos:"
-
-msgid "Submit"
-msgstr "Enviar"
-
-msgid ""
-"Below is a preview of data to be imported. If you are satisfied with the "
-"results, click 'Confirm import'"
-msgstr ""
-"Abaixo está uma prévia dos dados a serem importados. Se você estiver "
-"satisfeito com os resultados, clique em 'Confirmar Importar'"
-
-msgid "Confirm import"
-msgstr "Confirme a importação"
-
-msgid "Errors"
-msgstr "Erros"
-
-msgid "Line number"
-msgstr "Número da linha"
-
-msgid "Some rows failed to validate"
-msgstr "Algumas linhas falharam em validar"
-
-msgid ""
-"Please correct these errors in your data where possible, then reupload it "
-"using the form above."
-msgstr ""
-"Corrija esses erros em seus dados sempre que possível e depois reinicie -os "
-"usando o formulário acima."
-
-msgid "Row"
-msgstr "Linha"
-
-msgid "Non field specific"
-msgstr "Não específico de campo"
-
-msgid "Preview"
-msgstr "Visualização"
-
-msgid "New"
-msgstr "Novo"
-
-msgid "Skipped"
-msgstr "Pulou"
-
-msgid "Update"
-msgstr "Atualizar"
-
-msgid "This importer will import the following fields: "
-msgstr "Este importador importará os seguintes campos:"
-
-msgid ""
-"Something's wrong with your database installation. Make sure the appropriate"
-" database tables have been created, and make sure the database is readable "
-"by the appropriate user."
-msgstr ""
-"Algo está errado com a instalação do seu banco de dados. Verifique se as "
-"tabelas de banco de dados apropriadas foram criadas e verifique se o banco "
-"de dados é legível pelo usuário apropriado."
-
-msgid "Please correct the error below."
-msgstr "Corrija o erro abaixo."
-
-msgid "Please correct the errors below."
-msgstr "Corrija os erros abaixo."
-
-msgid "Date/time"
-msgstr "Data/hora"
-
-msgid ""
-"Este objeto não tem um histórico de alterações. Provavelmente não foi "
-"adicionado por meio deste site de administração."
-msgstr ""
-"Este objeto não tem um histórico de alterações. Provavelmente não foi "
-"adicionado por meio deste site de administração."
-
-msgid "Show all"
-msgstr "Mostre tudo"
-
-msgid "Save"
-msgstr "Salvar"
-
-msgid "Search"
-msgstr "Procurar"
-
-#, python-format
-msgid ""
-"\n"
-"                                    %(counter)s result\n"
-"                                "
-msgid_plural ""
-"\n"
-"                                    %(counter)s results\n"
-"                                "
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-format
-msgid ""
-"\n"
-"                                    %(full_result_count)s total\n"
-"                                "
-msgstr ""
-"\n"
-"%(full_result_count)s s Total"
-
-msgid "Save as new"
-msgstr "Salve como novo"
-
-msgid "Save and add another"
-msgstr "Salve e adicione outro"
-
-msgid "Save and continue editing"
-msgstr "Salve e continue editando"
-
-msgid "Save and view"
-msgstr "Salve e visualize"
-
-msgid "Close"
-msgstr "Fechar"
-
-msgid "Tem certeza que deseja excluir os temas selecionados?"
-msgstr "Tem certeza que deseja excluir os temas selecionados?"
-
-msgid "Esta ação não pode ser desfeita!"
-msgstr "Esta ação não pode ser desfeita!"
-
-msgid "Confirmar exclusão"
-msgstr "Confirmar exclusão"
-
 msgid "400 Requisição Inválida"
 msgstr "400 Requisição Inválida"
 
@@ -4838,6 +4971,9 @@ msgstr "Todos os direitos reservados."
 msgid "Feito com ❤️ por aventureiros para aventureiros."
 msgstr "Feito com ❤️ por aventureiros para aventureiros."
 
+msgid "Close"
+msgstr "Fechar"
+
 msgid "Volt logo"
 msgstr "Volt logo"
 
@@ -4846,6 +4982,12 @@ msgstr "Alternar a navegação"
 
 msgid "Bloquear Sessão"
 msgstr "Bloquear Sessão"
+
+msgid "Search"
+msgstr "Procurar"
+
+msgid "Acessar Admin"
+msgstr "Acessar Admin"
 
 msgid "Marcar como lidas"
 msgstr "Marcar como lidas"
@@ -4895,9 +5037,6 @@ msgstr "Tem certeza de que deseja limpar todas as notificações?"
 msgid "Erro ao carregar os detalhes da notificação."
 msgstr "Erro ao carregar os detalhes da notificação."
 
-msgid "Início"
-msgstr "Início"
-
 msgid "Games"
 msgstr "Jogos"
 
@@ -4942,9 +5081,6 @@ msgstr "Heróis atuais"
 
 msgid "Castle Siege"
 msgstr "Cerco do castelo"
-
-msgid "Permissões"
-msgstr "Permissões"
 
 msgid "Relatórios"
 msgstr "Relatórios"
@@ -5055,26 +5191,14 @@ msgstr "Missões Personalizadas"
 msgid "Eventos e Recompensas"
 msgstr "Eventos e Recompensas"
 
-msgid "Wiki"
-msgstr "Semana"
-
 msgid "Wiki e Atualizações do Lineage"
 msgstr "Wiki e Atualizações do Lineage"
-
-msgid "Informações Gerais"
-msgstr "Informações Gerais"
-
-msgid "Taxas de Experiência"
-msgstr "Taxas de Experiência"
 
 msgid "Chefes de Raide e Instâncias"
 msgstr "Chefes de Raide e Instâncias"
 
 msgid "Ajuda no Jogo"
 msgstr "Ajuda no Jogo"
-
-msgid "Guia de Eventos"
-msgstr "Guia de Eventos"
 
 msgid "Atualização"
 msgstr "Atualização"
@@ -5259,9 +5383,6 @@ msgstr "Termos e Condições"
 
 msgid "Termos e Condições de Uso"
 msgstr "Termos e Condições de Uso"
-
-msgid "Sobre o Servidor"
-msgstr "Sobre o Servidor"
 
 msgid "O"
 msgstr "O"
@@ -5489,113 +5610,11 @@ msgstr ""
 "insira sua nova senha duas vezes para verificarmos se foi digitada "
 "corretamente."
 
-msgid "Assistência do Jogo"
-msgstr "Assistência do Jogo"
+msgid "Alterar minha senha"
+msgstr "Alterar minha senha"
 
-msgid "Problemas Comuns"
-msgstr "Problemas Comuns"
-
-msgid "Suporte Técnico"
-msgstr "Suporte Técnico"
-
-msgid "Guia Wiki"
-msgstr "Guia Wiki"
-
-msgid "Taxas"
-msgstr "Taxas"
-
-msgid "Chefes de Raid"
-msgstr "Chefes de Raid"
-
-msgid "Atualizações"
-msgstr "Atualizações"
-
-msgid "Recursos"
-msgstr "Recursos"
-
-msgid "Eventos Regulares"
-msgstr "Eventos Regulares"
-
-msgid "Requisitos"
-msgstr "Requisitos"
-
-msgid "Eventos Especiais"
-msgstr "Eventos Especiais"
-
-msgid "Recursos do Servidor"
-msgstr "Recursos do Servidor"
-
-msgid "Recursos Personalizados"
-msgstr "Recursos Personalizados"
-
-msgid "Recursos de Gameplay"
-msgstr "Recursos de Gameplay"
-
-msgid "Recursos de Qualidade de Vida"
-msgstr "Recursos de Qualidade de Vida"
-
-msgid "Recursos VIP"
-msgstr "Recursos VIP"
-
-msgid "Recursos Anti-Cheat"
-msgstr "Recursos Anti-Cheat"
-
-msgid "Recursos da Comunidade"
-msgstr "Recursos da Comunidade"
-
-msgid "Informações do Servidor"
-msgstr "Informações do Servidor"
-
-msgid "Recursos do Jogo"
-msgstr "Recursos do Jogo"
-
-msgid "Começando"
-msgstr "Começando"
-
-msgid "Diretrizes da Comunidade"
-msgstr "Diretrizes da Comunidade"
-
-msgid "Bem-vindo ao Guia Wiki"
-msgstr "Bem-vindo ao Guia Wiki"
-
-msgid "Encontre todas as informações que você precisa sobre o servidor"
-msgstr "Encontre todas as informações que você precisa sobre o servidor"
-
-msgid "Raid Bosses"
-msgstr "Raid chefes"
-
-msgid "Raids Regulares"
-msgstr "Raids Regulares"
-
-msgid "Horários"
-msgstr "Horários"
-
-msgid "Raids Especiais"
-msgstr "Raids Especiais"
-
-msgid "Raids Mundiais"
-msgstr "Raids Mundiais"
-
-msgid "Taxas do Servidor"
-msgstr "Taxas do Servidor"
-
-msgid "Taxas de Drop"
-msgstr "Taxas de Drop"
-
-msgid "Taxas de Adena"
-msgstr "Taxas de Adena"
-
-msgid "Taxas de Spoil"
-msgstr "Taxas de Spoil"
-
-msgid "Taxas de Quest"
-msgstr "Taxas de Quest"
-
-msgid "Atualizações do Servidor"
-msgstr "Atualizações do Servidor"
-
-msgid "Nenhuma atualização disponível no momento."
-msgstr "Nenhuma atualização disponível no momento."
+msgid "Por favor, corrija os erros abaixo."
+msgstr "Por favor, corrija os erros abaixo."
 
 msgid "🔐 Gerador de credenciais"
 msgstr "🔐 Gerador de credenciais"
@@ -5679,6 +5698,356 @@ msgstr ""
 
 msgid "Você não tem permissão para criar notificações públicas staff."
 msgstr "Você não tem permissão para criar notificações públicas staff."
+
+#, python-format
+#~ msgid "Devolução de lance no leilão #%d"
+#~ msgstr "Devolução de lance no leilão #%d"
+
+#, python-format
+#~ msgid "Lance no leilão #%d"
+#~ msgstr "Lance no leilão #%d"
+
+#~ msgid "Este personagem não pertence a você."
+#~ msgstr "Este personagem não pertence a você."
+
+#~ msgid "Sem imagem"
+#~ msgstr "Sem imagem"
+
+#~ msgid "Run the selected action"
+#~ msgstr "Execute a ação selecionada"
+
+#~ msgid "Go"
+#~ msgstr "Ir"
+
+#~ msgid "Click here to select the objects across all pages"
+#~ msgstr "Clique aqui para selecionar os objetos em todas as páginas"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                            Select all %(total_count)s %(module_name)s"
+#~ msgstr ""
+#~ "\n"
+#~ "Selecione All %(total_count)s S %(module_name)s s"
+
+#~ msgid "Clear selection"
+#~ msgstr "Seleção clara"
+
+#~ msgid ""
+#~ "First, enter a username and password. Then, you'll be able to edit more user"
+#~ " options."
+#~ msgstr ""
+#~ "Primeiro, digite um nome de usuário e senha. Em seguida, você poderá editar "
+#~ "mais opções de usuário."
+
+#~ msgid "Enter a username and password."
+#~ msgstr "Digite um nome de usuário e senha."
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                            Digite uma nova senha para o usuário\n"
+#~ "                            <strong>%(username)s</strong>.\n"
+#~ "                        "
+#~ msgstr ""
+#~ "\n"
+#~ "Digite uma nova senha para o usuário\n"
+#~ "                            <strong>%(username)s</strong>."
+
+#~ msgid "Por favor, corrija o erro abaixo."
+#~ msgstr "Por favor, corrija o erro abaixo."
+
+#, python-format
+#~ msgid ""
+#~ "Add\n"
+#~ "                                %(name)s"
+#~ msgstr ""
+#~ "Adicionar\n"
+#~ "                                %(name)s s"
+
+#, python-format
+#~ msgid "Add %(name)s"
+#~ msgstr "Adicione %(name)s s"
+
+#~ msgid "History"
+#~ msgstr "História"
+
+#~ msgid "View on site"
+#~ msgstr "Ver no local"
+
+#~ msgid "Filter"
+#~ msgstr "Filtro"
+
+#~ msgid "Remove from sorting"
+#~ msgstr "Retire da classificação"
+
+#, python-format
+#~ msgid "Sorting priority: %(priority_number)s"
+#~ msgstr "Prioridade de classificação: %(priority_number)s s"
+
+#~ msgid "Toggle sorting"
+#~ msgstr "Alternar a classificação"
+
+#~ msgid "Confirmar Ação"
+#~ msgstr "Confirmar Ação"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                Tem certeza de que deseja executar a ação \"%(action_name)s\" nos %(objects_name)s selecionados?\n"
+#~ "                                Esta ação não pode ser desfeita.\n"
+#~ "                            "
+#~ msgstr ""
+#~ "\n"
+#~ "Tem certeza de que deseja executar a ação \"%(action_name)s\" nos %(objects_name)s selecionados?\n"
+#~ "                                Esta ação não pode ser desfeita."
+
+#~ msgid "Objetos Selecionados"
+#~ msgstr "Objetos Selecionados"
+
+#~ msgid "Sim, tenho certeza"
+#~ msgstr "Sim, tenho certeza"
+
+#~ msgid "Não, voltar"
+#~ msgstr "Não, voltar"
+
+#~ msgid "Delete"
+#~ msgstr "Excluir"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                    Deleting the %(object_name)s '%(escaped_object)s' would result in deleting\n"
+#~ "                                    related objects, but your account doesn't have permission to delete the\n"
+#~ "                                    following types of objects:\n"
+#~ "                                "
+#~ msgstr ""
+#~ "\n"
+#~ "Excluir o %(object_name)s s ' %(escaped_object)s s' resultaria na exclusão\n"
+#~ "                                    objetos relacionados, mas sua conta não tem permissão para excluir o\n"
+#~ "                                    A seguir, tipos de objetos:"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                    Deleting the %(object_name)s ' %(escaped_object)s' would require deleting\n"
+#~ "                                    the following protected related objects:\n"
+#~ "                                "
+#~ msgstr ""
+#~ "\n"
+#~ "Excluir o %(object_name)s s ' %(escaped_object)s s' exigiria a exclusão\n"
+#~ "                                    Os seguintes objetos relacionados protegidos:"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                    Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"?\n"
+#~ "                                    All of the following related items will be deleted:\n"
+#~ "                                "
+#~ msgstr ""
+#~ "\n"
+#~ "Tem certeza de que deseja excluir o %(object_name)s s \" %(escaped_object)s s\"?\n"
+#~ "                                    Todos os seguintes itens relacionados serão excluídos:"
+
+#~ msgid "Objects"
+#~ msgstr "Objetos"
+
+#~ msgid "No, take me back"
+#~ msgstr "Não, leve -me de volta"
+
+#~ msgid "Delete multiple objects"
+#~ msgstr "Exclua vários objetos"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                        Deleting the selected %(objects_name)s would result in deleting related\n"
+#~ "                                        objects, but your account doesn't have permission to delete the following\n"
+#~ "                                        types of objects:\n"
+#~ "                                    "
+#~ msgstr "\n"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                        Deleting the selected %(objects_name)s would require deleting the\n"
+#~ "                                        following protected related objects:\n"
+#~ "                                    "
+#~ msgstr "\n"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                        Are you sure you want to delete the selected %(objects_name)s? All of the\n"
+#~ "                                        following objects and their related items will be deleted:\n"
+#~ "                                    "
+#~ msgstr "\n"
+
+#~ msgid "Change"
+#~ msgstr "Mudar"
+
+#~ msgid "View"
+#~ msgstr "Visualizar"
+
+#~ msgid "Delete?"
+#~ msgstr "Excluir?"
+
+#, python-format
+#~ msgid " By %(filter_title)s "
+#~ msgstr "Por %(filter_title)s s"
+
+#~ msgid "Export"
+#~ msgstr "Exportar"
+
+#~ msgid "Import"
+#~ msgstr "Importar"
+
+#~ msgid "This exporter will export the following fields: "
+#~ msgstr "Este exportador exportará os seguintes campos:"
+
+#~ msgid "Submit"
+#~ msgstr "Enviar"
+
+#~ msgid ""
+#~ "Below is a preview of data to be imported. If you are satisfied with the "
+#~ "results, click 'Confirm import'"
+#~ msgstr ""
+#~ "Abaixo está uma prévia dos dados a serem importados. Se você estiver "
+#~ "satisfeito com os resultados, clique em 'Confirmar Importar'"
+
+#~ msgid "Confirm import"
+#~ msgstr "Confirme a importação"
+
+#~ msgid "Errors"
+#~ msgstr "Erros"
+
+#~ msgid "Line number"
+#~ msgstr "Número da linha"
+
+#~ msgid "Some rows failed to validate"
+#~ msgstr "Algumas linhas falharam em validar"
+
+#~ msgid ""
+#~ "Please correct these errors in your data where possible, then reupload it "
+#~ "using the form above."
+#~ msgstr ""
+#~ "Corrija esses erros em seus dados sempre que possível e depois reinicie -os "
+#~ "usando o formulário acima."
+
+#~ msgid "Row"
+#~ msgstr "Linha"
+
+#~ msgid "Non field specific"
+#~ msgstr "Não específico de campo"
+
+#~ msgid "Preview"
+#~ msgstr "Visualização"
+
+#~ msgid "New"
+#~ msgstr "Novo"
+
+#~ msgid "Skipped"
+#~ msgstr "Pulou"
+
+#~ msgid "Update"
+#~ msgstr "Atualizar"
+
+#~ msgid "This importer will import the following fields: "
+#~ msgstr "Este importador importará os seguintes campos:"
+
+#~ msgid ""
+#~ "Something's wrong with your database installation. Make sure the appropriate"
+#~ " database tables have been created, and make sure the database is readable "
+#~ "by the appropriate user."
+#~ msgstr ""
+#~ "Algo está errado com a instalação do seu banco de dados. Verifique se as "
+#~ "tabelas de banco de dados apropriadas foram criadas e verifique se o banco "
+#~ "de dados é legível pelo usuário apropriado."
+
+#~ msgid "Please correct the error below."
+#~ msgstr "Corrija o erro abaixo."
+
+#~ msgid "Please correct the errors below."
+#~ msgstr "Corrija os erros abaixo."
+
+#~ msgid "Date/time"
+#~ msgstr "Data/hora"
+
+#~ msgid ""
+#~ "Este objeto não tem um histórico de alterações. Provavelmente não foi "
+#~ "adicionado por meio deste site de administração."
+#~ msgstr ""
+#~ "Este objeto não tem um histórico de alterações. Provavelmente não foi "
+#~ "adicionado por meio deste site de administração."
+
+#~ msgid "Show all"
+#~ msgstr "Mostre tudo"
+
+#~ msgid "Save"
+#~ msgstr "Salvar"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                                    %(full_result_count)s total\n"
+#~ "                                "
+#~ msgstr ""
+#~ "\n"
+#~ "%(full_result_count)s s Total"
+
+#~ msgid "Save as new"
+#~ msgstr "Salve como novo"
+
+#~ msgid "Save and add another"
+#~ msgstr "Salve e adicione outro"
+
+#~ msgid "Save and continue editing"
+#~ msgstr "Salve e continue editando"
+
+#~ msgid "Save and view"
+#~ msgstr "Salve e visualize"
+
+#~ msgid "Tem certeza que deseja excluir os temas selecionados?"
+#~ msgstr "Tem certeza que deseja excluir os temas selecionados?"
+
+#~ msgid "Esta ação não pode ser desfeita!"
+#~ msgstr "Esta ação não pode ser desfeita!"
+
+#~ msgid "Confirmar exclusão"
+#~ msgstr "Confirmar exclusão"
+
+#~ msgid "Permissões"
+#~ msgstr "Permissões"
+
+#~ msgid "Problemas Comuns"
+#~ msgstr "Problemas Comuns"
+
+#~ msgid "Informações do Servidor"
+#~ msgstr "Informações do Servidor"
+
+#~ msgid "Recursos do Jogo"
+#~ msgstr "Recursos do Jogo"
+
+#~ msgid "Começando"
+#~ msgstr "Começando"
+
+#~ msgid "Diretrizes da Comunidade"
+#~ msgstr "Diretrizes da Comunidade"
+
+#~ msgid "Raid Bosses"
+#~ msgstr "Raid chefes"
+
+#~ msgid "Raids Regulares"
+#~ msgstr "Raids Regulares"
+
+#~ msgid "Horários"
+#~ msgstr "Horários"
+
+#~ msgid "Raids Especiais"
+#~ msgstr "Raids Especiais"
+
+#~ msgid "Nenhuma atualização disponível no momento."
+#~ msgstr "Nenhuma atualização disponível no momento."
 
 #~ msgid "Excluir Item"
 #~ msgstr "Excluir Item"
