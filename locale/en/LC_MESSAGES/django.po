@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-16 17:49-0300\n"
+"POT-Creation-Date: 2025-06-20 14:26-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1574,6 +1574,118 @@ msgstr "Back to Dashboard"
 msgid "Movimentação de Itens nos Últimos Dias"
 msgstr "Movement of items in recent days"
 
+msgid "Planejado"
+msgstr "Planned"
+
+msgid "Em andamento"
+msgstr "In progress"
+
+msgid "Concluído"
+msgstr "Completed"
+
+msgid "Slug"
+msgstr "Slug"
+
+msgid ""
+"Endereço amigável do roadmap, gerado automaticamente a partir do título."
+msgstr "Roadmap friendly address, automatically generated from the title."
+
+msgid "Imagem de capa do roadmap (opcional)."
+msgstr "Roadmap cover image (optional)."
+
+msgid "Autor"
+msgstr "Author"
+
+msgid "Usuário responsável pela publicação."
+msgstr "User responsible for the publication."
+
+msgid "Data de Publicação"
+msgstr "Date of publication"
+
+msgid "Data e hora em que o roadmap foi ou será publicado."
+msgstr "Date and time the roadmap was or will be published."
+
+msgid "Publicado"
+msgstr "Published"
+
+msgid "Indica se o roadmap está visível ao público."
+msgstr "Indicates whether roadmap is visible to the public."
+
+msgid "Privado"
+msgstr "Private"
+
+msgid "Se marcado, o roadmap será visível apenas para usuários autorizados."
+msgstr "If marked, Roadmap will be visible only for authorized users."
+
+msgid "Status do item do roadmap."
+msgstr "Status do item do roadmap."
+
+msgid "Data de Conclusão"
+msgstr "Completion date"
+
+msgid "Data de conclusão do item (opcional)."
+msgstr "Completion date of item (optional)."
+
+msgid "Item de Roadmap"
+msgstr "Item de Roadmap"
+
+msgid "Itens de Roadmap"
+msgstr "Roadmap items"
+
+msgid "Pode visualizar a lista de itens do roadmap"
+msgstr "You can view the list of roadmap items"
+
+msgid "Pode visualizar o detalhe do item do roadmap"
+msgstr "You can view the detail of the roadmap item"
+
+msgid "Português"
+msgstr "Portuguese"
+
+msgid "Inglês"
+msgstr "English"
+
+msgid "Espanhol"
+msgstr "Spanish"
+
+msgid "Idioma"
+msgstr "Language"
+
+msgid "Idioma da tradução."
+msgstr "Translation language."
+
+msgid "Título"
+msgstr "Title"
+
+msgid "Título do roadmap neste idioma."
+msgstr "Roadmap title in this language."
+
+msgid "Conteúdo"
+msgstr "Content"
+
+msgid "Resumo"
+msgstr "Summary"
+
+msgid "Resumo opcional para exibição em listas."
+msgstr "Optional summary for list display."
+
+msgid "Tradução de Item de Roadmap"
+msgstr "Roadmap item translation"
+
+msgid "Traduções de Itens de Roadmap"
+msgstr "Roadmap items translations"
+
+msgid "Voltar para o roadmap"
+msgstr "Back to Roadmap"
+
+msgid "Roadmap"
+msgstr "Roadmap"
+
+msgid "Leia mais"
+msgstr "read more"
+
+msgid "Nenhum item de roadmap disponível."
+msgstr "No Roadmap item available."
+
 msgid "Players Online"
 msgstr "Players Online"
 
@@ -1663,9 +1775,6 @@ msgstr "Index Configuration"
 
 msgid "Only one server configuration is allowed."
 msgstr "Only one server configuration is allowed."
-
-msgid "Português"
-msgstr "Portuguese"
 
 msgid "English"
 msgstr "English"
@@ -2728,9 +2837,6 @@ msgstr "Error adding the currency to the character."
 msgid "Title"
 msgstr "Title"
 
-msgid "Slug"
-msgstr "Slug"
-
 msgid "Order"
 msgstr "Order"
 
@@ -3331,9 +3437,6 @@ msgstr "Historics of Services"
 msgid "Versão"
 msgstr "Version"
 
-msgid "Autor"
-msgstr "Author"
-
 msgid "Upload de Arquivo"
 msgstr "File upload"
 
@@ -3596,9 +3699,6 @@ msgstr "Response Status Code:"
 msgid "Nenhum dado de auditoria encontrado."
 msgstr "No audit data found."
 
-msgid "Título"
-msgstr "Title"
-
 msgid "Data de início"
 msgstr "Start date"
 
@@ -3739,15 +3839,6 @@ msgstr "Frequent question"
 
 msgid "Pode visualizar o índice"
 msgstr "You can view the index"
-
-msgid "Inglês"
-msgstr "English"
-
-msgid "Espanhol"
-msgstr "Spanish"
-
-msgid "Idioma"
-msgstr "Language"
 
 msgid "Resposta"
 msgstr "Response"
@@ -3927,9 +4018,6 @@ msgstr "Dashboard"
 
 msgid "Dashboards"
 msgstr "Dashboards"
-
-msgid "Conteúdo"
-msgstr "Content"
 
 msgid "Tradução de Dashboard"
 msgstr "Dashboard translation"
@@ -4606,23 +4694,11 @@ msgstr "Friendly news address, automatically generated from the title."
 msgid "Imagem de capa da notícia (opcional)."
 msgstr "News cover image (optional)."
 
-msgid "Usuário responsável pela publicação."
-msgstr "User responsible for the publication."
-
-msgid "Data de Publicação"
-msgstr "Date of publication"
-
 msgid "Data e hora em que a notícia foi ou será publicada."
 msgstr "Date and time the news was or will be published."
 
-msgid "Publicado"
-msgstr "Published"
-
 msgid "Indica se a notícia está visível ao público."
 msgstr "Indicates whether the news is visible to the public."
-
-msgid "Privado"
-msgstr "Private"
 
 msgid "Se marcado, a notícia será visível apenas para usuários autorizados."
 msgstr "If marked, the news will be visible only for authorized users."
@@ -4639,17 +4715,8 @@ msgstr "You can view the news list"
 msgid "Pode visualizar o detalhe da notícia"
 msgstr "You can view the detail of the news"
 
-msgid "Idioma da tradução."
-msgstr "Translation language."
-
 msgid "Título da notícia neste idioma."
 msgstr "News title in this language."
-
-msgid "Resumo"
-msgstr "Summary"
-
-msgid "Resumo opcional para exibição em listas."
-msgstr "Optional summary for list display."
 
 msgid "Tradução de Notícia"
 msgstr "News Translation"
@@ -4665,9 +4732,6 @@ msgstr "Back to the news"
 
 msgid "Fique por dentro das últimas novidades e atualizações exclusivas."
 msgstr "Stay on top of the latest news and exclusive updates."
-
-msgid "Leia mais"
-msgstr "read more"
 
 msgid "Não há notícias privadas disponíveis no momento."
 msgstr "There is no private news available at the moment."

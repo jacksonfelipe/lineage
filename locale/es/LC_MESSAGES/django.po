@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-16 17:56-0300\n"
+"POT-Creation-Date: 2025-06-20 14:31-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1579,6 +1579,121 @@ msgstr "Voltar para Dashboard"
 msgid "Movimentação de Itens nos Últimos Dias"
 msgstr "Movimiento de elementos en los últimos días"
 
+msgid "Planejado"
+msgstr "Planificado"
+
+msgid "Em andamento"
+msgstr "En curso"
+
+msgid "Concluído"
+msgstr "Terminado"
+
+msgid "Slug"
+msgstr "Babosa"
+
+msgid ""
+"Endereço amigável do roadmap, gerado automaticamente a partir do título."
+msgstr ""
+"Dirección amigable para la hoja de ruta, generada automáticamente a partir "
+"del título."
+
+msgid "Imagem de capa do roadmap (opcional)."
+msgstr "Imagen de portada de la hoja de ruta (opcional)."
+
+msgid "Autor"
+msgstr "Autor"
+
+msgid "Usuário responsável pela publicação."
+msgstr "Usuario responsable de la publicación."
+
+msgid "Data de Publicação"
+msgstr "Fecha de publicación"
+
+msgid "Data e hora em que o roadmap foi ou será publicado."
+msgstr "Fecha y hora La hoja de ruta fue o se publicará."
+
+msgid "Publicado"
+msgstr "Publicado"
+
+msgid "Indica se o roadmap está visível ao público."
+msgstr "Indica si la hoja de ruta es visible para el público."
+
+msgid "Privado"
+msgstr "Privado"
+
+msgid "Se marcado, o roadmap será visível apenas para usuários autorizados."
+msgstr ""
+"Si se marca, la hoja de ruta será visible solo para usuarios autorizados."
+
+msgid "Status do item do roadmap."
+msgstr "Estado Do Artículo Do Hoje de ruta."
+
+msgid "Data de Conclusão"
+msgstr "Fecha de finalización"
+
+msgid "Data de conclusão do item (opcional)."
+msgstr "Fecha de finalización del artículo (opcional)."
+
+msgid "Item de Roadmap"
+msgstr "Artículo de hoja de ruta"
+
+msgid "Itens de Roadmap"
+msgstr "Artículo de hoja de ruta"
+
+msgid "Pode visualizar a lista de itens do roadmap"
+msgstr "Puede ver la lista de artículos de hoja de ruta"
+
+msgid "Pode visualizar o detalhe do item do roadmap"
+msgstr "Puede ver el detalle del elemento de la hoja de ruta"
+
+msgid "Português"
+msgstr "portugués"
+
+msgid "Inglês"
+msgstr "Inglés"
+
+msgid "Espanhol"
+msgstr "Español"
+
+msgid "Idioma"
+msgstr "Idioma"
+
+msgid "Idioma da tradução."
+msgstr "Lenguaje de traducción."
+
+msgid "Título"
+msgstr "Título"
+
+msgid "Título do roadmap neste idioma."
+msgstr "Título do roadmap neste idioma."
+
+msgid "Conteúdo"
+msgstr "Contenido"
+
+msgid "Resumo"
+msgstr "Resumen"
+
+msgid "Resumo opcional para exibição em listas."
+msgstr "Resumen opcional para la visualización de la lista."
+
+msgid "Tradução de Item de Roadmap"
+msgstr "Traducción de artículos de la hoja de ruta"
+
+msgid "Traduções de Itens de Roadmap"
+msgstr "Traducciones de artículos de hoja de ruta"
+
+msgid "Voltar para o roadmap"
+msgstr "Volver a la hoja de ruta"
+
+msgid "Roadmap"
+msgstr "Hoja de ruta"
+
+msgid "Leia mais"
+msgstr "leer más"
+
+msgid "Nenhum item de roadmap disponível."
+msgstr "No hay artículo de hoja de ruta disponible."
+
 msgid "Players Online"
 msgstr "Jugadores en línea"
 
@@ -1668,9 +1783,6 @@ msgstr "Configuración de índice"
 
 msgid "Only one server configuration is allowed."
 msgstr "Solo se permite una configuración de servidor."
-
-msgid "Português"
-msgstr "portugués"
 
 msgid "English"
 msgstr "Inglés"
@@ -2738,9 +2850,6 @@ msgstr "Error a agregar la moneda al personaje."
 msgid "Title"
 msgstr "Título"
 
-msgid "Slug"
-msgstr "Babosa"
-
 msgid "Order"
 msgstr "Orden"
 
@@ -3341,9 +3450,6 @@ msgstr "Históricos de los servicios"
 msgid "Versão"
 msgstr "Versión"
 
-msgid "Autor"
-msgstr "Autor"
-
 msgid "Upload de Arquivo"
 msgstr "Upload de Arquivo"
 
@@ -3607,9 +3713,6 @@ msgstr "Código de estado de respuesta:"
 msgid "Nenhum dado de auditoria encontrado."
 msgstr "No se encontraron datos de auditoría."
 
-msgid "Título"
-msgstr "Título"
-
 msgid "Data de início"
 msgstr "Fecha de inicio"
 
@@ -3750,15 +3853,6 @@ msgstr "Cuestión frecuente"
 
 msgid "Pode visualizar o índice"
 msgstr "Pode visualizar o índice"
-
-msgid "Inglês"
-msgstr "Inglés"
-
-msgid "Espanhol"
-msgstr "Español"
-
-msgid "Idioma"
-msgstr "Idioma"
 
 msgid "Resposta"
 msgstr "Respuesta"
@@ -3940,9 +4034,6 @@ msgstr "Panel"
 
 msgid "Dashboards"
 msgstr "Paneles"
-
-msgid "Conteúdo"
-msgstr "Contenido"
 
 msgid "Tradução de Dashboard"
 msgstr "Traducción del tablero"
@@ -4628,23 +4719,11 @@ msgstr ""
 msgid "Imagem de capa da notícia (opcional)."
 msgstr "Imagen de portada de noticias (opcional)."
 
-msgid "Usuário responsável pela publicação."
-msgstr "Usuario responsable de la publicación."
-
-msgid "Data de Publicação"
-msgstr "Fecha de publicación"
-
 msgid "Data e hora em que a notícia foi ou será publicada."
 msgstr "Fecha y hora Las noticias fueron o serán publicadas."
 
-msgid "Publicado"
-msgstr "Publicado"
-
 msgid "Indica se a notícia está visível ao público."
 msgstr "Indica si las noticias son visibles para el público."
-
-msgid "Privado"
-msgstr "Privado"
 
 msgid "Se marcado, a notícia será visível apenas para usuários autorizados."
 msgstr ""
@@ -4662,17 +4741,8 @@ msgstr "Puedes ver la lista de noticias"
 msgid "Pode visualizar o detalhe da notícia"
 msgstr "Puedes ver el detalle de las noticias"
 
-msgid "Idioma da tradução."
-msgstr "Lenguaje de traducción."
-
 msgid "Título da notícia neste idioma."
 msgstr "Título da notícia neste idioma."
-
-msgid "Resumo"
-msgstr "Resumen"
-
-msgid "Resumo opcional para exibição em listas."
-msgstr "Resumen opcional para la visualización de la lista."
 
 msgid "Tradução de Notícia"
 msgstr "Traducción de noticias"
@@ -4689,9 +4759,6 @@ msgstr "Volver a las noticias"
 msgid "Fique por dentro das últimas novidades e atualizações exclusivas."
 msgstr ""
 "Manténgase al tanto de las últimas noticias y actualizaciones exclusivas."
-
-msgid "Leia mais"
-msgstr "leer más"
 
 msgid "Não há notícias privadas disponíveis no momento."
 msgstr "No hay noticias privadas disponibles en este momento."
