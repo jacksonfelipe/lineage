@@ -69,6 +69,18 @@
           <span class="sidebar-text">{% trans "Calendário" %}</span>
         </a>
       </li>
+      <li class="nav-item {% if 'roadmap' in segment %}active{% endif %}">
+        <a href="{% url 'roadmap:index' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="5" width="14" height="10" rx="2" fill="currentColor"/>
+              <rect x="7" y="7" width="2" height="6" rx="1" fill="#fff"/>
+              <rect x="11" y="7" width="2" height="6" rx="1" fill="#fff"/>
+            </svg>
+          </span>
+          <span class="sidebar-text">{% trans "Roadmap" %}</span>
+        </a>
+      </li>
       
       {% if user.is_authenticated %}
 

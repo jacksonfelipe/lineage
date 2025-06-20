@@ -35,6 +35,7 @@ urlpatterns = [
     path('app/auction/', include('apps.lineage.auction.urls')),
     path('app/game/', include('apps.lineage.games.urls')),
     path('app/report/', include('apps.lineage.reports.urls')),
+    path('app/roadmap/', include('apps.lineage.roadmap.urls')),
     path('', include('apps.lineage.wiki.urls')),
 
     # libs externals

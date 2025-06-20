@@ -1,0 +1,79 @@
+{% extends 'layouts/base.html' %}
+{% load static i18n %}
+
+{% block title %}{{ translation.title }}{% endblock title %}
+
+{% block extrastyle %}
+<style>
+.horizontal-timeline-detail {
+  margin-top: 40px;
+  text-align: center;
+}
+.horizontal-timeline-detail .event-date {
+  display: inline-block;
+  min-width: 90px;
+  font-size: 1rem;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+}
+.roadmap-status {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+.roadmap-image {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+.ck-content {
+  font-size: 1.1rem;
+}
+</style>
+{% endblock extrastyle %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="horizontal-timeline-detail">
+        <div class="event-date badge 
+          {% if roadmap.status == 'planned' %}bg-info
+          {% elif roadmap.status == 'in_progress' %}bg-success
+          {% elif roadmap.status == 'completed' %}bg-danger
+          {% else %}bg-secondary{% endif %}">
+          {{ roadmap.pub_date|date:'d M Y' }}
+        </div>
+        <div class="roadmap-status">
+          <span class="badge 
+            {% if roadmap.status == 'planned' %}bg-info
+            {% elif roadmap.status == 'in_progress' %}bg-success
+            {% elif roadmap.status == 'completed' %}bg-danger
+            {% else %}bg-secondary{% endif %}">
+            {% if roadmap.status == 'planned' %}{% trans 'Planejado' %}
+            {% elif roadmap.status == 'in_progress' %}{% trans 'Em andamento' %}
+            {% elif roadmap.status == 'completed' %}{% trans 'Concluído' %}
+            {% else %}{{ roadmap.status }}{% endif %}
+          </span>
+        </div>
+        <h1 class="mb-3">{{ translation.title }}</h1>
+        {% if roadmap.image %}
+          <img class="roadmap-image" src="{{ roadmap.image.url }}" alt="{{ translation.title }}">
+        {% endif %}
+        <div class="mb-4 ck-content">
+          {{ translation.content|safe }}
+        </div>
+        <div class="news-meta mb-3">
+          <small>{% trans "Autor" %}: {{ roadmap.author.username }} | {% trans "Data de Publicação" %}: {{ roadmap.pub_date|date:'d/m/Y H:i' }}</small>
+        </div>
+        <div class="news-navigation">
+          <a href="{% url 'roadmap:index' %}" class="btn btn-primary mt-4">{% trans "Voltar para o roadmap" %}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<!-- JS extra, se necessário -->
+{% endblock extra_js %}

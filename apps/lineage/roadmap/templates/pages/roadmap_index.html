@@ -1,0 +1,87 @@
+{% extends 'layouts/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Roadmap" %}{% endblock title %}
+
+{% block extrastyle %}
+<style>
+.horizontal-timeline .items {
+  border-top: 3px solid #e9ecef;
+}
+.horizontal-timeline .items .items-list {
+  display: block;
+  position: relative;
+  text-align: center;
+  padding-top: 70px;
+  margin-right: 0;
+}
+.horizontal-timeline .items .items-list:before {
+  content: "";
+  position: absolute;
+  height: 36px;
+  border-right: 2px dashed #dee2e6;
+  top: 0;
+}
+.horizontal-timeline .items .items-list .event-date {
+  position: absolute;
+  top: 36px;
+  left: 0;
+  right: 0;
+  width: 75px;
+  margin: 0 auto;
+  font-size: 0.9rem;
+  padding-top: 8px;
+}
+@media (min-width: 1140px) {
+  .horizontal-timeline .items .items-list {
+    display: inline-block;
+    width: 24%;
+    padding-top: 45px;
+  }
+  .horizontal-timeline .items .items-list .event-date {
+    top: -40px;
+  }
+}
+</style>
+{% endblock extrastyle %}
+
+{% block content %}
+<div class="container-fluid py-5">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="horizontal-timeline">
+        <ul class="list-inline items">
+          {% for item in items %}
+          <li class="list-inline-item items-list">
+            <div class="px-4">
+              <div class="event-date badge 
+                {% if item.roadmap.status == 'planned' %}bg-info
+                {% elif item.roadmap.status == 'in_progress' %}bg-success
+                {% elif item.roadmap.status == 'completed' %}bg-danger
+                {% else %}bg-secondary{% endif %}">
+                {{ item.roadmap.pub_date|date:'d M' }}
+              </div>
+              <h5 class="pt-2">{{ item.translation.title }}</h5>
+              <p class="text-muted">{{ item.translation.summary|default:item.translation.content|truncatewords:20 }}</p>
+              <div>
+                <a href="{% url 'roadmap:detail' item.roadmap.slug %}" class="btn btn-primary btn-sm">{% trans "Leia mais" %}</a>
+              </div>
+            </div>
+          </li>
+          {% empty %}
+          <li class="list-inline-item items-list">
+            <div class="px-4">
+              <h5 class="pt-2">{% trans "Nenhum item de roadmap disponível." %}</h5>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<!-- JS extra, se necessário -->
+{% endblock extra_js %}

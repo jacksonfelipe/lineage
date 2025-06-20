@@ -18,7 +18,7 @@ load_dotenv()  # take environment variables from .env.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # System Version
-VERSION = '1.8.3'
+VERSION = '1.8.7'
 
 # Enable/Disable DEBUG Mode
 DEBUG = str2bool(os.environ.get('DEBUG', False))
@@ -110,6 +110,7 @@ INSTALLED_APPS = [
     "apps.lineage.games",
     "apps.lineage.reports",
     "apps.lineage.wiki",
+    "apps.lineage.roadmap",
 
     'allauth',
     'allauth.account',
