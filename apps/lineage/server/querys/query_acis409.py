@@ -692,12 +692,10 @@ class LineageAccount:
             if not result:
                 return False
 
-            # Calcula o hash da senha informada
-            hashed_input = generate_password_hash(password=password)
-
-            # Compara com o valor armazenado
             stored_hash = result[0]['password']
-            return hashed_input == stored_hash
+
+            # Compara a senha fornecida com o hash armazenado
+            return bcrypt.checkpw(password.encode(), stored_hash.encode())
 
         except Exception as e:
             print(f"Erro ao verificar senha: {e}")
