@@ -1,5 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
+from django.shortcuts import redirect
 
 from .views.views import *
 from .views.public import *
@@ -29,15 +30,15 @@ urlpatterns = [
     path("public/user-agreement/", user_agreement_view, name="user_agreement"),
     path("public/privacy-policy/", privacy_policy_view, name="privacy_policy"),
 
-    # Wiki views
-    path('wiki/', wiki_home, name='wiki'),
-    path('wiki/general/', wiki_general, name='wiki_general'),
-    path('wiki/rates/', wiki_rates, name='wiki_rates'),
-    path('wiki/raids/', wiki_raids, name='wiki_raids'),
-    path('wiki/assistance/', wiki_assistance, name='wiki_assistance'),
-    path('wiki/events/', wiki_events, name='wiki_events'),
-    path('wiki/updates/', wiki_updates, name='updates'),
-    path('wiki/features/', wiki_features, name='features'),
+    # Wiki views - Redirecting to new lineage wiki
+    path('wiki/', lambda request: redirect('wiki:home'), name='wiki'),
+    path('wiki/general/', lambda request: redirect('wiki:general'), name='wiki_general'),
+    path('wiki/rates/', lambda request: redirect('wiki:rates'), name='wiki_rates'),
+    path('wiki/raids/', lambda request: redirect('wiki:raids'), name='wiki_raids'),
+    path('wiki/assistance/', lambda request: redirect('wiki:assistance'), name='wiki_assistance'),
+    path('wiki/events/', lambda request: redirect('wiki:events'), name='wiki_events'),
+    path('wiki/updates/', lambda request: redirect('wiki:updates'), name='updates'),
+    path('wiki/features/', lambda request: redirect('wiki:features'), name='features'),
 
     # Authentication
     path('accounts/register/', register_view, name="register"),
