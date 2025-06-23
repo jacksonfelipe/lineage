@@ -307,6 +307,60 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'themes'),
 )
 
+# =========================== AWS S3 CONFIGS ===========================
+
+# Configuração para usar S3 da AWS
+USE_S3 = os.getenv('USE_S3', 'False').lower() == 'true'
+
+if USE_S3:
+    # Configurações do S3
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME', 'us-east-1')
+    AWS_S3_CUSTOM_DOMAIN = os.getenv('AWS_S3_CUSTOM_DOMAIN')
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_FILE_OVERWRITE = False
+    
+    # Configurações para arquivos estáticos
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+    
+    # Configurações para arquivos de mídia
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+    
+    # Configurações adicionais do S3
+    AWS_S3_SIGNATURE_VERSION = 's3v4'
+    AWS_S3_ADDRESSING_STYLE = 'virtual'
+    
+    # Configurações de segurança (opcional)
+    AWS_S3_SECURE_URLS = True
+    AWS_S3_VERIFY = True
+    
+    # Configurações de cache
+    AWS_S3_MAX_AGE_SECONDS = 60 * 60 * 24 * 365  # 1 ano
+    
+    # Configurações de compressão
+    AWS_S3_GZIP = True
+    
+    # Configurações de CORS (se necessário)
+    AWS_S3_CORS_CONFIGURATION = {
+        'CORSRules': [
+            {
+                'AllowedHeaders': ['*'],
+                'AllowedMethods': ['GET', 'POST', 'PUT', 'DELETE'],
+                'AllowedOrigins': ['*'],
+                'ExposeHeaders': ['ETag'],
+                'MaxAgeSeconds': 3000,
+            }
+        ]
+    }
+
 # =========================== EMAIL CONFIGS ===========================
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

@@ -24,6 +24,10 @@ django-ckeditor-5
 django-widget-tweaks
 django-po-translate
 
+# AWS S3 Storage
+django-storages
+boto3
+
 # Tools
 django-celery-results
 djangorestframework
