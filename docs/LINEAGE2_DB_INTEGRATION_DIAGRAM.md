@@ -23,13 +23,15 @@ flowchart TD
     D -->|Conexão direta| E
     E --> F
 
-    classDef safe fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef safe fill:#444,stroke:#fff,stroke-width:2px,color:#fff;
     class A,B,C,D,E,F safe;
+    %% Fundo do gráfico
+    %%{init: { 'theme': 'dark' }}%%
 ```
 
-## Legenda
-- **Usuário (Browser):** Cliente acessando o site.
-- **Views/Endpoints Django:** Camada de apresentação e API.
-- **Funções utilitárias:** Camada de lógica que prepara e executa queries.
-- **LineageDB:** Classe de integração, faz a ponte entre Django e o banco do L2 usando SQLAlchemy.
-- **Banco de Dados L2:** Base de dados do servidor de jogo, com tabelas específicas do Lineage 2. 
+## Legend
+- **User (Browser):** Client accessing the site.
+- **Views/Endpoints Django:** Presentation and API layer.
+- **Utility functions:** Logic layer that prepares and executes queries.
+- **LineageDB:** Integration class, bridges Django and the L2 database using SQLAlchemy.
+- **L2 Database:** Game server database, with specific Lineage 2 tables.

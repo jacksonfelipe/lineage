@@ -43,16 +43,21 @@ flowchart TD
     E -->|Depende| G
     F -->|Depende| G
 
-    classDef safe fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef safe fill:#444,stroke:#fff,stroke-width:2px,color:#fff;
     class A,B,C,D,E,F,G,H safe;
+    %% Fundo do gráfico
+    %% O Mermaid não tem uma diretiva oficial para fundo, mas pode-se usar uma nota para simular
+    %% ou instruir o visualizador a usar tema escuro.
+    %% Para renderizadores que suportam, pode-se usar: %%{init: { 'theme': 'dark' }}%%
+    %%{init: { 'theme': 'dark' }}%%
 ```
 
-## Legenda dos Componentes
-- **Usuário (Browser):** Cliente acessando o sistema.
-- **nginx:** Proxy reverso, serve estáticos e encaminha requisições para o Django.
-- **site:** Aplicação Django rodando via ASGI (Daphne).
-- **celery:** Worker para tarefas assíncronas.
-- **celery-beat:** Agendador de tarefas periódicas.
-- **flower:** Monitoramento e dashboard do Celery.
-- **redis:** Broker de mensagens e cache.
-- **postgres:** Banco de dados relacional. 
+## Component Legend
+- **User (Browser):** Client accessing the system.
+- **nginx:** Reverse proxy, serves static files and forwards requests to Django.
+- **site:** Django application running via ASGI (Daphne).
+- **celery:** Worker for asynchronous tasks.
+- **celery-beat:** Periodic task scheduler.
+- **flower:** Celery monitoring and dashboard.
+- **redis:** Message broker and cache.
+- **postgres:** Relational database.

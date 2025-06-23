@@ -39,18 +39,20 @@ flowchart TD
     I --> K
     J --> K
 
-    classDef safe fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef safe fill:#444,stroke:#fff,stroke-width:2px,color:#fff;
     class A,B,C,D,E,F,G,H,I,J,K safe;
+    %% Fundo do gráfico
+    %%{init: { 'theme': 'dark' }}%%
 ```
 
-## Legenda
-- **Admin Django:** Upload e gerenciamento dos temas.
-- **Model Theme:** Validação, extração e ativação do tema.
-- **theme.json:** Metadados e variáveis do tema.
-- **Arquivos extraídos:** Templates, CSS, JS, imagens, etc.
-- **ThemeVariable:** Variáveis salvas e internacionalizadas.
-- **Context Processors:** Injeção de contexto nos templates.
-- **render_theme_page:** Função utilitária para renderização dinâmica.
-- **Templates do tema ativo:** Templates customizados do tema.
-- **Fallback:** Uso dos templates padrão caso não exista no tema.
-- **Usuário:** Visualiza o site com o tema ativo. 
+## Legend
+- **Django Admin:** Theme upload and management.
+- **Theme Model:** Validation, extraction, and activation of the theme.
+- **theme.json:** Theme metadata and variables.
+- **Extracted files:** Templates, CSS, JS, images, etc.
+- **ThemeVariable:** Saved and internationalized variables.
+- **Context Processors:** Inject context into templates.
+- **render_theme_page:** Utility function for dynamic rendering.
+- **Templates of active theme:** Customized theme templates.
+- **Fallback:** Use default templates if not present in the theme.
+- **User:** Views the site with the active theme.
