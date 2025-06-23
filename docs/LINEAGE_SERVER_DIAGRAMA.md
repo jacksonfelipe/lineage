@@ -22,9 +22,6 @@ flowchart TD
     C -->|SQL| D
     D -->|Conexão direta| E
     E --> F
-
-    classDef db fill:#ffe,stroke:#f00,stroke-width:2px;
-    class E,F db;
 ```
 
 ## Legenda

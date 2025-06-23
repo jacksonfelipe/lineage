@@ -38,10 +38,6 @@ flowchart TD
     H --> J
     I --> K
     J --> K
-
-    style D fill:#ffe,stroke:#f00,stroke-width:2px;
-    style I fill:#efe,stroke:#080,stroke-width:2px;
-    style F fill:#eef,stroke:#00f,stroke-width:2px;
 ```
 
 ## Legenda
