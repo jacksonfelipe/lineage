@@ -2,19 +2,34 @@
 
 ```mermaid
 flowchart TD
-    A["Requisição HTTP recebida pelo Django"] --> B["View Django processa a requisição"]
-    B --> C["Chama função do arquivo de query (ex: query_acis.py)"]
-    C --> D["query_acis.py monta SQL e chama LineageDB (database.py)"]
-    D --> E["LineageDB executa query no banco externo do L2"]
-    E --> F["Retorna resultado para query_acis.py"]
-    F --> G["View Django retorna resposta HTTP"]
+    subgraph "Frontend"
+        A["Usuário (HTTP Request)"]
+    end
+    subgraph "Django Backend"
+        B["View Django"]
+        C["Função de Query (ex: query_acis.py)"]
+        D["LineageDB (database.py)"]
+    end
+    subgraph "Banco Externo L2"
+        E["Banco de Dados L2"]
+    end
 
-    subgraph Segurança
+    A -->|"Requisição HTTP"| B
+    B -->|"Valida e processa"| C
+    C -->|"Monta SQL seguro"| D
+    D -->|"Executa query"| E
+    E -->|"Retorna resultado"| D
+    D -->|"Retorna dados"| C
+    C -->|"Retorna dados"| B
+    B -->|"Resposta HTTP"| A
+
+    %% Segurança
+    subgraph "Camada de Segurança"
         S1["Isolamento: queries só via funções controladas"]
         S2["Validação de parâmetros e uso de cache"]
         S3["Sem SQL dinâmico direto do usuário"]
-        S4["Banco L2 não exposto à internet, só acessível pelo backend"]
-        S5["Funções estáticas e decoradores de cache dificultam ataques de repetição"]
+        S4["Banco L2 não exposto à internet"]
+        S5["Funções estáticas e decoradores de cache"]
     end
 
     B -.-> S1
@@ -23,8 +38,10 @@ flowchart TD
     D -.-> S4
     C -.-> S5
 
-    classDef safe fill:#ddd,stroke:#333,stroke-width:2px;
-    class A,B,C,D,E,F,G,S1,S2,S3,S4,S5 safe;
+    classDef safe fill:#444,stroke:#fff,stroke-width:2px,color:#fff;
+    class A,B,C,D,E,S1,S2,S3,S4,S5 safe;
+    %% Fundo do gráfico
+    %%{init: { 'theme': 'dark' }}%%
 ```
 
 ---
