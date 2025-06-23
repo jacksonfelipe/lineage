@@ -22,6 +22,9 @@ flowchart TD
     C -->|SQL| D
     D -->|Conexão direta| E
     E --> F
+
+    classDef safe fill:#bbf,stroke:#333,stroke-width:2px;
+    class A,B,C,D,E,F safe;
 ```
 
 ## Legenda

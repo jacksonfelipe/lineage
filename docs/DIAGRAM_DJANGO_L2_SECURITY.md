@@ -24,7 +24,7 @@ flowchart TD
     C -.-> S5
 
     classDef safe fill:#bbf,stroke:#333,stroke-width:2px;
-    class S1,S2,S3,S4,S5 safe;
+    class A,B,C,D,E,F,G,S1,S2,S3,S4,S5 safe;
 ```
 
 ---

@@ -42,6 +42,9 @@ flowchart TD
     D -->|Depende| G
     E -->|Depende| G
     F -->|Depende| G
+
+    classDef safe fill:#bbf,stroke:#333,stroke-width:2px;
+    class A,B,C,D,E,F,G,H safe;
 ```
 
 ## Legenda dos Componentes
