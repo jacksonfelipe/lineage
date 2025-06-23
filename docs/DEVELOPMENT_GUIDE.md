@@ -1,35 +1,35 @@
-# Guia de Desenvolvimento
+# Development Guide
 
-## Organização do Projeto
-- Apps Django em `apps/`
-- Frontend em `frontend/`
-- Utilitários em `utils/`, `middlewares/`, etc.
+## Project Organization
+- Django apps in `apps/`
+- Frontend in `frontend/`
+- Utilities in `utils/`, `middlewares/`, etc.
 
-## Convenções de Código
-- Siga o PEP8 para Python.
-- Use nomes descritivos para funções, variáveis e arquivos.
-- Separe responsabilidades em apps e módulos.
+## Code Conventions
+- Follow PEP8 for Python.
+- Use descriptive names for functions, variables, and files.
+- Separate responsibilities into apps and modules.
 
-## Fluxo de Trabalho
-1. Crie uma branch para cada feature/bugfix:
+## Workflow
+1. Create a branch for each feature/bugfix:
    ```bash
-   git checkout -b feature/nome-da-feature
+   git checkout -b feature/feature-name
    ```
-2. Faça commits pequenos e descritivos.
-3. Abra um Pull Request para revisão.
-4. Use o arquivo `workflow.md` para seguir o fluxo de contribuição.
+2. Make small and descriptive commits.
+3. Open a Pull Request for review.
+4. Use the `workflow.md` file to follow the contribution flow.
 
-## Testes
-- Testes em `test/`.
-- Rode com:
+## Tests
+- Tests in `test/`.
+- Run with:
   ```bash
   python manage.py test
   ```
-- Escreva testes para novas funcionalidades.
+- Write tests for new features.
 
-## Linters e Qualidade
-- Use `flake8`, `black` ou similares para manter o padrão de código.
+## Linters and Quality
+- Use `flake8`, `black` or similar tools to maintain code standards.
 
-## Dicas
-- Consulte a documentação dos apps em `docs/`.
-- Use variáveis de ambiente para configurações sensíveis. 
+## Tips
+- Check the documentation for apps in `docs/`.
+- Use environment variables for sensitive settings. 

@@ -1,50 +1,50 @@
-# Guia de Instalação e Deploy
+# Installation and Deployment Guide
 
-## Pré-requisitos
+## Prerequisites
 - Python 3.10+
-- Docker e Docker Compose
-- Node.js (opcional, para frontend)
+- Docker and Docker Compose
+- Node.js (optional, for frontend)
 
-## Instalação Local (sem Docker)
-1. Clone o repositório:
+## Local Installation (without Docker)
+1. Clone the repository:
    ```bash
    git clone <repo-url>
    cd SITE
    ```
-2. Crie e ative um ambiente virtual:
+2. Create and activate a virtual environment:
    ```bash
    python -m venv .venv
-   source .venv/bin/activate  # ou .venv\Scripts\activate no Windows
+   source .venv/bin/activate  # or .venv\Scripts\activate on Windows
    ```
-3. Instale as dependências:
+3. Install the dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-4. Configure as variáveis de ambiente:
-   - Copie `env.sample` para `.env` e ajuste conforme necessário.
-5. Migre o banco e crie um superusuário:
+4. Configure the environment variables:
+   - Copy `env.sample` to `.env` and adjust as needed.
+5. Migrate the database and create a superuser:
    ```bash
    python manage.py migrate
    python manage.py createsuperuser
    ```
-6. Rode o servidor:
+6. Run the server:
    ```bash
    python manage.py runserver
    ```
 
-## Instalação com Docker
-1. Configure o arquivo `.env`.
-2. Rode:
+## Installation with Docker
+1. Configure the `.env` file.
+2. Run:
    ```bash
    docker-compose up --build
    ```
-3. Acesse o sistema em `http://localhost:6085`.
+3. Access the system at `http://localhost:6085`.
 
-## Deploy em Produção
+## Production Deployment
 - Use Docker Compose, Nginx, HTTPS (Let's Encrypt).
-- Configure volumes para persistência de dados.
-- Ajuste variáveis de ambiente para produção.
+- Configure volumes for data persistence.
+- Adjust environment variables for production.
 
-## Dicas
-- Use `docker-compose logs -f` para ver os logs.
-- Use `docker-compose exec site bash` para acessar o container do Django. 
+## Tips
+- Use `docker-compose logs -f` to view the logs.
+- Use `docker-compose exec site bash` to access the Django container. 

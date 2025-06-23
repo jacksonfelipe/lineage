@@ -1,54 +1,54 @@
-# Diagrama de Arquitetura
+# Architecture Diagram
 
-Este diagrama representa a arquitetura do projeto, desde o acesso do usuário até o banco de dados, incluindo todos os serviços orquestrados pelo Docker Compose.
+This diagram represents the project architecture, from user access to the database, including all services orchestrated by Docker Compose.
 
 ```mermaid
 flowchart TD
     subgraph Web
-        A["Usuário (Browser)"]
+        A["User (Browser)"]
     end
     subgraph Nginx
-        B["nginx (Proxy Reverso)"]
+        B["nginx (Reverse Proxy)"]
     end
     subgraph App
         C["site (Django/ASGI)"]
         D["celery (Worker)"]
-        E["celery-beat (Agendador)"]
-        F["flower (Monitoramento Celery)"]
+        E["celery-beat (Scheduler)"]
+        F["flower (Celery Monitoring)"]
     end
     subgraph Infra
         G["redis (Broker/Cache)"]
-        H["postgres (Banco de Dados)"]
+        H["postgres (Database)"]
     end
     
     A -->|HTTP/HTTPS| B
     B -->|Proxy| C
-    B -->|Arquivos Estáticos/Mídia| B
+    B -->|Static/Media Files| B
     C -->|ORM| H
-    C -->|Tarefas Assíncronas| G
+    C -->|Asynchronous Tasks| G
     D -->|Broker| G
     E -->|Broker| G
     F -->|Broker| G
-    D -->|Executa Tarefas| C
-    E -->|Dispara Tarefas| D
-    F -->|Monitora| D
-    F -->|Monitora| E
-    C -->|Depende| G
-    D -->|Depende| C
-    E -->|Depende| C
-    F -->|Depende| C
-    B -->|Depende| C
-    C -->|Depende| H
-    D -->|Depende| G
-    E -->|Depende| G
-    F -->|Depende| G
+    D -->|Executes Tasks| C
+    E -->|Triggers Tasks| D
+    F -->|Monitors| D
+    F -->|Monitors| E
+    C -->|Depends on| G
+    D -->|Depends on| C
+    E -->|Depends on| C
+    F -->|Depends on| C
+    B -->|Depends on| C
+    C -->|Depends on| H
+    D -->|Depends on| G
+    E -->|Depends on| G
+    F -->|Depends on| G
 
     classDef safe fill:#444,stroke:#fff,stroke-width:2px,color:#fff;
     class A,B,C,D,E,F,G,H safe;
-    %% Fundo do gráfico
-    %% O Mermaid não tem uma diretiva oficial para fundo, mas pode-se usar uma nota para simular
-    %% ou instruir o visualizador a usar tema escuro.
-    %% Para renderizadores que suportam, pode-se usar: %%{init: { 'theme': 'dark' }}%%
+    %% Chart background
+    %% Mermaid does not have an official directive for background, but you can use a note to simulate
+    %% or instruct the viewer to use dark theme.
+    %% For renderers that support it, you can use: %%{init: { 'theme': 'dark' }}%%
     %%{init: { 'theme': 'dark' }}%%
 ```
 

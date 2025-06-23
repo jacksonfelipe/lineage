@@ -1,35 +1,35 @@
-# Diagrama: Segurança no uso do Django para acessar banco externo do Lineage 2
+# Diagram: Security in Using Django to Access External Lineage 2 Database
 
 ```mermaid
 flowchart TD
     subgraph "Frontend"
-        A["Usuário (HTTP Request)"]
+        A["User (HTTP Request)"]
     end
     subgraph "Django Backend"
-        B["View Django"]
-        C["Função de Query (ex: query_acis.py)"]
+        B["Django View"]
+        C["Query Function (e.g., query_acis.py)"]
         D["LineageDB (database.py)"]
     end
-    subgraph "Banco Externo L2"
-        E["Banco de Dados L2"]
+    subgraph "External L2 Database"
+        E["L2 Database"]
     end
 
-    A -->|"Requisição HTTP"| B
-    B -->|"Valida e processa"| C
-    C -->|"Monta SQL seguro"| D
-    D -->|"Executa query"| E
-    E -->|"Retorna resultado"| D
-    D -->|"Retorna dados"| C
-    C -->|"Retorna dados"| B
-    B -->|"Resposta HTTP"| A
+    A -->|"HTTP Request"| B
+    B -->|"Validates and processes"| C
+    C -->|"Builds secure SQL"| D
+    D -->|"Executes query"| E
+    E -->|"Returns result"| D
+    D -->|"Returns data"| C
+    C -->|"Returns data"| B
+    B -->|"HTTP Response"| A
 
-    %% Segurança
-    subgraph "Camada de Segurança"
-        S1["Isolamento: queries só via funções controladas"]
-        S2["Validação de parâmetros e uso de cache"]
-        S3["Sem SQL dinâmico direto do usuário"]
-        S4["Banco L2 não exposto à internet"]
-        S5["Funções estáticas e decoradores de cache"]
+    %% Security
+    subgraph "Security Layer"
+        S1["Isolation: queries only via controlled functions"]
+        S2["Parameter validation and use of cache"]
+        S3["No direct dynamic SQL from user"]
+        S4["L2 database not exposed to the internet"]
+        S5["Static functions and cache decorators"]
     end
 
     B -.-> S1
@@ -40,7 +40,7 @@ flowchart TD
 
     classDef safe fill:#444,stroke:#fff,stroke-width:2px,color:#fff;
     class A,B,C,D,E,S1,S2,S3,S4,S5 safe;
-    %% Fundo do gráfico
+    %% Background of the graph
     %%{init: { 'theme': 'dark' }}%%
 ```
 

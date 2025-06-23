@@ -1,22 +1,22 @@
-# Internacionalização (i18n)
+# Internationalization (i18n)
 
-## Idiomas Suportados
-- Português (pt)
-- Inglês (en)
-- Espanhol (es)
+## Supported Languages
+- Portuguese (pt)
+- English (en)
+- Spanish (es)
 
-## Como adicionar um novo idioma
-1. Adicione o idioma em `settings.py`.
-2. Gere arquivos de tradução:
+## How to add a new language
+1. Add the language in `settings.py`.
+2. Generate translation files:
    ```bash
-   python manage.py makemessages -l <idioma>
+   python manage.py makemessages -l <language>
    ```
-3. Traduza os textos em `locale/<idioma>/LC_MESSAGES/django.po`.
-4. Compile as traduções:
+3. Translate the texts in `locale/<language>/LC_MESSAGES/django.po`.
+4. Compile the translations:
    ```bash
    python manage.py compilemessages
    ```
 
-## Dicas
-- Use `gettext_lazy` para textos traduzíveis.
-- Mantenha traduções atualizadas ao alterar textos no código. 
+## Tips
+- Use `gettext_lazy` for translatable texts.
+- Keep translations updated when changing texts in the code. 

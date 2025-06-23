@@ -1,21 +1,21 @@
-# Automatizações e Tarefas Assíncronas
+# Automations and Asynchronous Tasks
 
 ## Celery
-- Usado para tarefas assíncronas (ex: envio de e-mails, processamento de dados).
-- Workers definidos no serviço `celery` do Docker Compose.
+- Used for asynchronous tasks (e.g., sending emails, data processing).
+- Workers are defined in the `celery` service of Docker Compose.
 
 ## Celery Beat
-- Agendador de tarefas periódicas.
-- Exemplo: tarefas diárias, limpezas, notificações.
+- Scheduler for periodic tasks.
+- Example: daily tasks, cleanups, notifications.
 
 ## Flower
-- Dashboard para monitoramento de tarefas Celery.
-- Acesse via `/flower/`.
+- Dashboard for monitoring Celery tasks.
+- Access via `/flower/`.
 
-## Como adicionar uma tarefa
-- Crie uma função em `tasks.py` de algum app.
-- Decore com `@shared_task` ou `@app.task`.
+## How to add a task
+- Create a function in the `tasks.py` of an app.
+- Decorate it with `@shared_task` or `@app.task`.
 
-## Dicas
-- Monitore o status das tarefas pelo Flower.
-- Consulte logs em caso de falhas. 
+## Tips
+- Monitor the status of tasks using Flower.
+- Check logs in case of failures. 

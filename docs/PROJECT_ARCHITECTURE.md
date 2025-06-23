@@ -1,139 +1,139 @@
-# Documento de Arquitetura do Projeto
+# Project Architecture Document
 
-## 1. Visão Geral
+## 1. Overview
 
-Este projeto é uma aplicação web robusta, baseada em Django, com múltiplos módulos (apps) organizados para diferentes domínios de negócio. Ele utiliza Docker para orquestração de ambientes, facilitando o desenvolvimento, testes e deploy. O frontend é desacoplado, sugerindo uma arquitetura moderna e escalável.
+This project is a robust web application based on Django, with multiple modules (apps) organized for different business domains. It uses Docker for environment orchestration, facilitating development, testing, and deployment. The frontend is decoupled, suggesting a modern and scalable architecture.
 
 ---
 
-## 2. Componentes Principais
+## 2. Main Components
 
 ### 2.1 Backend (Django)
-- **Localização:** `apps/`, `core/`, `middlewares/`, `utils/`
-- **Descrição:**  
-  O backend é implementado em Django, estruturado em múltiplos apps, cada um responsável por um domínio específico (ex: `accountancy`, `auction`, `games`, `inventory`, etc).  
-  O diretório `core/` provavelmente contém configurações globais e funcionalidades compartilhadas.
-- **Funcionalidades:**  
-  - Autenticação, administração, relatórios, inventário, pagamentos, jogos, loja, wiki, notificações, etc.
-  - Uso de middlewares customizados.
-  - Utilitários e scripts auxiliares em `utils/`.
+- **Location:** `apps/`, `core/`, `middlewares/`, `utils/`
+- **Description:**  
+  The backend is implemented in Django, structured into multiple apps, each responsible for a specific domain (e.g., `accountancy`, `auction`, `games`, `inventory`, etc).  
+  The `core/` directory likely contains global settings and shared functionalities.
+- **Features:**  
+  - Authentication, administration, reports, inventory, payments, games, shop, wiki, notifications, etc.
+  - Use of custom middlewares.
+  - Utilities and helper scripts in `utils/`.
 
 ### 2.2 Frontend
-- **Localização:** `frontend/`
-- **Descrição:**  
-  O frontend está desacoplado do backend, sugerindo o uso de frameworks modernos (React, Vue, etc).  
-  O arquivo `Charts.js` e outros arquivos JS indicam visualizações dinâmicas.
-- **Integração:**  
-  Comunicação via API REST ou GraphQL com o backend Django.
+- **Location:** `frontend/`
+- **Description:**  
+  The frontend is decoupled from the backend, suggesting the use of modern frameworks (React, Vue, etc).  
+  The `Charts.js` file and other JS files indicate dynamic visualizations.
+- **Integration:**  
+  Communication via REST API or GraphQL with the Django backend.
 
-### 2.3 Banco de Dados
-- **Localização:** Definido no `docker-compose.yml` (não visível diretamente, mas presumido)
-- **Descrição:**  
-  O projeto utiliza um banco de dados relacional (provavelmente PostgreSQL ou MySQL, comum em projetos Django).
-- **Persistência:**  
-  O arquivo `db.sqlite3` sugere uso de SQLite em ambiente de desenvolvimento.
+### 2.3 Database
+- **Location:** Defined in `docker-compose.yml` (not directly visible, but assumed)
+- **Description:**  
+  The project uses a relational database (probably PostgreSQL or MySQL, common in Django projects).
+- **Persistence:**  
+  The `db.sqlite3` file suggests the use of SQLite in the development environment.
 
-### 2.4 Servidor Web e Proxy
-- **Localização:** `nginx/`, `Dockerfile`, `gunicorn-cfg.py`
-- **Descrição:**  
-  O Nginx atua como proxy reverso, servindo arquivos estáticos e repassando requisições para o Gunicorn, que executa o Django.
-- **Configuração:**  
-  Arquivos de configuração customizados para Nginx e Gunicorn.
+### 2.4 Web Server and Proxy
+- **Location:** `nginx/`, `Dockerfile`, `gunicorn-cfg.py`
+- **Description:**  
+  Nginx acts as a reverse proxy, serving static files and forwarding requests to Gunicorn, which runs Django.
+- **Configuration:**  
+  Custom configuration files for Nginx and Gunicorn.
 
-### 2.5 Internacionalização
-- **Localização:** `locale/`
-- **Descrição:**  
-  Suporte a múltiplos idiomas (pt, en, es), com arquivos `.po` e `.mo` para traduções.
+### 2.5 Internationalization
+- **Location:** `locale/`
+- **Description:**  
+  Support for multiple languages (pt, en, es), with `.po` and `.mo` files for translations.
 
-### 2.6 Arquivos Estáticos e Mídia
-- **Localização:** `static/`, `media/`
-- **Descrição:**  
-  Organização de assets (CSS, JS, imagens, fontes) e uploads de usuários.
+### 2.6 Static and Media Files
+- **Location:** `static/`, `media/`
+- **Description:**  
+  Organization of assets (CSS, JS, images, fonts) and user uploads.
 
-### 2.7 Testes e Scripts
-- **Localização:** `test/`, `setup/`
-- **Descrição:**  
-  Scripts de teste, geração de chaves, automação de backup, build e instalação de dependências.
+### 2.7 Tests and Scripts
+- **Location:** `test/`, `setup/`
+- **Description:**  
+  Test scripts, key generation, backup automation, build, and dependency installation.
 
 ---
 
-## 3. Orquestração com Docker Compose
+## 3. Orchestration with Docker Compose
 
-### 3.1 Serviços Definidos
-O arquivo `docker-compose.yml` define os seguintes serviços principais:
+### 3.1 Defined Services
+The `docker-compose.yml` file defines the following main services:
 - **site:**  
-  Container principal rodando o Django com Daphne (ASGI).
+  Main container running Django with Daphne (ASGI).
 - **nginx:**  
-  Servidor web/proxy reverso.
+  Web server/reverse proxy.
 - **db (postgres):**  
-  Banco de dados relacional.
+  Relational database.
 - **redis:**  
-  Broker de mensagens e cache.
+  Message broker and cache.
 - **celery:**  
-  Worker para tarefas assíncronas.
+  Worker for asynchronous tasks.
 - **celery-beat:**  
-  Agendador de tarefas periódicas.
+  Scheduler for periodic tasks.
 - **flower:**  
-  Monitoramento e dashboard do Celery.
+  Celery monitoring and dashboard.
 
-### 3.2 Rede e Volumes
-- **Rede interna:**  
-  Comunicação entre containers via rede Docker.
+### 3.2 Network and Volumes
+- **Internal network:**  
+  Communication between containers via Docker network.
 - **Volumes:**  
-  Persistência de dados do banco, arquivos estáticos e mídia.
+  Data persistence for the database, static files, and media.
 
 ---
 
-## 4. Estrutura de Diretórios
+## 4. Directory Structure
 
 ```plaintext
-apps/           # Apps Django organizados por domínio
-core/           # Configurações e funcionalidades centrais do projeto
-middlewares/    # Middlewares customizados para Django
-utils/          # Scripts e utilitários auxiliares
-frontend/       # Código do frontend desacoplado
-static/         # Arquivos estáticos (CSS, JS, imagens)
-media/          # Uploads de usuários
-nginx/          # Configurações do Nginx
-locale/         # Arquivos de tradução
-setup/          # Scripts de automação e setup
-test/           # Scripts e arquivos de teste
-templates/      # Templates HTML do Django
+apps/           # Django apps organized by domain
+core/           # Central project settings and functionalities
+middlewares/    # Custom Django middlewares
+utils/          # Helper scripts and utilities
+frontend/       # Decoupled frontend code
+static/         # Static files (CSS, JS, images)
+media/          # User uploads
+nginx/          # Nginx configurations
+locale/         # Translation files
+setup/          # Automation and setup scripts
+test/           # Test scripts and files
+templates/      # Django HTML templates
 ```
 
 ---
 
-## 5. Fluxo de Requisições
+## 5. Request Flow
 
-Ver diagrama em `DIAGRAMA.md`.
-
----
-
-## 6. Considerações de Segurança
-- Uso de variáveis de ambiente para segredos (`env.sample`).
-- Configuração de proxy reverso (Nginx) para proteção e performance.
-- Possível uso de autenticação e autorização customizadas.
+See diagram in `DIAGRAMA.md`.
 
 ---
 
-## 7. Internacionalização e Acessibilidade
-- Suporte a múltiplos idiomas via `locale/`.
-- Templates organizados para fácil manutenção e customização.
+## 6. Security Considerations
+- Use of environment variables for secrets (`env.sample`).
+- Reverse proxy configuration (Nginx) for protection and performance.
+- Possible use of custom authentication and authorization.
 
 ---
 
-## 8. Deploy e Escalabilidade
-- Deploy facilitado via Docker Compose.
-- Possibilidade de escalar serviços (web, workers) conforme demanda.
-- Separação clara entre frontend e backend.
+## 7. Internationalization and Accessibility
+- Support for multiple languages via `locale/`.
+- Templates organized for easy maintenance and customization.
 
 ---
 
-## 9. Observabilidade e Logs
-- Diretório `logs/` para armazenamento de logs de aplicação e acesso.
-- Possível integração com ferramentas externas de monitoramento.
+## 8. Deployment and Scalability
+- Deployment facilitated via Docker Compose.
+- Possibility to scale services (web, workers) as needed.
+- Clear separation between frontend and backend.
 
 ---
 
-## 10. Documentação
-- `README.md`, `wiki.md`, `help.md` fornecem instruções de uso, contribuição e detalhes do projeto. 
+## 9. Observability and Logs
+- `logs/` directory for storing application and access logs.
+- Possible integration with external monitoring tools.
+
+---
+
+## 10. Documentation
+- `README.md`, `wiki.md`, `help.md` provide usage instructions, contribution guidelines, and project details. 

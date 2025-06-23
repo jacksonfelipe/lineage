@@ -1,17 +1,17 @@
-# Scripts e Utilitários
+# Scripts and Utilities
 
-## Localização
-- Scripts em `setup/`, `utils/`, `test/`.
+## Location
+- Scripts in `setup/`, `utils/`, `test/`.
 
-## Exemplos
-- `setup/backup.sh`: Backup do banco de dados.
-- `setup/build.sh`: Build automatizado do projeto.
-- `test/generate_key.py`: Geração de chaves para testes.
-- `utils/`: Funções auxiliares para uso interno.
+## Examples
+- `setup/backup.sh`: Database backup.
+- `setup/build.sh`: Automated project build.
+- `test/generate_key.py`: Key generation for tests.
+- `utils/`: Auxiliary functions for internal use.
 
-## Como rodar
-- Scripts shell: `bash setup/backup.sh`
-- Scripts Python: `python test/generate_key.py`
+## How to run
+- Shell scripts: `bash setup/backup.sh`
+- Python scripts: `python test/generate_key.py`
 
-## Dicas
-- Leia o cabeçalho dos scripts para instruções específicas. 
+## Tips
+- Read the script headers for specific instructions. 

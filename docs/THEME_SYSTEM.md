@@ -1,85 +1,85 @@
-# Sistema de Temas e Templates
+# Theme and Template System
 
-## Visão Geral
-O sistema de temas permite customizar a aparência do site via upload de pacotes ZIP contendo templates, estilos, scripts e assets. Cada tema pode ser ativado/desativado e possui variáveis customizáveis para internacionalização e personalização visual.
-
----
-
-## Como funciona
-- **Modelo principal:** `Theme` (apps.main.administrator.models)
-- **Upload:** O admin faz upload de um arquivo ZIP contendo o tema.
-- **Validação:** O ZIP deve conter um arquivo `theme.json` com metadados obrigatórios (`name`, `slug`, etc).
-- **Extração:** Os arquivos são extraídos para `themes/installed/<slug>/`.
-- **Ativação:** Apenas um tema pode estar ativo por vez. Ao ativar um tema, os outros são desativados automaticamente.
-- **Remoção:** Ao deletar um tema, o ZIP e a pasta extraída são removidos.
+## Overview
+The theme system allows you to customize the site's appearance by uploading ZIP packages containing templates, styles, scripts, and assets. Each theme can be activated/deactivated and has customizable variables for internationalization and visual personalization.
 
 ---
 
-## Estrutura esperada do ZIP
-- Arquivos permitidos: `.html`, `.css`, `.js`, imagens, fontes, etc.
-- Arquivo obrigatório: `theme.json` com metadados e variáveis.
-- Exemplo de `theme.json`:
+## How it works
+- **Main model:** `Theme` (apps.main.administrator.models)
+- **Upload:** The admin uploads a ZIP file containing the theme.
+- **Validation:** The ZIP must contain a `theme.json` file with required metadata (`name`, `slug`, etc).
+- **Extraction:** Files are extracted to `themes/installed/<slug>/`.
+- **Activation:** Only one theme can be active at a time. When a theme is activated, others are automatically deactivated.
+- **Removal:** When deleting a theme, the ZIP and the extracted folder are removed.
+
+---
+
+## Expected ZIP Structure
+- Allowed files: `.html`, `.css`, `.js`, images, fonts, etc.
+- Required file: `theme.json` with metadata and variables.
+- Example of `theme.json`:
   ```json
   {
-    "name": "Tema Exemplo",
-    "slug": "tema-exemplo",
+    "name": "Example Theme",
+    "slug": "example-theme",
     "version": "1.0",
-    "author": "Seu Nome",
-    "description": "Descrição do tema.",
+    "author": "Your Name",
+    "description": "Theme description.",
     "variables": [
-      {"name": "Cor Primária", "tipo": "string", "valor_pt": "#123456", "valor_en": "#123456", "valor_es": "#123456"}
+      {"name": "Primary Color", "tipo": "string", "valor_pt": "#123456", "valor_en": "#123456", "valor_es": "#123456"}
     ]
   }
   ```
 
 ---
 
-## Variáveis de Tema
-- Definidas no `theme.json` e salvas como `ThemeVariable`.
-- Suportam internacionalização (`valor_pt`, `valor_en`, `valor_es`).
-- Disponíveis no contexto dos templates via context processor.
-- Exemplo de uso em template:
+## Theme Variables
+- Defined in `theme.json` and saved as `ThemeVariable`.
+- Support internationalization (`valor_pt`, `valor_en`, `valor_es`).
+- Available in template context via context processor.
+- Example of usage in template:
   ```django
-  <style>body { background: {{ tema_exemplo_cor_primaria }}; }</style>
+  <style>body { background: {{ example_theme_primary_color }}; }</style>
   ```
 
 ---
 
-## Contexto dos Templates
-- O context processor `active_theme` injeta no contexto:
-  - `active_theme`: slug do tema ativo
-  - `base_template`: caminho do base.html do tema
+## Template Context
+- The `active_theme` context processor injects into the context:
+  - `active_theme`: slug of the active theme
+  - `base_template`: path to the theme's base.html
   - `theme_slug`, `path_theme`, `theme_files`
-- O context processor `theme_variables` injeta todas as variáveis do tema.
-- O context processor `background_setting` injeta a imagem de fundo ativa.
+- The `theme_variables` context processor injects all theme variables.
+- The `background_setting` context processor injects the active background image.
 
 ---
 
-## Renderização de Páginas
-- Função `render_theme_page` (em `utils/render_theme_page.py`):
-  - Tenta renderizar o template do tema ativo.
-  - Se não existir, faz fallback para o template padrão.
-- Exemplo de uso:
+## Page Rendering
+- Function `render_theme_page` (in `utils/render_theme_page.py`):
+  - Tries to render the template from the active theme.
+  - If it does not exist, falls back to the default template.
+- Example of usage:
   ```python
   return render_theme_page(request, 'public', 'index.html', context)
   ```
 
 ---
 
-## Servindo Arquivos do Tema
-- View `serve_theme_file` permite servir arquivos HTML do tema ativo de forma segura.
-- Verifica existência do arquivo e retorna 404 se não encontrado.
+## Serving Theme Files
+- The `serve_theme_file` view allows serving HTML files from the active theme securely.
+- Checks for file existence and returns 404 if not found.
 
 ---
 
-## Segurança
-- Apenas arquivos com extensões permitidas são extraídos.
-- Caminhos são validados para evitar path traversal.
-- Tamanho máximo do ZIP: 30MB.
+## Security
+- Only files with allowed extensions are extracted.
+- Paths are validated to prevent path traversal.
+- Maximum ZIP size: 30MB.
 
 ---
 
-## Dicas
-- Sempre inclua um `base.html` no tema para herança de templates.
-- Use variáveis para facilitar customização sem editar arquivos.
-- Teste o tema em múltiplos idiomas. 
+## Tips
+- Always include a `base.html` in the theme for template inheritance.
+- Use variables to facilitate customization without editing files.
+- Test the theme in multiple languages. 

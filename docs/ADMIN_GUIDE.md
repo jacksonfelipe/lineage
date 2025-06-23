@@ -1,22 +1,22 @@
-# Manual do Administrador
+# Administrator Manual
 
-## Acesso ao Admin
+## Admin Access
 - URL: `/admin/`
-- Use o superusuário criado na instalação.
+- Use the superuser created during installation.
 
-## Gerenciamento
-- Usuários, permissões, conteúdos e configurações podem ser gerenciados via admin.
-- Apps customizados podem ter seções próprias no admin.
+## Management
+- Users, permissions, content, and settings can be managed via the admin.
+- Custom apps may have their own sections in the admin.
 
-## Monitoramento
-- Logs em `logs/`.
-- Monitoramento de tarefas Celery via Flower (`/flower/`).
-- Verifique o status dos containers com `docker-compose ps`.
+## Monitoring
+- Logs are in `logs/`.
+- Monitor Celery tasks via Flower (`/flower/`).
+- Check the status of containers with `docker-compose ps`.
 
-## Manutenção
-- Rode migrações sempre que atualizar modelos:
+## Maintenance
+- Run migrations whenever you update models:
   ```bash
   python manage.py migrate
   ```
-- Use o admin para ajustes rápidos em dados e configurações.
-- Backup dos dados pode ser feito via scripts em `setup/`. 
+- Use the admin for quick adjustments to data and settings.
+- Data backup can be done via scripts in `setup/`. 

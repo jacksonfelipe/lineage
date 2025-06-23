@@ -1,29 +1,29 @@
-# Documentação do apps.lineage.server
+# Documentation for apps.lineage.server
 
-## Visão Geral
+## Overview
 
-O app `apps.lineage.server` é responsável por integrar o Django com o banco de dados do servidor Lineage 2 (L2), permitindo que a aplicação web acesse, consulte e manipule dados do jogo em tempo real, sem misturar os dados do Django com os dados do L2.
-
----
-
-## Estrutura do app
-
-- **models.py**: Modelos Django para configurações, preços de serviços, apoiadores, etc. (dados do site, não do L2)
-- **database.py**: Classe `LineageDB` para conexão e operações no banco do L2 (MySQL), usando SQLAlchemy.
-- **querys/**: Diversos arquivos com queries SQL e classes utilitárias para acessar dados do L2 (ex: personagens, clãs, rankings, etc).
-- **views/**: Endpoints Django que expõem dados do L2 para o frontend ou APIs.
-- **utils/**: Utilitários, cache, etc.
+The `apps.lineage.server` app is responsible for integrating Django with the Lineage 2 (L2) server database, allowing the web application to access, query, and manipulate game data in real time, without mixing Django data with L2 data.
 
 ---
 
-## O Banco do L2
+## App Structure
 
-O banco do L2 é um banco MySQL separado, com tabelas como `characters`, `accounts`, `clan_data`, `castle`, etc. Ele não é gerenciado pelo Django ORM, mas sim acessado diretamente via SQL puro.
+- **models.py**: Django models for settings, service prices, supporters, etc. (site data, not L2 data)
+- **database.py**: `LineageDB` class for connecting and operating on the L2 database (MySQL), using SQLAlchemy.
+- **querys/**: Various files with SQL queries and utility classes to access L2 data (e.g., characters, clans, rankings, etc).
+- **views/**: Django endpoints that expose L2 data to the frontend or APIs.
+- **utils/**: Utilities, cache, etc.
 
-- **Conexão**: Feita via SQLAlchemy, usando variáveis de ambiente para host, usuário, senha, etc.
-- **Classe principal**: `LineageDB` (singleton, thread-safe)
-- **Operações**: select, insert, update, delete, execute_raw, com cache opcional.
-- **Exemplo de uso**:
+---
+
+## The L2 Database
+
+The L2 database is a separate MySQL database, with tables such as `characters`, `accounts`, `clan_data`, `castle`, etc. It is not managed by the Django ORM, but is accessed directly via raw SQL.
+
+- **Connection**: Made via SQLAlchemy, using environment variables for host, user, password, etc.
+- **Main class**: `LineageDB` (singleton, thread-safe)
+- **Operations**: select, insert, update, delete, execute_raw, with optional cache.
+- **Usage example**:
   ```python
   from apps.lineage.server.database import LineageDB
   result = LineageDB().select("SELECT * FROM characters WHERE char_name = :name", {"name": "Hero"})
@@ -31,12 +31,12 @@ O banco do L2 é um banco MySQL separado, com tabelas como `characters`, `accoun
 
 ---
 
-## Relação Django x Banco do L2
+## Django x L2 Database Relationship
 
-- **Django ORM**: Usado apenas para dados do site (usuários, configurações, compras, etc).
-- **Banco do L2**: Acesso via SQL puro, sem models Django, para garantir performance e compatibilidade com o servidor do jogo.
-- **Integração**: Funções utilitárias e endpoints Django usam a `LineageDB` para buscar dados do L2 e exibir no site (ex: rankings, status de castelo, personagens online, etc).
-- **Exemplo de endpoint**:
+- **Django ORM**: Used only for site data (users, settings, purchases, etc).
+- **L2 Database**: Accessed via raw SQL, without Django models, to ensure performance and compatibility with the game server.
+- **Integration**: Utility functions and Django endpoints use `LineageDB` to fetch L2 data and display it on the site (e.g., rankings, castle status, online characters, etc).
+- **Endpoint example**:
   ```python
   # views/server_views.py
   @endpoint_enabled('top_level')
@@ -45,26 +45,26 @@ O banco do L2 é um banco MySQL separado, com tabelas como `characters`, `accoun
       limit = int(request.GET.get("limit", 10))
       return LineageStats.top_level(limit=limit)
   ```
-  Aqui, `LineageStats.top_level` executa uma query SQL no banco do L2 e retorna o ranking de personagens por level.
+  Here, `LineageStats.top_level` executes an SQL query on the L2 database and returns the character ranking by level.
 
 ---
 
-## Exemplo de fluxo
+## Example Flow
 
-1. Usuário acessa uma página de ranking no site.
-2. O Django chama uma função utilitária (ex: `LineageStats.top_level`) que executa uma query SQL no banco do L2 via `LineageDB`.
-3. O resultado é retornado e exibido no frontend.
-
----
-
-## Vantagens dessa abordagem
-- **Isolamento**: Dados do jogo e do site ficam separados, evitando conflitos e facilitando manutenção.
-- **Performance**: Queries otimizadas diretamente no banco do L2.
-- **Flexibilidade**: Possível adaptar para diferentes versões de banco do L2 (acis, essence, lucera, etc) apenas mudando as queries.
+1. User accesses a ranking page on the site.
+2. Django calls a utility function (e.g., `LineageStats.top_level`) that executes an SQL query on the L2 database via `LineageDB`.
+3. The result is returned and displayed on the frontend.
 
 ---
 
-## Observações
-- O acesso ao banco do L2 pode ser desativado via variável de ambiente (`LINEAGE_DB_ENABLED`).
-- O cache interno reduz a carga em queries repetidas.
-- Alterações no banco do L2 devem ser feitas com cuidado para não afetar o servidor do jogo. 
+## Advantages of this approach
+- **Isolation**: Game and site data remain separate, avoiding conflicts and making maintenance easier.
+- **Performance**: Optimized queries run directly on the L2 database.
+- **Flexibility**: Possible to adapt to different L2 database versions (acis, essence, lucera, etc) just by changing the queries.
+
+---
+
+## Notes
+- Access to the L2 database can be disabled via the environment variable (`LINEAGE_DB_ENABLED`).
+- Internal cache reduces load on repeated queries.
+- Changes to the L2 database should be made carefully to avoid affecting the game server. 

@@ -1,17 +1,17 @@
-# Documentação de API
+# API Documentation
 
-## Autenticação
-- A maioria dos endpoints requer autenticação via sessão Django ou token.
-- Exemplo de header:
+## Authentication
+- Most endpoints require authentication via Django session or token.
+- Example header:
   ```http
-  Authorization: Token <seu-token>
+  Authorization: Token <your-token>
   ```
 
-## Endpoints Principais
+## Main Endpoints
 
-### Exemplo: Ranking de Jogadores
+### Example: Player Ranking
 - `GET /api/lineage/top-level/?limit=10`
-- Resposta:
+- Response:
   ```json
   [
     {"char_name": "Hero", "level": 80, "clan_name": "Lendas", ...},
@@ -19,9 +19,9 @@
   ]
   ```
 
-### Exemplo: Status de Castelo
+### Example: Castle Status
 - `GET /api/lineage/siege/`
-- Resposta:
+- Response:
   ```json
   [
     {"castle": "Aden", "owner": "ClanX", "siege_date": "2024-06-01"},
@@ -29,11 +29,11 @@
   ]
   ```
 
-## Formatos de Erro
-- Respostas de erro seguem o padrão:
+## Error Formats
+- Error responses follow the pattern:
   ```json
-  {"error": "Mensagem de erro"}
+  {"error": "Error message"}
   ```
 
-## Observações
-- Consulte o código em `apps/lineage/server/views/` para mais exemplos de endpoints. 
+## Notes
+- See the code in `apps/lineage/server/views/` for more endpoint examples. 

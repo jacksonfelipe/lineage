@@ -1,17 +1,17 @@
-# Documentação de Integrações
+# Integrations Documentation
 
-## Banco do L2
-- Integração via `apps.lineage.server.database.LineageDB`.
-- Queries SQL diretas para dados do jogo.
+## L2 Database
+- Integration via `apps.lineage.server.database.LineageDB`.
+- Direct SQL queries for game data.
 
-## Pagamentos
-- Integração com gateways de pagamento (ex: PagSeguro, PayPal, etc).
-- Verifique o app `apps.lineage.payment` para detalhes.
+## Payments
+- Integration with payment gateways (e.g., PagSeguro, PayPal, etc).
+- Check the `apps.lineage.payment` app for details.
 
-## Notificações
-- Envio de e-mails, notificações no site e integrações com Discord.
-- Consulte `apps/main/notification/`.
+## Notifications
+- Sending emails, on-site notifications, and integrations with Discord.
+- See `apps/main/notification/`.
 
-## Como adicionar novas integrações
-- Crie um app Django separado ou módulo em `utils/`.
-- Siga o padrão de uso de variáveis de ambiente para segredos. 
+## How to add new integrations
+- Create a separate Django app or a module in `utils/`.
+- Follow the pattern of using environment variables for secrets. 
