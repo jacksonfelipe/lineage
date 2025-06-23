@@ -5,12 +5,32 @@ from django.conf.urls.static import static
 from django.views.i18n import JavaScriptCatalog
 from django.contrib.auth.views import redirect_to_login
 from django.shortcuts import redirect
+from django.http import FileResponse, Http404
+from django.views.decorators.cache import cache_control
 import os
 
 def admin_login_redirect(request):
     return redirect('login')
 
+@cache_control(max_age=86400)  # Cache por 24 horas
+def favicon_view(request):
+    """Serve favicon.ico with proper caching"""
+    try:
+        favicon_path = os.path.join(settings.STATICFILES_DIRS[0], 'favicon.ico')
+        if os.path.exists(favicon_path):
+            return FileResponse(
+                open(favicon_path, 'rb'), 
+                content_type='image/x-icon'
+            )
+        else:
+            raise Http404("Favicon not found")
+    except Exception:
+        raise Http404("Favicon not found")
+
 urlpatterns = [
+    # Favicon
+    path('favicon.ico', favicon_view, name='favicon'),
+    
     # main app start
     path('', include('apps.main.home.urls')),
     
