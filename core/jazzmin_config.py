@@ -39,7 +39,7 @@ def get_jazzmin_settings(project_title):
         # The model admin to search from the search bar, search bar omitted if excluded
         # "search_model": "auth.User",
         # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
-        "user_avatar": None,
+        "user_avatar": True,
         # URL for the login page
         "login_url": "login",
         # URL for the logout page

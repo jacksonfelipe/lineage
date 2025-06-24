@@ -162,10 +162,6 @@
                                 <i class="{{ link.icon }} mr-2"></i> {% trans link.name %}
                             </a>
                         {% endfor %}
-                        <div class="dropdown-divider"></div>
-                        {% if perms|can_view_self %}
-                            <a href="{% jazzy_admin_url request.user request.current_app|default:"admin" %}" class="dropdown-item dropdown-footer">{% trans 'See Profile' %}</a>
-                        {% endif %}
                     </div>
                 </li>
             </ul>
@@ -184,9 +180,9 @@
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                         <div class="image">
                             {% if jazzmin_settings|has_jazzmin_setting:"user_avatar" %}
-                                <img src="{% get_user_avatar request.user %}" width="160px" class="img-circle elevation-2" alt="User Image">
+                                <img src="{% url 'serve_files:serve_decrypted_file' 'home' 'user' 'avatar' request.user.uuid %}" width="160px" class="img-circle elevation-2" alt="User Image">
                             {% else %}
-                                <i class="fas fa-inverse user-profile fa-user-circle"></i>
+                                <img src="{% static 'assets/img/team/generic_user.png' %}" width="160px" class="img-circle elevation-2" alt="User Image">
                             {% endif %}
                         </div>
                         <div class="info">
