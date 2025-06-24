@@ -5073,7 +5073,7 @@ msgid "Inventário"
 msgstr "Inventory"
 
 msgid "Sair"
-msgstr "To go out"
+msgstr "Logout"
 
 msgid "Tem certeza de que deseja limpar todas as notificações?"
 msgstr "Are you sure you want to clean all notifications?"
