@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-20 14:31-0300\n"
+"POT-Creation-Date: 2025-06-23 23:02-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3162,6 +3162,18 @@ msgstr "Otras asistencias"
 msgid "Nenhuma outra assistência encontrada."
 msgstr "No se encontró otra ayuda."
 
+msgid "Wiki"
+msgstr "Semana"
+
+msgid "Logo do Lineage2"
+msgstr "LOGO DO LINEAGE2"
+
+msgid "Expandir"
+msgstr "Expandir"
+
+msgid "Voltar ao Site"
+msgstr "Volver al sitio web"
+
 msgid "Guia Wiki"
 msgstr "Guía de wiki"
 
@@ -3330,9 +3342,6 @@ msgstr "Otra información"
 msgid "Nenhuma outra informação encontrada."
 msgstr "Ninguna otra información encontrada."
 
-msgid "Wiki"
-msgstr "Semana"
-
 msgid "Bem-vindo ao Guia Wiki"
 msgstr "Bienvenido a la guía wiki"
 
@@ -3465,8 +3474,8 @@ msgstr "Tema"
 msgid "Temas"
 msgstr "Temas"
 
-msgid "O arquivo é muito grande. Tente um arquivo menor que 20MB."
-msgstr "El archivo es muy grande. Pruebe un archivo de menos de 20 MB."
+msgid "O arquivo é muito grande. Tente um arquivo menor que 30MB."
+msgstr "El archivo es muy grande. Pruebe un archivo de menos de 30 MB."
 
 msgid "O arquivo não é um ZIP válido."
 msgstr "El archivo no es un zip válido."
@@ -4995,6 +5004,44 @@ msgstr "Ver solicitud"
 msgid "Nenhuma solicitação encontrada."
 msgstr "No se encontró solicitud."
 
+msgid "Meu Perfil"
+msgstr "Mi perfil"
+
+msgid "Mudar Senha"
+msgstr "Cambiar la contraseña"
+
+msgid "Segurança"
+msgstr "Seguridad"
+
+msgid "Sair"
+msgstr "Salir"
+
+msgid "Search"
+msgstr "Buscar"
+
+msgid "Account"
+msgstr "Cuenta"
+
+msgid "Jazzmin version"
+msgstr "Versión de jazz"
+
+msgid "Copyright"
+msgstr "Derechos de autor"
+
+msgid "All rights reserved."
+msgstr "Reservados todos los derechos."
+
+msgid "UI Configuration"
+msgstr "Configuración de UI"
+
+msgid "Copy this info your settings file to persist these UI changes"
+msgstr ""
+"Copie esta información en su archivo de configuración para persistir estos "
+"cambios en la interfaz de usuario"
+
+msgid "Close"
+msgstr "Cerca"
+
 msgid "400 Requisição Inválida"
 msgstr "400 requisitos no válidos"
 
@@ -5048,9 +5095,6 @@ msgstr "Reservados todos los derechos."
 msgid "Feito com ❤️ por aventureiros para aventureiros."
 msgstr "Hecho con ❤️ por aventureros para aventureros."
 
-msgid "Close"
-msgstr "Cerca"
-
 msgid "Volt logo"
 msgstr "Era logo"
 
@@ -5059,9 +5103,6 @@ msgstr "Navegación"
 
 msgid "Bloquear Sessão"
 msgstr "Sesión"
-
-msgid "Search"
-msgstr "Buscar"
 
 msgid "Acessar Admin"
 msgstr "Acceder a administrador"
@@ -5074,15 +5115,6 @@ msgstr "Sin notificación"
 
 msgid "Ver todas as notificações"
 msgstr "Ver todas las notificaciones"
-
-msgid "Meu Perfil"
-msgstr "Mi perfil"
-
-msgid "Mudar Senha"
-msgstr "Cambiar la contraseña"
-
-msgid "Segurança"
-msgstr "Seguridad"
 
 msgid "Configurações"
 msgstr "Ajustes"
@@ -5104,9 +5136,6 @@ msgstr "Gerente de caja"
 
 msgid "Inventário"
 msgstr "Inventario"
-
-msgid "Sair"
-msgstr "Salir"
 
 msgid "Tem certeza de que deseja limpar todas as notificações?"
 msgstr "¿Estás seguro de que quieres limpiar todas las notificaciones?"
@@ -5179,9 +5208,6 @@ msgstr "Información de registros"
 
 msgid "Logs Errors"
 msgstr "Errores de registro"
-
-msgid "Logo do Lineage2"
-msgstr "LOGO DO LINEAGE2"
 
 msgid "Informações"
 msgstr "Información"
@@ -5697,74 +5723,6 @@ msgstr "🔐 Generador de credenciales"
 msgid "Digite a senha que deseja proteger: "
 msgstr "Ingrese la contraseña que desea proteger:"
 
-msgid "Jogue Agora"
-msgstr "Jugar ahora"
-
-msgid "Suporte"
-msgstr "Apoyo"
-
-msgid "Server"
-msgstr "Servidor"
-
-msgid "Estatística"
-msgstr "Estadística"
-
-msgid "Lineage 2 PDL"
-msgstr "Linaje 2 PDL"
-
-msgid "Jogar Agora"
-msgstr "Jugar ahora"
-
-msgid "O Que Torna Nosso Servidor Único?"
-msgstr "¿Qué hace que nuestro servidor sea único?"
-
-msgid "PvP & Sieges"
-msgstr "PvP y Sieges"
-
-msgid ""
-"Domine castelos, lute por território e mostre sua força no campo de batalha."
-msgstr ""
-"Castillos Domine, lucha territorio y muestran tu fuerza en el campo de "
-"batalla."
-
-msgid "Conteúdo exclusivo com recompensas únicas para jogadores dedicados."
-msgstr "Contenido exclusivo con recompensas únicas para jugadores dedicados."
-
-msgid "Eventos & Premiações"
-msgstr "Eventos y premios"
-
-msgid "Participe de eventos semanais com itens raros e bônus poderosos."
-msgstr "Únase a eventos semanales con potentes artículos y bonos raros."
-
-msgid "Download & Instalação"
-msgstr "Descargar e instalación"
-
-msgid ""
-"Baixe agora o cliente e patch oficial e comece sua jornada em nosso "
-"servidor."
-msgstr ""
-"Descargue ahora el cliente oficial y el parche y comience su viaje en "
-"nuestro servidor."
-
-msgid "Baixar Patch"
-msgstr "Patch de descarga"
-
-msgid "Baixar Cliente"
-msgstr "Descargar cliente"
-
-msgid "Junte-se à Comunidade"
-msgstr "Únete a la comunidad"
-
-msgid ""
-"Conecte-se com outros jogadores, tire dúvidas e participe dos eventos via "
-"Discord."
-msgstr ""
-"Conéctese con otros jugadores, haga preguntas y participe en eventos a "
-"través de Discord."
-
-msgid "Entrar no Discord"
-msgstr "Entrar no Discord"
-
 msgid ""
 "Notificações staff só podem ser enviadas para usuários staff ou "
 "superusuários."
@@ -5774,6 +5732,77 @@ msgstr ""
 
 msgid "Você não tem permissão para criar notificações públicas staff."
 msgstr "No se le permite crear notificaciones públicas del personal."
+
+#~ msgid "O arquivo é muito grande. Tente um arquivo menor que 20MB."
+#~ msgstr "El archivo es muy grande. Pruebe un archivo de menos de 20 MB."
+
+#~ msgid "Jogue Agora"
+#~ msgstr "Jugar ahora"
+
+#~ msgid "Suporte"
+#~ msgstr "Apoyo"
+
+#~ msgid "Server"
+#~ msgstr "Servidor"
+
+#~ msgid "Estatística"
+#~ msgstr "Estadística"
+
+#~ msgid "Lineage 2 PDL"
+#~ msgstr "Linaje 2 PDL"
+
+#~ msgid "Jogar Agora"
+#~ msgstr "Jugar ahora"
+
+#~ msgid "O Que Torna Nosso Servidor Único?"
+#~ msgstr "¿Qué hace que nuestro servidor sea único?"
+
+#~ msgid "PvP & Sieges"
+#~ msgstr "PvP y Sieges"
+
+#~ msgid ""
+#~ "Domine castelos, lute por território e mostre sua força no campo de batalha."
+#~ msgstr ""
+#~ "Castillos Domine, lucha territorio y muestran tu fuerza en el campo de "
+#~ "batalla."
+
+#~ msgid "Conteúdo exclusivo com recompensas únicas para jogadores dedicados."
+#~ msgstr "Contenido exclusivo con recompensas únicas para jugadores dedicados."
+
+#~ msgid "Eventos & Premiações"
+#~ msgstr "Eventos y premios"
+
+#~ msgid "Participe de eventos semanais com itens raros e bônus poderosos."
+#~ msgstr "Únase a eventos semanales con potentes artículos y bonos raros."
+
+#~ msgid "Download & Instalação"
+#~ msgstr "Descargar e instalación"
+
+#~ msgid ""
+#~ "Baixe agora o cliente e patch oficial e comece sua jornada em nosso "
+#~ "servidor."
+#~ msgstr ""
+#~ "Descargue ahora el cliente oficial y el parche y comience su viaje en "
+#~ "nuestro servidor."
+
+#~ msgid "Baixar Patch"
+#~ msgstr "Patch de descarga"
+
+#~ msgid "Baixar Cliente"
+#~ msgstr "Descargar cliente"
+
+#~ msgid "Junte-se à Comunidade"
+#~ msgstr "Únete a la comunidad"
+
+#~ msgid ""
+#~ "Conecte-se com outros jogadores, tire dúvidas e participe dos eventos via "
+#~ "Discord."
+#~ msgstr ""
+#~ "Conéctese con otros jugadores, haga preguntas y participe en eventos a "
+#~ "través de Discord."
+
+#~ msgid "Entrar no Discord"
+#~ msgstr "Entrar no Discord"
 
 #, python-format
 #~ msgid "Devolução de lance no leilão #%d"

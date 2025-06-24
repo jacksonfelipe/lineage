@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-20 14:26-0300\n"
+"POT-Creation-Date: 2025-06-23 22:49-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3149,6 +3149,18 @@ msgstr "Other assists"
 msgid "Nenhuma outra assistência encontrada."
 msgstr "No other assistance found."
 
+msgid "Wiki"
+msgstr "Wiki"
+
+msgid "Logo do Lineage2"
+msgstr "Logo do Lineage2"
+
+msgid "Expandir"
+msgstr "Expand"
+
+msgid "Voltar ao Site"
+msgstr "Back to the website"
+
 msgid "Guia Wiki"
 msgstr "Wiki guide"
 
@@ -3317,9 +3329,6 @@ msgstr "Other information"
 msgid "Nenhuma outra informação encontrada."
 msgstr "No other information found."
 
-msgid "Wiki"
-msgstr "Wiki"
-
 msgid "Bem-vindo ao Guia Wiki"
 msgstr "Welcome to the Wiki Guide"
 
@@ -3452,8 +3461,8 @@ msgstr "Her"
 msgid "Temas"
 msgstr "Themes"
 
-msgid "O arquivo é muito grande. Tente um arquivo menor que 20MB."
-msgstr "The file is very large. Try a file less than 20MB."
+msgid "O arquivo é muito grande. Tente um arquivo menor que 30MB."
+msgstr "The file is very large. Try a file less than 30mb."
 
 msgid "O arquivo não é um ZIP válido."
 msgstr "The file is not a valid zip."
@@ -4962,6 +4971,42 @@ msgstr "See request"
 msgid "Nenhuma solicitação encontrada."
 msgstr "No request found."
 
+msgid "Meu Perfil"
+msgstr "My profile"
+
+msgid "Mudar Senha"
+msgstr "Change password"
+
+msgid "Segurança"
+msgstr "Security"
+
+msgid "Sair"
+msgstr "Logout"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "Account"
+msgstr "Account"
+
+msgid "Jazzmin version"
+msgstr "Jazz version"
+
+msgid "Copyright"
+msgstr "Copyright"
+
+msgid "All rights reserved."
+msgstr "All rights reserved."
+
+msgid "UI Configuration"
+msgstr "UI Configuration"
+
+msgid "Copy this info your settings file to persist these UI changes"
+msgstr "Copy this info your settings file to persist these UI changes"
+
+msgid "Close"
+msgstr "Close"
+
 msgid "400 Requisição Inválida"
 msgstr "400 INVALID REQUIREMENT"
 
@@ -5015,9 +5060,6 @@ msgstr "All rights reserved."
 msgid "Feito com ❤️ por aventureiros para aventureiros."
 msgstr "Made with ❤️ by adventurers for adventurers."
 
-msgid "Close"
-msgstr "Close"
-
 msgid "Volt logo"
 msgstr "Was logo"
 
@@ -5026,9 +5068,6 @@ msgstr "Toggle navigation"
 
 msgid "Bloquear Sessão"
 msgstr "Block session"
-
-msgid "Search"
-msgstr "Search"
 
 msgid "Acessar Admin"
 msgstr "Access Admin"
@@ -5041,15 +5080,6 @@ msgstr "No notification"
 
 msgid "Ver todas as notificações"
 msgstr "See all notifications"
-
-msgid "Meu Perfil"
-msgstr "My profile"
-
-msgid "Mudar Senha"
-msgstr "Change password"
-
-msgid "Segurança"
-msgstr "Security"
 
 msgid "Configurações"
 msgstr "Settings"
@@ -5071,9 +5101,6 @@ msgstr "Box Manager"
 
 msgid "Inventário"
 msgstr "Inventory"
-
-msgid "Sair"
-msgstr "Logout"
 
 msgid "Tem certeza de que deseja limpar todas as notificações?"
 msgstr "Are you sure you want to clean all notifications?"
@@ -5146,9 +5173,6 @@ msgstr "Logs Info"
 
 msgid "Logs Errors"
 msgstr "Logs Errors"
-
-msgid "Logo do Lineage2"
-msgstr "Logo do Lineage2"
 
 msgid "Informações"
 msgstr "Information"
@@ -5659,73 +5683,6 @@ msgstr "🔐 credential generator"
 msgid "Digite a senha que deseja proteger: "
 msgstr "Enter the password you want to protect:"
 
-msgid "Jogue Agora"
-msgstr "Play now"
-
-msgid "Suporte"
-msgstr "Support"
-
-msgid "Server"
-msgstr "Server"
-
-msgid "Estatística"
-msgstr "Statistic"
-
-msgid "Lineage 2 PDL"
-msgstr "Lineage 2 PDL"
-
-msgid "Jogar Agora"
-msgstr "Play now"
-
-msgid "O Que Torna Nosso Servidor Único?"
-msgstr "What makes our server unique?"
-
-msgid "PvP & Sieges"
-msgstr "PvP & Sieges"
-
-msgid ""
-"Domine castelos, lute por território e mostre sua força no campo de batalha."
-msgstr ""
-"Domine Castles, fight territory and show your strength on the battlefield."
-
-msgid "Conteúdo exclusivo com recompensas únicas para jogadores dedicados."
-msgstr "Exclusive content with unique rewards for dedicated players."
-
-msgid "Eventos & Premiações"
-msgstr "Events and Awards"
-
-msgid "Participe de eventos semanais com itens raros e bônus poderosos."
-msgstr "Join weekly events with powerful rare items and bonuses."
-
-msgid "Download & Instalação"
-msgstr "Download and Installation"
-
-msgid ""
-"Baixe agora o cliente e patch oficial e comece sua jornada em nosso "
-"servidor."
-msgstr ""
-"Download now the official customer and patch and start your journey on our "
-"server."
-
-msgid "Baixar Patch"
-msgstr "Download patch"
-
-msgid "Baixar Cliente"
-msgstr "Download Customer"
-
-msgid "Junte-se à Comunidade"
-msgstr "Join the community"
-
-msgid ""
-"Conecte-se com outros jogadores, tire dúvidas e participe dos eventos via "
-"Discord."
-msgstr ""
-"Connect with other players, ask questions and participate in events via "
-"Discord."
-
-msgid "Entrar no Discord"
-msgstr "Discord"
-
 msgid ""
 "Notificações staff só podem ser enviadas para usuários staff ou "
 "superusuários."
@@ -5733,6 +5690,76 @@ msgstr "Staff notifications can only be sent to staff users or superusers."
 
 msgid "Você não tem permissão para criar notificações públicas staff."
 msgstr "You are not allowed to create staff public notifications."
+
+#~ msgid "O arquivo é muito grande. Tente um arquivo menor que 20MB."
+#~ msgstr "The file is very large. Try a file less than 20MB."
+
+#~ msgid "Jogue Agora"
+#~ msgstr "Play now"
+
+#~ msgid "Suporte"
+#~ msgstr "Support"
+
+#~ msgid "Server"
+#~ msgstr "Server"
+
+#~ msgid "Estatística"
+#~ msgstr "Statistic"
+
+#~ msgid "Lineage 2 PDL"
+#~ msgstr "Lineage 2 PDL"
+
+#~ msgid "Jogar Agora"
+#~ msgstr "Play now"
+
+#~ msgid "O Que Torna Nosso Servidor Único?"
+#~ msgstr "What makes our server unique?"
+
+#~ msgid "PvP & Sieges"
+#~ msgstr "PvP & Sieges"
+
+#~ msgid ""
+#~ "Domine castelos, lute por território e mostre sua força no campo de batalha."
+#~ msgstr ""
+#~ "Domine Castles, fight territory and show your strength on the battlefield."
+
+#~ msgid "Conteúdo exclusivo com recompensas únicas para jogadores dedicados."
+#~ msgstr "Exclusive content with unique rewards for dedicated players."
+
+#~ msgid "Eventos & Premiações"
+#~ msgstr "Events and Awards"
+
+#~ msgid "Participe de eventos semanais com itens raros e bônus poderosos."
+#~ msgstr "Join weekly events with powerful rare items and bonuses."
+
+#~ msgid "Download & Instalação"
+#~ msgstr "Download and Installation"
+
+#~ msgid ""
+#~ "Baixe agora o cliente e patch oficial e comece sua jornada em nosso "
+#~ "servidor."
+#~ msgstr ""
+#~ "Download now the official customer and patch and start your journey on our "
+#~ "server."
+
+#~ msgid "Baixar Patch"
+#~ msgstr "Download patch"
+
+#~ msgid "Baixar Cliente"
+#~ msgstr "Download Customer"
+
+#~ msgid "Junte-se à Comunidade"
+#~ msgstr "Join the community"
+
+#~ msgid ""
+#~ "Conecte-se com outros jogadores, tire dúvidas e participe dos eventos via "
+#~ "Discord."
+#~ msgstr ""
+#~ "Connect with other players, ask questions and participate in events via "
+#~ "Discord."
+
+#~ msgid "Entrar no Discord"
+#~ msgstr "Discord"
 
 #, python-format
 #~ msgid "Devolução de lance no leilão #%d"
