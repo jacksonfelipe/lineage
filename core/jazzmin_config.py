@@ -229,7 +229,7 @@ def get_jazzmin_settings(project_title):
         #############
         # Relative paths to custom CSS/JS files (must be present in static files)
         "custom_css": "custom/admin-custom.css",
-        "custom_js": "custom/admin-custom.js",
+        # "custom_js": "custom/admin-custom.js",
         ###############
         # Change view #
         ###############
