@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from celery.schedules import crontab
 from django.contrib import messages
 from .jazzmin_config import get_jazzmin_settings, get_jazzmin_ui_tweaks
+import re
 
 # =========================== MAIN CONFIGS ===========================
 
@@ -62,6 +63,13 @@ def env_to_list(value):
         return value
     return [str(value)]
 
+def normalize_origin(host, protocol='https'):
+    host = re.sub(r'^https?://', '', host)
+    # IPv6: precisa de colchetes
+    if ':' in host and not host.startswith('[') and not host.endswith(']'):
+        host = f'[{host}]'
+    return f'{protocol}://{host}'
+
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 RENDER_EXTERNAL_FRONTEND = os.environ.get('RENDER_EXTERNAL_FRONTEND')
 
@@ -69,13 +77,13 @@ if not DEBUG:
     # Hostnames
     for host in env_to_list(RENDER_EXTERNAL_HOSTNAME):
         ALLOWED_HOSTS.append(host)
-        CORS_ALLOWED_ORIGINS.append(f'https://{host}')
-        CSRF_TRUSTED_ORIGINS.append(f'https://{host}')
+        CORS_ALLOWED_ORIGINS.append(normalize_origin(host))
+        CSRF_TRUSTED_ORIGINS.append(normalize_origin(host))
     # Frontends
     for frontend in env_to_list(RENDER_EXTERNAL_FRONTEND):
         ALLOWED_HOSTS.append(frontend)
-        CORS_ALLOWED_ORIGINS.append(f'https://{frontend}')
-        CSRF_TRUSTED_ORIGINS.append(f'https://{frontend}')
+        CORS_ALLOWED_ORIGINS.append(normalize_origin(frontend))
+        CSRF_TRUSTED_ORIGINS.append(normalize_origin(frontend))
 
 # =========================== INSTALLED APPS CONFIGS ===========================
 
