@@ -161,3 +161,16 @@ class Comissao(BaseModel):
 
     def __str__(self):
         return f"{_('Commission from')} {self.apoiador.nome_publico} - R${self.valor}"
+
+
+class ApoiadorDefault(BaseModel):
+    imagem = models.ImageField(upload_to="apoiadores/default/", verbose_name=_("Imagem Default"))
+    ordem = models.PositiveIntegerField(default=0, verbose_name=_("Ordem"))
+
+    class Meta:
+        verbose_name = _("Imagem Default de Apoiador")
+        verbose_name_plural = _("Imagens Default de Apoiador")
+        ordering = ["ordem"]
+
+    def __str__(self):
+        return f"Imagem Default #{self.pk}"

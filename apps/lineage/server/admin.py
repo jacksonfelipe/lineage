@@ -98,7 +98,7 @@ class ApoiadorAdmin(BaseModelAdmin):
 
 
 @admin.register(Comissao)
-class ComissaoAdmin(admin.ModelAdmin):
+class ComissaoAdmin(BaseModelAdmin):
     # Exibir colunas no list display
     list_display = ('apoiador', 'compra', 'valor', 'pago', 'data_pagamento')
     # Filtros para facilitar a busca no admin
@@ -116,3 +116,9 @@ class ComissaoAdmin(admin.ModelAdmin):
         if obj.pago and not obj.data_pagamento:
             obj.data_pagamento = timezone.now()
         super().save_model(request, obj, form, change)
+
+
+@admin.register(ApoiadorDefault)
+class ApoiadorDefaultAdmin(BaseModelAdmin):
+    list_display = ("id", "ordem", "imagem")
+    ordering = ("ordem",)

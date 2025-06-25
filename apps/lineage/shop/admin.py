@@ -20,7 +20,7 @@ class ShopPackageAdmin(BaseModelAdmin):
 
 
 @admin.register(PromotionCode)
-class PromotionCodeAdmin(admin.ModelAdmin):
+class PromotionCodeAdmin(BaseModelAdmin):
     list_display = ('codigo', 'desconto_percentual', 'ativo', 'validade', 'apoiador')
     search_fields = ('codigo',)
     list_filter = ('ativo',)

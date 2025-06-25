@@ -152,10 +152,11 @@
 
         {% if total < 10 %}
           {% with restante=10|sub:total %}
+            {% imagens_default_apoiadores as imagens_default %}
             {% for _ in restante|to_range %}
-              {% with random=fixas|random_item %}
+              {% with random=imagens_default|random_item %}
                 <div class="apoiador-card">
-                  <img src="{% static 'assets/img/apoiadores/apoio' %}{{ random }}.png" alt="Apoio {{ random }}">
+                  <img src="{{ random }}" alt="Apoio Default">
                 </div>
               {% endwith %}
             {% endfor %}

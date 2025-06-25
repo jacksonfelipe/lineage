@@ -12,7 +12,7 @@ class SolicitationAdmin(BaseModelAdmin):
 
 
 @admin.register(SolicitationHistory)
-class SolicitationHistoryAdmin(admin.ModelAdmin):
+class SolicitationHistoryAdmin(BaseModelAdmin):
     list_display = ('solicitation', 'action', 'timestamp', 'user')
     search_fields = ('solicitation__protocol', 'action', 'user__username')
     list_filter = ('timestamp', 'user') 
