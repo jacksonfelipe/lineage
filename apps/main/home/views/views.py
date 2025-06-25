@@ -32,6 +32,7 @@ from apps.lineage.games.utils import verificar_recompensas_por_nivel
 from utils.render_theme_page import render_theme_page
 from utils.services import verificar_conquistas
 from utils.dynamic_import import get_query_class
+from apps.main.home.tasks import send_email_task
 
 LineageStats = get_query_class("LineageStats")
 logger = logging.getLogger(__name__)
@@ -384,16 +385,11 @@ def reenviar_verificacao_view(request):
 
             # Envia o e-mail
             try:
-                send_mail(
-                    subject='Reenvio de verificação de e-mail',
-                    message=(
-                        f'Olá {user.username},\n\n'
-                        f'Aqui está seu novo link de verificação:\n\n{verification_link}\n\n'
-                        'Se você não solicitou isso, ignore este e-mail.'
-                    ),
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[user.email],
-                    fail_silently=False,
+                send_email_task.delay(
+                    'Reenvio de verificação de e-mail',
+                    f'Olá {user.username},\n\nAqui está seu novo link de verificação:\n\n{verification_link}\n\nSe você não solicitou isso, ignore este e-mail.',
+                    settings.DEFAULT_FROM_EMAIL,
+                    [user.email]
                 )
                 messages.success(request, 'Um novo e-mail de verificação foi enviado.')
             except Exception as e:

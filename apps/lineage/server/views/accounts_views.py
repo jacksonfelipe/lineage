@@ -10,6 +10,7 @@ from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
+from apps.main.home.tasks import send_email_task
 
 signer = TimestampSigner()
 
@@ -254,11 +255,11 @@ def request_link_by_email(request):
         )
 
         # Envia e-mail
-        send_mail(
-            subject="Vinculação de Conta Lineage",
-            message=f"Clique no link abaixo para vincular sua conta:\n\n{link}\n\nO link expira em 1 hora.",
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[email]
+        send_email_task.delay(
+            "Vinculação de Conta Lineage",
+            f"Clique no link abaixo para vincular sua conta:\n\n{link}\n\nO link expira em 1 hora.",
+            settings.DEFAULT_FROM_EMAIL,
+            [email]
         )
 
         messages.success(request, "Um link de verificação foi enviado para o seu e-mail.")
