@@ -92,6 +92,10 @@ def get_jazzmin_settings(project_title):
             # Auditor
             "auditor.Auditor": "fas fa-history",
             
+            # Calendary
+            "calendary": "fas fa-calendar-alt",
+            "calendary.Event": "fas fa-calendar-day",
+            
             # FAQ
             "faq.FAQ": "fas fa-question-circle",
             "faq.FAQCategory": "fas fa-folder",
@@ -136,13 +140,6 @@ def get_jazzmin_settings(project_title):
             "downloads.Download": "fas fa-download",
             "downloads.DownloadCategory": "fas fa-folder",
             "downloads.DownloadLink": "fas fa-download",
-            
-            # Server
-            "server.Server": "fas fa-server",
-            "server.ServerStatus": "fas fa-signal",
-            "server.ServerConfig": "fas fa-cogs",
-            "server.ApiEndpointToggle": "fas fa-toggle-on",
-            "server.ActiveAdenaExchangeItem": "fas fa-coins",
             
             # Wallet
             "wallet.Wallet": "fas fa-wallet",
@@ -199,6 +196,25 @@ def get_jazzmin_settings(project_title):
             "games.BattlePassReward": "fas fa-medal",
             "games.UserBattlePassProgress": "fas fa-tasks",
             "games.BattlePassItemExchange": "fas fa-exchange-alt",
+
+            # Roadmap
+            "roadmap": "fas fa-route",
+            "roadmap.Roadmap": "fas fa-map",
+            "roadmap.RoadmapTranslation": "fas fa-map-marker-alt",
+
+            # Externos / Libs
+            "django_celery_results": "fas fa-tasks",
+            "django_celery_results.TaskResult": "fas fa-tasks",
+            "django_celery_results.GroupResult": "fas fa-layer-group",
+            "account": "fas fa-user-circle",
+            "account.EmailAddress": "fas fa-envelope",
+            "account.EmailConfirmation": "fas fa-check-circle",
+            "socialaccount": "fas fa-users",
+            "socialaccount.SocialAccount": "fas fa-user-friends",
+            "socialaccount.SocialApp": "fas fa-cogs",
+            "socialaccount.SocialToken": "fas fa-key",
+            "otp_totp": "fas fa-mobile-alt",
+            "otp_totp.TOTPDevice": "fas fa-shield-alt",
             
             # Reports
             "reports.Report": "fas fa-chart-bar",
@@ -216,11 +232,17 @@ def get_jazzmin_settings(project_title):
             "wiki.WikiAssistance": "fas fa-hands-helping",
             
             # Server
+            "server.Server": "fas fa-server",
+            "server.ServerStatus": "fas fa-signal",
+            "server.ServerConfig": "fas fa-cogs",
+            "server.ApiEndpointToggle": "fas fa-toggle-on",
+            "server.ActiveAdenaExchangeItem": "fas fa-coins",
             "server.IndexConfig": "fas fa-cogs",
             "server.IndexConfigTranslation": "fas fa-language",
             "server.ServicePrice": "fas fa-tags",
             "server.Apoiador": "fas fa-star",
             "server.Comissao": "fas fa-percentage",
+            "server.ApoiadorDefault": "fas fa-image",
         },
         # Icons that are used when one is not manually specified
         "default_icon_parents": "fas fa-chevron-circle-right",
