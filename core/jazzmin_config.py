@@ -56,7 +56,8 @@ def get_jazzmin_settings(project_title):
         # Links to put along the top menu
         "topmenu_links": [
             {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
-            {"name": "Site", "url": "dashboard"},
+            {"name": "Site Public", "url": "index"},
+            {"name": "Site Private", "url": "dashboard"},
         ],
         #############
         # User Menu #
