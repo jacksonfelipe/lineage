@@ -152,27 +152,6 @@ class UserPasswordResetView(PasswordResetView):
     form_class = UserPasswordResetForm
 
     def form_valid(self, form):
-        # Gera o e-mail normalmente, mas envia via Celery
-        opts = {
-            'use_https': self.request.is_secure(),
-            'token_generator': self.token_generator,
-            'from_email': self.from_email,
-            'email_template_name': self.email_template_name,
-            'subject_template_name': self.subject_template_name,
-            'request': self.request,
-            'html_email_template_name': getattr(self, 'html_email_template_name', None),
-            'extra_email_context': self.extra_email_context,
-        }
-        for user in form.get_users(form.cleaned_data["email"]):
-            context = self.get_email_context(user)
-            subject = self.render_mail_subject(context)
-            message = self.render_mail_message(context)
-            send_email_task.delay(
-                subject,
-                message,
-                self.from_email,
-                [user.email]
-            )
         print(_("Password reset email sent! (async)"))
         return super().form_valid(form)
 

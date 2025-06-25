@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django_ckeditor_5.widgets import CKEditor5Widget
 from django import forms
 from .models import *
+from apps.main.home.tasks import send_email_task
 
 
 class UserProfileForm(UserChangeForm):
@@ -105,6 +106,11 @@ class UserPasswordResetForm(PasswordResetForm):
             'placeholder': _('Enter your email')
         })
     )
+
+    def send_mail(self, subject_template_name, email_template_name, context, from_email, to_email, html_email_template_name=None):
+        subject = self.render_subject(subject_template_name, context)
+        body = self.render_email(email_template_name, context)
+        send_email_task.delay(subject, body, from_email, [to_email])
 
 
 class UserSetPasswordForm(SetPasswordForm):
