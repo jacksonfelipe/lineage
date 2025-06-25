@@ -4,6 +4,8 @@ from django_ckeditor_5.widgets import CKEditor5Widget
 from django import forms
 from .models import *
 from apps.main.home.tasks import send_email_task
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 
 class UserProfileForm(UserChangeForm):
@@ -108,8 +110,8 @@ class UserPasswordResetForm(PasswordResetForm):
     )
 
     def send_mail(self, subject_template_name, email_template_name, context, from_email, to_email, html_email_template_name=None):
-        subject = self.render_subject(subject_template_name, context)
-        body = self.render_email(email_template_name, context)
+        subject = strip_tags(render_to_string(subject_template_name, context)).replace('\n', '')
+        body = render_to_string(email_template_name, context)
         send_email_task.delay(subject, body, from_email, [to_email])
 
 
