@@ -188,7 +188,7 @@ class DashboardContentTranslationForm(forms.ModelForm):
             self.fields['language'].initial = language
 
 
-class CustomUserChangeForm(forms.ModelForm):
+class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = User
         fields = '__all__'
