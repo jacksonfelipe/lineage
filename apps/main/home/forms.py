@@ -109,14 +109,6 @@ class UserPasswordResetForm(PasswordResetForm):
         })
     )
 
-    def send_mail(self, subject_template_name, email_template_name, context, from_email, to_email, html_email_template_name=None):
-        subject = strip_tags(render_to_string(subject_template_name, context)).replace('\n', '')
-        body = render_to_string(email_template_name, context)
-        try:
-            send_email_task.delay(subject, body, from_email, [to_email])
-        except Exception as e:
-            print(e)
-
 
 class UserSetPasswordForm(SetPasswordForm):
     new_password1 = forms.CharField(
