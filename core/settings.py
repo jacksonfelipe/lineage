@@ -19,7 +19,7 @@ load_dotenv()  # take environment variables from .env.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # System Version
-VERSION = '1.8.14'
+VERSION = '1.8.15'
 
 # Enable/Disable DEBUG Mode
 DEBUG = str2bool(os.environ.get('DEBUG', False))
