@@ -82,3 +82,14 @@ def slogan_flag(request):
     return {
         'SHOW_SLOGAN': settings.SLOGAN
     }
+
+
+def social_login_config(request):
+    """Context processor para configurações de login social"""
+    return {
+        'SOCIAL_LOGIN_ENABLED': getattr(settings, 'SOCIAL_LOGIN_ENABLED', True),
+        'SOCIAL_LOGIN_GOOGLE_ENABLED': getattr(settings, 'SOCIAL_LOGIN_GOOGLE_ENABLED', True),
+        'SOCIAL_LOGIN_GITHUB_ENABLED': getattr(settings, 'SOCIAL_LOGIN_GITHUB_ENABLED', True),
+        'SOCIAL_LOGIN_DISCORD_ENABLED': getattr(settings, 'SOCIAL_LOGIN_DISCORD_ENABLED', True),
+        'SOCIAL_LOGIN_SHOW_SECTION': getattr(settings, 'SOCIAL_LOGIN_SHOW_SECTION', True),
+    }

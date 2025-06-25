@@ -177,6 +177,7 @@ TEMPLATES = [
                 "core.context_processors.background_setting",
                 "core.context_processors.theme_variables",
                 "core.context_processors.slogan_flag",
+                "core.context_processors.social_login_config",
                 "apps.main.home.context_processors.site_logo",
             ],
         },
@@ -271,6 +272,19 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+# =========================== SOCIAL LOGIN CONFIGS ===========================
+
+# Enable/Disable social login globally
+SOCIAL_LOGIN_ENABLED = str2bool(os.environ.get('SOCIAL_LOGIN_ENABLED', False))
+
+# Enable/Disable individual providers
+SOCIAL_LOGIN_GOOGLE_ENABLED = str2bool(os.environ.get('SOCIAL_LOGIN_GOOGLE_ENABLED', False))
+SOCIAL_LOGIN_GITHUB_ENABLED = str2bool(os.environ.get('SOCIAL_LOGIN_GITHUB_ENABLED', False))
+SOCIAL_LOGIN_DISCORD_ENABLED = str2bool(os.environ.get('SOCIAL_LOGIN_DISCORD_ENABLED', False))
+
+# Show social login section in templates
+SOCIAL_LOGIN_SHOW_SECTION = str2bool(os.environ.get('SOCIAL_LOGIN_SHOW_SECTION', False))
 
 # =========================== INTERNATIONALIZATION CONFIGS ===========================
 
