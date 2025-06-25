@@ -163,7 +163,7 @@ class UserPasswordResetView(PasswordResetView):
             'html_email_template_name': getattr(self, 'html_email_template_name', None),
             'extra_email_context': self.extra_email_context,
         }
-        for user in self.get_users(form.cleaned_data["email"]):
+        for user in form.get_users(form.cleaned_data["email"]):
             context = self.get_email_context(user)
             subject = self.render_mail_subject(context)
             message = self.render_mail_message(context)
