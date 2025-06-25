@@ -53,17 +53,29 @@ else:
 CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'http://localhost', 'http://127.0.0.1:6085', 'http://localhost:6085',]
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-if RENDER_EXTERNAL_HOSTNAME and not DEBUG:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
-    CORS_ALLOWED_ORIGINS.append(f'https://{RENDER_EXTERNAL_HOSTNAME}')
-    CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_EXTERNAL_HOSTNAME}')
+def env_to_list(value):
+    if not value:
+        return []
+    if isinstance(value, str):
+        return [v.strip() for v in value.split(',') if v.strip()]
+    if isinstance(value, list):
+        return value
+    return [str(value)]
 
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 RENDER_EXTERNAL_FRONTEND = os.environ.get('RENDER_EXTERNAL_FRONTEND')
-if RENDER_EXTERNAL_FRONTEND and not DEBUG:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_FRONTEND)
-    CORS_ALLOWED_ORIGINS.append(f'https://{RENDER_EXTERNAL_FRONTEND}')
-    CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_EXTERNAL_FRONTEND}')
+
+if not DEBUG:
+    # Hostnames
+    for host in env_to_list(RENDER_EXTERNAL_HOSTNAME):
+        ALLOWED_HOSTS.append(host)
+        CORS_ALLOWED_ORIGINS.append(f'https://{host}')
+        CSRF_TRUSTED_ORIGINS.append(f'https://{host}')
+    # Frontends
+    for frontend in env_to_list(RENDER_EXTERNAL_FRONTEND):
+        ALLOWED_HOSTS.append(frontend)
+        CORS_ALLOWED_ORIGINS.append(f'https://{frontend}')
+        CSRF_TRUSTED_ORIGINS.append(f'https://{frontend}')
 
 # =========================== INSTALLED APPS CONFIGS ===========================
 
