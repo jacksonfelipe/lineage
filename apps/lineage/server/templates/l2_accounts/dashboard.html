@@ -1,5 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load i18n static %}
+{% load banner_extras %}
 
 {% block content %}
 <div class="container mt-5">
@@ -30,8 +31,18 @@
           </ul>
         </div>
         <div class="col-md-8 text-center">
-          <img src="{% static 'assets/img/banner-pdl.png' %}" alt="{% trans 'Logo Lineage 2' %}"
-               class="img-fluid mb-4">
+          {% get_banner_url as banner_url %}
+          <div style="max-width: 732px; height: 291px; margin: 0 auto; overflow: hidden; border-radius: 8px; width: 100%;">
+            {% if banner_url %}
+              <img src="{{ banner_url }}"
+                   alt="{% trans 'Logo Lineage 2' %}"
+                   style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+            {% else %}
+              <img src="{% static 'assets/img/banner-pdl.png' %}"
+                   alt="{% trans 'Logo Lineage 2' %}"
+                   style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+            {% endif %}
+          </div>
         </div>
       </div>
     </div>

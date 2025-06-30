@@ -20,7 +20,7 @@ load_dotenv()  # take environment variables from .env.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # System Version
-VERSION = '1.8.15'
+VERSION = '1.8.21'
 
 # Enable/Disable DEBUG Mode
 DEBUG = str2bool(os.environ.get('DEBUG', False))
@@ -687,5 +687,5 @@ DYNAMIC_DATATB = {
 
 # =========================== JAZZMIN CONFIGURATION ===========================
 
-JAZZMIN_SETTINGS = get_jazzmin_settings(PROJECT_TITLE)
+JAZZMIN_SETTINGS = get_jazzmin_settings(PROJECT_TITLE, PROJECT_LOGO_URL)
 JAZZMIN_UI_TWEAKS = get_jazzmin_ui_tweaks()

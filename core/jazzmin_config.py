@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 # =========================== JAZZMIN CONFIGURATION ===========================
 
-def get_jazzmin_settings(project_title):
+def get_jazzmin_settings(project_title, project_logo):
     """
     Retorna as configurações do Jazzmin baseadas no título do projeto.
     
@@ -21,21 +21,21 @@ def get_jazzmin_settings(project_title):
         # title of the window (Will default to current_admin_site.site_title if absent or None)
         "site_title": project_title,
         # Title on the login screen (19 chars max) (Will default to current_admin_site.site_header if absent or None)
-        "site_header": "PDL",
+        "site_header": project_title,
         # Title on the brand (19 chars max) (Will default to current_admin_site.site_header if absent or None)
-        "site_brand": "PDL",
+        "site_brand": project_title,
         # Logo to use for your site, must be present in static files, used for brand on top left
-        "site_logo": "assets/img/ico.jpg",
+        "site_logo": project_logo,
         # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
-        "login_logo": "assets/img/ico.jpg",
+        "login_logo": project_logo,
         # CSS classes that are applied to the logo above
         "site_logo_classes": "img-circle",
         # Relative path to a favicon for your site, will default to site_logo if absent (ideally 32x32 px)
         "site_icon": "assets/img/ico.jpg",
         # Welcome text on the login screen
-        "welcome_sign": "Welcome to PDL Admin",
+        "welcome_sign": "Welcome to Panel Admin",
         # Copyright on the footer
-        "copyright": "all rights reserved to PDL System",
+        "copyright": "all rights reserved to " + project_title,
         # The model admin to search from the search bar, search bar omitted if excluded
         # "search_model": "auth.User",
         # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
