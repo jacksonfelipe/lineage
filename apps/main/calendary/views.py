@@ -1,4 +1,5 @@
 from .models import Event
+from django.db import models
 
 from django.shortcuts import render
 from django.http import JsonResponse
@@ -27,7 +28,7 @@ def get_events(request):
         'bg-secondary': {'color': '#6c757d', 'textColor': 'white'}
     }
 
-    events = Event.objects.filter(user=request.user)
+    events = Event.objects.filter(models.Q(user=request.user) | models.Q(user=None))
     data = []
     for event in events:
         event_data = {

@@ -71,7 +71,14 @@
           {% empty %}
           <li class="list-inline-item items-list">
             <div class="px-4">
-              <h5 class="pt-2">{% trans "Nenhum item de roadmap disponível." %}</h5>
+              <div class="event-date badge bg-secondary">
+                <i class="fas fa-calendar-times"></i>
+              </div>
+              <h5 class="pt-2 text-muted">{% trans "Nenhum item de roadmap disponível." %}</h5>
+              <p class="text-muted">{% trans "Aguarde novidades em breve!" %}</p>
+              <div>
+                <a href="#" class="btn btn-secondary btn-sm disabled" tabindex="-1" aria-disabled="true">{% trans "Leia mais" %}</a>
+              </div>
             </div>
           </li>
           {% endfor %}

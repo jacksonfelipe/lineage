@@ -14,7 +14,7 @@ class Event(BaseModel):
     end_date = models.DateTimeField(_('Data de término'))
     created_at = models.DateTimeField(_('Criado em'), auto_now_add=True)
     updated_at = models.DateTimeField(_('Atualizado em'), auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('Usuário'))
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('Usuário'), null=True, blank=True)
     className = models.CharField(
         _('Cor'),
         max_length=20,
