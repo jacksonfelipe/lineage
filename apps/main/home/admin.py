@@ -104,6 +104,13 @@ class DashboardContentAdmin(BaseModelAdmin):
             obj.author = request.user
         super().save_model(request, obj, form, change)
 
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.dashboard_content = form.instance  # FK para DashboardContent
+            instance.save()
+        formset.save_m2m()
+
     def get_title(self, obj):
         pt_translation = obj.translations.filter(language='pt').first()
         return pt_translation.title if pt_translation else f"Dashboard {obj.pk}"

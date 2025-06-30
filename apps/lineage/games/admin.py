@@ -198,6 +198,13 @@ class BattlePassLevelAdmin(BaseModelAdmin):
     ordering = ('season', 'level')
     inlines = [BattlePassRewardInline]
 
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.level = form.instance  # FK para BattlePassLevel
+            instance.save()
+        formset.save_m2m()
+
 
 @admin.register(BattlePassReward)
 class BattlePassRewardAdmin(BaseModelAdmin):

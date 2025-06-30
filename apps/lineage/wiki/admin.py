@@ -35,6 +35,13 @@ class WikiPageAdmin(BaseModelAdmin):
         return pt_translation.title if pt_translation else '-'
     get_title.short_description = _('Title')
 
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.page = form.instance  # FK para WikiPage
+            instance.save()
+        formset.save_m2m()
+
 
 class WikiSectionTranslationInline(TranslationInline):
     model = WikiSectionTranslation
@@ -53,6 +60,13 @@ class WikiSectionAdmin(BaseModelAdmin):
         return pt_translation.title if pt_translation else '-'
     get_title.short_description = _('Title')
 
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.section = form.instance  # FK para WikiSection
+            instance.save()
+        formset.save_m2m()
+
 
 class WikiUpdateTranslationInline(TranslationInline):
     model = WikiUpdateTranslation
@@ -65,6 +79,13 @@ class WikiUpdateAdmin(BaseModelAdmin):
     search_fields = ('version', 'translations__content')
     ordering = ('-release_date', '-version')
     inlines = [WikiUpdateTranslationInline]
+
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.update = form.instance  # FK para WikiUpdate
+            instance.save()
+        formset.save_m2m()
 
 
 class WikiEventTranslationInline(TranslationInline):
@@ -89,6 +110,13 @@ class WikiEventAdmin(BaseModelAdmin):
         return pt_translation.title if pt_translation else '-'
     get_title.short_description = _('Title')
 
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.event = form.instance  # FK para WikiEvent
+            instance.save()
+        formset.save_m2m()
+
 
 class WikiRateTranslationInline(TranslationInline):
     model = WikiRateTranslation
@@ -101,6 +129,13 @@ class WikiRateAdmin(BaseModelAdmin):
     search_fields = ('rate_type', 'translations__title', 'translations__content')
     ordering = ('rate_type', '-created_at')
     inlines = [WikiRateTranslationInline]
+
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.rate = form.instance  # FK para WikiRate
+            instance.save()
+        formset.save_m2m()
 
 
 class WikiFeatureTranslationInline(TranslationInline):
@@ -115,6 +150,13 @@ class WikiFeatureAdmin(BaseModelAdmin):
     ordering = ('feature_type', '-created_at')
     inlines = [WikiFeatureTranslationInline]
 
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.feature = form.instance  # FK para WikiFeature
+            instance.save()
+        formset.save_m2m()
+
 
 class WikiGeneralTranslationInline(TranslationInline):
     model = WikiGeneralTranslation
@@ -127,6 +169,13 @@ class WikiGeneralAdmin(BaseModelAdmin):
     search_fields = ('translations__title', 'translations__content')
     ordering = ['order', 'general_type']
     inlines = [WikiGeneralTranslationInline]
+
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.general = form.instance  # FK para WikiGeneral
+            instance.save()
+        formset.save_m2m()
 
 
 class WikiRaidTranslationInline(TranslationInline):
@@ -141,6 +190,13 @@ class WikiRaidAdmin(BaseModelAdmin):
     ordering = ['raid_type', 'level', 'order']
     inlines = [WikiRaidTranslationInline]
 
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.raid = form.instance  # FK para WikiRaid
+            instance.save()
+        formset.save_m2m()
+
 
 class WikiAssistanceTranslationInline(TranslationInline):
     model = WikiAssistanceTranslation
@@ -153,3 +209,10 @@ class WikiAssistanceAdmin(BaseModelAdmin):
     search_fields = ('translations__title', 'translations__content', 'translations__category')
     ordering = ['assistance_type', 'order']
     inlines = [WikiAssistanceTranslationInline]
+
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.assistance = form.instance  # FK para WikiAssistance
+            instance.save()
+        formset.save_m2m()

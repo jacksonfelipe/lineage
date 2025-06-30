@@ -30,8 +30,14 @@ class NewsAdmin(BaseModelAdmin):
     def save_model(self, request, obj, form, change):
         if not change or not obj.author:
             obj.author = request.user
-
         super().save_model(request, obj, form, change)
+
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.news = form.instance  # FK para News
+            instance.save()
+        formset.save_m2m()
 
     def get_title(self, obj):
         pt_translation = obj.translations.filter(language='pt').first()

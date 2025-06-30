@@ -14,6 +14,13 @@ class InventoryAdmin(BaseModelAdmin):
     search_fields = ('character_name', 'account_name', 'user__username')
     inlines = [InventoryItemInline]
 
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.inventory = form.instance  # FK para Inventory
+            instance.save()
+        formset.save_m2m()
+
 
 @admin.register(InventoryItem)
 class InventoryItemAdmin(BaseModelAdmin):

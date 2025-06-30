@@ -31,3 +31,10 @@ class FAQAdmin(BaseModelAdmin):
     list_filter = ('is_public',)
     search_fields = ('question',)
     inlines = [FAQTranslationInline]
+
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.faq = form.instance  # FK para FAQ
+            instance.save()
+        formset.save_m2m()
