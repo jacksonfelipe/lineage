@@ -78,6 +78,13 @@ class IndexConfigAdmin(BaseModelAdmin):
             return
         super().save_model(request, obj, form, change)
 
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.config = form.instance  # Ensure FK is set
+            instance.save()
+        formset.save_m2m()
+
 
 @admin.register(ServicePrice)
 class ServicePriceAdmin(BaseModelAdmin):
