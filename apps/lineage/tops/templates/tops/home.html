@@ -1,0 +1,129 @@
+{% extends 'tops/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Tops" %}{% endblock %}
+
+{% block tops_content %}
+<div class="tops-home">
+    <div class="welcome-section text-center mb-5">
+        <h1>{% trans "Bem-vindo aos Rankings" %}</h1>
+        <p class="lead">{% trans "Confira os melhores jogadores e clãs do servidor" %}</p>
+    </div>
+
+    <div class="tops-categories">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="tops-category-card">
+                    <a href="{% url 'tops:pvp' %}" class="text-decoration-none">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-sword fa-3x mb-3 text-warning"></i>
+                                <h5 class="card-title">{% trans "Ranking PvP" %}</h5>
+                                <p class="card-text">{% trans "Os melhores guerreiros PvP do servidor" %}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="tops-category-card">
+                    <a href="{% url 'tops:pk' %}" class="text-decoration-none">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-skull fa-3x mb-3 text-danger"></i>
+                                <h5 class="card-title">{% trans "Ranking PK" %}</h5>
+                                <p class="card-text">{% trans "Os jogadores com mais PKs" %}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="tops-category-card">
+                    <a href="{% url 'tops:adena' %}" class="text-decoration-none">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-coins fa-3x mb-3 text-success"></i>
+                                <h5 class="card-title">{% trans "Ranking Adena" %}</h5>
+                                <p class="card-text">{% trans "Os jogadores mais ricos do servidor" %}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="tops-category-card">
+                    <a href="{% url 'tops:clans' %}" class="text-decoration-none">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-shield-alt fa-3x mb-3 text-primary"></i>
+                                <h5 class="card-title">{% trans "Ranking Clans" %}</h5>
+                                <p class="card-text">{% trans "Os clãs mais poderosos" %}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="tops-category-card">
+                    <a href="{% url 'tops:level' %}" class="text-decoration-none">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-level-up-alt fa-3x mb-3 text-info"></i>
+                                <h5 class="card-title">{% trans "Ranking Nível" %}</h5>
+                                <p class="card-text">{% trans "Os jogadores de maior nível" %}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="tops-category-card">
+                    <a href="{% url 'tops:online' %}" class="text-decoration-none">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-users fa-3x mb-3 text-secondary"></i>
+                                <h5 class="card-title">{% trans "Top Online" %}</h5>
+                                <p class="card-text">{% trans "Jogadores online no momento" %}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="tops-category-card">
+                    <a href="{% url 'tops:olympiad' %}" class="text-decoration-none">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-medal fa-3x mb-3 text-warning"></i>
+                                <h5 class="card-title">{% trans "Ranking Olimpíada" %}</h5>
+                                <p class="card-text">{% trans "Os campeões da olimpíada" %}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="tops-category-card">
+                    <a href="{% url 'tops:siege' %}" class="text-decoration-none">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-castle fa-3x mb-3 text-dark"></i>
+                                <h5 class="card-title">{% trans "Castle & Siege" %}</h5>
+                                <p class="card-text">{% trans "Status dos castelos e cerco" %}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

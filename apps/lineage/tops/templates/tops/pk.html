@@ -1,0 +1,84 @@
+{% extends 'tops/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Ranking PK" %}{% endblock %}
+
+{% block tops_content %}
+<div class="tops-pk">
+    <div class="tops-header-section text-center mb-5">
+        <h1 class="display-4 fw-bold">{% trans "Ranking PK" %}</h1>
+        <p class="lead">{% trans "Os jogadores com mais PKs" %}</p>
+    </div>
+
+    <div class="tops-content-section">
+        {% if players %}
+        <div class="table-responsive">
+            <table class="table table-dark table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col" class="text-center">#</th>
+                        <th scope="col">{% trans "Jogador" %}</th>
+                        <th scope="col">{% trans "Clã" %}</th>
+                        <th scope="col" class="text-center">{% trans "PK" %}</th>
+                        <th scope="col" class="text-center">{% trans "Nível" %}</th>
+                        <th scope="col" class="text-center">{% trans "Classe" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in players %}
+                    <tr>
+                        <td class="text-center">
+                            {% if forloop.counter == 1 %}
+                                <span class="badge bg-warning text-dark">🥇</span>
+                            {% elif forloop.counter == 2 %}
+                                <span class="badge bg-secondary">🥈</span>
+                            {% elif forloop.counter == 3 %}
+                                <span class="badge bg-warning">🥉</span>
+                            {% else %}
+                                <span class="text-muted">{{ forloop.counter }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                {% if player.crest %}
+                                    <img src="data:image/png;base64,{{ player.crest }}" alt="Crest" class="me-2" style="width: 24px; height: 24px;">
+                                {% endif %}
+                                <span class="fw-bold">{{ player.char_name }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            {% if player.clan_name %}
+                                <div class="d-flex align-items-center">
+                                    {% if player.clan_crest %}
+                                        <img src="data:image/png;base64,{{ player.clan_crest }}" alt="Clan Crest" class="me-2" style="width: 24px; height: 24px;">
+                                    {% endif %}
+                                    <span>{{ player.clan_name }}</span>
+                                </div>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-danger">{{ player.pk_count }}</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-info">{{ player.level }}</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="text-muted">{{ player.class_name }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+            <h3>{% trans "Nenhum dado disponível" %}</h3>
+            <p class="text-muted">{% trans "Não foi possível carregar os dados do ranking PK no momento." %}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

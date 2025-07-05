@@ -1,0 +1,160 @@
+{% extends 'tops/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Castle & Siege Ranking" %}{% endblock %}
+
+{% block tops_content %}
+<div class="tops-siege">
+    <div class="tops-header-section text-center mb-5">
+        <h1 class="display-4 fw-bold">{% trans "Castle & Siege Ranking" %}</h1>
+        <p class="lead">{% trans "Status dos castelos e cerco" %}</p>
+    </div>
+
+    <div class="tops-content-section">
+        {% if castles %}
+        <div class="row">
+            {% for castle in castles %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="castle-card">
+                    <div class="castle-header">
+                        <h5 class="castle-name">{{ castle.castle_name }}</h5>
+                        <span class="castle-status {% if castle.siege_date %}badge bg-warning{% else %}badge bg-secondary{% endif %}">
+                            {% if castle.siege_date %}
+                                {% trans "Cerco Ativo" %}
+                            {% else %}
+                                {% trans "Sem Cerco" %}
+                            {% endif %}
+                        </span>
+                    </div>
+                    
+                    <div class="castle-info">
+                        {% if castle.owner_clan %}
+                        <div class="castle-owner">
+                            <strong>{% trans "Proprietário:" %}</strong>
+                            <div class="d-flex align-items-center mt-1">
+                                {% if castle.owner_crest %}
+                                    <img src="data:image/png;base64,{{ castle.owner_crest }}" alt="Owner Crest" class="me-2" style="width: 24px; height: 24px;">
+                                {% endif %}
+                                <span>{{ castle.owner_clan }}</span>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="castle-owner">
+                            <strong>{% trans "Proprietário:" %}</strong>
+                            <span class="text-muted">{% trans "Sem proprietário" %}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if castle.siege_date %}
+                        <div class="castle-siege">
+                            <strong>{% trans "Data do Cerco:" %}</strong>
+                            <span>{{ castle.siege_date|date:"d/m/Y H:i" }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if castle.tax_rate %}
+                        <div class="castle-tax">
+                            <strong>{% trans "Taxa:" %}</strong>
+                            <span>{{ castle.tax_rate }}%</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if castle.siege_participants %}
+                    <div class="castle-participants">
+                        <strong>{% trans "Participantes do Cerco:" %}</strong>
+                        <ul class="participants-list">
+                            {% for participant in castle.siege_participants %}
+                            <li>
+                                <div class="d-flex align-items-center">
+                                    {% if participant.crest %}
+                                        <img src="data:image/png;base64,{{ participant.crest }}" alt="Participant Crest" class="me-2" style="width: 16px; height: 16px;">
+                                    {% endif %}
+                                    <span>{{ participant.clan_name }}</span>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+            <h3>{% trans "Nenhum dado disponível" %}</h3>
+            <p class="text-muted">{% trans "Não foi possível carregar os dados dos castelos no momento." %}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.castle-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid rgba(230, 199, 125, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.castle-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(230, 199, 125, 0.2);
+}
+
+.castle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(230, 199, 125, 0.2);
+}
+
+.castle-name {
+    color: #e6c77d;
+    margin: 0;
+    font-weight: bold;
+}
+
+.castle-info {
+    margin-bottom: 15px;
+}
+
+.castle-info > div {
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.castle-info strong {
+    color: #e6c77d;
+}
+
+.castle-participants {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(230, 199, 125, 0.2);
+}
+
+.castle-participants strong {
+    color: #e6c77d;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.participants-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.participants-list li {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+</style>
+{% endblock %} 
