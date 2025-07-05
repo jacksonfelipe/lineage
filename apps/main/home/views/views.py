@@ -33,6 +33,7 @@ from utils.render_theme_page import render_theme_page
 from utils.services import verificar_conquistas
 from utils.dynamic_import import get_query_class
 from apps.main.home.tasks import send_email_task
+from utils.fake_players import apply_fake_players
 
 LineageStats = get_query_class("LineageStats")
 logger = logging.getLogger(__name__)
@@ -57,6 +58,7 @@ def index(request):
 
     # Contagem de jogadores online
     online_count = online[0]['quant'] if online and isinstance(online, list) and 'quant' in online[0] else 0
+    online_count = apply_fake_players(online_count)
     current_lang = get_language()
 
     # Pega a tradução configurada

@@ -701,3 +701,8 @@ FORCE_LOGIN_SERVER_STATUS = os.getenv('FORCE_LOGIN_SERVER_STATUS', 'auto')
 
 JAZZMIN_SETTINGS = get_jazzmin_settings(PROJECT_TITLE, PROJECT_LOGO_URL)
 JAZZMIN_UI_TWEAKS = get_jazzmin_ui_tweaks()
+
+# =========================== FAKE PLAYERS CONFIGURATION ===========================
+FAKE_PLAYERS_FACTOR = float(os.getenv('FAKE_PLAYERS_FACTOR', 1.0))
+FAKE_PLAYERS_MIN = int(os.getenv('FAKE_PLAYERS_MIN', 0))
+FAKE_PLAYERS_MAX = int(os.getenv('FAKE_PLAYERS_MAX', 0))
