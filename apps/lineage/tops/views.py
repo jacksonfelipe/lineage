@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.lineage.server.utils.crest import attach_crests_to_clans
 from apps.lineage.server.database import LineageDB
 from apps.lineage.server.models import ActiveAdenaExchangeItem
+from datetime import datetime
 
 from utils.dynamic_import import get_query_class  # importa o helper
 LineageStats = get_query_class("LineageStats")  # carrega a classe certa com base no .env
@@ -151,8 +152,60 @@ class TopsSiegeView(TopsBaseView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        db = LineageDB()
-        castles = LineageStats.siege() if db.is_connected() else []
+        try:
+            db = LineageDB()
+            if db.is_connected():
+                castles = LineageStats.siege()
+
+                for castle in castles:
+                    participants = LineageStats.siege_participants(castle["id"])
+                    castle["siege_participants"] = participants
+
+                    # adiciona caminho da imagem baseado no nome
+                    castle_name_lower = castle['name'].lower()
+                    # Mapeamento para garantir que as imagens sejam encontradas
+                    castle_image_mapping = {
+                        'aden': 'aden',
+                        'dion': 'dion',
+                        'giran': 'giran',
+                        'gludio': 'gludio',
+                        'goddard': 'goddard',
+                        'innadril': 'innadril',
+                        'oren': 'oren',
+                        'rune': 'rune',
+                        'schuttgart': 'schuttgart'
+                    }
+                    
+                    image_name = castle_image_mapping.get(castle_name_lower, castle_name_lower)
+                    castle["image_path"] = f"assets/img/castles/{image_name}.jpg"
+
+                    # adiciona valores default traduzidos se vazio
+                    castle["clan_name"] = castle["clan_name"] or _("No Owner")
+                    castle["char_name"] = castle["char_name"] or _("No Leader")
+                    castle["ally_name"] = castle["ally_name"] or _("No Alliance")
+
+                    # CORREÇÃO AQUI: converte Decimal para float
+                    if castle["sdate"]:
+                        timestamp_s = float(castle["sdate"]) / 1000
+                        castle["siege_date"] = datetime.fromtimestamp(timestamp_s)
+                    
+                    # Garantir que os participantes tenham valores padrão
+                    for participant in castle["siege_participants"]:
+                        participant["clan_name"] = participant["clan_name"] or _("Unknown Clan")
+
+                # move para fora do loop para não sobrescrever a cada iteração
+                castles = attach_crests_to_clans(castles)
+                
+                # Aplicar crests aos participantes também
+                for castle in castles:
+                    if castle.get("siege_participants"):
+                        castle["siege_participants"] = attach_crests_to_clans(castle["siege_participants"])
+            else:
+                castles = list()
+        except Exception as e:
+            print(f"Erro ao carregar dados do siege: {e}")
+            castles = list()
+
         context['castles'] = castles
         return context
     

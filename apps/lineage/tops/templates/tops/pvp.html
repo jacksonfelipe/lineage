@@ -59,13 +59,13 @@
                             {% endif %}
                         </td>
                         <td class="text-center">
-                            <span class="badge bg-danger">{{ player.pvp }}</span>
+                            <span class="badge bg-danger">{{ player.pvpkills }}</span>
                         </td>
                         <td class="text-center">
-                            <span class="badge bg-info">{{ player.level }}</span>
+                            <span class="badge bg-info">{{ player.level|default:"-" }}</span>
                         </td>
                         <td class="text-center">
-                            <span class="text-muted">{{ player.class_name }}</span>
+                            <span class="text-muted">{{ player.base|default:"-" }}</span>
                         </td>
                     </tr>
                     {% endfor %}

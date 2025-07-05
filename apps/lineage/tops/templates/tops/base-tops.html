@@ -198,6 +198,20 @@
               gap: 10px;
           }
       }
+
+      @media (max-width: 480px) {
+          .tops-logo h1 {
+              display: none;
+          }
+
+          .back-to-site span {
+              display: none;
+          }
+
+          .tops-language span {
+              display: none;
+          }
+      }
     </style>
 
     {% block extrahead %}{% endblock %}
@@ -215,12 +229,34 @@
       <div class="tops-header-right">
         <!-- Language Selector -->
         <div class="tops-language">
-          <img src="{% static 'default/images/flags/' %}{{ LANGUAGE_CODE }}.png" alt="{{ LANGUAGE_CODE }}">
-          <span>{{ LANGUAGE_CODE|upper }}</span>
+          <img src="{% static 'default/images/icons/world.png' %}" alt="{% trans 'Idioma' %}">
+          <span>
+            {% if LANGUAGE_CODE == 'pt' %}{% trans "Português" %}
+            {% elif LANGUAGE_CODE == 'en' %}{% trans "English" %}
+            {% elif LANGUAGE_CODE == 'es' %}{% trans "Español" %}
+            {% endif %}
+          </span>
+          <img src="{% static 'default/images/icons/downcursor.png' %}" alt="{% trans 'Expandir' %}">
+          
           <div class="tops-language-dropdown">
-            <a href="{% url 'set_language' %}?language=pt">🇧🇷 Português</a>
-            <a href="{% url 'set_language' %}?language=en">🇺🇸 English</a>
-            <a href="{% url 'set_language' %}?language=es">🇪🇸 Español</a>
+            <form method="post" action="{% url 'set_language' %}">
+              {% csrf_token %}
+              <input type="hidden" name="language" value="es">
+              <input type="hidden" name="next" value="{{ request.path }}">
+              <a href="#" onclick="this.closest('form').submit(); return false;">{% trans "Español" %}</a>
+            </form>
+            <form method="post" action="{% url 'set_language' %}">
+              {% csrf_token %}
+              <input type="hidden" name="language" value="pt">
+              <input type="hidden" name="next" value="{{ request.path }}">
+              <a href="#" onclick="this.closest('form').submit(); return false;">{% trans "Português" %}</a>
+            </form>
+            <form method="post" action="{% url 'set_language' %}">
+              {% csrf_token %}
+              <input type="hidden" name="language" value="en">
+              <input type="hidden" name="next" value="{{ request.path }}">
+              <a href="#" onclick="this.closest('form').submit(); return false;">{% trans "English" %}</a>
+            </form>
           </div>
         </div>
         

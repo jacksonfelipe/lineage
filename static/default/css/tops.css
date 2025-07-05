@@ -160,66 +160,283 @@
 
 .tops-content-section {
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
+    border-radius: 15px;
     padding: 30px;
     border: 1px solid rgba(230, 199, 125, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
 }
 
-/* Tables */
+/* ===== TABELAS MELHORADAS ===== */
+
+/* Container da tabela com scroll suave */
+.table-responsive {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(135deg, rgba(53, 47, 35, 0.95), rgba(40, 35, 25, 0.95));
+    border: 1px solid rgba(230, 199, 125, 0.3);
+}
+
+/* Estilo base da tabela */
 .table-dark {
-    background: rgba(53, 47, 35, 0.95);
+    background: transparent;
     color: #fff;
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+}
+
+/* Cabeçalho da tabela */
+.table-dark thead {
+    background: linear-gradient(135deg, rgba(230, 199, 125, 0.15), rgba(155, 117, 48, 0.15));
+    backdrop-filter: blur(10px);
 }
 
 .table-dark thead th {
-    background: rgba(230, 199, 125, 0.1);
-    border-color: rgba(230, 199, 125, 0.2);
+    background: transparent;
+    border: none;
     color: #e6c77d;
-    font-weight: bold;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 20px 15px;
+    text-align: center;
+    position: relative;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+.table-dark thead th:first-child {
+    text-align: center;
+    width: 80px;
+}
+
+.table-dark thead th:nth-child(2) {
+    text-align: left;
+}
+
+.table-dark thead th:not(:first-child):not(:nth-child(2)) {
+    text-align: center;
+}
+
+/* Linhas do corpo da tabela */
 .table-dark tbody tr {
-    transition: background-color 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    border-bottom: 1px solid rgba(230, 199, 125, 0.1);
 }
 
 .table-dark tbody tr:hover {
-    background: rgba(230, 199, 125, 0.1);
+    background: linear-gradient(135deg, rgba(230, 199, 125, 0.1), rgba(155, 117, 48, 0.1));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(230, 199, 125, 0.2);
+    z-index: 1;
 }
 
+/* Células da tabela */
 .table-dark td {
-    border-color: rgba(230, 199, 125, 0.1);
+    border: none;
     vertical-align: middle;
+    padding: 18px 15px;
+    font-size: 14px;
+    position: relative;
+    background: transparent;
 }
 
-/* Badges */
+.table-dark td:first-child {
+    text-align: center;
+    font-weight: 600;
+}
+
+.table-dark td:nth-child(2) {
+    text-align: left;
+}
+
+.table-dark td:not(:first-child):not(:nth-child(2)) {
+    text-align: center;
+}
+
+/* Efeito de destaque para top 3 */
+.table-dark tbody tr:nth-child(1) {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 193, 7, 0.15));
+    border-left: 4px solid #ffd700;
+}
+
+.table-dark tbody tr:nth-child(1):hover {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 193, 7, 0.25));
+}
+
+.table-dark tbody tr:nth-child(2) {
+    background: linear-gradient(135deg, rgba(192, 192, 192, 0.15), rgba(169, 169, 169, 0.15));
+    border-left: 4px solid #c0c0c0;
+}
+
+.table-dark tbody tr:nth-child(2):hover {
+    background: linear-gradient(135deg, rgba(192, 192, 192, 0.25), rgba(169, 169, 169, 0.25));
+}
+
+.table-dark tbody tr:nth-child(3) {
+    background: linear-gradient(135deg, rgba(205, 127, 50, 0.15), rgba(184, 115, 51, 0.15));
+    border-left: 4px solid #cd7f32;
+}
+
+.table-dark tbody tr:nth-child(3):hover {
+    background: linear-gradient(135deg, rgba(205, 127, 50, 0.25), rgba(184, 115, 51, 0.25));
+}
+
+/* Badges melhorados */
 .badge {
-    font-size: 12px;
-    padding: 6px 10px;
-    border-radius: 15px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .badge.bg-warning {
-    background: linear-gradient(45deg, #ff8a00, #ff4d00) !important;
+    background: linear-gradient(135deg, #ff8a00, #ff4d00) !important;
+    color: #fff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .badge.bg-secondary {
-    background: linear-gradient(45deg, #6c757d, #495057) !important;
+    background: linear-gradient(135deg, #6c757d, #495057) !important;
+    color: #fff !important;
 }
 
 .badge.bg-danger {
-    background: linear-gradient(45deg, #dc3545, #c82333) !important;
+    background: linear-gradient(135deg, #dc3545, #c82333) !important;
+    color: #fff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .badge.bg-success {
-    background: linear-gradient(45deg, #28a745, #20c997) !important;
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+    color: #fff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .badge.bg-info {
-    background: linear-gradient(45deg, #17a2b8, #138496) !important;
+    background: linear-gradient(135deg, #17a2b8, #138496) !important;
+    color: #fff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .badge.bg-primary {
-    background: linear-gradient(45deg, #007bff, #0056b3) !important;
+    background: linear-gradient(135deg, #007bff, #0056b3) !important;
+    color: #fff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Emojis de ranking */
+.table-dark tbody tr:nth-child(1) td:first-child .badge {
+    background: linear-gradient(135deg, #ffd700, #ffed4e) !important;
+    color: #000 !important;
+    font-size: 16px;
+    padding: 10px 15px;
+}
+
+.table-dark tbody tr:nth-child(2) td:first-child .badge {
+    background: linear-gradient(135deg, #c0c0c0, #e5e5e5) !important;
+    color: #000 !important;
+    font-size: 16px;
+    padding: 10px 15px;
+}
+
+.table-dark tbody tr:nth-child(3) td:first-child .badge {
+    background: linear-gradient(135deg, #cd7f32, #daa520) !important;
+    color: #fff !important;
+    font-size: 16px;
+    padding: 10px 15px;
+}
+
+/* Nomes dos jogadores */
+.table-dark td .fw-bold {
+    color: #e6c77d;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.table-dark tbody tr:hover td .fw-bold {
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(230, 199, 125, 0.5);
+}
+
+/* Crests e imagens */
+.table-dark img {
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.table-dark tbody tr:hover img {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Texto muted */
+.table-dark .text-muted {
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-style: italic;
+}
+
+/* Animações de entrada */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.table-dark tbody tr {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.table-dark tbody tr:nth-child(1) { animation-delay: 0.1s; }
+.table-dark tbody tr:nth-child(2) { animation-delay: 0.2s; }
+.table-dark tbody tr:nth-child(3) { animation-delay: 0.3s; }
+.table-dark tbody tr:nth-child(4) { animation-delay: 0.4s; }
+.table-dark tbody tr:nth-child(5) { animation-delay: 0.5s; }
+.table-dark tbody tr:nth-child(6) { animation-delay: 0.6s; }
+.table-dark tbody tr:nth-child(7) { animation-delay: 0.7s; }
+.table-dark tbody tr:nth-child(8) { animation-delay: 0.8s; }
+.table-dark tbody tr:nth-child(9) { animation-delay: 0.9s; }
+.table-dark tbody tr:nth-child(10) { animation-delay: 1.0s; }
+
+/* Scrollbar personalizada */
+.table-responsive::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: rgba(53, 47, 35, 0.3);
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #e6c77d, #d1a44f);
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #d1a44f, #e6c77d);
 }
 
 /* Responsive */
@@ -251,8 +468,31 @@
         padding: 20px;
     }
     
+    /* Tabelas responsivas */
     .table-responsive {
+        font-size: 12px;
+    }
+    
+    .table-dark thead th {
+        padding: 15px 8px;
+        font-size: 12px;
+    }
+    
+    .table-dark td {
+        padding: 12px 8px;
+        font-size: 12px;
+    }
+    
+    .badge {
+        font-size: 10px;
+        padding: 6px 8px;
+    }
+    
+    .table-dark tbody tr:nth-child(1) td:first-child .badge,
+    .table-dark tbody tr:nth-child(2) td:first-child .badge,
+    .table-dark tbody tr:nth-child(3) td:first-child .badge {
         font-size: 14px;
+        padding: 8px 12px;
     }
 }
 
@@ -273,4 +513,40 @@
     .welcome-section h1 {
         font-size: 28px;
     }
+    
+    /* Tabelas muito pequenas */
+    .table-responsive {
+        font-size: 11px;
+    }
+    
+    .table-dark thead th {
+        padding: 10px 5px;
+        font-size: 11px;
+    }
+    
+    .table-dark td {
+        padding: 8px 5px;
+        font-size: 11px;
+    }
+    
+    .badge {
+        font-size: 9px;
+        padding: 4px 6px;
+    }
+    
+    .table-dark img {
+        width: 18px !important;
+        height: 18px !important;
+    }
+}
+
+.tops-header {
+    height: 73px;
+    min-height: 73px;
+    padding-top: 0;
+    padding-bottom: 0;
+    align-items: center;
+}
+.tops-header .tops-logo img {
+    height: 40px;
 } 

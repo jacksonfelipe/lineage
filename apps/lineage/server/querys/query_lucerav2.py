@@ -522,6 +522,12 @@ class LineageAccount:
             return
 
         lineage_db = LineageDB()
+        
+        # Verifica se o banco está habilitado antes de tentar qualquer operação
+        if not lineage_db.enabled:
+            LineageAccount._checked_columns = True
+            return
+            
         columns = lineage_db.get_table_columns("accounts")
 
         try:

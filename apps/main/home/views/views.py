@@ -34,6 +34,7 @@ from utils.services import verificar_conquistas
 from utils.dynamic_import import get_query_class
 from apps.main.home.tasks import send_email_task
 from utils.fake_players import apply_fake_players
+from utils.server_status import check_server_status
 
 LineageStats = get_query_class("LineageStats")
 logger = logging.getLogger(__name__)
@@ -88,6 +89,9 @@ def index(request):
     # Buscar apoiadores ativos e aprovados
     apoiadores = Apoiador.objects.filter(ativo=True, status='aprovado')
 
+    # Verificar status do servidor
+    server_status = check_server_status()
+
     context = {
         'clanes': clanes,
         'classes_info': classes_info,
@@ -97,6 +101,7 @@ def index(request):
         'descricao_servidor': descricao_servidor,
         'jogadores_online_texto': jogadores_online_texto,
         'apoiadores': apoiadores,
+        'server_status': server_status,
     }
 
     return render_theme_page(request, 'public', 'index.html', context)

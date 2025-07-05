@@ -3,13 +3,13 @@
 
 {% block extrahead %}
 <link rel="stylesheet" href="{% static 'default/css/tops.css' %}">
+<link rel="stylesheet" href="{% static 'default/css/tops-tables-enhanced.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="tops-container">
     <div class="tops-nav-container" data-aos="fade-right" data-aos-duration="1000">
         <div class="tops-nav-header">
-            <i class="fas fa-trophy"></i>
             <h2>{% trans "Rankings" %}</h2>
         </div>
         <div class="tops-nav-menu">
@@ -21,7 +21,7 @@
                 </li>
                 <li class="tops-nav-item">
                     <a href="{% url 'tops:pvp' %}" {% if request.resolver_match.url_name == 'pvp' %}class="tops-nav-link active"{% else %}class="tops-nav-link"{% endif %}>
-                        <i class="fas fa-sword"></i>{% trans "Ranking PvP" %}
+                        <i class="fas fa-khanda"></i>{% trans "Ranking PvP" %}
                     </a>
                 </li>
                 <li class="tops-nav-item">
@@ -56,7 +56,7 @@
                 </li>
                 <li class="tops-nav-item">
                     <a href="{% url 'tops:siege' %}" {% if request.resolver_match.url_name == 'siege' %}class="tops-nav-link active"{% else %}class="tops-nav-link"{% endif %}>
-                        <i class="fas fa-castle"></i>{% trans "Castle & Siege" %}
+                        <i class="fas fa-chess-rook"></i>{% trans "Castle & Siege" %}
                     </a>
                 </li>
             </ul>
@@ -76,4 +76,5 @@
     // Initialize AOS
     AOS.init();
 </script>
+<script src="{% static 'default/js/tops-tables.js' %}"></script>
 {% endblock %} 

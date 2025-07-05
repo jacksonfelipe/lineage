@@ -47,16 +47,16 @@
                             </div>
                         </td>
                         <td>
-                            <span>{{ clan.leader_name }}</span>
+                            <span>{{ clan.char_name|default:"-" }}</span>
                         </td>
                         <td class="text-center">
                             <span class="badge bg-info">{{ clan.level }}</span>
                         </td>
                         <td class="text-center">
-                            <span class="badge bg-primary">{{ clan.members_count }}</span>
+                            <span class="badge bg-primary">{{ clan.membros }}</span>
                         </td>
                         <td class="text-center">
-                            <span class="badge bg-success">{{ clan.reputation_score }}</span>
+                            <span class="badge bg-success">{{ clan.reputation_score|default:"0" }}</span>
                         </td>
                     </tr>
                     {% endfor %}

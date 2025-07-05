@@ -1,0 +1,484 @@
+/* ===== MELHORIAS EXTRAS PARA TABELAS TOPS ===== */
+
+/* Efeito de brilho nas bordas das tabelas */
+.table-responsive::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        transparent 0%, 
+        rgba(230, 199, 125, 0.1) 25%, 
+        rgba(230, 199, 125, 0.2) 50%, 
+        rgba(230, 199, 125, 0.1) 75%, 
+        transparent 100%);
+    border-radius: 12px;
+    pointer-events: none;
+    animation: borderGlow 3s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+}
+
+/* Efeito de partículas flutuantes */
+.table-responsive::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 20%, rgba(230, 199, 125, 0.1) 1px, transparent 1px),
+        radial-gradient(circle at 80% 40%, rgba(230, 199, 125, 0.1) 1px, transparent 1px),
+        radial-gradient(circle at 40% 80%, rgba(230, 199, 125, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px, 30px 30px, 40px 40px;
+    animation: floatParticles 20s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes floatParticles {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-50px); }
+}
+
+/* Melhorias nos cabeçalhos */
+.table-dark thead th::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #e6c77d, #d1a44f);
+    transition: width 0.3s ease;
+}
+
+.table-dark thead th:hover::before {
+    width: 80%;
+}
+
+/* Efeito de destaque para células importantes */
+.table-dark td:nth-child(2) {
+    position: relative;
+}
+
+.table-dark td:nth-child(2)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, #e6c77d, #d1a44f);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.table-dark tbody tr:hover td:nth-child(2)::before {
+    opacity: 1;
+}
+
+/* Efeito de pulso para badges de ranking */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.table-dark tbody tr:nth-child(1) td:first-child .badge {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Efeito de rotação para crests */
+.table-dark img {
+    transition: all 0.3s ease;
+}
+
+.table-dark tbody tr:hover img {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Melhorias nos números de ranking */
+.table-dark td:first-child .text-muted {
+    font-weight: 600;
+    color: rgba(230, 199, 125, 0.7) !important;
+    font-size: 16px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Efeito de gradiente no hover das linhas */
+.table-dark tbody tr::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(230, 199, 125, 0.05) 0%, 
+        rgba(155, 117, 48, 0.05) 50%, 
+        rgba(230, 199, 125, 0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.table-dark tbody tr:hover::before {
+    opacity: 1;
+}
+
+/* Efeito de sombra dinâmica */
+.table-dark tbody tr {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.table-dark tbody tr:hover {
+    box-shadow: 0 8px 25px rgba(230, 199, 125, 0.2);
+}
+
+/* Melhorias nos badges de status */
+.badge.bg-danger {
+    position: relative;
+    overflow: hidden;
+}
+
+.badge.bg-danger::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.badge.bg-danger:hover::before {
+    left: 100%;
+}
+
+/* Efeito de destaque para clãs */
+.table-dark td:nth-child(3) {
+    position: relative;
+}
+
+.table-dark td:nth-child(3) span {
+    transition: all 0.3s ease;
+}
+
+.table-dark tbody tr:hover td:nth-child(3) span {
+    color: #e6c77d;
+    text-shadow: 0 1px 2px rgba(230, 199, 125, 0.3);
+}
+
+/* Melhorias na responsividade */
+@media (max-width: 768px) {
+    .table-responsive::before,
+    .table-responsive::after {
+        display: none;
+    }
+    
+    .table-dark thead th::before {
+        display: none;
+    }
+    
+    .table-dark td:nth-child(2)::before {
+        display: none;
+    }
+}
+
+/* ===== CAMPO DE BUSCA MELHORADO ===== */
+.tops-search {
+    background: linear-gradient(135deg, rgba(53, 47, 35, 0.95), rgba(40, 35, 25, 0.95));
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(230, 199, 125, 0.2);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.tops-search::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(230, 199, 125, 0.05), transparent);
+    transition: left 0.6s ease;
+}
+
+.tops-search:hover::before {
+    left: 100%;
+}
+
+.tops-search .input-group {
+    position: relative;
+    z-index: 2;
+}
+
+.tops-search .input-group-text {
+    background: linear-gradient(135deg, rgba(230, 199, 125, 0.2), rgba(209, 164, 79, 0.2));
+    border: 1px solid rgba(230, 199, 125, 0.3);
+    border-right: none;
+    color: #e6c77d;
+    font-size: 1.1rem;
+    padding: 12px 15px;
+    border-radius: 12px 0 0 12px;
+    transition: all 0.3s ease;
+}
+
+.tops-search .form-control {
+    background: rgba(33, 37, 41, 0.8);
+    border: 1px solid rgba(230, 199, 125, 0.3);
+    border-left: none;
+    color: #ffffff;
+    font-size: 1rem;
+    padding: 12px 15px;
+    border-radius: 0 12px 12px 0;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.tops-search .form-control::placeholder {
+    color: rgba(230, 199, 125, 0.6);
+    font-style: italic;
+}
+
+.tops-search .form-control:focus {
+    background: rgba(33, 37, 41, 0.9);
+    border-color: rgba(230, 199, 125, 0.6);
+    box-shadow: 0 0 0 0.2rem rgba(230, 199, 125, 0.25);
+    color: #ffffff;
+    outline: none;
+}
+
+.tops-search .form-control:focus + .input-group-text {
+    border-color: rgba(230, 199, 125, 0.6);
+    background: linear-gradient(135deg, rgba(230, 199, 125, 0.3), rgba(209, 164, 79, 0.3));
+}
+
+/* Efeito de destaque no hover */
+.tops-search:hover .input-group-text {
+    background: linear-gradient(135deg, rgba(230, 199, 125, 0.3), rgba(209, 164, 79, 0.3));
+    border-color: rgba(230, 199, 125, 0.5);
+}
+
+.tops-search:hover .form-control {
+    border-color: rgba(230, 199, 125, 0.5);
+    background: rgba(33, 37, 41, 0.9);
+}
+
+/* Animação de entrada para o campo de busca */
+.tops-search {
+    animation: slideInDown 0.6s ease-out;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Efeito de brilho no ícone de busca */
+.tops-search .input-group-text i {
+    transition: all 0.3s ease;
+}
+
+.tops-search:hover .input-group-text i {
+    color: #d1a44f;
+    text-shadow: 0 0 10px rgba(230, 199, 125, 0.5);
+    transform: scale(1.1);
+}
+
+/* Botão de limpar busca */
+.tops-search .btn-outline-warning {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.05));
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    border-left: none;
+    color: #ffc107;
+    padding: 12px 15px;
+    border-radius: 0 12px 12px 0;
+    transition: all 0.3s ease;
+    display: none;
+}
+
+.tops-search .btn-outline-warning:hover {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 193, 7, 0.1));
+    border-color: rgba(255, 193, 7, 0.5);
+    color: #ffc107;
+    transform: scale(1.05);
+}
+
+.tops-search .btn-outline-warning i {
+    font-size: 0.9rem;
+}
+
+/* Informações de busca */
+.tops-search .search-info {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.tops-search .search-info small {
+    font-size: 0.85rem;
+    color: rgba(230, 199, 125, 0.7);
+    transition: all 0.3s ease;
+}
+
+.tops-search .search-info small i {
+    margin-right: 5px;
+    color: #e6c77d;
+}
+
+/* Efeito de destaque para resultados encontrados */
+.table-dark tbody tr.search-highlight {
+    background: linear-gradient(135deg, rgba(230, 199, 125, 0.1), rgba(209, 164, 79, 0.1));
+    border-left: 3px solid #e6c77d;
+}
+
+/* Responsividade para o campo de busca */
+@media (max-width: 768px) {
+    .tops-search {
+        padding: 20px 15px;
+        margin-bottom: 20px;
+    }
+    
+    .tops-search .input-group-text,
+    .tops-search .form-control,
+    .tops-search .btn-outline-warning {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tops-search {
+        padding: 15px 10px;
+    }
+    
+    .tops-search .input-group-text,
+    .tops-search .form-control {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+    }
+}
+
+/* ===== EFEITOS ADICIONAIS PARA TABELAS ===== */
+
+/* Efeito de loading para tabelas */
+.table-loading {
+    position: relative;
+    min-height: 200px;
+}
+
+.table-loading::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(230, 199, 125, 0.3);
+    border-top: 3px solid #e6c77d;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Efeito de destaque para dados importantes */
+.table-dark td:nth-child(4) .badge {
+    position: relative;
+    overflow: hidden;
+}
+
+.table-dark td:nth-child(4) .badge::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.table-dark tbody tr:hover td:nth-child(4) .badge::after {
+    opacity: 1;
+}
+
+/* Melhorias nos ícones */
+.table-dark .fas,
+.table-dark .far {
+    transition: all 0.3s ease;
+}
+
+.table-dark tbody tr:hover .fas,
+.table-dark tbody tr:hover .far {
+    transform: scale(1.2);
+    color: #e6c77d;
+}
+
+/* Efeito de destaque para níveis altos */
+.table-dark td:nth-child(5) .badge {
+    position: relative;
+}
+
+.table-dark td:nth-child(5) .badge[data-level="high"] {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24) !important;
+    animation: levelGlow 2s ease-in-out infinite;
+}
+
+@keyframes levelGlow {
+    0%, 100% { box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3); }
+    50% { box-shadow: 0 4px 16px rgba(255, 107, 107, 0.6); }
+}
+
+/* Melhorias na acessibilidade */
+.table-dark tbody tr:focus-within {
+    outline: 2px solid #e6c77d;
+    outline-offset: 2px;
+}
+
+/* Efeito de destaque para dados em tempo real */
+.table-dark td[data-live="true"] {
+    position: relative;
+}
+
+.table-dark td[data-live="true"]::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    background: #28a745;
+    border-radius: 50%;
+    animation: livePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+} 

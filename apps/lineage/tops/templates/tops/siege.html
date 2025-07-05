@@ -12,12 +12,22 @@
 
     <div class="tops-content-section">
         {% if castles %}
-        <div class="row">
+        <div class="row g-4">
             {% for castle in castles %}
-            <div class="col-md-6 col-lg-4 mb-4">
+            <div class="col-md-6 col-lg-4 mb-5">
                 <div class="castle-card">
+                    <div class="castle-image-container">
+                        {% if castle.image_path %}
+                            <img src="{% static castle.image_path %}" alt="{{ castle.name }}" class="castle-image">
+                        {% else %}
+                            <div class="castle-image-placeholder">
+                                <i class="fas fa-castle fa-3x"></i>
+                                <span>{{ castle.name }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
                     <div class="castle-header">
-                        <h5 class="castle-name">{{ castle.castle_name }}</h5>
+                        <h5 class="castle-name">{{ castle.name }}</h5>
                         <span class="castle-status {% if castle.siege_date %}badge bg-warning{% else %}badge bg-secondary{% endif %}">
                             {% if castle.siege_date %}
                                 {% trans "Cerco Ativo" %}
@@ -28,14 +38,14 @@
                     </div>
                     
                     <div class="castle-info">
-                        {% if castle.owner_clan %}
+                        {% if castle.clan_name %}
                         <div class="castle-owner">
                             <strong>{% trans "Proprietário:" %}</strong>
                             <div class="d-flex align-items-center mt-1">
-                                {% if castle.owner_crest %}
-                                    <img src="data:image/png;base64,{{ castle.owner_crest }}" alt="Owner Crest" class="me-2" style="width: 24px; height: 24px;">
+                                {% if castle.clan_crest_image_base64 %}
+                                    <img src="data:image/png;base64,{{ castle.clan_crest_image_base64 }}" alt="Owner Crest" class="me-2" style="width: 24px; height: 24px;">
                                 {% endif %}
-                                <span>{{ castle.owner_clan }}</span>
+                                <span>{{ castle.clan_name }}</span>
                             </div>
                         </div>
                         {% else %}
@@ -52,10 +62,10 @@
                         </div>
                         {% endif %}
                         
-                        {% if castle.tax_rate %}
+                        {% if castle.stax %}
                         <div class="castle-tax">
                             <strong>{% trans "Taxa:" %}</strong>
-                            <span>{{ castle.tax_rate }}%</span>
+                            <span>{{ castle.stax }}%</span>
                         </div>
                         {% endif %}
                     </div>
@@ -67,8 +77,8 @@
                             {% for participant in castle.siege_participants %}
                             <li>
                                 <div class="d-flex align-items-center">
-                                    {% if participant.crest %}
-                                        <img src="data:image/png;base64,{{ participant.crest }}" alt="Participant Crest" class="me-2" style="width: 16px; height: 16px;">
+                                    {% if participant.clan_crest_image_base64 %}
+                                        <img src="data:image/png;base64,{{ participant.clan_crest_image_base64 }}" alt="Participant Crest" class="me-2" style="width: 16px; height: 16px;">
                                     {% endif %}
                                     <span>{{ participant.clan_name }}</span>
                                 </div>
@@ -93,16 +103,58 @@
 
 <style>
 .castle-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    padding: 20px;
+    background: transparent;
+    border-radius: 15px;
+    padding: 0;
     border: 1px solid rgba(230, 199, 125, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .castle-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(230, 199, 125, 0.2);
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(230, 199, 125, 0.3);
+}
+
+.castle-image-container {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+}
+
+.castle-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.castle-card:hover .castle-image {
+    transform: scale(1.05);
+}
+
+.castle-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(230, 199, 125, 0.1), rgba(230, 199, 125, 0.05));
+    color: #e6c77d;
+    font-size: 14px;
+    text-align: center;
+}
+
+.castle-image-placeholder i {
+    margin-bottom: 10px;
+    opacity: 0.7;
+}
+
+.castle-image-placeholder span {
+    font-weight: bold;
 }
 
 .castle-header {
@@ -110,7 +162,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
-    padding-bottom: 10px;
+    padding: 25px 25px 15px 25px;
     border-bottom: 1px solid rgba(230, 199, 125, 0.2);
 }
 
@@ -118,14 +170,16 @@
     color: #e6c77d;
     margin: 0;
     font-weight: bold;
+    font-size: 1.1rem;
 }
 
 .castle-info {
     margin-bottom: 15px;
+    padding: 0 25px;
 }
 
 .castle-info > div {
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     color: rgba(255, 255, 255, 0.8);
 }
 
@@ -135,14 +189,14 @@
 
 .castle-participants {
     margin-top: 15px;
-    padding-top: 15px;
+    padding: 20px 25px 25px 25px;
     border-top: 1px solid rgba(230, 199, 125, 0.2);
 }
 
 .castle-participants strong {
     color: #e6c77d;
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .participants-list {
@@ -153,8 +207,35 @@
 
 .participants-list li {
     color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 5px;
+    margin-bottom: 6px;
     font-size: 14px;
+}
+
+/* Espaçamento adicional para o container principal */
+.tops-content-section {
+    padding: 2rem 0;
+    background: transparent;
+    border: none;
+    color: inherit;
+}
+
+/* Melhor espaçamento para dispositivos móveis */
+@media (max-width: 768px) {
+    .castle-card {
+        margin-bottom: 2rem;
+    }
+    
+    .castle-header {
+        padding: 20px 20px 10px 20px;
+    }
+    
+    .castle-info {
+        padding: 0 20px;
+    }
+    
+    .castle-participants {
+        padding: 15px 20px 20px 20px;
+    }
 }
 </style>
 {% endblock %} 
