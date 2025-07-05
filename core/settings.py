@@ -685,6 +685,18 @@ DYNAMIC_DATATB = {
     # SLUG -> Import_PATH 
 }
 
+# =========================== SERVER STATUS CONFIGS ===========================
+
+# Configurações para verificação de status do servidor de jogo
+GAME_SERVER_IP = os.getenv('GAME_SERVER_IP', '127.0.0.1')
+GAME_SERVER_PORT = int(os.getenv('GAME_SERVER_PORT', 7777))
+LOGIN_SERVER_PORT = int(os.getenv('LOGIN_SERVER_PORT', 2106))
+SERVER_STATUS_TIMEOUT = int(os.getenv('SERVER_STATUS_TIMEOUT', 1))
+
+# Forçar status do servidor (auto = verificação automática, on = sempre online, off = sempre offline)
+FORCE_GAME_SERVER_STATUS = os.getenv('FORCE_GAME_SERVER_STATUS', 'auto')
+FORCE_LOGIN_SERVER_STATUS = os.getenv('FORCE_LOGIN_SERVER_STATUS', 'auto')
+
 # =========================== JAZZMIN CONFIGURATION ===========================
 
 JAZZMIN_SETTINGS = get_jazzmin_settings(PROJECT_TITLE, PROJECT_LOGO_URL)
