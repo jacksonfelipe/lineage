@@ -57,6 +57,7 @@ urlpatterns = [
     path('app/report/', include('apps.lineage.reports.urls')),
     path('app/roadmap/', include('apps.lineage.roadmap.urls')),
     path('', include('apps.lineage.wiki.urls')),
+    path('', include('apps.lineage.tops.urls')),
 
     # libs externals
     path('', include('serve_files.urls')),
