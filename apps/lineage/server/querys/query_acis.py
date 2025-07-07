@@ -56,10 +56,13 @@ class LineageStats:
                 C.pkkills, 
                 C.online, 
                 C.onlinetime,
+                CS.level,
+                CS.class_id AS base,
                 D.name AS clan_name,
                 C.clanid AS clan_id,
                 CD.ally_id AS ally_id
             FROM characters C
+            LEFT JOIN character_subclasses CS ON CS.char_obj_id = C.obj_Id AND CS.class_index = 0
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clanid AND D.sub_pledge_id = 0
             LEFT JOIN clan_data CD ON CD.clan_id = C.clanid
             WHERE C.accesslevel = '0'
@@ -78,10 +81,13 @@ class LineageStats:
                 C.pkkills, 
                 C.online, 
                 C.onlinetime,
+                CS.level,
+                CS.class_id AS base,
                 D.name AS clan_name,
                 C.clanid AS clan_id,
                 CD.ally_id AS ally_id
             FROM characters C
+            LEFT JOIN character_subclasses CS ON CS.char_obj_id = C.obj_Id AND CS.class_index = 0
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clanid AND D.sub_pledge_id = 0
             LEFT JOIN clan_data CD ON CD.clan_id = C.clanid
             WHERE C.accesslevel = '0'
@@ -100,10 +106,13 @@ class LineageStats:
                 C.pkkills, 
                 C.online, 
                 C.onlinetime,
+                CS.level,
+                CS.class_id AS base,
                 D.name AS clan_name,
                 C.clanid AS clan_id,
                 CD.ally_id AS ally_id
             FROM characters C
+            LEFT JOIN character_subclasses CS ON CS.char_obj_id = C.obj_Id AND CS.class_index = 0
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clanid AND D.sub_pledge_id = 0
             LEFT JOIN clan_data CD ON CD.clan_id = C.clanid
             WHERE C.accesslevel = '0'

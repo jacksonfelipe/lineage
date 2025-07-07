@@ -46,6 +46,8 @@ class LineageStats:
                 C.pkkills, 
                 C.online, 
                 C.onlinetime,
+                C.level,
+                C.classid AS base,
                 D.clan_name,
                 C.clanid AS clan_id,
                 D.ally_id
@@ -67,6 +69,8 @@ class LineageStats:
                 C.pkkills, 
                 C.online, 
                 C.onlinetime,
+                C.level,
+                C.classid AS base,
                 D.clan_name,
                 C.clanid AS clan_id,
                 D.ally_id
@@ -88,6 +92,8 @@ class LineageStats:
                 C.pkkills, 
                 C.online, 
                 C.onlinetime,
+                C.level,
+                C.classid AS base,
                 D.clan_name,
                 C.clanid AS clan_id,
                 D.ally_id

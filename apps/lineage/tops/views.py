@@ -36,6 +36,15 @@ class TopsPvpView(TopsBaseView):
         context = super().get_context_data(**kwargs)
         db = LineageDB()
         result = LineageStats.top_pvp(limit=20) if db.is_connected() else []
+        
+        # Processar os dados para incluir nome da classe
+        from utils.resources import get_class_name
+        for player in result:
+            if 'base' in player and player['base'] is not None:
+                player['class_name'] = get_class_name(player['base'])
+            else:
+                player['class_name'] = '-'
+        
         result = attach_crests_to_clans(result)
         context['players'] = result
         return context
@@ -51,6 +60,15 @@ class TopsPkView(TopsBaseView):
         context = super().get_context_data(**kwargs)
         db = LineageDB()
         result = LineageStats.top_pk(limit=20) if db.is_connected() else []
+        
+        # Processar os dados para incluir nome da classe
+        from utils.resources import get_class_name
+        for player in result:
+            if 'base' in player and player['base'] is not None:
+                player['class_name'] = get_class_name(player['base'])
+            else:
+                player['class_name'] = '-'
+        
         result = attach_crests_to_clans(result)
         context['players'] = result
         return context
@@ -75,8 +93,49 @@ class TopsAdenaView(TopsBaseView):
             adn_billion_item = active_item.item_type
             value_item = active_item.value_item
 
+        def humanize_time(seconds):
+            from datetime import timedelta
+            try:
+                seconds = int(seconds)
+            except Exception:
+                return "0m"
+            delta = timedelta(seconds=seconds)
+            days = delta.days
+            hours, remainder = divmod(delta.seconds, 3600)
+            minutes, _ = divmod(remainder, 60)
+            parts = []
+            if days > 0:
+                parts.append(f"{days}d")
+            if hours > 0:
+                parts.append(f"{hours}h")
+            if minutes > 0:
+                parts.append(f"{minutes}m")
+            return ' '.join(parts) if parts else "0m"
+
         if db.is_connected():
             result = LineageStats.top_adena(limit=20, adn_billion_item=adn_billion_item, value_item=value_item)
+            
+            # Padronizar campo adena
+            for player in result:
+                if 'adenas' in player and 'adena' not in player:
+                    player['adena'] = player['adenas']
+                # Adicionar campo tempo online humanizado
+                player['human_onlinetime'] = humanize_time(player.get('onlinetime', 0))
+
+            # Processar os dados para incluir nome da classe
+            from utils.resources import get_class_name
+            for player in result:
+                base_id = player.get('base')
+                if base_id is not None:
+                    try:
+                        base_id = int(base_id)
+                    except Exception:
+                        base_id = None
+                if base_id is not None:
+                    player['class_name'] = get_class_name(base_id)
+                else:
+                    player['class_name'] = '-'
+            
             result = attach_crests_to_clans(result)
         else:
             result = list()
@@ -109,7 +168,40 @@ class TopsLevelView(TopsBaseView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         db = LineageDB()
+        
+        def humanize_time(seconds):
+            from datetime import timedelta
+            try:
+                seconds = int(seconds)
+            except Exception:
+                return "0m"
+            delta = timedelta(seconds=seconds)
+            days = delta.days
+            hours, remainder = divmod(delta.seconds, 3600)
+            minutes, _ = divmod(remainder, 60)
+            parts = []
+            if days > 0:
+                parts.append(f"{days}d")
+            if hours > 0:
+                parts.append(f"{hours}h")
+            if minutes > 0:
+                parts.append(f"{minutes}m")
+            return ' '.join(parts) if parts else "0m"
+
         result = LineageStats.top_level(limit=20) if db.is_connected() else []
+        
+        # Processar os dados para incluir nome da classe e tempo online humanizado
+        from utils.resources import get_class_name
+        for player in result:
+            # Processar classe
+            if 'base' in player and player['base'] is not None:
+                player['class_name'] = get_class_name(player['base'])
+            else:
+                player['class_name'] = '-'
+            
+            # Adicionar campo tempo online humanizado
+            player['human_onlinetime'] = humanize_time(player.get('onlinetime', 0))
+        
         result = attach_crests_to_clans(result)
         context['players'] = result
         return context
@@ -124,7 +216,40 @@ class TopsOnlineView(TopsBaseView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         db = LineageDB()
+        
+        def humanize_time(seconds):
+            from datetime import timedelta
+            try:
+                seconds = int(seconds)
+            except Exception:
+                return "0m"
+            delta = timedelta(seconds=seconds)
+            days = delta.days
+            hours, remainder = divmod(delta.seconds, 3600)
+            minutes, _ = divmod(remainder, 60)
+            parts = []
+            if days > 0:
+                parts.append(f"{days}d")
+            if hours > 0:
+                parts.append(f"{hours}h")
+            if minutes > 0:
+                parts.append(f"{minutes}m")
+            return ' '.join(parts) if parts else "0m"
+
         result = LineageStats.top_online(limit=20) if db.is_connected() else []
+        
+        # Processar os dados para incluir nome da classe e tempo online humanizado
+        from utils.resources import get_class_name
+        for player in result:
+            # Processar classe
+            if 'base' in player and player['base'] is not None:
+                player['class_name'] = get_class_name(player['base'])
+            else:
+                player['class_name'] = '-'
+            
+            # Adicionar campo tempo online humanizado
+            player['human_onlinetime'] = humanize_time(player.get('onlinetime', 0))
+        
         result = attach_crests_to_clans(result)
         context['ranking'] = result
         return context
@@ -140,6 +265,15 @@ class TopsOlympiadView(TopsBaseView):
         context = super().get_context_data(**kwargs)
         db = LineageDB()
         result = LineageStats.olympiad_ranking() if db.is_connected() else []
+        
+        # Processar os dados para incluir nome da classe
+        from utils.resources import get_class_name
+        for player in result:
+            if 'base' in player and player['base'] is not None:
+                player['class_name'] = get_class_name(player['base'])
+            else:
+                player['class_name'] = '-'
+        
         context['ranking'] = result
         return context
     

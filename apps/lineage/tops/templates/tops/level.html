@@ -20,8 +20,8 @@
                         <th>{% trans "Jogador" %}</th>
                         <th>{% trans "Clã" %}</th>
                         <th>{% trans "Nível" %}</th>
+                        <th>{% trans "Online" %}</th>
                         <th>{% trans "Tempo Online" %}</th>
-                        <th>{% trans "Classe" %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,10 +62,14 @@
                             <span class="tops-badge info">{{ player.level|default:"-" }}</span>
                         </td>
                         <td>
-                            <span class="tops-badge secondary">{{ player.onlinetime|floatformat:0|default:"-" }}</span>
+                            {% if player.online > 0 %}
+                                <span class="tops-badge success">🟢 {% trans "Online" %}</span>
+                            {% else %}
+                                <span class="tops-badge secondary">⚪ {% trans "Offline" %}</span>
+                            {% endif %}
                         </td>
                         <td>
-                            <span class="tops-text-muted">{{ player.base|default:"-" }}</span>
+                            <span class="tops-badge secondary">{{ player.human_onlinetime|default:"-" }}</span>
                         </td>
                     </tr>
                     {% endfor %}

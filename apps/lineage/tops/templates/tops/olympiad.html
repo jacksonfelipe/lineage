@@ -20,7 +20,7 @@
                         <th>{% trans "Jogador" %}</th>
                         <th>{% trans "Clã" %}</th>
                         <th>{% trans "Pontos" %}</th>
-                        <th>{% trans "Nível" %}</th>
+                        <th>{% trans "Status" %}</th>
                         <th>{% trans "Classe" %}</th>
                     </tr>
                 </thead>
@@ -62,10 +62,14 @@
                             <span class="tops-badge warning">{{ player.olympiad_points|default:"-" }}</span>
                         </td>
                         <td>
-                            <span class="tops-badge info">{{ player.level|default:"-" }}</span>
+                            {% if player.online > 0 %}
+                                <span class="tops-badge success">🟢 {% trans "Online" %}</span>
+                            {% else %}
+                                <span class="tops-badge secondary">⚪ {% trans "Offline" %}</span>
+                            {% endif %}
                         </td>
                         <td>
-                            <span class="tops-text-muted">{{ player.base|default:"-" }}</span>
+                            <span class="tops-text-muted">{{ player.class_name|default:"-" }}</span>
                         </td>
                     </tr>
                     {% endfor %}
