@@ -11,14 +11,12 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 
-    <!-- Base CSS -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
-    <!-- Template CSS Exclusivo Tops -->
-    <link rel="stylesheet" href="{% static 'default/css/main.css' %}">
+    <!-- CSS Exclusivo Tops -->
     <link rel="stylesheet" href="{% static 'default/css/tops.css' %}">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link type="text/css" href="{% static 'public/css/layout.css' %}" rel="stylesheet">
+    {% block extrahead %}{% endblock %}
 
     <style>
       body {
@@ -29,9 +27,10 @@
           position: relative;
           margin: 0;
           padding: 0;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
 
-      /* Tops Header - Aplicando as mesmas propriedades do Wiki */
+      /* Tops Header */
       .tops-header {
           position: fixed;
           top: 0;
@@ -213,8 +212,6 @@
           }
       }
     </style>
-
-    {% block extrahead %}{% endblock %}
   </head>
   <body>
     <!-- Header -->
@@ -274,7 +271,6 @@
     </main>
 
     <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     {% block extrascripts %}{% endblock %}
   </body>
 </html> 

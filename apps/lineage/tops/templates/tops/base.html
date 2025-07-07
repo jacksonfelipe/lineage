@@ -2,13 +2,12 @@
 {% load static i18n %}
 
 {% block extrahead %}
-<link rel="stylesheet" href="{% static 'default/css/tops.css' %}">
-<link rel="stylesheet" href="{% static 'default/css/tops-tables-enhanced.css' %}">
+<link rel="stylesheet" href="{% static 'default/css/tops-tables.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="tops-container">
-    <div class="tops-nav-container" data-aos="fade-right" data-aos-duration="1000">
+    <div class="tops-nav-container">
         <div class="tops-nav-header">
             <h2>{% trans "Rankings" %}</h2>
         </div>
@@ -63,7 +62,7 @@
         </div>
     </div>
     
-    <div class="tops-content" data-aos="fade-left" data-aos-duration="1000">
+    <div class="tops-content">
         <div class="content-wrapper">
             {% block tops_content %}{% endblock %}
         </div>
@@ -72,9 +71,5 @@
 {% endblock %}
 
 {% block extrascripts %}
-<script>
-    // Initialize AOS
-    AOS.init();
-</script>
-<script src="{% static 'default/js/tops-tables.js' %}"></script>
+<script src="{% static 'default/js/tops.js' %}"></script>
 {% endblock %} 

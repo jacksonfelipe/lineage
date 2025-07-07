@@ -5,67 +5,67 @@
 
 {% block tops_content %}
 <div class="tops-pk">
-    <div class="tops-header-section text-center mb-5">
-        <h1 class="display-4 fw-bold">{% trans "Ranking PK" %}</h1>
+    <div class="tops-header-section">
+        <h1>{% trans "Ranking PK" %}</h1>
         <p class="lead">{% trans "Os jogadores com mais PKs" %}</p>
     </div>
 
-    <div class="tops-content-section">
+    <div class="tops-table-container">
         {% if players %}
-        <div class="table-responsive">
-            <table class="table table-dark table-hover">
-                <thead class="table-dark">
+        <div class="tops-table-responsive">
+            <table class="tops-table">
+                <thead>
                     <tr>
-                        <th scope="col" class="text-center">#</th>
-                        <th scope="col">{% trans "Jogador" %}</th>
-                        <th scope="col">{% trans "Clã" %}</th>
-                        <th scope="col" class="text-center">{% trans "PK" %}</th>
-                        <th scope="col" class="text-center">{% trans "Nível" %}</th>
-                        <th scope="col" class="text-center">{% trans "Classe" %}</th>
+                        <th>#</th>
+                        <th>{% trans "Jogador" %}</th>
+                        <th>{% trans "Clã" %}</th>
+                        <th>{% trans "PK" %}</th>
+                        <th>{% trans "Nível" %}</th>
+                        <th>{% trans "Classe" %}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for player in players %}
                     <tr>
-                        <td class="text-center">
+                        <td>
                             {% if forloop.counter == 1 %}
-                                <span class="badge bg-warning text-dark">🥇</span>
+                                <span class="tops-badge gold">🥇</span>
                             {% elif forloop.counter == 2 %}
-                                <span class="badge bg-secondary">🥈</span>
+                                <span class="tops-badge silver">🥈</span>
                             {% elif forloop.counter == 3 %}
-                                <span class="badge bg-warning">🥉</span>
+                                <span class="tops-badge bronze">🥉</span>
                             {% else %}
-                                <span class="text-muted">{{ forloop.counter }}</span>
+                                <span class="tops-text-muted">{{ forloop.counter }}</span>
                             {% endif %}
                         </td>
                         <td>
-                            <div class="d-flex align-items-center">
+                            <div class="tops-flex">
                                 {% if player.crest %}
-                                    <img src="data:image/png;base64,{{ player.crest }}" alt="Crest" class="me-2" style="width: 24px; height: 24px;">
+                                    <img src="data:image/png;base64,{{ player.crest }}" alt="Crest" class="tops-crest">
                                 {% endif %}
-                                <span class="fw-bold">{{ player.char_name }}</span>
+                                <span class="tops-player-name">{{ player.char_name }}</span>
                             </div>
                         </td>
                         <td>
                             {% if player.clan_name %}
-                                <div class="d-flex align-items-center">
+                                <div class="tops-flex">
                                     {% if player.clan_crest %}
-                                        <img src="data:image/png;base64,{{ player.clan_crest }}" alt="Clan Crest" class="me-2" style="width: 24px; height: 24px;">
+                                        <img src="data:image/png;base64,{{ player.clan_crest }}" alt="Clan Crest" class="tops-crest">
                                     {% endif %}
                                     <span>{{ player.clan_name }}</span>
                                 </div>
                             {% else %}
-                                <span class="text-muted">-</span>
+                                <span class="tops-text-muted">-</span>
                             {% endif %}
                         </td>
-                        <td class="text-center">
-                            <span class="badge bg-danger">{{ player.pkkills }}</span>
+                        <td>
+                            <span class="tops-badge danger">{{ player.pkkills }}</span>
                         </td>
-                        <td class="text-center">
-                            <span class="badge bg-info">{{ player.level }}</span>
+                        <td>
+                            <span class="tops-badge info">{{ player.level|default:"-" }}</span>
                         </td>
-                        <td class="text-center">
-                            <span class="text-muted">{{ player.base|default:"-" }}</span>
+                        <td>
+                            <span class="tops-text-muted">{{ player.base|default:"-" }}</span>
                         </td>
                     </tr>
                     {% endfor %}
@@ -73,10 +73,10 @@
             </table>
         </div>
         {% else %}
-        <div class="text-center py-5">
-            <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+        <div class="tops-empty-state">
+            <i class="fas fa-exclamation-triangle"></i>
             <h3>{% trans "Nenhum dado disponível" %}</h3>
-            <p class="text-muted">{% trans "Não foi possível carregar os dados do ranking PK no momento." %}</p>
+            <p>{% trans "Não foi possível carregar os dados do ranking PK no momento." %}</p>
         </div>
         {% endif %}
     </div>

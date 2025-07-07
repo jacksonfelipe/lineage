@@ -5,58 +5,58 @@
 
 {% block tops_content %}
 <div class="tops-clans">
-    <div class="tops-header-section text-center mb-5">
-        <h1 class="display-4 fw-bold">{% trans "Ranking Clans" %}</h1>
+    <div class="tops-header-section">
+        <h1>{% trans "Ranking Clans" %}</h1>
         <p class="lead">{% trans "Os clãs mais poderosos" %}</p>
     </div>
 
-    <div class="tops-content-section">
+    <div class="tops-table-container">
         {% if clans %}
-        <div class="table-responsive">
-            <table class="table table-dark table-hover">
-                <thead class="table-dark">
+        <div class="tops-table-responsive">
+            <table class="tops-table">
+                <thead>
                     <tr>
-                        <th scope="col" class="text-center">#</th>
-                        <th scope="col">{% trans "Clã" %}</th>
-                        <th scope="col">{% trans "Líder" %}</th>
-                        <th scope="col" class="text-center">{% trans "Nível" %}</th>
-                        <th scope="col" class="text-center">{% trans "Membros" %}</th>
-                        <th scope="col" class="text-center">{% trans "Reputação" %}</th>
+                        <th>#</th>
+                        <th>{% trans "Clã" %}</th>
+                        <th>{% trans "Líder" %}</th>
+                        <th>{% trans "Nível" %}</th>
+                        <th>{% trans "Membros" %}</th>
+                        <th>{% trans "Reputação" %}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for clan in clans %}
                     <tr>
-                        <td class="text-center">
+                        <td>
                             {% if forloop.counter == 1 %}
-                                <span class="badge bg-warning text-dark">🥇</span>
+                                <span class="tops-badge gold">🥇</span>
                             {% elif forloop.counter == 2 %}
-                                <span class="badge bg-secondary">🥈</span>
+                                <span class="tops-badge silver">🥈</span>
                             {% elif forloop.counter == 3 %}
-                                <span class="badge bg-warning">🥉</span>
+                                <span class="tops-badge bronze">🥉</span>
                             {% else %}
-                                <span class="text-muted">{{ forloop.counter }}</span>
+                                <span class="tops-text-muted">{{ forloop.counter }}</span>
                             {% endif %}
                         </td>
                         <td>
-                            <div class="d-flex align-items-center">
+                            <div class="tops-flex">
                                 {% if clan.crest %}
-                                    <img src="data:image/png;base64,{{ clan.crest }}" alt="Clan Crest" class="me-2" style="width: 24px; height: 24px;">
+                                    <img src="data:image/png;base64,{{ clan.crest }}" alt="Clan Crest" class="tops-crest">
                                 {% endif %}
-                                <span class="fw-bold">{{ clan.clan_name }}</span>
+                                <span class="tops-player-name">{{ clan.clan_name }}</span>
                             </div>
                         </td>
                         <td>
-                            <span>{{ clan.char_name|default:"-" }}</span>
+                            <span class="tops-text-muted">{{ clan.char_name|default:"-" }}</span>
                         </td>
-                        <td class="text-center">
-                            <span class="badge bg-info">{{ clan.level }}</span>
+                        <td>
+                            <span class="tops-badge info">{{ clan.level|default:"-" }}</span>
                         </td>
-                        <td class="text-center">
-                            <span class="badge bg-primary">{{ clan.membros }}</span>
+                        <td>
+                            <span class="tops-badge primary">{{ clan.membros|default:"-" }}</span>
                         </td>
-                        <td class="text-center">
-                            <span class="badge bg-success">{{ clan.reputation_score|default:"0" }}</span>
+                        <td>
+                            <span class="tops-badge success">{{ clan.reputation_score|default:"0" }}</span>
                         </td>
                     </tr>
                     {% endfor %}
@@ -64,10 +64,10 @@
             </table>
         </div>
         {% else %}
-        <div class="text-center py-5">
-            <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+        <div class="tops-empty-state">
+            <i class="fas fa-exclamation-triangle"></i>
             <h3>{% trans "Nenhum dado disponível" %}</h3>
-            <p class="text-muted">{% trans "Não foi possível carregar os dados do ranking de Clãs no momento." %}</p>
+            <p>{% trans "Não foi possível carregar os dados do ranking de Clãs no momento." %}</p>
         </div>
         {% endif %}
     </div>

@@ -5,86 +5,103 @@
 
 {% block tops_content %}
 <div class="tops-siege">
-    <div class="tops-header-section text-center mb-5">
-        <h1 class="display-4 fw-bold">{% trans "Castle & Siege Ranking" %}</h1>
+    <div class="tops-header-section">
+        <h1>{% trans "Castle & Siege Ranking" %}</h1>
         <p class="lead">{% trans "Status dos castelos e cerco" %}</p>
     </div>
 
-    <div class="tops-content-section">
+    <div class="tops-table-container">
         {% if castles %}
-        <div class="row g-4">
+        <div class="tops-castles-grid">
             {% for castle in castles %}
-            <div class="col-md-6 col-lg-4 mb-5">
-                <div class="castle-card">
-                    <div class="castle-image-container">
-                        {% if castle.image_path %}
-                            <img src="{% static castle.image_path %}" alt="{{ castle.name }}" class="castle-image">
-                        {% else %}
-                            <div class="castle-image-placeholder">
-                                <i class="fas fa-castle fa-3x"></i>
-                                <span>{{ castle.name }}</span>
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="castle-header">
-                        <h5 class="castle-name">{{ castle.name }}</h5>
-                        <span class="castle-status {% if castle.siege_date %}badge bg-warning{% else %}badge bg-secondary{% endif %}">
+            <div class="tops-castle-card">
+                <div class="tops-castle-image-container">
+                    {% if castle.image_path %}
+                        <img src="{% static castle.image_path %}" alt="{{ castle.name }}" class="tops-castle-image">
+                    {% else %}
+                        <div class="tops-castle-image-placeholder">
+                            <i class="fas fa-chess-rook"></i>
+                            <span>{{ castle.name }}</span>
+                        </div>
+                    {% endif %}
+                    <div class="tops-castle-overlay">
+                        <div class="tops-castle-status">
                             {% if castle.siege_date %}
-                                {% trans "Cerco Ativo" %}
+                                <span class="tops-badge warning">
+                                    <i class="fas fa-fire"></i> {% trans "Cerco Ativo" %}
+                                </span>
                             {% else %}
-                                {% trans "Sem Cerco" %}
+                                <span class="tops-badge secondary">
+                                    <i class="fas fa-shield-alt"></i> {% trans "Sem Cerco" %}
+                                </span>
                             {% endif %}
-                        </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tops-castle-content">
+                    <div class="tops-castle-header">
+                        <h3 class="tops-castle-name">{{ castle.name }}</h3>
                     </div>
                     
-                    <div class="castle-info">
+                    <div class="tops-castle-info">
                         {% if castle.clan_name %}
-                        <div class="castle-owner">
-                            <strong>{% trans "Proprietário:" %}</strong>
-                            <div class="d-flex align-items-center mt-1">
+                        <div class="tops-castle-owner">
+                            <div class="tops-info-label">
+                                <i class="fas fa-crown"></i> {% trans "Proprietário" %}
+                            </div>
+                            <div class="tops-flex">
                                 {% if castle.clan_crest_image_base64 %}
-                                    <img src="data:image/png;base64,{{ castle.clan_crest_image_base64 }}" alt="Owner Crest" class="me-2" style="width: 24px; height: 24px;">
+                                    <img src="data:image/png;base64,{{ castle.clan_crest_image_base64 }}" alt="Owner Crest" class="tops-crest">
                                 {% endif %}
-                                <span>{{ castle.clan_name }}</span>
+                                <span class="tops-player-name">{{ castle.clan_name }}</span>
                             </div>
                         </div>
                         {% else %}
-                        <div class="castle-owner">
-                            <strong>{% trans "Proprietário:" %}</strong>
-                            <span class="text-muted">{% trans "Sem proprietário" %}</span>
+                        <div class="tops-castle-owner">
+                            <div class="tops-info-label">
+                                <i class="fas fa-crown"></i> {% trans "Proprietário" %}
+                            </div>
+                            <span class="tops-text-muted">{% trans "Sem proprietário" %}</span>
                         </div>
                         {% endif %}
                         
                         {% if castle.siege_date %}
-                        <div class="castle-siege">
-                            <strong>{% trans "Data do Cerco:" %}</strong>
-                            <span>{{ castle.siege_date|date:"d/m/Y H:i" }}</span>
+                        <div class="tops-castle-siege">
+                            <div class="tops-info-label">
+                                <i class="fas fa-calendar-alt"></i> {% trans "Data do Cerco" %}
+                            </div>
+                            <span class="tops-badge info">{{ castle.siege_date|date:"d/m/Y H:i" }}</span>
                         </div>
                         {% endif %}
                         
                         {% if castle.stax %}
-                        <div class="castle-tax">
-                            <strong>{% trans "Taxa:" %}</strong>
-                            <span>{{ castle.stax }}%</span>
+                        <div class="tops-castle-tax">
+                            <div class="tops-info-label">
+                                <i class="fas fa-coins"></i> {% trans "Taxa" %}
+                            </div>
+                            <span class="tops-badge success">{{ castle.stax }}%</span>
                         </div>
                         {% endif %}
                     </div>
                     
                     {% if castle.siege_participants %}
-                    <div class="castle-participants">
-                        <strong>{% trans "Participantes do Cerco:" %}</strong>
-                        <ul class="participants-list">
+                    <div class="tops-castle-participants">
+                        <div class="tops-info-label">
+                            <i class="fas fa-users"></i> {% trans "Participantes do Cerco" %}
+                        </div>
+                        <div class="tops-participants-list">
                             {% for participant in castle.siege_participants %}
-                            <li>
-                                <div class="d-flex align-items-center">
+                            <div class="tops-participant">
+                                <div class="tops-flex">
                                     {% if participant.clan_crest_image_base64 %}
-                                        <img src="data:image/png;base64,{{ participant.clan_crest_image_base64 }}" alt="Participant Crest" class="me-2" style="width: 16px; height: 16px;">
+                                        <img src="data:image/png;base64,{{ participant.clan_crest_image_base64 }}" alt="Participant Crest" class="tops-crest">
                                     {% endif %}
                                     <span>{{ participant.clan_name }}</span>
                                 </div>
-                            </li>
+                            </div>
                             {% endfor %}
-                        </ul>
+                        </div>
                     </div>
                     {% endif %}
                 </div>
@@ -92,149 +109,241 @@
             {% endfor %}
         </div>
         {% else %}
-        <div class="text-center py-5">
-            <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+        <div class="tops-empty-state">
+            <i class="fas fa-exclamation-triangle"></i>
             <h3>{% trans "Nenhum dado disponível" %}</h3>
-            <p class="text-muted">{% trans "Não foi possível carregar os dados dos castelos no momento." %}</p>
+            <p>{% trans "Não foi possível carregar os dados dos castelos no momento." %}</p>
         </div>
         {% endif %}
     </div>
 </div>
 
 <style>
-.castle-card {
-    background: transparent;
-    border-radius: 15px;
-    padding: 0;
-    border: 1px solid rgba(230, 199, 125, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* ===== CASTLE & SIEGE - CSS MELHORADO ===== */
+
+.tops-castles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.tops-castle-card {
+    background: rgba(53, 47, 35, 0.9);
+    border-radius: 20px;
+    border: 1px solid rgba(230, 199, 125, 0.3);
     overflow: hidden;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    position: relative;
 }
 
-.castle-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 25px rgba(230, 199, 125, 0.3);
+.tops-castle-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #e6c77d, #d1a44f, #9b7530, #e6c77d);
+    border-radius: 22px;
+    z-index: -1;
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
 }
 
-.castle-image-container {
+.tops-castle-card:hover::before {
+    opacity: 0.5;
+}
+
+.tops-castle-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(230, 199, 125, 0.3);
+    border-color: rgba(230, 199, 125, 0.6);
+}
+
+.tops-castle-image-container {
+    position: relative;
     width: 100%;
-    height: 220px;
+    height: 250px;
     overflow: hidden;
 }
 
-.castle-image {
+.tops-castle-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.5s ease;
 }
 
-.castle-card:hover .castle-image {
-    transform: scale(1.05);
+.tops-castle-card:hover .tops-castle-image {
+    transform: scale(1.1);
 }
 
-.castle-image-placeholder {
+.tops-castle-image-placeholder {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, rgba(230, 199, 125, 0.1), rgba(230, 199, 125, 0.05));
+    background: linear-gradient(135deg, rgba(230, 199, 125, 0.15), rgba(155, 117, 48, 0.15));
     color: #e6c77d;
-    font-size: 14px;
+    font-size: 16px;
     text-align: center;
 }
 
-.castle-image-placeholder i {
-    margin-bottom: 10px;
-    opacity: 0.7;
-}
-
-.castle-image-placeholder span {
-    font-weight: bold;
-}
-
-.castle-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.tops-castle-image-placeholder i {
+    font-size: 48px;
     margin-bottom: 15px;
-    padding: 25px 25px 15px 25px;
-    border-bottom: 1px solid rgba(230, 199, 125, 0.2);
+    opacity: 0.8;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.castle-name {
+.tops-castle-image-placeholder span {
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.tops-castle-overlay {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 2;
+}
+
+.tops-castle-content {
+    padding: 25px;
+}
+
+.tops-castle-header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.tops-castle-name {
     color: #e6c77d;
     margin: 0;
-    font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 24px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(45deg, #e6c77d, #d1a44f, #9b7530, #e6c77d);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease-in-out infinite;
 }
 
-.castle-info {
+.tops-castle-info {
+    margin-bottom: 20px;
+}
+
+.tops-castle-info > div {
     margin-bottom: 15px;
-    padding: 0 25px;
+    padding: 12px 15px;
+    background: rgba(230, 199, 125, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(230, 199, 125, 0.1);
+    transition: all 0.3s ease;
 }
 
-.castle-info > div {
-    margin-bottom: 10px;
-    color: rgba(255, 255, 255, 0.8);
+.tops-castle-info > div:hover {
+    background: rgba(230, 199, 125, 0.1);
+    border-color: rgba(230, 199, 125, 0.3);
+    transform: translateX(5px);
 }
 
-.castle-info strong {
+.tops-info-label {
     color: #e6c77d;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.castle-participants {
-    margin-top: 15px;
-    padding: 20px 25px 25px 25px;
+.tops-info-label i {
+    margin-right: 8px;
+    opacity: 0.8;
+}
+
+.tops-castle-participants {
     border-top: 1px solid rgba(230, 199, 125, 0.2);
+    padding-top: 20px;
 }
 
-.castle-participants strong {
-    color: #e6c77d;
-    display: block;
-    margin-bottom: 10px;
+.tops-participants-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.participants-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.tops-participant {
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(230, 199, 125, 0.1);
+    transition: all 0.3s ease;
 }
 
-.participants-list li {
-    color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 6px;
+.tops-participant:hover {
+    background: rgba(230, 199, 125, 0.1);
+    border-color: rgba(230, 199, 125, 0.3);
+    transform: translateX(3px);
+}
+
+.tops-participant span {
+    color: rgba(255, 255, 255, 0.9);
     font-size: 14px;
 }
 
-/* Espaçamento adicional para o container principal */
-.tops-content-section {
-    padding: 2rem 0;
-    background: transparent;
-    border: none;
-    color: inherit;
+/* Animações */
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
-/* Melhor espaçamento para dispositivos móveis */
+/* Responsividade */
 @media (max-width: 768px) {
-    .castle-card {
-        margin-bottom: 2rem;
+    .tops-castles-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
     
-    .castle-header {
-        padding: 20px 20px 10px 20px;
+    .tops-castle-card {
+        margin-bottom: 0;
     }
     
-    .castle-info {
-        padding: 0 20px;
+    .tops-castle-content {
+        padding: 20px;
     }
     
-    .castle-participants {
-        padding: 15px 20px 20px 20px;
+    .tops-castle-name {
+        font-size: 20px;
+    }
+    
+    .tops-castle-image-container {
+        height: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .tops-castle-content {
+        padding: 15px;
+    }
+    
+    .tops-castle-name {
+        font-size: 18px;
+    }
+    
+    .tops-castle-image-container {
+        height: 180px;
+    }
+    
+    .tops-castle-overlay {
+        top: 10px;
+        right: 10px;
     }
 }
 </style>
