@@ -113,10 +113,6 @@ function addSearchField(container, table) {
                 const rows = tbody.querySelectorAll('tr');
                 let visibleCount = 0;
                 
-                // Debug: verificar se há linhas com display none persistente
-                console.log('Search term:', searchTerm);
-                console.log('Total rows:', rows.length);
-                
                 // Se o termo de busca estiver vazio, mostrar todas as linhas
                 if (searchTerm === '') {
                     rows.forEach((row, index) => {
@@ -169,7 +165,6 @@ function addSearchField(container, table) {
                 
                 // Verificação final para garantir que tudo está correto
                 if (searchTerm === '') {
-                    console.log('Search cleared, ensuring all rows are visible...');
                     setTimeout(() => {
                         fixDisplayIssues(container);
                     }, 100);
@@ -389,7 +384,6 @@ function fixDisplayIssues(container) {
             // Verificar se a linha está visível
             const computedStyle = window.getComputedStyle(row);
             if (computedStyle.display === 'none') {
-                console.log('Found hidden row, fixing...');
                 row.removeAttribute('style');
                 row.style.display = 'table-row';
             }
