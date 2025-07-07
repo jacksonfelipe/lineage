@@ -106,27 +106,56 @@ function addSearchField(container, table) {
             
             searchTimeout = setTimeout(() => {
                 const searchTerm = this.value.toLowerCase().trim();
+                
+                // Verificar e corrigir problemas de display antes da busca
+                fixDisplayIssues(container);
+                
                 const rows = tbody.querySelectorAll('tr');
                 let visibleCount = 0;
                 
-                rows.forEach((row, index) => {
-                    const playerName = row.querySelector('td:nth-child(2)')?.textContent.toLowerCase() || '';
-                    const clanName = row.querySelector('td:nth-child(3)')?.textContent.toLowerCase() || '';
-                    const className = row.querySelector('td:nth-child(6)')?.textContent.toLowerCase() || '';
-                    
-                    const matches = playerName.includes(searchTerm) || 
-                                  clanName.includes(searchTerm) || 
-                                  className.includes(searchTerm);
-                    
-                    if (matches || searchTerm === '') {
-                        row.style.display = '';
+                // Debug: verificar se há linhas com display none persistente
+                console.log('Search term:', searchTerm);
+                console.log('Total rows:', rows.length);
+                
+                // Se o termo de busca estiver vazio, mostrar todas as linhas
+                if (searchTerm === '') {
+                    rows.forEach((row, index) => {
+                        // Remover qualquer CSS inline que possa estar causando problemas
+                        row.removeAttribute('style');
+                        row.style.display = 'table-row';
+                        row.style.opacity = '1';
+                        row.style.visibility = 'visible';
+                        row.style.height = '';
+                        row.style.color = '';
                         row.style.animation = 'fadeInUp 0.3s ease';
                         row.style.animationDelay = `${index * 0.05}s`;
                         visibleCount++;
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
+                    });
+                } else {
+                    // Filtrar linhas baseado no termo de busca
+                    rows.forEach((row, index) => {
+                        const playerName = row.querySelector('td:nth-child(2)')?.textContent.toLowerCase() || '';
+                        const clanName = row.querySelector('td:nth-child(3)')?.textContent.toLowerCase() || '';
+                        const className = row.querySelector('td:nth-child(6)')?.textContent.toLowerCase() || '';
+                        
+                        const matches = playerName.includes(searchTerm) || 
+                                      clanName.includes(searchTerm) || 
+                                      className.includes(searchTerm);
+                        
+                        if (matches) {
+                            row.style.display = 'table-row';
+                            row.style.opacity = '1';
+                            row.style.visibility = 'visible';
+                            row.style.height = '';
+                            row.style.color = '';
+                            row.style.animation = 'fadeInUp 0.3s ease';
+                            row.style.animationDelay = `${index * 0.05}s`;
+                            visibleCount++;
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                }
                 
                 // Atualizar informações de busca
                 updateSearchInfo(searchInfo, visibleCount, rows.length, searchTerm);
@@ -137,14 +166,27 @@ function addSearchField(container, table) {
                 } else {
                     clearButton.style.display = 'none';
                 }
+                
+                // Verificação final para garantir que tudo está correto
+                if (searchTerm === '') {
+                    console.log('Search cleared, ensuring all rows are visible...');
+                    setTimeout(() => {
+                        fixDisplayIssues(container);
+                    }, 100);
+                }
             }, 300);
         });
         
         // Funcionalidade do botão limpar
         clearButton.addEventListener('click', function() {
-            searchInput.value = '';
-            searchInput.dispatchEvent(new Event('input'));
-            searchInput.focus();
+            resetSearch(container);
+        });
+        
+        // Adicionar listener para tecla Escape
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                resetSearch(container);
+            }
         });
         
         // Foco automático no campo de busca
@@ -153,7 +195,7 @@ function addSearchField(container, table) {
 }
 
 function updateSearchInfo(searchInfo, visibleCount, totalCount, searchTerm) {
-    if (searchTerm) {
+    if (searchTerm && searchTerm.length > 0) {
         searchInfo.innerHTML = `
             <small style="color: #e6c77d;">
                 <i class="fas fa-search" style="color: #d1a44f;"></i>
@@ -167,6 +209,43 @@ function updateSearchInfo(searchInfo, visibleCount, totalCount, searchTerm) {
                 Digite o nome do jogador para filtrar os resultados
             </small>
         `;
+    }
+}
+
+// Função para resetar completamente a busca
+function resetSearch(container) {
+    const searchInput = container.querySelector('input[type="text"]');
+    const clearButton = container.querySelector('button[type="button"]');
+    const tbody = container.querySelector('tbody');
+    const searchInfo = container.querySelector('.tops-search-info');
+    
+    if (searchInput && tbody) {
+        searchInput.value = '';
+        
+        // Mostrar todas as linhas
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach((row, index) => {
+            // Remover qualquer CSS inline que possa estar causando problemas
+            row.removeAttribute('style');
+            row.style.display = 'table-row';
+            row.style.opacity = '1';
+            row.style.visibility = 'visible';
+            row.style.height = '';
+            row.style.color = '';
+            row.style.animation = 'fadeInUp 0.3s ease';
+            row.style.animationDelay = `${index * 0.05}s`;
+        });
+        
+        // Atualizar informações
+        updateSearchInfo(searchInfo, rows.length, rows.length, '');
+        
+        // Esconder botão limpar
+        if (clearButton) {
+            clearButton.style.display = 'none';
+        }
+        
+        // Focar no campo
+        searchInput.focus();
     }
 }
 
@@ -298,6 +377,23 @@ function fixFirstPlaceAlignment(table) {
                 }
             }
         }
+    }
+}
+
+// Função para verificar e corrigir problemas de display
+function fixDisplayIssues(container) {
+    const tbody = container.querySelector('tbody');
+    if (tbody) {
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach(row => {
+            // Verificar se a linha está visível
+            const computedStyle = window.getComputedStyle(row);
+            if (computedStyle.display === 'none') {
+                console.log('Found hidden row, fixing...');
+                row.removeAttribute('style');
+                row.style.display = 'table-row';
+            }
+        });
     }
 }
 
