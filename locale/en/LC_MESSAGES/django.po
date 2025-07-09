@@ -1112,6 +1112,36 @@ msgstr "Obsolete Inventories Detected"
 msgid "Os seguintes inventários pertencem a personagens que não existem mais na sua conta:"
 msgstr "The following inventories belong to characters that no longer exist in your account:"
 
+msgid "Deletar"
+msgstr "Delete"
+
+msgid "Deletar Inventário Obsoleto"
+msgstr "Delete Obsolete Inventory"
+
+msgid "Tem certeza que deseja deletar este inventário obsoleto? Os itens serão transferidos para a bag."
+msgstr "Are you sure you want to delete this obsolete inventory? Items will be transferred to the bag."
+
+msgid "Este personagem ainda existe na sua conta. Não é possível deletar o inventário."
+msgstr "This character still exists in your account. Cannot delete the inventory."
+
+msgid "Inventário obsoleto deletado. Item transferido para a bag:"
+msgstr "Obsolete inventory deleted. Item transferred to bag:"
+
+msgid "Inventário obsoleto deletado."
+msgstr "Obsolete inventory deleted."
+
+msgid "itens transferidos para a bag."
+msgstr "items transferred to bag."
+
+msgid "Nenhum item encontrado."
+msgstr "No items found."
+
+msgid "Inventário não encontrado."
+msgstr "Inventory not found."
+
+msgid "Erro ao deletar inventário:"
+msgstr "Error deleting inventory:"
+
 msgid "Essa caixa não pertence a você. Compre uma nova do mesmo tipo."
 msgstr "This box does not belong to you. Buy a new one of the same type."
 
