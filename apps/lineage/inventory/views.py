@@ -3,6 +3,7 @@ from apps.main.home.decorator import conditional_otp_required
 from django.contrib import messages
 from django.db import transaction
 from django.contrib.auth import authenticate
+from django.utils.translation import gettext as _
 
 from django.db.models import Sum
 from .utils.items import get_itens_json
@@ -321,6 +322,55 @@ def trocar_item_com_jogador(request):
 
 @conditional_otp_required
 def inventario_dashboard(request):
+    # Obter personagens da conta do usuário
+    try:
+        personagens = LineageServices.find_chars(request.user.username)
+        personagens_nomes = [p['char_name'] for p in personagens]
+    except Exception as e:
+        messages.error(request, 'Erro ao carregar personagens da conta. Tente novamente.')
+        personagens_nomes = []
+        personagens = []
+
+    # Obter inventários existentes
+    inventories = Inventory.objects.filter(user=request.user)
+    inventarios_existentes = {inv.character_name: inv for inv in inventories}
+    
+    # Lista para armazenar inventários obsoletos
+    inventarios_obsoletos = []
+    
+    # Criar inventários para personagens que não têm
+    inventarios_criados = []
+    for personagem in personagens_nomes:
+        if personagem not in inventarios_existentes:
+            try:
+                inventory = Inventory.objects.create(
+                    user=request.user,
+                    account_name=request.user.username,
+                    character_name=personagem
+                )
+                inventarios_criados.append(personagem)
+            except Exception as e:
+                messages.error(request, f'Erro ao criar inventário para {personagem}: {str(e)}')
+    
+    # Verificar inventários obsoletos (personagens que não existem mais na conta)
+    for inv in inventories:
+        if inv.character_name not in personagens_nomes:
+            inventarios_obsoletos.append(inv.character_name)
+    
+    # Mostrar mensagens informativas
+    if inventarios_criados:
+        if len(inventarios_criados) == 1:
+            messages.success(request, f"{_('Inventário criado para o personagem')} {inventarios_criados[0]}.")
+        else:
+            messages.success(request, f"{_('Inventários criados para')} {len(inventarios_criados)} {_('personagens.')}")
+    
+    if inventarios_obsoletos:
+        if len(inventarios_obsoletos) == 1:
+            messages.warning(request, f"{_('Inventário obsoleto encontrado para o personagem')} {inventarios_obsoletos[0]} ({_('não existe mais na conta.')})")
+        else:
+            messages.warning(request, f"{_('Inventários obsoletos encontrados para')} {len(inventarios_obsoletos)} {_('personagens (não existem mais na conta).')}")
+    
+    # Recarregar inventários após as modificações
     inventories = Inventory.objects.filter(user=request.user)
     inventory_data = []
 
@@ -333,7 +383,8 @@ def inventario_dashboard(request):
         })
 
     return render(request, 'pages/inventario_dashboard.html', {
-        'inventory_data': inventory_data
+        'inventory_data': inventory_data,
+        'inventarios_obsoletos': inventarios_obsoletos
     })
 
 

@@ -1082,6 +1082,36 @@ msgstr "This box does not exist. You can buy it below."
 msgid "Este personagem não existe na sua conta."
 msgstr "This character does not exist in your account."
 
+msgid "Inventário criado para o personagem"
+msgstr "Inventory created for character"
+
+msgid "Inventários criados para"
+msgstr "Inventories created for"
+
+msgid "personagens."
+msgstr "characters."
+
+msgid "Inventário obsoleto encontrado para o personagem"
+msgstr "Obsolete inventory found for character"
+
+msgid "não existe mais na conta."
+msgstr "no longer exists in account."
+
+msgid "Inventários obsoletos encontrados para"
+msgstr "Obsolete inventories found for"
+
+msgid "personagens (não existem mais na conta)."
+msgstr "characters (no longer exist in account)."
+
+msgid "Obsoleto"
+msgstr "Obsolete"
+
+msgid "Inventários Obsoletos Detectados"
+msgstr "Obsolete Inventories Detected"
+
+msgid "Os seguintes inventários pertencem a personagens que não existem mais na sua conta:"
+msgstr "The following inventories belong to characters that no longer exist in your account:"
+
 msgid "Essa caixa não pertence a você. Compre uma nova do mesmo tipo."
 msgstr "This box does not belong to you. Buy a new one of the same type."
 

@@ -1084,6 +1084,36 @@ msgstr "Esta caixa não existe. Você pode comprá-la abaixo."
 msgid "Este personagem não existe na sua conta."
 msgstr "Este personagem não existe na sua conta."
 
+msgid "Inventário criado para o personagem"
+msgstr "Inventário criado para o personagem"
+
+msgid "Inventários criados para"
+msgstr "Inventários criados para"
+
+msgid "personagens."
+msgstr "personagens."
+
+msgid "Inventário obsoleto encontrado para o personagem"
+msgstr "Inventário obsoleto encontrado para o personagem"
+
+msgid "não existe mais na conta."
+msgstr "não existe mais na conta."
+
+msgid "Inventários obsoletos encontrados para"
+msgstr "Inventários obsoletos encontrados para"
+
+msgid "personagens (não existem mais na conta)."
+msgstr "personagens (não existem mais na conta)."
+
+msgid "Obsoleto"
+msgstr "Obsoleto"
+
+msgid "Inventários Obsoletos Detectados"
+msgstr "Inventários Obsoletos Detectados"
+
+msgid "Os seguintes inventários pertencem a personagens que não existem mais na sua conta:"
+msgstr "Os seguintes inventários pertencem a personagens que não existem mais na sua conta:"
+
 msgid "Essa caixa não pertence a você. Compre uma nova do mesmo tipo."
 msgstr "Essa caixa não pertence a você. Compre uma nova do mesmo tipo."
 
