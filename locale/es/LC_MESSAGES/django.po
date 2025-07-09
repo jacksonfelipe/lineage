@@ -1084,6 +1084,39 @@ msgstr "No has ganado ningún premio."
 msgid "Esta caixa não existe. Você pode comprá-la abaixo."
 msgstr "Esta caja no existe. Puedes comprarlo a continuación."
 
+msgid "Este personagem não existe na sua conta."
+msgstr "Este personaje no existe en tu cuenta."
+
+msgid "Inventário criado para o personagem"
+msgstr "Inventario creado para el personaje"
+
+msgid "Inventários criados para"
+msgstr "Inventarios creados para"
+
+msgid "personagens."
+msgstr "personajes."
+
+msgid "Inventário obsoleto encontrado para o personagem"
+msgstr "Inventario obsoleto encontrado para el personaje"
+
+msgid "não existe mais na conta."
+msgstr "ya no existe en la cuenta."
+
+msgid "Inventários obsoletos encontrados para"
+msgstr "Inventarios obsoletos encontrados para"
+
+msgid "personagens (não existem mais na conta)."
+msgstr "personajes (ya no existen en la cuenta)."
+
+msgid "Obsoleto"
+msgstr "Obsoleto"
+
+msgid "Inventários Obsoletos Detectados"
+msgstr "Inventarios Obsoletos Detectados"
+
+msgid "Os seguintes inventários pertencem a personagens que não existem mais na sua conta:"
+msgstr "Los siguientes inventarios pertenecen a personajes que ya no existen en tu cuenta:"
+
 msgid "Essa caixa não pertence a você. Compre uma nova do mesmo tipo."
 msgstr "Esta caja no te pertenece. Compre uno nuevo del mismo tipo."
 

@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from apps.main.home.decorator import conditional_otp_required
 from django.contrib import messages
 from django.db import transaction
+from django.utils.translation import gettext as _
 from .models import ShopItem, ShopPackage, Cart, CartItem, CartPackage, PromotionCode, ShopPurchase
 from apps.lineage.wallet.signals import aplicar_transacao
 from apps.lineage.inventory.models import InventoryItem, Inventory
@@ -119,10 +120,16 @@ def checkout(request):
     if not personagem or len(personagem.strip()) < 3:
         messages.error(request, "Informe um nome de personagem válido para entrega (mínimo 3 caracteres).")
         return redirect('shop:view_cart')
-    
-    # Verificar se o personagem existe no inventário do usuário
-    if not Inventory.objects.filter(user=request.user, character_name=personagem).exists():
-        messages.error(request, 'Este personagem não pertence a você.')
+
+    # Verificar se o personagem existe na conta do usuário
+    try:
+        personagens = LineageServices.find_chars(request.user.username)
+        personagem_existe = any(p['char_name'] == personagem for p in personagens)
+        if not personagem_existe:
+            messages.error(request, _('Este personagem não existe na sua conta.'))
+            return redirect('shop:view_cart')
+    except Exception as e:
+        messages.error(request, 'Erro ao verificar personagens da conta. Tente novamente.')
         return redirect('shop:view_cart')
 
     if not cart.cartitem_set.exists() and not cart.cartpackage_set.exists():
@@ -135,6 +142,7 @@ def checkout(request):
             aplicar_transacao(wallet, 'SAIDA', total, descricao="Compra no Shop")
 
             # Enviar itens e pacotes para o inventário
+            # Se o inventário não existir, será criado automaticamente
             inventory, created = Inventory.objects.get_or_create(
                 user=request.user,
                 account_name=request.user.username,
