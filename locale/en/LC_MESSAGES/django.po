@@ -1079,6 +1079,9 @@ msgstr "You have not won any prize."
 msgid "Esta caixa não existe. Você pode comprá-la abaixo."
 msgstr "This box does not exist. You can buy it below."
 
+msgid "Este personagem não existe na sua conta."
+msgstr "This character does not exist in your account."
+
 msgid "Essa caixa não pertence a você. Compre uma nova do mesmo tipo."
 msgstr "This box does not belong to you. Buy a new one of the same type."
 
