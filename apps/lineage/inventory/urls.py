@@ -12,6 +12,7 @@ urlpatterns = [
     path('dashboard/', views.inventario_dashboard, name='inventario_dashboard'),
     path('global/', views.inventario_global, name='inventario_global'),
     path('transfer-to-bag/<str:char_name>/<int:item_id>/', views.transferir_para_bag, name='transferir_para_bag'),
+    path('delete-obsolete/<str:character_name>/', views.deletar_inventario_obsoleto, name='deletar_inventario_obsoleto'),
 
     path('api/item-image/<int:item_id>/', views.get_item_image_url, name='get_item_image_url'),
 ]

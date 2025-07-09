@@ -479,3 +479,89 @@ def transferir_para_bag(request, char_name, item_id):
     except Exception as e:
         messages.error(request, f'Erro ao carregar item: {str(e)}')
         return redirect('inventory:inventario_dashboard')
+
+
+@conditional_otp_required
+@transaction.atomic
+def deletar_inventario_obsoleto(request, character_name):
+    """
+    Deleta um inventário obsoleto, transferindo seus itens para a bag se necessário
+    """
+    try:
+        # Verificar se o inventário existe e pertence ao usuário
+        inventory = get_object_or_404(Inventory, character_name=character_name, user=request.user)
+        
+        # Verificar se o personagem realmente não existe mais na conta
+        try:
+            personagens = LineageServices.find_chars(request.user.username)
+            personagens_nomes = [p['char_name'] for p in personagens]
+            
+            if character_name in personagens_nomes:
+                messages.error(request, _('Este personagem ainda existe na sua conta. Não é possível deletar o inventário.'))
+                return redirect('inventory:inventario_dashboard')
+                
+        except Exception as e:
+            messages.error(request, _('Erro ao verificar personagens da conta. Tente novamente.'))
+            return redirect('inventory:inventario_dashboard')
+        
+        # Obter todos os itens do inventário
+        inventory_items = InventoryItem.objects.filter(inventory=inventory)
+        itens_transferidos = []
+        
+        if inventory_items.exists():
+            # Obter ou criar a bag do usuário
+            bag, created = Bag.objects.get_or_create(user=request.user)
+            
+            # Transferir todos os itens para a bag
+            for item in inventory_items:
+                bag_item, created = BagItem.objects.get_or_create(
+                    bag=bag,
+                    item_id=item.item_id,
+                    enchant=item.enchant,
+                    defaults={
+                        'item_name': item.item_name,
+                        'quantity': item.quantity
+                    }
+                )
+                
+                if not created:
+                    bag_item.quantity += item.quantity
+                    bag_item.save()
+                
+                itens_transferidos.append(f"{item.quantity}x {item.item_name}")
+                
+                # Registrar o log
+                InventoryLog.objects.create(
+                    user=request.user,
+                    inventory=inventory,
+                    item_id=item.item_id,
+                    item_name=item.item_name,
+                    enchant=item.enchant,
+                    quantity=item.quantity,
+                    acao='BAG_PARA_INVENTARIO',
+                    origem=character_name,
+                    destino='Bag'
+                )
+            
+            # Deletar todos os itens do inventário
+            inventory_items.delete()
+            
+            # Mostrar mensagem sobre itens transferidos
+            if len(itens_transferidos) == 1:
+                messages.success(request, f"{_('Inventário obsoleto deletado. Item transferido para a bag:')} {itens_transferidos[0]}")
+            else:
+                messages.success(request, f"{_('Inventário obsoleto deletado.')} {len(itens_transferidos)} {_('itens transferidos para a bag.')}")
+        else:
+            messages.success(request, f"{_('Inventário obsoleto deletado.')} {_('Nenhum item encontrado.')}")
+        
+        # Deletar o inventário
+        inventory.delete()
+        
+        return redirect('inventory:inventario_dashboard')
+        
+    except Inventory.DoesNotExist:
+        messages.error(request, _('Inventário não encontrado.'))
+        return redirect('inventory:inventario_dashboard')
+    except Exception as e:
+        messages.error(request, f"{_('Erro ao deletar inventário:')} {str(e)}")
+        return redirect('inventory:inventario_dashboard')

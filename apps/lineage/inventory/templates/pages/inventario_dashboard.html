@@ -56,9 +56,19 @@
             </span>
           {% endif %}
         </div>
-        <button class="btn btn-outline-secondary btn-sm rounded-pill" type="button" data-bs-toggle="collapse" data-bs-target="#inv{{ data.inventory.id }}">
-          <i class="bi bi-box-seam me-1"></i>{% trans "Itens" %}
-        </button>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-secondary btn-sm rounded-pill" type="button" data-bs-toggle="collapse" data-bs-target="#inv{{ data.inventory.id }}">
+            <i class="bi bi-box-seam me-1"></i>{% trans "Itens" %}
+          </button>
+          {% if data.inventory.character_name in inventarios_obsoletos %}
+            <a href="{% url 'inventory:deletar_inventario_obsoleto' character_name=data.inventory.character_name %}" 
+               class="btn btn-outline-danger btn-sm rounded-pill"
+               onclick="return confirm('{% trans 'Tem certeza que deseja deletar este inventário obsoleto? Os itens serão transferidos para a bag.' %}')"
+               title="{% trans 'Deletar Inventário Obsoleto' %}">
+              <i class="bi bi-trash me-1"></i>{% trans "Deletar" %}
+            </a>
+          {% endif %}
+        </div>
       </div>
 
       <div id="inv{{ data.inventory.id }}" class="collapse show">
