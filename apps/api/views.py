@@ -44,6 +44,7 @@ class PublicAPIRateThrottle(AnonRateThrottle):
 @ServerAPISchema.players_online_schema()
 class PlayersOnlineView(GenericAPIView):
     """View para dados de jogadores online"""
+    permission_classes = [AllowAny]
     serializer_class = PlayerOnlineSerializer
     throttle_classes = [PublicAPIRateThrottle]
     queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
@@ -99,6 +100,7 @@ class PlayersOnlineView(GenericAPIView):
 @ServerAPISchema.top_pvp_schema()
 class TopPvPView(GenericAPIView):
     """View para ranking PvP"""
+    permission_classes = [AllowAny]
     serializer_class = TopPlayerSerializer
     throttle_classes = [PublicAPIRateThrottle]
     queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
@@ -139,6 +141,7 @@ class TopPvPView(GenericAPIView):
 @ServerAPISchema.top_pk_schema()
 class TopPKView(GenericAPIView):
     """View para ranking PK"""
+    permission_classes = [AllowAny]
     serializer_class = TopPlayerSerializer
     throttle_classes = [PublicAPIRateThrottle]
     queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
@@ -179,6 +182,7 @@ class TopPKView(GenericAPIView):
 @ServerAPISchema.top_clan_schema()
 class TopClanView(GenericAPIView):
     """View para ranking de clãs"""
+    permission_classes = [AllowAny]
     serializer_class = TopClanSerializer
     throttle_classes = [PublicAPIRateThrottle]
     queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
@@ -241,6 +245,7 @@ class TopClanView(GenericAPIView):
 @ServerAPISchema.top_rich_schema()
 class TopRichView(GenericAPIView):
     """View para ranking de riqueza"""
+    permission_classes = [AllowAny]
     serializer_class = TopPlayerSerializer
     throttle_classes = [PublicAPIRateThrottle]
     queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
@@ -281,6 +286,7 @@ class TopRichView(GenericAPIView):
 @ServerAPISchema.top_online_schema()
 class TopOnlineView(GenericAPIView):
     """View para ranking de tempo online"""
+    permission_classes = [AllowAny]
     serializer_class = TopPlayerSerializer
     throttle_classes = [PublicAPIRateThrottle]
     queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
@@ -321,6 +327,7 @@ class TopOnlineView(GenericAPIView):
 @ServerAPISchema.top_level_schema()
 class TopLevelView(GenericAPIView):
     """View para ranking de nível"""
+    permission_classes = [AllowAny]
     serializer_class = TopPlayerSerializer
     throttle_classes = [PublicAPIRateThrottle]
     queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
@@ -361,6 +368,7 @@ class TopLevelView(GenericAPIView):
 @ServerAPISchema.olympiad_ranking_schema()
 class OlympiadRankingView(GenericAPIView):
     """View para ranking da Olimpíada"""
+    permission_classes = [AllowAny]
     serializer_class = OlympiadRankingSerializer
     throttle_classes = [PublicAPIRateThrottle]
     queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
@@ -409,6 +417,7 @@ class OlympiadRankingView(GenericAPIView):
 @ServerAPISchema.olympiad_heroes_schema("Todos os Heróis", "Retorna todos os heróis da Olimpíada")
 class OlympiadAllHeroesView(GenericAPIView):
     """View para todos os heróis da Olimpíada"""
+    permission_classes = [AllowAny]
     serializer_class = OlympiadHeroSerializer
     throttle_classes = [PublicAPIRateThrottle]
     queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
@@ -441,6 +450,7 @@ class OlympiadAllHeroesView(GenericAPIView):
 @ServerAPISchema.olympiad_heroes_schema("Heróis Atuais", "Retorna os heróis atuais da Olimpíada")
 class OlympiadCurrentHeroesView(GenericAPIView):
     """View para heróis atuais da Olimpíada"""
+    permission_classes = [AllowAny]
     serializer_class = OlympiadHeroSerializer
     throttle_classes = [PublicAPIRateThrottle]
     queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
@@ -473,6 +483,7 @@ class OlympiadCurrentHeroesView(GenericAPIView):
 @ServerAPISchema.grandboss_status_schema()
 class GrandBossStatusView(GenericAPIView):
     """View para status dos Grand Bosses"""
+    permission_classes = [AllowAny]
     serializer_class = GrandBossStatusSerializer
     throttle_classes = [PublicAPIRateThrottle]
     queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
@@ -547,6 +558,7 @@ class GrandBossStatusView(GenericAPIView):
 @ServerAPISchema.siege_schema()
 class SiegeView(GenericAPIView):
     """View para status dos cercos"""
+    permission_classes = [AllowAny]
     serializer_class = SiegeSerializer
     throttle_classes = [PublicAPIRateThrottle]
     queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
@@ -608,6 +620,7 @@ class SiegeView(GenericAPIView):
 @ServerAPISchema.siege_participants_schema()
 class SiegeParticipantsView(GenericAPIView):
     """View para participantes do cerco"""
+    permission_classes = [AllowAny]
     serializer_class = SiegeParticipantSerializer
     throttle_classes = [PublicAPIRateThrottle]
     queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
@@ -646,6 +659,7 @@ class SiegeParticipantsView(GenericAPIView):
 @ServerAPISchema.boss_jewel_locations_schema()
 class BossJewelLocationsView(GenericAPIView):
     """View para localizações dos Boss Jewels"""
+    permission_classes = [AllowAny]
     serializer_class = BossJewelLocationSerializer
     throttle_classes = [PublicAPIRateThrottle]
     queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular

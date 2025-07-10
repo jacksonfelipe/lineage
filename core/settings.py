@@ -710,6 +710,21 @@ SPECTACULAR_SETTINGS = {
     'SCHEMA_PATH_PREFIX': '/api/v1/',
     'AUTO_SCHEMA_GENERATION': False,  # Desabilita geração automática de schema
     'TAGS': [],
+    
+    # Configuração de segurança para Swagger UI
+    'SECURITY': [
+        {
+            'Bearer': []
+        }
+    ],
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'http',
+            'scheme': 'bearer',
+            'bearerFormat': 'JWT',
+            'description': 'Digite seu token JWT sem o prefixo "Bearer"'
+        }
+    },
 }
 
 MESSAGE_TAGS = {
