@@ -7,6 +7,7 @@ from django.contrib.auth.views import redirect_to_login
 from django.shortcuts import redirect
 from django.http import FileResponse, Http404
 from django.views.decorators.cache import cache_control
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 import os
 
 def admin_login_redirect(request):
@@ -33,6 +34,9 @@ urlpatterns = [
     
     # main app start
     path('', include('apps.main.home.urls')),
+
+    # api app
+    path('api/v1/', include('apps.api.urls')),
     
     # apps native
     path('app/message/', include('apps.main.message.urls')),
@@ -67,6 +71,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('ckeditor5/', include('django_ckeditor_5.urls')),
     path('jsi18n/', JavaScriptCatalog.as_view(), name='jsi18n'),
+
+    # API Documentation
+    path('api/v1/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/v1/schema/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/v1/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
     path('accounts/', include('allauth.urls')),
 ]
