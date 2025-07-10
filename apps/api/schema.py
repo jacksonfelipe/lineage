@@ -20,7 +20,7 @@ class ServerAPISchema:
     def players_online_schema():
         return extend_schema(
             summary="Jogadores Online",
-            description="Retorna o número de jogadores atualmente online no servidor",
+            description="Retorna o número de jogadores atualmente online no servidor. **Endpoint público** - não requer autenticação.",
             responses={
                 status.HTTP_200_OK: PlayerOnlineSerializer
             },
@@ -31,7 +31,7 @@ class ServerAPISchema:
     def top_pvp_schema():
         return extend_schema(
             summary="Ranking PvP",
-            description="Retorna o ranking dos jogadores com mais PvPs",
+            description="Retorna o ranking dos jogadores com mais PvPs. **Endpoint público** - não requer autenticação.",
             parameters=[
                 OpenApiParameter(
                     name="limit",
@@ -56,7 +56,7 @@ class ServerAPISchema:
     def top_pk_schema():
         return extend_schema(
             summary="Ranking PK",
-            description="Retorna o ranking dos jogadores com mais PKs",
+            description="Retorna o ranking dos jogadores com mais PKs. **Endpoint público** - não requer autenticação.",
             parameters=[
                 OpenApiParameter(
                     name="limit",
@@ -81,7 +81,7 @@ class ServerAPISchema:
     def top_rich_schema():
         return extend_schema(
             summary="Ranking de Riqueza",
-            description="Retorna o ranking dos jogadores mais ricos (Adena)",
+            description="Retorna o ranking dos jogadores mais ricos (Adena). **Endpoint público** - não requer autenticação.",
             parameters=[
                 OpenApiParameter(
                     name="limit",
@@ -106,7 +106,7 @@ class ServerAPISchema:
     def top_online_schema():
         return extend_schema(
             summary="Ranking de Tempo Online",
-            description="Retorna o ranking dos jogadores com mais tempo online",
+            description="Retorna o ranking dos jogadores com mais tempo online. **Endpoint público** - não requer autenticação.",
             parameters=[
                 OpenApiParameter(
                     name="limit",
@@ -131,7 +131,7 @@ class ServerAPISchema:
     def top_level_schema():
         return extend_schema(
             summary="Ranking de Nível",
-            description="Retorna o ranking dos jogadores com maior nível",
+            description="Retorna o ranking dos jogadores com maior nível. **Endpoint público** - não requer autenticação.",
             parameters=[
                 OpenApiParameter(
                     name="limit",
@@ -156,7 +156,7 @@ class ServerAPISchema:
     def top_clan_schema():
         return extend_schema(
             summary="Ranking de Clãs",
-            description="Retorna o ranking dos clãs mais poderosos",
+            description="Retorna o ranking dos clãs mais poderosos. **Endpoint público** - não requer autenticação.",
             parameters=[
                 OpenApiParameter(
                     name="limit",
@@ -176,7 +176,7 @@ class ServerAPISchema:
     def olympiad_ranking_schema():
         return extend_schema(
             summary="Ranking da Olimpíada",
-            description="Retorna o ranking atual da Olimpíada",
+            description="Retorna o ranking atual da Olimpíada. **Endpoint público** - não requer autenticação.",
             responses={
                 status.HTTP_200_OK: OlympiadRankingSerializer(many=True)
             },
@@ -187,7 +187,7 @@ class ServerAPISchema:
     def olympiad_heroes_schema(endpoint_name, description):
         return extend_schema(
             summary=f"Heróis da Olimpíada - {endpoint_name}",
-            description=description,
+            description=f"{description}. **Endpoint público** - não requer autenticação.",
             responses={
                 status.HTTP_200_OK: OlympiadHeroSerializer(many=True)
             },
@@ -198,7 +198,7 @@ class ServerAPISchema:
     def grandboss_status_schema():
         return extend_schema(
             summary="Status dos Grand Bosses",
-            description="Retorna o status atual dos Grand Bosses",
+            description="Retorna o status atual dos Grand Bosses. **Endpoint público** - não requer autenticação.",
             responses={
                 status.HTTP_200_OK: GrandBossStatusSerializer(many=True)
             },
@@ -209,7 +209,7 @@ class ServerAPISchema:
     def siege_schema():
         return extend_schema(
             summary="Status dos Cercos",
-            description="Retorna o status atual dos castelos e cercos",
+            description="Retorna o status atual dos castelos e cercos. **Endpoint público** - não requer autenticação.",
             responses={
                 status.HTTP_200_OK: SiegeSerializer(many=True)
             },
@@ -220,7 +220,7 @@ class ServerAPISchema:
     def siege_participants_schema():
         return extend_schema(
             summary="Participantes do Cerco",
-            description="Retorna os clãs participantes de um cerco específico",
+            description="Retorna os clãs participantes de um cerco específico. **Endpoint público** - não requer autenticação.",
             parameters=[
                 OpenApiParameter(
                     name="castle_id",
@@ -244,7 +244,7 @@ class ServerAPISchema:
     def boss_jewel_locations_schema():
         return extend_schema(
             summary="Localizações dos Boss Jewels",
-            description="Retorna as localizações dos Boss Jewels",
+            description="Retorna as localizações dos Boss Jewels. **Endpoint público** - não requer autenticação.",
             parameters=[
                 OpenApiParameter(
                     name="ids",
@@ -273,7 +273,7 @@ class AuthAPISchema:
     def login_schema():
         return extend_schema(
             summary="Login de Usuário",
-            description="Realiza login do usuário e retorna tokens JWT",
+            description="Realiza login do usuário e retorna tokens JWT. **Endpoint público** - não requer autenticação.",
             request=LoginSerializer,
             responses={
                 status.HTTP_200_OK: CustomTokenObtainPairSerializer,
@@ -286,7 +286,7 @@ class AuthAPISchema:
     def refresh_token_schema():
         return extend_schema(
             summary="Refresh de Token",
-            description="Atualiza o token de acesso usando o refresh token",
+            description="Atualiza o token de acesso usando o refresh token. **Endpoint público** - não requer autenticação.",
             request=RefreshTokenSerializer,
             responses={
                 status.HTTP_200_OK: APIResponseSerializer,
@@ -298,11 +298,12 @@ class AuthAPISchema:
     @staticmethod
     def logout_schema():
         return extend_schema(
-            summary="Logout de Usuário",
-            description="Realiza logout do usuário e invalida o refresh token",
+            summary="Logout de Usuário 🔒",
+            description="Realiza logout do usuário e invalida o refresh token. **Endpoint autenticado** - requer token JWT.",
             responses={
                 status.HTTP_200_OK: APIResponseSerializer,
                 status.HTTP_400_BAD_REQUEST: APIResponseSerializer,
+                status.HTTP_401_UNAUTHORIZED: APIResponseSerializer,
             },
             tags=["Autenticação"]
         )
@@ -316,8 +317,8 @@ class UserAPISchema:
     @staticmethod
     def user_profile_schema():
         return extend_schema(
-            summary="Perfil do Usuário",
-            description="Retorna ou atualiza o perfil do usuário logado",
+            summary="Perfil do Usuário 🔒",
+            description="Retorna ou atualiza o perfil do usuário logado. **Endpoint autenticado** - requer token JWT.",
             responses={
                 status.HTTP_200_OK: UserProfileSerializer,
                 status.HTTP_401_UNAUTHORIZED: APIResponseSerializer,
@@ -328,8 +329,8 @@ class UserAPISchema:
     @staticmethod
     def change_password_schema():
         return extend_schema(
-            summary="Alterar Senha",
-            description="Altera a senha do usuário logado",
+            summary="Alterar Senha 🔒",
+            description="Altera a senha do usuário logado. **Endpoint autenticado** - requer token JWT.",
             request=ChangePasswordSerializer,
             responses={
                 status.HTTP_200_OK: APIResponseSerializer,
@@ -342,8 +343,8 @@ class UserAPISchema:
     @staticmethod
     def user_dashboard_schema():
         return extend_schema(
-            summary="Dashboard do Usuário",
-            description="Retorna dados do dashboard do usuário logado",
+            summary="Dashboard do Usuário 🔒",
+            description="Retorna dados do dashboard do usuário logado. **Endpoint autenticado** - requer token JWT.",
             responses={
                 status.HTTP_200_OK: APIResponseSerializer,
                 status.HTTP_401_UNAUTHORIZED: APIResponseSerializer,
@@ -354,8 +355,8 @@ class UserAPISchema:
     @staticmethod
     def user_stats_schema():
         return extend_schema(
-            summary="Estatísticas do Usuário",
-            description="Retorna estatísticas detalhadas do usuário no jogo",
+            summary="Estatísticas do Usuário 🔒",
+            description="Retorna estatísticas detalhadas do usuário no jogo. **Endpoint autenticado** - requer token JWT.",
             responses={
                 status.HTTP_200_OK: APIResponseSerializer,
                 status.HTTP_401_UNAUTHORIZED: APIResponseSerializer,
@@ -373,7 +374,7 @@ class SearchAPISchema:
     def character_search_schema():
         return extend_schema(
             summary="Busca de Personagens",
-            description="Busca personagens no servidor",
+            description="Busca personagens no servidor. **Endpoint público** - não requer autenticação.",
             parameters=[
                 OpenApiParameter(
                     name="q",
@@ -398,7 +399,7 @@ class SearchAPISchema:
     def item_search_schema():
         return extend_schema(
             summary="Busca de Itens",
-            description="Busca itens no servidor",
+            description="Busca itens no servidor. **Endpoint público** - não requer autenticação.",
             parameters=[
                 OpenApiParameter(
                     name="q",
@@ -429,7 +430,7 @@ class GameDataAPISchema:
     def clan_detail_schema():
         return extend_schema(
             summary="Detalhes do Clã",
-            description="Retorna informações detalhadas de um clã específico",
+            description="Retorna informações detalhadas de um clã específico. **Endpoint público** - não requer autenticação.",
             responses={
                 status.HTTP_200_OK: ClanDetailSerializer,
                 status.HTTP_404_NOT_FOUND: APIResponseSerializer,
@@ -441,7 +442,7 @@ class GameDataAPISchema:
     def auction_items_schema():
         return extend_schema(
             summary="Itens do Leilão",
-            description="Retorna itens disponíveis no leilão",
+            description="Retorna itens disponíveis no leilão. **Endpoint público** - não requer autenticação.",
             parameters=[
                 OpenApiParameter(
                     name="limit",
@@ -473,9 +474,26 @@ class ServerStatusAPISchema:
     def server_status_schema():
         return extend_schema(
             summary="Status do Servidor",
-            description="Retorna o status atual do servidor de jogo",
+            description="Retorna o status atual do servidor de jogo. **Endpoint público** - não requer autenticação.",
             responses={
                 status.HTTP_200_OK: ServerStatusSerializer,
             },
             tags=["Status do Servidor"]
+        )
+
+
+# =========================== API INFO SCHEMAS ===========================
+
+class APIInfoSchema:
+    """Schema para informações da API"""
+    
+    @staticmethod
+    def api_info_schema():
+        return extend_schema(
+            summary="Informações da API",
+            description="Retorna informações gerais sobre a API. **Endpoint público** - não requer autenticação.",
+            responses={
+                status.HTTP_200_OK: APIResponseSerializer,
+            },
+            tags=["Informações da API"]
         ) 

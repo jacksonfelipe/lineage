@@ -61,7 +61,7 @@ Authorization: Bearer <seu_token_aqui>
 }
 ```
 
-#### POST `/auth/logout/`
+#### POST `/auth/logout/` 🔒
 **Descrição**: Realiza logout e invalida o refresh token
 **Autenticação**: Autenticado
 **Body**:
@@ -75,7 +75,7 @@ Authorization: Bearer <seu_token_aqui>
 
 ### 👤 Usuário
 
-#### GET `/user/profile/`
+#### GET `/user/profile/` 🔒
 **Descrição**: Retorna o perfil do usuário logado
 **Autenticação**: Autenticado
 **Resposta**:
@@ -95,7 +95,7 @@ Authorization: Bearer <seu_token_aqui>
 }
 ```
 
-#### PUT `/user/profile/`
+#### PUT `/user/profile/` 🔒
 **Descrição**: Atualiza o perfil do usuário
 **Autenticação**: Autenticado
 **Body**:
@@ -107,7 +107,7 @@ Authorization: Bearer <seu_token_aqui>
 }
 ```
 
-#### POST `/user/change-password/`
+#### POST `/user/change-password/` 🔒
 **Descrição**: Altera a senha do usuário
 **Autenticação**: Autenticado
 **Body**:
@@ -119,7 +119,7 @@ Authorization: Bearer <seu_token_aqui>
 }
 ```
 
-#### GET `/user/dashboard/`
+#### GET `/user/dashboard/` 🔒
 **Descrição**: Retorna dados do dashboard do usuário
 **Autenticação**: Autenticado
 **Resposta**:
@@ -147,7 +147,7 @@ Authorization: Bearer <seu_token_aqui>
 }
 ```
 
-#### GET `/user/stats/`
+#### GET `/user/stats/` 🔒
 **Descrição**: Retorna estatísticas detalhadas do usuário no jogo
 **Autenticação**: Autenticado
 
@@ -458,6 +458,39 @@ curl "http://localhost:80/api/v1/server/top-pvp/?limit=10"
 - **Base URL**: `/api/v1/`
 - **Formato**: JSON
 - **Encoding**: UTF-8
+
+## 📋 Resumo dos Endpoints
+
+### 🔓 Endpoints Públicos (Sem Autenticação)
+- `POST /auth/login/` - Login
+- `POST /auth/refresh/` - Refresh token
+- `GET /server/status/` - Status do servidor
+- `GET /server/players-online/` - Jogadores online
+- `GET /server/top-pvp/` - Ranking PvP
+- `GET /server/top-pk/` - Ranking PK
+- `GET /server/top-clan/` - Ranking de clãs
+- `GET /server/top-rich/` - Ranking de riqueza
+- `GET /server/top-online/` - Ranking de tempo online
+- `GET /server/top-level/` - Ranking de nível
+- `GET /server/olympiad-ranking/` - Ranking da Olimpíada
+- `GET /server/olympiad-heroes/` - Todos os heróis da Olimpíada
+- `GET /server/olympiad-current-heroes/` - Heróis atuais da Olimpíada
+- `GET /server/grandboss-status/` - Status dos Grand Bosses
+- `GET /server/siege/` - Status dos cercos
+- `GET /server/siege-participants/{id}/` - Participantes do cerco
+- `GET /server/boss-jewel-locations/` - Localizações dos Boss Jewels
+- `GET /search/character/` - Busca de personagens
+- `GET /search/item/` - Busca de itens
+- `GET /clan/{nome}/` - Detalhes do clã
+- `GET /auction/items/` - Itens do leilão
+
+### 🔒 Endpoints Autenticados (Requerem Token JWT)
+- `POST /auth/logout/` - Logout
+- `GET /user/profile/` - Perfil do usuário
+- `PUT /user/profile/` - Atualizar perfil
+- `POST /user/change-password/` - Alterar senha
+- `GET /user/dashboard/` - Dashboard do usuário
+- `GET /user/stats/` - Estatísticas do usuário
 
 ## 📞 Suporte
 

@@ -20,7 +20,9 @@ apps/api/
 
 ## Endpoints Disponíveis
 
-### Servidor
+### 🔓 Endpoints Públicos (Sem Autenticação)
+
+#### Servidor
 - `GET /api/server/players-online/` - Jogadores online
 - `GET /api/server/top-pvp/` - Ranking PvP
 - `GET /api/server/top-pk/` - Ranking PK
@@ -29,20 +31,45 @@ apps/api/
 - `GET /api/server/top-online/` - Ranking de tempo online
 - `GET /api/server/top-level/` - Ranking de nível
 
-### Olimpíada
+#### Olimpíada
 - `GET /api/server/olympiad-ranking/` - Ranking da Olimpíada
 - `GET /api/server/olympiad-heroes/` - Todos os heróis
 - `GET /api/server/olympiad-current-heroes/` - Heróis atuais
 
-### Bosses
+#### Bosses
 - `GET /api/server/grandboss-status/` - Status dos Grand Bosses
 - `GET /api/server/boss-jewel-locations/` - Localizações dos Boss Jewels
 
-### Cercos
+#### Cercos
 - `GET /api/server/siege/` - Status dos cercos
 - `GET /api/server/siege-participants/{castle_id}/` - Participantes do cerco
 
+#### Busca e Dados do Jogo
+- `GET /api/search/character/` - Busca de personagens
+- `GET /api/search/item/` - Busca de itens
+- `GET /api/clan/{nome}/` - Detalhes do clã
+- `GET /api/auction/items/` - Itens do leilão
+
+#### Autenticação (Pública para obter tokens)
+- `POST /api/auth/login/` - Login
+- `POST /api/auth/refresh/` - Refresh token
+
+### 🔒 Endpoints Autenticados (Requerem Token JWT)
+
+#### Usuário
+- `POST /api/auth/logout/` - Logout
+- `GET /api/user/profile/` - Perfil do usuário
+- `PUT /api/user/profile/` - Atualizar perfil
+- `POST /api/user/change-password/` - Alterar senha
+- `GET /api/user/dashboard/` - Dashboard do usuário
+- `GET /api/user/stats/` - Estatísticas do usuário
+
 ## Características
+
+### Autenticação
+- **JWT (JSON Web Tokens)**: Para endpoints protegidos
+- **Endpoints Públicos**: Não requerem autenticação
+- **Endpoints Autenticados**: Requerem token JWT no header `Authorization: Bearer <token>`
 
 ### Rate Limiting
 - **APIs Públicas**: 30 requisições por minuto por IP
@@ -57,8 +84,8 @@ apps/api/
 
 ### Documentação
 - Documentação automática com DRF Spectacular
-- Swagger UI disponível em `/api/schema/swagger-ui/`
-- OpenAPI 3.0 schema em `/api/schema/`
+- Swagger UI disponível em `/api/v1/schema/swagger/`
+- OpenAPI 3.0 schema em `/api/v1/schema/`
 
 ### Validação
 - Serializers para validação de entrada e saída
@@ -119,12 +146,28 @@ urlpatterns = [
 
 ## Uso
 
-### Exemplo de Requisição
+### Endpoints Públicos
 ```bash
+# Jogadores online
 curl -X GET "https://seu-dominio.com/api/server/players-online/"
+
+# Ranking PvP com limite
+curl -X GET "https://seu-dominio.com/api/server/top-pvp/?limit=10"
 ```
 
-### Exemplo de Resposta
+### Endpoints Autenticados
+```bash
+# Login para obter token
+curl -X POST "https://seu-dominio.com/api/auth/login/" \
+  -H "Content-Type: application/json" \
+  -d '{"username": "seu_usuario", "password": "sua_senha"}'
+
+# Usar token para acessar perfil
+curl -X GET "https://seu-dominio.com/api/user/profile/" \
+  -H "Authorization: Bearer <seu_token_aqui>"
+```
+
+### Exemplo de Resposta (Público)
 ```json
 {
     "online_count": 150,
@@ -133,9 +176,14 @@ curl -X GET "https://seu-dominio.com/api/server/players-online/"
 }
 ```
 
-### Com Parâmetros
-```bash
-curl -X GET "https://seu-dominio.com/api/server/top-pvp/?limit=10"
+### Exemplo de Resposta (Autenticado)
+```json
+{
+    "username": "seu_usuario",
+    "email": "usuario@exemplo.com",
+    "date_joined": "2024-01-01T00:00:00Z",
+    "last_login": "2024-01-15T10:30:00Z"
+}
 ```
 
 ## Testes

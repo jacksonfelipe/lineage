@@ -25,7 +25,7 @@ from .serializers import (
     APIResponseSerializer, ServerStatusSerializer
 )
 
-from .schema import ServerAPISchema, AuthAPISchema, UserAPISchema, SearchAPISchema, GameDataAPISchema, ServerStatusAPISchema
+from .schema import ServerAPISchema, AuthAPISchema, UserAPISchema, SearchAPISchema, GameDataAPISchema, ServerStatusAPISchema, APIInfoSchema
 
 from utils.dynamic_import import get_query_class
 from apps.lineage.server.decorators import endpoint_enabled
@@ -1145,6 +1145,7 @@ class ServerStatusView(APIView):
 
 # =========================== API INFO VIEWS ===========================
 
+@APIInfoSchema.api_info_schema()
 class APIInfoView(APIView):
     """View para informações da API"""
     permission_classes = [AllowAny]
