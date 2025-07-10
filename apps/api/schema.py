@@ -24,7 +24,8 @@ class ServerAPISchema:
             responses={
                 status.HTTP_200_OK: PlayerOnlineSerializer
             },
-            tags=["Servidor"]
+            tags=["Servidor"],
+            auth=[]
         )
     
     @staticmethod
@@ -49,7 +50,8 @@ class ServerAPISchema:
             responses={
                 status.HTTP_200_OK: TopPlayerSerializer(many=True)
             },
-            tags=["Servidor"]
+            tags=["Servidor"],
+            auth=[]
         )
     
     @staticmethod
@@ -74,7 +76,8 @@ class ServerAPISchema:
             responses={
                 status.HTTP_200_OK: TopPlayerSerializer(many=True)
             },
-            tags=["Servidor"]
+            tags=["Servidor"],
+            auth=[]
         )
     
     @staticmethod
@@ -99,7 +102,8 @@ class ServerAPISchema:
             responses={
                 status.HTTP_200_OK: TopPlayerSerializer(many=True)
             },
-            tags=["Servidor"]
+            tags=["Servidor"],
+            auth=[]
         )
     
     @staticmethod
@@ -124,7 +128,8 @@ class ServerAPISchema:
             responses={
                 status.HTTP_200_OK: TopPlayerSerializer(many=True)
             },
-            tags=["Servidor"]
+            tags=["Servidor"],
+            auth=[]
         )
     
     @staticmethod
@@ -149,7 +154,8 @@ class ServerAPISchema:
             responses={
                 status.HTTP_200_OK: TopPlayerSerializer(many=True)
             },
-            tags=["Servidor"]
+            tags=["Servidor"],
+            auth=[]
         )
     
     @staticmethod
@@ -169,7 +175,8 @@ class ServerAPISchema:
             responses={
                 status.HTTP_200_OK: TopClanSerializer(many=True)
             },
-            tags=["Servidor"]
+            tags=["Servidor"],
+            auth=[]
         )
     
     @staticmethod
@@ -180,7 +187,8 @@ class ServerAPISchema:
             responses={
                 status.HTTP_200_OK: OlympiadRankingSerializer(many=True)
             },
-            tags=["Olimpíada"]
+            tags=["Olimpíada"],
+            auth=[]
         )
     
     @staticmethod
@@ -191,7 +199,8 @@ class ServerAPISchema:
             responses={
                 status.HTTP_200_OK: OlympiadHeroSerializer(many=True)
             },
-            tags=["Olimpíada"]
+            tags=["Olimpíada"],
+            auth=[]
         )
     
     @staticmethod
@@ -202,7 +211,8 @@ class ServerAPISchema:
             responses={
                 status.HTTP_200_OK: GrandBossStatusSerializer(many=True)
             },
-            tags=["Bosses"]
+            tags=["Bosses"],
+            auth=[]
         )
     
     @staticmethod
@@ -213,7 +223,8 @@ class ServerAPISchema:
             responses={
                 status.HTTP_200_OK: SiegeSerializer(many=True)
             },
-            tags=["Cercos"]
+            tags=["Cercos"],
+            auth=[]
         )
     
     @staticmethod
@@ -237,7 +248,8 @@ class ServerAPISchema:
             responses={
                 status.HTTP_200_OK: SiegeParticipantSerializer(many=True)
             },
-            tags=["Cercos"]
+            tags=["Cercos"],
+            auth=[]
         )
     
     @staticmethod
@@ -261,7 +273,8 @@ class ServerAPISchema:
             responses={
                 status.HTTP_200_OK: BossJewelLocationSerializer(many=True)
             },
-            tags=["Bosses"]
+            tags=["Bosses"],
+            auth=[]
         ) 
 
 # =========================== AUTHENTICATION SCHEMAS ===========================
@@ -279,7 +292,8 @@ class AuthAPISchema:
                 status.HTTP_200_OK: CustomTokenObtainPairSerializer,
                 status.HTTP_401_UNAUTHORIZED: APIResponseSerializer,
             },
-            tags=["Autenticação"]
+            tags=["Autenticação"],
+            auth=[]
         )
     
     @staticmethod
@@ -292,7 +306,8 @@ class AuthAPISchema:
                 status.HTTP_200_OK: APIResponseSerializer,
                 status.HTTP_401_UNAUTHORIZED: APIResponseSerializer,
             },
-            tags=["Autenticação"]
+            tags=["Autenticação"],
+            auth=[]
         )
     
     @staticmethod
@@ -305,7 +320,8 @@ class AuthAPISchema:
                 status.HTTP_400_BAD_REQUEST: APIResponseSerializer,
                 status.HTTP_401_UNAUTHORIZED: APIResponseSerializer,
             },
-            tags=["Autenticação"]
+            tags=["Autenticação"],
+            auth=[{'Bearer': []}]
         )
 
 
@@ -323,7 +339,8 @@ class UserAPISchema:
                 status.HTTP_200_OK: UserProfileSerializer,
                 status.HTTP_401_UNAUTHORIZED: APIResponseSerializer,
             },
-            tags=["Usuário"]
+            tags=["Usuário"],
+            auth=[{'Bearer': []}]
         )
     
     @staticmethod
@@ -337,7 +354,8 @@ class UserAPISchema:
                 status.HTTP_400_BAD_REQUEST: APIResponseSerializer,
                 status.HTTP_401_UNAUTHORIZED: APIResponseSerializer,
             },
-            tags=["Usuário"]
+            tags=["Usuário"],
+            auth=[{'Bearer': []}]
         )
     
     @staticmethod
@@ -349,7 +367,8 @@ class UserAPISchema:
                 status.HTTP_200_OK: APIResponseSerializer,
                 status.HTTP_401_UNAUTHORIZED: APIResponseSerializer,
             },
-            tags=["Usuário"]
+            tags=["Usuário"],
+            auth=[{'Bearer': []}]
         )
     
     @staticmethod
@@ -361,7 +380,8 @@ class UserAPISchema:
                 status.HTTP_200_OK: APIResponseSerializer,
                 status.HTTP_401_UNAUTHORIZED: APIResponseSerializer,
             },
-            tags=["Usuário"]
+            tags=["Usuário"],
+            auth=[{'Bearer': []}]
         )
 
 
@@ -392,7 +412,8 @@ class SearchAPISchema:
                 status.HTTP_200_OK: CharacterSerializer(many=True),
                 status.HTTP_400_BAD_REQUEST: APIResponseSerializer,
             },
-            tags=["Busca"]
+            tags=["Busca"],
+            auth=[]
         )
     
     @staticmethod
@@ -417,7 +438,8 @@ class SearchAPISchema:
                 status.HTTP_200_OK: ItemSerializer(many=True),
                 status.HTTP_400_BAD_REQUEST: APIResponseSerializer,
             },
-            tags=["Busca"]
+            tags=["Busca"],
+            auth=[]
         )
 
 
@@ -435,7 +457,8 @@ class GameDataAPISchema:
                 status.HTTP_200_OK: ClanDetailSerializer,
                 status.HTTP_404_NOT_FOUND: APIResponseSerializer,
             },
-            tags=["Dados do Jogo"]
+            tags=["Dados do Jogo"],
+            auth=[]
         )
     
     @staticmethod
@@ -461,7 +484,8 @@ class GameDataAPISchema:
                 status.HTTP_200_OK: AuctionItemSerializer(many=True),
                 status.HTTP_400_BAD_REQUEST: APIResponseSerializer,
             },
-            tags=["Dados do Jogo"]
+            tags=["Dados do Jogo"],
+            auth=[]
         )
 
 
@@ -478,7 +502,8 @@ class ServerStatusAPISchema:
             responses={
                 status.HTTP_200_OK: ServerStatusSerializer,
             },
-            tags=["Status do Servidor"]
+            tags=["Status do Servidor"],
+            auth=[]
         )
 
 
@@ -495,5 +520,6 @@ class APIInfoSchema:
             responses={
                 status.HTTP_200_OK: APIResponseSerializer,
             },
-            tags=["Informações da API"]
+            tags=["Informações da API"],
+            auth=[]
         ) 
