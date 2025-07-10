@@ -56,6 +56,12 @@ requests
 anthropic
 astor
 
+# Api
+djangorestframework-simplejwt
+django-filter
+django-guardian
+django-extensions
+
 # websockets
 channels
 channels-redis
@@ -72,3 +78,7 @@ django-ckeditor
 django-otp 
 qrcode
 pyotp
+
+# Docs
+mkdocs
+mkdocs-material

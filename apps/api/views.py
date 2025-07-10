@@ -1,21 +1,35 @@
-from rest_framework.decorators import api_view, throttle_classes
+from rest_framework.decorators import api_view, throttle_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.throttling import AnonRateThrottle
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveAPIView
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
+from rest_framework.views import APIView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.cache import cache
 from django.conf import settings
+from django.contrib.auth import authenticate
+from django.utils import timezone
+from datetime import datetime
+import logging
+from drf_spectacular.utils import extend_schema
 
 from .serializers import (
     PlayerOnlineSerializer, TopPlayerSerializer, TopClanSerializer,
     OlympiadRankingSerializer, OlympiadHeroSerializer, GrandBossStatusSerializer,
-    SiegeSerializer, SiegeParticipantSerializer, BossJewelLocationSerializer
+    SiegeSerializer, SiegeParticipantSerializer, BossJewelLocationSerializer,
+    CustomTokenObtainPairSerializer, RefreshTokenSerializer, LoginSerializer,
+    UserProfileSerializer, ChangePasswordSerializer, CharacterSerializer,
+    ItemSerializer, ClanDetailSerializer, AuctionItemSerializer,
+    APIResponseSerializer, ServerStatusSerializer
 )
 
-from .schema import ServerAPISchema
+from .schema import ServerAPISchema, AuthAPISchema, UserAPISchema, SearchAPISchema, GameDataAPISchema, ServerStatusAPISchema
 
 from utils.dynamic_import import get_query_class
 from apps.lineage.server.decorators import endpoint_enabled
+from apps.lineage.server.models import ApiEndpointToggle
 
 # Carrega a classe LineageStats baseada na configuração
 LineageStats = get_query_class("LineageStats")
@@ -32,6 +46,7 @@ class PlayersOnlineView(GenericAPIView):
     """View para dados de jogadores online"""
     serializer_class = PlayerOnlineSerializer
     throttle_classes = [PublicAPIRateThrottle]
+    queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
     
     def get(self, request):
         """
@@ -86,6 +101,7 @@ class TopPvPView(GenericAPIView):
     """View para ranking PvP"""
     serializer_class = TopPlayerSerializer
     throttle_classes = [PublicAPIRateThrottle]
+    queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
     
     def get(self, request):
         """
@@ -125,6 +141,7 @@ class TopPKView(GenericAPIView):
     """View para ranking PK"""
     serializer_class = TopPlayerSerializer
     throttle_classes = [PublicAPIRateThrottle]
+    queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
     
     def get(self, request):
         """
@@ -164,6 +181,7 @@ class TopClanView(GenericAPIView):
     """View para ranking de clãs"""
     serializer_class = TopClanSerializer
     throttle_classes = [PublicAPIRateThrottle]
+    queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
     
     def get(self, request):
         """
@@ -225,6 +243,7 @@ class TopRichView(GenericAPIView):
     """View para ranking de riqueza"""
     serializer_class = TopPlayerSerializer
     throttle_classes = [PublicAPIRateThrottle]
+    queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
     
     def get(self, request):
         """
@@ -264,6 +283,7 @@ class TopOnlineView(GenericAPIView):
     """View para ranking de tempo online"""
     serializer_class = TopPlayerSerializer
     throttle_classes = [PublicAPIRateThrottle]
+    queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
     
     def get(self, request):
         """
@@ -303,6 +323,7 @@ class TopLevelView(GenericAPIView):
     """View para ranking de nível"""
     serializer_class = TopPlayerSerializer
     throttle_classes = [PublicAPIRateThrottle]
+    queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
     
     def get(self, request):
         """
@@ -342,6 +363,7 @@ class OlympiadRankingView(GenericAPIView):
     """View para ranking da Olimpíada"""
     serializer_class = OlympiadRankingSerializer
     throttle_classes = [PublicAPIRateThrottle]
+    queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
     
     def get(self, request):
         """
@@ -389,6 +411,7 @@ class OlympiadAllHeroesView(GenericAPIView):
     """View para todos os heróis da Olimpíada"""
     serializer_class = OlympiadHeroSerializer
     throttle_classes = [PublicAPIRateThrottle]
+    queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
     
     def get(self, request):
         """
@@ -420,6 +443,7 @@ class OlympiadCurrentHeroesView(GenericAPIView):
     """View para heróis atuais da Olimpíada"""
     serializer_class = OlympiadHeroSerializer
     throttle_classes = [PublicAPIRateThrottle]
+    queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
     
     def get(self, request):
         """
@@ -451,6 +475,7 @@ class GrandBossStatusView(GenericAPIView):
     """View para status dos Grand Bosses"""
     serializer_class = GrandBossStatusSerializer
     throttle_classes = [PublicAPIRateThrottle]
+    queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
     
     def get(self, request):
         """
@@ -524,6 +549,7 @@ class SiegeView(GenericAPIView):
     """View para status dos cercos"""
     serializer_class = SiegeSerializer
     throttle_classes = [PublicAPIRateThrottle]
+    queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
     
     def get(self, request):
         """
@@ -584,6 +610,7 @@ class SiegeParticipantsView(GenericAPIView):
     """View para participantes do cerco"""
     serializer_class = SiegeParticipantSerializer
     throttle_classes = [PublicAPIRateThrottle]
+    queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
     
     def get(self, request, castle_id):
         """
@@ -621,6 +648,7 @@ class BossJewelLocationsView(GenericAPIView):
     """View para localizações dos Boss Jewels"""
     serializer_class = BossJewelLocationSerializer
     throttle_classes = [PublicAPIRateThrottle]
+    queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
     
     def get(self, request):
         """
@@ -691,5 +719,475 @@ class BossJewelLocationsView(GenericAPIView):
             logger.error(f"Erro em boss_jewel_locations: {str(e)}", exc_info=True)
             return Response(
                 {'error': f'Erro ao buscar localizações dos Boss Jewels: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+# =========================== AUTHENTICATION VIEWS ===========================
+
+@AuthAPISchema.login_schema()
+class LoginView(TokenObtainPairView):
+    """View para login com JWT"""
+    serializer_class = CustomTokenObtainPairSerializer
+    permission_classes = [AllowAny]
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            response = super().post(request, *args, **kwargs)
+            
+            # Adiciona informações extras à resposta
+            response.data.update({
+                'message': 'Login realizado com sucesso',
+                'timestamp': timezone.now().isoformat(),
+            })
+            
+            return response
+        except Exception as e:
+            logger = logging.getLogger(__name__)
+            logger.error(f"Erro no login: {str(e)}", exc_info=True)
+            return Response(
+                {'error': 'Erro ao realizar login'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+@AuthAPISchema.refresh_token_schema()
+class RefreshTokenView(TokenRefreshView):
+    """View para refresh de token JWT"""
+    serializer_class = RefreshTokenSerializer
+    permission_classes = [AllowAny]
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            response = super().post(request, *args, **kwargs)
+            response.data.update({
+                'message': 'Token atualizado com sucesso',
+                'timestamp': timezone.now().isoformat(),
+            })
+            return response
+        except Exception as e:
+            return Response(
+                {'error': 'Token inválido ou expirado'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+
+@AuthAPISchema.logout_schema()
+class LogoutView(APIView):
+    """View para logout"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = APIResponseSerializer
+    
+    def post(self, request):
+        try:
+            refresh_token = request.data.get('refresh')
+            if refresh_token:
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+            
+            return Response({
+                'message': 'Logout realizado com sucesso',
+                'timestamp': timezone.now().isoformat(),
+            })
+        except Exception as e:
+            return Response(
+                {'error': 'Erro ao realizar logout'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+@UserAPISchema.user_profile_schema()
+class UserProfileView(APIView):
+    """View para perfil do usuário"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserProfileSerializer
+    
+    def get(self, request):
+        """Retorna o perfil do usuário logado"""
+        try:
+            serializer = UserProfileSerializer(request.user)
+            return Response({
+                'success': True,
+                'data': serializer.data,
+                'timestamp': timezone.now().isoformat(),
+            })
+        except Exception as e:
+            return Response(
+                {'error': 'Erro ao buscar perfil do usuário'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    
+    def put(self, request):
+        """Atualiza o perfil do usuário"""
+        try:
+            serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({
+                    'success': True,
+                    'message': 'Perfil atualizado com sucesso',
+                    'data': serializer.data,
+                    'timestamp': timezone.now().isoformat(),
+                })
+            return Response(
+                {'error': serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return Response(
+                {'error': 'Erro ao atualizar perfil'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+@UserAPISchema.change_password_schema()
+class ChangePasswordView(APIView):
+    """View para mudança de senha"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = ChangePasswordSerializer
+    
+    def post(self, request):
+        try:
+            serializer = ChangePasswordSerializer(data=request.data)
+            if serializer.is_valid():
+                user = request.user
+                if not user.check_password(serializer.validated_data['old_password']):
+                    return Response(
+                        {'error': 'Senha atual incorreta'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                
+                user.set_password(serializer.validated_data['new_password'])
+                user.save()
+                
+                return Response({
+                    'success': True,
+                    'message': 'Senha alterada com sucesso',
+                    'timestamp': timezone.now().isoformat(),
+                })
+            return Response(
+                {'error': serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return Response(
+                {'error': 'Erro ao alterar senha'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+# =========================== GAME VIEWS ===========================
+
+@SearchAPISchema.character_search_schema()
+class CharacterSearchView(APIView):
+    """View para busca de personagens"""
+    permission_classes = [AllowAny]
+    throttle_classes = [PublicAPIRateThrottle]
+    serializer_class = CharacterSerializer
+    
+    def get(self, request):
+        try:
+            query = request.GET.get('q', '').strip()
+            if not query or len(query) < 2:
+                return Response(
+                    {'error': 'Query deve ter pelo menos 2 caracteres'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # Busca personagens no banco de dados do jogo
+            cache_key = f'api_character_search_{query}'
+            cached_data = cache.get(cache_key)
+            
+            if cached_data is None:
+                # Aqui você implementaria a busca real no banco do jogo
+                # Por enquanto, retorna dados mock
+                data = LineageStats.search_characters(query) if hasattr(LineageStats, 'search_characters') else []
+                cache.set(cache_key, data, 300)  # Cache por 5 minutos
+            else:
+                data = cached_data
+            
+            serializer = CharacterSerializer(data, many=True)
+            return Response({
+                'success': True,
+                'data': serializer.data,
+                'count': len(serializer.data),
+                'timestamp': timezone.now().isoformat(),
+            })
+        except Exception as e:
+            return Response(
+                {'error': 'Erro ao buscar personagens'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+@SearchAPISchema.item_search_schema()
+class ItemSearchView(APIView):
+    """View para busca de itens"""
+    permission_classes = [AllowAny]
+    throttle_classes = [PublicAPIRateThrottle]
+    serializer_class = ItemSerializer
+    
+    def get(self, request):
+        try:
+            query = request.GET.get('q', '').strip()
+            if not query or len(query) < 2:
+                return Response(
+                    {'error': 'Query deve ter pelo menos 2 caracteres'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            cache_key = f'api_item_search_{query}'
+            cached_data = cache.get(cache_key)
+            
+            if cached_data is None:
+                # Implementar busca real de itens
+                data = LineageStats.search_items(query) if hasattr(LineageStats, 'search_items') else []
+                cache.set(cache_key, data, 600)  # Cache por 10 minutos
+            else:
+                data = cached_data
+            
+            serializer = ItemSerializer(data, many=True)
+            return Response({
+                'success': True,
+                'data': serializer.data,
+                'count': len(serializer.data),
+                'timestamp': timezone.now().isoformat(),
+            })
+        except Exception as e:
+            return Response(
+                {'error': 'Erro ao buscar itens'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+@GameDataAPISchema.clan_detail_schema()
+class ClanDetailView(APIView):
+    """View para detalhes de clã"""
+    permission_classes = [AllowAny]
+    throttle_classes = [PublicAPIRateThrottle]
+    serializer_class = ClanDetailSerializer
+    
+    def get(self, request, clan_name):
+        try:
+            cache_key = f'api_clan_detail_{clan_name}'
+            cached_data = cache.get(cache_key)
+            
+            if cached_data is None:
+                # Busca dados do clã
+                data = LineageStats.get_clan_details(clan_name) if hasattr(LineageStats, 'get_clan_details') else None
+                if data:
+                    cache.set(cache_key, data, 300)  # Cache por 5 minutos
+            else:
+                data = cached_data
+            
+            if not data:
+                return Response(
+                    {'error': 'Clã não encontrado'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            
+            serializer = ClanDetailSerializer(data)
+            return Response({
+                'success': True,
+                'data': serializer.data,
+                'timestamp': timezone.now().isoformat(),
+            })
+        except Exception as e:
+            return Response(
+                {'error': 'Erro ao buscar dados do clã'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+@GameDataAPISchema.auction_items_schema()
+class AuctionItemsView(APIView):
+    """View para itens do leilão"""
+    permission_classes = [AllowAny]
+    throttle_classes = [PublicAPIRateThrottle]
+    serializer_class = AuctionItemSerializer
+    
+    def get(self, request):
+        try:
+            limit = int(request.GET.get("limit", 20))
+            limit = min(limit, 100)
+            
+            cache_key = f'api_auction_items_{limit}'
+            cached_data = cache.get(cache_key)
+            
+            if cached_data is None:
+                # Busca itens do leilão
+                data = LineageStats.get_auction_items(limit) if hasattr(LineageStats, 'get_auction_items') else []
+                cache.set(cache_key, data, 60)  # Cache por 1 minuto
+            else:
+                data = cached_data
+            
+            serializer = AuctionItemSerializer(data, many=True)
+            return Response({
+                'success': True,
+                'data': serializer.data,
+                'count': len(serializer.data),
+                'timestamp': timezone.now().isoformat(),
+            })
+        except ValueError:
+            return Response(
+                {'error': 'Parâmetro limit deve ser um número válido'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return Response(
+                {'error': 'Erro ao buscar itens do leilão'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+# =========================== USER DASHBOARD VIEWS ===========================
+
+@UserAPISchema.user_dashboard_schema()
+class UserDashboardView(APIView):
+    """View para dashboard do usuário"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = APIResponseSerializer
+    
+    def get(self, request):
+        try:
+            user = request.user
+            
+            # Busca dados do usuário no jogo
+            game_data = LineageStats.get_user_stats(user.username) if hasattr(LineageStats, 'get_user_stats') else {}
+            
+            dashboard_data = {
+                'user_info': {
+                    'username': user.username,
+                    'email': user.email,
+                    'date_joined': user.date_joined,
+                    'last_login': user.last_login,
+                },
+                'game_stats': game_data,
+                'server_status': {
+                    'online': True,
+                    'players_online': LineageStats.players_online()[0].get('quant', 0) if LineageStats.players_online() else 0,
+                }
+            }
+            
+            return Response({
+                'success': True,
+                'data': dashboard_data,
+                'timestamp': timezone.now().isoformat(),
+            })
+        except Exception as e:
+            return Response(
+                {'error': 'Erro ao buscar dados do dashboard'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+@UserAPISchema.user_stats_schema()
+class UserStatsView(APIView):
+    """View para estatísticas do usuário"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = APIResponseSerializer
+    
+    def get(self, request):
+        try:
+            user = request.user
+            
+            # Busca estatísticas do usuário
+            stats_data = LineageStats.get_user_detailed_stats(user.username) if hasattr(LineageStats, 'get_user_detailed_stats') else {}
+            
+            return Response({
+                'success': True,
+                'data': stats_data,
+                'timestamp': timezone.now().isoformat(),
+            })
+        except Exception as e:
+            return Response(
+                {'error': 'Erro ao buscar estatísticas do usuário'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+# =========================== SERVER STATUS VIEWS ===========================
+
+@ServerStatusAPISchema.server_status_schema()
+class ServerStatusView(APIView):
+    """View para status do servidor"""
+    permission_classes = [AllowAny]
+    throttle_classes = [PublicAPIRateThrottle]
+    serializer_class = ServerStatusSerializer
+    
+    def get(self, request):
+        try:
+            # Verifica status do servidor
+            game_server_status = LineageStats.check_server_status() if hasattr(LineageStats, 'check_server_status') else True
+            
+            status_data = {
+                'server_name': getattr(settings, 'PROJECT_TITLE', 'Lineage 2 Server'),
+                'status': 'online' if game_server_status else 'offline',
+                'players_online': LineageStats.players_online()[0].get('quant', 0) if LineageStats.players_online() else 0,
+                'max_players': 1000,  # Configurável
+                'uptime': '24h 30m',  # Implementar cálculo real
+                'last_update': timezone.now(),
+                'version': getattr(settings, 'VERSION', '1.0.0'),
+                'maintenance_mode': False,
+            }
+            
+            serializer = ServerStatusSerializer(status_data)
+            return Response({
+                'success': True,
+                'data': serializer.data,
+                'timestamp': timezone.now().isoformat(),
+            })
+        except Exception as e:
+            return Response(
+                {'error': 'Erro ao verificar status do servidor'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+# =========================== API INFO VIEWS ===========================
+
+class APIInfoView(APIView):
+    """View para informações da API"""
+    permission_classes = [AllowAny]
+    serializer_class = APIResponseSerializer
+    
+    def get(self, request):
+        try:
+            api_info = {
+                'name': 'Lineage 2 API',
+                'version': getattr(settings, 'VERSION', '1.0.0'),
+                'description': 'API pública para servidores de Lineage 2',
+                'documentation': '/api/v1/schema/swagger/',
+                'endpoints': {
+                    'public': [
+                        '/api/v1/server/status/',
+                        '/api/v1/server/players-online/',
+                        '/api/v1/search/character/',
+                        '/api/v1/search/item/',
+                        '/api/v1/clan/{name}/',
+                        '/api/v1/auction/items/',
+                    ],
+                    'authenticated': [
+                        '/api/v1/auth/login/',
+                        '/api/v1/auth/refresh/',
+                        '/api/v1/auth/logout/',
+                        '/api/v1/user/profile/',
+                        '/api/v1/user/dashboard/',
+                        '/api/v1/user/stats/',
+                    ]
+                },
+                'rate_limits': {
+                    'anonymous': '30/minute',
+                    'authenticated': '100/minute'
+                }
+            }
+            
+            return Response({
+                'success': True,
+                'data': api_info,
+                'timestamp': timezone.now().isoformat(),
+            })
+        except Exception as e:
+            return Response(
+                {'error': 'Erro ao buscar informações da API'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
