@@ -25,6 +25,7 @@ from .serializers import (
     APIResponseSerializer, ServerStatusSerializer
 )
 from .forms import ApiEndpointToggleForm
+from .permissions import IsSuperUser, IsAPIAdmin, IsMonitoringAdmin
 
 from .schema import ServerAPISchema, AuthAPISchema, UserAPISchema, SearchAPISchema, GameDataAPISchema, ServerStatusAPISchema, APIInfoSchema
 
@@ -1570,7 +1571,7 @@ class CacheStatsView(APIView):
 @endpoint_enabled('api_config')
 @extend_schema(
     summary="API Endpoint Configuration",
-    description="Configuração de endpoints da API (apenas para administradores)",
+    description="Configuração de endpoints da API (apenas para superusers)",
     responses={
         status.HTTP_200_OK: APIResponseSerializer,
         status.HTTP_403_FORBIDDEN: APIResponseSerializer,
@@ -1580,17 +1581,17 @@ class CacheStatsView(APIView):
 )
 class APIConfigView(APIView):
     """View para configuração de endpoints da API"""
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSuperUser]
     serializer_class = APIResponseSerializer
     
     def get(self, request):
         """Retorna a configuração atual dos endpoints"""
         try:
-            # Verifica se o usuário é staff
-            if not request.user.is_staff:
+            # Verifica se o usuário é superuser
+            if not request.user.is_superuser:
                 return Response({
                     'success': False,
-                    'error': 'Acesso negado. Apenas administradores podem acessar configurações.',
+                    'error': 'Acesso negado. Apenas superusers podem acessar configurações.',
                     'timestamp': timezone.now().isoformat(),
                 }, status=status.HTTP_403_FORBIDDEN)
             
@@ -1619,11 +1620,11 @@ class APIConfigView(APIView):
     def post(self, request):
         """Atualiza a configuração dos endpoints"""
         try:
-            # Verifica se o usuário é staff
-            if not request.user.is_staff:
+            # Verifica se o usuário é superuser
+            if not request.user.is_superuser:
                 return Response({
                     'success': False,
-                    'error': 'Acesso negado. Apenas administradores podem modificar configurações.',
+                    'error': 'Acesso negado. Apenas superusers podem modificar configurações.',
                     'timestamp': timezone.now().isoformat(),
                 }, status=status.HTTP_403_FORBIDDEN)
             
@@ -1683,7 +1684,7 @@ class APIConfigView(APIView):
 @endpoint_enabled('api_config_panel')
 @extend_schema(
     summary="API Configuration Panel",
-    description="Painel de configuração da API para administradores (interface HTML)",
+    description="Painel de configuração da API para superusers (interface HTML)",
     responses={
         status.HTTP_200_OK: APIResponseSerializer,
         status.HTTP_403_FORBIDDEN: APIResponseSerializer,
@@ -1693,7 +1694,7 @@ class APIConfigView(APIView):
 )
 class APIConfigPanelView(APIView):
     """View para painel de configuração da API (interface HTML)"""
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSuperUser]
     serializer_class = APIResponseSerializer  # Adiciona serializer para DRF Spectacular
     
     def get(self, request):
@@ -1703,9 +1704,9 @@ class APIConfigPanelView(APIView):
             logger = logging.getLogger(__name__)
             logger.info(f"APIConfigPanelView accessed by user: {request.user.username}")
             
-            # Verifica se o usuário é staff
-            if not request.user.is_staff:
-                logger.warning(f"Non-staff user {request.user.username} tried to access config panel")
+            # Verifica se o usuário é superuser
+            if not request.user.is_superuser:
+                logger.warning(f"Non-superuser {request.user.username} tried to access config panel")
                 from django.shortcuts import render
                 return render(request, "errors/403.html", status=403)
             
@@ -1754,11 +1755,11 @@ class APIConfigPanelView(APIView):
     def post(self, request):
         """Atualiza a configuração via AJAX"""
         try:
-            # Verifica se o usuário é staff
-            if not request.user.is_staff:
+            # Verifica se o usuário é superuser
+            if not request.user.is_superuser:
                 return Response({
                     'success': False,
-                    'error': 'Acesso negado. Apenas administradores podem modificar configurações.',
+                    'error': 'Acesso negado. Apenas superusers podem modificar configurações.',
                     'timestamp': timezone.now().isoformat(),
                 }, status=status.HTTP_403_FORBIDDEN)
             
