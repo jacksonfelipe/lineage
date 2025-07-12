@@ -1,9 +1,11 @@
-from django.urls import path
+from django.shortcuts import redirect
+from django.urls import path, include
 from . import views
 
 app_name = 'api'
 
-urlpatterns = [
+# URLs da versão 1 (atual)
+v1_patterns = [
     # =========================== API INFO ===========================
     path('', views.APIInfoView.as_view(), name='api_info'),
     
@@ -42,4 +44,21 @@ urlpatterns = [
     # =========================== GAME DATA ===========================
     path('clan/<str:clan_name>/', views.ClanDetailView.as_view(), name='clan_detail'),
     path('auction/items/', views.AuctionItemsView.as_view(), name='auction_items'),
+    
+    # =========================== MONITORING & METRICS ===========================
+    path('health/', views.HealthCheckView.as_view(), name='health_check'),
+    path('metrics/hourly/', views.HourlyMetricsView.as_view(), name='hourly_metrics'),
+    path('metrics/daily/', views.DailyMetricsView.as_view(), name='daily_metrics'),
+    path('metrics/performance/', views.PerformanceMetricsView.as_view(), name='performance_metrics'),
+    path('metrics/slow-queries/', views.SlowQueriesView.as_view(), name='slow_queries'),
+    path('cache/stats/', views.CacheStatsView.as_view(), name='cache_stats'),
+]
+
+# URLs principais com versionamento
+urlpatterns = [
+    # Versão 1 (atual)
+    path('v1/', include(v1_patterns)),
+    
+    # Redirecionamento da raiz para Swagger
+    path('', views.APIRedirectView.as_view(), name='api_redirect'),
 ]

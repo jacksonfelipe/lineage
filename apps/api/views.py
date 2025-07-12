@@ -13,7 +13,7 @@ from django.contrib.auth import authenticate
 from django.utils import timezone
 from datetime import datetime
 import logging
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 from .serializers import (
     PlayerOnlineSerializer, TopPlayerSerializer, TopClanSerializer,
@@ -1206,3 +1206,373 @@ class APIInfoView(APIView):
                 {'error': 'Erro ao buscar informações da API'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+# =========================== MONITORING VIEWS ===========================
+
+@extend_schema(
+    summary="Health Check",
+    description="Verifica a saúde de todos os sistemas da API",
+    responses={
+        status.HTTP_200_OK: APIResponseSerializer,
+        status.HTTP_503_SERVICE_UNAVAILABLE: APIResponseSerializer,
+    },
+    tags=["Monitoramento"],
+    auth=[]
+)
+class HealthCheckView(APIView):
+    """View para health check da API"""
+    permission_classes = [AllowAny]
+    serializer_class = APIResponseSerializer
+    
+    def get(self, request):
+        """Executa verificação completa de saúde"""
+        try:
+            from .monitoring import HealthCheck
+            
+            health_status = HealthCheck.full_health_check()
+            
+            if health_status['status'] == 'healthy':
+                return Response({
+                    'success': True,
+                    'data': health_status,
+                    'timestamp': timezone.now().isoformat(),
+                })
+            else:
+                return Response({
+                    'success': False,
+                    'data': health_status,
+                    'timestamp': timezone.now().isoformat(),
+                }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+                
+        except Exception as e:
+            return Response({
+                'success': False,
+                'error': f'Erro ao executar health check: {str(e)}',
+                'timestamp': timezone.now().isoformat(),
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@extend_schema(
+    summary="Métricas da Última Hora",
+    description="Retorna estatísticas da API da última hora",
+    responses={
+        status.HTTP_200_OK: APIResponseSerializer,
+        status.HTTP_403_FORBIDDEN: APIResponseSerializer,
+    },
+    tags=["Monitoramento"],
+    auth=[]
+)
+class HourlyMetricsView(APIView):
+    """View para métricas da última hora"""
+    permission_classes = [IsAuthenticated]  # Apenas usuários autenticados
+    
+    def get(self, request):
+        """Retorna métricas da última hora"""
+        try:
+            from .monitoring import APIMetrics
+            
+            # Verifica se o usuário é staff
+            if not request.user.is_staff:
+                return Response({
+                    'success': False,
+                    'error': 'Acesso negado. Apenas administradores podem acessar métricas.',
+                    'timestamp': timezone.now().isoformat(),
+                }, status=status.HTTP_403_FORBIDDEN)
+            
+            metrics = APIMetrics.get_hourly_stats()
+            
+            return Response({
+                'success': True,
+                'data': metrics,
+                'timestamp': timezone.now().isoformat(),
+            })
+            
+        except Exception as e:
+            return Response({
+                'success': False,
+                'error': f'Erro ao buscar métricas: {str(e)}',
+                'timestamp': timezone.now().isoformat(),
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@extend_schema(
+    summary="Métricas do Dia",
+    description="Retorna estatísticas da API do dia atual",
+    responses={
+        status.HTTP_200_OK: APIResponseSerializer,
+        status.HTTP_403_FORBIDDEN: APIResponseSerializer,
+    },
+    tags=["Monitoramento"],
+    auth=[]
+)
+class DailyMetricsView(APIView):
+    """View para métricas do dia"""
+    permission_classes = [IsAuthenticated]  # Apenas usuários autenticados
+    
+    def get(self, request):
+        """Retorna métricas do dia atual"""
+        try:
+            from .monitoring import APIMetrics
+            
+            # Verifica se o usuário é staff
+            if not request.user.is_staff:
+                return Response({
+                    'success': False,
+                    'error': 'Acesso negado. Apenas administradores podem acessar métricas.',
+                    'timestamp': timezone.now().isoformat(),
+                }, status=status.HTTP_403_FORBIDDEN)
+            
+            metrics = APIMetrics.get_daily_stats()
+            
+            return Response({
+                'success': True,
+                'data': metrics,
+                'timestamp': timezone.now().isoformat(),
+            })
+            
+        except Exception as e:
+            return Response({
+                'success': False,
+                'error': f'Erro ao buscar métricas: {str(e)}',
+                'timestamp': timezone.now().isoformat(),
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@extend_schema(
+    summary="Performance por Endpoint",
+    description="Retorna estatísticas de performance por endpoint",
+    responses={
+        status.HTTP_200_OK: APIResponseSerializer,
+        status.HTTP_403_FORBIDDEN: APIResponseSerializer,
+    },
+    tags=["Monitoramento"],
+    auth=[]
+)
+class PerformanceMetricsView(APIView):
+    """View para métricas de performance"""
+    permission_classes = [IsAuthenticated]  # Apenas usuários autenticados
+    
+    def get(self, request):
+        """Retorna métricas de performance por endpoint"""
+        try:
+            from .monitoring import APIPerformance
+            
+            # Verifica se o usuário é staff
+            if not request.user.is_staff:
+                return Response({
+                    'success': False,
+                    'error': 'Acesso negado. Apenas administradores podem acessar métricas.',
+                    'timestamp': timezone.now().isoformat(),
+                }, status=status.HTTP_403_FORBIDDEN)
+            
+            performance = APIPerformance.get_endpoint_performance()
+            
+            return Response({
+                'success': True,
+                'data': performance,
+                'timestamp': timezone.now().isoformat(),
+            })
+            
+        except Exception as e:
+            return Response({
+                'success': False,
+                'error': f'Erro ao buscar métricas de performance: {str(e)}',
+                'timestamp': timezone.now().isoformat(),
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@extend_schema(
+    summary="Queries Lentas",
+    description="Retorna as queries mais lentas da API",
+    parameters=[
+        OpenApiParameter(
+            name="limit",
+            type=int,
+            location=OpenApiParameter.QUERY,
+            description="Número máximo de queries (padrão: 10)",
+            default=10,
+        )
+    ],
+    responses={
+        status.HTTP_200_OK: APIResponseSerializer,
+        status.HTTP_403_FORBIDDEN: APIResponseSerializer,
+    },
+    tags=["Monitoramento"],
+    auth=[]
+)
+class SlowQueriesView(APIView):
+    """View para queries lentas"""
+    permission_classes = [IsAuthenticated]  # Apenas usuários autenticados
+    
+    def get(self, request):
+        """Retorna as queries mais lentas"""
+        try:
+            from .monitoring import APIPerformance
+            
+            # Verifica se o usuário é staff
+            if not request.user.is_staff:
+                return Response({
+                    'success': False,
+                    'error': 'Acesso negado. Apenas administradores podem acessar métricas.',
+                    'timestamp': timezone.now().isoformat(),
+                }, status=status.HTTP_403_FORBIDDEN)
+            
+            limit = int(request.GET.get('limit', 10))
+            limit = min(limit, 50)  # Limita a 50 queries
+            
+            slow_queries = APIPerformance.get_slow_queries(limit)
+            
+            return Response({
+                'success': True,
+                'data': {
+                    'slow_queries': slow_queries,
+                    'count': len(slow_queries),
+                    'limit': limit,
+                },
+                'timestamp': timezone.now().isoformat(),
+            })
+            
+        except ValueError:
+            return Response({
+                'success': False,
+                'error': 'Parâmetro limit deve ser um número válido',
+                'timestamp': timezone.now().isoformat(),
+            }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({
+                'success': False,
+                'error': f'Erro ao buscar queries lentas: {str(e)}',
+                'timestamp': timezone.now().isoformat(),
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@extend_schema(
+    summary="Estatísticas de Cache",
+    description="Retorna estatísticas do sistema de cache",
+    responses={
+        status.HTTP_200_OK: APIResponseSerializer,
+        status.HTTP_403_FORBIDDEN: APIResponseSerializer,
+    },
+    tags=["Monitoramento"],
+    auth=[]
+)
+class CacheStatsView(APIView):
+    """View para estatísticas de cache"""
+    permission_classes = [IsAuthenticated]  # Apenas usuários autenticados
+    
+    def get(self, request):
+        """Retorna estatísticas do cache"""
+        try:
+            from .cache import CacheStats
+            
+            # Verifica se o usuário é staff
+            if not request.user.is_staff:
+                return Response({
+                    'success': False,
+                    'error': 'Acesso negado. Apenas administradores podem acessar estatísticas.',
+                    'timestamp': timezone.now().isoformat(),
+                }, status=status.HTTP_403_FORBIDDEN)
+            
+            cache_stats = CacheStats.get_stats()
+            hit_rate = CacheStats.get_hit_rate()
+            
+            return Response({
+                'success': True,
+                'data': {
+                    'cache_stats': cache_stats,
+                    'hit_rate': hit_rate,
+                },
+                'timestamp': timezone.now().isoformat(),
+            })
+            
+        except Exception as e:
+            return Response({
+                'success': False,
+                'error': f'Erro ao buscar estatísticas de cache: {str(e)}',
+                'timestamp': timezone.now().isoformat(),
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# =========================== REDIRECT VIEWS ===========================
+
+@extend_schema(
+    summary="API Landing Page",
+    description="Página inicial da API com links para documentação e informações",
+    responses={
+        status.HTTP_200_OK: APIResponseSerializer,
+    },
+    tags=["Documentação"],
+    auth=[]
+)
+class APIRedirectView(APIView):
+    """View para landing page da API"""
+    permission_classes = [AllowAny]
+    
+    def get(self, request):
+        """Retorna informações da API e links para documentação"""
+        
+        # Informações da API
+        api_info = {
+            'name': 'Lineage 2 API',
+            'version': 'v1',
+            'description': 'API pública para servidores de Lineage 2',
+            'status': 'active',
+            'documentation': {
+                'swagger_ui': '/api/v1/schema/swagger/',
+                'openapi_schema': '/api/v1/schema/',
+                'redoc': '/api/v1/schema/redoc/',
+            },
+            'endpoints': {
+                'public': [
+                    '/api/v1/server/status/',
+                    '/api/v1/server/players-online/',
+                    '/api/v1/search/character/',
+                    '/api/v1/search/item/',
+                    '/api/v1/clan/{name}/',
+                    '/api/v1/auction/items/',
+                    '/api/v1/health/',
+                ],
+                'authenticated': [
+                    '/api/v1/auth/login/',
+                    '/api/v1/auth/refresh/',
+                    '/api/v1/auth/logout/',
+                    '/api/v1/user/profile/',
+                    '/api/v1/user/dashboard/',
+                    '/api/v1/user/stats/',
+                ],
+                'admin_only': [
+                    '/api/v1/metrics/hourly/',
+                    '/api/v1/metrics/daily/',
+                    '/api/v1/metrics/performance/',
+                    '/api/v1/metrics/slow-queries/',
+                    '/api/v1/cache/stats/',
+                ]
+            },
+            'rate_limits': {
+                'anonymous': '30/minute',
+                'authenticated': '100/minute'
+            },
+            'features': [
+                'Versionamento da API',
+                'Paginação avançada',
+                'Filtros robustos',
+                'Cache inteligente',
+                'Monitoramento em tempo real',
+                'Documentação automática',
+                'Rate limiting',
+                'Health checks',
+            ]
+        }
+        
+        # Se a requisição aceita HTML, retorna o template
+        if 'text/html' in request.META.get('HTTP_ACCEPT', ''):
+            from django.shortcuts import render
+            return render(request, 'api/landing.html', {
+                'api_info': api_info
+            })
+        
+        # Caso contrário, retorna JSON
+        return Response({
+            'success': True,
+            'data': api_info,
+            'timestamp': timezone.now().isoformat(),
+        })

@@ -176,6 +176,9 @@ MIDDLEWARE = [
     "middlewares.forbidden_redirect_middleware.ForbiddenRedirectMiddleware",
     "middlewares.rate_limit_api_external.RateLimitMiddleware",
     "middlewares.lock_screen_middleware.SessionLockMiddleware",
+    
+    # API Cache Middleware
+    "apps.api.cache.CacheMiddleware",
 ]
 
 # =========================== TEMPLATES CONFIGS ===========================
@@ -683,7 +686,7 @@ REST_FRAMEWORK = {
         'user': '100/minute'
     },
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'apps.api.pagination.StandardResultsSetPagination',
     'PAGE_SIZE': 20,
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
@@ -698,6 +701,7 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser',
     ],
+    'EXCEPTION_HANDLER': 'apps.api.exceptions.custom_exception_handler',
 }
 
 # DRF Spectacular Configuration
@@ -725,6 +729,9 @@ SPECTACULAR_SETTINGS = {
             'description': 'Digite seu token JWT sem o prefixo "Bearer"'
         }
     },
+    
+    # Template personalizado para Swagger UI
+    "SWAGGER_UI_FAVICON_HREF": STATIC_URL + "assets/img/ico.jpg",
 }
 
 MESSAGE_TAGS = {
