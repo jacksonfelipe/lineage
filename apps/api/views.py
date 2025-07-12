@@ -24,6 +24,7 @@ from .serializers import (
     ItemSerializer, ClanDetailSerializer, AuctionItemSerializer,
     APIResponseSerializer, ServerStatusSerializer
 )
+from .forms import ApiEndpointToggleForm
 
 from .schema import ServerAPISchema, AuthAPISchema, UserAPISchema, SearchAPISchema, GameDataAPISchema, ServerStatusAPISchema, APIInfoSchema
 
@@ -736,8 +737,62 @@ class BossJewelLocationsView(GenericAPIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+
+@endpoint_enabled('raidboss_status')
+@ServerAPISchema.grandboss_status_schema()
+class RaidBossStatusView(GenericAPIView):
+    """View para status dos Raid Bosses"""
+    permission_classes = [AllowAny]
+    serializer_class = GrandBossStatusSerializer  # Reutiliza o mesmo serializer
+    throttle_classes = [PublicAPIRateThrottle]
+    queryset = ApiEndpointToggle.objects.none()  # Empty queryset for DRF Spectacular
+    
+    def get(self, request):
+        """
+        Retorna o status dos Raid Bosses
+        """
+        try:
+            cache_key = 'api_raidboss_status'
+            cached_data = cache.get(cache_key)
+            
+            if cached_data is None:
+                data = LineageStats.raidboss_status() if hasattr(LineageStats, 'raidboss_status') else []
+                cache.set(cache_key, data, 60)
+            else:
+                data = cached_data
+            
+            # Verifica se os dados estão no formato esperado
+            if not data or not isinstance(data, list):
+                return Response(
+                    {'error': 'Dados de status dos Raid Bosses não disponíveis'},
+                    status=status.HTTP_503_SERVICE_UNAVAILABLE
+                )
+            
+            # Processa os dados para o formato esperado pelo serializer
+            processed_data = []
+            for boss in data:
+                processed_boss = {
+                    'boss_id': boss.get('boss_id', 0),
+                    'name': boss.get('name', 'Unknown'),
+                    'level': boss.get('level', 0),
+                    'status': boss.get('status', 'Unknown'),
+                    'respawn_time': boss.get('respawn_human', '-'),
+                    'last_kill': boss.get('last_kill', None),
+                }
+                processed_data.append(processed_boss)
+            
+            serializer = self.get_serializer(processed_data, many=True)
+            return Response(serializer.data)
+        
+        except Exception as e:
+            return Response(
+                {'error': 'Erro ao buscar status dos Raid Bosses'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
 # =========================== AUTHENTICATION VIEWS ===========================
 
+@endpoint_enabled('auth_login')
 @AuthAPISchema.login_schema()
 class LoginView(TokenObtainPairView):
     """View para login com JWT"""
@@ -764,6 +819,7 @@ class LoginView(TokenObtainPairView):
             )
 
 
+@endpoint_enabled('auth_refresh')
 @AuthAPISchema.refresh_token_schema()
 class RefreshTokenView(TokenRefreshView):
     """View para refresh de token JWT"""
@@ -785,6 +841,7 @@ class RefreshTokenView(TokenRefreshView):
             )
 
 
+@endpoint_enabled('auth_logout')
 @AuthAPISchema.logout_schema()
 class LogoutView(APIView):
     """View para logout"""
@@ -809,6 +866,7 @@ class LogoutView(APIView):
             )
 
 
+@endpoint_enabled('user_profile')
 @UserAPISchema.user_profile_schema()
 class UserProfileView(APIView):
     """View para perfil do usuário"""
@@ -853,6 +911,7 @@ class UserProfileView(APIView):
             )
 
 
+@endpoint_enabled('user_change_password')
 @UserAPISchema.change_password_schema()
 class ChangePasswordView(APIView):
     """View para mudança de senha"""
@@ -891,6 +950,7 @@ class ChangePasswordView(APIView):
 
 # =========================== GAME VIEWS ===========================
 
+@endpoint_enabled('search_character')
 @SearchAPISchema.character_search_schema()
 class CharacterSearchView(APIView):
     """View para busca de personagens"""
@@ -933,6 +993,7 @@ class CharacterSearchView(APIView):
             )
 
 
+@endpoint_enabled('search_item')
 @SearchAPISchema.item_search_schema()
 class ItemSearchView(APIView):
     """View para busca de itens"""
@@ -973,6 +1034,7 @@ class ItemSearchView(APIView):
             )
 
 
+@endpoint_enabled('clan_detail')
 @GameDataAPISchema.clan_detail_schema()
 class ClanDetailView(APIView):
     """View para detalhes de clã"""
@@ -1012,6 +1074,7 @@ class ClanDetailView(APIView):
             )
 
 
+@endpoint_enabled('auction_items')
 @GameDataAPISchema.auction_items_schema()
 class AuctionItemsView(APIView):
     """View para itens do leilão"""
@@ -1055,6 +1118,7 @@ class AuctionItemsView(APIView):
 
 # =========================== USER DASHBOARD VIEWS ===========================
 
+@endpoint_enabled('user_dashboard')
 @UserAPISchema.user_dashboard_schema()
 class UserDashboardView(APIView):
     """View para dashboard do usuário"""
@@ -1094,6 +1158,7 @@ class UserDashboardView(APIView):
             )
 
 
+@endpoint_enabled('user_stats')
 @UserAPISchema.user_stats_schema()
 class UserStatsView(APIView):
     """View para estatísticas do usuário"""
@@ -1121,6 +1186,7 @@ class UserStatsView(APIView):
 
 # =========================== SERVER STATUS VIEWS ===========================
 
+@endpoint_enabled('server_status')
 @ServerStatusAPISchema.server_status_schema()
 class ServerStatusView(APIView):
     """View para status do servidor"""
@@ -1159,6 +1225,7 @@ class ServerStatusView(APIView):
 
 # =========================== API INFO VIEWS ===========================
 
+@endpoint_enabled('api_info')
 @APIInfoSchema.api_info_schema()
 class APIInfoView(APIView):
     """View para informações da API"""
@@ -1209,6 +1276,7 @@ class APIInfoView(APIView):
 
 # =========================== MONITORING VIEWS ===========================
 
+@endpoint_enabled('health_check')
 @extend_schema(
     summary="Health Check",
     description="Verifica a saúde de todos os sistemas da API",
@@ -1252,6 +1320,7 @@ class HealthCheckView(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@endpoint_enabled('hourly_metrics')
 @extend_schema(
     summary="Métricas da Última Hora",
     description="Retorna estatísticas da API da última hora",
@@ -1295,6 +1364,7 @@ class HourlyMetricsView(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@endpoint_enabled('daily_metrics')
 @extend_schema(
     summary="Métricas do Dia",
     description="Retorna estatísticas da API do dia atual",
@@ -1338,6 +1408,7 @@ class DailyMetricsView(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@endpoint_enabled('performance_metrics')
 @extend_schema(
     summary="Performance por Endpoint",
     description="Retorna estatísticas de performance por endpoint",
@@ -1381,6 +1452,7 @@ class PerformanceMetricsView(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@endpoint_enabled('slow_queries')
 @extend_schema(
     summary="Queries Lentas",
     description="Retorna as queries mais lentas da API",
@@ -1446,6 +1518,7 @@ class SlowQueriesView(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@endpoint_enabled('cache_stats')
 @extend_schema(
     summary="Estatísticas de Cache",
     description="Retorna estatísticas do sistema de cache",
@@ -1491,6 +1564,373 @@ class CacheStatsView(APIView):
                 'error': f'Erro ao buscar estatísticas de cache: {str(e)}',
                 'timestamp': timezone.now().isoformat(),
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# =========================== API CONFIGURATION VIEWS ===========================
+
+@endpoint_enabled('api_config')
+@extend_schema(
+    summary="API Endpoint Configuration",
+    description="Configuração de endpoints da API (apenas para administradores)",
+    responses={
+        status.HTTP_200_OK: APIResponseSerializer,
+        status.HTTP_403_FORBIDDEN: APIResponseSerializer,
+    },
+    tags=["Administração"],
+    auth=[]
+)
+class APIConfigView(APIView):
+    """View para configuração de endpoints da API"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = APIResponseSerializer
+    
+    def get(self, request):
+        """Retorna a configuração atual dos endpoints"""
+        try:
+            # Verifica se o usuário é staff
+            if not request.user.is_staff:
+                return Response({
+                    'success': False,
+                    'error': 'Acesso negado. Apenas administradores podem acessar configurações.',
+                    'timestamp': timezone.now().isoformat(),
+                }, status=status.HTTP_403_FORBIDDEN)
+            
+            toggle, created = ApiEndpointToggle.objects.get_or_create(pk=1)
+            
+            # Usa o novo método do modelo para obter todos os endpoints
+            config_data = toggle.get_all_endpoints()
+            
+            return Response({
+                'success': True,
+                'data': {
+                    'endpoints': config_data,
+                    'categories': toggle.get_endpoint_categories(),
+                    'last_updated': toggle.updated_at.isoformat() if toggle.updated_at else None,
+                },
+                'timestamp': timezone.now().isoformat(),
+            })
+            
+        except Exception as e:
+            return Response({
+                'success': False,
+                'error': f'Erro ao buscar configuração: {str(e)}',
+                'timestamp': timezone.now().isoformat(),
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def post(self, request):
+        """Atualiza a configuração dos endpoints"""
+        try:
+            # Verifica se o usuário é staff
+            if not request.user.is_staff:
+                return Response({
+                    'success': False,
+                    'error': 'Acesso negado. Apenas administradores podem modificar configurações.',
+                    'timestamp': timezone.now().isoformat(),
+                }, status=status.HTTP_403_FORBIDDEN)
+            
+            toggle, created = ApiEndpointToggle.objects.get_or_create(pk=1)
+            
+            # Obtém todos os campos booleanos do modelo
+            all_endpoints = toggle.get_all_endpoints()
+            endpoint_fields = list(all_endpoints.keys())
+            
+            # Atualiza os campos baseado nos dados recebidos
+            updated_fields = []
+            for field in endpoint_fields:
+                if field in request.data:
+                    # Converte o valor para boolean
+                    new_value = bool(request.data[field])
+                    current_value = getattr(toggle, field, False)
+                    
+                    if current_value != new_value:
+                        setattr(toggle, field, new_value)
+                        updated_fields.append(field)
+            
+            if updated_fields:
+                toggle.save()
+                
+                # Limpa o cache relacionado aos endpoints alterados
+                from django.core.cache import cache
+                for field in updated_fields:
+                    cache_key = f'api_{field}'
+                    cache.delete(cache_key)
+                
+                # Log da ação
+                logger = logging.getLogger(__name__)
+                logger.info(f"API config updated by {request.user.username}: {updated_fields}")
+            
+            return Response({
+                'success': True,
+                'message': f'Configuração atualizada com sucesso. {len(updated_fields)} campo(s) alterado(s).',
+                'data': {
+                    'updated_fields': updated_fields,
+                    'updated_count': len(updated_fields),
+                    'last_updated': toggle.updated_at.isoformat() if toggle.updated_at else None,
+                    'endpoints': toggle.get_all_endpoints(),
+                },
+                'timestamp': timezone.now().isoformat(),
+            })
+            
+        except Exception as e:
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error updating API config: {e}")
+            return Response({
+                'success': False,
+                'error': f'Erro ao atualizar configuração: {str(e)}',
+                'timestamp': timezone.now().isoformat(),
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@endpoint_enabled('api_config_panel')
+@extend_schema(
+    summary="API Configuration Panel",
+    description="Painel de configuração da API para administradores (interface HTML)",
+    responses={
+        status.HTTP_200_OK: APIResponseSerializer,
+        status.HTTP_403_FORBIDDEN: APIResponseSerializer,
+    },
+    tags=["Administração"],
+    auth=[]
+)
+class APIConfigPanelView(APIView):
+    """View para painel de configuração da API (interface HTML)"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = APIResponseSerializer  # Adiciona serializer para DRF Spectacular
+    
+    def get(self, request):
+        """Renderiza o painel de configuração HTML"""
+        try:
+            # Log de debug
+            logger = logging.getLogger(__name__)
+            logger.info(f"APIConfigPanelView accessed by user: {request.user.username}")
+            
+            # Verifica se o usuário é staff
+            if not request.user.is_staff:
+                logger.warning(f"Non-staff user {request.user.username} tried to access config panel")
+                from django.shortcuts import render
+                return render(request, "errors/403.html", status=403)
+            
+            # Busca dados de configuração para passar ao template
+            try:
+                logger.info("Attempting to get ApiEndpointToggle object")
+                toggle, created = ApiEndpointToggle.objects.get_or_create(pk=1)
+                logger.info(f"ApiEndpointToggle object {'created' if created else 'retrieved'}")
+                
+                # Cria o formulário com os dados atuais
+                form = ApiEndpointToggleForm(instance=toggle)
+                
+                logger.info(f"Form created with {len(form.fields)} fields")
+                
+                context = {
+                    'form': form,
+                    'toggle': toggle,
+                    'categories': toggle.get_endpoint_categories(),
+                    'last_updated': toggle.updated_at if toggle.updated_at else None,
+                    'user': request.user,
+                }
+                
+                logger.info("Context prepared successfully")
+                
+            except Exception as e:
+                logger.error(f"Error preparing context: {str(e)}", exc_info=True)
+                context = {
+                    'form': None,
+                    'toggle': None,
+                    'categories': {},
+                    'last_updated': None,
+                    'user': request.user,
+                    'error': str(e),
+                }
+            
+            from django.shortcuts import render
+            logger.info("Rendering template")
+            return render(request, "api/config.html", context)
+            
+        except Exception as e:
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error in APIConfigPanelView.get: {str(e)}", exc_info=True)
+            from django.shortcuts import render
+            return render(request, "errors/500.html", status=500)
+    
+    def post(self, request):
+        """Atualiza a configuração via AJAX"""
+        try:
+            # Verifica se o usuário é staff
+            if not request.user.is_staff:
+                return Response({
+                    'success': False,
+                    'error': 'Acesso negado. Apenas administradores podem modificar configurações.',
+                    'timestamp': timezone.now().isoformat(),
+                }, status=status.HTTP_403_FORBIDDEN)
+            
+            toggle, created = ApiEndpointToggle.objects.get_or_create(pk=1)
+            
+            # Cria o formulário com os dados da requisição
+            form = ApiEndpointToggleForm(request.POST, instance=toggle)
+            
+            if form.is_valid():
+                # Salva o formulário
+                form.save()
+                
+                # Obtém os campos que foram alterados
+                changed_data = form.changed_data
+                
+                if changed_data:
+                    # Limpa o cache relacionado aos endpoints alterados
+                    from django.core.cache import cache
+                    for field in changed_data:
+                        cache_key = f'api_{field}'
+                        cache.delete(cache_key)
+                    
+                    # Log da ação
+                    logger = logging.getLogger(__name__)
+                    logger.info(f"API config updated by {request.user.username}: {changed_data}")
+                
+                # Verifica se é uma requisição AJAX
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                    # Retorna JSON para requisições AJAX
+                    return Response({
+                        'success': True,
+                        'message': f'Configuração atualizada com sucesso. {len(changed_data)} campo(s) alterado(s).',
+                        'data': {
+                            'updated_fields': changed_data,
+                            'updated_count': len(changed_data),
+                            'last_updated': toggle.updated_at.isoformat() if toggle.updated_at else None,
+                            'endpoints': toggle.get_all_endpoints(),
+                        },
+                        'timestamp': timezone.now().isoformat(),
+                    })
+                else:
+                    # Retorna o painel HTML atualizado
+                    from django.shortcuts import render
+                    from django.contrib import messages
+                    
+                    # Adiciona mensagem de sucesso
+                    messages.success(request, f'Configuração atualizada com sucesso. {len(changed_data)} campo(s) alterado(s).')
+                    
+                    # Prepara o contexto atualizado
+                    context = {
+                        'form': form,
+                        'toggle': toggle,
+                        'categories': toggle.get_endpoint_categories(),
+                        'last_updated': toggle.updated_at if toggle.updated_at else None,
+                        'user': request.user,
+                    }
+                    
+                    return render(request, "api/config.html", context)
+            else:
+                # Formulário inválido
+                error_message = "Erro de validação: " + ", ".join([f"{field}: {', '.join(errors)}" for field, errors in form.errors.items()])
+                
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                    return Response({
+                        'success': False,
+                        'error': error_message,
+                        'timestamp': timezone.now().isoformat(),
+                    }, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    from django.shortcuts import render
+                    from django.contrib import messages
+                    
+                    messages.error(request, error_message)
+                    
+                    context = {
+                        'form': form,
+                        'toggle': toggle,
+                        'categories': toggle.get_endpoint_categories(),
+                        'last_updated': toggle.updated_at if toggle.updated_at else None,
+                        'user': request.user,
+                    }
+                    
+                    return render(request, "api/config.html", context)
+            
+        except Exception as e:
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error updating API config: {e}")
+            
+            # Verifica se é uma requisição AJAX
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return Response({
+                    'success': False,
+                    'error': f'Erro ao atualizar configuração: {str(e)}',
+                    'timestamp': timezone.now().isoformat(),
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            else:
+                # Retorna o painel HTML com mensagem de erro
+                from django.shortcuts import render
+                from django.contrib import messages
+                
+                messages.error(request, f'Erro ao atualizar configuração: {str(e)}')
+                
+                toggle, created = ApiEndpointToggle.objects.get_or_create(pk=1)
+                config_data = toggle.get_all_endpoints()
+                context = {
+                    'config_data': config_data,
+                    'categories': toggle.get_endpoint_categories(),
+                    'last_updated': toggle.updated_at if toggle.updated_at else None,
+                    'user': request.user,
+                }
+                
+                return render(request, "api/config.html", context)
+    
+    def put(self, request):
+        """Atualiza configuração específica"""
+        return self.post(request)
+    
+    def delete(self, request):
+        """Reseta configuração para padrões"""
+        try:
+            # Verifica se o usuário é staff
+            if not request.user.is_staff:
+                return Response({
+                    'success': False,
+                    'error': 'Acesso negado. Apenas administradores podem resetar configurações.',
+                    'timestamp': timezone.now().isoformat(),
+                }, status=status.HTTP_403_FORBIDDEN)
+            
+            toggle, created = ApiEndpointToggle.objects.get_or_create(pk=1)
+            
+            # Obtém todos os campos booleanos do modelo
+            all_endpoints = toggle.get_all_endpoints()
+            endpoint_fields = list(all_endpoints.keys())
+            
+            reset_fields = []
+            for field in endpoint_fields:
+                current_value = getattr(toggle, field, True)
+                if current_value != True:
+                    setattr(toggle, field, True)
+                    reset_fields.append(field)
+            
+            if reset_fields:
+                toggle.save()
+                
+                # Limpa todo o cache da API
+                from django.core.cache import cache
+                cache.clear()
+                
+                logger = logging.getLogger(__name__)
+                logger.info(f"API config reset by {request.user.username}")
+            
+            return Response({
+                'success': True,
+                'message': 'Configuração resetada para padrões com sucesso.',
+                'data': {
+                    'reset_fields': reset_fields,
+                    'reset_count': len(reset_fields),
+                    'last_updated': toggle.updated_at.isoformat() if toggle.updated_at else None,
+                    'endpoints': toggle.get_all_endpoints(),
+                },
+                'timestamp': timezone.now().isoformat(),
+            })
+            
+        except Exception as e:
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error resetting API config: {e}")
+            return Response({
+                'success': False,
+                'error': f'Erro ao resetar configuração: {str(e)}',
+                'timestamp': timezone.now().isoformat(),
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 # =========================== REDIRECT VIEWS ===========================
 

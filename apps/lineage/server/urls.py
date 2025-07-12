@@ -1,7 +1,6 @@
 from django.urls import path
-from .views.server_views import *
+from .views.server_views import painel_apoiador, formulario_apoiador, painel_staff, solicitar_comissao, editar_imagem_apoiador
 from .views.accounts_views import *
-from .views.config_views import *
 from .views.tops_views import *
 from .views.status_views import *
 from .views.services_views import *
@@ -9,21 +8,6 @@ from .views.services_views import *
 app_name = 'server'
 
 urlpatterns = [
-    path("api/players-online/", players_online, name="api_players_online"),
-    path("api/top-pvp/", top_pvp, name="api_top_pvp"),
-    path("api/top-pk/", top_pk, name="api_top_pk"),
-    path("api/top-clan/", top_clan, name="api_top_clan"),
-    path("api/top-rich/", top_rich, name="api_top_rich"),
-    path("api/top-online/", top_online, name="api_top_online"),
-    path("api/top-level/", top_level, name="api_top_level"),
-    path("api/olympiad-ranking/", olympiad_ranking, name="api_olympiad_ranking"),
-    path("api/olympiad-heroes/", olympiad_all_heroes, name="api_olympiad_all_heroes"),
-    path("api/olympiad-current-heroes/", olympiad_current_heroes, name="api_olympiad_current_heroes"),
-    path("api/grandboss-status/", grandboss_status, name="api_grandboss_status"),
-    path("api/siege/", siege, name="api_siege"),
-    path("api/siege-participants/<int:castle_id>/", siege_participants, name="api_siege_participants"),
-    path("api/boss-jewel-locations/", boss_jewel_locations, name="api_boss_jewel_locations"),
-    path("api/config/", api_config_panel, name="api_config_panel"),
 
     path('status/top-pvp/', top_pvp_view, name='top_pvp'),
     path('status/top-pk/', top_pk_view, name='top_pk'),

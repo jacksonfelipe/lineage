@@ -16,6 +16,7 @@ def caminho_imagem_apoiador(instance, filename):
 
 
 class ApiEndpointToggle(BaseModel):
+    # =========================== SERVER ENDPOINTS ===========================
     players_online = models.BooleanField(default=True, verbose_name=_("Players Online"))
     top_pvp = models.BooleanField(default=True, verbose_name=_("Top PvP"))
     top_pk = models.BooleanField(default=True, verbose_name=_("Top PK"))
@@ -31,13 +32,150 @@ class ApiEndpointToggle(BaseModel):
     siege = models.BooleanField(default=True, verbose_name=_("Siege"))
     siege_participants = models.BooleanField(default=True, verbose_name=_("Siege Participants"))
     boss_jewel_locations = models.BooleanField(default=True, verbose_name=_("Boss Jewel Locations"))
+    
+    # =========================== AUTHENTICATION ENDPOINTS ===========================
+    auth_login = models.BooleanField(default=True, verbose_name=_("Auth Login"))
+    auth_refresh = models.BooleanField(default=True, verbose_name=_("Auth Refresh"))
+    auth_logout = models.BooleanField(default=True, verbose_name=_("Auth Logout"))
+    
+    # =========================== USER ENDPOINTS ===========================
+    user_profile = models.BooleanField(default=True, verbose_name=_("User Profile"))
+    user_change_password = models.BooleanField(default=True, verbose_name=_("User Change Password"))
+    user_dashboard = models.BooleanField(default=True, verbose_name=_("User Dashboard"))
+    user_stats = models.BooleanField(default=True, verbose_name=_("User Stats"))
+    
+    # =========================== SEARCH ENDPOINTS ===========================
+    search_character = models.BooleanField(default=True, verbose_name=_("Search Character"))
+    search_item = models.BooleanField(default=True, verbose_name=_("Search Item"))
+    
+    # =========================== GAME DATA ENDPOINTS ===========================
+    clan_detail = models.BooleanField(default=True, verbose_name=_("Clan Detail"))
+    auction_items = models.BooleanField(default=True, verbose_name=_("Auction Items"))
+    
+    # =========================== SERVER STATUS ENDPOINTS ===========================
+    server_status = models.BooleanField(default=True, verbose_name=_("Server Status"))
+    
+    # =========================== API INFO ENDPOINTS ===========================
+    api_info = models.BooleanField(default=True, verbose_name=_("API Info"))
+    
+    # =========================== MONITORING ENDPOINTS ===========================
+    health_check = models.BooleanField(default=True, verbose_name=_("Health Check"))
+    hourly_metrics = models.BooleanField(default=True, verbose_name=_("Hourly Metrics"))
+    daily_metrics = models.BooleanField(default=True, verbose_name=_("Daily Metrics"))
+    performance_metrics = models.BooleanField(default=True, verbose_name=_("Performance Metrics"))
+    slow_queries = models.BooleanField(default=True, verbose_name=_("Slow Queries"))
+    cache_stats = models.BooleanField(default=True, verbose_name=_("Cache Stats"))
+    
+    # =========================== ADMINISTRATION ENDPOINTS ===========================
+    api_config = models.BooleanField(default=True, verbose_name=_("API Config"))
+    api_config_panel = models.BooleanField(default=True, verbose_name=_("API Config Panel"))
 
     class Meta:
         verbose_name = _("API Endpoint Toggle")
         verbose_name_plural = _("API Endpoint Toggles")
 
     def __str__(self):
-        return _("API Endpoint Configuration")
+        return str(_("API Endpoint Configuration"))
+    
+    def get_endpoint_categories(self):
+        """Retorna os endpoints organizados por categoria"""
+        return {
+            'server': {
+                'players_online': self.players_online,
+                'top_pvp': self.top_pvp,
+                'top_pk': self.top_pk,
+                'top_clan': self.top_clan,
+                'top_rich': self.top_rich,
+                'top_online': self.top_online,
+                'top_level': self.top_level,
+                'olympiad_ranking': self.olympiad_ranking,
+                'olympiad_all_heroes': self.olympiad_all_heroes,
+                'olympiad_current_heroes': self.olympiad_current_heroes,
+                'grandboss_status': self.grandboss_status,
+                'raidboss_status': self.raidboss_status,
+                'siege': self.siege,
+                'siege_participants': self.siege_participants,
+                'boss_jewel_locations': self.boss_jewel_locations,
+            },
+            'authentication': {
+                'auth_login': self.auth_login,
+                'auth_refresh': self.auth_refresh,
+                'auth_logout': self.auth_logout,
+            },
+            'user': {
+                'user_profile': self.user_profile,
+                'user_change_password': self.user_change_password,
+                'user_dashboard': self.user_dashboard,
+                'user_stats': self.user_stats,
+            },
+            'search': {
+                'search_character': self.search_character,
+                'search_item': self.search_item,
+            },
+            'game_data': {
+                'clan_detail': self.clan_detail,
+                'auction_items': self.auction_items,
+            },
+            'server_status': {
+                'server_status': self.server_status,
+            },
+            'api_info': {
+                'api_info': self.api_info,
+            },
+            'monitoring': {
+                'health_check': self.health_check,
+                'hourly_metrics': self.hourly_metrics,
+                'daily_metrics': self.daily_metrics,
+                'performance_metrics': self.performance_metrics,
+                'slow_queries': self.slow_queries,
+                'cache_stats': self.cache_stats,
+            },
+            'administration': {
+                'api_config': self.api_config,
+                'api_config_panel': self.api_config_panel,
+            }
+        }
+    
+    def get_all_endpoints(self):
+        """Retorna todos os endpoints como um dicionário simples"""
+        return {
+            'players_online': self.players_online,
+            'top_pvp': self.top_pvp,
+            'top_pk': self.top_pk,
+            'top_clan': self.top_clan,
+            'top_rich': self.top_rich,
+            'top_online': self.top_online,
+            'top_level': self.top_level,
+            'olympiad_ranking': self.olympiad_ranking,
+            'olympiad_all_heroes': self.olympiad_all_heroes,
+            'olympiad_current_heroes': self.olympiad_current_heroes,
+            'grandboss_status': self.grandboss_status,
+            'raidboss_status': self.raidboss_status,
+            'siege': self.siege,
+            'siege_participants': self.siege_participants,
+            'boss_jewel_locations': self.boss_jewel_locations,
+            'auth_login': self.auth_login,
+            'auth_refresh': self.auth_refresh,
+            'auth_logout': self.auth_logout,
+            'user_profile': self.user_profile,
+            'user_change_password': self.user_change_password,
+            'user_dashboard': self.user_dashboard,
+            'user_stats': self.user_stats,
+            'search_character': self.search_character,
+            'search_item': self.search_item,
+            'clan_detail': self.clan_detail,
+            'auction_items': self.auction_items,
+            'server_status': self.server_status,
+            'api_info': self.api_info,
+            'health_check': self.health_check,
+            'hourly_metrics': self.hourly_metrics,
+            'daily_metrics': self.daily_metrics,
+            'performance_metrics': self.performance_metrics,
+            'slow_queries': self.slow_queries,
+            'cache_stats': self.cache_stats,
+            'api_config': self.api_config,
+            'api_config_panel': self.api_config_panel,
+        }
 
 
 class IndexConfig(BaseModel):

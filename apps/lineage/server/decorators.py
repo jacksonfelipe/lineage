@@ -9,6 +9,7 @@ from rest_framework import status
 from django.utils.decorators import method_decorator
 from django.views import View
 from rest_framework.views import APIView
+import json
 
 
 def endpoint_enabled(endpoint_field):
@@ -24,9 +25,10 @@ def endpoint_enabled(endpoint_field):
                 if not toggle or not getattr(toggle, endpoint_field, False):
                     # Check if it's a REST API request
                     if request.path.startswith('/api/'):
-                        return Response(
+                        # Return JSON response instead of DRF Response
+                        return JsonResponse(
                             {'error': f'Endpoint {endpoint_field} está desabilitado'},
-                            status=status.HTTP_503_SERVICE_UNAVAILABLE
+                            status=503
                         )
                     else:
                         return render(request, "errors/404.html", status=404)
@@ -42,9 +44,10 @@ def endpoint_enabled(endpoint_field):
                 if not toggle or not getattr(toggle, endpoint_field, False):
                     # Verifica se é uma requisição de API REST
                     if request.path.startswith('/api/'):
-                        return Response(
+                        # Return JSON response instead of DRF Response
+                        return JsonResponse(
                             {'error': f'Endpoint {endpoint_field} está desabilitado'},
-                            status=status.HTTP_503_SERVICE_UNAVAILABLE
+                            status=503
                         )
                     else:
                         return render(request, "errors/404.html", status=404)

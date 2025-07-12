@@ -36,6 +36,7 @@ v1_patterns = [
     path('server/siege/', views.SiegeView.as_view(), name='siege'),
     path('server/siege-participants/<int:castle_id>/', views.SiegeParticipantsView.as_view(), name='siege_participants'),
     path('server/boss-jewel-locations/', views.BossJewelLocationsView.as_view(), name='boss_jewel_locations'),
+    path('server/raidboss-status/', views.RaidBossStatusView.as_view(), name='raidboss_status'),
     
     # =========================== SEARCH ENDPOINTS ===========================
     path('search/character/', views.CharacterSearchView.as_view(), name='character_search'),
@@ -52,6 +53,10 @@ v1_patterns = [
     path('metrics/performance/', views.PerformanceMetricsView.as_view(), name='performance_metrics'),
     path('metrics/slow-queries/', views.SlowQueriesView.as_view(), name='slow_queries'),
     path('cache/stats/', views.CacheStatsView.as_view(), name='cache_stats'),
+    
+    # =========================== ADMINISTRATION ===========================
+    path('admin/config/', views.APIConfigView.as_view(), name='api_config'),
+    path('admin/config/panel/', views.APIConfigPanelView.as_view(), name='api_config_panel'),
 ]
 
 # URLs principais com versionamento

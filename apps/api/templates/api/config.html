@@ -1,0 +1,738 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% load api_filters %}
+
+{% block extrahead %}
+<style>
+    .endpoint-card {
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background: #fff;
+        transition: all 0.3s ease;
+        position: relative;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .endpoint-card:hover {
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+    
+    .endpoint-card.disabled {
+        border-color: #dc3545;
+        background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
+        opacity: 0.9;
+    }
+    
+    .endpoint-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .endpoint-info {
+        flex: 1;
+    }
+    
+    .endpoint-name {
+        font-weight: 700;
+        color: #2c3e50;
+        font-size: 1.1em;
+        margin-bottom: 5px;
+    }
+    
+    .endpoint-url {
+        font-family: 'Courier New', monospace;
+        font-size: 0.85em;
+        color: #6c757d;
+        background: #f8f9fa;
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid #e9ecef;
+    }
+    
+    .endpoint-status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .status-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+    
+    .status-indicator.enabled {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        box-shadow: 0 0 10px rgba(40, 167, 69, 0.3);
+    }
+    
+    .status-indicator.disabled {
+        background: linear-gradient(135deg, #dc3545, #e74c3c);
+        box-shadow: 0 0 10px rgba(220, 53, 69, 0.3);
+    }
+    
+    .status-badge {
+        font-size: 0.75em;
+        font-weight: 600;
+        padding: 4px 8px;
+        border-radius: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .status-badge.enabled {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .status-badge.disabled {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    .form-switch {
+        padding-left: 0;
+    }
+    
+    .form-check-input {
+        width: 3rem;
+        height: 1.5rem;
+        margin-left: 0;
+        margin-right: 0.75rem;
+        cursor: pointer;
+    }
+    
+    .form-check-input:checked {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+    
+    .form-check-input:focus {
+        box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+    }
+    
+    .form-check-label {
+        font-weight: 600;
+        color: #495057;
+        cursor: pointer;
+    }
+    
+    .category-section {
+        margin-bottom: 30px;
+    }
+    
+    .category-title {
+        font-size: 1.3em;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 3px solid #e9ecef;
+        position: relative;
+    }
+    
+    .category-title::after {
+        content: '';
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        border-radius: 2px;
+    }
+    
+    .stats-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .stats-number {
+        font-size: 2.5em;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+    
+    .stats-label {
+        font-size: 0.9em;
+        opacity: 0.9;
+    }
+    
+    .btn-custom {
+        border-radius: 25px;
+        font-weight: 600;
+        padding: 12px 30px;
+        transition: all 0.3s ease;
+        border: none;
+    }
+    
+    .btn-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .btn-save {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+    }
+    
+    .btn-reset {
+        background: linear-gradient(135deg, #ffc107, #fd7e14);
+        color: white;
+    }
+    
+    .loading {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+    
+    .alert-custom {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <!-- Header Card -->
+            <div class="card border-0 shadow-lg rounded-4 mb-4">
+                <div class="card-header bg-gradient bg-primary text-white rounded-top-4 d-flex justify-content-between align-items-center py-4 px-5">
+                    <div>
+                        <h3 class="mb-1 fw-bold">
+                            <i class="bi bi-gear-fill me-3"></i>{% trans "Configuração de Endpoints da API" %}
+                        </h3>
+                        <p class="mb-0 opacity-75">{% trans "Gerencie quais endpoints estarão disponíveis para os usuários" %}</p>
+                    </div>
+                    <div class="text-end">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="text-center">
+                                <div class="stats-number" id="enabled-count">-</div>
+                                <div class="stats-label">{% trans "Ativos" %}</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="stats-number" id="total-count">-</div>
+                                <div class="stats-label">{% trans "Total" %}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body px-5 py-4">
+                    <!-- Mensagens do Django -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-custom alert-dismissible fade show" role="alert">
+                                {% if message.tags == 'success' %}
+                                    <i class="bi bi-check-circle-fill me-2"></i>
+                                {% elif message.tags == 'error' %}
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                {% elif message.tags == 'warning' %}
+                                    <i class="bi bi-exclamation-circle-fill me-2"></i>
+                                {% elif message.tags == 'info' %}
+                                    <i class="bi bi-info-circle-fill me-2"></i>
+                                {% endif %}
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <!-- Informação -->
+                    <div class="alert alert-info alert-custom" role="alert">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        <strong>{% trans "Informação:" %}</strong> 
+                        {% trans "As alterações são aplicadas imediatamente. Endpoints desativados retornarão erro 403 para todos os usuários." %}
+                    </div>
+                    
+                    {% if form %}
+                        <form id="api-config-form" method="post">
+                            {% csrf_token %}
+                            
+                            <!-- Server Endpoints -->
+                            <div class="category-section">
+                                <h4 class="category-title">
+                                    <i class="bi bi-server me-2"></i>{% trans "Endpoints do Servidor" %}
+                                </h4>
+                                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                                    {% for field in form %}
+                                        {% if field.name in 'players_online,top_pvp,top_pk,top_clan,top_rich,top_online,top_level,olympiad_ranking,olympiad_all_heroes,olympiad_current_heroes,grandboss_status,raidboss_status,siege,siege_participants,boss_jewel_locations' %}
+                                            <div class="col">
+                                                <div class="endpoint-card{% if not field.value %} disabled{% endif %}" data-endpoint="{{ field.name }}">
+                                                    <div class="endpoint-header">
+                                                        <div class="endpoint-info">
+                                                            <div class="endpoint-name">{{ field.label }}</div>
+                                                            <div class="endpoint-url">/api/v1/server/{{ field.name|format_endpoint_url }}/</div>
+                                                        </div>
+                                                        <div class="endpoint-status">
+                                                            <span class="status-indicator {% if field.value %}enabled{% else %}disabled{% endif %}"></span>
+                                                            <span class="status-badge {% if field.value %}enabled{% else %}disabled{% endif %}">
+                                                                {% if field.value %}{% trans "Ativo" %}{% else %}{% trans "Inativo" %}{% endif %}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-check form-switch d-flex align-items-center justify-content-center">
+                                                        {{ field }}
+                                                        <label class="form-check-label" for="{{ field.id_for_label }}">
+                                                            {% if field.value %}{% trans "Ativo" %}{% else %}{% trans "Inativo" %}{% endif %}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <!-- Authentication Endpoints -->
+                            <div class="category-section">
+                                <h4 class="category-title">
+                                    <i class="bi bi-shield-lock me-2"></i>{% trans "Autenticação" %}
+                                </h4>
+                                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                                    {% for field in form %}
+                                        {% if field.name in 'auth_login,auth_refresh,auth_logout' %}
+                                            <div class="col">
+                                                <div class="endpoint-card{% if not field.value %} disabled{% endif %}" data-endpoint="{{ field.name }}">
+                                                    <div class="endpoint-header">
+                                                        <div class="endpoint-info">
+                                                            <div class="endpoint-name">{{ field.label }}</div>
+                                                            <div class="endpoint-url">/api/v1/auth/{{ field.name|auth_endpoint_url }}/</div>
+                                                        </div>
+                                                        <div class="endpoint-status">
+                                                            <span class="status-indicator {% if field.value %}enabled{% else %}disabled{% endif %}"></span>
+                                                            <span class="status-badge {% if field.value %}enabled{% else %}disabled{% endif %}">
+                                                                {% if field.value %}{% trans "Ativo" %}{% else %}{% trans "Inativo" %}{% endif %}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-check form-switch d-flex align-items-center justify-content-center">
+                                                        {{ field }}
+                                                        <label class="form-check-label" for="{{ field.id_for_label }}">
+                                                            {% if field.value %}{% trans "Ativo" %}{% else %}{% trans "Inativo" %}{% endif %}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <!-- User Endpoints -->
+                            <div class="category-section">
+                                <h4 class="category-title">
+                                    <i class="bi bi-person me-2"></i>{% trans "Usuário" %}
+                                </h4>
+                                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                                    {% for field in form %}
+                                        {% if field.name in 'user_profile,user_change_password,user_dashboard,user_stats' %}
+                                            <div class="col">
+                                                <div class="endpoint-card{% if not field.value %} disabled{% endif %}" data-endpoint="{{ field.name }}">
+                                                    <div class="endpoint-header">
+                                                        <div class="endpoint-info">
+                                                            <div class="endpoint-name">{{ field.label }}</div>
+                                                            <div class="endpoint-url">/api/v1/user/{{ field.name|user_endpoint_url }}/</div>
+                                                        </div>
+                                                        <div class="endpoint-status">
+                                                            <span class="status-indicator {% if field.value %}enabled{% else %}disabled{% endif %}"></span>
+                                                            <span class="status-badge {% if field.value %}enabled{% else %}disabled{% endif %}">
+                                                                {% if field.value %}{% trans "Ativo" %}{% else %}{% trans "Inativo" %}{% endif %}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-check form-switch d-flex align-items-center justify-content-center">
+                                                        {{ field }}
+                                                        <label class="form-check-label" for="{{ field.id_for_label }}">
+                                                            {% if field.value %}{% trans "Ativo" %}{% else %}{% trans "Inativo" %}{% endif %}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <!-- Search Endpoints -->
+                            <div class="category-section">
+                                <h4 class="category-title">
+                                    <i class="bi bi-search me-2"></i>{% trans "Busca" %}
+                                </h4>
+                                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                                    {% for field in form %}
+                                        {% if field.name in 'search_character,search_item' %}
+                                            <div class="col">
+                                                <div class="endpoint-card{% if not field.value %} disabled{% endif %}" data-endpoint="{{ field.name }}">
+                                                    <div class="endpoint-header">
+                                                        <div class="endpoint-info">
+                                                            <div class="endpoint-name">{{ field.label }}</div>
+                                                            <div class="endpoint-url">/api/v1/search/{{ field.name|search_endpoint_url }}/</div>
+                                                        </div>
+                                                        <div class="endpoint-status">
+                                                            <span class="status-indicator {% if field.value %}enabled{% else %}disabled{% endif %}"></span>
+                                                            <span class="status-badge {% if field.value %}enabled{% else %}disabled{% endif %}">
+                                                                {% if field.value %}{% trans "Ativo" %}{% else %}{% trans "Inativo" %}{% endif %}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-check form-switch d-flex align-items-center justify-content-center">
+                                                        {{ field }}
+                                                        <label class="form-check-label" for="{{ field.id_for_label }}">
+                                                            {% if field.value %}{% trans "Ativo" %}{% else %}{% trans "Inativo" %}{% endif %}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                                                         <!-- Game Data Endpoints -->
+                             <div class="category-section">
+                                 <h4 class="category-title">
+                                     <i class="bi bi-controller me-2"></i>{% trans "Dados do Jogo" %}
+                                 </h4>
+                                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                                     {% for field in form %}
+                                         {% if field.name in 'clan_detail,auction_items,server_status,api_info' %}
+                                            <div class="col">
+                                                <div class="endpoint-card{% if not field.value %} disabled{% endif %}" data-endpoint="{{ field.name }}">
+                                                    <div class="endpoint-header">
+                                                        <div class="endpoint-info">
+                                                            <div class="endpoint-name">{{ field.label }}</div>
+                                                                                                                         <div class="endpoint-url">
+                                                                 {% if field.name == 'server_status' %}
+                                                                     /api/v1/server/status/
+                                                                 {% elif field.name == 'api_info' %}
+                                                                     /api/v1/info/
+                                                                 {% else %}
+                                                                     /api/v1/game/{{ field.name|format_endpoint_url }}/
+                                                                 {% endif %}
+                                                             </div>
+                                                        </div>
+                                                        <div class="endpoint-status">
+                                                            <span class="status-indicator {% if field.value %}enabled{% else %}disabled{% endif %}"></span>
+                                                            <span class="status-badge {% if field.value %}enabled{% else %}disabled{% endif %}">
+                                                                {% if field.value %}{% trans "Ativo" %}{% else %}{% trans "Inativo" %}{% endif %}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-check form-switch d-flex align-items-center justify-content-center">
+                                                        {{ field }}
+                                                        <label class="form-check-label" for="{{ field.id_for_label }}">
+                                                            {% if field.value %}{% trans "Ativo" %}{% else %}{% trans "Inativo" %}{% endif %}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <!-- Monitoring Endpoints -->
+                            <div class="category-section">
+                                <h4 class="category-title">
+                                    <i class="bi bi-graph-up me-2"></i>{% trans "Monitoramento" %}
+                                </h4>
+                                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                                    {% for field in form %}
+                                        {% if field.name in 'health_check,hourly_metrics,daily_metrics,performance_metrics,slow_queries,cache_stats' %}
+                                            <div class="col">
+                                                <div class="endpoint-card{% if not field.value %} disabled{% endif %}" data-endpoint="{{ field.name }}">
+                                                    <div class="endpoint-header">
+                                                        <div class="endpoint-info">
+                                                            <div class="endpoint-name">{{ field.label }}</div>
+                                                            <div class="endpoint-url">/api/v1/monitoring/{{ field.name|format_endpoint_url }}/</div>
+                                                        </div>
+                                                        <div class="endpoint-status">
+                                                            <span class="status-indicator {% if field.value %}enabled{% else %}disabled{% endif %}"></span>
+                                                            <span class="status-badge {% if field.value %}enabled{% else %}disabled{% endif %}">
+                                                                {% if field.value %}{% trans "Ativo" %}{% else %}{% trans "Inativo" %}{% endif %}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-check form-switch d-flex align-items-center justify-content-center">
+                                                        {{ field }}
+                                                        <label class="form-check-label" for="{{ field.id_for_label }}">
+                                                            {% if field.value %}{% trans "Ativo" %}{% else %}{% trans "Inativo" %}{% endif %}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <!-- Administration Endpoints -->
+                            <div class="category-section">
+                                <h4 class="category-title">
+                                    <i class="bi bi-gear me-2"></i>{% trans "Administração" %}
+                                </h4>
+                                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                                    {% for field in form %}
+                                        {% if field.name in 'api_config,api_config_panel' %}
+                                            <div class="col">
+                                                <div class="endpoint-card{% if not field.value %} disabled{% endif %}" data-endpoint="{{ field.name }}">
+                                                    <div class="endpoint-header">
+                                                        <div class="endpoint-info">
+                                                            <div class="endpoint-name">{{ field.label }}</div>
+                                                            <div class="endpoint-url">/api/v1/admin/{{ field.name|admin_endpoint_url }}/</div>
+                                                        </div>
+                                                        <div class="endpoint-status">
+                                                            <span class="status-indicator {% if field.value %}enabled{% else %}disabled{% endif %}"></span>
+                                                            <span class="status-badge {% if field.value %}enabled{% else %}disabled{% endif %}">
+                                                                {% if field.value %}{% trans "Ativo" %}{% else %}{% trans "Inativo" %}{% endif %}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-check form-switch d-flex align-items-center justify-content-center">
+                                                        {{ field }}
+                                                        <label class="form-check-label" for="{{ field.id_for_label }}">
+                                                            {% if field.value %}{% trans "Ativo" %}{% else %}{% trans "Inativo" %}{% endif %}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top">
+                                <button type="button" class="btn btn-custom btn-reset" id="reset-btn">
+                                    <i class="bi bi-arrow-clockwise me-2"></i>{% trans "Resetar Padrões" %}
+                                </button>
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="text-muted small">
+                                        <i class="bi bi-clock me-1"></i>
+                                        {% trans "Última atualização:" %} 
+                                        <span id="last-updated">
+                                            {% if last_updated %}
+                                                {{ last_updated|date:"d/m/Y H:i" }}
+                                            {% else %}
+                                                {% trans "Nunca" %}
+                                            {% endif %}
+                                        </span>
+                                    </span>
+                                    <button type="submit" class="btn btn-custom btn-save" id="save-btn">
+                                        <i class="bi bi-check-circle me-2"></i>{% trans "Salvar Alterações" %}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    {% else %}
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            {% trans "Erro ao carregar formulário de configuração." %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('api-config-form');
+    const saveBtn = document.getElementById('save-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const enabledCount = document.getElementById('enabled-count');
+    const totalCount = document.getElementById('total-count');
+    const lastUpdated = document.getElementById('last-updated');
+    
+    // Inicializa contadores
+    updateCounters();
+    
+    // Adiciona listeners para os checkboxes
+    const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            updateEndpointCard(this);
+            updateCounters();
+        });
+    });
+    
+    // Manipula o envio do formulário
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveConfig();
+    });
+    
+    // Manipula o botão de reset
+    resetBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirm('{% trans "Tem certeza que deseja resetar todas as configurações para os padrões?" %}')) {
+            resetConfig();
+        }
+    });
+    
+    function updateEndpointCard(checkbox) {
+        const card = checkbox.closest('.endpoint-card');
+        const statusIndicator = card.querySelector('.status-indicator');
+        const statusBadge = card.querySelector('.status-badge');
+        const label = card.querySelector('.form-check-label');
+        
+        if (checkbox.checked) {
+            card.classList.remove('disabled');
+            statusIndicator.classList.remove('disabled');
+            statusIndicator.classList.add('enabled');
+            statusBadge.classList.remove('disabled');
+            statusBadge.classList.add('enabled');
+            statusBadge.textContent = '{% trans "Ativo" %}';
+            label.textContent = '{% trans "Ativo" %}';
+        } else {
+            card.classList.add('disabled');
+            statusIndicator.classList.remove('enabled');
+            statusIndicator.classList.add('disabled');
+            statusBadge.classList.remove('enabled');
+            statusBadge.classList.add('disabled');
+            statusBadge.textContent = '{% trans "Inativo" %}';
+            label.textContent = '{% trans "Inativo" %}';
+        }
+    }
+    
+    function updateCounters() {
+        const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+        const enabled = Array.from(checkboxes).filter(cb => cb.checked).length;
+        const total = checkboxes.length;
+        
+        enabledCount.textContent = enabled;
+        totalCount.textContent = total;
+    }
+    
+    function saveConfig() {
+        const formData = new FormData(form);
+        
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>{% trans "Salvando..." %}';
+        form.classList.add('loading');
+        
+        fetch('/api/v1/admin/config/panel/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: formData,
+        })
+        .then(response => {
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return response.json();
+            } else {
+                window.location.reload();
+                return null;
+            }
+        })
+        .then(data => {
+            if (data) {
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    if (data.data.last_updated) {
+                        updateLastUpdated(data.data.last_updated);
+                    }
+                } else {
+                    showAlert('Erro ao salvar: ' + data.error, 'danger');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            showAlert('Erro ao salvar configuração', 'danger');
+        })
+        .finally(() => {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i>{% trans "Salvar Alterações" %}';
+            form.classList.remove('loading');
+        });
+    }
+    
+    function resetConfig() {
+        resetBtn.disabled = true;
+        resetBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>{% trans "Resetando..." %}';
+        
+        fetch('/api/v1/admin/config/panel/', {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
+        .then(response => {
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return response.json();
+            } else {
+                window.location.reload();
+                return null;
+            }
+        })
+        .then(data => {
+            if (data) {
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                } else {
+                    showAlert('Erro ao resetar: ' + data.error, 'danger');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            showAlert('Erro ao resetar configuração', 'danger');
+        })
+        .finally(() => {
+            resetBtn.disabled = false;
+            resetBtn.innerHTML = '<i class="bi bi-arrow-clockwise me-2"></i>{% trans "Resetar Padrões" %}';
+        });
+    }
+    
+    function updateLastUpdated(timestamp) {
+        if (timestamp) {
+            const date = new Date(timestamp);
+            lastUpdated.textContent = date.toLocaleString('pt-BR');
+        } else {
+            lastUpdated.textContent = '{% trans "Nunca" %}';
+        }
+    }
+    
+    function showAlert(message, type) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-custom alert-dismissible fade show`;
+        alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        const cardBody = document.querySelector('.card-body');
+        cardBody.insertBefore(alertDiv, cardBody.firstChild);
+        
+        setTimeout(() => {
+            if (alertDiv.parentNode) {
+                alertDiv.remove();
+            }
+        }, 5000);
+    }
+});
+</script>
+{% endblock content %} 

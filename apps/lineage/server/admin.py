@@ -8,21 +8,28 @@ from django.utils import timezone
 @admin.register(ApiEndpointToggle)
 class ApiEndpointToggleAdmin(BaseModelAdmin):
     list_display = [
-        'players_online',
-        'top_pvp',
-        'top_pk',
-        'top_clan',
-        'top_rich',
-        'top_online',
-        'top_level',
-        'olympiad_ranking',
-        'olympiad_all_heroes',
-        'olympiad_current_heroes',
-        'grandboss_status',
-        'raidboss_status',
-        'siege',
-        'siege_participants',
-        'boss_jewel_locations',
+        # Server endpoints
+        'players_online', 'top_pvp', 'top_pk', 'top_clan', 'top_rich', 
+        'top_online', 'top_level', 'olympiad_ranking', 'olympiad_all_heroes', 
+        'olympiad_current_heroes', 'grandboss_status', 'raidboss_status', 
+        'siege', 'siege_participants', 'boss_jewel_locations',
+        # Authentication endpoints
+        'auth_login', 'auth_refresh', 'auth_logout',
+        # User endpoints
+        'user_profile', 'user_change_password', 'user_dashboard', 'user_stats',
+        # Search endpoints
+        'search_character', 'search_item',
+        # Game data endpoints
+        'clan_detail', 'auction_items',
+        # Server status endpoints
+        'server_status',
+        # API info endpoints
+        'api_info',
+        # Monitoring endpoints
+        'health_check', 'hourly_metrics', 'daily_metrics', 'performance_metrics',
+        'slow_queries', 'cache_stats',
+        # Administration endpoints
+        'api_config', 'api_config_panel',
     ]
 
     list_editable = list_display  # permite edição inline no list view
