@@ -176,9 +176,6 @@ MIDDLEWARE = [
     "middlewares.forbidden_redirect_middleware.ForbiddenRedirectMiddleware",
     "middlewares.rate_limit_api_external.RateLimitMiddleware",
     "middlewares.lock_screen_middleware.SessionLockMiddleware",
-    
-    # API Cache Middleware
-    "apps.api.cache.CacheMiddleware",
 ]
 
 # =========================== TEMPLATES CONFIGS ===========================
