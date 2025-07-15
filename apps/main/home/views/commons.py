@@ -142,7 +142,7 @@ def verify_2fa_view(request):
             if device.verify_token(token):
                 request.user = user  # necessário para otp_login
                 otp_login(request, device)  # <- isto marca o 2FA como verificado
-                login(request, user)        # autentica o usuário na sessão Django
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')        # autentica o usuário na sessão Django
                 del request.session['pre_2fa_user_id']
                 return redirect('dashboard')
             else:
