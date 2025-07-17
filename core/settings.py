@@ -111,6 +111,7 @@ INSTALLED_APPS = [
     "django_otp.plugins.otp_totp",
 
     "apps.api",
+    "apps.licence",
 
     "apps.main.administrator",
     "apps.main.auditor",
