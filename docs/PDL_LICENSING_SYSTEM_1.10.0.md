@@ -81,38 +81,22 @@ A versão 1.10.0 do Painel Definitivo Lineage (PDL) introduz um sistema de licen
 
 ## 🌐 Validação DNS TXT com Criptografia Avançada
 
-### Criptografia AES-256-GCM
-
-O sistema implementa validação de contratos via DNS TXT com criptografia de ponta:
-
-**Características:**
-- Chaves de criptografia configuráveis via variáveis de ambiente
-- Prefixo DNS personalizável (padrão: `pdl-contract-`)
-- Validação automática de contratos via DNS TXT
-- Suporte a múltiplos registros DNS
-
-### Configuração Segura
-
-```python
-# Settings configuráveis
-PDL_DNS_PREFIX = "pdl-contract-"
-PDL_ENCRYPTION_KEY = "sua_chave_secreta_aqui"
-```
+A validação de contratos PDL PRO é feita exclusivamente via registro DNS TXT no domínio **denky.dev.br**. Não há consulta a API ou DNS do cliente.
 
 ### Exemplo de Registro DNS
 
-```bash
-# Exemplo de registro DNS TXT
-pdl-contract-12345.example.com TXT "encrypted_contract_data"
 ```
+# Exemplo de registro DNS TXT
+pdl-contract-CONTRATO-2024-001.denky.dev.br TXT "<valor_criptografado>"
+```
+
+O valor criptografado deve ser gerado pelo script oficial do DENKY, usando a mesma chave Fernet configurada no projeto do cliente.
 
 ### Processo de Validação
 
-1. **Geração do Contrato:** Sistema gera número de contrato único
-2. **Criptografia:** Contrato é criptografado com AES-256-GCM
-3. **Registro DNS:** Cliente adiciona registro TXT no DNS
-4. **Validação:** Sistema verifica automaticamente via DNS
-5. **Ativação:** Licença é ativada após validação bem-sucedida
+1. **Geração do Contrato:** O dono do projeto gera o valor criptografado para o contrato usando o script standalone.
+2. **Publicação no DNS:** O valor é publicado em denky.dev.br como registro TXT.
+3. **Validação no Cliente:** O sistema do cliente busca o valor do DNS, descriptografa com a chave Fernet e confere se o número do contrato e domínio batem.
 
 ---
 
@@ -530,72 +514,36 @@ apps/licence/
 
 ## 🛠️ Instalação e Configuração
 
-### Pré-requisitos
-
-**Dependências:**
-- Python 3.8+
-- Django 4.0+
-- Redis (para cache)
-- dnspython (para validação DNS)
-- cryptography (para criptografia)
-
-### Instalação
-
-```bash
-# Instalar dependências
-pip install -r requirements.txt
-
-# Executar migrações
-python manage.py migrate
-
-# Criar superusuário
-python manage.py createsuperuser
-
-# Gerar chave de criptografia
-python manage.py generate_encryption_key
-```
-
 ### Configuração
 
 ```python
 # settings.py
 
-# Configurações do sistema de licenciamento
-PDL_DNS_PREFIX = "pdl-contract-"
-PDL_ENCRYPTION_KEY = "sua_chave_secreta_aqui"
-
-# Adicionar app às INSTALLED_APPS
-INSTALLED_APPS = [
-    # ... outros apps
-    'apps.licence',
-]
-
-# Adicionar middleware
-MIDDLEWARE = [
-    # ... outros middlewares
-    'apps.licence.middleware.LicenseMiddleware',
-]
-
-# Configurar URLs
-urlpatterns = [
-    # ... outras URLs
-    path('licence/', include('apps.licence.urls')),
-]
+# Chave Fernet usada para validar contratos PRO
+LICENSE_CONFIG = {
+    'ENCRYPTION_KEY': 'SUA_CHAVE_FERNET_AQUI',
+    'DNS_TIMEOUT': 10,
+}
 ```
 
-### Variáveis de Ambiente
+- **ENCRYPTION_KEY:** Deve ser a mesma chave usada no script gerador de contratos.
+- **DNS_TIMEOUT:** Tempo limite para consulta DNS.
 
-```bash
-# .env
-PDL_DNS_PREFIX=pdl-contract-
-PDL_ENCRYPTION_KEY=sua_chave_secreta_aqui
-PDL_LICENSE_CACHE_TTL=3600
-PDL_VERIFICATION_RATE_LIMIT=100
-```
+Remova qualquer configuração relacionada a API, domínio do cliente ou variáveis como PDL_DNS_PREFIX, PDL_ENCRYPTION_KEY, PDL_LICENSE_CACHE_TTL, PDL_VERIFICATION_RATE_LIMIT, PDL_DNS_PREFIX, PDL_ENCRYPTION_KEY, etc.
 
 ---
 
 ## 📝 Exemplos de Uso
+
+### Validação de Contrato PRO
+
+O sistema do cliente irá buscar o registro DNS:
+
+```
+pdl-contract-<numero_contrato>.denky.dev.br TXT "<valor_criptografado>"
+```
+
+E irá descriptografar usando a chave Fernet configurada. Se o número do contrato e domínio batem, a licença é válida.
 
 ### Criação de Licença FREE
 
