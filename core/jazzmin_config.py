@@ -243,6 +243,11 @@ def get_jazzmin_settings(project_title, project_logo):
             "server.Apoiador": "fas fa-star",
             "server.Comissao": "fas fa-percentage",
             "server.ApoiadorDefault": "fas fa-image",
+            
+            # Licence
+            "licence": "fas fa-key",
+            "licence.License": "fas fa-key",
+            "licence.LicenseVerification": "fas fa-shield-alt",
         },
         # Icons that are used when one is not manually specified
         "default_icon_parents": "fas fa-chevron-circle-right",

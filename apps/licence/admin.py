@@ -8,9 +8,10 @@ from core.admin import BaseModelAdmin
 
 @admin.register(License)
 class LicenseAdmin(BaseModelAdmin):
+    icon = 'fas fa-key'
     list_display = [
-        'license_key_short', 'license_type', 'domain', 'company_name', 
-        'status', 'activated_at', 'expires_at', 'verification_count'
+        'license_key_short', 'license_type_with_icon', 'domain', 'company_name', 
+        'status_with_icon', 'activated_at', 'expires_at', 'verification_count'
     ]
     list_filter = ['license_type', 'status', 'activated_at', 'expires_at']
     search_fields = ['license_key', 'domain', 'company_name', 'contact_email']
@@ -57,9 +58,44 @@ class LicenseAdmin(BaseModelAdmin):
     def license_key_short(self, obj):
         """Exibe apenas os primeiros caracteres da chave de licença"""
         if obj.license_key:
-            return obj.license_key[:12] + "..."
+            return format_html(
+                '<i class="fas fa-key text-primary"></i> <code>{}</code>',
+                obj.license_key[:12] + "..."
+            )
         return "-"
     license_key_short.short_description = _("Chave de Licença")
+    
+    def license_type_with_icon(self, obj):
+        """Exibe o tipo de licença com ícone"""
+        if obj.license_type == 'free':
+            return format_html(
+                '<i class="fas fa-gift text-info"></i> <span class="badge bg-info">PDL FREE</span>'
+            )
+        else:
+            return format_html(
+                '<i class="fas fa-crown text-warning"></i> <span class="badge bg-warning">PDL PRO</span>'
+            )
+    license_type_with_icon.short_description = _("Tipo")
+    
+    def status_with_icon(self, obj):
+        """Exibe o status com ícone"""
+        if obj.status == 'active':
+            return format_html(
+                '<i class="fas fa-check-circle text-success"></i> <span class="badge bg-success">Ativa</span>'
+            )
+        elif obj.status == 'expired':
+            return format_html(
+                '<i class="fas fa-exclamation-triangle text-danger"></i> <span class="badge bg-danger">Expirada</span>'
+            )
+        elif obj.status == 'suspended':
+            return format_html(
+                '<i class="fas fa-pause-circle text-warning"></i> <span class="badge bg-warning">Suspensa</span>'
+            )
+        else:
+            return format_html(
+                '<i class="fas fa-times-circle text-secondary"></i> <span class="badge bg-secondary">Inativa</span>'
+            )
+    status_with_icon.short_description = _("Status")
     
     def activate_licenses(self, request, queryset):
         """Ação para ativar licenças selecionadas"""
@@ -105,9 +141,10 @@ class LicenseAdmin(BaseModelAdmin):
 
 @admin.register(LicenseVerification)
 class LicenseVerificationAdmin(BaseModelAdmin):
+    icon = 'fas fa-shield-alt'
     list_display = [
         'license_domain', 'verification_date', 'ip_address', 
-        'success', 'response_time'
+        'success_with_icon', 'response_time_with_icon'
     ]
     list_filter = ['success', 'verification_date', 'license__license_type']
     search_fields = ['license__domain', 'license__license_key', 'ip_address']
@@ -135,8 +172,45 @@ class LicenseVerificationAdmin(BaseModelAdmin):
     
     def license_domain(self, obj):
         """Exibe o domínio da licença"""
-        return obj.license.domain if obj.license else "-"
+        if obj.license:
+            return format_html(
+                '<i class="fas fa-globe text-primary"></i> <strong>{}</strong>',
+                obj.license.domain
+            )
+        return "-"
     license_domain.short_description = _("Domínio")
+    
+    def success_with_icon(self, obj):
+        """Exibe o sucesso da verificação com ícone"""
+        if obj.success:
+            return format_html(
+                '<i class="fas fa-check-circle text-success"></i> <span class="badge bg-success">Sucesso</span>'
+            )
+        else:
+            return format_html(
+                '<i class="fas fa-times-circle text-danger"></i> <span class="badge bg-danger">Falha</span>'
+            )
+    success_with_icon.short_description = _("Resultado")
+    
+    def response_time_with_icon(self, obj):
+        """Exibe o tempo de resposta com ícone"""
+        if obj.response_time:
+            if obj.response_time < 1.0:
+                color = 'success'
+                icon = 'fas fa-bolt'
+            elif obj.response_time < 3.0:
+                color = 'warning'
+                icon = 'fas fa-clock'
+            else:
+                color = 'danger'
+                icon = 'fas fa-hourglass-half'
+            
+            return format_html(
+                '<i class="{} text-{}"></i> <span class="text-{}">{:.2f}s</span>',
+                icon, color, color, obj.response_time
+            )
+        return "-"
+    response_time_with_icon.short_description = _("Tempo de Resposta")
     
     def has_add_permission(self, request):
         """Não permite adicionar verificações manualmente"""
