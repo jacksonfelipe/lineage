@@ -79,6 +79,12 @@ django-otp
 qrcode
 pyotp
 
+# DNS Resolution
+dnspython
+
+# Cryptography
+cryptography
+
 # Docs
 mkdocs
 mkdocs-material
