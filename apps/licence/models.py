@@ -135,7 +135,8 @@ class License(BaseModel):
     
     def generate_license_key(self):
         """Gera uma chave de licença única"""
-        return license_validator.generate_license_key()
+        from .utils import _get_license_validator
+        return _get_license_validator().generate_license_key()
     
     def get_default_features(self):
         """Retorna as funcionalidades padrão baseadas no tipo de licença"""

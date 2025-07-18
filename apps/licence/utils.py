@@ -16,7 +16,13 @@ class LicenseCrypto:
     
     def __init__(self):
         self.encryption_key = self._get_encryption_key()
-        self.cipher_suite = Fernet(self.encryption_key)
+        try:
+            self.cipher_suite = Fernet(self.encryption_key)
+        except Exception as e:
+            # Se a chave for inválida, gera uma nova baseada no SECRET_KEY
+            print(f"Warning: Invalid encryption key, generating new one: {e}")
+            self.encryption_key = self._generate_fallback_key()
+            self.cipher_suite = Fernet(self.encryption_key)
     
     def _get_encryption_key(self):
         """
@@ -27,11 +33,16 @@ class LicenseCrypto:
         if config_key:
             # Se a chave está configurada, usa ela
             try:
-                return base64.urlsafe_b64decode(config_key + '=' * (4 - len(config_key) % 4))
+                # A chave já está em base64, não precisa decodificar
+                return config_key.encode()
             except Exception:
                 pass
         
         # Se não há chave configurada, gera uma baseada no SECRET_KEY
+        return self._generate_fallback_key()
+    
+    def _generate_fallback_key(self):
+        """Gera uma chave baseada no SECRET_KEY do Django"""
         salt = hashlib.sha256(settings.SECRET_KEY.encode()).digest()
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
@@ -174,34 +185,48 @@ class LicenseValidator:
         return '-'.join([key[i:i+4] for i in range(0, 32, 4)])
 
 
-# Instâncias globais
-license_crypto = LicenseCrypto()
-license_validator = LicenseValidator()
+# Instâncias globais - inicializadas como None para evitar problemas durante importação
+license_crypto = None
+license_validator = None
+
+def _get_license_crypto():
+    """Obtém a instância de LicenseCrypto, criando se necessário"""
+    global license_crypto
+    if license_crypto is None:
+        license_crypto = LicenseCrypto()
+    return license_crypto
+
+def _get_license_validator():
+    """Obtém a instância de LicenseValidator, criando se necessário"""
+    global license_validator
+    if license_validator is None:
+        license_validator = LicenseValidator()
+    return license_validator
 
 
 def encrypt_license_data(data: str) -> str:
     """
     Função de conveniência para criptografar dados
     """
-    return license_crypto.encrypt(data)
+    return _get_license_crypto().encrypt(data)
 
 
 def decrypt_license_data(encrypted_data: str) -> str:
     """
     Função de conveniência para descriptografar dados
     """
-    return license_crypto.decrypt(encrypted_data)
+    return _get_license_crypto().decrypt(encrypted_data)
 
 
 def validate_contract_dns(contract_number: str, domain: str) -> tuple[bool, str]:
     """
     Função de conveniência para validar contrato via DNS
     """
-    return license_validator.validate_contract_via_dns(contract_number, domain)
+    return _get_license_validator().validate_contract_via_dns(contract_number, domain)
 
 
 def generate_dns_record(contract_number: str, domain: str, encrypt: bool = True) -> dict:
     """
     Função de conveniência para gerar registro DNS
     """
-    return license_validator.generate_dns_record(contract_number, domain, encrypt) 
+    return _get_license_validator().generate_dns_record(contract_number, domain, encrypt) 

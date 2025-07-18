@@ -22,7 +22,8 @@ class Command(BaseCommand):
         self.stdout.write(f'Registro DNS esperado: {txt_record_name}')
         
         # Testa a validação
-        success, message = license_validator.validate_contract_via_dns(contract_number, domain)
+        from apps.licence.utils import _get_license_validator
+        success, message = _get_license_validator().validate_contract_via_dns(contract_number, domain)
         
         if success:
             self.stdout.write(self.style.SUCCESS(f'✅ {message}'))
