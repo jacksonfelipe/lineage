@@ -814,27 +814,6 @@ FAKE_PLAYERS_MAX = int(os.getenv('FAKE_PLAYERS_MAX', 0))
 
 # Configurações de validação de licenças
 LICENSE_CONFIG = {
-    # Configuração do registro DNS TXT para validação de contratos
-    'DNS_TXT_PREFIX': os.getenv('LICENSE_DNS_TXT_PREFIX', 'pdl-contract'),
-    
-    # Chave de criptografia para dados sensíveis (32 bytes em base64)
-    'ENCRYPTION_KEY': os.getenv('LICENSE_ENCRYPTION_KEY', ''),
-    
-    # Timeout para consultas DNS (segundos)
-    'DNS_TIMEOUT': int(os.getenv('LICENSE_DNS_TIMEOUT', 10)),
-    
-    # Intervalo de verificação de licença (segundos)
-    'VERIFICATION_INTERVAL': int(os.getenv('LICENSE_VERIFICATION_INTERVAL', 3600)),
-    
-    # Cache de licença (segundos)
-    'CACHE_TIMEOUT': int(os.getenv('LICENSE_CACHE_TIMEOUT', 3600)),
-    
-    # Validação remota (True/False)
-    'REMOTE_VALIDATION': str2bool(os.getenv('LICENSE_REMOTE_VALIDATION', False)),
-    
-    # URL da API de validação remota (se habilitada)
-    'REMOTE_API_URL': os.getenv('LICENSE_REMOTE_API_URL', ''),
-    
-    # Chave da API de validação remota
-    'REMOTE_API_KEY': os.getenv('LICENSE_REMOTE_API_KEY', ''),
+    'ENCRYPTION_KEY': os.environ.get('PDL_ENCRYPTION_KEY', ''),  # Chave Fernet usada no script gerador
+    'DNS_TIMEOUT': int(os.environ.get('PDL_DNS_TIMEOUT', '10')),
 }

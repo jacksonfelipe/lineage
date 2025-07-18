@@ -75,21 +75,20 @@ class LicenseCrypto:
 
 class LicenseValidator:
     """
-    Utilitário para validação de licenças via DNS
+    Utilitário para validação de licenças via DNS do denky.dev.br
     """
     
     def __init__(self):
-        self.dns_prefix = settings.LICENSE_CONFIG.get('DNS_TXT_PREFIX', 'pdl-contract')
         self.dns_timeout = settings.LICENSE_CONFIG.get('DNS_TIMEOUT', 10)
         self.crypto = LicenseCrypto()
-    
-    def validate_contract_via_dns(self, contract_number: str, domain: str) -> tuple[bool, str]:
+
+    def validate_contract_via_dns(self, contract_number: str, client_domain: str) -> tuple[bool, str]:
         """
-        Valida o número do contrato via registro DNS TXT
+        Valida o número do contrato via registro DNS TXT em denky.dev.br
         """
         try:
             # Formata o registro TXT esperado
-            txt_record_name = f"{self.dns_prefix}.{domain}"
+            txt_record_name = f"pdl-contract-{contract_number}.denky.dev.br"
             
             # Resolve o registro TXT
             resolver = dns.resolver.Resolver()
@@ -97,25 +96,21 @@ class LicenseValidator:
             resolver.lifetime = self.dns_timeout
             
             answers = resolver.resolve(txt_record_name, 'TXT')
-            
-            # Verifica se algum dos registros TXT contém o número do contrato
             for answer in answers:
                 txt_value = answer.to_text().strip('"')
-                
-                # Verifica se o contrato está no valor TXT
-                if contract_number in txt_value:
-                    return True, "Contrato validado via DNS"
-                
-                # Verifica se é um valor criptografado
+                # Tenta descriptografar
                 try:
-                    decrypted_value = self.crypto.decrypt(txt_value)
-                    if contract_number in decrypted_value:
-                        return True, "Contrato validado via DNS (criptografado)"
+                    decrypted_json = self.crypto.decrypt(txt_value)
+                    if not decrypted_json:
+                        continue
+                    import json
+                    contract_data = json.loads(decrypted_json)
+                    # Confere número do contrato e domínio
+                    if contract_data.get('contract_number') == contract_number and contract_data.get('client_domain') == client_domain:
+                        return True, "Contrato validado via DNS do denky.dev.br"
                 except Exception:
                     continue
-            
-            return False, f"Contrato {contract_number} não encontrado no registro DNS TXT de {txt_record_name}"
-            
+            return False, f"Contrato {contract_number} não encontrado ou inválido no registro DNS TXT de {txt_record_name}"
         except dns.resolver.NXDOMAIN:
             return False, f"Registro DNS TXT não encontrado para {txt_record_name}"
         except dns.resolver.NoAnswer:
