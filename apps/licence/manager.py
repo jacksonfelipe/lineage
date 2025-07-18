@@ -157,7 +157,8 @@ class LicenseManager:
         """
         Valida o número do contrato via registro DNS TXT
         """
-        return license_validator.validate_contract_via_dns(contract_number, domain)
+        from .utils import _get_license_validator
+        return _get_license_validator().validate_contract_via_dns(contract_number, domain)
     
     def create_pro_license(self, domain, contact_email, company_name, contact_phone, contract_number=""):
         """

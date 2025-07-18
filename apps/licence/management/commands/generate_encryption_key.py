@@ -9,7 +9,8 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Gerando nova chave de criptografia...'))
         
         # Gera uma nova chave
-        new_key = license_crypto.generate_encryption_key()
+        from apps.licence.utils import _get_license_crypto
+        new_key = _get_license_crypto().generate_encryption_key()
         
         self.stdout.write('\n' + '='*60)
         self.stdout.write(self.style.SUCCESS('CHAVE DE CRIPTOGRAFIA GERADA'))
