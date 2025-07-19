@@ -20,7 +20,7 @@ load_dotenv()  # take environment variables from .env.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # System Version
-VERSION = '1.10.0'
+VERSION = '1.10.5'
 
 # Enable/Disable DEBUG Mode
 DEBUG = str2bool(os.environ.get('DEBUG', False))
@@ -41,6 +41,29 @@ LOGIN_REDIRECT_URL = 'dashboard'
 # =========================== LOGGER CONFIGS ===========================
 
 LOGGING = is_LOGGING
+
+# Adiciona logging específico para autenticação (versão simplificada)
+if 'loggers' not in LOGGING:
+    LOGGING['loggers'] = {}
+
+# Loggers de autenticação com handlers seguros
+LOGGING['loggers'].update({
+    'core.backends': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+        'propagate': False,
+    },
+    'apps.main.home.views.accounts': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+        'propagate': False,
+    },
+    'apps.main.home.views.commons': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+        'propagate': False,
+    }
+})
 
 # =========================== CORS CONFIGS ===========================
 
@@ -235,6 +258,21 @@ if DB_ENGINE and DB_NAME and DB_USERNAME:
         'PASSWORD': DB_PASS,
         'HOST'    : DB_HOST,
         'PORT'    : int(DB_PORT) if DB_PORT else '',
+        'OPTIONS': {
+            # Configurações para evitar bloqueios de banco
+            'timeout': 20,  # Timeout de conexão em segundos
+            'connect_timeout': 10,  # Timeout de conexão inicial
+            'autocommit': True,  # Autocommit para evitar transações longas
+        } if DB_ENGINE == 'postgresql' else {
+            # Configurações específicas para SQLite
+            'timeout': 20,
+            'check_same_thread': False,  # Permite múltiplas threads
+        } if DB_ENGINE == 'sqlite3' else {
+            # Configurações para MySQL
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'charset': 'utf8mb4',
+            'autocommit': True,
+        }
         }
     }
 else:
@@ -242,6 +280,10 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': 'db.sqlite3',
+            'OPTIONS': {
+                'timeout': 20,
+                'check_same_thread': False,
+            }
         }
     }
     
@@ -275,9 +317,9 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_UNIQUE_EMAIL = True
 
 AUTHENTICATION_BACKENDS = (
+    'core.backends.LicenseBackend',  # PRIMEIRO - verifica licença antes de qualquer login
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
-    'core.backends.LicenseBackend',
 )
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -502,6 +544,24 @@ SERVE_DECRYPTED_FILE_URL_BASE = os.environ.get('SERVE_DECRYPTED_FILE_URL_BASE', 
 
 AUDITOR_MIDDLEWARE_ENABLE = os.getenv('CONFIG_AUDITOR_MIDDLEWARE_ENABLE', False)
 AUDITOR_MIDDLEWARE_RESTRICT_PATHS = os.getenv('CONFIG_AUDITOR_MIDDLEWARE_RESTRICT_PATHS', [])
+
+# =========================== AUDITOR MIDDLEWARE CONFIGS ===========================
+
+# Configurações do middleware de auditoria
+AUDITOR_MIDDLEWARE_ENABLE = str2bool(os.environ.get('CONFIG_AUDITOR_MIDDLEWARE_ENABLE', 'False'))
+AUDITOR_MIDDLEWARE_RESTRICT_PATHS = [
+    '/static/',
+    '/media/',
+    '/favicon.ico',
+    '/robots.txt',
+    '/sitemap.xml',
+    '/admin/jsi18n/',
+    '/__debug__/',
+    '/api/health/',
+    '/api/status/',
+]
+AUDITOR_MIDDLEWARE_MAX_RETRIES = 3
+AUDITOR_MIDDLEWARE_RETRY_DELAY = 0.1
 
 # =========================== EXTRA CONFIGS ===========================
 

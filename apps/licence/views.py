@@ -386,3 +386,19 @@ def api_license_features(request):
             'success': False,
             'error': str(e)
         }, status=500)
+
+
+@login_required
+@user_passes_test(is_superuser)
+def test_block(request):
+    """
+    Página de teste do sistema de bloqueio de login por licença
+    """
+    from utils.license_manager import check_license_status
+    
+    context = {
+        'is_valid': check_license_status(),
+        'license_info': license_manager.get_license_info(),
+    }
+    
+    return render(request, 'licence/test_block.html', context)

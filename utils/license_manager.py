@@ -1,23 +1,39 @@
 import requests
+from django.conf import settings
 
 def check_license_status():
     """
-    Simula a verificação do status da licença através de uma API externa.
-    Em um cenário real, esta função faria uma requisição HTTP para a sua API de licenças.
+    Verifica o status da licença usando o sistema de licença PDL real.
     """
-    # TODO: Substitua esta lógica pela sua chamada real à API de licenças.
-    # Exemplo: try/except para lidar com erros de rede, verificar o status da resposta, etc.
     try:
-        # Exemplo de chamada real (descomente e ajuste):
-        # response = requests.get("https://sua-api-de-licenca.com/status")
-        # data = response.json()
-        # return data.get("is_valid", False)
-
-        # SIMULAÇÃO: Retorna True para licença válida, False para inválida
-        # Altere para False para testar o cenário de licença inválida
-        is_valid = True # Ou False para simular licença inválida
-        print(f"[LicenseManager] Status da licença: {'Válida' if is_valid else 'Inválida'}")
+        # Importa o gerenciador de licenças do PDL
+        from apps.licence.manager import license_manager
+        
+        # Verifica o status da licença atual
+        is_valid = license_manager.check_license_status()
+        
+        print(f"[LicenseManager] Status da licença PDL: {'Válida' if is_valid else 'Inválida'}")
         return is_valid
+        
+    except ImportError as e:
+        print(f"[LicenseManager] Erro ao importar sistema de licença: {e}")
+        # Se não conseguir importar o sistema de licença, permite o login
+        return True
+        
     except Exception as e:
         print(f"[LicenseManager] Erro ao verificar licença: {e}")
-        return False # Retorna False em caso de erro na comunicação com a API 
+        # Em caso de erro, permite o login para não bloquear o sistema
+        return True
+
+def check_license_status_for_testing():
+    """
+    Versão para testes - permite simular licença inválida
+    """
+    # Para testes, você pode alterar este valor
+    SIMULATE_INVALID_LICENSE = False
+    
+    if SIMULATE_INVALID_LICENSE:
+        print("[LicenseManager] TESTE: Simulando licença inválida")
+        return False
+    
+    return check_license_status() 

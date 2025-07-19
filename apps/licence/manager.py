@@ -248,11 +248,16 @@ class LicenseManager:
             if request:
                 verification.ip_address = self._get_client_ip(request)
                 verification.user_agent = request.META.get('HTTP_USER_AGENT', '')
+            else:
+                # Se não há request, usa valores padrão
+                verification.ip_address = '127.0.0.1'
+                verification.user_agent = 'System/CLI'
             
             verification.save()
             
         except Exception as e:
             print(f"[LicenseManager] Erro ao registrar verificação: {e}")
+            # Não falha a verificação por causa do erro de registro
     
     def _get_client_ip(self, request):
         """
