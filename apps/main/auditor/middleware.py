@@ -2,9 +2,10 @@ import logging
 from functools import reduce
 from operator import add
 from time import time
+import threading
 
 from django.conf import settings
-from django.db import IntegrityError, DataError, connection
+from django.db import IntegrityError, DataError, connection, transaction
 from django.utils import timezone
 from django.http.request import RawPostDataException
 
@@ -20,11 +21,18 @@ class AuditorMiddleware:
         self.AUDITOR_MIDDLEWARE_ENABLE = getattr(settings, "AUDITOR_MIDDLEWARE_ENABLE", False)
         self.AUDITOR_MIDDLEWARE_RESTRICT_PATHS = getattr(settings, "AUDITOR_MIDDLEWARE_RESTRICT_PATHS", [])
         self.AUDITOR_MIDDLEWARE_CONTENT = getattr(settings, "DEBUG", False)
+        # Adiciona lock para evitar concorrência
+        self._save_lock = threading.Lock()
 
     def __call__(self, request):
         if not self.AUDITOR_MIDDLEWARE_ENABLE:
             response = self.get_response(request)
             logger.info('Auditor Middleware is disabled!')
+            return response
+        
+        # Ignora requisições para arquivos estáticos e mídia
+        if self._should_skip_audit(request.path):
+            response = self.get_response(request)
             return response
         
         if '/app/auditor/' in request.path:
@@ -78,21 +86,68 @@ class AuditorMiddleware:
         s['response_content'] = "DISABLE"
         s['response_status_code'] = getattr(response, 'status_code', None)
 
-        # Garantir que todos os campos obrigatórios estão presentes
-        required_fields = ['date', 'path', 'total_time', 'total_queries', 'db_time', 'python_time', 'ip', 'method', 'user_agent', 'host', 'port', 'content_type', 'response_content', 'response_status_code']
-        missing_fields = [field for field in required_fields if field not in s or s[field] is None]
-
-        if missing_fields:
-            logger.error(f"Missing required fields: {missing_fields}. Unable to save event data: {s}")
-        else:
-            try:
-                event = Auditor(**s)
-                event.save()
-            except IntegrityError as e:
-                logger.error(f"IntegrityError: Error saving statistics to the database. Error: {e}. Event data: {s}")
-            except DataError as e:
-                logger.error(f"DataError: Error saving statistics to the database. Error: {e}. Event data: {s}")
-            except Exception as e:
-                logger.error(f"Error saving statistics to the database. Error: {e}. Event data: {s}")
+        # Salva os dados de auditoria de forma assíncrona e segura
+        self._save_audit_data_async(s)
 
         return response
+
+    def _should_skip_audit(self, path):
+        """Verifica se deve pular a auditoria para este caminho"""
+        skip_patterns = [
+            '/static/',
+            '/media/',
+            '/favicon.ico',
+            '/robots.txt',
+            '/sitemap.xml',
+            '/admin/jsi18n/',
+            '/__debug__/',
+        ]
+        return any(path.startswith(pattern) for pattern in skip_patterns)
+
+    def _save_audit_data_async(self, audit_data):
+        """Salva dados de auditoria de forma assíncrona e segura"""
+        try:
+            # Usa lock para evitar concorrência
+            with self._save_lock:
+                # Garantir que todos os campos obrigatórios estão presentes
+                required_fields = ['date', 'path', 'total_time', 'total_queries', 'db_time', 'python_time', 'ip', 'method', 'user_agent', 'host', 'port', 'content_type', 'response_content', 'response_status_code']
+                missing_fields = [field for field in required_fields if field not in audit_data or audit_data[field] is None]
+
+                if missing_fields:
+                    logger.error(f"Missing required fields: {missing_fields}. Unable to save event data: {audit_data}")
+                    return
+
+                # Tenta salvar com timeout e retry
+                self._save_with_retry(audit_data)
+
+        except Exception as e:
+            logger.error(f"Unexpected error in audit save: {e}. Event data: {audit_data}")
+
+    def _save_with_retry(self, audit_data, max_retries=3, retry_delay=0.1):
+        """Salva com retry em caso de erro de banco bloqueado"""
+        for attempt in range(max_retries):
+            try:
+                with transaction.atomic():
+                    event = Auditor(**audit_data)
+                    event.save()
+                return  # Sucesso, sai da função
+                
+            except IntegrityError as e:
+                logger.warning(f"IntegrityError (attempt {attempt + 1}/{max_retries}): {e}")
+                if attempt == max_retries - 1:
+                    logger.error(f"IntegrityError: Error saving statistics to the database. Error: {e}. Event data: {audit_data}")
+                    
+            except DataError as e:
+                logger.warning(f"DataError (attempt {attempt + 1}/{max_retries}): {e}")
+                if attempt == max_retries - 1:
+                    logger.error(f"DataError: Error saving statistics to the database. Error: {e}. Event data: {audit_data}")
+                    
+            except Exception as e:
+                if "database is locked" in str(e).lower():
+                    logger.warning(f"Database locked (attempt {attempt + 1}/{max_retries}): {e}")
+                    if attempt < max_retries - 1:
+                        import time
+                        time.sleep(retry_delay * (attempt + 1))  # Backoff exponencial
+                        continue
+                logger.error(f"Error saving statistics to the database. Error: {e}. Event data: {audit_data}")
+                break

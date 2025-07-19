@@ -15,6 +15,7 @@ urlpatterns = [
     path('<int:license_id>/renew/', views.license_renew, name='renew'),
     path('<int:license_id>/delete/', views.license_delete, name='delete'),
     path('status/', views.status, name='status'),
+    path('test-block/', views.test_block, name='test_block'),
     
     # API URLs
     path('api/activate/', views.api_activate_license, name='api_activate'),

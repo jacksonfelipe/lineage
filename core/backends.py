@@ -3,30 +3,63 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse
 from utils.license_manager import check_license_status
+import logging
 
+logger = logging.getLogger(__name__)
 
 class LicenseBackend(ModelBackend):
+    """
+    Backend de autenticação que verifica a licença do sistema.
+    Deve ser executado PRIMEIRO para validar a licença antes de qualquer login.
+    """
+    
     def authenticate(self, request, username=None, password=None, **kwargs):
+        """
+        Primeiro verifica a licença, depois autentica o usuário
+        """
+        logger.debug(f"[LicenseBackend] Iniciando autenticação para usuário: {username}")
+        
+        # 1. Verifica a licença do sistema ANTES de qualquer autenticação
+        logger.debug(f"[LicenseBackend] Verificando status da licença...")
+        if not check_license_status():
+            logger.warning(f"[LicenseBackend] Licença inválida - bloqueando login para usuário: {username}")
+            
+            if request:
+                messages.error(
+                    request, 
+                    "❌ Acesso negado: A licença do sistema PDL não é válida ou expirou. "
+                    "Entre em contato com o administrador para renovar a licença."
+                )
+            
+            return None  # Bloqueia TODOS os logins se a licença for inválida
+        
+        logger.debug(f"[LicenseBackend] Licença válida - permitindo autenticação para usuário: {username}")
+        
+        # 2. Se a licença for válida, chama o backend pai para autenticar
         user = super().authenticate(request, username, password, **kwargs)
-
-        if user and user.is_superuser:
-            if not check_license_status():
-                if request:
-                    messages.error(request, "Erro: A licença do sistema não é válida. Contate o administrador.")
-                    # Você pode querer redirecionar o usuário ou simplesmente não retornar o usuário
-                    # e deixar que o fluxo de login padrão do Django lide com isso.
-                    # return None # Impediria o login do superusuário
-                    
-                    # Alternativamente, para um erro mais explícito e um redirecionamento personalizado:
-                    # return None # Garante que o usuário não será logado pelo backend
-
-                print("[LicenseBackend] Tentativa de login de superusuário com licença inválida.")
-                return None  # Impede o login do superusuário
-
+        
+        # Se a autenticação falhou, retorna None
+        if not user:
+            logger.debug(f"[LicenseBackend] Autenticação falhou para usuário: {username}")
+            return None
+            
+        logger.info(f"[LicenseBackend] Usuário autenticado com sucesso: {user.username} (is_superuser: {user.is_superuser})")
+        
+        # 3. Verificações adicionais para superusuários (se necessário)
+        if user.is_superuser:
+            logger.debug(f"[LicenseBackend] Usuário é superusuário: {user.username}")
+            # Aqui você pode adicionar verificações específicas para superusuários se necessário
+        
         return user
 
     def get_user(self, user_id):
+        """
+        Recupera um usuário pelo ID
+        """
         try:
-            return super().get_user(user_id)
-        except Exception:
+            user = super().get_user(user_id)
+            logger.debug(f"[LicenseBackend] Usuário recuperado: {user.username if user else 'None'}")
+            return user
+        except Exception as e:
+            logger.error(f"[LicenseBackend] Erro ao recuperar usuário {user_id}: {e}")
             return None 
