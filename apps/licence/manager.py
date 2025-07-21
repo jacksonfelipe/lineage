@@ -172,7 +172,12 @@ class LicenseManager:
             # Valida se o número do contrato foi fornecido
             if not contract_number:
                 return False, "Número do contrato é obrigatório para licenças PRO"
-            
+
+            # Verifica se já existe uma licença com o mesmo número de contrato
+            from .models import License
+            if License.objects.filter(contract_number=contract_number).exists():
+                return False, "Já existe uma licença com este número de contrato. Não é permitido reutilizar o mesmo contrato."
+
             # Valida o contrato via DNS TXT (a menos que seja pulado)
             if not skip_dns_validation:
                 contract_valid, contract_message = self.validate_contract_via_dns(contract_number, domain)
@@ -180,7 +185,7 @@ class LicenseManager:
                     return False, f"Validação de contrato falhou: {contract_message}"
             else:
                 print(f"[LicenseManager] Validação DNS pulada para contrato: {contract_number}")
-            
+
             license = License.objects.create(
                 license_type='pro',
                 domain=domain,
@@ -191,9 +196,9 @@ class LicenseManager:
                 status='active',
                 expires_at=timezone.now() + timezone.timedelta(days=365)
             )
-            
+
             return True, license.id
-            
+
         except Exception as e:
             return False, f"Erro ao criar licença profissional: {str(e)}"
     

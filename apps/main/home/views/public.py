@@ -69,7 +69,8 @@ def maintenance_view(request):
     """
     Página de manutenção para usuários comuns quando a licença está inválida
     """
-    return render_theme_page(request, 'public', 'maintenance.html', {})
+    from django.shortcuts import render
+    return render(request, 'public/maintenance_isolated.html', {})
 
 
 def license_expired_view(request):
