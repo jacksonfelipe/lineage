@@ -4,6 +4,7 @@ from apps.main.faq.models import FAQ
 from apps.main.news.models import News
 from django.utils.translation import get_language, gettext as _
 from utils.render_theme_page import render_theme_page
+from django.shortcuts import redirect
 
 
 def public_news_list(request):
@@ -62,3 +63,22 @@ def public_faq_list(request):
     }
 
     return render_theme_page(request, 'public', 'faq.html', context)
+
+
+def maintenance_view(request):
+    """
+    Página de manutenção para usuários comuns quando a licença está inválida
+    """
+    return render_theme_page(request, 'public', 'maintenance.html', {})
+
+
+def license_expired_view(request):
+    """
+    Página de licença expirada para superusuários
+    """
+    # Verifica se o usuário é superusuário
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        # Se não for superusuário, redireciona para manutenção
+        return redirect('maintenance')
+    
+    return render_theme_page(request, 'public', 'license_expired.html', {})

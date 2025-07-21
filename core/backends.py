@@ -24,14 +24,9 @@ class LicenseBackend(ModelBackend):
         if not check_license_status():
             logger.warning(f"[LicenseBackend] Licença inválida - bloqueando login para usuário: {username}")
             
-            if request:
-                messages.error(
-                    request, 
-                    "❌ Acesso negado: A licença do sistema PDL não é válida ou expirou. "
-                    "Entre em contato com o administrador para renovar a licença."
-                )
-            
-            return None  # Bloqueia TODOS os logins se a licença for inválida
+            # Não mostra mensagem de erro aqui - será tratada na view específica
+            # Apenas retorna None para bloquear o login
+            return None
         
         logger.debug(f"[LicenseBackend] Licença válida - permitindo autenticação para usuário: {username}")
         

@@ -111,15 +111,27 @@ class UserLoginView(LoginView):
         
         logger.info(f"[UserLoginView] Tentativa de login para usuário: {username}")
         
-        # Usa o sistema padrão do Django - o LicenseBackend será executado primeiro
-        user = form.get_user()
+        # Primeiro, tenta autenticar o usuário para verificar se é superusuário
+        from django.contrib.auth import authenticate
+        user = authenticate(username=username, password=password)
         
         if not user:
             logger.warning(f"[UserLoginView] Falha na autenticação para usuário: {username}")
+            
+            # Verifica se a falha foi devido à licença inválida
+            from utils.license_manager import check_license_status
+            if not check_license_status():
+                logger.warning(f"[UserLoginView] Login bloqueado devido à licença inválida para usuário: {username}")
+                
+                # Como não conseguimos autenticar, não sabemos se é superusuário
+                # Vamos redirecionar para manutenção por padrão
+                return redirect('maintenance')
+            
             form.add_error(None, _("Credenciais inválidas. Tente novamente."))
             return self.form_invalid(form)
         
-        logger.info(f"[UserLoginView] Usuário autenticado com sucesso: {user.username} (backend: {user.backend})")
+        # Se chegou aqui, o usuário foi autenticado com sucesso
+        logger.info(f"[UserLoginView] Usuário autenticado com sucesso: {user.username} (is_superuser: {user.is_superuser})")
         
         # Verifica se o usuário tem 2FA configurado
         totp_device = TOTPDevice.objects.filter(user=user, confirmed=True).first()

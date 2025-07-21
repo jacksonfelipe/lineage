@@ -50,6 +50,8 @@ class LicenseManager:
             # Verifica se a licença está ativa
             if current_license.status != 'active':
                 self._record_verification(current_license, request, False, f"Licença com status: {current_license.status}", start_time)
+                # Limpa o cache para garantir que mudanças no admin sejam refletidas
+                cache.delete(self.cache_key)
                 return False
             
             # Verifica se não expirou (apenas para licenças PRO)
@@ -57,11 +59,13 @@ class LicenseManager:
                 if current_license.expires_at < timezone.now():
                     current_license.status = 'expired'
                     current_license.save()
+                    # Limpa o cache após mudança de status
+                    cache.delete(self.cache_key)
                     self._record_verification(current_license, request, False, "Licença expirada", start_time)
                     return False
             
-            # Verifica se deve fazer verificação remota
-            if self._should_verify_remotely(current_license):
+            # Verifica se deve fazer verificação remota (desabilitada em desenvolvimento)
+            if self._should_verify_remotely(current_license) and not settings.DEBUG:
                 remote_valid = self._verify_remotely(current_license, request)
                 if not remote_valid:
                     self._record_verification(current_license, request, False, "Falha na verificação remota", start_time)
@@ -72,7 +76,7 @@ class LicenseManager:
             current_license.verification_count += 1
             current_license.save()
             
-            # Limpa o cache
+            # Limpa o cache para garantir dados atualizados
             cache.delete(self.cache_key)
             
             self._record_verification(current_license, request, True, "", start_time)
@@ -160,7 +164,7 @@ class LicenseManager:
         from .utils import _get_license_validator
         return _get_license_validator().validate_contract_via_dns(contract_number, domain)
     
-    def create_pro_license(self, domain, contact_email, company_name, contact_phone, contract_number=""):
+    def create_pro_license(self, domain, contact_email, company_name, contact_phone, contract_number="", skip_dns_validation=False):
         """
         Cria uma licença profissional (PDL PRO) com validação de contrato
         """
@@ -169,10 +173,13 @@ class LicenseManager:
             if not contract_number:
                 return False, "Número do contrato é obrigatório para licenças PRO"
             
-            # Valida o contrato via DNS TXT
-            contract_valid, contract_message = self.validate_contract_via_dns(contract_number, domain)
-            if not contract_valid:
-                return False, f"Validação de contrato falhou: {contract_message}"
+            # Valida o contrato via DNS TXT (a menos que seja pulado)
+            if not skip_dns_validation:
+                contract_valid, contract_message = self.validate_contract_via_dns(contract_number, domain)
+                if not contract_valid:
+                    return False, f"Validação de contrato falhou: {contract_message}"
+            else:
+                print(f"[LicenseManager] Validação DNS pulada para contrato: {contract_number}")
             
             license = License.objects.create(
                 license_type='pro',

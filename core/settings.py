@@ -20,7 +20,7 @@ load_dotenv()  # take environment variables from .env.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # System Version
-VERSION = '1.10.5'
+VERSION = '1.10.10'
 
 # Enable/Disable DEBUG Mode
 DEBUG = str2bool(os.environ.get('DEBUG', False))
@@ -260,7 +260,6 @@ if DB_ENGINE and DB_NAME and DB_USERNAME:
         'PORT'    : int(DB_PORT) if DB_PORT else '',
         'OPTIONS': {
             # Configurações para evitar bloqueios de banco
-            'timeout': 20,  # Timeout de conexão em segundos
             'connect_timeout': 10,  # Timeout de conexão inicial
             'autocommit': True,  # Autocommit para evitar transações longas
         } if DB_ENGINE == 'postgresql' else {
