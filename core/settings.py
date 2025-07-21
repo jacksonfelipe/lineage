@@ -20,7 +20,7 @@ load_dotenv()  # take environment variables from .env.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # System Version
-VERSION = '1.10.10'
+VERSION = '1.10.5'
 
 # Enable/Disable DEBUG Mode
 DEBUG = str2bool(os.environ.get('DEBUG', False))
@@ -251,27 +251,27 @@ DB_NAME     = os.getenv('DB_NAME'     , None)
 
 if DB_ENGINE and DB_NAME and DB_USERNAME:
     DATABASES = {
-      'default': {
-        'ENGINE'  : 'django.db.backends.' + DB_ENGINE,
-        'NAME'    : DB_NAME,
-        'USER'    : DB_USERNAME,
-        'PASSWORD': DB_PASS,
-        'HOST'    : DB_HOST,
-        'PORT'    : int(DB_PORT) if DB_PORT else '',
-        'OPTIONS': {
-            # Configurações para evitar bloqueios de banco
-            'connect_timeout': 10,  # Timeout de conexão inicial
-            'autocommit': True,  # Autocommit para evitar transações longas
-        } if DB_ENGINE == 'postgresql' else {
-            # Configurações específicas para SQLite
-            'timeout': 20,
-            'check_same_thread': False,  # Permite múltiplas threads
-        } if DB_ENGINE == 'sqlite3' else {
-            # Configurações para MySQL
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            'charset': 'utf8mb4',
-            'autocommit': True,
-        }
+        'default': {
+            'ENGINE'  : 'django.db.backends.' + DB_ENGINE,
+            'NAME'    : DB_NAME,
+            'USER'    : DB_USERNAME,
+            'PASSWORD': DB_PASS,
+            'HOST'    : DB_HOST,
+            'PORT'    : int(DB_PORT) if DB_PORT else '',
+            'OPTIONS': (
+                {
+                    'connect_timeout': 10,  # OK para PostgreSQL
+                } if DB_ENGINE == 'postgresql' else
+                {
+                    'timeout': 20,
+                    'check_same_thread': False,  # OK para SQLite
+                } if DB_ENGINE == 'sqlite3' else
+                {
+                    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+                    'charset': 'utf8mb4',
+                    'autocommit': True,  # OK para MySQL
+                }
+            )
         }
     }
 else:
