@@ -131,7 +131,23 @@ class License(BaseModel):
         if not self.features_enabled:
             self.features_enabled = self.get_default_features()
         
+        # Verifica se o status foi alterado
+        if self.pk:
+            try:
+                old_instance = License.objects.get(pk=self.pk)
+                status_changed = old_instance.status != self.status
+            except License.DoesNotExist:
+                status_changed = True
+        else:
+            status_changed = True
+        
         super().save(*args, **kwargs)
+        
+        # Limpa o cache se o status foi alterado
+        if status_changed:
+            from django.core.cache import cache
+            cache.delete('current_license')
+            print(f"[License] Cache limpo devido à mudança de status: {self.status}")
     
     def generate_license_key(self):
         """Gera uma chave de licença única"""

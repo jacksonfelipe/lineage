@@ -29,6 +29,8 @@ urlpatterns = [
     path("public/terms/", terms_view, name="terms"),
     path("public/user-agreement/", user_agreement_view, name="user_agreement"),
     path("public/privacy-policy/", privacy_policy_view, name="privacy_policy"),
+    path("public/maintenance/", maintenance_view, name="maintenance"),
+    path("public/license-expired/", license_expired_view, name="license_expired"),
 
     # Wiki views - Redirecting to new lineage wiki
     path('wiki/', lambda request: redirect('wiki:home'), name='wiki'),

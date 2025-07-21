@@ -20,7 +20,8 @@ class LicenseMiddleware:
             '/static/',
             '/media/',
             '/accounts/',
-            '/public/',
+            '/public/maintenance/',
+            '/public/license-expired/',
             '/api/license/',
             '/license/',
             '/activate/',
@@ -51,12 +52,34 @@ class LicenseMiddleware:
                 is_valid = license_manager.check_license_status(request)
                 request.license_status['is_valid'] = is_valid
                 
+                # Se a licença for inválida, redireciona baseado no tipo de usuário
+                if not is_valid:
+                    # Verifica se o usuário está autenticado e é superusuário
+                    if hasattr(request, 'user') and request.user.is_authenticated and request.user.is_superuser:
+                        # Superusuário - redireciona para página de licença expirada
+                        if not path.startswith('/public/license-expired/'):
+                            return redirect('license_expired')
+                    else:
+                        # Usuário comum ou não autenticado - redireciona para manutenção
+                        if not path.startswith('/public/maintenance/'):
+                            return redirect('maintenance')
+                
                 # Mostra aviso se não for superusuário ou se a licença for inválida
                 if not is_valid or (hasattr(request, 'user') and request.user.is_authenticated and not request.user.is_superuser):
                     request.license_status['show_warning'] = True
             else:
                 # Não há licença ativa
                 request.license_status['show_warning'] = True
+                
+                # Redireciona baseado no tipo de usuário
+                if hasattr(request, 'user') and request.user.is_authenticated and request.user.is_superuser:
+                    # Superusuário - redireciona para página de licença expirada
+                    if not path.startswith('/public/license-expired/'):
+                        return redirect('license_expired')
+                else:
+                    # Usuário comum ou não autenticado - redireciona para manutenção
+                    if not path.startswith('/public/maintenance/'):
+                        return redirect('maintenance')
         
         response = self.get_response(request)
         return response

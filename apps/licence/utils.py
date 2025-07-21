@@ -97,6 +97,10 @@ class LicenseValidator:
         """
         Valida o número do contrato via registro DNS TXT em denky.dev.br
         """
+        # Em modo DEBUG, pula a validação DNS para facilitar desenvolvimento
+        if settings.DEBUG:
+            return True, "Validação DNS pulada em modo DEBUG"
+        
         try:
             # Formata o registro TXT esperado
             txt_record_name = f"pdl-contract-{contract_number}.denky.dev.br"
