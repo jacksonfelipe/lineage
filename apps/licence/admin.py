@@ -17,7 +17,9 @@ class LicenseAdmin(BaseModelAdmin):
     search_fields = ['license_key', 'domain', 'company_name', 'contact_email']
     readonly_fields = [
         'license_key', 'verification_count', 'last_verification', 
-        'created_at', 'updated_at'
+        'created_at', 'updated_at', 'license_type', 'status', 'domain', 'company_name',
+        'contact_email', 'contact_phone', 'contract_number', 'support_hours_used',
+        'support_hours_limit', 'activated_at', 'expires_at', 'features_enabled', 'notes'
     ]
     
     fieldsets = (
@@ -52,9 +54,9 @@ class LicenseAdmin(BaseModelAdmin):
             'classes': ('collapse',)
         }),
     )
-    
-    actions = ['activate_licenses', 'deactivate_licenses', 'renew_licenses']
-    
+
+    actions = None  # Remove ações em massa
+
     def license_key_short(self, obj):
         """Exibe apenas os primeiros caracteres da chave de licença"""
         if obj.license_key:
@@ -137,6 +139,15 @@ class LicenseAdmin(BaseModelAdmin):
             f"{count} licença(s) renovada(s) por 365 dias."
         )
     renew_licenses.short_description = _("Renovar licenças por 1 ano")
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(LicenseVerification)

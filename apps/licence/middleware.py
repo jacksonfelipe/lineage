@@ -31,6 +31,11 @@ class LicenseMiddleware:
         # Verifica se a URL atual está na lista de exceções
         path = request.path_info
         is_exempt = any(path.startswith(url) for url in exempt_urls)
+
+        # Permite superusuário acessar qualquer URL de licença
+        if hasattr(request, 'user') and request.user.is_authenticated and request.user.is_superuser:
+            if path.startswith('/licence/'):
+                return self.get_response(request)
         
         # Adiciona informações de licença ao request
         request.license_status = {
