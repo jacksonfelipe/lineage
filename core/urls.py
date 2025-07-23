@@ -37,6 +37,9 @@ urlpatterns = [
 
     # api app
     path('api/', include('apps.api.urls')),
+
+    # lience app
+    path('licence/', include('apps.licence.urls')),
     
     # apps native
     path('app/message/', include('apps.main.message.urls')),

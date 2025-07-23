@@ -87,6 +87,38 @@
 
 {% block content %}
 <div class="container py-4">
+  <!-- Aviso de Licença -->
+  {% if request.license_status.show_warning %}
+    <div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+      <div class="d-flex align-items-center">
+        <i class="fas fa-exclamation-triangle me-3 fs-4"></i>
+        <div>
+          <h6 class="alert-heading fw-bold mb-1">⚠️ {% trans "Aviso de Licença" %}</h6>
+          <p class="mb-2">{% trans "A licença do sistema não é válida. Algumas funcionalidades podem estar indisponíveis. Entre em contato com o administrador." %}</p>
+          {% if request.user.is_superuser %}
+            <a href="{% url 'licence:status' %}" class="btn btn-sm btn-warning">
+              <i class="fas fa-cog me-1"></i>{% trans "Gerenciar Licença" %}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endif %}
+  
+  <!-- Debug: Status da Licença (remover em produção) -->
+  {% if request.user.is_superuser and debug %}
+    <div class="alert alert-info mb-4">
+      <strong>Debug - Status da Licença:</strong><br>
+      <small>
+        has_license: {{ request.license_status.has_license }}<br>
+        is_valid: {{ request.license_status.is_valid }}<br>
+        show_warning: {{ request.license_status.show_warning }}<br>
+        license_info: {{ request.license_status.license_info }}
+      </small>
+    </div>
+  {% endif %}
+
   <div class="text-center mb-4">
     <h1 class="text-primary fw-bold">{% trans "Painel do Jogador" %}</h1>
     <p class="text-primary">{% trans "Tudo que você precisa em um só lugar." %}</p>

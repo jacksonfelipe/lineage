@@ -131,23 +131,39 @@ def verify_2fa_view(request):
     if request.method == 'POST':
         user_id = request.session.get('pre_2fa_user_id')
         if not user_id:
+            logger.warning("[verify_2fa_view] Nenhum user_id encontrado na sessão")
             return redirect('login')
 
         User = get_user_model()
-        user = User.objects.get(pk=user_id)
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            logger.error(f"[verify_2fa_view] Usuário {user_id} não encontrado")
+            return redirect('login')
+            
         token = request.POST.get('token')
         device = TOTPDevice.objects.filter(user=user, confirmed=True).first()
         
         if device:
             if device.verify_token(token):
-                request.user = user  # necessário para otp_login
-                otp_login(request, device)  # <- isto marca o 2FA como verificado
-                login(request, user, backend='django.contrib.auth.backends.ModelBackend')        # autentica o usuário na sessão Django
+                logger.info(f"[verify_2fa_view] 2FA verificado com sucesso para usuário: {user.username}")
+                
+                # Marca o 2FA como verificado
+                request.user = user
+                otp_login(request, device)
+                
+                # Faz o login usando o sistema padrão do Django
+                # O LicenseBackend será executado automaticamente
+                logger.info(f"[verify_2fa_view] Fazendo login do usuário {user.username}")
+                login(request, user)
+                
                 del request.session['pre_2fa_user_id']
                 return redirect('dashboard')
             else:
-                return render(request, 'accounts_custom/verify-2fa.html', {'error': 'Código inválido.', 'user': request.user})
+                logger.warning(f"[verify_2fa_view] Código 2FA inválido para usuário: {user.username}")
+                return render(request, 'accounts_custom/verify-2fa.html', {'error': 'Código inválido.', 'user': user})
         else:
-            return render(request, 'accounts_custom/verify-2fa.html', {'error': 'Dispositivo 2FA não configurado ou não confirmado.', 'user': request.user})
+            logger.error(f"[verify_2fa_view] Dispositivo 2FA não encontrado para usuário: {user.username}")
+            return render(request, 'accounts_custom/verify-2fa.html', {'error': 'Dispositivo 2FA não configurado ou não confirmado.', 'user': user})
     
     return render(request, 'accounts_custom/verify-2fa.html', {'user': request.user})

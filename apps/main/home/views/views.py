@@ -365,6 +365,7 @@ def dashboard(request):
             'xp_percent': int((perfil.xp / perfil.xp_para_proximo_nivel()) * 100),
             'conquistas': page_obj.object_list,
             'page_obj': page_obj,
+            'debug': settings.DEBUG,
         }
         return render(request, 'dashboard_custom/dashboard.html', context)
     else:

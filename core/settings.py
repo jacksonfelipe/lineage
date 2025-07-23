@@ -20,7 +20,7 @@ load_dotenv()  # take environment variables from .env.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # System Version
-VERSION = '1.9.0'
+VERSION = '1.10.10'
 
 # Enable/Disable DEBUG Mode
 DEBUG = str2bool(os.environ.get('DEBUG', False))
@@ -41,6 +41,29 @@ LOGIN_REDIRECT_URL = 'dashboard'
 # =========================== LOGGER CONFIGS ===========================
 
 LOGGING = is_LOGGING
+
+# Adiciona logging específico para autenticação (versão simplificada)
+if 'loggers' not in LOGGING:
+    LOGGING['loggers'] = {}
+
+# Loggers de autenticação com handlers seguros
+LOGGING['loggers'].update({
+    'core.backends': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+        'propagate': False,
+    },
+    'apps.main.home.views.accounts': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+        'propagate': False,
+    },
+    'apps.main.home.views.commons': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+        'propagate': False,
+    }
+})
 
 # =========================== CORS CONFIGS ===========================
 
@@ -111,6 +134,7 @@ INSTALLED_APPS = [
     "django_otp.plugins.otp_totp",
 
     "apps.api",
+    "apps.licence",
 
     "apps.main.administrator",
     "apps.main.auditor",
@@ -176,6 +200,10 @@ MIDDLEWARE = [
     "middlewares.forbidden_redirect_middleware.ForbiddenRedirectMiddleware",
     "middlewares.rate_limit_api_external.RateLimitMiddleware",
     "middlewares.lock_screen_middleware.SessionLockMiddleware",
+    
+    # Middlewares de licença
+    "apps.licence.middleware.LicenseMiddleware",
+    "apps.licence.middleware.LicenseFeatureMiddleware",
 ]
 
 # =========================== TEMPLATES CONFIGS ===========================
@@ -223,13 +251,27 @@ DB_NAME     = os.getenv('DB_NAME'     , None)
 
 if DB_ENGINE and DB_NAME and DB_USERNAME:
     DATABASES = {
-      'default': {
-        'ENGINE'  : 'django.db.backends.' + DB_ENGINE,
-        'NAME'    : DB_NAME,
-        'USER'    : DB_USERNAME,
-        'PASSWORD': DB_PASS,
-        'HOST'    : DB_HOST,
-        'PORT'    : int(DB_PORT) if DB_PORT else '',
+        'default': {
+            'ENGINE'  : 'django.db.backends.' + DB_ENGINE,
+            'NAME'    : DB_NAME,
+            'USER'    : DB_USERNAME,
+            'PASSWORD': DB_PASS,
+            'HOST'    : DB_HOST,
+            'PORT'    : int(DB_PORT) if DB_PORT else '',
+            'OPTIONS': (
+                {
+                    'connect_timeout': 10,  # OK para PostgreSQL
+                } if DB_ENGINE == 'postgresql' else
+                {
+                    'timeout': 20,
+                    'check_same_thread': False,  # OK para SQLite
+                } if DB_ENGINE == 'sqlite3' else
+                {
+                    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+                    'charset': 'utf8mb4',
+                    'autocommit': True,  # OK para MySQL
+                }
+            )
         }
     }
 else:
@@ -237,6 +279,10 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': 'db.sqlite3',
+            'OPTIONS': {
+                'timeout': 20,
+                'check_same_thread': False,
+            }
         }
     }
     
@@ -270,9 +316,9 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_UNIQUE_EMAIL = True
 
 AUTHENTICATION_BACKENDS = (
+    'core.backends.LicenseBackend',  # PRIMEIRO - verifica licença antes de qualquer login
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
-    'core.backends.LicenseBackend',
 )
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -497,6 +543,24 @@ SERVE_DECRYPTED_FILE_URL_BASE = os.environ.get('SERVE_DECRYPTED_FILE_URL_BASE', 
 
 AUDITOR_MIDDLEWARE_ENABLE = os.getenv('CONFIG_AUDITOR_MIDDLEWARE_ENABLE', False)
 AUDITOR_MIDDLEWARE_RESTRICT_PATHS = os.getenv('CONFIG_AUDITOR_MIDDLEWARE_RESTRICT_PATHS', [])
+
+# =========================== AUDITOR MIDDLEWARE CONFIGS ===========================
+
+# Configurações do middleware de auditoria
+AUDITOR_MIDDLEWARE_ENABLE = str2bool(os.environ.get('CONFIG_AUDITOR_MIDDLEWARE_ENABLE', 'False'))
+AUDITOR_MIDDLEWARE_RESTRICT_PATHS = [
+    '/static/',
+    '/media/',
+    '/favicon.ico',
+    '/robots.txt',
+    '/sitemap.xml',
+    '/admin/jsi18n/',
+    '/__debug__/',
+    '/api/health/',
+    '/api/status/',
+]
+AUDITOR_MIDDLEWARE_MAX_RETRIES = 3
+AUDITOR_MIDDLEWARE_RETRY_DELAY = 0.1
 
 # =========================== EXTRA CONFIGS ===========================
 
@@ -804,3 +868,11 @@ JAZZMIN_UI_TWEAKS = get_jazzmin_ui_tweaks()
 FAKE_PLAYERS_FACTOR = float(os.getenv('FAKE_PLAYERS_FACTOR', 1.0))
 FAKE_PLAYERS_MIN = int(os.getenv('FAKE_PLAYERS_MIN', 0))
 FAKE_PLAYERS_MAX = int(os.getenv('FAKE_PLAYERS_MAX', 0))
+
+# =========================== LICENSE CONFIGURATION ===========================
+
+# Configurações de validação de licenças
+LICENSE_CONFIG = {
+    'ENCRYPTION_KEY': os.environ.get('PDL_ENCRYPTION_KEY', ''),  # Chave Fernet usada no script gerador
+    'DNS_TIMEOUT': int(os.environ.get('PDL_DNS_TIMEOUT', '10')),
+}
