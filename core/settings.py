@@ -20,7 +20,7 @@ load_dotenv()  # take environment variables from .env.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # System Version
-VERSION = '1.10.10'
+VERSION = '1.11.0'
 
 # Enable/Disable DEBUG Mode
 DEBUG = str2bool(os.environ.get('DEBUG', False))
@@ -172,6 +172,7 @@ INSTALLED_APPS = [
     'django_quill',
 
     'rest_framework',
+    'rest_framework.authtoken',
     'drf_spectacular',
     'django_api_gen',
 ]

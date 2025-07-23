@@ -11,11 +11,11 @@ from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
 from apps.main.home.tasks import send_email_task
+from apps.lineage.server.lineage_account_manager import LineageAccount
+from utils.dynamic_import import get_query_class
 
 signer = TimestampSigner()
 
-from utils.dynamic_import import get_query_class
-LineageAccount = get_query_class("LineageAccount")
 LineageServices = get_query_class("LineageServices")
 
 

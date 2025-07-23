@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .views.server_views import painel_apoiador, formulario_apoiador, painel_staff, solicitar_comissao, editar_imagem_apoiador
 from .views.accounts_views import *
 from .views.tops_views import *
@@ -39,4 +39,6 @@ urlpatterns = [
     path('supporter/panel/staff/', painel_staff, name='painel_staff'),
     path('supporter/request-commission/', solicitar_comissao, name='solicitar_comissao'),
     path('supporter/panel/edit-image/', editar_imagem_apoiador, name='editar_imagem_apoiador'),
+    
+    path('api/', include('apps.lineage.server.urls_api')),
 ]
