@@ -90,7 +90,7 @@ No código, basta selecionar a filial desejada para que todas as operações sej
 graph TD
     A[Usuário seleciona filial] --> B[Configuração dinâmica de conexão]
     B --> C[Importação da query correta]
-    C --> D[Operação (ex: registrar conta)]
+    C --> D[Operação de conta]
     D --> E[Execução no banco da filial]
     E --> F[Retorno para o painel]
 ```
