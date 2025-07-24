@@ -28,8 +28,7 @@ DEBUG = str2bool(os.environ.get('DEBUG', False))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 if not SECRET_KEY:
-    SECRET_KEY = ''.join(random.choices(
-        string.ascii_letters + string.digits, k=32))
+    SECRET_KEY = ''.join(random.choices(string.ascii_letters + string.digits, k=32))
 
 ROOT_URLCONF = "core.urls"
 AUTH_USER_MODEL = 'home.User'
