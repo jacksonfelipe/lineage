@@ -450,11 +450,18 @@ if USE_S3:
 CONFIG_EMAIL_ENABLE = os.getenv('CONFIG_EMAIL_ENABLE', 'False').lower() in ['true', '1', 'yes']
 if CONFIG_EMAIL_ENABLE:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_USE_TLS = os.getenv('CONFIG_EMAIL_USE_TLS', 'True').lower() in ['true', '1', 'yes']
+    use_tls = os.getenv('CONFIG_EMAIL_USE_TLS', 'True').lower() in ['true', '1', 'yes']
+    use_ssl = not use_tls
     EMAIL_HOST = os.getenv('CONFIG_EMAIL_HOST')
     EMAIL_HOST_USER = os.getenv('CONFIG_EMAIL_HOST_USER')
     EMAIL_HOST_PASSWORD = os.getenv('CONFIG_EMAIL_HOST_PASSWORD')
-    EMAIL_PORT = int(os.getenv('CONFIG_EMAIL_PORT', 587))
+    # Porta padrão: 587 para TLS, 465 para SSL
+    if use_tls:
+        EMAIL_USE_TLS = True
+        EMAIL_PORT = int(os.getenv('CONFIG_EMAIL_PORT', 587))
+    else:
+        EMAIL_USE_SSL = True
+        EMAIL_PORT = int(os.getenv('CONFIG_EMAIL_PORT', 465))
     DEFAULT_FROM_EMAIL = os.getenv('CONFIG_DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
