@@ -32,6 +32,7 @@ from .schema import ServerAPISchema, AuthAPISchema, UserAPISchema, SearchAPISche
 from utils.dynamic_import import get_query_class
 from apps.lineage.server.decorators import endpoint_enabled
 from apps.lineage.server.models import ApiEndpointToggle
+from apps.main.notification.models import PushSubscription
 
 # Carrega a classe LineageStats baseada na configuração
 LineageStats = get_query_class("LineageStats")
@@ -1519,53 +1520,6 @@ class SlowQueriesView(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@endpoint_enabled('cache_stats')
-@extend_schema(
-    summary="Estatísticas de Cache",
-    description="Retorna estatísticas do sistema de cache",
-    responses={
-        status.HTTP_200_OK: APIResponseSerializer,
-        status.HTTP_403_FORBIDDEN: APIResponseSerializer,
-    },
-    tags=["Monitoramento"],
-    auth=[]
-)
-class CacheStatsView(APIView):
-    """View para estatísticas de cache"""
-    permission_classes = [IsAuthenticated]  # Apenas usuários autenticados
-    
-    def get(self, request):
-        """Retorna estatísticas do cache"""
-        try:
-            from .cache import CacheStats
-            
-            # Verifica se o usuário é staff
-            if not request.user.is_staff:
-                return Response({
-                    'success': False,
-                    'error': 'Acesso negado. Apenas administradores podem acessar estatísticas.',
-                    'timestamp': timezone.now().isoformat(),
-                }, status=status.HTTP_403_FORBIDDEN)
-            
-            cache_stats = CacheStats.get_stats()
-            hit_rate = CacheStats.get_hit_rate()
-            
-            return Response({
-                'success': True,
-                'data': {
-                    'cache_stats': cache_stats,
-                    'hit_rate': hit_rate,
-                },
-                'timestamp': timezone.now().isoformat(),
-            })
-            
-        except Exception as e:
-            return Response({
-                'success': False,
-                'error': f'Erro ao buscar estatísticas de cache: {str(e)}',
-                'timestamp': timezone.now().isoformat(),
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 # =========================== API CONFIGURATION VIEWS ===========================
 
 @endpoint_enabled('api_config')
@@ -2017,3 +1971,25 @@ class APIRedirectView(APIView):
             'data': api_info,
             'timestamp': timezone.now().isoformat(),
         })
+
+
+class PushSubscriptionView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        data = request.data
+        endpoint = data.get('endpoint')
+        keys = data.get('keys', {})
+        auth = keys.get('auth')
+        p256dh = keys.get('p256dh')
+        if not (endpoint and auth and p256dh):
+            return Response({'error': 'Dados incompletos'}, status=status.HTTP_400_BAD_REQUEST)
+        # Remove subscriptions antigas do mesmo endpoint
+        PushSubscription.objects.filter(user=request.user, endpoint=endpoint).delete()
+        PushSubscription.objects.create(
+            user=request.user,
+            endpoint=endpoint,
+            auth=auth,
+            p256dh=p256dh
+        )
+        return Response({'ok': True})

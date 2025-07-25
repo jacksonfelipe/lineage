@@ -105,19 +105,6 @@
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   {% endif %}
-  
-  <!-- Debug: Status da Licença (remover em produção) -->
-  {% if request.user.is_superuser and debug %}
-    <div class="alert alert-info mb-4">
-      <strong>Debug - Status da Licença:</strong><br>
-      <small>
-        has_license: {{ request.license_status.has_license }}<br>
-        is_valid: {{ request.license_status.is_valid }}<br>
-        show_warning: {{ request.license_status.show_warning }}<br>
-        license_info: {{ request.license_status.license_info }}
-      </small>
-    </div>
-  {% endif %}
 
   <div class="text-center mb-4">
     <h1 class="text-primary fw-bold">{% trans "Painel do Jogador" %}</h1>

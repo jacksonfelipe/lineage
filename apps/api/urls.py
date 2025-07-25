@@ -1,6 +1,8 @@
 from django.shortcuts import redirect
 from django.urls import path, include
 from . import views
+from apps.main.notification import views as notification_views
+from .views import PushSubscriptionView
 
 app_name = 'api'
 
@@ -52,11 +54,13 @@ v1_patterns = [
     path('metrics/daily/', views.DailyMetricsView.as_view(), name='daily_metrics'),
     path('metrics/performance/', views.PerformanceMetricsView.as_view(), name='performance_metrics'),
     path('metrics/slow-queries/', views.SlowQueriesView.as_view(), name='slow_queries'),
-    path('cache/stats/', views.CacheStatsView.as_view(), name='cache_stats'),
     
     # =========================== ADMINISTRATION ===========================
     path('admin/config/', views.APIConfigView.as_view(), name='api_config'),
     path('admin/config/panel/', views.APIConfigPanelView.as_view(), name='api_config_panel'),
+
+    # =========================== PUSH NOTIFICATIONS ===========================
+    path('push-subscription/', PushSubscriptionView.as_view(), name='push_subscription'),
 ]
 
 # URLs principais com versionamento

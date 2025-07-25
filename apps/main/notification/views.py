@@ -4,6 +4,11 @@ from django.urls import reverse
 from apps.main.home.decorator import conditional_otp_required
 from .models import Notification, PublicNotificationView
 from django.core.paginator import Paginator
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import PushSubscription
+import json
 
 
 @conditional_otp_required
@@ -194,3 +199,29 @@ def confirm_notification_view(request, pk):
             public_notification_view.save()
 
     return JsonResponse({'status': 'success'})
+
+
+@csrf_exempt
+@login_required
+def save_subscription(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Método não permitido'}, status=405)
+    try:
+        data = json.loads(request.body)
+        endpoint = data.get('endpoint')
+        keys = data.get('keys', {})
+        auth = keys.get('auth')
+        p256dh = keys.get('p256dh')
+        if not (endpoint and auth and p256dh):
+            return JsonResponse({'error': 'Dados incompletos'}, status=400)
+        # Remove subscriptions antigas do mesmo endpoint
+        PushSubscription.objects.filter(user=request.user, endpoint=endpoint).delete()
+        PushSubscription.objects.create(
+            user=request.user,
+            endpoint=endpoint,
+            auth=auth,
+            p256dh=p256dh
+        )
+        return JsonResponse({'ok': True})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

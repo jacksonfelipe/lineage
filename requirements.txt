@@ -55,6 +55,7 @@ passlib[bcrypt]
 requests
 anthropic
 astor
+pywebpush
 
 # Api
 djangorestframework-simplejwt

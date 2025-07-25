@@ -883,3 +883,11 @@ LICENSE_CONFIG = {
     'ENCRYPTION_KEY': os.environ.get('PDL_ENCRYPTION_KEY', ''),  # Chave Fernet usada no script gerador
     'DNS_TIMEOUT': int(os.environ.get('PDL_DNS_TIMEOUT', '10')),
 }
+
+# Web Push VAPID keys (gere usando pywebpush ou web-push)
+# Exemplo para gerar: 
+#   from pywebpush import generate_vapid_private_key, generate_vapid_public_key
+#   private_key = generate_vapid_private_key()
+#   public_key = generate_vapid_public_key(private_key)
+VAPID_PRIVATE_KEY = os.environ.get("VAPID_PRIVATE_KEY")
+VAPID_PUBLIC_KEY = os.environ.get("VAPID_PUBLIC_KEY")

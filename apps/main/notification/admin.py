@@ -1,7 +1,7 @@
 # admin.py
 
 from django.contrib import admin
-from .models import Notification, PublicNotificationView
+from .models import Notification, PublicNotificationView, PushSubscription
 from core.admin import BaseModelAdmin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
@@ -31,3 +31,9 @@ class PublicNotificationViewAdmin(BaseModelAdmin):
     list_display = ('user', 'notification', 'viewed')
     list_filter = ('viewed',)
     search_fields = ('user__username', 'notification__message')
+
+
+@admin.register(PushSubscription)
+class PushSubscriptionAdmin(BaseModelAdmin):
+    list_display = ("user", "endpoint", "created_at")
+    search_fields = ("user__username", "endpoint")
