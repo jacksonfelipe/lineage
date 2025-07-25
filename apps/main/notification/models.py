@@ -70,3 +70,22 @@ class PublicNotificationView(BaseModel):
     class Meta:
         verbose_name = _("Visualização de Notificação Pública")
         verbose_name_plural = _("Visualizações de Notificações Públicas")
+
+
+class PushSubscription(BaseModel):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name=_('Usuário'),
+        help_text=_('Usuário dono do subscription.')
+    )
+    endpoint = models.URLField(max_length=500)
+    auth = models.CharField(max_length=255)
+    p256dh = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name = _('Push Subscription')
+        verbose_name_plural = _('Push Subscriptions')
+
+    def __str__(self):
+        return f"{self.user} - {self.endpoint[:30]}..."

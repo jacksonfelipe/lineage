@@ -1,9 +1,18 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
+from django.conf import settings
 from django.http import JsonResponse
 from django.urls import reverse
 from apps.main.home.decorator import conditional_otp_required
 from .models import Notification, PublicNotificationView
 from django.core.paginator import Paginator
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import PushSubscription
+import json
+from pywebpush import webpush, WebPushException
 
 
 @conditional_otp_required
@@ -194,3 +203,64 @@ def confirm_notification_view(request, pk):
             public_notification_view.save()
 
     return JsonResponse({'status': 'success'})
+
+
+@csrf_exempt
+@login_required
+def save_subscription(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Método não permitido'}, status=405)
+    try:
+        data = json.loads(request.body)
+        endpoint = data.get('endpoint')
+        keys = data.get('keys', {})
+        auth = keys.get('auth')
+        p256dh = keys.get('p256dh')
+        if not (endpoint and auth and p256dh):
+            return JsonResponse({'error': 'Dados incompletos'}, status=400)
+        # Remove subscriptions antigas do mesmo endpoint
+        PushSubscription.objects.filter(user=request.user, endpoint=endpoint).delete()
+        PushSubscription.objects.create(
+            user=request.user,
+            endpoint=endpoint,
+            auth=auth,
+            p256dh=p256dh
+        )
+        return JsonResponse({'ok': True})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+@staff_member_required
+def send_push_view(request):
+    if request.method == 'POST':
+        message = request.POST.get('message', '').strip()
+        total = 0
+        errors = []
+        if message:
+            for sub in PushSubscription.objects.all():
+                subscription_info = {
+                    "endpoint": sub.endpoint,
+                    "keys": {
+                        "p256dh": getattr(sub, 'p256dh', ''),
+                        "auth": sub.auth,
+                    }
+                }
+                try:
+                    webpush(
+                        subscription_info=subscription_info,
+                        data=json.dumps({"body": message}),
+                        vapid_private_key=settings.VAPID_PRIVATE_KEY,
+                        vapid_claims={"sub": "mailto:seu@email.com"}
+                    )
+                    total += 1
+                except WebPushException as ex:
+                    errors.append(f"Erro para {sub.user}: {repr(ex)}")
+            if total:
+                messages.success(request, f"Notificações enviadas para {total} inscritos!")
+            if errors:
+                messages.error(request, "\n".join(errors))
+        else:
+            messages.error(request, "Mensagem não pode ser vazia.")
+        return redirect('notification:send_push')
+    return render(request, 'notification/send_push.html')

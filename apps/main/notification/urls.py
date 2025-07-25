@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import send_push_view
 
 app_name = 'notification'
 
@@ -10,4 +11,5 @@ urlpatterns = [
     path('detail/<int:pk>/', views.notification_detail, name='notification_detail'),
     path('all/', views.all_notifications, name='all_notifications'),
     path('confirm-view/<int:pk>/', views.confirm_notification_view, name='confirm_notification_view'),
+    path('send-push/', send_push_view, name='send_push'),
 ]
