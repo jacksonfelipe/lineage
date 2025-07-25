@@ -5,8 +5,11 @@
   "description": "PWA para push notification separado do site principal.",
   "main": "src/index.js",
   "dependencies": {
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "react-icons": "^5.5.0"
   },
   "scripts": {
     "start": "webpack serve --mode development --open",
