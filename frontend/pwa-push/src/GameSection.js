@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { FaCrown, FaUsers, FaGem, FaCoins, FaSword, FaShieldAlt, FaSearch, FaSync, FaCalendar, FaMapMarkerAlt, FaStar, FaGavel, FaClock, FaUser, FaTag, FaChartBar } from "react-icons/fa";
+import { FaUsers, FaSearch, FaSync, FaGavel, FaClock, FaTag, FaShieldAlt } from "react-icons/fa";
 
 // Função para converter qualquer valor em string segura
 function safeString(value) {
-  if (value === null || value === undefined) return "";
+  if (value === null || value === undefined) return "N/A";
   if (typeof value === "object") return JSON.stringify(value);
   return String(value);
 }
@@ -21,74 +21,62 @@ function formatDate(dateString) {
 
 // Função para formatar números
 function formatNumber(num) {
-  if (num === null || num === undefined) return "0";
-  if (typeof num === 'string') return num;
-  return num.toLocaleString('pt-BR');
+  if (!num || num === 0) return "0";
+  if (num >= 1000000000) return `${(num / 1000000000).toFixed(1)}B`;
+  if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
+  if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
+  return num.toString();
 }
 
 function ClanCard({ data }) {
   if (!data) return null;
 
-  const clanStats = [
-    { key: "level", label: "Level", icon: <FaStar size={16} />, color: "#ffc107" },
-    { key: "members", label: "Membros", icon: <FaUsers size={16} />, color: "#17a2b8" },
+  const fields = [
+    { key: "clan_name", label: "Nome", icon: <FaUsers size={16} />, color: "#e6c77d" },
+    { key: "leader_name", label: "Líder", icon: <FaUsers size={16} />, color: "#28a745" },
+    { key: "level", label: "Nível", icon: <FaUsers size={16} />, color: "#007bff" },
+    { key: "member_count", label: "Membros", icon: <FaUsers size={16} />, color: "#17a2b8" },
     { key: "reputation", label: "Reputação", icon: <FaShieldAlt size={16} />, color: "#28a745" }
   ];
 
   return (
     <div className="clan-card">
       <div className="clan-header">
-        <div className="clan-icon">
-          <FaCrown size={32} color="#e6c77d" />
-        </div>
-        <div className="clan-info">
-          <h3>{safeString(data.name || data.clan_name || "Clã")}</h3>
-          <div className="clan-leader">
-            <FaUser size={14} color="#6c757d" />
-            <span>{safeString(data.leader || data.clan_leader || "Líder desconhecido")}</span>
-          </div>
-        </div>
-        <div className="clan-badge">
-          <FaCrown size={16} color="#e6c77d" />
-        </div>
+        <FaUsers size={20} color="#e6c77d" />
+        <h4>{safeString(data.clan_name)}</h4>
       </div>
-      
-      <div className="clan-stats">
-        {clanStats.map(stat => (
-          data[stat.key] && (
-            <div key={stat.key} className="clan-stat-item" style={{ borderColor: stat.color }}>
-              <div className="stat-icon" style={{ color: stat.color }}>
-                {stat.icon}
-              </div>
-              <div className="stat-info">
-                <span className="stat-label">{stat.label}</span>
-                <span className="stat-value">{formatNumber(data[stat.key])}</span>
-              </div>
-            </div>
-          )
-        ))}
-      </div>
-
       <div className="clan-details">
-        {data.alliance && (
-          <div className="clan-detail-item">
-            <FaUsers size={14} color="#6c757d" />
-            <span className="detail-label">Aliança:</span>
-            <span className="detail-value">{safeString(data.alliance)}</span>
+        {fields.map((field) => (
+          <div key={field.key} className="clan-field">
+            <div className="field-icon" style={{ color: field.color }}>
+              {field.icon}
+            </div>
+            <div className="field-info">
+              <div className="field-label">{field.label}</div>
+              <div className="field-value">{safeString(data[field.key])}</div>
+            </div>
           </div>
-        )}
-        {data.territory && (
-          <div className="clan-detail-item">
-            <FaMapMarkerAlt size={14} color="#6c757d" />
-            <span className="detail-label">Território:</span>
-            <span className="detail-value">{safeString(data.territory)}</span>
+        ))}
+        {data.ally_name && (
+          <div className="clan-field">
+            <div className="field-icon" style={{ color: "#ffc107" }}>
+              <FaUsers size={16} />
+            </div>
+            <div className="field-info">
+              <div className="field-label">Aliança</div>
+              <div className="field-value">{safeString(data.ally_name)}</div>
+            </div>
           </div>
         )}
         {data.creation_date && (
-          <div className="clan-detail-item">
-            <FaCalendar size={14} color="#6c757d" />
-            <span className="detail-label">Criado em:</span>
-            <span className="detail-value">{formatDate(data.creation_date)}</span>
+          <div className="clan-field">
+            <div className="field-icon" style={{ color: "#6c757d" }}>
+              <FaClock size={16} />
+            </div>
+            <div className="field-info">
+              <div className="field-label">Criado em</div>
+              <div className="field-value">{formatDate(data.creation_date)}</div>
+            </div>
           </div>
         )}
       </div>
@@ -96,54 +84,57 @@ function ClanCard({ data }) {
   );
 }
 
-function AuctionGrid({ data }) {
-  if (!Array.isArray(data) || data.length === 0) {
+function AuctionGrid({ items }) {
+  if (!Array.isArray(items) || items.length === 0) {
     return (
       <div className="auction-empty">
-        <div className="empty-icon">🏪</div>
+        <div className="empty-icon">🏷️</div>
         <p>Nenhum item disponível no leilão</p>
-        <span className="empty-subtitle">Os itens aparecerão aqui quando disponíveis</span>
       </div>
     );
   }
 
   return (
     <div className="auction-grid">
-      {data.map((item, i) => (
-        <div className="auction-card" key={i}>
+      {items.slice(0, 20).map((item, index) => (
+        <div key={index} className="auction-card">
           <div className="auction-header">
-            <div className="auction-icon">
-              <FaGem size={20} color="#e6c77d" />
-            </div>
-            <div className="auction-name">{safeString(item.name || item.item_name || "Item")}</div>
-            <div className="auction-price">
-              <FaCoins size={14} color="#ffc107" />
-              <span>{formatNumber(item.price || 0)}</span>
-            </div>
+            <FaTag size={16} color="#e6c77d" />
+            <h4>{safeString(item.item_name)}</h4>
           </div>
-          
           <div className="auction-details">
-            {item.seller && (
-              <div className="auction-detail-item">
-                <FaUser size={12} color="#6c757d" />
-                <span className="detail-label">Vendedor:</span>
-                <span className="detail-value">{safeString(item.seller)}</span>
+            <div className="auction-field">
+              <span className="field-label">Vendedor:</span>
+              <span className="field-value">{safeString(item.seller_name)}</span>
+            </div>
+            <div className="auction-field">
+              <span className="field-label">Lance Atual:</span>
+              <span className="field-value">{formatNumber(item.current_bid)}</span>
+            </div>
+            <div className="auction-field">
+              <span className="field-label">Lance Mínimo:</span>
+              <span className="field-value">{formatNumber(item.min_bid)}</span>
+            </div>
+            <div className="auction-field">
+              <span className="field-label">Quantidade:</span>
+              <span className="field-value">{safeString(item.item_count)}</span>
+            </div>
+            {item.item_grade && (
+              <div className="auction-field">
+                <span className="field-label">Grau:</span>
+                <span className="field-value">{safeString(item.item_grade)}</span>
               </div>
             )}
-            {item.quantity && (
-              <div className="auction-detail-item">
-                <FaTag size={12} color="#6c757d" />
-                <span className="detail-label">Quantidade:</span>
-                <span className="detail-value">{formatNumber(item.quantity)}</span>
+            {item.item_enchant && (
+              <div className="auction-field">
+                <span className="field-label">Encantamento:</span>
+                <span className="field-value">+{safeString(item.item_enchant)}</span>
               </div>
             )}
-            {item.end_time && (
-              <div className="auction-detail-item">
-                <FaClock size={12} color="#6c757d" />
-                <span className="detail-label">Termina:</span>
-                <span className="detail-value">{formatDate(item.end_time)}</span>
-              </div>
-            )}
+            <div className="auction-field">
+              <span className="field-label">Termina em:</span>
+              <span className="field-value">{formatDate(item.end_time)}</span>
+            </div>
           </div>
         </div>
       ))}
@@ -151,73 +142,29 @@ function AuctionGrid({ data }) {
   );
 }
 
-function GameStats({ stats }) {
-  if (!stats || Object.keys(stats).length === 0) {
-    return (
-      <div className="game-stats-section">
-        <div className="stats-header">
-          <FaChartBar size={20} color="#e6c77d" />
-          <h3>Estatísticas do Jogo</h3>
-        </div>
-        <div className="stats-empty">
-          <div className="empty-icon">📊</div>
-          <p>Nenhuma estatística disponível</p>
-        </div>
-      </div>
-    );
-  }
-
-  const statItems = [
-    { key: "total_players", label: "Total de Jogadores", icon: <FaUsers size={16} />, color: "#17a2b8" },
-    { key: "online_players", label: "Jogadores Online", icon: <FaUsers size={16} />, color: "#28a745" },
-    { key: "total_clans", label: "Total de Clãs", icon: <FaCrown size={16} />, color: "#e6c77d" },
-    { key: "active_auctions", label: "Leilões Ativos", icon: <FaGavel size={16} />, color: "#fd7e14" }
-  ];
-
-  return (
-    <div className="game-stats-section">
-      <div className="stats-header">
-        <FaChartBar size={20} color="#e6c77d" />
-        <h3>Estatísticas do Jogo</h3>
-      </div>
-      <div className="stats-grid">
-        {statItems.map(stat => (
-          stats[stat.key] && (
-            <div key={stat.key} className="stat-card" style={{ borderColor: stat.color }}>
-              <div className="stat-icon" style={{ color: stat.color }}>
-                {stat.icon}
-              </div>
-              <div className="stat-info">
-                <span className="stat-label">{stat.label}</span>
-                <span className="stat-value">{formatNumber(stats[stat.key])}</span>
-              </div>
-            </div>
-          )
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export default function GameSection({ token }) {
+  const [loading, setLoading] = useState(true);
+  const [auctionItems, setAuctionItems] = useState([]);
   const [clanName, setClanName] = useState("");
   const [clanData, setClanData] = useState(null);
-  const [auctionItems, setAuctionItems] = useState(null);
-  const [gameStats, setGameStats] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [searching, setSearching] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetchGameData();
+    if (token) {
+      fetchGameData();
+    }
   }, [token]);
 
   async function fetchGameData() {
+    if (!token) return;
+    
     setLoading(true);
     setError("");
+    
     try {
       console.log("Buscando dados do jogo...");
-      
+
       // Buscar dados individualmente
       const auctionRes = await fetch("/api/v1/auction/items/", {
         headers: { Authorization: `Bearer ${token}` }
@@ -233,93 +180,99 @@ export default function GameSection({ token }) {
         setAuctionItems([]);
       }
 
-      // Definir estatísticas padrão já que não há endpoint específico
-      setGameStats({
-        total_players: 0,
-        online_players: 0,
-        total_clans: 0,
-        active_auctions: Array.isArray(auctionItems) ? auctionItems.length : 0
-      });
-
     } catch (e) {
       console.error("Erro ao buscar dados do jogo:", e);
-      setError("Erro ao buscar dados do jogo");
+      setError("Erro ao carregar dados do jogo");
       setAuctionItems([]);
-      setGameStats({});
     }
     setLoading(false);
   }
 
-  async function searchClan(e) {
-    e.preventDefault();
-    if (!clanName.trim()) return;
+  async function searchClan() {
+    if (!clanName.trim() || !token) return;
     
     setSearching(true);
     setError("");
+    
     try {
+      console.log("Buscando clã:", clanName);
+      
       const res = await fetch(`/api/v1/clan/${encodeURIComponent(clanName)}/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      const data = await res.json();
-      setClanData(data);
+
+      if (res.ok) {
+        const data = await res.json();
+        console.log("Clan data:", data);
+        setClanData(data);
+      } else {
+        console.warn("Erro ao buscar clã:", res.status);
+        setClanData(null);
+        setError("Clã não encontrado");
+      }
     } catch (e) {
+      console.error("Erro ao buscar clã:", e);
       setError("Erro ao buscar clã");
+      setClanData(null);
     }
     setSearching(false);
   }
 
-  if (loading) return <div className="loading">Carregando dados do jogo...</div>;
+  if (loading) {
+    return (
+      <div className="game-section">
+        <h2>Dados do Jogo</h2>
+        <div className="loading">Carregando dados do jogo...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="game-section">
-      {/* Estatísticas do Jogo */}
-      <GameStats stats={gameStats} />
+      <h2>Dados do Jogo</h2>
+
+      {error && <div className="error">{error}</div>}
 
       {/* Busca de Clã */}
       <div className="game-clan-section">
-        <div className="clan-header-section">
-          <FaCrown size={24} color="#e6c77d" />
+        <div className="clan-header">
+          <FaUsers size={20} color="#e6c77d" />
           <h3>Busca de Clã</h3>
         </div>
-        <div className="clan-search-box">
-          <form onSubmit={searchClan} className="clan-search-form">
-            <div className="search-input-group">
-              <FaSearch size={16} color="#6c757d" />
-              <input
-                type="text"
-                placeholder="Digite o nome do clã..."
-                value={clanName}
-                onChange={e => setClanName(e.target.value)}
-                className="search-input"
-                required
-              />
-            </div>
-            <button className="btn-primary" type="submit" disabled={searching}>
-              {searching ? "Buscando..." : "Buscar Clã"}
-            </button>
-          </form>
-          {clanData && <ClanCard data={clanData} />}
+        <div className="clan-search">
+          <input
+            type="text"
+            placeholder="Digite o nome do clã..."
+            value={clanName}
+            onChange={e => setClanName(e.target.value)}
+            className="clan-input"
+          />
+          <button 
+            onClick={searchClan} 
+            disabled={searching}
+            className="btn-primary"
+          >
+            <FaSearch size={14} />
+            {searching ? "Buscando..." : "Buscar"}
+          </button>
         </div>
+        {clanData && (
+          <ClanCard data={clanData} />
+        )}
       </div>
 
-      {/* Itens do Leilão */}
+      {/* Leilão */}
       <div className="game-auction-section">
-        <div className="auction-header-section">
-          <div className="auction-title">
-            <FaGavel size={24} color="#e6c77d" />
-            <h3>Itens do Leilão</h3>
-          </div>
+        <div className="auction-header">
+          <FaGavel size={20} color="#e6c77d" />
+          <h3>Itens do Leilão</h3>
           <button className="btn-secondary refresh-btn" onClick={fetchGameData} disabled={loading}>
             <FaSync size={14} />
             {loading ? "Carregando..." : "Atualizar"}
           </button>
         </div>
-        <div className="auction-content">
-          <AuctionGrid data={auctionItems} />
-        </div>
+        <AuctionGrid items={auctionItems} />
       </div>
-
-      {error && <div className="error">{error}</div>}
     </div>
   );
 } 

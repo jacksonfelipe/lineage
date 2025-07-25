@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { FaServer, FaUsers, FaTrophy, FaSkull, FaFlag, FaCheck, FaTimes, FaClock, FaCode, FaCrown, FaDragon } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { FaServer, FaUsers, FaCrown, FaTrophy, FaDragon, FaSkull, FaCoins, FaClock, FaMedal, FaCode } from "react-icons/fa";
 
 // Função para converter qualquer valor em string segura
 function safeString(value) {
-  if (value === null || value === undefined) return "";
+  if (value === null || value === undefined) return "N/A";
   if (typeof value === "object") return JSON.stringify(value);
   return String(value);
 }
@@ -19,6 +19,26 @@ function formatUptime(uptime) {
     return `${hours}h`;
   }
   return uptime;
+}
+
+// Função para formatar números
+function formatNumber(num) {
+  if (!num || num === 0) return "0";
+  if (num >= 1000000000) return `${(num / 1000000000).toFixed(1)}B`;
+  if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
+  if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
+  return num.toString();
+}
+
+// Função para formatar data
+function formatDate(dateString) {
+  if (!dateString) return "N/A";
+  try {
+    const date = new Date(dateString);
+    return date.toLocaleString('pt-BR');
+  } catch (e) {
+    return dateString;
+  }
 }
 
 function RankingTable({ title, data, icon, emptyMessage = "Nenhum ranking disponível" }) {
@@ -37,34 +57,68 @@ function RankingTable({ title, data, icon, emptyMessage = "Nenhum ranking dispon
     );
   }
 
+  const getPositionClass = (index) => {
+    if (index === 0) return "gold";
+    if (index === 1) return "silver";
+    if (index === 2) return "bronze";
+    return "other";
+  };
+
+  const formatValue = (item, title) => {
+    if (title.includes("Level")) return item.level;
+    if (title.includes("PvP")) return item.pvp_count;
+    if (title.includes("PK")) return item.pk_count;
+    if (title.includes("Rico")) return formatNumber(item.adena);
+    if (title.includes("Online")) return formatUptime(item.online_time);
+    if (title.includes("Olimpíada")) return item.points;
+    if (title.includes("Guild")) return item.member_count;
+    if (title.includes("Heróis")) return item.hero_count;
+    return item.level || item.pvp_count || item.pk_count || item.adena || item.online_time || item.points || item.member_count || item.hero_count || "N/A";
+  };
+
+  const getDetails = (item, title) => {
+    if (title.includes("Level") || title.includes("PvP") || title.includes("PK")) {
+      return `${safeString(item.class_name || "N/A")} • ${safeString(item.clan_name || "Sem Clã")}`;
+    }
+    if (title.includes("Rico")) {
+      return `${safeString(item.class_name || "N/A")} • ${safeString(item.clan_name || "Sem Clã")}`;
+    }
+    if (title.includes("Online")) {
+      return `${safeString(item.class_name || "N/A")} • ${safeString(item.clan_name || "Sem Clã")}`;
+    }
+    if (title.includes("Olimpíada")) {
+      return `${safeString(item.class_name || "N/A")} • Rank #${item.rank}`;
+    }
+    if (title.includes("Heróis")) {
+      return `${safeString(item.class_name || "N/A")} • ${safeString(item.hero_type || "N/A")}`;
+    }
+    if (title.includes("Guild")) {
+      return `Líder: ${safeString(item.leader_name)} • Reputação: ${item.reputation}`;
+    }
+    return "";
+  };
+
   return (
     <div className="ranking-table">
       <div className="ranking-header">
         <div className="ranking-icon">{icon}</div>
         <h3>{title}</h3>
-        <span className="ranking-count">{data.length} jogadores</span>
       </div>
       <div className="ranking-content">
-        <table>
-          <thead>
-            <tr>
-              <th>Pos</th>
-              <th>Nome</th>
-              <th>Pontos</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.slice(0, 10).map((item, i) => (
-              <tr key={i} className={i < 3 ? `top-${i + 1}` : ''}>
-                <td className="position">
-                  {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}
-                </td>
-                <td className="player-name">{safeString(item.name || item.character_name || "Desconhecido")}</td>
-                <td className="player-points">{safeString(item.points || item.level || "0")}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {data.slice(0, 10).map((item, index) => (
+          <div key={index} className="ranking-item">
+            <div className={`ranking-position ${getPositionClass(index)}`}>
+              {index + 1}
+            </div>
+            <div className="ranking-info">
+              <div className="ranking-name">{safeString(item.char_name || item.clan_name)}</div>
+              <div className="ranking-details">{getDetails(item, title)}</div>
+            </div>
+            <div className="ranking-value">
+              {formatValue(item, title)}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -72,14 +126,14 @@ function RankingTable({ title, data, icon, emptyMessage = "Nenhum ranking dispon
 
 function StatusCard({ title, value, icon, color = "#e6c77d", subtitle = "" }) {
   return (
-    <div className="status-card" style={{ borderColor: color }}>
-      <div className="status-icon" style={{ color }}>
+    <div className="status-card" style={{ borderLeftColor: color }}>
+      <div className="icon" style={{ color }}>
         {icon}
       </div>
       <div className="status-info">
-        <h3>{safeString(title)}</h3>
-        <p className="status-value">{safeString(value)}</p>
-        {subtitle && <p className="status-subtitle">{subtitle}</p>}
+        <h3>{title}</h3>
+        <div className="value">{safeString(value)}</div>
+        {subtitle && <div className="subtitle">{subtitle}</div>}
       </div>
     </div>
   );
@@ -159,11 +213,20 @@ function SiegeInfo({ siege }) {
 }
 
 export default function ServerSection({ token }) {
-  const [status, setStatus] = useState(null);
-  const [rankings, setRankings] = useState({});
-  const [bosses, setBosses] = useState([]);
-  const [siege, setSiege] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState({ online: false, players: 0, uptime: 0, version: "1.0.0" });
+  const [rankings, setRankings] = useState({ 
+    level: [], 
+    pvp: [], 
+    guild: [], 
+    pk: [], 
+    rich: [], 
+    online: [], 
+    olympiad: [], 
+    olympiadHeroes: [] 
+  });
+  const [bosses, setBosses] = useState({ grand: [], raid: [] });
+  const [siege, setSiege] = useState([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -183,10 +246,28 @@ export default function ServerSection({ token }) {
         const topPvpRes = await fetch("/api/v1/server/top-pvp/", { 
           headers: { Authorization: `Bearer ${token}` } 
         });
+        const topPkRes = await fetch("/api/v1/server/top-pk/", { 
+          headers: { Authorization: `Bearer ${token}` } 
+        });
+        const topRichRes = await fetch("/api/v1/server/top-rich/", { 
+          headers: { Authorization: `Bearer ${token}` } 
+        });
+        const topOnlineRes = await fetch("/api/v1/server/top-online/", { 
+          headers: { Authorization: `Bearer ${token}` } 
+        });
         const topClanRes = await fetch("/api/v1/server/top-clan/", { 
           headers: { Authorization: `Bearer ${token}` } 
         });
+        const olympiadRankingRes = await fetch("/api/v1/server/olympiad-ranking/", { 
+          headers: { Authorization: `Bearer ${token}` } 
+        });
+        const olympiadHeroesRes = await fetch("/api/v1/server/olympiad-heroes/", { 
+          headers: { Authorization: `Bearer ${token}` } 
+        });
         const grandBossRes = await fetch("/api/v1/server/grandboss-status/", { 
+          headers: { Authorization: `Bearer ${token}` } 
+        });
+        const raidBossRes = await fetch("/api/v1/server/raidboss-status/", { 
           headers: { Authorization: `Bearer ${token}` } 
         });
         const siegeRes = await fetch("/api/v1/server/siege/", { 
@@ -208,10 +289,11 @@ export default function ServerSection({ token }) {
           });
         }
 
+        // Processar rankings
         if (topLevelRes.ok) {
           const topLevelData = await topLevelRes.json();
           console.log("Top level data:", topLevelData);
-          setRankings(prev => ({ ...prev, level: topLevelData }));
+          setRankings(prev => ({ ...prev, level: topLevelData.results || topLevelData }));
         } else {
           console.warn("Erro ao buscar top level:", topLevelRes.status);
           setRankings(prev => ({ ...prev, level: [] }));
@@ -220,45 +302,93 @@ export default function ServerSection({ token }) {
         if (topPvpRes.ok) {
           const topPvpData = await topPvpRes.json();
           console.log("Top PvP data:", topPvpData);
-          setRankings(prev => ({ ...prev, pvp: topPvpData }));
+          setRankings(prev => ({ ...prev, pvp: topPvpData.results || topPvpData }));
         } else {
           console.warn("Erro ao buscar top PvP:", topPvpRes.status);
           setRankings(prev => ({ ...prev, pvp: [] }));
         }
 
+        if (topPkRes.ok) {
+          const topPkData = await topPkRes.json();
+          console.log("Top PK data:", topPkData);
+          setRankings(prev => ({ ...prev, pk: topPkData.results || topPkData }));
+        } else {
+          console.warn("Erro ao buscar top PK:", topPkRes.status);
+          setRankings(prev => ({ ...prev, pk: [] }));
+        }
+
+        if (topRichRes.ok) {
+          const topRichData = await topRichRes.json();
+          console.log("Top Rich data:", topRichData);
+          setRankings(prev => ({ ...prev, rich: topRichData.results || topRichData }));
+        } else {
+          console.warn("Erro ao buscar top Rich:", topRichRes.status);
+          setRankings(prev => ({ ...prev, rich: [] }));
+        }
+
+        if (topOnlineRes.ok) {
+          const topOnlineData = await topOnlineRes.json();
+          console.log("Top Online data:", topOnlineData);
+          setRankings(prev => ({ ...prev, online: topOnlineData.results || topOnlineData }));
+        } else {
+          console.warn("Erro ao buscar top Online:", topOnlineRes.status);
+          setRankings(prev => ({ ...prev, online: [] }));
+        }
+
         if (topClanRes.ok) {
           const topClanData = await topClanRes.json();
           console.log("Top clan data:", topClanData);
-          setRankings(prev => ({ ...prev, guild: topClanData }));
+          setRankings(prev => ({ ...prev, guild: topClanData.results || topClanData }));
         } else {
           console.warn("Erro ao buscar top clan:", topClanRes.status);
           setRankings(prev => ({ ...prev, guild: [] }));
+        }
+
+        // Processar dados da Olimpíada
+        if (olympiadRankingRes.ok) {
+          const olympiadRankingData = await olympiadRankingRes.json();
+          console.log("Olympiad ranking data:", olympiadRankingData);
+          setRankings(prev => ({ ...prev, olympiad: olympiadRankingData.results || olympiadRankingData }));
+        } else {
+          console.warn("Erro ao buscar ranking da Olimpíada:", olympiadRankingRes.status);
+          setRankings(prev => ({ ...prev, olympiad: [] }));
+        }
+
+        if (olympiadHeroesRes.ok) {
+          const olympiadHeroesData = await olympiadHeroesRes.json();
+          console.log("Olympiad heroes data:", olympiadHeroesData);
+          setRankings(prev => ({ ...prev, olympiadHeroes: olympiadHeroesData.results || olympiadHeroesData }));
+        } else {
+          console.warn("Erro ao buscar heróis da Olimpíada:", olympiadHeroesRes.status);
+          setRankings(prev => ({ ...prev, olympiadHeroes: [] }));
         }
 
         // Buscar status dos bosses
         if (grandBossRes.ok) {
           const grandBossData = await grandBossRes.json();
           console.log("Grand boss data:", grandBossData);
-          setBosses(grandBossData);
+          setBosses(prev => ({ ...prev, grand: grandBossData.results || grandBossData }));
         } else {
           console.warn("Erro ao buscar grand boss:", grandBossRes.status);
-          setBosses([
-            { name: "Boss 1", alive: true },
-            { name: "Boss 2", alive: false }
-          ]);
+          setBosses(prev => ({ ...prev, grand: [] }));
+        }
+
+        if (raidBossRes.ok) {
+          const raidBossData = await raidBossRes.json();
+          console.log("Raid boss data:", raidBossData);
+          setBosses(prev => ({ ...prev, raid: raidBossData.results || raidBossData }));
+        } else {
+          console.warn("Erro ao buscar raid boss:", raidBossRes.status);
+          setBosses(prev => ({ ...prev, raid: [] }));
         }
 
         if (siegeRes.ok) {
           const siegeData = await siegeRes.json();
           console.log("Siege data:", siegeData);
-          setSiege(siegeData);
+          setSiege(siegeData.results || siegeData);
         } else {
           console.warn("Erro ao buscar siege:", siegeRes.status);
-          setSiege({ 
-            active: false, 
-            castle: "", 
-            guild: "" 
-          });
+          setSiege([]);
         }
 
       } catch (e) {
@@ -266,9 +396,9 @@ export default function ServerSection({ token }) {
         setError("Erro ao buscar dados do servidor");
         // Dados padrão
         setStatus({ online: false, players: 0, uptime: 0, version: "1.0.0" });
-        setRankings({ level: [], pvp: [], guild: [] });
-        setBosses([{ name: "Boss 1", alive: true }, { name: "Boss 2", alive: false }]);
-        setSiege({ active: false, castle: "", guild: "" });
+        setRankings({ level: [], pvp: [], guild: [], pk: [], rich: [], online: [], olympiad: [], olympiadHeroes: [] });
+        setBosses({ grand: [], raid: [] });
+        setSiege([]);
       }
       setLoading(false);
     }
@@ -316,28 +446,135 @@ export default function ServerSection({ token }) {
         <RankingTable
           title="Ranking de Level"
           data={rankings.level || []}
-          icon={<FaTrophy />}
+          icon={<FaCrown />}
           emptyMessage="Nenhum ranking de level disponível"
         />
         <RankingTable
           title="Ranking PvP"
           data={rankings.pvp || []}
-          icon={<FaSkull />}
+          icon={<FaTrophy />}
           emptyMessage="Nenhum ranking PvP disponível"
         />
         <RankingTable
           title="Ranking de Guild"
           data={rankings.guild || []}
-          icon={<FaFlag />}
+          icon={<FaUsers />}
           emptyMessage="Nenhum ranking de guild disponível"
+        />
+        <RankingTable
+          title="Ranking PK"
+          data={rankings.pk || []}
+          icon={<FaSkull />}
+          emptyMessage="Nenhum ranking PK disponível"
+        />
+        <RankingTable
+          title="Ranking Rico"
+          data={rankings.rich || []}
+          icon={<FaCoins />}
+          emptyMessage="Nenhum ranking Rico disponível"
+        />
+        <RankingTable
+          title="Ranking Online"
+          data={rankings.online || []}
+          icon={<FaClock />}
+          emptyMessage="Nenhum ranking Online disponível"
+        />
+        <RankingTable
+          title="Ranking da Olimpíada"
+          data={rankings.olympiad || []}
+          icon={<FaMedal />}
+          emptyMessage="Nenhum ranking da Olimpíada disponível"
+        />
+        <RankingTable
+          title="Heróis da Olimpíada"
+          data={rankings.olympiadHeroes || []}
+          icon={<FaDragon />}
+          emptyMessage="Nenhum herói da Olimpíada disponível"
         />
       </div>
 
       {/* Bosses */}
-      <BossGrid bosses={bosses} />
+      <div className="server-bosses">
+        <h3>Status dos Bosses</h3>
+        <div className="boss-grid">
+          {(bosses.grand || []).map((boss, index) => (
+            <div key={index} className="boss-card">
+              <div className="boss-header">
+                <FaDragon size={16} color={boss.is_alive ? "#28a745" : "#dc3545"} />
+                <h4>{safeString(boss.boss_name)}</h4>
+              </div>
+              <div className="boss-status">
+                <span className={`status ${boss.is_alive ? 'alive' : 'dead'}`}>
+                  {boss.is_alive ? 'Vivo' : 'Morto'}
+                </span>
+                {boss.respawn_time && (
+                  <div className="respawn-time">
+                    Respawn: {formatDate(boss.respawn_time)}
+                  </div>
+                )}
+                {boss.location && (
+                  <div className="boss-location">
+                    Local: {safeString(boss.location)}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+          {(bosses.raid || []).map((boss, index) => (
+            <div key={`raid-${index}`} className="boss-card raid-boss">
+              <div className="boss-header">
+                <FaSkull size={16} color={boss.is_alive ? "#28a745" : "#dc3545"} />
+                <h4>{safeString(boss.boss_name)} (Raid)</h4>
+              </div>
+              <div className="boss-status">
+                <span className={`status ${boss.is_alive ? 'alive' : 'dead'}`}>
+                  {boss.is_alive ? 'Vivo' : 'Morto'}
+                </span>
+                {boss.respawn_time && (
+                  <div className="respawn-time">
+                    Respawn: {formatDate(boss.respawn_time)}
+                  </div>
+                )}
+                {boss.location && (
+                  <div className="boss-location">
+                    Local: {safeString(boss.location)}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Siege */}
-      <SiegeInfo siege={siege} />
+      <div className="server-siege">
+        <h3>Informações do Siege</h3>
+        <div className="siege-info">
+          {(siege || []).map((castle, index) => (
+            <div key={index} className="castle-card">
+              <div className="castle-header">
+                <FaCrown size={16} color="#e6c77d" />
+                <h4>{safeString(castle.castle_name)}</h4>
+              </div>
+              <div className="castle-details">
+                <div className="castle-owner">
+                  <strong>Proprietário:</strong> {safeString(castle.owner_clan) || "Nenhum"}
+                </div>
+                <div className="castle-status">
+                  <span className={`status ${castle.is_under_siege ? 'under-siege' : 'peace'}`}>
+                    {castle.is_under_siege ? 'Sob Cerco' : 'Em Paz'}
+                  </span>
+                </div>
+                {castle.siege_date && (
+                  <div className="siege-date">
+                    Próximo Cerco: {formatDate(castle.siege_date)}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {error && <div className="error">{error}</div>}
     </div>
