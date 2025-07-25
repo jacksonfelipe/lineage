@@ -69,8 +69,8 @@ class LicenseMiddleware:
                         if not path.startswith('/public/maintenance/'):
                             return redirect('maintenance')
                 
-                # Mostra aviso se não for superusuário ou se a licença for inválida
-                if not is_valid or (hasattr(request, 'user') and request.user.is_authenticated and not request.user.is_superuser):
+                # Mostra aviso apenas se a licença for inválida
+                if not is_valid:
                     request.license_status['show_warning'] = True
             else:
                 # Não há licença ativa
