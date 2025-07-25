@@ -81,6 +81,7 @@ class PushSubscription(BaseModel):
     )
     endpoint = models.URLField(max_length=500)
     auth = models.CharField(max_length=255)
+    p256dh = models.CharField(max_length=255)
 
     class Meta:
         verbose_name = _('Push Subscription')

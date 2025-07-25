@@ -35,7 +35,9 @@ export default function App() {
   };
 
   const handleSubscribe = async () => {
+    console.log("Clicou em Ativar Push");
     const result = await subscribeUserToPush(token);
+    console.log("Resultado subscribeUserToPush:", result);
     if (result) {
       setSubscribed(true);
       setPermission("granted");

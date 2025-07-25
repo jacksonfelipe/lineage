@@ -1,12 +1,16 @@
 // Substitua por sua VAPID public key real (base64 url safe)
-const VAPID_PUBLIC_KEY = "SUA_PUBLICA_VAPID_KEY_AQUI";
+const VAPID_PUBLIC_KEY = "BBQIgwfHEkr1LOgtUFwxm_bbb-h6tRMjxa7GCpVYKBsLdBQ-dkKPmkTidKKedNyWfaPgqQl1tV36yo7AyAhQ0J8";
 
 export async function subscribeUserToPush(token) {
-  if (!('serviceWorker' in navigator)) return false;
+  if (!('serviceWorker' in navigator)) {
+    console.log("Service worker não suportado");
+    return false;
+  }
   const registration = await navigator.serviceWorker.ready;
   let permission = Notification.permission;
   if (permission !== "granted") {
     permission = await Notification.requestPermission();
+    console.log("Permissão de notificação:", permission);
     if (permission !== "granted") return false;
   }
   try {
@@ -14,7 +18,7 @@ export async function subscribeUserToPush(token) {
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
     });
-    // Envie subscription para o backend via fetch/AJAX com Authorization
+    console.log("Subscription criada:", subscription);
     await fetch("/api/v1/push-subscription/", {
       method: "POST",
       headers: {
@@ -25,6 +29,7 @@ export async function subscribeUserToPush(token) {
     });
     return true;
   } catch (e) {
+    console.error("Erro ao subscrever push:", e);
     return false;
   }
 }

@@ -33,6 +33,7 @@ from utils.dynamic_import import get_query_class
 from apps.lineage.server.decorators import endpoint_enabled
 from apps.lineage.server.models import ApiEndpointToggle
 from apps.main.notification.models import PushSubscription
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # Carrega a classe LineageStats baseada na configuração
 LineageStats = get_query_class("LineageStats")
@@ -1974,6 +1975,7 @@ class APIRedirectView(APIView):
 
 
 class PushSubscriptionView(APIView):
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
