@@ -34,6 +34,24 @@ export async function subscribeUserToPush(token) {
   }
 }
 
+export async function unsubscribeUserFromPush(token, subscription) {
+  if (!subscription) return false;
+  try {
+    await fetch("/api/v1/push-subscription/", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ endpoint: subscription.endpoint })
+    });
+    return true;
+  } catch (e) {
+    console.error("Erro ao remover push subscription:", e);
+    return false;
+  }
+}
+
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding)

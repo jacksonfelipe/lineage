@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { subscribeUserToPush } from "./push";
+import { subscribeUserToPush, unsubscribeUserFromPush } from "./push";
 import "./App.css";
 
 export default function App() {
@@ -42,6 +42,26 @@ export default function App() {
       setSubscribed(true);
       setPermission("granted");
     }
+  };
+
+  const handleUnsubscribe = async () => {
+    if (!('serviceWorker' in navigator)) return;
+    const registration = await navigator.serviceWorker.ready;
+    const subscription = await registration.pushManager.getSubscription();
+    if (subscription) {
+      await subscription.unsubscribe();
+      await unsubscribeUserFromPush(token, subscription);
+      setSubscribed(false);
+      setPermission(Notification.permission);
+    }
+  };
+
+  const handleLogout = () => {
+    setToken("");
+    localStorage.removeItem("jwt_token");
+    setSubscribed(false);
+    setUsername("");
+    setPassword("");
   };
 
   if (!token) {
@@ -87,6 +107,8 @@ export default function App() {
         <p className="install-tip">
           Para instalar, use o menu do navegador e escolha <b>“Adicionar à tela inicial”</b>.
         </p>
+        <button className="btn-primary" onClick={handleUnsubscribe} style={{marginTop: 16}}>Desativar Push</button>
+        <button className="btn-secondary" onClick={handleLogout} style={{marginTop: 8}}>Sair</button>
       </div>
     );
   }
@@ -110,6 +132,7 @@ export default function App() {
       <p className="install-tip">
         Para instalar, use o menu do navegador e escolha <b>“Adicionar à tela inicial”</b>.
       </p>
+      <button className="btn-secondary" onClick={handleLogout} style={{marginTop: 16}}>Sair</button>
     </div>
   );
 } 

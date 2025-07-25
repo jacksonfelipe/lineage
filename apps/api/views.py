@@ -1995,3 +1995,14 @@ class PushSubscriptionView(APIView):
             p256dh=p256dh
         )
         return Response({'ok': True})
+
+    def delete(self, request):
+        data = request.data
+        endpoint = data.get('endpoint')
+        if not endpoint:
+            return Response({'error': 'Endpoint não informado'}, status=status.HTTP_400_BAD_REQUEST)
+        deleted, _ = PushSubscription.objects.filter(user=request.user, endpoint=endpoint).delete()
+        if deleted:
+            return Response({'ok': True, 'deleted': deleted})
+        else:
+            return Response({'error': 'Inscrição não encontrada'}, status=status.HTTP_404_NOT_FOUND)
