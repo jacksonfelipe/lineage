@@ -237,7 +237,7 @@ export default function MetricsSection({ token }) {
         console.log("Buscando dados de métricas...");
         
         // Buscar dados individualmente
-        const healthRes = await fetch("/api/v1/metrics/health/", { 
+        const healthRes = await fetch("/api/v1/health/", { 
           headers: { Authorization: `Bearer ${token}` } 
         });
         const hourlyRes = await fetch("/api/v1/metrics/hourly/", { 

@@ -222,9 +222,6 @@ export default function GameSection({ token }) {
       const auctionRes = await fetch("/api/v1/auction/items/", {
         headers: { Authorization: `Bearer ${token}` }
       });
-      const statsRes = await fetch("/api/v1/game/stats/", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
 
       // Processar cada resposta
       if (auctionRes.ok) {
@@ -236,14 +233,13 @@ export default function GameSection({ token }) {
         setAuctionItems([]);
       }
 
-      if (statsRes.ok) {
-        const statsData = await statsRes.json();
-        console.log("Game stats data:", statsData);
-        setGameStats(statsData);
-      } else {
-        console.warn("Erro ao buscar estatísticas:", statsRes.status);
-        setGameStats({});
-      }
+      // Definir estatísticas padrão já que não há endpoint específico
+      setGameStats({
+        total_players: 0,
+        online_players: 0,
+        total_clans: 0,
+        active_auctions: Array.isArray(auctionItems) ? auctionItems.length : 0
+      });
 
     } catch (e) {
       console.error("Erro ao buscar dados do jogo:", e);

@@ -177,10 +177,16 @@ export default function ServerSection({ token }) {
         const statusRes = await fetch("/api/v1/server/status/", { 
           headers: { Authorization: `Bearer ${token}` } 
         });
-        const rankingsRes = await fetch("/api/v1/server/rankings/", { 
+        const topLevelRes = await fetch("/api/v1/server/top-level/", { 
           headers: { Authorization: `Bearer ${token}` } 
         });
-        const bossesRes = await fetch("/api/v1/server/bosses/", { 
+        const topPvpRes = await fetch("/api/v1/server/top-pvp/", { 
+          headers: { Authorization: `Bearer ${token}` } 
+        });
+        const topClanRes = await fetch("/api/v1/server/top-clan/", { 
+          headers: { Authorization: `Bearer ${token}` } 
+        });
+        const grandBossRes = await fetch("/api/v1/server/grandboss-status/", { 
           headers: { Authorization: `Bearer ${token}` } 
         });
         const siegeRes = await fetch("/api/v1/server/siege/", { 
@@ -202,25 +208,40 @@ export default function ServerSection({ token }) {
           });
         }
 
-        if (rankingsRes.ok) {
-          const rankingsData = await rankingsRes.json();
-          console.log("Rankings data:", rankingsData);
-          setRankings(rankingsData);
+        if (topLevelRes.ok) {
+          const topLevelData = await topLevelRes.json();
+          console.log("Top level data:", topLevelData);
+          setRankings(prev => ({ ...prev, level: topLevelData }));
         } else {
-          console.warn("Erro ao buscar rankings:", rankingsRes.status);
-          setRankings({
-            level: [],
-            pvp: [],
-            guild: []
-          });
+          console.warn("Erro ao buscar top level:", topLevelRes.status);
+          setRankings(prev => ({ ...prev, level: [] }));
         }
 
-        if (bossesRes.ok) {
-          const bossesData = await bossesRes.json();
-          console.log("Bosses data:", bossesData);
-          setBosses(bossesData);
+        if (topPvpRes.ok) {
+          const topPvpData = await topPvpRes.json();
+          console.log("Top PvP data:", topPvpData);
+          setRankings(prev => ({ ...prev, pvp: topPvpData }));
         } else {
-          console.warn("Erro ao buscar bosses:", bossesRes.status);
+          console.warn("Erro ao buscar top PvP:", topPvpRes.status);
+          setRankings(prev => ({ ...prev, pvp: [] }));
+        }
+
+        if (topClanRes.ok) {
+          const topClanData = await topClanRes.json();
+          console.log("Top clan data:", topClanData);
+          setRankings(prev => ({ ...prev, guild: topClanData }));
+        } else {
+          console.warn("Erro ao buscar top clan:", topClanRes.status);
+          setRankings(prev => ({ ...prev, guild: [] }));
+        }
+
+        // Buscar status dos bosses
+        if (grandBossRes.ok) {
+          const grandBossData = await grandBossRes.json();
+          console.log("Grand boss data:", grandBossData);
+          setBosses(grandBossData);
+        } else {
+          console.warn("Erro ao buscar grand boss:", grandBossRes.status);
           setBosses([
             { name: "Boss 1", alive: true },
             { name: "Boss 2", alive: false }
