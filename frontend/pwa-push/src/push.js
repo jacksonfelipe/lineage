@@ -1,5 +1,12 @@
-// Substitua por sua VAPID public key real (base64 url safe)
-const VAPID_PUBLIC_KEY = "BBQIgwfHEkr1LOgtUFwxm_bbb-h6tRMjxa7GCpVYKBsLdBQ-dkKPmkTidKKedNyWfaPgqQl1tV36yo7AyAhQ0J8";
+let VAPID_PUBLIC_KEY = null;
+
+export async function getVapidPublicKey() {
+  if (VAPID_PUBLIC_KEY) return VAPID_PUBLIC_KEY;
+  const res = await fetch("/api/v1/vapid-public-key/");
+  const data = await res.json();
+  VAPID_PUBLIC_KEY = data.vapid_public_key;
+  return VAPID_PUBLIC_KEY;
+}
 
 export async function subscribeUserToPush(token) {
   if (!('serviceWorker' in navigator)) {
@@ -14,9 +21,10 @@ export async function subscribeUserToPush(token) {
     if (permission !== "granted") return false;
   }
   try {
+    const vapidKey = await getVapidPublicKey();
     const subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+      applicationServerKey: urlBase64ToUint8Array(vapidKey)
     });
     console.log("Subscription criada:", subscription);
     await fetch("/api/v1/push-subscription/", {

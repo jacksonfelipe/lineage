@@ -1974,6 +1974,14 @@ class APIRedirectView(APIView):
         })
 
 
+class VapidPublicKeyView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        from django.conf import settings
+        return Response({"vapid_public_key": settings.VAPID_PUBLIC_KEY})
+
+
 class PushSubscriptionView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]

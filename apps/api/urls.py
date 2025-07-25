@@ -2,7 +2,7 @@ from django.shortcuts import redirect
 from django.urls import path, include
 from . import views
 from apps.main.notification import views as notification_views
-from .views import PushSubscriptionView
+from .views import PushSubscriptionView, VapidPublicKeyView
 
 app_name = 'api'
 
@@ -61,6 +61,7 @@ v1_patterns = [
 
     # =========================== PUSH NOTIFICATIONS ===========================
     path('push-subscription/', PushSubscriptionView.as_view(), name='push_subscription'),
+    path('vapid-public-key/', VapidPublicKeyView.as_view(), name='vapid_public_key'),
 ]
 
 # URLs principais com versionamento
