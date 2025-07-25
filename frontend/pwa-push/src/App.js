@@ -10,6 +10,7 @@ export default function App() {
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [pushError, setPushError] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -36,11 +37,14 @@ export default function App() {
 
   const handleSubscribe = async () => {
     console.log("Clicou em Ativar Push");
+    setPushError("");
     const result = await subscribeUserToPush(token);
     console.log("Resultado subscribeUserToPush:", result);
-    if (result) {
+    if (result && result.success) {
       setSubscribed(true);
       setPermission("granted");
+    } else if (result && result.error) {
+      setPushError(result.error);
     }
   };
 
@@ -118,6 +122,7 @@ export default function App() {
       <img src="/static/pwa/icons/logo.png" alt="Logo" className="logo" />
       <h1>Notificações Push</h1>
       <p>Receba alertas importantes diretamente no seu celular.</p>
+      {pushError && <p className="error">{pushError}</p>}
       {permission !== "granted" && (
         <button className="btn-primary" onClick={handleSubscribe}>
           Permitir Notificações

@@ -27,7 +27,7 @@ export async function subscribeUserToPush(token) {
       applicationServerKey: urlBase64ToUint8Array(vapidKey)
     });
     console.log("Subscription criada:", subscription);
-    await fetch("/api/v1/push-subscription/", {
+    const res = await fetch("/api/v1/push-subscription/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,10 +35,14 @@ export async function subscribeUserToPush(token) {
       },
       body: JSON.stringify(subscription)
     });
-    return true;
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      return { success: false, error: data.error || 'Erro desconhecido ao cadastrar push' };
+    }
+    return { success: true };
   } catch (e) {
     console.error("Erro ao subscrever push:", e);
-    return false;
+    return { success: false, error: e.message || 'Erro desconhecido' };
   }
 }
 

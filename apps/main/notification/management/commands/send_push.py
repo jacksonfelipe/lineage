@@ -31,5 +31,8 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS(f"Notificação enviada para {sub.user} ({sub.endpoint[:30]}...)"))
                 total += 1
             except WebPushException as ex:
+                # Silenciar erro para WNS/Edge Legacy
+                if subscription_info["endpoint"].startswith("https://wns2-") or "notify.windows.com" in subscription_info["endpoint"]:
+                    continue
                 self.stdout.write(self.style.ERROR(f"Erro ao enviar para {sub.user}: {repr(ex)}"))
         self.stdout.write(self.style.SUCCESS(f"Total de notificações enviadas: {total}")) 

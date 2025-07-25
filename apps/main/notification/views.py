@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from .models import PushSubscription
 import json
 from pywebpush import webpush, WebPushException
+import logging
 
 
 @conditional_otp_required
@@ -218,6 +219,8 @@ def save_subscription(request):
         p256dh = keys.get('p256dh')
         if not (endpoint and auth and p256dh):
             return JsonResponse({'error': 'Dados incompletos'}, status=400)
+        if endpoint and ('notify.windows.com' in endpoint or endpoint.startswith('https://wns2-')):
+            return JsonResponse({'error': 'Push notifications não são suportadas neste navegador. Use Chrome, Firefox ou Edge Chromium.'}, status=400)
         # Remove subscriptions antigas do mesmo endpoint
         PushSubscription.objects.filter(user=request.user, endpoint=endpoint).delete()
         PushSubscription.objects.create(
@@ -228,7 +231,9 @@ def save_subscription(request):
         )
         return JsonResponse({'ok': True})
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+        import traceback
+        tb = traceback.format_exc()
+        return JsonResponse({'error': str(e), 'traceback': tb, 'body': request.body.decode('utf-8', errors='replace')}, status=500)
 
 
 @staff_member_required
@@ -237,6 +242,7 @@ def send_push_view(request):
         message = request.POST.get('message', '').strip()
         total = 0
         errors = []
+        logger = logging.getLogger(__name__)
         if message:
             for sub in PushSubscription.objects.all():
                 subscription_info = {
@@ -255,11 +261,12 @@ def send_push_view(request):
                     )
                     total += 1
                 except WebPushException as ex:
-                    errors.append(f"Erro para {sub.user}: {repr(ex)}")
+                    logger.error(f"Erro ao enviar push para {sub.user}: {repr(ex)}")
+                    errors.append(sub.user)
             if total:
                 messages.success(request, f"Notificações enviadas para {total} inscritos!")
             if errors:
-                messages.error(request, "\n".join(errors))
+                messages.error(request, f"Falha ao enviar notificações para {len(errors)} usuários. Consulte os logs para detalhes.")
         else:
             messages.error(request, "Mensagem não pode ser vazia.")
         return redirect('notification:send_push')
