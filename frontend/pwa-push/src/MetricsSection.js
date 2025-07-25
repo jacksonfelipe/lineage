@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaHeartbeat, FaChartLine, FaClock, FaTachometerAlt, FaDatabase } from "react-icons/fa";
+import { FaChartLine, FaClock, FaExclamationTriangle, FaServer, FaDatabase, FaChartBar, FaTachometerAlt, FaHistory } from "react-icons/fa";
 
 // Função para converter qualquer valor em string segura
 function safeString(value) {
@@ -8,84 +8,44 @@ function safeString(value) {
   return String(value);
 }
 
-function HealthCheck({ data }) {
-  if (!data) return null;
-  const isHealthy = data.status === 'healthy' || data.success === true;
-  return (
-    <div className="metrics-health-card">
-      <div className="health-header">
-        <div className="health-icon">
-          <FaHeartbeat size={32} color={isHealthy ? "#28a745" : "#dc3545"} />
-        </div>
-        <div className="health-title">
-          <h3>Health Check</h3>
-          <div className={`health-status ${isHealthy ? 'healthy' : 'unhealthy'}`}>
-            {isHealthy ? 'Sistema Saudável' : 'Problemas Detectados'}
-          </div>
-        </div>
-      </div>
-      <div className="health-details">
-        {data.components && Object.entries(data.components).map(([name, status]) => (
-          <div key={name} className="health-component">
-            <span className="component-name">{safeString(name)}:</span>
-            <span className={`component-status ${status === 'healthy' ? 'healthy' : 'unhealthy'}`}>
-              {status === 'healthy' ? 'OK' : 'ERRO'}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+// Função para formatar timestamp
+function formatTimestamp(timestamp) {
+  if (!timestamp) return "N/A";
+  try {
+    const date = new Date(timestamp);
+    return date.toLocaleString('pt-BR');
+  } catch (e) {
+    return timestamp;
+  }
 }
 
-function MetricsCard({ data, label, icon }) {
-  if (!data) return null;
-  return (
-    <div className="metrics-card">
-      <div className="metrics-header">
-        <div className="metrics-icon">{icon}</div>
-        <h3>{safeString(label)}</h3>
-      </div>
-      <div className="metrics-content">
-        {Object.entries(data).map(([key, value]) => (
-          <div key={key} className="metric-item">
-            <span className="metric-key">{safeString(key)}:</span>
-            <span className="metric-value">{safeString(value)}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+// Função para formatar números
+function formatNumber(num) {
+  if (num === null || num === undefined) return "0";
+  if (typeof num === 'string') return num;
+  return num.toLocaleString('pt-BR');
 }
 
-function PerformanceMetrics({ data }) {
-  if (!data) return null;
+// Função para formatar tempo de resposta
+function formatResponseTime(time) {
+  if (!time || time === 0) return "0ms";
+  if (time < 1000) return `${time}ms`;
+  return `${(time / 1000).toFixed(2)}s`;
+}
+
+function MetricsCard({ title, value, subtitle, icon, color = "#e6c77d", trend = null }) {
   return (
-    <div className="metrics-performance-card">
-      <div className="performance-header">
-        <div className="performance-icon">
-          <FaTachometerAlt size={28} color="#e6c77d" />
-        </div>
-        <h3>Performance por Endpoint</h3>
+    <div className="metrics-card" style={{ borderColor: color }}>
+      <div className="metrics-icon" style={{ color }}>
+        {icon}
       </div>
-      <div className="performance-list">
-        {Array.isArray(data) ? data.map((item, i) => (
-          <div key={i} className="performance-item">
-            <div className="endpoint-name">{safeString(item.endpoint || item.name || `Endpoint ${i+1}`)}</div>
-            <div className="endpoint-stats">
-              {item.avg_time && <span>Tempo médio: {safeString(item.avg_time)}ms</span>}
-              {item.requests && <span>Requisições: {safeString(item.requests)}</span>}
-              {item.errors && <span>Erros: {safeString(item.errors)}</span>}
-            </div>
-          </div>
-        )) : (
-          <div className="performance-item">
-            <div className="endpoint-name">Dados de Performance</div>
-            <div className="endpoint-stats">
-              {Object.entries(data).map(([k, v]) => (
-                <span key={k}>{safeString(k)}: {safeString(v)}</span>
-              ))}
-            </div>
+      <div className="metrics-info">
+        <h3>{title}</h3>
+        <p className="metrics-value">{value}</p>
+        {subtitle && <p className="metrics-subtitle">{subtitle}</p>}
+        {trend && (
+          <div className={`metrics-trend ${trend > 0 ? 'positive' : 'negative'}`}>
+            {trend > 0 ? '↗' : '↘'} {Math.abs(trend)}%
           </div>
         )}
       </div>
@@ -93,36 +53,168 @@ function PerformanceMetrics({ data }) {
   );
 }
 
-function SlowQueries({ data }) {
-  if (!data) return null;
-  return (
-    <div className="metrics-slow-queries-card">
-      <div className="slow-queries-header">
-        <div className="slow-queries-icon">
-          <FaDatabase size={28} color="#e6c77d" />
+function MetricsGrid({ title, data, icon, emptyMessage = "Nenhum dado disponível" }) {
+  if (!data || Object.keys(data).length === 0) {
+    return (
+      <div className="metrics-grid">
+        <div className="metrics-header">
+          <div className="metrics-header-icon">{icon}</div>
+          <h3>{title}</h3>
         </div>
-        <h3>Queries Lentas</h3>
+        <div className="metrics-empty">
+          <div className="empty-icon">📊</div>
+          <p>{emptyMessage}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const metrics = [
+    { key: "total_requests", label: "Total de Requisições", icon: <FaServer size={16} />, color: "#17a2b8" },
+    { key: "avg_response_time", label: "Tempo Médio", icon: <FaClock size={16} />, color: "#ffc107" },
+    { key: "error_rate", label: "Taxa de Erro", icon: <FaExclamationTriangle size={16} />, color: "#dc3545" }
+  ];
+
+  return (
+    <div className="metrics-grid">
+      <div className="metrics-header">
+        <div className="metrics-header-icon">{icon}</div>
+        <h3>{title}</h3>
+        <span className="metrics-timestamp">
+          {data.timestamp && formatTimestamp(data.timestamp)}
+        </span>
+      </div>
+      <div className="metrics-cards">
+        {metrics.map(metric => (
+          <MetricsCard
+            key={metric.key}
+            title={metric.label}
+            value={
+              metric.key === "avg_response_time" 
+                ? formatResponseTime(data[metric.key])
+                : metric.key === "error_rate"
+                ? `${formatNumber(data[metric.key] || 0)}%`
+                : formatNumber(data[metric.key] || 0)
+            }
+            icon={metric.icon}
+            color={metric.color}
+            subtitle={
+              metric.key === "total_requests" ? "requisições" :
+              metric.key === "avg_response_time" ? "tempo de resposta" :
+              "erros por 100 req"
+            }
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function StatusCodesTable({ statusCodes }) {
+  if (!statusCodes || Object.keys(statusCodes).length === 0) {
+    return (
+      <div className="status-codes-section">
+        <h4>Status Codes</h4>
+        <div className="status-codes-empty">
+          <p>Nenhum status code registrado</p>
+        </div>
+      </div>
+    );
+  }
+
+  const statusColors = {
+    "200": "#28a745",
+    "201": "#28a745", 
+    "400": "#ffc107",
+    "401": "#fd7e14",
+    "403": "#fd7e14",
+    "404": "#dc3545",
+    "500": "#dc3545"
+  };
+
+  return (
+    <div className="status-codes-section">
+      <h4>Status Codes</h4>
+      <div className="status-codes-grid">
+        {Object.entries(statusCodes).map(([code, count]) => (
+          <div key={code} className="status-code-item" style={{ borderColor: statusColors[code] || "#6c757d" }}>
+            <span className="status-code">{code}</span>
+            <span className="status-count">{formatNumber(count)}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function EndpointsTable({ endpoints }) {
+  if (!endpoints || Object.keys(endpoints).length === 0) {
+    return (
+      <div className="endpoints-section">
+        <h4>Endpoints Mais Acessados</h4>
+        <div className="endpoints-empty">
+          <p>Nenhum endpoint registrado</p>
+        </div>
+      </div>
+    );
+  }
+
+  const sortedEndpoints = Object.entries(endpoints)
+    .sort(([,a], [,b]) => b - a)
+    .slice(0, 10);
+
+  return (
+    <div className="endpoints-section">
+      <h4>Endpoints Mais Acessados</h4>
+      <div className="endpoints-list">
+        {sortedEndpoints.map(([endpoint, count], index) => (
+          <div key={endpoint} className="endpoint-item">
+            <div className="endpoint-rank">#{index + 1}</div>
+            <div className="endpoint-path">{endpoint}</div>
+            <div className="endpoint-count">{formatNumber(count)}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SlowQueriesTable({ slowQueries }) {
+  if (!slowQueries || slowQueries.length === 0) {
+    return (
+      <div className="slow-queries-section">
+        <div className="slow-queries-header">
+          <FaDatabase size={20} color="#e6c77d" />
+          <h4>Queries Lentas</h4>
+        </div>
+        <div className="slow-queries-empty">
+          <div className="empty-icon">🐌</div>
+          <p>Nenhuma query lenta registrada</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="slow-queries-section">
+      <div className="slow-queries-header">
+        <FaDatabase size={20} color="#e6c77d" />
+        <h4>Queries Lentas</h4>
+        <span className="slow-queries-count">{slowQueries.length} queries</span>
       </div>
       <div className="slow-queries-list">
-        {Array.isArray(data) ? data.map((query, i) => (
-          <div key={i} className="slow-query-item">
-            <div className="query-sql">{safeString(query.sql || query.query || `Query ${i+1}`)}</div>
-            <div className="query-stats">
-              {query.time && <span>Tempo: {safeString(query.time)}ms</span>}
-              {query.count && <span>Execuções: {safeString(query.count)}</span>}
-              {query.limit && <span>Limite: {safeString(query.limit)}</span>}
+        {slowQueries.map((query, index) => (
+          <div key={index} className="slow-query-item">
+            <div className="query-header">
+              <span className="query-number">#{index + 1}</span>
+              <span className="query-time">{formatResponseTime(query.execution_time || query.time)}</span>
             </div>
+            <div className="query-sql">{safeString(query.sql || query.query)}</div>
+            {query.count && (
+              <div className="query-count">Executada {formatNumber(query.count)} vezes</div>
+            )}
           </div>
-        )) : (
-          <div className="slow-query-item">
-            <div className="query-sql">Dados de Queries Lentas</div>
-            <div className="query-stats">
-              {Object.entries(data).map(([k, v]) => (
-                <span key={k}>{safeString(k)}: {safeString(v)}</span>
-              ))}
-            </div>
-          </div>
-        )}
+        ))}
       </div>
     </div>
   );
@@ -138,7 +230,7 @@ export default function MetricsSection({ token }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    async function fetchAll() {
+    async function fetchData() {
       setLoading(true);
       setError("");
       try {
@@ -168,7 +260,7 @@ export default function MetricsSection({ token }) {
           setHealth(healthData);
         } else {
           console.warn("Erro ao buscar health:", healthRes.status);
-          setHealth({ status: "healthy", components: { "API": "healthy" } });
+          setHealth({ status: "healthy", uptime: 0 });
         }
 
         if (hourlyRes.ok) {
@@ -177,7 +269,7 @@ export default function MetricsSection({ token }) {
           setHourly(hourlyData);
         } else {
           console.warn("Erro ao buscar hourly:", hourlyRes.status);
-          setHourly({ "requests": 0, "errors": 0, "avg_time": 0 });
+          setHourly({ success: true, data: {}, timestamp: new Date().toISOString() });
         }
 
         if (dailyRes.ok) {
@@ -186,7 +278,7 @@ export default function MetricsSection({ token }) {
           setDaily(dailyData);
         } else {
           console.warn("Erro ao buscar daily:", dailyRes.status);
-          setDaily({ "requests": 0, "errors": 0, "avg_time": 0 });
+          setDaily({ success: true, data: {}, timestamp: new Date().toISOString() });
         }
 
         if (performanceRes.ok) {
@@ -195,7 +287,7 @@ export default function MetricsSection({ token }) {
           setPerformance(performanceData);
         } else {
           console.warn("Erro ao buscar performance:", performanceRes.status);
-          setPerformance([]);
+          setPerformance({ success: true, data: {} });
         }
 
         if (slowQueriesRes.ok) {
@@ -204,45 +296,112 @@ export default function MetricsSection({ token }) {
           setSlowQueries(slowQueriesData);
         } else {
           console.warn("Erro ao buscar slow queries:", slowQueriesRes.status);
-          setSlowQueries([]);
+          setSlowQueries({ success: true, data: { slow_queries: [], count: 0 } });
         }
 
       } catch (e) {
-        console.error("Erro ao buscar métricas:", e);
+        console.error("Erro ao buscar dados de métricas:", e);
         setError("Erro ao buscar dados de métricas");
         // Dados padrão
-        setHealth({ status: "healthy", components: { "API": "healthy" } });
-        setHourly({ "requests": 0, "errors": 0, "avg_time": 0 });
-        setDaily({ "requests": 0, "errors": 0, "avg_time": 0 });
-        setPerformance([]);
-        setSlowQueries([]);
+        setHealth({ status: "healthy", uptime: 0 });
+        setHourly({ success: true, data: {}, timestamp: new Date().toISOString() });
+        setDaily({ success: true, data: {}, timestamp: new Date().toISOString() });
+        setPerformance({ success: true, data: {} });
+        setSlowQueries({ success: true, data: { slow_queries: [], count: 0 } });
       }
       setLoading(false);
     }
-    fetchAll();
+    fetchData();
   }, [token]);
 
-  if (loading) return <div>Carregando métricas...</div>;
+  if (loading) return <div className="loading">Carregando métricas...</div>;
 
   return (
     <div className="metrics-section">
-      <HealthCheck data={health} />
-      
-      <div className="metrics-grid">
-        <MetricsCard
-          data={hourly}
-          label="Métricas por Hora"
-          icon={<FaClock size={24} color="#17a2b8" />}
-        />
-        <MetricsCard
-          data={daily}
-          label="Métricas Diárias"
-          icon={<FaChartLine size={24} color="#28a745" />}
-        />
-      </div>
+      {/* Health Check */}
+      {health && (
+        <div className="health-check">
+          <div className="health-header">
+            <FaTachometerAlt size={24} color="#e6c77d" />
+            <h3>Status do Sistema</h3>
+          </div>
+          <div className="health-cards">
+            <MetricsCard
+              title="Status"
+              value={health.status === "healthy" ? "Saudável" : "Problemas"}
+              icon={<FaServer size={24} />}
+              color={health.status === "healthy" ? "#28a745" : "#dc3545"}
+              subtitle="estado atual"
+            />
+            <MetricsCard
+              title="Uptime"
+              value={formatResponseTime(health.uptime * 1000)}
+              icon={<FaHistory size={24} />}
+              color="#17a2b8"
+              subtitle="tempo ativo"
+            />
+          </div>
+        </div>
+      )}
 
-      <PerformanceMetrics data={performance} />
-      <SlowQueries data={slowQueries} />
+      {/* Métricas por Hora */}
+      <MetricsGrid
+        title="Métricas por Hora"
+        data={hourly?.data || {}}
+        icon={<FaChartLine size={24} color="#e6c77d" />}
+        emptyMessage="Nenhuma métrica horária disponível"
+      />
+
+      {/* Métricas Diárias */}
+      <MetricsGrid
+        title="Métricas Diárias"
+        data={daily?.data || {}}
+        icon={<FaChartBar size={24} color="#e6c77d" />}
+        emptyMessage="Nenhuma métrica diária disponível"
+      />
+
+      {/* Status Codes e Endpoints */}
+      {(hourly?.data?.status_codes || daily?.data?.status_codes || hourly?.data?.endpoints || daily?.data?.endpoints) && (
+        <div className="metrics-details">
+          <div className="metrics-details-grid">
+            <StatusCodesTable statusCodes={hourly?.data?.status_codes || daily?.data?.status_codes} />
+            <EndpointsTable endpoints={hourly?.data?.endpoints || daily?.data?.endpoints} />
+          </div>
+        </div>
+      )}
+
+      {/* Performance por Endpoint */}
+      {performance && (
+        <div className="performance-section">
+          <div className="performance-header">
+            <FaTachometerAlt size={24} color="#e6c77d" />
+            <h3>Performance por Endpoint</h3>
+          </div>
+          <div className="performance-content">
+            {performance.data && Object.keys(performance.data).length > 0 ? (
+              <div className="performance-list">
+                {Object.entries(performance.data).map(([endpoint, data]) => (
+                  <div key={endpoint} className="performance-item">
+                    <div className="performance-endpoint">{endpoint}</div>
+                    <div className="performance-metrics">
+                      <span className="performance-time">{formatResponseTime(data.avg_time || 0)}</span>
+                      <span className="performance-count">{formatNumber(data.count || 0)} req</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="performance-empty">
+                <div className="empty-icon">⚡</div>
+                <p>Nenhum dado de performance disponível</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Queries Lentas */}
+      <SlowQueriesTable slowQueries={slowQueries?.data?.slow_queries || []} />
 
       {error && <div className="error">{error}</div>}
     </div>

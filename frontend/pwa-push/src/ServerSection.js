@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaServer, FaUsers, FaTrophy, FaSkull, FaFlag, FaCheck, FaTimes } from "react-icons/fa";
+import { FaServer, FaUsers, FaTrophy, FaSkull, FaFlag, FaCheck, FaTimes, FaClock, FaCode, FaCrown, FaDragon } from "react-icons/fa";
 
 // Função para converter qualquer valor em string segura
 function safeString(value) {
@@ -8,42 +8,69 @@ function safeString(value) {
   return String(value);
 }
 
-function RankingTable({ title, data, icon }) {
+// Função para formatar uptime
+function formatUptime(uptime) {
+  if (!uptime) return "0h";
+  if (typeof uptime === 'string') return uptime;
+  if (typeof uptime === 'number') {
+    const hours = Math.floor(uptime / 3600);
+    const days = Math.floor(hours / 24);
+    if (days > 0) return `${days}d ${hours % 24}h`;
+    return `${hours}h`;
+  }
+  return uptime;
+}
+
+function RankingTable({ title, data, icon, emptyMessage = "Nenhum ranking disponível" }) {
   if (!Array.isArray(data) || data.length === 0) {
     return (
       <div className="ranking-table">
-        <h3>{icon} {title}</h3>
-        <p>Nenhum dado disponível</p>
+        <div className="ranking-header">
+          <div className="ranking-icon">{icon}</div>
+          <h3>{title}</h3>
+        </div>
+        <div className="ranking-empty">
+          <div className="empty-icon">🏆</div>
+          <p>{emptyMessage}</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="ranking-table">
-      <h3>{icon} {title}</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Pos</th>
-            <th>Nome</th>
-            <th>Pontos</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.slice(0, 10).map((item, i) => (
-            <tr key={i}>
-              <td>{i + 1}</td>
-              <td>{safeString(item.name || item.character_name || "Desconhecido")}</td>
-              <td>{safeString(item.points || item.level || "0")}</td>
+      <div className="ranking-header">
+        <div className="ranking-icon">{icon}</div>
+        <h3>{title}</h3>
+        <span className="ranking-count">{data.length} jogadores</span>
+      </div>
+      <div className="ranking-content">
+        <table>
+          <thead>
+            <tr>
+              <th>Pos</th>
+              <th>Nome</th>
+              <th>Pontos</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data.slice(0, 10).map((item, i) => (
+              <tr key={i} className={i < 3 ? `top-${i + 1}` : ''}>
+                <td className="position">
+                  {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}
+                </td>
+                <td className="player-name">{safeString(item.name || item.character_name || "Desconhecido")}</td>
+                <td className="player-points">{safeString(item.points || item.level || "0")}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
 
-function StatusCard({ title, value, icon, color = "#e6c77d" }) {
+function StatusCard({ title, value, icon, color = "#e6c77d", subtitle = "" }) {
   return (
     <div className="status-card" style={{ borderColor: color }}>
       <div className="status-icon" style={{ color }}>
@@ -51,7 +78,8 @@ function StatusCard({ title, value, icon, color = "#e6c77d" }) {
       </div>
       <div className="status-info">
         <h3>{safeString(title)}</h3>
-        <p>{safeString(value)}</p>
+        <p className="status-value">{safeString(value)}</p>
+        {subtitle && <p className="status-subtitle">{subtitle}</p>}
       </div>
     </div>
   );
@@ -61,27 +89,70 @@ function BossGrid({ bosses }) {
   if (!Array.isArray(bosses) || bosses.length === 0) {
     return (
       <div className="boss-grid">
-        <h3>Bosses</h3>
-        <p>Nenhum boss disponível</p>
+        <div className="boss-header">
+          <FaDragon size={24} color="#e6c77d" />
+          <h3>Status dos Bosses</h3>
+        </div>
+        <div className="boss-empty">
+          <div className="empty-icon">🐉</div>
+          <p>Nenhum boss disponível</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="boss-grid">
-      <h3>Status dos Bosses</h3>
+      <div className="boss-header">
+        <FaDragon size={24} color="#e6c77d" />
+        <h3>Status dos Bosses</h3>
+        <span className="boss-count">{bosses.length} bosses</span>
+      </div>
       <div className="boss-cards">
         {bosses.map((boss, i) => (
-          <div key={i} className="boss-card">
+          <div key={i} className={`boss-card ${boss.alive ? 'alive' : 'dead'}`}>
             <div className="boss-status">
-              {boss.alive ? <FaCheck color="green" /> : <FaTimes color="red" />}
+              {boss.alive ? <FaCheck color="green" size={20} /> : <FaTimes color="red" size={20} />}
             </div>
             <div className="boss-info">
               <h4>{safeString(boss.name || "Boss")}</h4>
-              <p>{boss.alive ? "Vivo" : "Morto"}</p>
+              <p className={`boss-state ${boss.alive ? 'alive' : 'dead'}`}>
+                {boss.alive ? "Vivo" : "Morto"}
+              </p>
             </div>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+function SiegeInfo({ siege }) {
+  if (!siege) return null;
+
+  return (
+    <div className="siege-info">
+      <div className="siege-header">
+        <FaCrown size={24} color="#e6c77d" />
+        <h3>Informações do Siege</h3>
+      </div>
+      <div className="siege-card">
+        <div className="siege-status">
+          <div className="siege-item">
+            <span className="siege-label">Status:</span>
+            <span className={`siege-value ${siege.active ? 'active' : 'inactive'}`}>
+              {siege.active ? "Ativo" : "Inativo"}
+            </span>
+          </div>
+          <div className="siege-item">
+            <span className="siege-label">Castle:</span>
+            <span className="siege-value">{safeString(siege.castle || "Nenhum")}</span>
+          </div>
+          <div className="siege-item">
+            <span className="siege-label">Guild:</span>
+            <span className="siege-value">{safeString(siege.guild || "Nenhuma")}</span>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -124,9 +195,9 @@ export default function ServerSection({ token }) {
         } else {
           console.warn("Erro ao buscar status:", statusRes.status);
           setStatus({ 
-            online: true, 
-            players: 150, 
-            uptime: "24h", 
+            online: false, 
+            players: 0, 
+            uptime: 0, 
             version: "1.0.0" 
           });
         }
@@ -164,8 +235,8 @@ export default function ServerSection({ token }) {
           console.warn("Erro ao buscar siege:", siegeRes.status);
           setSiege({ 
             active: false, 
-            castle: "Castle 1", 
-            guild: "Nenhuma" 
+            castle: "", 
+            guild: "" 
           });
         }
 
@@ -173,77 +244,79 @@ export default function ServerSection({ token }) {
         console.error("Erro ao buscar dados do servidor:", e);
         setError("Erro ao buscar dados do servidor");
         // Dados padrão
-        setStatus({ online: true, players: 150, uptime: "24h", version: "1.0.0" });
+        setStatus({ online: false, players: 0, uptime: 0, version: "1.0.0" });
         setRankings({ level: [], pvp: [], guild: [] });
         setBosses([{ name: "Boss 1", alive: true }, { name: "Boss 2", alive: false }]);
-        setSiege({ active: false, castle: "Castle 1", guild: "Nenhuma" });
+        setSiege({ active: false, castle: "", guild: "" });
       }
       setLoading(false);
     }
     fetchData();
   }, [token]);
 
-  if (loading) return <div>Carregando dados do servidor...</div>;
+  if (loading) return <div className="loading">Carregando dados do servidor...</div>;
 
   return (
     <div className="server-section">
+      {/* Status Cards */}
       <div className="server-status-cards">
         <StatusCard
           title="Status"
           value={status?.online ? "Online" : "Offline"}
           icon={<FaServer size={24} />}
           color={status?.online ? "#28a745" : "#dc3545"}
+          subtitle={status?.online ? "Servidor funcionando" : "Servidor indisponível"}
         />
         <StatusCard
           title="Jogadores"
           value={status?.players || "0"}
           icon={<FaUsers size={24} />}
           color="#17a2b8"
+          subtitle="jogadores online"
         />
         <StatusCard
           title="Uptime"
-          value={status?.uptime || "0h"}
-          icon={<FaCheck size={24} />}
+          value={formatUptime(status?.uptime)}
+          icon={<FaClock size={24} />}
           color="#ffc107"
+          subtitle="tempo ativo"
         />
         <StatusCard
           title="Versão"
           value={status?.version || "1.0.0"}
-          icon={<FaServer size={24} />}
+          icon={<FaCode size={24} />}
           color="#6c757d"
+          subtitle="versão atual"
         />
       </div>
 
+      {/* Rankings */}
       <div className="server-rankings">
         <RankingTable
           title="Ranking de Level"
           data={rankings.level || []}
           icon={<FaTrophy />}
+          emptyMessage="Nenhum ranking de level disponível"
         />
         <RankingTable
           title="Ranking PvP"
           data={rankings.pvp || []}
           icon={<FaSkull />}
+          emptyMessage="Nenhum ranking PvP disponível"
         />
         <RankingTable
           title="Ranking de Guild"
           data={rankings.guild || []}
           icon={<FaFlag />}
+          emptyMessage="Nenhum ranking de guild disponível"
         />
       </div>
 
+      {/* Bosses */}
       <BossGrid bosses={bosses} />
 
-      {siege && (
-        <div className="siege-info">
-          <h3>Informações do Siege</h3>
-          <div className="siege-card">
-            <p><strong>Ativo:</strong> {siege.active ? "Sim" : "Não"}</p>
-            <p><strong>Castle:</strong> {safeString(siege.castle)}</p>
-            <p><strong>Guild:</strong> {safeString(siege.guild)}</p>
-          </div>
-        </div>
-      )}
+      {/* Siege */}
+      <SiegeInfo siege={siege} />
 
       {error && <div className="error">{error}</div>}
     </div>
