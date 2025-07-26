@@ -71,8 +71,18 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [pushError, setPushError] = useState("");
   const [activeSection, setActiveSection] = useState(SECTIONS[0].key);
+  const [sidebarExpanded, setSidebarExpanded] = useState(() => {
+    const saved = localStorage.getItem('sidebar_expanded');
+    return saved !== null ? JSON.parse(saved) : true;
+  });
 
   console.log("Estado inicial:", { token: !!token, activeSection });
+
+  const toggleSidebar = () => {
+    const newState = !sidebarExpanded;
+    setSidebarExpanded(newState);
+    localStorage.setItem('sidebar_expanded', JSON.stringify(newState));
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -181,9 +191,14 @@ export default function App() {
   return (
     <ErrorBoundary>
       <div className="pwa-root">
-        <aside className="sidebar">
-          <div className="sidebar-logo">
-            <img src="/static/pwa/icons/logo.png" alt="Logo" className="logo" />
+        <aside className={`sidebar ${sidebarExpanded ? 'expanded' : 'collapsed'}`}>
+          <div className="sidebar-header">
+            <div className="sidebar-logo">
+              <img src="/static/pwa/icons/logo.png" alt="Logo" className="logo" />
+            </div>
+            <button className="sidebar-toggle" onClick={toggleSidebar} title={sidebarExpanded ? "Recolher menu" : "Expandir menu"}>
+              <span className="toggle-icon">{sidebarExpanded ? '◀' : '▶'}</span>
+            </button>
           </div>
           <nav className="sidebar-menu">
             {SECTIONS.map(section => (
@@ -199,11 +214,11 @@ export default function App() {
                 <span className="sidebar-label">{section.label}</span>
               </button>
             ))}
+            <button className="sidebar-btn sidebar-logout" onClick={handleLogout} title="Sair">
+              <span className="sidebar-icon"><FaSignOutAlt /></span>
+              <span className="sidebar-label">Sair</span>
+            </button>
           </nav>
-          <button className="sidebar-btn sidebar-logout" onClick={handleLogout} title="Sair">
-            <span className="sidebar-icon"><FaSignOutAlt /></span>
-            <span className="sidebar-label">Sair</span>
-          </button>
         </aside>
         <main className="main-content">
           <div className="section-content">
