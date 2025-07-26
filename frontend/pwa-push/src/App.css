@@ -250,10 +250,61 @@ hr {
   border-right: 1.5px solid #e6c77d22;
   min-height: 100vh;
   z-index: 10;
+  position: relative;
+  transition: width 0.3s ease;
 }
-.sidebar-logo {
+
+.sidebar.collapsed {
+  width: 60px;
+  padding: 18px 0 12px 0;
+}
+
+.sidebar-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   margin-bottom: 32px;
+  width: 100%;
 }
+
+.sidebar-toggle {
+  background: rgba(230, 199, 125, 0.1);
+  border: 1px solid #e6c77d44;
+  color: #e6c77d;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+}
+
+.sidebar-toggle:hover {
+  background: rgba(230, 199, 125, 0.2);
+  border-color: #e6c77d;
+  transform: scale(1.1);
+}
+
+.toggle-icon {
+  transition: transform 0.3s ease;
+}
+
+.sidebar.collapsed .toggle-icon {
+  transform: rotate(180deg);
+}
+
+.sidebar-logo {
+  margin-bottom: 0;
+}
+
+.sidebar.collapsed .sidebar-logo {
+  margin-bottom: 0;
+}
+
 .sidebar-menu {
   flex: 1;
   width: 100%;
@@ -261,6 +312,7 @@ hr {
   flex-direction: column;
   gap: 6px;
 }
+
 .sidebar-btn {
   background: none;
   border: none;
@@ -277,27 +329,52 @@ hr {
   transition: background 0.18s, color 0.18s;
   outline: none;
   gap: 12px;
+  white-space: nowrap;
+  overflow: hidden;
 }
+
+.sidebar.collapsed .sidebar-btn {
+  padding: 10px 10px;
+  justify-content: center;
+  gap: 0;
+}
+
 .sidebar-btn.active, .sidebar-btn:hover {
   background: linear-gradient(90deg, #e6c77d22 0%, #e6c77d11 100%);
   color: #fff;
 }
+
 .sidebar-icon {
   font-size: 1.3em;
   margin-right: 8px;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
+
+.sidebar.collapsed .sidebar-icon {
+  margin-right: 0;
+}
+
 .sidebar-label {
   flex: 1;
+  transition: opacity 0.3s ease;
 }
+
+.sidebar.collapsed .sidebar-label {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
 .sidebar-logout {
-  margin-top: 18px;
-  width: 80%;
-  align-self: center;
+  width: 100%;
+  align-self: stretch;
   color: #dc3545;
   border: 1px solid #dc354544;
   background: rgba(220, 53, 69, 0.1);
+  margin-top: 0;
+  border-radius: 8px 20px 20px 8px;
 }
 
 .sidebar-logout:hover {
@@ -313,6 +390,7 @@ hr {
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
+  transition: margin-left 0.3s ease;
 }
 .section-content {
   width: 100%;
@@ -2524,228 +2602,9 @@ hr {
   font-size: 0.98rem;
 }
 
-@media (max-width: 900px) {
-  .sidebar {
-    width: 60px;
-    padding: 18px 0 12px 0;
-  }
-  .sidebar-label {
-    display: none;
-  }
-  .sidebar-btn {
-    padding: 10px 10px;
-    font-size: 1.1rem;
-    justify-content: center;
-  }
-  .sidebar-logo .logo {
-    width: 40px;
-    height: 40px;
-  }
-  .server-status-row {
-    flex-direction: column;
-    gap: 12px;
-  }
-  .server-rankings-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  .boss-grid-list {
-    flex-direction: column;
-    gap: 8px;
-  }
-  .search-form {
-    flex-direction: column;
-  }
-  .character-grid, .item-grid {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-  .game-search-form {
-    flex-direction: column;
-  }
-  .clan-details {
-    grid-template-columns: 1fr;
-    gap: 6px;
-  }
-  .auction-header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .auction-grid {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-  .health-details {
-    grid-template-columns: 1fr;
-    gap: 6px;
-  }
-  .endpoint-stats, .query-stats {
-    flex-direction: column;
-    gap: 4px;
-  }
-  .categories-grid {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 8px;
-  }
-  .endpoint-config-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  .endpoint-status {
-    align-self: flex-end;
-  }
-  .push-header {
-    flex-direction: column;
-    text-align: center;
-    gap: 12px;
-  }
-  .push-permission-status {
-    flex-direction: column;
-    text-align: center;
-    gap: 12px;
-  }
-  .push-subscribed-status {
-    flex-direction: column;
-    text-align: center;
-    gap: 8px;
-  }
-  .sidebar-logout {
-    color: #dc3545;
-    border: 1px solid #dc354544;
-    background: rgba(220, 53, 69, 0.1);
-  }
-  
-  .sidebar-logout:hover {
-    background: rgba(220, 53, 69, 0.2);
-    color: #fff;
-    border-color: #dc3545;
-  }
-}
 
-@media (max-width: 600px) {
-  .pwa-root {
-    flex-direction: column;
-  }
-  .sidebar {
-    flex-direction: row;
-    width: 100vw;
-    min-height: unset;
-    height: 56px;
-    padding: 0 0 0 0;
-    border-right: none;
-    border-bottom: 1.5px solid #e6c77d22;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-    position: sticky;
-    top: 0;
-    z-index: 20;
-  }
-  .sidebar-logo {
-    margin: 0 10px 0 8px;
-    display: flex;
-    align-items: center;
-  }
-  .sidebar-menu {
-    flex-direction: row;
-    gap: 0;
-    width: 100%;
-    justify-content: space-around;
-    align-items: center;
-  }
-  .sidebar-btn {
-    border-radius: 8px;
-    padding: 8px 6px;
-    font-size: 1.1rem;
-    margin: 0 2px;
-    justify-content: center;
-  }
-  .sidebar-label {
-    display: none;
-  }
-  .sidebar-logout {
-    margin: 0 8px 0 0;
-    width: auto;
-    font-size: 0.98rem;
-    padding: 7px 12px;
-    color: #dc3545;
-    border: 1px solid #dc354544;
-    background: rgba(220, 53, 69, 0.1);
-  }
-  
-  .sidebar-logout:hover {
-    background: rgba(220, 53, 69, 0.2);
-    color: #fff;
-    border-color: #dc3545;
-  }
-  .main-content {
-    padding: 12px 0 0 0;
-  }
-  .section-content {
-    padding: 0 4vw 24px 4vw;
-    max-width: 100vw;
-  }
-  html, body {
-    width: 100vw;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    background: linear-gradient(135deg, #2d261a 0%, #1a1812 100%);
-  }
-  .pwa-container {
-    max-width: 100vw;
-    width: 100vw;
-    min-height: 100vh;
-    padding: 8vw 4vw 6vw 4vw;
-    margin: 0;
-    border-radius: 0;
-    box-shadow: none;
-    background: rgba(26, 24, 18, 0.7);
-    backdrop-filter: blur(5px);
-    justify-content: center;
-  }
-  
-  .login-content {
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  .login-info {
-    align-items: center;
-    text-align: center;
-    gap: 8px;
-  }
-  .logo {
-    width: 64px;
-    height: 64px;
-    margin-bottom: 16px;
-  }
-  h1 {
-    font-size: 1.4rem;
-    margin-bottom: 12px;
-  }
-  .install-tip {
-    font-size: 1rem;
-    margin-top: 16px;
-  }
-  .input, .btn-primary, .btn-secondary {
-    max-width: 100%;
-    min-width: auto;
-    font-size: 1rem;
-    padding: 14px 16px;
-    margin-bottom: 12px;
-    border-radius: 12px;
-    display: block;
-    text-align: left;
-  }
-  .input::placeholder {
-    text-align: center;
-  }
-  .success, .error {
-    font-size: 0.95rem;
-    margin-bottom: 8px;
-  }
-}
+
+
 
 @media (min-width: 900px) and (max-width: 1199px) {
   .pwa-container {
