@@ -8,7 +8,7 @@ import GameSection from "./GameSection";
 import MetricsSection from "./MetricsSection";
 import AdminSection from "./AdminSection";
 import PushSection from "./PushSection";
-import { FaUser, FaServer, FaSearch, FaGamepad, FaChartBar, FaCogs, FaBell } from "react-icons/fa";
+import { FaUser, FaServer, FaSearch, FaGamepad, FaChartBar, FaCogs, FaBell, FaSignOutAlt } from "react-icons/fa";
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -137,31 +137,40 @@ export default function App() {
     return (
       <ErrorBoundary>
         <div className="pwa-container">
-          <img src="/static/pwa/icons/logo.png" alt="Logo" className="logo" />
-          <h1>Login</h1>
-          <form onSubmit={handleLogin}>
-            <input
-              type="text"
-              placeholder="Usuário"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
-              className="input"
-              autoFocus
-              required
-            />
-            <input
-              type="password"
-              placeholder="Senha"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              className="input"
-              required
-            />
-            <button className="btn-primary" type="submit" disabled={loading}>
-              {loading ? "Entrando..." : "Entrar"}
-            </button>
-          </form>
-          {loginError && <p className="error">{loginError}</p>}
+          <div className="login-content">
+            <div className="login-info">
+              <img src="/static/pwa/icons/logo.png" alt="Logo" className="logo" />
+              <h1>Login</h1>
+              <p className="install-tip">
+                Acesse sua conta para gerenciar notificações e configurações do sistema.
+              </p>
+            </div>
+            <div className="login-form">
+              <form onSubmit={handleLogin}>
+                <input
+                  type="text"
+                  placeholder="Usuário"
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
+                  className="input"
+                  autoFocus
+                  required
+                />
+                <input
+                  type="password"
+                  placeholder="Senha"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  className="input"
+                  required
+                />
+                <button className="btn-primary" type="submit" disabled={loading}>
+                  {loading ? "Entrando..." : "Entrar"}
+                </button>
+              </form>
+              {loginError && <p className="error">{loginError}</p>}
+            </div>
+          </div>
         </div>
       </ErrorBoundary>
     );
@@ -191,8 +200,9 @@ export default function App() {
               </button>
             ))}
           </nav>
-          <button className="btn-secondary sidebar-logout" onClick={handleLogout}>
-            Sair
+          <button className="sidebar-btn sidebar-logout" onClick={handleLogout} title="Sair">
+            <span className="sidebar-icon"><FaSignOutAlt /></span>
+            <span className="sidebar-label">Sair</span>
           </button>
         </aside>
         <main className="main-content">

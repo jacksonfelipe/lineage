@@ -225,7 +225,7 @@ export default function ServerSection({ token }) {
     olympiad: [], 
     olympiadHeroes: [] 
   });
-  const [bosses, setBosses] = useState({ grand: [], raid: [] });
+  const [bosses, setBosses] = useState({ grand: [] });
   const [siege, setSiege] = useState([]);
   const [error, setError] = useState("");
 
@@ -267,9 +267,6 @@ export default function ServerSection({ token }) {
         const grandBossRes = await fetch("/api/v1/server/grandboss-status/", { 
           headers: { Authorization: `Bearer ${token}` } 
         });
-        const raidBossRes = await fetch("/api/v1/server/raidboss-status/", { 
-          headers: { Authorization: `Bearer ${token}` } 
-        });
         const siegeRes = await fetch("/api/v1/server/siege/", { 
           headers: { Authorization: `Bearer ${token}` } 
         });
@@ -280,7 +277,7 @@ export default function ServerSection({ token }) {
           console.log("Status data:", statusData);
           setStatus(statusData);
         } else {
-          console.warn("Erro ao buscar status:", statusRes.status);
+          console.log("Status API não disponível:", statusRes.status);
           setStatus({ 
             online: false, 
             players: 0, 
@@ -295,7 +292,7 @@ export default function ServerSection({ token }) {
           console.log("Top level data:", topLevelData);
           setRankings(prev => ({ ...prev, level: topLevelData.results || topLevelData }));
         } else {
-          console.warn("Erro ao buscar top level:", topLevelRes.status);
+          console.log("Top level API não disponível:", topLevelRes.status);
           setRankings(prev => ({ ...prev, level: [] }));
         }
 
@@ -304,7 +301,7 @@ export default function ServerSection({ token }) {
           console.log("Top PvP data:", topPvpData);
           setRankings(prev => ({ ...prev, pvp: topPvpData.results || topPvpData }));
         } else {
-          console.warn("Erro ao buscar top PvP:", topPvpRes.status);
+          console.log("Top PvP API não disponível:", topPvpRes.status);
           setRankings(prev => ({ ...prev, pvp: [] }));
         }
 
@@ -313,7 +310,7 @@ export default function ServerSection({ token }) {
           console.log("Top PK data:", topPkData);
           setRankings(prev => ({ ...prev, pk: topPkData.results || topPkData }));
         } else {
-          console.warn("Erro ao buscar top PK:", topPkRes.status);
+          console.log("Top PK API não disponível:", topPkRes.status);
           setRankings(prev => ({ ...prev, pk: [] }));
         }
 
@@ -322,7 +319,7 @@ export default function ServerSection({ token }) {
           console.log("Top Rich data:", topRichData);
           setRankings(prev => ({ ...prev, rich: topRichData.results || topRichData }));
         } else {
-          console.warn("Erro ao buscar top Rich:", topRichRes.status);
+          console.log("Top Rich API não disponível:", topRichRes.status);
           setRankings(prev => ({ ...prev, rich: [] }));
         }
 
@@ -331,7 +328,7 @@ export default function ServerSection({ token }) {
           console.log("Top Online data:", topOnlineData);
           setRankings(prev => ({ ...prev, online: topOnlineData.results || topOnlineData }));
         } else {
-          console.warn("Erro ao buscar top Online:", topOnlineRes.status);
+          console.log("Top Online API não disponível:", topOnlineRes.status);
           setRankings(prev => ({ ...prev, online: [] }));
         }
 
@@ -340,7 +337,7 @@ export default function ServerSection({ token }) {
           console.log("Top clan data:", topClanData);
           setRankings(prev => ({ ...prev, guild: topClanData.results || topClanData }));
         } else {
-          console.warn("Erro ao buscar top clan:", topClanRes.status);
+          console.log("Top clan API não disponível:", topClanRes.status);
           setRankings(prev => ({ ...prev, guild: [] }));
         }
 
@@ -350,7 +347,7 @@ export default function ServerSection({ token }) {
           console.log("Olympiad ranking data:", olympiadRankingData);
           setRankings(prev => ({ ...prev, olympiad: olympiadRankingData.results || olympiadRankingData }));
         } else {
-          console.warn("Erro ao buscar ranking da Olimpíada:", olympiadRankingRes.status);
+          console.log("Olympiad ranking API não disponível:", olympiadRankingRes.status);
           setRankings(prev => ({ ...prev, olympiad: [] }));
         }
 
@@ -359,45 +356,48 @@ export default function ServerSection({ token }) {
           console.log("Olympiad heroes data:", olympiadHeroesData);
           setRankings(prev => ({ ...prev, olympiadHeroes: olympiadHeroesData.results || olympiadHeroesData }));
         } else {
-          console.warn("Erro ao buscar heróis da Olimpíada:", olympiadHeroesRes.status);
+          console.log("Olympiad heroes API não disponível:", olympiadHeroesRes.status);
           setRankings(prev => ({ ...prev, olympiadHeroes: [] }));
         }
 
         // Buscar status dos bosses
-        if (grandBossRes.ok) {
-          const grandBossData = await grandBossRes.json();
-          console.log("Grand boss data:", grandBossData);
-          setBosses(prev => ({ ...prev, grand: grandBossData.results || grandBossData }));
-        } else {
-          console.warn("Erro ao buscar grand boss:", grandBossRes.status);
+        try {
+          if (grandBossRes.ok) {
+            const grandBossData = await grandBossRes.json();
+            console.log("Grand boss data:", grandBossData);
+            setBosses(prev => ({ ...prev, grand: grandBossData.results || grandBossData }));
+          } else {
+            console.log("Grand boss API não disponível:", grandBossRes.status);
+            setBosses(prev => ({ ...prev, grand: [] }));
+          }
+        } catch (error) {
+          console.log("Erro ao processar grand boss:", error.message);
           setBosses(prev => ({ ...prev, grand: [] }));
         }
 
-        if (raidBossRes.ok) {
-          const raidBossData = await raidBossRes.json();
-          console.log("Raid boss data:", raidBossData);
-          setBosses(prev => ({ ...prev, raid: raidBossData.results || raidBossData }));
-        } else {
-          console.warn("Erro ao buscar raid boss:", raidBossRes.status);
-          setBosses(prev => ({ ...prev, raid: [] }));
-        }
 
-        if (siegeRes.ok) {
-          const siegeData = await siegeRes.json();
-          console.log("Siege data:", siegeData);
-          setSiege(siegeData.results || siegeData);
-        } else {
-          console.warn("Erro ao buscar siege:", siegeRes.status);
+
+        try {
+          if (siegeRes.ok) {
+            const siegeData = await siegeRes.json();
+            console.log("Siege data:", siegeData);
+            setSiege(siegeData.results || siegeData);
+          } else {
+            console.log("Siege API não disponível:", siegeRes.status);
+            setSiege([]);
+          }
+        } catch (error) {
+          console.log("Erro ao processar siege:", error.message);
           setSiege([]);
         }
 
       } catch (e) {
-        console.error("Erro ao buscar dados do servidor:", e);
+        console.log("Erro geral ao buscar dados do servidor:", e.message);
         setError("Erro ao buscar dados do servidor");
         // Dados padrão
         setStatus({ online: false, players: 0, uptime: 0, version: "1.0.0" });
         setRankings({ level: [], pvp: [], guild: [], pk: [], rich: [], online: [], olympiad: [], olympiadHeroes: [] });
-        setBosses({ grand: [], raid: [] });
+        setBosses({ grand: [] });
         setSiege([]);
       }
       setLoading(false);
@@ -410,35 +410,38 @@ export default function ServerSection({ token }) {
   return (
     <div className="server-section">
       {/* Status Cards */}
-      <div className="server-status-cards">
-        <StatusCard
-          title="Status"
-          value={status?.online ? "Online" : "Offline"}
-          icon={<FaServer size={24} />}
-          color={status?.online ? "#28a745" : "#dc3545"}
-          subtitle={status?.online ? "Servidor funcionando" : "Servidor indisponível"}
-        />
-        <StatusCard
-          title="Jogadores"
-          value={status?.players || "0"}
-          icon={<FaUsers size={24} />}
-          color="#17a2b8"
-          subtitle="jogadores online"
-        />
-        <StatusCard
-          title="Uptime"
-          value={formatUptime(status?.uptime)}
-          icon={<FaClock size={24} />}
-          color="#ffc107"
-          subtitle="tempo ativo"
-        />
-        <StatusCard
-          title="Versão"
-          value={status?.version || "1.0.0"}
-          icon={<FaCode size={24} />}
-          color="#6c757d"
-          subtitle="versão atual"
-        />
+      <div className="server-status">
+        <h2>Status do Servidor</h2>
+        <div className="server-status-grid">
+          <StatusCard
+            title="Status"
+            value={status?.online ? "Online" : "Offline"}
+            icon={<FaServer size={24} />}
+            color={status?.online ? "#28a745" : "#dc3545"}
+            subtitle={status?.online ? "Servidor funcionando" : "Servidor indisponível"}
+          />
+          <StatusCard
+            title="Jogadores"
+            value={status?.players || "0"}
+            icon={<FaUsers size={24} />}
+            color="#17a2b8"
+            subtitle="jogadores online"
+          />
+          <StatusCard
+            title="Uptime"
+            value={formatUptime(status?.uptime)}
+            icon={<FaClock size={24} />}
+            color="#ffc107"
+            subtitle="tempo ativo"
+          />
+          <StatusCard
+            title="Versão"
+            value={status?.version || "1.0.0"}
+            icon={<FaCode size={24} />}
+            color="#6c757d"
+            subtitle="versão atual"
+          />
+        </div>
       </div>
 
       {/* Rankings */}
@@ -520,29 +523,7 @@ export default function ServerSection({ token }) {
               </div>
             </div>
           ))}
-          {(bosses.raid || []).map((boss, index) => (
-            <div key={`raid-${index}`} className="boss-card raid-boss">
-              <div className="boss-header">
-                <FaSkull size={16} color={boss.is_alive ? "#28a745" : "#dc3545"} />
-                <h4>{safeString(boss.boss_name)} (Raid)</h4>
-              </div>
-              <div className="boss-status">
-                <span className={`status ${boss.is_alive ? 'alive' : 'dead'}`}>
-                  {boss.is_alive ? 'Vivo' : 'Morto'}
-                </span>
-                {boss.respawn_time && (
-                  <div className="respawn-time">
-                    Respawn: {formatDate(boss.respawn_time)}
-                  </div>
-                )}
-                {boss.location && (
-                  <div className="boss-location">
-                    Local: {safeString(boss.location)}
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
+
         </div>
       </div>
 
