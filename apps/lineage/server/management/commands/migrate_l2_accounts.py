@@ -50,16 +50,17 @@ class Command(BaseCommand):
         try:
             LineageAccount = get_query_class("LineageAccount")
             
-            # Busca todas as contas com email não nulo (tenta múltiplas colunas)
+            # Busca todas as contas com email válido na coluna l2email
             sql = """
                 SELECT login, 
-                       COALESCE(email, l2email, e_mail) as email,
+                       l2email as email,
                        accessLevel, 
                        created_time
                 FROM accounts 
-                WHERE (email IS NOT NULL AND email != '' AND email != 'NULL' AND LENGTH(TRIM(email)) > 0)
-                   OR (l2email IS NOT NULL AND l2email != '' AND l2email != 'NULL' AND LENGTH(TRIM(l2email)) > 0)
-                   OR (e_mail IS NOT NULL AND e_mail != '' AND e_mail != 'NULL' AND LENGTH(TRIM(e_mail)) > 0)
+                WHERE l2email IS NOT NULL 
+                AND l2email != '' 
+                AND l2email != 'NULL' 
+                AND LENGTH(TRIM(l2email)) > 0
                 ORDER BY created_time ASC
             """
             
