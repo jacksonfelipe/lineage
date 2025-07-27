@@ -102,7 +102,7 @@ class Command(BaseCommand):
             )
             
             # Define o nível de acesso baseado no access_level do L2
-            if access_level and int(access_level) > 0:
+            if access_level is not None and int(access_level) > 0:
                 user.is_staff = True
                 if int(access_level) >= 100:  # GM ou superior
                     user.is_superuser = True
@@ -211,6 +211,14 @@ class Command(BaseCommand):
                     access_level = account.get('access_level', 0)
                     created_time = account.get('created_time')
 
+                    # Verifica se o username já existe no PDL
+                    if User.objects.filter(username=login).exists():
+                        self.stdout.write(
+                            self.style.WARNING(f'⚠️  Username {login} já existe no PDL - pulando')
+                        )
+                        stats['skipped'] += 1
+                        continue
+
                     # Verifica se o email já existe no PDL
                     original_email = email
                     if self.check_email_exists(email):
@@ -247,7 +255,7 @@ class Command(BaseCommand):
                             stats['created'] += 1
                             
                             # Log da senha (apenas para administradores)
-                            if int(access_level) > 0:
+                            if access_level and int(access_level) > 0:
                                 self.stdout.write(
                                     f'🔑 Senha para {login}: {password}'
                                 )
