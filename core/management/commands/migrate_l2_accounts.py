@@ -1,0 +1,234 @@
+import os
+import secrets
+import string
+from django.core.management.base import BaseCommand
+from django.contrib.auth import get_user_model
+from django.db import transaction
+from apps.lineage.server.database import LineageDB
+from utils.dynamic_import import get_query_class
+
+User = get_user_model()
+
+
+class Command(BaseCommand):
+    help = 'Migra contas do banco do L2 para o PDL seguindo regras específicas'
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--dry-run',
+            action='store_true',
+            help='Executa em modo de teste sem criar usuários',
+        )
+        parser.add_argument(
+            '--prefix',
+            type=str,
+            default='L2_',
+            help='Prefixo para emails duplicados (padrão: L2_)',
+        )
+        parser.add_argument(
+            '--password-length',
+            type=int,
+            default=64,
+            help='Comprimento da senha aleatória (padrão: 64)',
+        )
+        parser.add_argument(
+            '--batch-size',
+            type=int,
+            default=100,
+            help='Tamanho do lote para processamento (padrão: 100)',
+        )
+
+    def generate_random_password(self, length=64):
+        """Gera uma senha aleatória de 64 bits"""
+        alphabet = string.ascii_letters + string.digits + string.punctuation
+        # Remove caracteres que podem causar problemas em alguns sistemas
+        alphabet = alphabet.replace('"', '').replace("'", '').replace('\\', '').replace('`', '')
+        return ''.join(secrets.choice(alphabet) for _ in range(length))
+
+    def get_l2_accounts(self):
+        """Busca contas do L2 com email válido"""
+        try:
+            LineageAccount = get_query_class("LineageAccount")
+            
+            # Busca todas as contas com email não nulo
+            sql = """
+                SELECT login, email, accessLevel, created_time
+                FROM accounts 
+                WHERE email IS NOT NULL 
+                AND email != '' 
+                AND email != 'NULL'
+                ORDER BY created_time ASC
+            """
+            
+            accounts = LineageDB().select(sql)
+            return accounts
+        except Exception as e:
+            self.stderr.write(
+                self.style.ERROR(f'Erro ao buscar contas do L2: {e}')
+            )
+            return []
+
+    def check_email_exists(self, email):
+        """Verifica se o email já existe no PDL"""
+        return User.objects.filter(email=email).exists()
+
+    def create_pdl_user(self, login, email, password, access_level, created_time):
+        """Cria usuário no PDL"""
+        try:
+            # Verifica se o username já existe
+            if User.objects.filter(username=login).exists():
+                self.stdout.write(
+                    self.style.WARNING(f'Username {login} já existe no PDL - pulando')
+                )
+                return False, None
+
+            # Cria o usuário
+            user = User.objects.create_user(
+                username=login,
+                email=email,
+                password=password,
+                is_active=True,
+                is_email_verified=False,  # Não verificado por padrão
+                is_2fa_enabled=False,     # 2FA desabilitado por padrão
+            )
+            
+            # Define o nível de acesso baseado no access_level do L2
+            if access_level and int(access_level) > 0:
+                user.is_staff = True
+                if int(access_level) >= 100:  # GM ou superior
+                    user.is_superuser = True
+            
+            user.save()
+            
+            return True, user
+            
+        except Exception as e:
+            self.stderr.write(
+                self.style.ERROR(f'Erro ao criar usuário {login}: {e}')
+            )
+            return False, None
+
+    def handle(self, *args, **options):
+        dry_run = options['dry_run']
+        prefix = options['prefix']
+        password_length = options['password_length']
+        batch_size = options['batch_size']
+
+        self.stdout.write(
+            self.style.SUCCESS('🚀 Iniciando migração de contas L2 → PDL')
+        )
+        
+        if dry_run:
+            self.stdout.write(
+                self.style.WARNING('⚠️  MODO DE TESTE - Nenhum usuário será criado')
+            )
+
+        # Verifica conexão com o banco L2
+        if not LineageDB().is_connected():
+            self.stderr.write(
+                self.style.ERROR('❌ Não foi possível conectar ao banco do L2')
+            )
+            return
+
+        # Busca contas do L2
+        self.stdout.write('📋 Buscando contas do L2...')
+        l2_accounts = self.get_l2_accounts()
+        
+        if not l2_accounts:
+            self.stdout.write(
+                self.style.WARNING('⚠️  Nenhuma conta encontrada no L2')
+            )
+            return
+
+        self.stdout.write(
+            self.style.SUCCESS(f'✅ Encontradas {len(l2_accounts)} contas no L2')
+        )
+
+        # Estatísticas
+        stats = {
+            'total': len(l2_accounts),
+            'created': 0,
+            'skipped': 0,
+            'errors': 0,
+            'email_conflicts': 0,
+        }
+
+        # Processa as contas em lotes
+        for i in range(0, len(l2_accounts), batch_size):
+            batch = l2_accounts[i:i + batch_size]
+            
+            self.stdout.write(f'📦 Processando lote {i//batch_size + 1}/{(len(l2_accounts) + batch_size - 1)//batch_size}')
+            
+            with transaction.atomic():
+                for account in batch:
+                    login = account.get('login')
+                    email = account.get('email')
+                    access_level = account.get('accessLevel') or account.get('access_level', 0)
+                    created_time = account.get('created_time')
+                    
+                    if not login or not email:
+                        stats['skipped'] += 1
+                        continue
+
+                    # Verifica se o email já existe no PDL
+                    original_email = email
+                    if self.check_email_exists(email):
+                        # Adiciona prefixo para emails duplicados
+                        email = f"{prefix}{email}"
+                        stats['email_conflicts'] += 1
+                        
+                        if self.check_email_exists(email):
+                            # Se ainda existe com prefixo, pula
+                            self.stdout.write(
+                                self.style.WARNING(f'⚠️  Email duplicado mesmo com prefixo: {email}')
+                            )
+                            stats['skipped'] += 1
+                            continue
+
+                    # Gera senha aleatória
+                    password = self.generate_random_password(password_length)
+                    
+                    if dry_run:
+                        self.stdout.write(
+                            f'🔍 [TESTE] Criaria: {login} → {email} (access: {access_level})'
+                        )
+                        stats['created'] += 1
+                    else:
+                        # Cria o usuário no PDL
+                        success, user = self.create_pdl_user(
+                            login, email, password, access_level, created_time
+                        )
+                        
+                        if success:
+                            self.stdout.write(
+                                self.style.SUCCESS(f'✅ Criado: {login} → {email}')
+                            )
+                            stats['created'] += 1
+                            
+                            # Log da senha (apenas para administradores)
+                            if int(access_level) > 0:
+                                self.stdout.write(
+                                    f'🔑 Senha para {login}: {password}'
+                                )
+                        else:
+                            stats['errors'] += 1
+
+        # Relatório final
+        self.stdout.write('\n' + '='*60)
+        self.stdout.write(self.style.SUCCESS('📊 RELATÓRIO DE MIGRAÇÃO'))
+        self.stdout.write('='*60)
+        self.stdout.write(f'Total de contas processadas: {stats["total"]}')
+        self.stdout.write(f'Usuários criados: {stats["created"]}')
+        self.stdout.write(f'Pulados: {stats["skipped"]}')
+        self.stdout.write(f'Erros: {stats["errors"]}')
+        self.stdout.write(f'Conflitos de email resolvidos: {stats["email_conflicts"]}')
+        
+        if dry_run:
+            self.stdout.write('\n⚠️  MODO DE TESTE - Execute sem --dry-run para criar os usuários')
+        else:
+            self.stdout.write('\n✅ Migração concluída!')
+            self.stdout.write('\n📝 PRÓXIMOS PASSOS:')
+            self.stdout.write('1. Os usuários precisam definir suas próprias senhas')
+            self.stdout.write('2. Eles devem usar a senha do L2 para confirmar a veracidade da conta')
+            self.stdout.write('3. As contas não estão vinculadas (conforme solicitado)')
+            self.stdout.write('4. Considere enviar emails informativos aos usuários') 
