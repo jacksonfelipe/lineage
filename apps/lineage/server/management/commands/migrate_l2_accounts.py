@@ -227,10 +227,12 @@ class Command(BaseCommand):
             })
 
         # Processa as contas em lotes
+        self.stdout.write(f'🔄 Processando {len(processed_accounts)} contas em lotes de {batch_size}...')
+        
         for i in range(0, len(processed_accounts), batch_size):
             batch = processed_accounts[i:i + batch_size]
             
-            self.stdout.write(f'📦 Processando lote {i//batch_size + 1}/{(len(processed_accounts) + batch_size - 1)//batch_size}')
+            self.stdout.write(f'📦 Processando lote {i//batch_size + 1}/{(len(processed_accounts) + batch_size - 1)//batch_size} ({len(batch)} contas)')
             
             for account in batch:
                 login = account.get('login')
@@ -288,6 +290,9 @@ class Command(BaseCommand):
                                     f'🔑 Senha para {login}: {password}'
                                 )
                         else:
+                            self.stdout.write(
+                                self.style.ERROR(f'❌ Erro ao criar: {login} → {email}')
+                            )
                             stats['errors'] += 1
 
         # Relatório final
