@@ -57,9 +57,9 @@ class Command(BaseCommand):
                        accessLevel, 
                        created_time
                 FROM accounts 
-                WHERE (email IS NOT NULL AND email != '' AND email != 'NULL')
-                   OR (l2email IS NOT NULL AND l2email != '' AND l2email != 'NULL')
-                   OR (e_mail IS NOT NULL AND e_mail != '' AND e_mail != 'NULL')
+                WHERE (email IS NOT NULL AND email != '' AND email != 'NULL' AND LENGTH(TRIM(email)) > 0)
+                   OR (l2email IS NOT NULL AND l2email != '' AND l2email != 'NULL' AND LENGTH(TRIM(l2email)) > 0)
+                   OR (e_mail IS NOT NULL AND e_mail != '' AND e_mail != 'NULL' AND LENGTH(TRIM(e_mail)) > 0)
                 ORDER BY created_time ASC
             """
             
