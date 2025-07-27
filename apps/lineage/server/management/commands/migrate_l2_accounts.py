@@ -50,6 +50,24 @@ class Command(BaseCommand):
         alphabet = string.ascii_uppercase + string.digits
         return ''.join(secrets.choice(alphabet) for _ in range(length))
 
+    def validate_and_fix_username(self, login):
+        """Valida e corrige username se necessário"""
+        if not login:
+            return None
+            
+        # Remove caracteres inválidos e espaços
+        login = ''.join(c for c in login if c.isalnum() or c in '_-')
+        
+        # Trunca se for muito longo (máximo 16 caracteres)
+        if len(login) > 16:
+            login = login[:16]
+            
+        # Garante que não está vazio
+        if not login:
+            return None
+            
+        return login
+
     def get_l2_accounts(self):
         """Busca contas do L2 com email válido"""
         try:
@@ -177,6 +195,16 @@ class Command(BaseCommand):
                 stats['skipped'] += 1
                 continue
 
+            # Valida e corrige username
+            original_login = login
+            login = self.validate_and_fix_username(login)
+            if not login:
+                self.stdout.write(
+                    self.style.WARNING(f'⚠️  Username inválido: {original_login} - pulando')
+                )
+                stats['skipped'] += 1
+                continue
+
             # Conta ocorrências de cada email
             if email in email_count:
                 email_count[email] += 1
@@ -204,35 +232,34 @@ class Command(BaseCommand):
             
             self.stdout.write(f'📦 Processando lote {i//batch_size + 1}/{(len(processed_accounts) + batch_size - 1)//batch_size}')
             
-            with transaction.atomic():
-                for account in batch:
-                    login = account.get('login')
-                    email = account.get('email')
-                    access_level = account.get('access_level', 0)
-                    created_time = account.get('created_time')
+            for account in batch:
+                login = account.get('login')
+                email = account.get('email')
+                access_level = account.get('access_level', 0)
+                created_time = account.get('created_time')
 
-                    # Verifica se o username já existe no PDL
-                    if User.objects.filter(username=login).exists():
+                # Verifica se o username já existe no PDL
+                if User.objects.filter(username=login).exists():
+                    self.stdout.write(
+                        self.style.WARNING(f'⚠️  Username {login} já existe no PDL - pulando')
+                    )
+                    stats['skipped'] += 1
+                    continue
+
+                # Verifica se o email já existe no PDL
+                original_email = email
+                if self.check_email_exists(email):
+                    # Adiciona prefixo para emails duplicados
+                    email = f"{prefix}{email}"
+                    stats['email_conflicts'] += 1
+                    
+                    if self.check_email_exists(email):
+                        # Se ainda existe com prefixo, pula
                         self.stdout.write(
-                            self.style.WARNING(f'⚠️  Username {login} já existe no PDL - pulando')
+                            self.style.WARNING(f'⚠️  Email duplicado mesmo com prefixo: {email}')
                         )
                         stats['skipped'] += 1
                         continue
-
-                    # Verifica se o email já existe no PDL
-                    original_email = email
-                    if self.check_email_exists(email):
-                        # Adiciona prefixo para emails duplicados
-                        email = f"{prefix}{email}"
-                        stats['email_conflicts'] += 1
-                        
-                        if self.check_email_exists(email):
-                            # Se ainda existe com prefixo, pula
-                            self.stdout.write(
-                                self.style.WARNING(f'⚠️  Email duplicado mesmo com prefixo: {email}')
-                            )
-                            stats['skipped'] += 1
-                            continue
 
                     # Gera senha aleatória
                     password = self.generate_random_password(password_length)
@@ -243,10 +270,11 @@ class Command(BaseCommand):
                         )
                         stats['created'] += 1
                     else:
-                        # Cria o usuário no PDL
-                        success, user = self.create_pdl_user(
-                            login, email, password, access_level, created_time
-                        )
+                        # Cria o usuário no PDL com transação
+                        with transaction.atomic():
+                            success, user = self.create_pdl_user(
+                                login, email, password, access_level, created_time
+                            )
                         
                         if success:
                             self.stdout.write(
