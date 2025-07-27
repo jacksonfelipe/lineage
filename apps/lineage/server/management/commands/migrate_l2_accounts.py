@@ -263,37 +263,37 @@ class Command(BaseCommand):
                         stats['skipped'] += 1
                         continue
 
-                    # Gera senha aleatória
-                    password = self.generate_random_password(password_length)
+                # Gera senha aleatória
+                password = self.generate_random_password(password_length)
+                
+                if dry_run:
+                    self.stdout.write(
+                        f'🔍 [TESTE] Criaria: {login} → {email} (access: {access_level})'
+                    )
+                    stats['created'] += 1
+                else:
+                    # Cria o usuário no PDL com transação
+                    with transaction.atomic():
+                        success, user = self.create_pdl_user(
+                            login, email, password, access_level, created_time
+                        )
                     
-                    if dry_run:
+                    if success:
                         self.stdout.write(
-                            f'🔍 [TESTE] Criaria: {login} → {email} (access: {access_level})'
+                            self.style.SUCCESS(f'✅ Criado: {login} → {email}')
                         )
                         stats['created'] += 1
-                    else:
-                        # Cria o usuário no PDL com transação
-                        with transaction.atomic():
-                            success, user = self.create_pdl_user(
-                                login, email, password, access_level, created_time
-                            )
                         
-                        if success:
+                        # Log da senha (apenas para administradores)
+                        if access_level and int(access_level) > 0:
                             self.stdout.write(
-                                self.style.SUCCESS(f'✅ Criado: {login} → {email}')
+                                f'🔑 Senha para {login}: {password}'
                             )
-                            stats['created'] += 1
-                            
-                            # Log da senha (apenas para administradores)
-                            if access_level and int(access_level) > 0:
-                                self.stdout.write(
-                                    f'🔑 Senha para {login}: {password}'
-                                )
-                        else:
-                            self.stdout.write(
-                                self.style.ERROR(f'❌ Erro ao criar: {login} → {email}')
-                            )
-                            stats['errors'] += 1
+                    else:
+                        self.stdout.write(
+                            self.style.ERROR(f'❌ Erro ao criar: {login} → {email}')
+                        )
+                        stats['errors'] += 1
 
         # Relatório final
         self.stdout.write('\n' + '='*60)
