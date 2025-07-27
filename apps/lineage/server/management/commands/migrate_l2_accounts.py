@@ -45,6 +45,11 @@ class Command(BaseCommand):
         alphabet = alphabet.replace('"', '').replace("'", '').replace('\\', '').replace('`', '')
         return ''.join(secrets.choice(alphabet) for _ in range(length))
 
+    def generate_random_prefix(self, length=6):
+        """Gera um prefixo aleatório para emails duplicados"""
+        alphabet = string.ascii_uppercase + string.digits
+        return ''.join(secrets.choice(alphabet) for _ in range(length))
+
     def get_l2_accounts(self):
         """Busca contas do L2 com email válido"""
         try:
@@ -155,24 +160,56 @@ class Command(BaseCommand):
             'skipped': 0,
             'errors': 0,
             'email_conflicts': 0,
+            'l2_duplicates': 0,
         }
 
-        # Processa as contas em lotes
-        for i in range(0, len(l2_accounts), batch_size):
-            batch = l2_accounts[i:i + batch_size]
+        # Processa emails duplicados dentro da lista L2
+        email_count = {}
+        processed_accounts = []
+        
+        for account in l2_accounts:
+            login = account.get('login')
+            email = account.get('email')
+            access_level = account.get('accessLevel', 0)
+            created_time = account.get('created_time')
             
-            self.stdout.write(f'📦 Processando lote {i//batch_size + 1}/{(len(l2_accounts) + batch_size - 1)//batch_size}')
+            if not login or not email:
+                stats['skipped'] += 1
+                continue
+
+            # Conta ocorrências de cada email
+            if email in email_count:
+                email_count[email] += 1
+                # Gera prefixo aleatório para duplicatas
+                random_prefix = self.generate_random_prefix()
+                email = f"{random_prefix}_{email}"
+                stats['l2_duplicates'] += 1
+                self.stdout.write(
+                    self.style.WARNING(f'🔄 Email duplicado no L2: {login} → {email}')
+                )
+            else:
+                email_count[email] = 1
+
+            # Adiciona à lista processada
+            processed_accounts.append({
+                'login': login,
+                'email': email,
+                'access_level': access_level,
+                'created_time': created_time
+            })
+
+        # Processa as contas em lotes
+        for i in range(0, len(processed_accounts), batch_size):
+            batch = processed_accounts[i:i + batch_size]
+            
+            self.stdout.write(f'📦 Processando lote {i//batch_size + 1}/{(len(processed_accounts) + batch_size - 1)//batch_size}')
             
             with transaction.atomic():
                 for account in batch:
                     login = account.get('login')
                     email = account.get('email')
-                    access_level = account.get('accessLevel', 0)
+                    access_level = account.get('access_level', 0)
                     created_time = account.get('created_time')
-                    
-                    if not login or not email:
-                        stats['skipped'] += 1
-                        continue
 
                     # Verifica se o email já existe no PDL
                     original_email = email
@@ -225,7 +262,8 @@ class Command(BaseCommand):
         self.stdout.write(f'Usuários criados: {stats["created"]}')
         self.stdout.write(f'Pulados: {stats["skipped"]}')
         self.stdout.write(f'Erros: {stats["errors"]}')
-        self.stdout.write(f'Conflitos de email resolvidos: {stats["email_conflicts"]}')
+        self.stdout.write(f'Emails duplicados no L2: {stats["l2_duplicates"]}')
+        self.stdout.write(f'Conflitos com PDL resolvidos: {stats["email_conflicts"]}')
         
         if dry_run:
             self.stdout.write('\n⚠️  MODO DE TESTE - Execute sem --dry-run para criar os usuários')
