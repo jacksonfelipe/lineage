@@ -6,6 +6,14 @@
 
 set -e  # Para em caso de erro
 
+# Detect Ubuntu version for docker-compose
+UBUNTU_VERSION=$(lsb_release -cs 2>/dev/null || echo "unknown")
+if [ "$UBUNTU_VERSION" = "focal" ]; then
+  DOCKER_COMPOSE="docker-compose"
+else
+  DOCKER_COMPOSE="docker compose"
+fi
+
 # Cores para output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -31,19 +39,9 @@ log_error() {
 }
 
 # Verifica se está no diretório correto
-if [ ! -f "manage.py" ]; then
-    log_error "Execute este script no diretório raiz do projeto (onde está o manage.py)"
+if [ ! -f "docker-compose.yml" ]; then
+    log_error "Execute este script no diretório raiz do projeto (onde está o docker-compose.yml)"
     exit 1
-fi
-
-# Verifica se o ambiente virtual está ativo
-if [ -z "$VIRTUAL_ENV" ]; then
-    log_warning "Ambiente virtual não detectado. Verifique se está ativo."
-    read -p "Continuar mesmo assim? (y/N): " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 1
-    fi
 fi
 
 # Verifica se o .env existe
@@ -62,6 +60,13 @@ if ! grep -q "LINEAGE_DB_ENABLED=true" .env; then
     fi
 fi
 
+# Verifica se os containers estão rodando
+log_info "Verificando se os containers estão rodando..."
+if ! $DOCKER_COMPOSE ps | grep -q "site.*Up"; then
+    log_error "Container 'site' não está rodando. Execute './build.sh' primeiro."
+    exit 1
+fi
+
 echo "============================================================"
 echo "🔄 MIGRAÇÃO SEGURA L2 → PDL"
 echo "============================================================"
@@ -69,12 +74,12 @@ echo "============================================================"
 # 1. Backup do banco PDL
 log_info "Criando backup do banco PDL..."
 BACKUP_FILE="backup_pdl_$(date +%Y%m%d_%H%M%S).json"
-python manage.py dumpdata > "$BACKUP_FILE"
+$DOCKER_COMPOSE exec site python3 manage.py dumpdata > "$BACKUP_FILE"
 log_success "Backup criado: $BACKUP_FILE"
 
 # 2. Teste de conexão com L2
 log_info "Testando conexão com banco L2..."
-if python manage.py migrate_l2_accounts --dry-run --batch-size 1 > /dev/null 2>&1; then
+if $DOCKER_COMPOSE exec site python3 manage.py migrate_l2_accounts --dry-run --batch-size 1 > /dev/null 2>&1; then
     log_success "Conexão com L2 OK"
 else
     log_error "Falha na conexão com L2. Verifique as configurações."
@@ -83,7 +88,7 @@ fi
 
 # 3. Execução do teste
 log_info "Executando teste de migração..."
-python manage.py migrate_l2_accounts --dry-run
+$DOCKER_COMPOSE exec site python3 manage.py migrate_l2_accounts --dry-run
 
 # 4. Confirmação do usuário
 echo
@@ -95,7 +100,7 @@ echo
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     log_info "Executando migração real..."
-    python manage.py migrate_l2_accounts
+    $DOCKER_COMPOSE exec site python3 manage.py migrate_l2_accounts
     log_success "Migração concluída!"
     
     echo
@@ -113,5 +118,5 @@ else
     echo
     echo "O backup foi mantido: $BACKUP_FILE"
     echo "Você pode executar a migração manualmente com:"
-    echo "python manage.py migrate_l2_accounts"
+    echo "$DOCKER_COMPOSE exec site python3 manage.py migrate_l2_accounts"
 fi 

@@ -33,7 +33,7 @@ O comando `migrate_l2_accounts` permite migrar contas do servidor L2 para o PDL 
 ### Modo de Teste (Recomendado primeiro)
 
 ```bash
-python manage.py migrate_l2_accounts --dry-run
+docker-compose exec site python3 manage.py migrate_l2_accounts --dry-run
 ```
 
 Este comando mostra o que seria feito sem criar usuários.
@@ -41,13 +41,13 @@ Este comando mostra o que seria feito sem criar usuários.
 ### Execução Real
 
 ```bash
-python manage.py migrate_l2_accounts
+docker-compose exec site python3 manage.py migrate_l2_accounts
 ```
 
 ### Opções Disponíveis
 
 ```bash
-python manage.py migrate_l2_accounts \
+docker-compose exec site python3 manage.py migrate_l2_accounts \
     --dry-run \              # Modo de teste
     --prefix "L2_" \         # Prefixo para emails duplicados
     --password-length 64 \   # Comprimento da senha
@@ -59,7 +59,7 @@ python manage.py migrate_l2_accounts \
 ### 1. Teste com configuração personalizada
 
 ```bash
-python manage.py migrate_l2_accounts \
+docker-compose exec site python3 manage.py migrate_l2_accounts \
     --dry-run \
     --prefix "MIGRATED_" \
     --password-length 32 \
@@ -69,7 +69,7 @@ python manage.py migrate_l2_accounts \
 ### 2. Migração completa
 
 ```bash
-python manage.py migrate_l2_accounts \
+docker-compose exec site python3 manage.py migrate_l2_accounts \
     --prefix "L2_" \
     --batch-size 200
 ```
@@ -77,7 +77,7 @@ python manage.py migrate_l2_accounts \
 ### 3. Migração com senhas mais curtas
 
 ```bash
-python manage.py migrate_l2_accounts \
+docker-compose exec site python3 manage.py migrate_l2_accounts \
     --password-length 16
 ```
 
@@ -216,7 +216,7 @@ O comando gera logs detalhados incluindo:
 
 ```bash
 # Backup do banco PDL
-python manage.py dumpdata > backup_pdl_$(date +%Y%m%d_%H%M%S).json
+docker-compose exec site python3 manage.py dumpdata > backup_pdl_$(date +%Y%m%d_%H%M%S).json
 
 # Backup do banco L2 (se possível)
 mysqldump -h 192.168.1.100 -u l2user -p l2jdb > backup_l2_$(date +%Y%m%d_%H%M%S).sql
@@ -232,18 +232,18 @@ echo "🔄 Iniciando migração segura L2 → PDL"
 
 # 1. Backup
 echo "💾 Criando backup..."
-python manage.py dumpdata > backup_pdl_$(date +%Y%m%d_%H%M%S).json
+docker-compose exec site python3 manage.py dumpdata > backup_pdl_$(date +%Y%m%d_%H%M%S).json
 
 # 2. Teste
 echo "🧪 Executando teste..."
-python manage.py migrate_l2_accounts --dry-run
+docker-compose exec site python3 manage.py migrate_l2_accounts --dry-run
 
 # 3. Confirmação
 read -p "Continuar com a migração real? (y/N): " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "🚀 Executando migração..."
-    python manage.py migrate_l2_accounts
+    docker-compose exec site python3 manage.py migrate_l2_accounts
 else
     echo "❌ Migração cancelada"
 fi
