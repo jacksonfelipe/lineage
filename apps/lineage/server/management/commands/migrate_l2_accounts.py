@@ -50,13 +50,16 @@ class Command(BaseCommand):
         try:
             LineageAccount = get_query_class("LineageAccount")
             
-            # Busca todas as contas com email não nulo
+            # Busca todas as contas com email não nulo (tenta múltiplas colunas)
             sql = """
-                SELECT login, email, accessLevel, created_time
+                SELECT login, 
+                       COALESCE(email, l2email, e_mail) as email,
+                       accessLevel, 
+                       created_time
                 FROM accounts 
-                WHERE email IS NOT NULL 
-                AND email != '' 
-                AND email != 'NULL'
+                WHERE (email IS NOT NULL AND email != '' AND email != 'NULL')
+                   OR (l2email IS NOT NULL AND l2email != '' AND l2email != 'NULL')
+                   OR (e_mail IS NOT NULL AND e_mail != '' AND e_mail != 'NULL')
                 ORDER BY created_time ASC
             """
             
@@ -163,7 +166,7 @@ class Command(BaseCommand):
                 for account in batch:
                     login = account.get('login')
                     email = account.get('email')
-                    access_level = account.get('accessLevel') or account.get('access_level', 0)
+                    access_level = account.get('accessLevel', 0)
                     created_time = account.get('created_time')
                     
                     if not login or not email:
