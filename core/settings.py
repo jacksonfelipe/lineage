@@ -369,6 +369,12 @@ DATE_FORMAT = os.getenv("CONFIG_DATE_FORMAT", 'd/m/Y')
 TIME_FORMAT = os.getenv("CONFIG_TIME_FORMAT", 'H:i:s')
 GMT_OFFSET = float(os.getenv("CONFIG_GMT_OFFSET", -3))
 
+# Configuração para exibir data e hora ou apenas data no status dos Grand Bosses
+GRANDBOSS_SHOW_TIME = os.getenv("CONFIG_GRANDBOSS_SHOW_TIME", "True").lower() in ['true', '1', 'yes']
+
+# Configuração para exibir quantidade de jogadores online na página inicial
+SHOW_PLAYERS_ONLINE = os.getenv("CONFIG_SHOW_PLAYERS_ONLINE", "True").lower() in ['true', '1', 'yes']
+
 LANGUAGES = [
     ('pt', _('Português')),
     ('en', _('Inglês')),

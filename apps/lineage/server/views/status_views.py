@@ -51,7 +51,15 @@ def olympiad_ranking_view(request):
     # Obtém o ranking de olimpíada
     db = LineageDB()
     result = LineageStats.olympiad_ranking() if db.is_connected() else []
-    result = attach_crests_to_clans(result)
+    
+    # Filtra registros com valores None
+    filtered_result = []
+    for player in result:
+        # Só inclui se char_name não for None
+        if player.get('char_name') is not None:
+            filtered_result.append(player)
+    
+    result = attach_crests_to_clans(filtered_result)
     for player in result:
         player['base'] = get_class_name(player['base'])
     return render(request, 'status/olympiad_ranking.html', {'ranking': result})
@@ -62,7 +70,15 @@ def olympiad_all_heroes_view(request):
     # Obtém todos os heróis da olimpíada
     db = LineageDB()
     result = LineageStats.olympiad_all_heroes() if db.is_connected() else []
-    result = attach_crests_to_clans(result)
+    
+    # Filtra registros com valores None
+    filtered_result = []
+    for player in result:
+        # Só inclui se char_name não for None
+        if player.get('char_name') is not None:
+            filtered_result.append(player)
+    
+    result = attach_crests_to_clans(filtered_result)
     for player in result:
         player['base'] = get_class_name(player['base'])
     return render(request, 'status/olympiad_all_heroes.html', {'heroes': result})
@@ -73,7 +89,15 @@ def olympiad_current_heroes_view(request):
     # Obtém os heróis atuais da olimpíada
     db = LineageDB()
     result = LineageStats.olympiad_current_heroes() if db.is_connected() else []
-    result = attach_crests_to_clans(result)
+    
+    # Filtra registros com valores None
+    filtered_result = []
+    for player in result:
+        # Só inclui se char_name não for None
+        if player.get('char_name') is not None:
+            filtered_result.append(player)
+    
+    result = attach_crests_to_clans(filtered_result)
     for player in result:
         player['base'] = get_class_name(player['base'])
     return render(request, 'status/olympiad_current_heroes.html', {'current_heroes': result})
@@ -144,7 +168,13 @@ def grandboss_status_view(request):
                 if respawn_timestamp > current_time:
                     try:
                         respawn_datetime = datetime.fromtimestamp(respawn_timestamp) - timedelta(hours=gmt_offset)
-                        boss['respawn_human'] = respawn_datetime.strftime('%d/%m/%Y %H:%M')
+                        
+                        # Usar configuração para decidir se mostra data e hora ou apenas data
+                        if getattr(settings, 'GRANDBOSS_SHOW_TIME', True):
+                            boss['respawn_human'] = respawn_datetime.strftime('%d/%m/%Y %H:%M')
+                        else:
+                            boss['respawn_human'] = respawn_datetime.strftime('%d/%m/%Y')
+                        
                         boss['status'] = "Morto"
                     except (OSError, OverflowError, ValueError) as e:
                         boss['status'] = "Desconhecido"

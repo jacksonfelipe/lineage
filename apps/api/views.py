@@ -391,9 +391,15 @@ class OlympiadRankingView(GenericAPIView):
             else:
                 data = cached_data
             
+            # Filtra registros com valores None
+            filtered_data = []
+            for player in data:
+                if player.get('char_name') is not None:
+                    filtered_data.append(player)
+            
             # Processa os dados para o formato esperado pelo serializer
             processed_data = []
-            for i, player in enumerate(data, 1):
+            for i, player in enumerate(filtered_data, 1):
                 from utils.resources import get_class_name
                 
                 processed_player = {
@@ -440,7 +446,13 @@ class OlympiadAllHeroesView(GenericAPIView):
             else:
                 data = cached_data
             
-            serializer = self.get_serializer(data, many=True)
+            # Filtra registros com valores None
+            filtered_data = []
+            for player in data:
+                if player.get('char_name') is not None:
+                    filtered_data.append(player)
+            
+            serializer = self.get_serializer(filtered_data, many=True)
             return Response(serializer.data)
         
         except Exception as e:
@@ -473,7 +485,13 @@ class OlympiadCurrentHeroesView(GenericAPIView):
             else:
                 data = cached_data
             
-            serializer = self.get_serializer(data, many=True)
+            # Filtra registros com valores None
+            filtered_data = []
+            for player in data:
+                if player.get('char_name') is not None:
+                    filtered_data.append(player)
+            
+            serializer = self.get_serializer(filtered_data, many=True)
             return Response(serializer.data)
         
         except Exception as e:

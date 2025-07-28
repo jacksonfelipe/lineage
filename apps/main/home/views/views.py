@@ -92,10 +92,14 @@ def index(request):
     # Verificar status do servidor
     server_status = check_server_status()
 
+    # Verificar se deve mostrar jogadores online
+    show_players_online = getattr(settings, 'SHOW_PLAYERS_ONLINE', True)
+
     context = {
         'clanes': clanes,
         'classes_info': classes_info,
         'online': online_count,
+        'show_players_online': show_players_online,
         'configuracao': config,
         'nome_servidor': nome_servidor,
         'descricao_servidor': descricao_servidor,
