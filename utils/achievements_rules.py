@@ -137,8 +137,6 @@ def mil_xp(user, request=None):
     except:
         return False
 
-
-
 @registrar_validador('100_transacoes')
 def cem_transacoes(user, request=None):
     from apps.lineage.wallet.models import TransacaoWallet, TransacaoBonus
@@ -165,427 +163,243 @@ def primeira_solicitacao_resolvida(user, request=None):
     from apps.main.solicitation.models import Solicitation
     return Solicitation.objects.filter(user=user, status='closed').exists()
 
-@registrar_validador('primeiro_personagem')
-def primeiro_personagem(user, request=None):
-    from apps.lineage.server.database import LineageDB
+# =========================== NOVAS CONQUISTAS CRIATIVAS ===========================
+
+@registrar_validador('colecionador_itens')
+def colecionador_itens(user, request=None):
+    """Possui 10 ou mais itens no inventário"""
+    return InventoryItem.objects.filter(inventory__user=user).count() >= 10
+
+@registrar_validador('mestre_inventario')
+def mestre_inventario(user, request=None):
+    """Possui 50 ou mais itens no inventário"""
+    return InventoryItem.objects.filter(inventory__user=user).count() >= 50
+
+@registrar_validador('trocador_incansavel')
+def trocador_incansavel(user, request=None):
+    """Realizou 10 ou mais trocas de itens"""
+    return InventoryLog.objects.filter(user=user, acao='TROCA_ENTRE_PERSONAGENS').count() >= 10
+
+@registrar_validador('gerenciador_economico')
+def gerenciador_economico(user, request=None):
+    """Realizou 20 ou mais transferências para o jogo"""
+    return TransacaoWallet.objects.filter(
+        wallet__usuario=user,
+        tipo="SAIDA",
+        descricao__icontains="Transferência para o servidor"
+    ).count() >= 20
+
+@registrar_validador('benfeitor_comunitario')
+def benfeitor_comunitario(user, request=None):
+    """Realizou 10 ou mais transferências para outros jogadores"""
+    return TransacaoWallet.objects.filter(
+        wallet__usuario=user,
+        tipo="SAIDA",
+        descricao__icontains="Transferência para jogador"
+    ).count() >= 10
+
+@registrar_validador('bonus_diario_7dias')
+def bonus_diario_7dias(user, request=None):
+    """Recebeu bônus diário por 7 dias consecutivos"""
+    from apps.lineage.wallet.models import TransacaoBonus
+    from datetime import datetime, timedelta
+    
+    # Verifica se recebeu bônus nos últimos 7 dias
+    data_limite = datetime.now() - timedelta(days=7)
+    bonus_recentes = TransacaoBonus.objects.filter(
+        wallet__usuario=user,
+        tipo='ENTRADA',
+        descricao__icontains="Bônus diário",
+        created_at__gte=data_limite
+    ).count()
+    return bonus_recentes >= 7
+
+@registrar_validador('bonus_diario_30dias')
+def bonus_diario_30dias(user, request=None):
+    """Recebeu bônus diário por 30 dias consecutivos"""
+    from apps.lineage.wallet.models import TransacaoBonus
+    from datetime import datetime, timedelta
+    
+    data_limite = datetime.now() - timedelta(days=30)
+    bonus_recentes = TransacaoBonus.objects.filter(
+        wallet__usuario=user,
+        tipo='ENTRADA',
+        descricao__icontains="Bônus diário",
+        created_at__gte=data_limite
+    ).count()
+    return bonus_recentes >= 30
+
+@registrar_validador('patrocinador_ouro')
+def patrocinador_ouro(user, request=None):
+    """Realizou 5 ou mais pagamentos aprovados"""
+    return Pagamento.objects.filter(usuario=user, status='approved').count() >= 5
+
+@registrar_validador('patrocinador_diamante')
+def patrocinador_diamante(user, request=None):
+    """Realizou 10 ou mais pagamentos aprovados"""
+    return Pagamento.objects.filter(usuario=user, status='approved').count() >= 10
+
+@registrar_validador('comprador_frequente')
+def comprador_frequente(user, request=None):
+    """Realizou 5 ou mais compras na loja"""
+    return ShopPurchase.objects.filter(user=user).count() >= 5
+
+@registrar_validador('comprador_vip')
+def comprador_vip(user, request=None):
+    """Realizou 15 ou mais compras na loja"""
+    return ShopPurchase.objects.filter(user=user).count() >= 15
+
+@registrar_validador('leiloeiro_profissional')
+def leiloeiro_profissional(user, request=None):
+    """Criou 25 ou mais leilões"""
+    return user.auctions.count() >= 25
+
+@registrar_validador('leiloeiro_mestre')
+def leiloeiro_mestre(user, request=None):
+    """Criou 50 ou mais leilões"""
+    return user.auctions.count() >= 50
+
+@registrar_validador('lanceador_profissional')
+def lanceador_profissional(user, request=None):
+    """Realizou 100 ou mais lances"""
+    return Bid.objects.filter(bidder=user).count() >= 100
+
+@registrar_validador('lanceador_mestre')
+def lanceador_mestre(user, request=None):
+    """Realizou 200 ou mais lances"""
+    return Bid.objects.filter(bidder=user).count() >= 200
+
+@registrar_validador('vencedor_serie')
+def vencedor_serie(user, request=None):
+    """Venceu 3 ou mais leilões"""
+    return Auction.objects.filter(highest_bidder=user, status='finished').count() >= 3
+
+@registrar_validador('vencedor_mestre')
+def vencedor_mestre(user, request=None):
+    """Venceu 10 ou mais leilões"""
+    return Auction.objects.filter(highest_bidder=user, status='finished').count() >= 10
+
+@registrar_validador('cupom_mestre')
+def cupom_mestre(user, request=None):
+    """Aplicou 5 ou mais cupons promocionais"""
+    return Cart.objects.filter(user=user, promocao_aplicada__isnull=False).count() >= 5
+
+@registrar_validador('cupom_expert')
+def cupom_expert(user, request=None):
+    """Aplicou 15 ou mais cupons promocionais"""
+    return Cart.objects.filter(user=user, promocao_aplicada__isnull=False).count() >= 15
+
+@registrar_validador('solicitante_frequente')
+def solicitante_frequente(user, request=None):
+    """Abriu 5 ou mais solicitações de suporte"""
+    return Solicitation.objects.filter(user=user).count() >= 5
+
+@registrar_validador('solicitante_expert')
+def solicitante_expert(user, request=None):
+    """Abriu 15 ou mais solicitações de suporte"""
+    return Solicitation.objects.filter(user=user).count() >= 15
+
+@registrar_validador('resolvedor_problemas')
+def resolvedor_problemas(user, request=None):
+    """Teve 3 ou mais solicitações resolvidas"""
+    return Solicitation.objects.filter(user=user, status='closed').count() >= 3
+
+@registrar_validador('resolvedor_mestre')
+def resolvedor_mestre(user, request=None):
+    """Teve 10 ou mais solicitações resolvidas"""
+    return Solicitation.objects.filter(user=user, status='closed').count() >= 10
+
+@registrar_validador('rede_social')
+def rede_social(user, request=None):
+    """Tem 5 ou mais amigos aceitos"""
+    return Friendship.objects.filter(user=user, accepted=True).count() >= 5
+
+@registrar_validador('rede_social_mestre')
+def rede_social_mestre(user, request=None):
+    """Tem 15 ou mais amigos aceitos"""
+    return Friendship.objects.filter(user=user, accepted=True).count() >= 15
+
+@registrar_validador('nivel_50')
+def nivel_50(user, request=None):
+    """Alcançou o nível 50 no sistema"""
     try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        # Verifica se o usuário tem personagens no servidor
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account",
-            {"account": user.username}
-        )
-        return characters and characters[0]['count'] > 0
+        perfil = user.perfilgamer
+        return perfil.level >= 50
     except:
         return False
 
-@registrar_validador('primeiro_clan')
-def primeiro_clan(user, request=None):
-    from apps.lineage.server.database import LineageDB
+@registrar_validador('nivel_75')
+def nivel_75(user, request=None):
+    """Alcançou o nível 75 no sistema"""
     try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        # Verifica se o usuário tem personagens em clãs
-        characters_in_clan = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND clanid > 0",
-            {"account": user.username}
-        )
-        return characters_in_clan and characters_in_clan[0]['count'] > 0
+        perfil = user.perfilgamer
+        return perfil.level >= 75
     except:
         return False
 
-@registrar_validador('primeiro_castle')
-def primeiro_castle(user, request=None):
-    from apps.lineage.server.database import LineageDB
+@registrar_validador('nivel_100')
+def nivel_100(user, request=None):
+    """Alcançou o nível 100 no sistema"""
     try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        # Verifica se o usuário tem personagens em clãs que possuem castelos
-        castle_characters = db.select("""
-            SELECT COUNT(*) as count 
-            FROM characters c 
-            JOIN clan_data cd ON c.clanid = cd.clan_id 
-            WHERE c.account_name = :account AND cd.hasCastle = 1
-        """, {"account": user.username})
-        return castle_characters and castle_characters[0]['count'] > 0
+        perfil = user.perfilgamer
+        return perfil.level >= 100
     except:
         return False
 
-@registrar_validador('personagem_nivel_50')
-def personagem_nivel_50(user, request=None):
-    from apps.lineage.server.database import LineageDB
+@registrar_validador('5000_xp')
+def cinco_mil_xp(user, request=None):
+    """Acumulou 5000 pontos de experiência"""
     try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
+        perfil = user.perfilgamer
+        xp_total = perfil.xp
+        level_atual = perfil.level
         
-        # Usa subconsulta para obter base_level da tabela character_subclasses
-        characters = db.select("""
-            SELECT COUNT(*) as count 
-            FROM characters c 
-            JOIN character_subclasses cs ON cs.char_obj_id = c.obj_Id AND cs.isBase = '1'
-            WHERE c.account_name = :account AND cs.level >= 50
-        """, {"account": user.username})
-        return characters and characters[0]['count'] > 0
+        for nivel in range(1, level_atual):
+            xp_total += 100 + (nivel - 1) * 25
+            
+        return xp_total >= 5000
     except:
         return False
 
-@registrar_validador('personagem_nivel_80')
-def personagem_nivel_80(user, request=None):
-    from apps.lineage.server.database import LineageDB
+@registrar_validador('10000_xp')
+def dez_mil_xp(user, request=None):
+    """Acumulou 10000 pontos de experiência"""
     try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
+        perfil = user.perfilgamer
+        xp_total = perfil.xp
+        level_atual = perfil.level
         
-        # Usa subconsulta para obter base_level da tabela character_subclasses
-        characters = db.select("""
-            SELECT COUNT(*) as count 
-            FROM characters c 
-            JOIN character_subclasses cs ON cs.char_obj_id = c.obj_Id AND cs.isBase = '1'
-            WHERE c.account_name = :account AND cs.level >= 80
-        """, {"account": user.username})
-        return characters and characters[0]['count'] > 0
+        for nivel in range(1, level_atual):
+            xp_total += 100 + (nivel - 1) * 25
+            
+        return xp_total >= 10000
     except:
         return False
 
-@registrar_validador('personagem_nobless')
-def personagem_nobless(user, request=None):
-    from apps.lineage.server.database import LineageDB
-    try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        # Verifica se o personagem tem status nobless
-        # Tenta diferentes possibilidades de colunas conforme o servidor
-        try:
-            characters = db.select("""
-                SELECT COUNT(*) as count 
-                FROM characters c 
-                WHERE c.account_name = :account AND c.nobless = 1
-            """, {"account": user.username})
-            if characters and characters[0]['count'] > 0:
-                return True
-        except:
-            pass
-        
-        # Se não funcionar, tenta verificar se o personagem tem nível alto (aproximação)
-        try:
-            characters = db.select("""
-                SELECT COUNT(*) as count 
-                FROM characters c 
-                JOIN character_subclasses cs ON cs.char_obj_id = c.obj_Id AND cs.isBase = '1'
-                WHERE c.account_name = :account AND cs.level >= 75
-            """, {"account": user.username})
-            return characters and characters[0]['count'] > 0
-        except:
-            return False
-    except:
-        return False
+@registrar_validador('250_transacoes')
+def duzentos_cinquenta_transacoes(user, request=None):
+    """Realizou 250 transações na carteira"""
+    from apps.lineage.wallet.models import TransacaoWallet, TransacaoBonus
+    transacoes_normais = TransacaoWallet.objects.filter(wallet__usuario=user).count()
+    transacoes_bonus = TransacaoBonus.objects.filter(wallet__usuario=user).count()
+    return (transacoes_normais + transacoes_bonus) >= 250
 
-@registrar_validador('personagem_hero')
-def personagem_hero(user, request=None):
-    from apps.lineage.server.database import LineageDB
-    try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        # Verifica se o personagem tem status hero
-        # Tenta diferentes possibilidades de colunas conforme o servidor
-        try:
-            characters = db.select("""
-                SELECT COUNT(*) as count 
-                FROM characters c 
-                WHERE c.account_name = :account AND c.hero_end > :current_time
-            """, {"account": user.username, "current_time": int(time.time() * 1000)})
-            if characters and characters[0]['count'] > 0:
-                return True
-        except:
-            pass
-        
-        # Se não funcionar, tenta verificar se o personagem tem nível muito alto (aproximação)
-        try:
-            characters = db.select("""
-                SELECT COUNT(*) as count 
-                FROM characters c 
-                JOIN character_subclasses cs ON cs.char_obj_id = c.obj_Id AND cs.isBase = '1'
-                WHERE c.account_name = :account AND cs.level >= 85
-            """, {"account": user.username})
-            return characters and characters[0]['count'] > 0
-        except:
-            return False
-    except:
-        return False
+@registrar_validador('500_transacoes')
+def quinhentas_transacoes(user, request=None):
+    """Realizou 500 transações na carteira"""
+    from apps.lineage.wallet.models import TransacaoWallet, TransacaoBonus
+    transacoes_normais = TransacaoWallet.objects.filter(wallet__usuario=user).count()
+    transacoes_bonus = TransacaoBonus.objects.filter(wallet__usuario=user).count()
+    return (transacoes_normais + transacoes_bonus) >= 500
 
-@registrar_validador('primeiro_subclass')
-def primeiro_subclass(user, request=None):
-    from apps.lineage.server.database import LineageDB
-    try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        # Verifica se o personagem tem subclasses (não base class)
-        characters = db.select("""
-            SELECT COUNT(*) as count 
-            FROM characters c 
-            JOIN character_subclasses cs ON cs.char_obj_id = c.obj_Id AND cs.isBase = '0'
-            WHERE c.account_name = :account
-        """, {"account": user.username})
-        return characters and characters[0]['count'] > 0
-    except:
-        return False
+@registrar_validador('bonus_mestre')
+def bonus_mestre(user, request=None):
+    """Recebeu 10 ou mais bônus"""
+    from apps.lineage.wallet.models import TransacaoBonus
+    return TransacaoBonus.objects.filter(wallet__usuario=user, tipo='ENTRADA').count() >= 10
 
-@registrar_validador('personagem_pvp_100')
-def personagem_pvp_100(user, request=None):
-    from apps.lineage.server.database import LineageDB
-    try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND pvpkills >= 100",
-            {"account": user.username}
-        )
-        return characters and characters[0]['count'] > 0
-    except:
-        return False
-
-@registrar_validador('personagem_pvp_500')
-def personagem_pvp_500(user, request=None):
-    from apps.lineage.server.database import LineageDB
-    try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND pvpkills >= 500",
-            {"account": user.username}
-        )
-        return characters and characters[0]['count'] > 0
-    except:
-        return False
-
-@registrar_validador('personagem_pvp_1000')
-def personagem_pvp_1000(user, request=None):
-    from apps.lineage.server.database import LineageDB
-    try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND pvpkills >= 1000",
-            {"account": user.username}
-        )
-        return characters and characters[0]['count'] > 0
-    except:
-        return False
-
-@registrar_validador('primeiro_ally')
-def primeiro_ally(user, request=None):
-    from apps.lineage.server.database import LineageDB
-    try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        # Verifica se o personagem está em uma aliança
-        characters = db.select("""
-            SELECT COUNT(*) as count 
-            FROM characters c 
-            JOIN clan_data cd ON c.clanid = cd.clan_id 
-            WHERE c.account_name = :account AND cd.ally_id > 0
-        """, {"account": user.username})
-        return characters and characters[0]['count'] > 0
-    except:
-        return False
-
-@registrar_validador('personagem_online_24h')
-def personagem_online_24h(user, request=None):
-    from apps.lineage.server.database import LineageDB
-    try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND onlinetime >= 86400",
-            {"account": user.username}
-        )
-        return characters and characters[0]['count'] > 0
-    except:
-        return False
-
-@registrar_validador('personagem_online_100h')
-def personagem_online_100h(user, request=None):
-    from apps.lineage.server.database import LineageDB
-    try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND onlinetime >= 360000",
-            {"account": user.username}
-        )
-        return characters and characters[0]['count'] > 0
-    except:
-        return False
-
-@registrar_validador('personagem_online_500h')
-def personagem_online_500h(user, request=None):
-    from apps.lineage.server.database import LineageDB
-    try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        # 500 horas = 1.800.000.000 milissegundos
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND onlinetime >= 1800000000",
-            {"account": user.username}
-        )
-        return characters and characters[0]['count'] > 0
-    except:
-        return False
-
-@registrar_validador('olympiad_participant')
-def olympiad_participant(user, request=None):
-    from apps.lineage.server.database import LineageDB
-    try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        # Verifica se o usuário tem personagens que participaram da Olimpíada
-        # Tenta diferentes tabelas conforme o servidor
-        try:
-            characters = db.select("""
-                SELECT COUNT(*) as count 
-                FROM oly_nobles ON 
-                INNER JOIN characters C ON C.obj_Id = ON.char_id 
-                WHERE C.account_name = :account
-            """, {"account": user.username})
-            if characters and characters[0]['count'] > 0:
-                return True
-        except:
-            pass
-        
-        # Se não funcionar, tenta verificar se o personagem tem nível alto (aproximação)
-        try:
-            characters = db.select("""
-                SELECT COUNT(*) as count 
-                FROM characters c 
-                JOIN character_subclasses cs ON cs.char_obj_id = c.obj_Id AND cs.isBase = '1'
-                WHERE c.account_name = :account AND cs.level >= 70
-            """, {"account": user.username})
-            return characters and characters[0]['count'] > 0
-        except:
-            return False
-    except:
-        return False
-
-@registrar_validador('olympiad_winner')
-def olympiad_winner(user, request=None):
-    from apps.lineage.server.database import LineageDB
-    try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        # Verifica se o usuário tem personagens que venceram batalhas na Olimpíada
-        # Tenta diferentes tabelas conforme o servidor
-        try:
-            characters = db.select("""
-                SELECT COUNT(*) as count 
-                FROM oly_nobles ON 
-                INNER JOIN characters C ON C.obj_Id = ON.char_id 
-                WHERE C.account_name = :account AND ON.points_current > 0
-            """, {"account": user.username})
-            if characters and characters[0]['count'] > 0:
-                return True
-        except:
-            pass
-        
-        # Se não funcionar, tenta verificar se o personagem tem nível muito alto (aproximação)
-        try:
-            characters = db.select("""
-                SELECT COUNT(*) as count 
-                FROM characters c 
-                JOIN character_subclasses cs ON cs.char_obj_id = c.obj_Id AND cs.isBase = '1'
-                WHERE c.account_name = :account AND cs.level >= 80
-            """, {"account": user.username})
-            return characters and characters[0]['count'] > 0
-        except:
-            return False
-    except:
-        return False
-
-@registrar_validador('grandboss_killer')
-def grandboss_killer(user, request=None):
-    from apps.lineage.server.database import LineageDB
-    try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        # Verifica se o usuário tem personagens que participaram de kills de Grand Bosses
-        # Esta é uma aproximação baseada em kills PvP altas (indicativo de participação em raids)
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND pvpkills >= 50",
-            {"account": user.username}
-        )
-        return characters and characters[0]['count'] > 0
-    except:
-        return False
-
-@registrar_validador('siege_participant')
-def siege_participant(user, request=None):
-    from apps.lineage.server.database import LineageDB
-    try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        # Verifica se o usuário tem personagens em clãs que participaram de cercos
-        characters = db.select("""
-            SELECT COUNT(*) as count 
-            FROM characters C 
-            JOIN clan_data CD ON C.clanid = CD.clan_id 
-            JOIN siege_clans SC ON CD.clan_id = SC.clan_id 
-            WHERE C.account_name = :account
-        """, {"account": user.username})
-        return characters and characters[0]['count'] > 0
-    except:
-        return False
-
-@registrar_validador('personagem_nivel_100')
-def personagem_nivel_100(user, request=None):
-    from apps.lineage.server.database import LineageDB
-    try:
-        db = LineageDB()
-        if not db.is_connected():
-            return False
-        
-        # Usa subconsulta para obter base_level da tabela character_subclasses
-        characters = db.select("""
-            SELECT COUNT(*) as count 
-            FROM characters c 
-            JOIN character_subclasses cs ON cs.char_obj_id = c.obj_Id AND cs.isBase = '1'
-            WHERE c.account_name = :account AND cs.level >= 100
-        """, {"account": user.username})
-        return characters and characters[0]['count'] > 0
-    except:
-        return False
+@registrar_validador('bonus_expert')
+def bonus_expert(user, request=None):
+    """Recebeu 25 ou mais bônus"""
+    from apps.lineage.wallet.models import TransacaoBonus
+    return TransacaoBonus.objects.filter(wallet__usuario=user, tipo='ENTRADA').count() >= 25
