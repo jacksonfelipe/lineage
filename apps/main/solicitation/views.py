@@ -6,12 +6,14 @@ from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
-from .forms import SolicitationForm
+from .forms import SolicitationForm, SolicitationStatusForm
 from django.contrib import messages
 from django.shortcuts import redirect
 from utils.notifications import send_notification
 from django.urls import reverse
 import logging
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from apps.main.home.models import PerfilGamer
 from utils.services import verificar_conquistas
@@ -35,11 +37,17 @@ class SolicitationDashboardView(LoginRequiredMixin, View):
         # Obtém o histórico de eventos associados à solicitação
         history = SolicitationHistory.objects.filter(solicitation=solicitation).order_by('-timestamp')
 
+        # Formulário para mudança de status (apenas para staff)
+        status_form = None
+        if request.user.is_staff:
+            status_form = SolicitationStatusForm(initial={'status': solicitation.status})
+
         # Passa os dados para o contexto
         context = {
             'solicitation': solicitation,
             'participants': participants,
             'history': history,
+            'status_form': status_form,
         }
 
         return render(request, 'pages/solicitation_dashboard.html', context)
@@ -47,9 +55,9 @@ class SolicitationDashboardView(LoginRequiredMixin, View):
 
 class SolicitationListView(LoginRequiredMixin, ListView):
     model = Solicitation
-    template_name = 'pages/solicitation_list.html'  # Substitua pelo seu caminho de template
-    context_object_name = 'solicitations'  # Nome da variável que conterá as solicitações no template
-    paginate_by = 10  # Número de itens por página
+    template_name = 'pages/solicitation_list.html'
+    context_object_name = 'solicitations'
+    paginate_by = 10
 
     def get_queryset(self):
         # Verifica se o usuário é admin
@@ -60,18 +68,22 @@ class SolicitationListView(LoginRequiredMixin, ListView):
             # Se não for admin, retorna apenas as solicitações do usuário logado
             return Solicitation.objects.filter(user=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_staff:
+            # Adiciona estatísticas para staff
+            context['total_open'] = Solicitation.objects.filter(status='open').count()
+            context['total_in_progress'] = Solicitation.objects.filter(status='in_progress').count()
+            context['total_waiting_user'] = Solicitation.objects.filter(status='waiting_user').count()
+            context['total_resolved'] = Solicitation.objects.filter(status='resolved').count()
+        return context
+
 
 class SolicitationCreateView(LoginRequiredMixin, CreateView):
     model = Solicitation
     form_class = SolicitationForm
     template_name = 'pages/solicitation_create.html'
     success_url = reverse_lazy('solicitation:solicitation_list')
-
-    def dispatch(self, request, *args, **kwargs):
-        if Solicitation.objects.filter(user=request.user, status='pending').exists():
-            messages.warning(request, "Você já possui uma solicitação pendente. Aguarde o processamento antes de criar uma nova.")
-            return redirect('solicitation:solicitation_list')
-        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -91,14 +103,75 @@ class SolicitationCreateView(LoginRequiredMixin, CreateView):
             send_notification(
                 user=None,  # None para broadcast para staff
                 notification_type='staff',
-                message='Relatório sigiloso disponível.',
+                message=f'Nova solicitação criada: {form.instance.title}',
                 created_by=self.request.user,
-                link=reverse('solicitation:solicitation_list')
+                link=reverse('solicitation:solicitation_dashboard', kwargs={'protocol': form.instance.protocol})
             )
         except Exception as e:
             logger.error(f"Erro ao criar notificação: {str(e)}")
 
+        messages.success(self.request, f"Solicitação criada com sucesso! Protocolo: {form.instance.protocol}")
         return response
+
+
+class SolicitationStatusUpdateView(LoginRequiredMixin, View):
+    def post(self, request, protocol):
+        solicitation = get_object_or_404(Solicitation, protocol=protocol)
+        
+        # Apenas staff pode mudar status
+        if not request.user.is_staff:
+            messages.error(request, _("Você não tem permissão para alterar o status desta solicitação."))
+            return redirect('solicitation:solicitation_dashboard', protocol=protocol)
+        
+        form = SolicitationStatusForm(request.POST)
+        if form.is_valid():
+            old_status = solicitation.status
+            new_status = form.cleaned_data['status']
+            assigned_to = form.cleaned_data['assigned_to']
+            comment = form.cleaned_data['comment']
+            
+            # Atualiza o status
+            solicitation.status = new_status
+            if assigned_to:
+                solicitation.assigned_to = assigned_to
+            
+            # Atualiza timestamps se necessário
+            if new_status == 'resolved' and not solicitation.resolved_at:
+                solicitation.resolved_at = timezone.now()
+            elif new_status == 'closed' and not solicitation.closed_at:
+                solicitation.closed_at = timezone.now()
+            
+            solicitation.save()
+            
+            # Cria entrada no histórico
+            action_text = f"Status alterado de '{dict(Solicitation.STATUS_CHOICES)[old_status]}' para '{dict(Solicitation.STATUS_CHOICES)[new_status]}'"
+            if comment:
+                action_text += f" - {comment}"
+            
+            SolicitationHistory.objects.create(
+                solicitation=solicitation,
+                action=action_text,
+                user=request.user
+            )
+            
+            # Notifica o usuário sobre a mudança de status
+            if solicitation.user and solicitation.user != request.user:
+                try:
+                    send_notification(
+                        user=solicitation.user,
+                        notification_type='solicitation_update',
+                        message=f'Sua solicitação {solicitation.protocol} teve o status alterado para {dict(Solicitation.STATUS_CHOICES)[new_status]}',
+                        created_by=request.user,
+                        link=reverse('solicitation:solicitation_dashboard', kwargs={'protocol': solicitation.protocol})
+                    )
+                except Exception as e:
+                    logger.error(f"Erro ao enviar notificação: {str(e)}")
+            
+            messages.success(request, f"Status da solicitação alterado para '{dict(Solicitation.STATUS_CHOICES)[new_status]}'")
+        else:
+            messages.error(request, _("Erro ao alterar status. Verifique os dados informados."))
+        
+        return redirect('solicitation:solicitation_dashboard', protocol=protocol)
 
 
 class AddEventToHistoryView(View):
@@ -107,7 +180,7 @@ class AddEventToHistoryView(View):
 
         # Verifica se o usuário tem permissão
         if not is_staff_or_owner(request.user, solicitation):
-            messages.error(request, "Você não tem permissão para adicionar eventos ao histórico dessa solicitação.")
+            messages.error(request, _("Você não tem permissão para adicionar eventos ao histórico dessa solicitação."))
             return redirect('solicitation:solicitation_dashboard', protocol=protocol)
 
         # Verifica se há algum evento no histórico e se o último foi de um usuário comum
@@ -116,7 +189,7 @@ class AddEventToHistoryView(View):
         # Se o usuário não for staff, o próximo evento precisa ser registrado por um staff
         if last_event is not None and last_event.user is not None and not request.user.is_staff:
             if not last_event.user.is_staff:
-                messages.info(request, "O próximo evento precisa ser registrado por um staff.")
+                messages.info(request, _("O próximo evento precisa ser registrado por um staff."))
                 return redirect('solicitation:solicitation_dashboard', protocol=protocol)
 
         # Exibe formulário de evento
@@ -127,7 +200,7 @@ class AddEventToHistoryView(View):
 
         # Verifica se o usuário tem permissão
         if not is_staff_or_owner(request.user, solicitation):
-            messages.error(request, "Você não tem permissão para adicionar eventos ao histórico dessa solicitação.")
+            messages.error(request, _("Você não tem permissão para adicionar eventos ao histórico dessa solicitação."))
             return redirect('solicitation:solicitation_dashboard', protocol=protocol)
 
         # Verifica se o último evento foi de um usuário comum, mas permite que staff registre eventos sem restrição
@@ -136,7 +209,7 @@ class AddEventToHistoryView(View):
         # Se o usuário não for staff, o próximo evento precisa ser registrado por um staff
         if last_event is not None and last_event.user is not None and not request.user.is_staff:
             if not last_event.user.is_staff:
-                messages.error(request, "Você só pode registrar um evento depois que um staff fizer a próxima alteração.")
+                messages.error(request, _("Você só pode registrar um evento depois que um staff fizer a próxima alteração."))
                 return redirect('solicitation:solicitation_dashboard', protocol=protocol)
 
         # Adiciona evento ao histórico
@@ -151,5 +224,5 @@ class AddEventToHistoryView(View):
             user=request.user  # Associando o usuário que fez a alteração
         )
 
-        messages.success(request, "Evento registrado com sucesso.")
+        messages.success(request, _("Evento registrado com sucesso."))
         return redirect('solicitation:solicitation_dashboard', protocol=protocol)
