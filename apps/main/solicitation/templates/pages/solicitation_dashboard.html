@@ -1,5 +1,6 @@
 {% extends 'layouts/base.html' %}
 {% load static i18n %}
+{% load solicitation_filters %}
 
 {% block title %}{% trans "Detalhe da Solicitação" %}{% endblock title %}
 
@@ -80,13 +81,20 @@
             {% trans "Detalhe da Solicitação" %}
         </h2>
         <div>
-            <a href="{% url 'administrator:chat_room' solicitation.protocol %}" class="btn btn-success me-2 shadow-sm">
-                💬 {% trans "Ir para o Chat" %}
-            </a>
-            {% if user.is_staff or user == solicitation.user %}
-            <a href="{% url 'solicitation:add_event_to_history' solicitation.protocol %}" class="btn btn-warning shadow-sm">
-                ➕ {% trans "Adicionar Evento" %}
-            </a>
+            {% if not solicitation.status|in_list:"resolved,closed,cancelled,rejected" %}
+                <a href="{% url 'administrator:chat_room' solicitation.protocol %}" class="btn btn-success me-2 shadow-sm">
+                    💬 {% trans "Ir para o Chat" %}
+                </a>
+                {% if user.is_staff or user == solicitation.user %}
+                <a href="{% url 'solicitation:add_event_to_history' solicitation.protocol %}" class="btn btn-warning shadow-sm">
+                    ➕ {% trans "Adicionar Evento" %}
+                </a>
+                {% endif %}
+            {% else %}
+                <div class="alert alert-info mb-0">
+                    <i class="fas fa-info-circle"></i> 
+                    {% trans "Esta solicitação está" %} <strong>{{ solicitation.get_status_display|lower }}</strong> {% trans "e não permite mais interações." %}
+                </div>
             {% endif %}
         </div>
     </div>

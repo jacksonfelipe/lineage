@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import permission_required
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 from .models import Solicitation, SolicitationHistory, SolicitationParticipant
+from .choices import STATUS_CHOICES
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -144,7 +145,7 @@ class SolicitationStatusUpdateView(LoginRequiredMixin, View):
             solicitation.save()
             
             # Cria entrada no histórico
-            action_text = f"Status alterado de '{dict(Solicitation.STATUS_CHOICES)[old_status]}' para '{dict(Solicitation.STATUS_CHOICES)[new_status]}'"
+            action_text = f"Status alterado de '{dict(STATUS_CHOICES)[old_status]}' para '{dict(STATUS_CHOICES)[new_status]}'"
             if comment:
                 action_text += f" - {comment}"
             
@@ -160,14 +161,14 @@ class SolicitationStatusUpdateView(LoginRequiredMixin, View):
                     send_notification(
                         user=solicitation.user,
                         notification_type='solicitation_update',
-                        message=f'Sua solicitação {solicitation.protocol} teve o status alterado para {dict(Solicitation.STATUS_CHOICES)[new_status]}',
+                        message=f'Sua solicitação {solicitation.protocol} teve o status alterado para {dict(STATUS_CHOICES)[new_status]}',
                         created_by=request.user,
                         link=reverse('solicitation:solicitation_dashboard', kwargs={'protocol': solicitation.protocol})
                     )
                 except Exception as e:
                     logger.error(f"Erro ao enviar notificação: {str(e)}")
             
-            messages.success(request, f"Status da solicitação alterado para '{dict(Solicitation.STATUS_CHOICES)[new_status]}'")
+            messages.success(request, f"Status da solicitação alterado para '{dict(STATUS_CHOICES)[new_status]}'")
         else:
             messages.error(request, _("Erro ao alterar status. Verifique os dados informados."))
         
@@ -181,6 +182,12 @@ class AddEventToHistoryView(View):
         # Verifica se o usuário tem permissão
         if not is_staff_or_owner(request.user, solicitation):
             messages.error(request, _("Você não tem permissão para adicionar eventos ao histórico dessa solicitação."))
+            return redirect('solicitation:solicitation_dashboard', protocol=protocol)
+
+        # Verifica se o status é final (resolved, closed, cancelled, rejected)
+        final_statuses = ['resolved', 'closed', 'cancelled', 'rejected']
+        if solicitation.status in final_statuses:
+            messages.error(request, _("Não é possível adicionar eventos a uma solicitação que está {}.").format(solicitation.get_status_display().lower()))
             return redirect('solicitation:solicitation_dashboard', protocol=protocol)
 
         # Verifica se há algum evento no histórico e se o último foi de um usuário comum
@@ -201,6 +208,12 @@ class AddEventToHistoryView(View):
         # Verifica se o usuário tem permissão
         if not is_staff_or_owner(request.user, solicitation):
             messages.error(request, _("Você não tem permissão para adicionar eventos ao histórico dessa solicitação."))
+            return redirect('solicitation:solicitation_dashboard', protocol=protocol)
+
+        # Verifica se o status é final (resolved, closed, cancelled, rejected)
+        final_statuses = ['resolved', 'closed', 'cancelled', 'rejected']
+        if solicitation.status in final_statuses:
+            messages.error(request, _("Não é possível adicionar eventos a uma solicitação que está {}.").format(solicitation.get_status_display().lower()))
             return redirect('solicitation:solicitation_dashboard', protocol=protocol)
 
         # Verifica se o último evento foi de um usuário comum, mas permite que staff registre eventos sem restrição
