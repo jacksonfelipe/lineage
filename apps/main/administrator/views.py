@@ -55,7 +55,15 @@ def chat_room(request, group_name):
     if not is_participant:
         raise Http404(_("Você não tem permissão para acessar esta sala de chat."))
 
-    # Verifica se o status é 'pending'
+    # Verifica se o status é final (resolved, closed, cancelled, rejected)
+    final_statuses = ['resolved', 'closed', 'cancelled', 'rejected']
+    if solicitation.status in final_statuses:
+        return render(request, 'errors/solicitation_closed.html', {
+            'solicitation': solicitation,
+            'status': solicitation.get_status_display(),  # Exibe 'Resolvido', 'Fechado', etc
+        })
+
+    # Verifica se o status é 'pending' (mantém a verificação original)
     if solicitation.status != 'pending':
         return render(request, 'errors/solicitation_closed.html', {
             'solicitation': solicitation,

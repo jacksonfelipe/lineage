@@ -1,5 +1,6 @@
 {% extends 'layouts/base.html' %}
 {% load static i18n %}
+{% load solicitation_filters %}
 
 {% block title %}{% trans "Detalhe da Solicitação" %}{% endblock title %}
 
@@ -58,6 +59,16 @@
             transform: translateY(0);
         }
     }
+
+    .status-badge {
+        font-size: 0.9em;
+        padding: 0.5em 1em;
+    }
+
+    .priority-badge {
+        font-size: 0.8em;
+        padding: 0.4em 0.8em;
+    }
 </style>
 {% endblock extrastyle %}
 
@@ -70,13 +81,20 @@
             {% trans "Detalhe da Solicitação" %}
         </h2>
         <div>
-            <a href="{% url 'administrator:chat_room' solicitation.protocol %}" class="btn btn-success me-2 shadow-sm">
-                💬 {% trans "Ir para o Chat" %}
-            </a>
-            {% if user.is_staff or user == solicitation.user %}
-            <a href="{% url 'solicitation:add_event_to_history' solicitation.protocol %}" class="btn btn-warning shadow-sm">
-                ➕ {% trans "Adicionar Evento" %}
-            </a>
+            {% if not solicitation.status|in_list:"resolved,closed,cancelled,rejected" %}
+                <a href="{% url 'administrator:chat_room' solicitation.protocol %}" class="btn btn-success me-2 shadow-sm">
+                    💬 {% trans "Ir para o Chat" %}
+                </a>
+                {% if user.is_staff or user == solicitation.user %}
+                <a href="{% url 'solicitation:add_event_to_history' solicitation.protocol %}" class="btn btn-warning shadow-sm">
+                    ➕ {% trans "Adicionar Evento" %}
+                </a>
+                {% endif %}
+            {% else %}
+                <div class="alert alert-info mb-0">
+                    <i class="fas fa-info-circle"></i> 
+                    {% trans "Esta solicitação está" %} <strong>{{ solicitation.get_status_display|lower }}</strong> {% trans "e não permite mais interações." %}
+                </div>
             {% endif %}
         </div>
     </div>
@@ -84,12 +102,69 @@
     <!-- Detalhes da Solicitação -->
     <div class="card shadow mb-4">
         <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">{% trans "Solicitação" %}</h5>
+            <h5 class="mb-0">{% trans "Informações da Solicitação" %}</h5>
         </div>
         <div class="card-body">
-            <p><strong>{% trans "Protocolo:" %}</strong> {{ solicitation.protocol }}</p>
-            <p><strong>{% trans "Status:" %}</strong> {{ solicitation.status }}</p>
-            <p><strong>{% trans "Data da Solicitação:" %}</strong> {{ solicitation.created_at|date:"d/m/Y" }}</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>{% trans "Protocolo:" %}</strong> <span class="badge bg-dark">{{ solicitation.protocol }}</span></p>
+                    <p><strong>{% trans "Título:" %}</strong> {{ solicitation.title }}</p>
+                    <p><strong>{% trans "Categoria:" %}</strong> <span class="badge bg-secondary">{{ solicitation.get_category_display }}</span></p>
+                    <p><strong>{% trans "Prioridade:" %}</strong> 
+                        {% if solicitation.priority == 'low' %}
+                            <span class="badge bg-success priority-badge">{{ solicitation.get_priority_display }}</span>
+                        {% elif solicitation.priority == 'medium' %}
+                            <span class="badge bg-warning priority-badge">{{ solicitation.get_priority_display }}</span>
+                        {% elif solicitation.priority == 'high' %}
+                            <span class="badge bg-danger priority-badge">{{ solicitation.get_priority_display }}</span>
+                        {% elif solicitation.priority == 'urgent' %}
+                            <span class="badge bg-dark priority-badge">{{ solicitation.get_priority_display }}</span>
+                        {% elif solicitation.priority == 'critical' %}
+                            <span class="badge bg-danger priority-badge" style="background-color: #dc3545 !important;">{{ solicitation.get_priority_display }}</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>{% trans "Status:" %}</strong> 
+                        {% if solicitation.status == 'open' %}
+                            <span class="badge bg-primary status-badge">{{ solicitation.get_status_display }}</span>
+                        {% elif solicitation.status == 'in_progress' %}
+                            <span class="badge bg-warning status-badge">{{ solicitation.get_status_display }}</span>
+                        {% elif solicitation.status == 'waiting_user' %}
+                            <span class="badge bg-info status-badge">{{ solicitation.get_status_display }}</span>
+                        {% elif solicitation.status == 'waiting_third_party' %}
+                            <span class="badge bg-secondary status-badge">{{ solicitation.get_status_display }}</span>
+                        {% elif solicitation.status == 'resolved' %}
+                            <span class="badge bg-success status-badge">{{ solicitation.get_status_display }}</span>
+                        {% elif solicitation.status == 'closed' %}
+                            <span class="badge bg-dark status-badge">{{ solicitation.get_status_display }}</span>
+                        {% elif solicitation.status == 'cancelled' %}
+                            <span class="badge bg-secondary status-badge">{{ solicitation.get_status_display }}</span>
+                        {% elif solicitation.status == 'rejected' %}
+                            <span class="badge bg-danger status-badge">{{ solicitation.get_status_display }}</span>
+                        {% endif %}
+                    </p>
+                    <p><strong>{% trans "Criado em:" %}</strong> {{ solicitation.created_at|date:"d/m/Y H:i" }}</p>
+                    {% if solicitation.resolved_at %}
+                        <p><strong>{% trans "Resolvido em:" %}</strong> {{ solicitation.resolved_at|date:"d/m/Y H:i" }}</p>
+                    {% endif %}
+                    {% if solicitation.closed_at %}
+                        <p><strong>{% trans "Fechado em:" %}</strong> {{ solicitation.closed_at|date:"d/m/Y H:i" }}</p>
+                    {% endif %}
+                    {% if solicitation.assigned_to %}
+                        <p><strong>{% trans "Atribuído para:" %}</strong> {{ solicitation.assigned_to.username }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="row mt-3">
+                <div class="col-12">
+                    <p><strong>{% trans "Descrição:" %}</strong></p>
+                    <div class="border rounded p-3 bg-light">
+                        {{ solicitation.description|linebreaks }}
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Participantes logo abaixo -->
@@ -107,12 +182,56 @@
         </div>
     </div>
 
+    <!-- Formulário de Mudança de Status (apenas para staff) -->
+    {% if user.is_staff and status_form %}
+    <div class="card shadow mb-4">
+        <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">{% trans "Alterar Status da Solicitação" %}</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'solicitation:status_update' solicitation.protocol %}">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="{{ status_form.status.id_for_label }}" class="form-label">{% trans "Novo Status" %} *</label>
+                        {{ status_form.status }}
+                        {% if status_form.status.errors %}
+                            <div class="text-danger">{{ status_form.status.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="{{ status_form.assigned_to.id_for_label }}" class="form-label">{% trans "Atribuir para" %}</label>
+                        {{ status_form.assigned_to }}
+                        {% if status_form.assigned_to.errors %}
+                            <div class="text-danger">{{ status_form.assigned_to.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-save"></i> {% trans "Atualizar Status" %}
+                        </button>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label for="{{ status_form.comment.id_for_label }}" class="form-label">{% trans "Comentário" %}</label>
+                        {{ status_form.comment }}
+                        {% if status_form.comment.errors %}
+                            <div class="text-danger">{{ status_form.comment.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Histórico de Eventos -->
     <div class="row mt-5">
         <div class="col-md-12">
             <h4 class="mb-4 text-primary">{% trans "Histórico de Eventos" %}</h4>
 
-            {% for event in solicitation.solicitation_history.all %}
+            {% for event in history %}
                 <div class="event-box shadow-sm rounded p-3 mb-4">
                     <div class="event-thumbnail">
                         {% if event.image %}
@@ -123,7 +242,7 @@
                     </div>
                     <div class="event-content">
                         <p class="mb-1"><strong>{{ event.timestamp|date:"d/m/Y H:i" }}</strong></p>
-                        <p class="mb-1"><strong>{% trans "Usuário:" %}</strong> {% if event.image %}{{ event.user.username }}{% else %}{% trans "Sistema" %}{% endif %}</p>
+                        <p class="mb-1"><strong>{% trans "Usuário:" %}</strong> {% if event.user %}{{ event.user.username }}{% else %}{% trans "Sistema" %}{% endif %}</p>
                         <p class="event-action text-muted">{{ event.action }}</p>
                         {% if event.image %}
                             <img src="{{ event.image.url }}" alt="Event Image" class="img-fluid mt-2 rounded" style="max-width: 300px;">

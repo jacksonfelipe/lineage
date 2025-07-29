@@ -9,11 +9,32 @@
     <ul class="list-group mb-4">
       <li class="list-group-item"><strong>{% trans "ID do Pedido:" %}</strong> {{ pedido.id }}</li>
       <li class="list-group-item"><strong>{% trans "Valor Pago:" %}</strong> R$ {{ pedido.valor_pago }}</li>
-      <li class="list-group-item"><strong>{% trans "Moedas Geradas:" %}</strong> {{ pedido.moedas_geradas }}</li>
+      
+      {% if pedido.bonus_aplicado > 0 %}
+        <li class="list-group-item list-group-item-success">
+          <strong><i class="fas fa-gift"></i> {% trans "Bônus Aplicado:" %}</strong> R$ {{ pedido.bonus_aplicado }}
+        </li>
+        <li class="list-group-item list-group-item-success">
+          <strong>{% trans "Total Creditado:" %}</strong> R$ {{ pedido.total_creditado }}
+        </li>
+      {% else %}
+        <li class="list-group-item"><strong>{% trans "Moedas Geradas:" %}</strong> {{ pedido.moedas_geradas }}</li>
+      {% endif %}
+      
       <li class="list-group-item"><strong>{% trans "Status:" %}</strong> {{ pedido.status }}</li>
       <li class="list-group-item"><strong>{% trans "Método:" %}</strong> {{ pedido.metodo }}</li>
       <li class="list-group-item"><strong>{% trans "Data de Criação:" %}</strong> {{ pedido.data_criacao }}</li>
     </ul>
+
+    {% if pedido.bonus_aplicado > 0 %}
+      <div class="alert alert-success mb-4">
+        <h5><i class="fas fa-gift"></i> {% trans "Bônus Aplicado!" %}</h5>
+        <p class="mb-0">
+          {% trans "Parabéns! Você receberá um bônus de" %} <strong>R$ {{ pedido.bonus_aplicado }}</strong> 
+          {% trans "além do valor da sua compra." %}
+        </p>
+      </div>
+    {% endif %}
 
     <form method="post">
       {% csrf_token %}

@@ -28,17 +28,41 @@ class PromotionCodeAdmin(BaseModelAdmin):
 
 @admin.register(Cart)
 class CartAdmin(BaseModelAdmin):
-    list_display = ('user', 'promocao_aplicada', 'calcular_total')
+    list_display = ('user', 'usar_bonus', 'promocao_aplicada', 'calcular_total')
     search_fields = ('user__username',)
     ordering = ('user',)
+    list_filter = ('usar_bonus', 'promocao_aplicada')
+    
+    fieldsets = (
+        ('Informações Básicas', {
+            'fields': ('user', 'promocao_aplicada')
+        }),
+        ('Pagamento com Bônus', {
+            'fields': ('usar_bonus', 'valor_bonus_usado', 'valor_dinheiro_usado'),
+            'description': 'Configurações de pagamento misto'
+        }),
+    )
 
 
 @admin.register(ShopPurchase)
 class ShopPurchaseAdmin(BaseModelAdmin):
-    list_display = ('user', 'character_name', 'total_pago', 'data_compra', 'promocao_aplicada')
-    list_filter = ('data_compra',)
+    list_display = ('user', 'character_name', 'total_pago', 'valor_bonus_usado', 'valor_dinheiro_usado', 'data_compra')
+    list_filter = ('data_compra', 'promocao_aplicada')
     search_fields = ('user__username', 'character_name')
     ordering = ('-data_compra',)
+    
+    fieldsets = (
+        ('Informações da Compra', {
+            'fields': ('user', 'character_name', 'total_pago', 'data_compra')
+        }),
+        ('Detalhes do Pagamento', {
+            'fields': ('valor_bonus_usado', 'valor_dinheiro_usado'),
+            'description': 'Como foi realizado o pagamento'
+        }),
+        ('Promoções', {
+            'fields': ('promocao_aplicada', 'apoiador')
+        }),
+    )
 
 
 @admin.register(ShopPackageItem)

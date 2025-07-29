@@ -20,7 +20,7 @@ load_dotenv()  # take environment variables from .env.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # System Version
-VERSION = '1.11.0'
+VERSION = '1.13.2'
 
 # Enable/Disable DEBUG Mode
 DEBUG = str2bool(os.environ.get('DEBUG', False))
@@ -28,8 +28,7 @@ DEBUG = str2bool(os.environ.get('DEBUG', False))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 if not SECRET_KEY:
-    SECRET_KEY = ''.join(random.choices(
-        string.ascii_letters + string.digits, k=32))
+    SECRET_KEY = ''.join(random.choices(string.ascii_letters + string.digits, k=32))
 
 ROOT_URLCONF = "core.urls"
 AUTH_USER_MODEL = 'home.User'
@@ -370,6 +369,12 @@ DATE_FORMAT = os.getenv("CONFIG_DATE_FORMAT", 'd/m/Y')
 TIME_FORMAT = os.getenv("CONFIG_TIME_FORMAT", 'H:i:s')
 GMT_OFFSET = float(os.getenv("CONFIG_GMT_OFFSET", -3))
 
+# Configuração para exibir data e hora ou apenas data no status dos Grand Bosses
+GRANDBOSS_SHOW_TIME = os.getenv("CONFIG_GRANDBOSS_SHOW_TIME", "True").lower() in ['true', '1', 'yes']
+
+# Configuração para exibir quantidade de jogadores online na página inicial
+SHOW_PLAYERS_ONLINE = os.getenv("CONFIG_SHOW_PLAYERS_ONLINE", "True").lower() in ['true', '1', 'yes']
+
 LANGUAGES = [
     ('pt', _('Português')),
     ('en', _('Inglês')),
@@ -451,11 +456,18 @@ if USE_S3:
 CONFIG_EMAIL_ENABLE = os.getenv('CONFIG_EMAIL_ENABLE', 'False').lower() in ['true', '1', 'yes']
 if CONFIG_EMAIL_ENABLE:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_USE_TLS = os.getenv('CONFIG_EMAIL_USE_TLS', 'True').lower() in ['true', '1', 'yes']
+    use_tls = os.getenv('CONFIG_EMAIL_USE_TLS', 'True').lower() in ['true', '1', 'yes']
+    use_ssl = not use_tls
     EMAIL_HOST = os.getenv('CONFIG_EMAIL_HOST')
     EMAIL_HOST_USER = os.getenv('CONFIG_EMAIL_HOST_USER')
     EMAIL_HOST_PASSWORD = os.getenv('CONFIG_EMAIL_HOST_PASSWORD')
-    EMAIL_PORT = int(os.getenv('CONFIG_EMAIL_PORT', 587))
+    # Porta padrão: 587 para TLS, 465 para SSL
+    if use_tls:
+        EMAIL_USE_TLS = True
+        EMAIL_PORT = int(os.getenv('CONFIG_EMAIL_PORT', 587))
+    else:
+        EMAIL_USE_SSL = True
+        EMAIL_PORT = int(os.getenv('CONFIG_EMAIL_PORT', 465))
     DEFAULT_FROM_EMAIL = os.getenv('CONFIG_DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -877,3 +889,11 @@ LICENSE_CONFIG = {
     'ENCRYPTION_KEY': os.environ.get('PDL_ENCRYPTION_KEY', ''),  # Chave Fernet usada no script gerador
     'DNS_TIMEOUT': int(os.environ.get('PDL_DNS_TIMEOUT', '10')),
 }
+
+# Web Push VAPID keys (gere usando pywebpush ou web-push)
+# Exemplo para gerar: 
+#   from pywebpush import generate_vapid_private_key, generate_vapid_public_key
+#   private_key = generate_vapid_private_key()
+#   public_key = generate_vapid_public_key(private_key)
+VAPID_PRIVATE_KEY = os.environ.get("VAPID_PRIVATE_KEY")
+VAPID_PUBLIC_KEY = os.environ.get("VAPID_PUBLIC_KEY")

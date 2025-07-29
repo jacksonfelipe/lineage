@@ -40,7 +40,10 @@ class LicenseBackend(ModelBackend):
             
         logger.info(f"[LicenseBackend] Usuário autenticado com sucesso: {user.username} (is_superuser: {user.is_superuser})")
         
-        # 3. Verificações adicionais para superusuários (se necessário)
+        # 3. Define o backend no usuário para que o Django saiba qual backend foi usado
+        user.backend = 'core.backends.LicenseBackend'
+        
+        # 4. Verificações adicionais para superusuários (se necessário)
         if user.is_superuser:
             logger.debug(f"[LicenseBackend] Usuário é superusuário: {user.username}")
             # Aqui você pode adicionar verificações específicas para superusuários se necessário
@@ -53,7 +56,10 @@ class LicenseBackend(ModelBackend):
         """
         try:
             user = super().get_user(user_id)
-            logger.debug(f"[LicenseBackend] Usuário recuperado: {user.username if user else 'None'}")
+            if user:
+                # Define o backend no usuário para que o Django saiba qual backend foi usado
+                user.backend = 'core.backends.LicenseBackend'
+                logger.debug(f"[LicenseBackend] Usuário recuperado: {user.username}")
             return user
         except Exception as e:
             logger.error(f"[LicenseBackend] Erro ao recuperar usuário {user_id}: {e}")

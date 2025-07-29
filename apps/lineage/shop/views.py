@@ -39,12 +39,27 @@ def shop_home(request):
 @conditional_otp_required
 def view_cart(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
-    # Lista os personagens da conta
+    wallet, created = Wallet.objects.get_or_create(usuario=request.user)
+    
+    # Buscar personagens do usuário
     try:
         personagens = LineageServices.find_chars(request.user.username)
-    except:
-        messages.warning(request, 'Não foi possível carregar seus personagens agora.')
-    return render(request, 'shop/cart.html', {'cart': cart, "personagens": personagens})
+    except Exception as e:
+        personagens = []
+        messages.warning(request, 'Erro ao carregar personagens. Tente novamente.')
+
+    # Calcular pagamento misto se usar bônus
+    valor_bonus_usado, valor_dinheiro_usado = cart.calcular_pagamento_misto(wallet.saldo_bonus)
+    
+    context = {
+        'cart': cart,
+        'personagens': personagens,
+        'wallet': wallet,
+        'valor_bonus_usado': valor_bonus_usado,
+        'valor_dinheiro_usado': valor_dinheiro_usado,
+    }
+    
+    return render(request, 'shop/cart.html', context)
 
 
 @conditional_otp_required
@@ -88,6 +103,22 @@ def add_package_to_cart(request, package_id):
 
 
 @conditional_otp_required
+def toggle_bonus_usage(request):
+    """Alterna o uso de bônus no carrinho"""
+    if request.method == 'POST':
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart.usar_bonus = not cart.usar_bonus
+        cart.save()
+        
+        if cart.usar_bonus:
+            messages.success(request, "Pagamento com bônus ativado!")
+        else:
+            messages.info(request, "Pagamento apenas com dinheiro.")
+    
+    return redirect('shop:view_cart')
+
+
+@conditional_otp_required
 def apply_promo_code(request):
     if request.method == "POST":
         code = request.POST.get("promo_code")
@@ -111,10 +142,20 @@ def checkout(request):
     wallet, created = Wallet.objects.get_or_create(usuario=request.user)
 
     total = cart.calcular_total()
+    valor_bonus_usado, valor_dinheiro_usado = cart.calcular_pagamento_misto(wallet.saldo_bonus)
 
-    if wallet.saldo < total:
-        messages.error(request, "Saldo insuficiente na carteira.")
-        return redirect('shop:view_cart')
+    # Verificar se tem saldo suficiente
+    if cart.usar_bonus:
+        if wallet.saldo_bonus < valor_bonus_usado:
+            messages.error(request, "Saldo de bônus insuficiente.")
+            return redirect('shop:view_cart')
+        if wallet.saldo < valor_dinheiro_usado:
+            messages.error(request, "Saldo insuficiente na carteira.")
+            return redirect('shop:view_cart')
+    else:
+        if wallet.saldo < total:
+            messages.error(request, "Saldo insuficiente na carteira.")
+            return redirect('shop:view_cart')
 
     personagem = request.POST.get('character_name')
     if not personagem or len(personagem.strip()) < 3:
@@ -138,8 +179,28 @@ def checkout(request):
 
     try:
         with transaction.atomic():
-            # Descontar do saldo
-            aplicar_transacao(wallet, 'SAIDA', total, descricao="Compra no Shop")
+            # Descontar do saldo de bônus se aplicável
+            if cart.usar_bonus and valor_bonus_usado > 0:
+                from apps.lineage.wallet.signals import aplicar_transacao_bonus
+                aplicar_transacao_bonus(
+                    wallet=wallet,
+                    tipo='SAIDA',
+                    valor=valor_bonus_usado,
+                    descricao=f"Compra no Shop - {personagem}",
+                    origem="Shop",
+                    destino=personagem
+                )
+
+            # Descontar do saldo normal se aplicável
+            if valor_dinheiro_usado > 0:
+                aplicar_transacao(
+                    wallet=wallet,
+                    tipo='SAIDA',
+                    valor=valor_dinheiro_usado,
+                    descricao=f"Compra no Shop - {personagem}",
+                    origem="Shop",
+                    destino=personagem
+                )
 
             # Enviar itens e pacotes para o inventário
             # Se o inventário não existir, será criado automaticamente
@@ -195,20 +256,24 @@ def checkout(request):
                 user=request.user,
                 character_name=personagem,
                 total_pago=total,
+                valor_bonus_usado=valor_bonus_usado,
+                valor_dinheiro_usado=valor_dinheiro_usado,
                 promocao_aplicada=cart.promocao_aplicada
             )
 
+            # Limpar o carrinho
             cart.limpar()
-            messages.success(request, "Compra realizada com sucesso! Itens enviados para o inventário.")
 
-            perfil = PerfilGamer.objects.get(user=request.user)
-            perfil.adicionar_xp(40)
-            verificar_conquistas(request.user, request=request)
+            # Mensagem de sucesso
+            if cart.usar_bonus and valor_bonus_usado > 0:
+                messages.success(request, f"Compra realizada com sucesso! R$ {valor_bonus_usado:.2f} em bônus e R$ {valor_dinheiro_usado:.2f} em dinheiro.")
+            else:
+                messages.success(request, f"Compra realizada com sucesso! R$ {total:.2f} debitados da sua carteira.")
 
-            return redirect('shop:purchase_history')
+            return redirect('shop:shop_home')
 
     except Exception as e:
-        messages.error(request, "Erro ao processar a compra. Por favor, tente novamente.")
+        messages.error(request, f"Erro ao processar a compra: {str(e)}")
         return redirect('shop:view_cart')
 
 

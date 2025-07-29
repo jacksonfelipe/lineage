@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from apps.main.home.models import User
 from core.models import BaseModel
+from decimal import Decimal
 
 
 class ShopItem(BaseModel):
@@ -81,6 +82,10 @@ class Cart(BaseModel):
     promocao_aplicada = models.ForeignKey(
         PromotionCode, verbose_name=_("Promoção Aplicada"), null=True, blank=True, on_delete=models.SET_NULL
     )
+    # Campos para pagamento com bônus
+    usar_bonus = models.BooleanField(_("Usar Bônus"), default=False)
+    valor_bonus_usado = models.DecimalField(_("Valor Bônus Usado"), max_digits=10, decimal_places=2, default=0.00)
+    valor_dinheiro_usado = models.DecimalField(_("Valor Dinheiro Usado"), max_digits=10, decimal_places=2, default=0.00)
 
     class Meta:
         verbose_name = _("Carrinho")
@@ -93,10 +98,29 @@ class Cart(BaseModel):
             total *= (1 - (self.promocao_aplicada.desconto_percentual / 100))
         return total
 
+    def calcular_pagamento_misto(self, saldo_bonus_disponivel):
+        """
+        Calcula como o pagamento será dividido entre bônus e dinheiro
+        Retorna: (valor_bonus_usado, valor_dinheiro_usado)
+        """
+        total = self.calcular_total()
+        
+        if not self.usar_bonus:
+            return Decimal('0.00'), total
+        
+        # Usa bônus primeiro, depois dinheiro
+        valor_bonus_usado = min(total, saldo_bonus_disponivel)
+        valor_dinheiro_usado = total - valor_bonus_usado
+        
+        return valor_bonus_usado, valor_dinheiro_usado
+
     def limpar(self):
         self.itens.clear()
         self.pacotes.clear()
         self.promocao_aplicada = None
+        self.usar_bonus = False
+        self.valor_bonus_usado = Decimal('0.00')
+        self.valor_dinheiro_usado = Decimal('0.00')
         self.save()
 
     def __str__(self):
@@ -133,6 +157,9 @@ class ShopPurchase(BaseModel):
     user = models.ForeignKey(User, verbose_name=_("Usuário"), on_delete=models.CASCADE)
     character_name = models.CharField(_("Nome do Personagem"), max_length=100)
     total_pago = models.DecimalField(_("Total Pago"), max_digits=10, decimal_places=2)
+    # Campos para registrar o tipo de pagamento
+    valor_bonus_usado = models.DecimalField(_("Valor Bônus Usado"), max_digits=10, decimal_places=2, default=0.00)
+    valor_dinheiro_usado = models.DecimalField(_("Valor Dinheiro Usado"), max_digits=10, decimal_places=2, default=0.00)
     promocao_aplicada = models.ForeignKey(
         PromotionCode, verbose_name=_("Promoção Aplicada"), null=True, blank=True, on_delete=models.SET_NULL
     )
@@ -151,4 +178,5 @@ class ShopPurchase(BaseModel):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Compra de {self.user.username} — R${self.total_pago} — {self.data_compra.strftime('%d/%m/%Y %H:%M')}"
+        bonus_info = f" (Bônus: R${self.valor_bonus_usado})" if self.valor_bonus_usado > 0 else ""
+        return f"Compra de {self.user.username} — R${self.total_pago}{bonus_info} — {self.data_compra.strftime('%d/%m/%Y %H:%M')}"

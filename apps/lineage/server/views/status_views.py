@@ -50,11 +50,89 @@ def siege_ranking_view(request):
 def olympiad_ranking_view(request):
     # Obtém o ranking de olimpíada
     db = LineageDB()
-    result = LineageStats.olympiad_ranking() if db.is_connected() else []
-    result = attach_crests_to_clans(result)
-    for player in result:
-        player['base'] = get_class_name(player['base'])
-    return render(request, 'status/olympiad_ranking.html', {'ranking': result})
+    original_result = LineageStats.olympiad_ranking() if db.is_connected() else []
+    
+    # Filtra registros com valores None
+    filtered_result = []
+    for player in original_result:
+        # Só inclui se char_name não for None
+        if player.get('char_name') is not None:
+            filtered_result.append(player)
+    
+    # Preparar dados para os filtros - usar dados originais ANTES de qualquer filtro
+    # Usar a mesma lógica da view que funciona
+    all_classes = list(set([get_class_name(p.get('base', '')) for p in filtered_result if p.get('base')]))
+    all_classes.sort()
+    
+    # Aplicar filtros baseados nos parâmetros GET
+    search_query = request.GET.get('search', '').strip().lower()
+    class_filter = request.GET.get('class', '').strip()
+    clan_filter = request.GET.get('clan', '').strip().lower()
+    status_filter = request.GET.get('status', '').strip()
+    min_points = request.GET.get('min_points', '').strip()
+    
+    # Filtrar por busca de texto (nome do jogador, clã, classe)
+    if search_query:
+        filtered_result = [
+            player for player in filtered_result
+            if ((player.get('char_name') or '').lower().find(search_query) != -1 or
+                (player.get('clan_name') or '').lower().find(search_query) != -1 or
+                get_class_name(player.get('base', '')).lower().find(search_query) != -1)
+        ]
+    
+    # Filtrar por classe
+    if class_filter:
+        filtered_result = [
+            player for player in filtered_result
+            if get_class_name(player.get('base', '')).lower() == class_filter.lower()
+        ]
+    
+    # Filtrar por clã
+    if clan_filter:
+        filtered_result = [
+            player for player in filtered_result
+            if (player.get('clan_name') or '').lower().find(clan_filter) != -1
+        ]
+    
+    # Filtrar por status
+    if status_filter:
+        if status_filter == 'online':
+            filtered_result = [player for player in filtered_result if player.get('online', 0) > 0]
+        elif status_filter == 'offline':
+            filtered_result = [player for player in filtered_result if player.get('online', 0) == 0]
+    
+    # Filtrar por pontos mínimos
+    if min_points and min_points.isdigit():
+        min_points_int = int(min_points)
+        filtered_result = [
+            player for player in filtered_result
+            if player.get('olympiad_points', 0) >= min_points_int
+        ]
+    
+    # Processar os dados para incluir nome da classe (como na view que funciona)
+    for player in filtered_result:
+        if 'base' in player and player['base'] is not None:
+            player['class_name'] = get_class_name(player['base'])
+        else:
+            player['class_name'] = '-'
+    
+    final_result = attach_crests_to_clans(filtered_result)
+    
+    context = {
+        'ranking': final_result,
+        'filters': {
+            'search': request.GET.get('search', ''),
+            'class': request.GET.get('class', ''),
+            'clan': request.GET.get('clan', ''),
+            'status': request.GET.get('status', ''),
+            'min_points': request.GET.get('min_points', ''),
+        },
+        'available_classes': all_classes,
+        'total_players': len(original_result),
+        'filtered_players': len(filtered_result),
+    }
+    
+    return render(request, 'status/olympiad_ranking.html', context)
 
 
 @conditional_otp_required
@@ -62,7 +140,15 @@ def olympiad_all_heroes_view(request):
     # Obtém todos os heróis da olimpíada
     db = LineageDB()
     result = LineageStats.olympiad_all_heroes() if db.is_connected() else []
-    result = attach_crests_to_clans(result)
+    
+    # Filtra registros com valores None
+    filtered_result = []
+    for player in result:
+        # Só inclui se char_name não for None
+        if player.get('char_name') is not None:
+            filtered_result.append(player)
+    
+    result = attach_crests_to_clans(filtered_result)
     for player in result:
         player['base'] = get_class_name(player['base'])
     return render(request, 'status/olympiad_all_heroes.html', {'heroes': result})
@@ -73,7 +159,15 @@ def olympiad_current_heroes_view(request):
     # Obtém os heróis atuais da olimpíada
     db = LineageDB()
     result = LineageStats.olympiad_current_heroes() if db.is_connected() else []
-    result = attach_crests_to_clans(result)
+    
+    # Filtra registros com valores None
+    filtered_result = []
+    for player in result:
+        # Só inclui se char_name não for None
+        if player.get('char_name') is not None:
+            filtered_result.append(player)
+    
+    result = attach_crests_to_clans(filtered_result)
     for player in result:
         player['base'] = get_class_name(player['base'])
     return render(request, 'status/olympiad_current_heroes.html', {'current_heroes': result})
@@ -144,7 +238,13 @@ def grandboss_status_view(request):
                 if respawn_timestamp > current_time:
                     try:
                         respawn_datetime = datetime.fromtimestamp(respawn_timestamp) - timedelta(hours=gmt_offset)
-                        boss['respawn_human'] = respawn_datetime.strftime('%d/%m/%Y %H:%M')
+                        
+                        # Usar configuração para decidir se mostra data e hora ou apenas data
+                        if getattr(settings, 'GRANDBOSS_SHOW_TIME', True):
+                            boss['respawn_human'] = respawn_datetime.strftime('%d/%m/%Y %H:%M')
+                        else:
+                            boss['respawn_human'] = respawn_datetime.strftime('%d/%m/%Y')
+                        
                         boss['status'] = "Morto"
                     except (OSError, OverflowError, ValueError) as e:
                         boss['status'] = "Desconhecido"

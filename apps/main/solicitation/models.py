@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from utils.protocol import create_protocol
 from apps.main.home.models import User
 from core.models import BaseModel
-from .choices import STATUS_CHOICES
+from .choices import STATUS_CHOICES, CATEGORY_CHOICES, PRIORITY_CHOICES
 
 
 class Solicitation(BaseModel):
@@ -14,12 +14,35 @@ class Solicitation(BaseModel):
         verbose_name=_("Protocolo"),
         help_text=_("Código de identificação único da solicitação.")
     )
+    title = models.CharField(
+        max_length=200,
+        verbose_name=_("Título"),
+        help_text=_("Título da solicitação.")
+    )
+    description = models.TextField(
+        verbose_name=_("Descrição"),
+        help_text=_("Descrição detalhada da solicitação.")
+    )
     status = models.CharField(
-        max_length=10,
+        max_length=20,
         choices=STATUS_CHOICES,
-        default='pending',
+        default='open',
         verbose_name=_("Status"),
         help_text=_("Status atual da solicitação.")
+    )
+    category = models.CharField(
+        max_length=20,
+        choices=CATEGORY_CHOICES,
+        default='general',
+        verbose_name=_("Categoria"),
+        help_text=_("Categoria da solicitação.")
+    )
+    priority = models.CharField(
+        max_length=10,
+        choices=PRIORITY_CHOICES,
+        default='medium',
+        verbose_name=_("Prioridade"),
+        help_text=_("Prioridade da solicitação.")
     )
     user = models.ForeignKey(
         User,
@@ -30,6 +53,27 @@ class Solicitation(BaseModel):
         verbose_name=_("Usuário"),
         help_text=_("Usuário que iniciou a solicitação.")
     )
+    assigned_to = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        related_name='solicitations_assigned',
+        blank=True,
+        null=True,
+        verbose_name=_("Atribuído para"),
+        help_text=_("Usuário responsável por resolver a solicitação.")
+    )
+    resolved_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name=_("Resolvido em"),
+        help_text=_("Data e hora em que a solicitação foi resolvida.")
+    )
+    closed_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name=_("Fechado em"),
+        help_text=_("Data e hora em que a solicitação foi fechada.")
+    )
 
     def add_participant(self, user):
         """Adiciona um participante à proposta."""
@@ -39,10 +83,27 @@ class Solicitation(BaseModel):
         """Verifica se o usuário é um dos participantes da proposta."""
         return SolicitationParticipant.objects.filter(solicitation=self, user=user).exists()
 
+    def can_be_resolved(self):
+        """Verifica se a solicitação pode ser resolvida."""
+        return self.status in ['open', 'in_progress', 'waiting_user', 'waiting_third_party']
+
+    def can_be_closed(self):
+        """Verifica se a solicitação pode ser fechada."""
+        return self.status in ['resolved', 'open', 'in_progress']
+
     def save(self, *args, **kwargs):
         is_new = self._state.adding
         if not self.protocol:
             self.protocol = create_protocol()
+        
+        # Atualiza timestamps baseado no status
+        if self.status == 'resolved' and not self.resolved_at:
+            from django.utils import timezone
+            self.resolved_at = timezone.now()
+        elif self.status == 'closed' and not self.closed_at:
+            from django.utils import timezone
+            self.closed_at = timezone.now()
+        
         super().save(*args, **kwargs)
 
         if is_new and self.user:
@@ -51,11 +112,12 @@ class Solicitation(BaseModel):
         SolicitationHistory.objects.create(solicitation=self, action=_('Solicitação criada.'))
 
     def __str__(self):
-        return f"{_('Solicitação')} {self.protocol} - {self.status}"
+        return f"{_('Solicitação')} {self.protocol} - {self.title} ({self.status})"
 
     class Meta:
         verbose_name = _("Solicitação")
         verbose_name_plural = _("Solicitações")
+        ordering = ['-created_at']
 
 
 class SolicitationParticipant(BaseModel):

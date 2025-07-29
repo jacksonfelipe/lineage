@@ -11,20 +11,67 @@
         <p><strong>{% trans "Informações Importantes:" %}</strong></p>
         <ul>
             <li>{% trans "As solicitações são tickets de suporte para iniciar um chat com a administração." %}</li>
-            <li>{% trans "Enquanto o status da solicitação estiver como Pendente, o chat permanecerá ativo." %}</li>
-            <li>{% trans "Após a solicitação ser concluída, o chat será desabilitado e o atendimento encerrado." %}</li>
-            <li>{% trans "Somente uma solicitação pendente pode existir por vez." %}</li>
+            <li>{% trans "Enquanto o status da solicitação estiver como Aberto ou Em Andamento, o chat permanecerá ativo." %}</li>
+            <li>{% trans "Após a solicitação ser resolvida ou fechada, o chat será desabilitado e o atendimento encerrado." %}</li>
+            <li>{% trans "Você pode criar múltiplas solicitações conforme necessário." %}</li>
             <li>{% trans "Seja claro e objetivo ao abrir uma solicitação para que a equipe possa ajudá-lo de forma mais eficaz." %}</li>
             <li>{% trans "Após criar a solicitação, acesse o dashboard e clique em Chat para iniciar o atendimento." %}</li>
             <li>{% trans "O atendimento não é em tempo real, ou seja, você criará a solicitação e aguardará a resposta da equipe." %}</li>
         </ul>
     </div>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> {% trans "Criar Solicitação" %}</button>
-        <a href="{% url 'solicitation:solicitation_list' %}" class="btn btn-secondary">{% trans "Cancelar" %}</a>
-    </form>
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="{{ form.title.id_for_label }}" class="form-label">{% trans "Título" %} *</label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <div class="text-danger">{{ form.title.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.category.id_for_label }}" class="form-label">{% trans "Categoria" %} *</label>
+                        {{ form.category }}
+                        {% if form.category.errors %}
+                            <div class="text-danger">{{ form.category.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.priority.id_for_label }}" class="form-label">{% trans "Prioridade" %} *</label>
+                        {{ form.priority }}
+                        {% if form.priority.errors %}
+                            <div class="text-danger">{{ form.priority.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">{% trans "Descrição" %} *</label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="text-danger">{{ form.description.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check"></i> {% trans "Criar Solicitação" %}
+                    </button>
+                    <a href="{% url 'solicitation:solicitation_list' %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> {% trans "Cancelar" %}
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock content %}

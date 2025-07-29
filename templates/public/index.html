@@ -580,10 +580,12 @@
                 <div class="stats-card">
                     <h3><i class="fas fa-chart-line"></i> {% trans "Estatísticas" %}</h3>
                     <div class="stats-grid">
+                        {% if show_players_online %}
                         <div class="stat-item">
                             <div class="stat-number">{{ online|default:"0" }}</div>
                             <div class="stat-label">{% trans "Online" %}</div>
                         </div>
+                        {% endif %}
                         <div class="stat-item">
                             <div class="stat-number">{{ clanes|length|default:"0" }}</div>
                             <div class="stat-label">{% trans "Clãs" %}</div>

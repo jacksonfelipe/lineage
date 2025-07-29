@@ -199,19 +199,21 @@ def notificacao_mercado_pago(request):
                         pagamento = Pagamento.objects.get(id=pagamento_id)
                         if status == "approved" and pagamento.status == "pending":
                             with transaction.atomic():
+                                # Usa o novo sistema de bônus
+                                from apps.lineage.wallet.utils import aplicar_compra_com_bonus
+                                from decimal import Decimal
+                                
                                 wallet, created = Wallet.objects.get_or_create(usuario=pagamento.usuario)
-                                aplicar_transacao(
-                                    wallet=wallet,
-                                    tipo="ENTRADA",
-                                    valor=pagamento.valor,
-                                    descricao="Crédito via MercadoPago",
-                                    origem="MercadoPago",
-                                    destino=pagamento.usuario.username
+                                valor_total, valor_bonus, descricao_bonus = aplicar_compra_com_bonus(
+                                    wallet, Decimal(str(pagamento.valor)), "MercadoPago"
                                 )
+                                
                                 pagamento.status = "paid"
                                 pagamento.save()
 
                                 pedido = pagamento.pedido_pagamento
+                                pedido.bonus_aplicado = valor_bonus
+                                pedido.total_creditado = valor_total
                                 pedido.status = 'CONCLUÍDO'
                                 pedido.save()
 

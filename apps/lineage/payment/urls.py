@@ -9,6 +9,7 @@ app_name = "payment"
 
 urlpatterns = [
     path('new/', payments_views.criar_ou_reaproveitar_pedido, name='novo_pedido'),
+    path('calcular-bonus/', payments_views.calcular_bonus_ajax, name='calcular_bonus_ajax'),
     path('order/<int:pedido_id>/', payments_views.detalhes_pedido, name='detalhes_pedido'),
     path('order/<int:pedido_id>/confirm/', payments_views.confirmar_pagamento, name='confirmar_pagamento'),
     path('pending/', payments_views.pedidos_pendentes, name='pedidos_pendentes'),

@@ -3,7 +3,7 @@ from django.conf import settings
 import mercadopago
 import stripe
 from ..models import *
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from apps.main.home.decorator import conditional_otp_required
 from datetime import timedelta
 from django.utils.timezone import now
@@ -11,16 +11,46 @@ from django.contrib import messages
 from django.db import transaction
 from utils.services import verificar_conquistas
 from apps.main.home.models import PerfilGamer
+from apps.lineage.wallet.utils import calcular_bonus_compra
+from decimal import Decimal
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 @conditional_otp_required
+def calcular_bonus_ajax(request):
+    """View para calcular bônus via AJAX"""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Método não permitido'}, status=405)
+    
+    try:
+        valor = Decimal(request.POST.get('valor', '0'))
+        if valor <= 0:
+            return JsonResponse({'error': 'Valor inválido'}, status=400)
+        
+        valor_bonus, descricao_bonus, percentual_bonus = calcular_bonus_compra(valor)
+        total_creditado = valor + valor_bonus
+        
+        return JsonResponse({
+            'success': True,
+            'valor_compra': float(valor),
+            'valor_bonus': float(valor_bonus),
+            'percentual_bonus': float(percentual_bonus),
+            'total_creditado': float(total_creditado),
+            'descricao_bonus': descricao_bonus,
+            'tem_bonus': valor_bonus > 0
+        })
+        
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+@conditional_otp_required
 def criar_ou_reaproveitar_pedido(request):
     if request.method == 'POST':
         try:
-            valor = float(request.POST.get('valor'))
+            valor = Decimal(request.POST.get('valor'))
             if valor <= 0:
                 return HttpResponse("Valor inválido", status=400)
         except (TypeError, ValueError):
@@ -59,10 +89,16 @@ def criar_ou_reaproveitar_pedido(request):
             if pedido_existente:
                 return redirect('payment:detalhes_pedido', pedido_id=pedido_existente.id)
 
+            # Calcula o bônus para este valor
+            valor_bonus, descricao_bonus, percentual_bonus = calcular_bonus_compra(valor)
+            total_creditado = valor + valor_bonus
+
             novo_pedido = PedidoPagamento.objects.create(
                 usuario=usuario,
                 valor_pago=valor,
                 moedas_geradas=valor,
+                bonus_aplicado=valor_bonus,
+                total_creditado=total_creditado,
                 metodo=metodo,
                 status='PENDENTE'
             )

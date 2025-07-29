@@ -137,6 +137,8 @@ def verify_2fa_view(request):
         User = get_user_model()
         try:
             user = User.objects.get(pk=user_id)
+            # Define o backend no usuário para que o Django saiba qual backend foi usado
+            user.backend = 'core.backends.LicenseBackend'
         except User.DoesNotExist:
             logger.error(f"[verify_2fa_view] Usuário {user_id} não encontrado")
             return redirect('login')

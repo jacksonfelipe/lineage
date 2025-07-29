@@ -16,15 +16,19 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 
 # Tenta importar as rotas do administrator, mas trata o erro caso o app não exista
 try:
-    from apps.main.administrator.routing import websocket_urlpatterns
+    from apps.main.administrator.routing import websocket_urlpatterns as admin_ws
 except ImportError:
-    websocket_urlpatterns = []
+    admin_ws = []
+try:
+    from apps.main.notification.routing import websocket_urlpatterns as notif_ws
+except ImportError:
+    notif_ws = []
 
 application = ProtocolTypeRouter({
     'http': get_asgi_application(),
     'websocket': AuthMiddlewareStack(
         URLRouter(
-            websocket_urlpatterns
+            admin_ws + notif_ws
         )
     ),
 })

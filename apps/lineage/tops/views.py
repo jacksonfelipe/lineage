@@ -266,15 +266,84 @@ class TopsOlympiadView(TopsBaseView):
         db = LineageDB()
         result = LineageStats.olympiad_ranking() if db.is_connected() else []
         
-        # Processar os dados para incluir nome da classe
+        # Import get_class_name at the beginning of the method
         from utils.resources import get_class_name
+        
+        # Filtra registros com valores None
+        filtered_result = []
         for player in result:
+            # Só inclui se char_name não for None
+            if player.get('char_name') is not None:
+                filtered_result.append(player)
+        
+        # Aplicar filtros baseados nos parâmetros GET
+        search_query = self.request.GET.get('search', '').strip().lower()
+        class_filter = self.request.GET.get('class', '').strip()
+        clan_filter = self.request.GET.get('clan', '').strip().lower()
+        status_filter = self.request.GET.get('status', '').strip()
+        min_points = self.request.GET.get('min_points', '').strip()
+        
+        # Filtrar por busca de texto (nome do jogador, clã, classe)
+        if search_query:
+            filtered_result = [
+                player for player in filtered_result
+                if ((player.get('char_name') or '').lower().find(search_query) != -1 or
+                    (player.get('clan_name') or '').lower().find(search_query) != -1 or
+                    get_class_name(player.get('base', '')).lower().find(search_query) != -1)
+            ]
+        
+        # Filtrar por classe
+        if class_filter:
+            filtered_result = [
+                player for player in filtered_result
+                if get_class_name(player.get('base', '')).lower() == class_filter.lower()
+            ]
+        
+        # Filtrar por clã
+        if clan_filter:
+            filtered_result = [
+                player for player in filtered_result
+                if (player.get('clan_name') or '').lower().find(clan_filter) != -1
+            ]
+        
+        # Filtrar por status
+        if status_filter:
+            if status_filter == 'online':
+                filtered_result = [player for player in filtered_result if player.get('online', 0) > 0]
+            elif status_filter == 'offline':
+                filtered_result = [player for player in filtered_result if player.get('online', 0) == 0]
+        
+        # Filtrar por pontos mínimos
+        if min_points and min_points.isdigit():
+            min_points_int = int(min_points)
+            filtered_result = [
+                player for player in filtered_result
+                if player.get('olympiad_points', 0) >= min_points_int
+            ]
+        
+        # Processar os dados para incluir nome da classe
+        for player in filtered_result:
             if 'base' in player and player['base'] is not None:
                 player['class_name'] = get_class_name(player['base'])
             else:
                 player['class_name'] = '-'
         
-        context['ranking'] = result
+        # Preparar dados para os filtros
+        all_classes = list(set([get_class_name(p.get('base', '')) for p in filtered_result if p.get('base')]))
+        all_classes.sort()
+        
+        context['ranking'] = filtered_result
+        context['filters'] = {
+            'search': self.request.GET.get('search', ''),
+            'class': self.request.GET.get('class', ''),
+            'clan': self.request.GET.get('clan', ''),
+            'status': self.request.GET.get('status', ''),
+            'min_points': self.request.GET.get('min_points', ''),
+        }
+        context['available_classes'] = all_classes
+        context['total_players'] = len(result)
+        context['filtered_players'] = len(filtered_result)
+        
         return context
     
     def get_title(self):

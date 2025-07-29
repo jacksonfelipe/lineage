@@ -106,6 +106,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             # Tenta encontrar a solicitação com o protocolo correspondente
             solicitation = Solicitation.objects.get(protocol=protocol)
 
+            # Verifica se o status é final (resolved, closed, cancelled, rejected)
+            final_statuses = ['resolved', 'closed', 'cancelled', 'rejected']
+            if solicitation.status in final_statuses:
+                return False  # Bloqueia acesso ao chat para status finais
+
             # Se o usuário for admin, automaticamente adiciona como participante
             if user.is_staff:  # Verifica se é admin
                 solicitation.add_participant(user)
