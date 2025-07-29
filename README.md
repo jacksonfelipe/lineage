@@ -54,7 +54,7 @@ cd /var/pdl
 
 nano setup.sh
 >> copie o conteudo desse arquivo para dentro <<
-https://github.com/D3NKYT0/lineage/blob/main/setup/setup.sh
+https://github.com/jacksonfelipe/lineage/blob/main/setup/setup.sh
 >> e salve o arquivo. <<
 
 chmod +x setup.sh
