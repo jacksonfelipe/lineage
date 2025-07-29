@@ -59,10 +59,74 @@ def olympiad_ranking_view(request):
         if player.get('char_name') is not None:
             filtered_result.append(player)
     
+    # Aplicar filtros baseados nos parâmetros GET
+    search_query = request.GET.get('search', '').strip().lower()
+    class_filter = request.GET.get('class', '').strip()
+    clan_filter = request.GET.get('clan', '').strip().lower()
+    status_filter = request.GET.get('status', '').strip()
+    min_points = request.GET.get('min_points', '').strip()
+    
+    # Filtrar por busca de texto (nome do jogador, clã, classe)
+    if search_query:
+        filtered_result = [
+            player for player in filtered_result
+            if (player.get('char_name', '').lower().find(search_query) != -1 or
+                player.get('clan_name', '').lower().find(search_query) != -1 or
+                get_class_name(player.get('base', '')).lower().find(search_query) != -1)
+        ]
+    
+    # Filtrar por classe
+    if class_filter:
+        filtered_result = [
+            player for player in filtered_result
+            if get_class_name(player.get('base', '')).lower() == class_filter.lower()
+        ]
+    
+    # Filtrar por clã
+    if clan_filter:
+        filtered_result = [
+            player for player in filtered_result
+            if player.get('clan_name', '').lower().find(clan_filter) != -1
+        ]
+    
+    # Filtrar por status
+    if status_filter:
+        if status_filter == 'online':
+            filtered_result = [player for player in filtered_result if player.get('online', 0) > 0]
+        elif status_filter == 'offline':
+            filtered_result = [player for player in filtered_result if player.get('online', 0) == 0]
+    
+    # Filtrar por pontos mínimos
+    if min_points and min_points.isdigit():
+        min_points_int = int(min_points)
+        filtered_result = [
+            player for player in filtered_result
+            if player.get('olympiad_points', 0) >= min_points_int
+        ]
+    
     result = attach_crests_to_clans(filtered_result)
     for player in result:
         player['base'] = get_class_name(player['base'])
-    return render(request, 'status/olympiad_ranking.html', {'ranking': result})
+    
+    # Preparar dados para os filtros
+    all_classes = list(set([get_class_name(p.get('base', '')) for p in filtered_result if p.get('base')]))
+    all_classes.sort()
+    
+    context = {
+        'ranking': result,
+        'filters': {
+            'search': request.GET.get('search', ''),
+            'class': request.GET.get('class', ''),
+            'clan': request.GET.get('clan', ''),
+            'status': request.GET.get('status', ''),
+            'min_points': request.GET.get('min_points', ''),
+        },
+        'available_classes': all_classes,
+        'total_players': len(result),
+        'filtered_players': len(filtered_result),
+    }
+    
+    return render(request, 'status/olympiad_ranking.html', context)
 
 
 @conditional_otp_required
