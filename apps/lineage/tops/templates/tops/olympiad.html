@@ -253,6 +253,48 @@
     padding-right: 40px;
 }
 
+/* Estilos para as opções do select */
+.tops-input-wrapper select option {
+    background-color: #1a1a2e;
+    color: #ffffff;
+    padding: 8px 12px;
+}
+
+/* Estilo para quando o select está aberto */
+.tops-input-wrapper select:focus option:hover,
+.tops-input-wrapper select:focus option:focus {
+    background-color: #e6c77d;
+    color: #1a1a2e;
+}
+
+/* Estilo para a opção selecionada */
+.tops-input-wrapper select option:checked {
+    background-color: #e6c77d;
+    color: #1a1a2e;
+    font-weight: 600;
+}
+
+/* Estilos adicionais para compatibilidade */
+.tops-input-wrapper select::-ms-expand {
+    display: none;
+}
+
+/* Estilo para o dropdown do select (Firefox) */
+.tops-input-wrapper select:-moz-focusring {
+    color: transparent;
+    text-shadow: 0 0 0 #ffffff;
+}
+
+/* Estilo para o dropdown do select (Chrome/Safari) */
+.tops-input-wrapper select:focus {
+    color: #ffffff;
+}
+
+/* Estilo para garantir que o texto seja visível no select fechado */
+.tops-input-wrapper select {
+    color: #ffffff !important;
+}
+
 .tops-filter-actions {
     display: flex;
     gap: 15px;
