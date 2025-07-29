@@ -402,8 +402,98 @@ def personagem_online_500h(user, request=None):
         if not db.is_connected():
             return False
         
+        # 500 horas = 1.800.000.000 milissegundos
         characters = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND onlinetime >= 1800000",
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND onlinetime >= 1800000000",
+            {"account": user.username}
+        )
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('olympiad_participant')
+def olympiad_participant(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        # Verifica se o usuário tem personagens que participaram da Olimpíada
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM oly_nobles ON JOIN characters C ON C.obj_Id = ON.char_id WHERE C.account_name = :account",
+            {"account": user.username}
+        )
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('olympiad_winner')
+def olympiad_winner(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        # Verifica se o usuário tem personagens que venceram batalhas na Olimpíada
+        # Vencedores têm pontos positivos na Olimpíada
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM oly_nobles ON JOIN characters C ON C.obj_Id = ON.char_id WHERE C.account_name = :account AND ON.points_current > 0",
+            {"account": user.username}
+        )
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('grandboss_killer')
+def grandboss_killer(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        # Verifica se o usuário tem personagens que participaram de kills de Grand Bosses
+        # Esta é uma aproximação baseada em kills PvP altas (indicativo de participação em raids)
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND pvpkills >= 50",
+            {"account": user.username}
+        )
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('siege_participant')
+def siege_participant(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        # Verifica se o usuário tem personagens em clãs que participaram de cercos
+        characters = db.select("""
+            SELECT COUNT(*) as count 
+            FROM characters C 
+            JOIN clan_data CD ON C.clanid = CD.clan_id 
+            JOIN siege_clans SC ON CD.clan_id = SC.clan_id 
+            WHERE C.account_name = :account
+        """, {"account": user.username})
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('personagem_nivel_100')
+def personagem_nivel_100(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND base_level >= 100",
             {"account": user.username}
         )
         return characters and characters[0]['count'] > 0

@@ -85,6 +85,11 @@ def criar_conquistas_iniciais(sender, **kwargs):
         {'codigo': 'personagem_online_24h', 'nome': 'Viciado', 'descricao': 'Possui um personagem com 24 horas ou mais de tempo online'},
         {'codigo': 'personagem_online_100h', 'nome': 'Dedicado', 'descricao': 'Possui um personagem com 100 horas ou mais de tempo online'},
         {'codigo': 'personagem_online_500h', 'nome': 'Veterano Online', 'descricao': 'Possui um personagem com 500 horas ou mais de tempo online'},
+        {'codigo': 'olympiad_participant', 'nome': 'Participante da Olimpíada', 'descricao': 'Participou da Olimpíada pela primeira vez'},
+        {'codigo': 'olympiad_winner', 'nome': 'Vencedor da Olimpíada', 'descricao': 'Venceu uma batalha na Olimpíada'},
+        {'codigo': 'grandboss_killer', 'nome': 'Caçador de Grand Bosses', 'descricao': 'Participou da morte de um Grand Boss'},
+        {'codigo': 'siege_participant', 'nome': 'Participante de Cerco', 'descricao': 'Participou de um cerco de castelo'},
+        {'codigo': 'personagem_nivel_100', 'nome': 'Lenda Viva', 'descricao': 'Possui um personagem de nível 100 ou superior'},
     ]
 
     for conquista in conquistas:
