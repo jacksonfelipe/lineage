@@ -287,8 +287,8 @@ class TopsOlympiadView(TopsBaseView):
         if search_query:
             filtered_result = [
                 player for player in filtered_result
-                if (player.get('char_name', '').lower().find(search_query) != -1 or
-                    player.get('clan_name', '').lower().find(search_query) != -1 or
+                if ((player.get('char_name') or '').lower().find(search_query) != -1 or
+                    (player.get('clan_name') or '').lower().find(search_query) != -1 or
                     get_class_name(player.get('base', '')).lower().find(search_query) != -1)
             ]
         
@@ -303,7 +303,7 @@ class TopsOlympiadView(TopsBaseView):
         if clan_filter:
             filtered_result = [
                 player for player in filtered_result
-                if player.get('clan_name', '').lower().find(clan_filter) != -1
+                if (player.get('clan_name') or '').lower().find(clan_filter) != -1
             ]
         
         # Filtrar por status
