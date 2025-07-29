@@ -51,19 +51,21 @@ def stripe_webhook(request):
             try:
                 pagamento = Pagamento.objects.get(id=pagamento_id)
                 if pagamento.status == "pending":
+                    # Usa o novo sistema de bônus
+                    from apps.lineage.wallet.utils import aplicar_compra_com_bonus
+                    from decimal import Decimal
+                    
                     wallet, created = Wallet.objects.get_or_create(usuario=pagamento.usuario)
-                    aplicar_transacao(
-                        wallet=wallet,
-                        tipo="ENTRADA",
-                        valor=valor,
-                        descricao="Crédito via Stripe",
-                        origem="Stripe",
-                        destino=pagamento.usuario.username
+                    valor_total, valor_bonus, descricao_bonus = aplicar_compra_com_bonus(
+                        wallet, Decimal(str(valor)), "Stripe"
                     )
+                    
                     pagamento.status = "paid"
                     pagamento.save()
 
                     pedido = pagamento.pedido_pagamento
+                    pedido.bonus_aplicado = valor_bonus
+                    pedido.total_creditado = valor_total
                     pedido.status = "CONCLUÍDO"
                     pedido.save()
 
@@ -96,19 +98,21 @@ def stripe_pagamento_sucesso(request):
         pagamento = Pagamento.objects.get(id=pagamento_id)
 
         if session.payment_status == "paid" and pagamento.status != "paid":
+            # Usa o novo sistema de bônus
+            from apps.lineage.wallet.utils import aplicar_compra_com_bonus
+            from decimal import Decimal
+            
             wallet, created = Wallet.objects.get_or_create(usuario=pagamento.usuario)
-            aplicar_transacao(
-                wallet=wallet,
-                tipo="ENTRADA",
-                valor=pagamento.valor,
-                descricao="Crédito via Stripe",
-                origem="Stripe",
-                destino=pagamento.usuario.username
+            valor_total, valor_bonus, descricao_bonus = aplicar_compra_com_bonus(
+                wallet, Decimal(str(pagamento.valor)), "Stripe"
             )
+            
             pagamento.status = "paid"
             pagamento.save()
 
             pedido = pagamento.pedido_pagamento
+            pedido.bonus_aplicado = valor_bonus
+            pedido.total_creditado = valor_total
             pedido.status = 'CONCLUÍDO'
             pedido.save()
 

@@ -85,6 +85,7 @@
       {% endfor %}
     </ul>
 
+    <!-- Código Promocional -->
     <form method="post" action="{% url 'shop:apply_promo_code' %}" class="mb-3 d-flex">
       {% csrf_token %}
       <input type="text" name="promo_code" class="form-control rounded-start-pill" placeholder="{% trans 'Código promocional' %}">
@@ -93,10 +94,88 @@
       </button>
     </form>
 
-    <div class="text-end mb-3">
-      <h4 class="fw-bold text-success">
-        {% trans "Total" %}: R$ {{ cart.calcular_total|floatformat:2 }}
-      </h4>
+    <!-- Informações de Saldo -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <div class="card border-primary">
+          <div class="card-body text-center">
+            <h6 class="card-title text-primary">
+              <i class="fas fa-wallet me-2"></i>{% trans "Saldo Principal" %}
+            </h6>
+            <h4 class="text-primary mb-0">R$ {{ wallet.saldo|floatformat:2 }}</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card border-warning">
+          <div class="card-body text-center">
+            <h6 class="card-title text-warning">
+              <i class="fas fa-gift me-2"></i>{% trans "Saldo Bônus" %}
+            </h6>
+            <h4 class="text-warning mb-0">R$ {{ wallet.saldo_bonus|floatformat:2 }}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Opção de Pagamento com Bônus -->
+    <div class="card mb-3">
+      <div class="card-body">
+        <h6 class="card-title">
+          <i class="fas fa-credit-card me-2"></i>{% trans "Forma de Pagamento" %}
+        </h6>
+        
+        <form method="post" action="{% url 'shop:toggle_bonus_usage' %}" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn {% if cart.usar_bonus %}btn-warning{% else %}btn-outline-warning{% endif %} me-2">
+            <i class="fas fa-gift me-1"></i>
+            {% if cart.usar_bonus %}
+              {% trans "Desativar Pagamento com Bônus" %}
+            {% else %}
+              {% trans "Ativar Pagamento com Bônus" %}
+            {% endif %}
+          </button>
+        </form>
+        
+        {% if cart.usar_bonus %}
+          <small class="text-muted d-block mt-2">
+            <i class="fas fa-info-circle me-1"></i>
+            {% trans "O sistema usará primeiro o saldo de bônus e depois o saldo principal." %}
+          </small>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Resumo do Pagamento -->
+    <div class="card mb-3">
+      <div class="card-body">
+        <h6 class="card-title">
+          <i class="fas fa-calculator me-2"></i>{% trans "Resumo do Pagamento" %}
+        </h6>
+        
+        <div class="row">
+          <div class="col-md-6">
+            <p class="mb-1"><strong>{% trans "Total da Compra" %}:</strong></p>
+            <h5 class="text-success">R$ {{ cart.calcular_total|floatformat:2 }}</h5>
+          </div>
+          
+          {% if cart.usar_bonus %}
+            <div class="col-md-6">
+              <p class="mb-1"><strong>{% trans "Pagamento" %}:</strong></p>
+              {% if valor_bonus_usado > 0 %}
+                <p class="mb-1 text-warning">
+                  <i class="fas fa-gift me-1"></i>{% trans "Bônus" %}: R$ {{ valor_bonus_usado|floatformat:2 }}
+                </p>
+              {% endif %}
+              {% if valor_dinheiro_usado > 0 %}
+                <p class="mb-1 text-primary">
+                  <i class="fas fa-wallet me-1"></i>{% trans "Dinheiro" %}: R$ {{ valor_dinheiro_usado|floatformat:2 }}
+                </p>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
     </div>
 
     <form method="post" action="{% url 'shop:checkout' %}">

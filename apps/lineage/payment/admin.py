@@ -6,10 +6,24 @@ from core.admin import BaseModelAdmin
 
 @admin.register(PedidoPagamento)
 class PedidoPagamentoAdmin(BaseModelAdmin):
-    list_display = ('usuario', 'valor_pago', 'moedas_geradas', 'metodo', 'status', 'data_criacao')
+    list_display = ('usuario', 'valor_pago', 'bonus_aplicado', 'total_creditado', 'metodo', 'status', 'data_criacao')
     list_filter = ('status', 'metodo', 'data_criacao')
     search_fields = ('usuario__username', 'metodo')
-    readonly_fields = ('usuario', 'valor_pago', 'moedas_geradas', 'metodo', 'data_criacao')
+    readonly_fields = ('usuario', 'valor_pago', 'moedas_geradas', 'metodo', 'data_criacao', 'bonus_aplicado', 'total_creditado')
+    
+    fieldsets = (
+        ('Informações do Pedido', {
+            'fields': ('usuario', 'valor_pago', 'metodo', 'status', 'data_criacao')
+        }),
+        ('Bônus e Totais', {
+            'fields': ('bonus_aplicado', 'total_creditado'),
+            'description': 'Informações sobre bônus aplicados e total creditado'
+        }),
+        ('Campos Legados', {
+            'fields': ('moedas_geradas',),
+            'description': 'Campo mantido para compatibilidade'
+        }),
+    )
 
     actions = ['confirmar_pagamentos']
 
@@ -21,6 +35,9 @@ class PedidoPagamentoAdmin(BaseModelAdmin):
                 pedido.confirmar_pagamento()
                 total += 1
         self.message_user(request, f"{total} pagamento(s) confirmado(s) com sucesso.")
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('usuario')
 
 
 @admin.register(Pagamento)

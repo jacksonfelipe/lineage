@@ -3,41 +3,146 @@
 
 {% block content %}
 <div class="container mt-5">
-  <div class="card shadow-lg p-4">
-    <h2 class="mb-4 text-center">{% trans "Comprar Moedas" %}</h2>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card shadow-lg p-4">
+        <h2 class="mb-4 text-center">{% trans "Comprar Moedas" %}</h2>
 
-    <form method="post" action="{% url 'payment:novo_pedido' %}">
-      {% csrf_token %}
+        <form method="post" action="{% url 'payment:novo_pedido' %}">
+          {% csrf_token %}
 
-      <div class="mb-3">
-        <label for="valor" class="form-label">{% trans "Valor em Reais (R$)" %}</label>
-        <input
-          type="number"
-          class="form-control"
-          id="valor"
-          name="valor"
-          step="0.01"
-          min="1"
-          placeholder="{% trans 'Digite o valor que deseja comprar' %}"
-          required
-        >
+          <div class="mb-3">
+            <label for="valor" class="form-label">{% trans "Valor em Reais (R$)" %}</label>
+            <input
+              type="number"
+              class="form-control"
+              id="valor"
+              name="valor"
+              step="0.01"
+              min="1"
+              placeholder="{% trans 'Digite o valor que deseja comprar' %}"
+              required
+            >
+          </div>
+
+          <div class="mb-3">
+            <label for="metodo" class="form-label">{% trans "Escolha o Meio de Pagamento" %}</label>
+            <select class="form-select" id="metodo" name="metodo" required>
+              <option value="MercadoPago">{% trans "Mercado Pago" %}</option>
+              <option value="Stripe">{% trans "Stripe" %}</option>
+              {# {% trans "Adicione outras opções no futuro se desejar" %} #}
+            </select>
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-success btn-lg">
+              {% trans "Gerar Pedido" %}
+            </button>
+          </div>
+        </form>
       </div>
+    </div>
 
-      <div class="mb-3">
-        <label for="metodo" class="form-label">{% trans "Escolha o Meio de Pagamento" %}</label>
-        <select class="form-select" id="metodo" name="metodo" required>
-          <option value="MercadoPago">{% trans "Mercado Pago" %}</option>
-          <option value="Stripe">{% trans "Stripe" %}</option>
-          {# {% trans "Adicione outras opções no futuro se desejar" %} #}
-        </select>
+    <div class="col-md-4">
+      <div class="card shadow-lg p-4">
+        <h4 class="mb-3 text-center">
+          <i class="fas fa-gift text-warning"></i>
+          {% trans "Bônus Disponíveis" %}
+        </h4>
+        
+        <div id="bonus-info">
+          <p class="text-muted text-center">
+            {% trans "Digite um valor para ver os bônus disponíveis" %}
+          </p>
+        </div>
       </div>
-
-      <div class="d-grid">
-        <button type="submit" class="btn btn-success btn-lg">
-          {% trans "Gerar Pedido" %}
-        </button>
-      </div>
-    </form>
+    </div>
   </div>
 </div>
+
+<script>
+let timeoutId;
+
+document.getElementById('valor').addEventListener('input', function() {
+    const valor = parseFloat(this.value) || 0;
+    const bonusInfo = document.getElementById('bonus-info');
+    
+    // Limpa o timeout anterior
+    clearTimeout(timeoutId);
+    
+    if (valor > 0) {
+        // Mostra loading
+        bonusInfo.innerHTML = `
+            <div class="text-center">
+                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                    <span class="visually-hidden">Carregando...</span>
+                </div>
+                <p class="text-muted mt-2">{% trans "Calculando bônus..." %}</p>
+            </div>
+        `;
+        
+        // Faz a requisição AJAX com delay para evitar muitas requisições
+        timeoutId = setTimeout(() => {
+            fetch('{% url "payment:calcular_bonus_ajax" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: `valor=${valor}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.tem_bonus) {
+                        bonusInfo.innerHTML = `
+                            <div class="text-center">
+                                <div class="alert alert-success">
+                                    <h5><i class="fas fa-gift"></i> Bônus Aplicado!</h5>
+                                    <p class="mb-1"><strong>${data.descricao_bonus}</strong></p>
+                                    <p class="mb-1">Valor da compra: R$ ${data.valor_compra.toFixed(2)}</p>
+                                    <p class="mb-1">Bônus: R$ ${data.valor_bonus.toFixed(2)} (${data.percentual_bonus}%)</p>
+                                    <p class="mb-0"><strong>Total creditado: R$ ${data.total_creditado.toFixed(2)}</strong></p>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        bonusInfo.innerHTML = `
+                            <div class="text-center">
+                                <div class="alert alert-info">
+                                    <h5><i class="fas fa-info-circle"></i> Sem Bônus</h5>
+                                    <p class="mb-0">Este valor não possui bônus disponível.</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                } else {
+                    bonusInfo.innerHTML = `
+                        <div class="text-center">
+                            <div class="alert alert-warning">
+                                <p class="mb-0">Erro ao calcular bônus.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                bonusInfo.innerHTML = `
+                    <div class="text-center">
+                        <div class="alert alert-danger">
+                            <p class="mb-0">Erro de conexão.</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }, 500); // Delay de 500ms
+    } else {
+        bonusInfo.innerHTML = `
+            <p class="text-muted text-center">
+                {% trans "Digite um valor para ver os bônus disponíveis" %}
+            </p>
+        `;
+    }
+});
+</script>
 {% endblock %}

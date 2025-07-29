@@ -1,13 +1,13 @@
 from django.core.paginator import Paginator
 from apps.main.home.decorator import conditional_otp_required
-from .models import Wallet, TransacaoWallet, CoinConfig
+from .models import Wallet, TransacaoWallet, TransacaoBonus, CoinConfig
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .utils import transferir_para_jogador
 from decimal import Decimal
 from django.contrib.auth import authenticate
 from apps.main.home.models import User
-from django.db import transaction
+from django.db import transaction, models
 from .signals import aplicar_transacao
 from apps.lineage.server.database import LineageDB
 from django.contrib.admin.views.decorators import staff_member_required
@@ -26,7 +26,18 @@ from django.utils.translation import gettext as _
 @conditional_otp_required
 def dashboard_wallet(request):
     wallet, created = Wallet.objects.get_or_create(usuario=request.user)
-    transacoes_query = TransacaoWallet.objects.filter(wallet=wallet).order_by('-created_at')
+    
+    # Combina transações normais e de bônus, ordenadas por data
+    from django.db.models import Q
+    transacoes_query = (
+        TransacaoWallet.objects.filter(wallet=wallet)
+        .values('id', 'tipo', 'valor', 'descricao', 'data', 'origem', 'destino')
+        .annotate(tipo_transacao=models.Value('normal', output_field=models.CharField()))
+    ).union(
+        TransacaoBonus.objects.filter(wallet=wallet)
+        .values('id', 'tipo', 'valor', 'descricao', 'data', 'origem', 'destino')
+        .annotate(tipo_transacao=models.Value('bonus', output_field=models.CharField()))
+    ).order_by('-data')
     
     paginator = Paginator(transacoes_query, 10)
     page_number = request.GET.get('page')
