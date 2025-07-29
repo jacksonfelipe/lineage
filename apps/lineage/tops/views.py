@@ -266,6 +266,9 @@ class TopsOlympiadView(TopsBaseView):
         db = LineageDB()
         result = LineageStats.olympiad_ranking() if db.is_connected() else []
         
+        # Import get_class_name at the beginning of the method
+        from utils.resources import get_class_name
+        
         # Filtra registros com valores None
         filtered_result = []
         for player in result:
@@ -319,7 +322,6 @@ class TopsOlympiadView(TopsBaseView):
             ]
         
         # Processar os dados para incluir nome da classe
-        from utils.resources import get_class_name
         for player in filtered_result:
             if 'base' in player and player['base'] is not None:
                 player['class_name'] = get_class_name(player['base'])
