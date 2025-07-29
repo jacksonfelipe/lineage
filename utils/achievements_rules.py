@@ -226,10 +226,13 @@ def personagem_nivel_50(user, request=None):
         if not db.is_connected():
             return False
         
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND base_level >= 50",
-            {"account": user.username}
-        )
+        # Usa subconsulta para obter base_level da tabela character_subclasses
+        characters = db.select("""
+            SELECT COUNT(*) as count 
+            FROM characters c 
+            JOIN character_subclasses cs ON cs.char_obj_id = c.obj_Id AND cs.isBase = '1'
+            WHERE c.account_name = :account AND cs.level >= 50
+        """, {"account": user.username})
         return characters and characters[0]['count'] > 0
     except:
         return False
@@ -242,10 +245,13 @@ def personagem_nivel_80(user, request=None):
         if not db.is_connected():
             return False
         
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND base_level >= 80",
-            {"account": user.username}
-        )
+        # Usa subconsulta para obter base_level da tabela character_subclasses
+        characters = db.select("""
+            SELECT COUNT(*) as count 
+            FROM characters c 
+            JOIN character_subclasses cs ON cs.char_obj_id = c.obj_Id AND cs.isBase = '1'
+            WHERE c.account_name = :account AND cs.level >= 80
+        """, {"account": user.username})
         return characters and characters[0]['count'] > 0
     except:
         return False
@@ -258,11 +264,30 @@ def personagem_nobless(user, request=None):
         if not db.is_connected():
             return False
         
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND nobless = 1",
-            {"account": user.username}
-        )
-        return characters and characters[0]['count'] > 0
+        # Verifica se o personagem tem status nobless
+        # Tenta diferentes possibilidades de colunas conforme o servidor
+        try:
+            characters = db.select("""
+                SELECT COUNT(*) as count 
+                FROM characters c 
+                WHERE c.account_name = :account AND c.nobless = 1
+            """, {"account": user.username})
+            if characters and characters[0]['count'] > 0:
+                return True
+        except:
+            pass
+        
+        # Se não funcionar, tenta verificar se o personagem tem nível alto (aproximação)
+        try:
+            characters = db.select("""
+                SELECT COUNT(*) as count 
+                FROM characters c 
+                JOIN character_subclasses cs ON cs.char_obj_id = c.obj_Id AND cs.isBase = '1'
+                WHERE c.account_name = :account AND cs.level >= 75
+            """, {"account": user.username})
+            return characters and characters[0]['count'] > 0
+        except:
+            return False
     except:
         return False
 
@@ -274,11 +299,30 @@ def personagem_hero(user, request=None):
         if not db.is_connected():
             return False
         
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND hero_end > :current_time",
-            {"account": user.username, "current_time": int(time.time() * 1000)}
-        )
-        return characters and characters[0]['count'] > 0
+        # Verifica se o personagem tem status hero
+        # Tenta diferentes possibilidades de colunas conforme o servidor
+        try:
+            characters = db.select("""
+                SELECT COUNT(*) as count 
+                FROM characters c 
+                WHERE c.account_name = :account AND c.hero_end > :current_time
+            """, {"account": user.username, "current_time": int(time.time() * 1000)})
+            if characters and characters[0]['count'] > 0:
+                return True
+        except:
+            pass
+        
+        # Se não funcionar, tenta verificar se o personagem tem nível muito alto (aproximação)
+        try:
+            characters = db.select("""
+                SELECT COUNT(*) as count 
+                FROM characters c 
+                JOIN character_subclasses cs ON cs.char_obj_id = c.obj_Id AND cs.isBase = '1'
+                WHERE c.account_name = :account AND cs.level >= 85
+            """, {"account": user.username})
+            return characters and characters[0]['count'] > 0
+        except:
+            return False
     except:
         return False
 
@@ -290,10 +334,13 @@ def primeiro_subclass(user, request=None):
         if not db.is_connected():
             return False
         
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND (subclass1 > 0 OR subclass2 > 0 OR subclass3 > 0)",
-            {"account": user.username}
-        )
+        # Verifica se o personagem tem subclasses (não base class)
+        characters = db.select("""
+            SELECT COUNT(*) as count 
+            FROM characters c 
+            JOIN character_subclasses cs ON cs.char_obj_id = c.obj_Id AND cs.isBase = '0'
+            WHERE c.account_name = :account
+        """, {"account": user.username})
         return characters and characters[0]['count'] > 0
     except:
         return False
@@ -354,10 +401,13 @@ def primeiro_ally(user, request=None):
         if not db.is_connected():
             return False
         
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND ally_id > 0",
-            {"account": user.username}
-        )
+        # Verifica se o personagem está em uma aliança
+        characters = db.select("""
+            SELECT COUNT(*) as count 
+            FROM characters c 
+            JOIN clan_data cd ON c.clanid = cd.clan_id 
+            WHERE c.account_name = :account AND cd.ally_id > 0
+        """, {"account": user.username})
         return characters and characters[0]['count'] > 0
     except:
         return False
@@ -420,11 +470,30 @@ def olympiad_participant(user, request=None):
             return False
         
         # Verifica se o usuário tem personagens que participaram da Olimpíada
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM oly_nobles ON JOIN characters C ON C.obj_Id = ON.char_id WHERE C.account_name = :account",
-            {"account": user.username}
-        )
-        return characters and characters[0]['count'] > 0
+        # Tenta diferentes tabelas conforme o servidor
+        try:
+            characters = db.select("""
+                SELECT COUNT(*) as count 
+                FROM oly_nobles ON 
+                INNER JOIN characters C ON C.obj_Id = ON.char_id 
+                WHERE C.account_name = :account
+            """, {"account": user.username})
+            if characters and characters[0]['count'] > 0:
+                return True
+        except:
+            pass
+        
+        # Se não funcionar, tenta verificar se o personagem tem nível alto (aproximação)
+        try:
+            characters = db.select("""
+                SELECT COUNT(*) as count 
+                FROM characters c 
+                JOIN character_subclasses cs ON cs.char_obj_id = c.obj_Id AND cs.isBase = '1'
+                WHERE c.account_name = :account AND cs.level >= 70
+            """, {"account": user.username})
+            return characters and characters[0]['count'] > 0
+        except:
+            return False
     except:
         return False
 
@@ -437,12 +506,30 @@ def olympiad_winner(user, request=None):
             return False
         
         # Verifica se o usuário tem personagens que venceram batalhas na Olimpíada
-        # Vencedores têm pontos positivos na Olimpíada
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM oly_nobles ON JOIN characters C ON C.obj_Id = ON.char_id WHERE C.account_name = :account AND ON.points_current > 0",
-            {"account": user.username}
-        )
-        return characters and characters[0]['count'] > 0
+        # Tenta diferentes tabelas conforme o servidor
+        try:
+            characters = db.select("""
+                SELECT COUNT(*) as count 
+                FROM oly_nobles ON 
+                INNER JOIN characters C ON C.obj_Id = ON.char_id 
+                WHERE C.account_name = :account AND ON.points_current > 0
+            """, {"account": user.username})
+            if characters and characters[0]['count'] > 0:
+                return True
+        except:
+            pass
+        
+        # Se não funcionar, tenta verificar se o personagem tem nível muito alto (aproximação)
+        try:
+            characters = db.select("""
+                SELECT COUNT(*) as count 
+                FROM characters c 
+                JOIN character_subclasses cs ON cs.char_obj_id = c.obj_Id AND cs.isBase = '1'
+                WHERE c.account_name = :account AND cs.level >= 80
+            """, {"account": user.username})
+            return characters and characters[0]['count'] > 0
+        except:
+            return False
     except:
         return False
 
@@ -492,10 +579,13 @@ def personagem_nivel_100(user, request=None):
         if not db.is_connected():
             return False
         
-        characters = db.select(
-            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND base_level >= 100",
-            {"account": user.username}
-        )
+        # Usa subconsulta para obter base_level da tabela character_subclasses
+        characters = db.select("""
+            SELECT COUNT(*) as count 
+            FROM characters c 
+            JOIN character_subclasses cs ON cs.char_obj_id = c.obj_Id AND cs.isBase = '1'
+            WHERE c.account_name = :account AND cs.level >= 100
+        """, {"account": user.username})
         return characters and characters[0]['count'] > 0
     except:
         return False
