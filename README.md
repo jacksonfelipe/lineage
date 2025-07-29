@@ -38,7 +38,7 @@ O PDL é um painel que nasceu com a missão de oferecer ferramentas poderosas pa
 #
 
 <p align="center">
-<img height="280" src="https://i.imgur.com/mYkfb8X.png">
+<img height="280" src="https://i.imgur.com/SJV9SQw.png">
 </p>
 
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/Django.svg)](https://www.djangoproject.com/)
@@ -93,7 +93,7 @@ $ ./build.sh
 ```bash
 $ >> entre na pasta [ cd /var/pdl/lineage ] e execute o comando abaixo <<
 $ >> copie o conteudo desse arquivo para dentro <<
-$ https://github.com/D3NKYT0/lineage/blob/main/setup/backup.sh
+$ https://github.com/jacksonfelipe/lineage/blob/main/setup/backup.sh
 $ >> e salve o arquivo. <<
 $ chmod +x backup.sh
 $ crontab -e
@@ -104,7 +104,7 @@ $ 0 3 * * * /var/pdl/lineage/backup.sh >> /var/pdl/backup.log 2>&1
 ## Como testar (produção)
 
 ```bash
-https://pdl.denky.dev.br/
+https://l2jprmeium.com/
 ```
 
 ## Sobre Mim
