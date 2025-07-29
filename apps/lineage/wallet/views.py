@@ -57,12 +57,12 @@ def transfer_to_server(request):
     db = LineageDB()
     if not db.is_connected():
         messages.error(request, 'O banco do jogo está indisponível no momento. Tente novamente mais tarde.')
-        return redirect('wallet:transfer_to_server')
+        return redirect('wallet:dashboard')
     
     config = CoinConfig.objects.filter(ativa=True).first()
     if not config:
         messages.error(request, 'Nenhuma moeda configurada está ativa no momento.')
-        return redirect('wallet:transfer_to_server')
+        return redirect('wallet:dashboard')
 
     wallet, created = Wallet.objects.get_or_create(usuario=request.user)
     personagens = []
@@ -85,31 +85,31 @@ def transfer_to_server(request):
             valor = Decimal(valor)
         except:
             messages.error(request, 'Valor inválido.')
-            return redirect('wallet:transfer_to_server')
+            return redirect('wallet:dashboard')
 
         if valor < 1 or valor > 1000:
             messages.error(request, 'Só é permitido transferir entre R$1,00 e R$1.000,00.')
-            return redirect('wallet:transfer_to_server')
+            return redirect('wallet:dashboard')
 
         user = authenticate(username=request.user.username, password=senha)
         if not user:
             messages.error(request, 'Senha incorreta.')
-            return redirect('wallet:transfer_to_server')
+            return redirect('wallet:dashboard')
 
         if wallet.saldo < valor:
             messages.error(request, 'Saldo insuficiente.')
-            return redirect('wallet:transfer_to_server')
+            return redirect('wallet:dashboard')
 
         # Confirma se o personagem pertence à conta
         personagem = TransferFromWalletToChar.find_char(request.user.username, nome_personagem)
         if not personagem:
             messages.error(request, 'Personagem inválido ou não pertence a essa conta.')
-            return redirect('wallet:transfer_to_server')
+            return redirect('wallet:dashboard')
 
         if not TransferFromWalletToChar.items_delayed:
             if personagem[0]['online'] != 0:
                 messages.error(request, 'O personagem precisa estar offline.')
-                return redirect('wallet:transfer_to_server')
+                return redirect('wallet:dashboard')
 
         try:
             with transaction.atomic():
@@ -133,7 +133,7 @@ def transfer_to_server(request):
 
         except Exception as e:
             messages.error(request, f"Ocorreu um erro durante a transferência: {str(e)}")
-            return redirect('wallet:transfer_to_server')
+            return redirect('wallet:dashboard')
 
         perfil = PerfilGamer.objects.get(user=request.user)
         perfil.adicionar_xp(40)
@@ -159,28 +159,28 @@ def transfer_to_player(request):
             valor = Decimal(valor)
         except:
             messages.error(request, 'Valor inválido.')
-            return redirect('wallet:transfer_to_player')
+            return redirect('wallet:dashboard')
 
         # Verificação de limites
         if valor < 1 or valor > 1000:
             messages.error(request, 'Só é permitido transferir entre R$1,00 e R$1.000,00.')
-            return redirect('wallet:transfer_to_player')
+            return redirect('wallet:dashboard')
 
         # Verificação de senha
         user = authenticate(username=request.user.username, password=senha)
         if not user:
             messages.error(request, 'Senha incorreta.')
-            return redirect('wallet:transfer_to_player')
+            return redirect('wallet:dashboard')
         
         try:
             destinatario = User.objects.get(username=nome_jogador)
         except User.DoesNotExist:
             messages.error(request, 'Jogador não encontrado.')
-            return redirect('wallet:transfer_to_player')
+            return redirect('wallet:dashboard')
 
         if destinatario == request.user:
             messages.error(request, 'Você não pode transferir para si mesmo.')
-            return redirect('wallet:transfer_to_player')
+            return redirect('wallet:dashboard')
 
         wallet_origem, created = Wallet.objects.get_or_create(usuario=request.user)
         wallet_destino, created = Wallet.objects.get_or_create(usuario=destinatario)
