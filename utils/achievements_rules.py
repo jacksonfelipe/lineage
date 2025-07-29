@@ -11,6 +11,8 @@ from apps.lineage.payment.models import PedidoPagamento, Pagamento
 from apps.lineage.wallet.models import TransacaoWallet
 from apps.lineage.inventory.models import InventoryItem, InventoryLog
 
+import time
+
 
 @registrar_validador('primeiro_login')
 def primeiro_login(user, request=None):
@@ -132,5 +134,278 @@ def mil_xp(user, request=None):
             xp_total += 100 + (nivel - 1) * 25
             
         return xp_total >= 1000
+    except:
+        return False
+
+
+
+@registrar_validador('100_transacoes')
+def cem_transacoes(user, request=None):
+    from apps.lineage.wallet.models import TransacaoWallet, TransacaoBonus
+    # Conta transações normais e de bônus
+    transacoes_normais = TransacaoWallet.objects.filter(wallet__usuario=user).count()
+    transacoes_bonus = TransacaoBonus.objects.filter(wallet__usuario=user).count()
+    return (transacoes_normais + transacoes_bonus) >= 100
+
+@registrar_validador('primeiro_bonus')
+def primeiro_bonus(user, request=None):
+    from apps.lineage.wallet.models import TransacaoBonus
+    return TransacaoBonus.objects.filter(wallet__usuario=user, tipo='ENTRADA').exists()
+
+@registrar_validador('nivel_25')
+def nivel_25(user, request=None):
+    try:
+        perfil = user.perfilgamer
+        return perfil.level >= 25
+    except:
+        return False
+
+@registrar_validador('primeira_solicitacao_resolvida')
+def primeira_solicitacao_resolvida(user, request=None):
+    from apps.main.solicitation.models import Solicitation
+    return Solicitation.objects.filter(user=user, status='closed').exists()
+
+@registrar_validador('primeiro_personagem')
+def primeiro_personagem(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        # Verifica se o usuário tem personagens no servidor
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account",
+            {"account": user.username}
+        )
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('primeiro_clan')
+def primeiro_clan(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        # Verifica se o usuário tem personagens em clãs
+        characters_in_clan = db.select(
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND clanid > 0",
+            {"account": user.username}
+        )
+        return characters_in_clan and characters_in_clan[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('primeiro_castle')
+def primeiro_castle(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        # Verifica se o usuário tem personagens em clãs que possuem castelos
+        castle_characters = db.select("""
+            SELECT COUNT(*) as count 
+            FROM characters c 
+            JOIN clan_data cd ON c.clanid = cd.clan_id 
+            WHERE c.account_name = :account AND cd.hasCastle = 1
+        """, {"account": user.username})
+        return castle_characters and castle_characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('personagem_nivel_50')
+def personagem_nivel_50(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND base_level >= 50",
+            {"account": user.username}
+        )
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('personagem_nivel_80')
+def personagem_nivel_80(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND base_level >= 80",
+            {"account": user.username}
+        )
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('personagem_nobless')
+def personagem_nobless(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND nobless = 1",
+            {"account": user.username}
+        )
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('personagem_hero')
+def personagem_hero(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND hero_end > :current_time",
+            {"account": user.username, "current_time": int(time.time() * 1000)}
+        )
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('primeiro_subclass')
+def primeiro_subclass(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND (subclass1 > 0 OR subclass2 > 0 OR subclass3 > 0)",
+            {"account": user.username}
+        )
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('personagem_pvp_100')
+def personagem_pvp_100(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND pvpkills >= 100",
+            {"account": user.username}
+        )
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('personagem_pvp_500')
+def personagem_pvp_500(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND pvpkills >= 500",
+            {"account": user.username}
+        )
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('personagem_pvp_1000')
+def personagem_pvp_1000(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND pvpkills >= 1000",
+            {"account": user.username}
+        )
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('primeiro_ally')
+def primeiro_ally(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND ally_id > 0",
+            {"account": user.username}
+        )
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('personagem_online_24h')
+def personagem_online_24h(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND onlinetime >= 86400",
+            {"account": user.username}
+        )
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('personagem_online_100h')
+def personagem_online_100h(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND onlinetime >= 360000",
+            {"account": user.username}
+        )
+        return characters and characters[0]['count'] > 0
+    except:
+        return False
+
+@registrar_validador('personagem_online_500h')
+def personagem_online_500h(user, request=None):
+    from apps.lineage.server.database import LineageDB
+    try:
+        db = LineageDB()
+        if not db.is_connected():
+            return False
+        
+        characters = db.select(
+            "SELECT COUNT(*) as count FROM characters WHERE account_name = :account AND onlinetime >= 1800000",
+            {"account": user.username}
+        )
+        return characters and characters[0]['count'] > 0
     except:
         return False
