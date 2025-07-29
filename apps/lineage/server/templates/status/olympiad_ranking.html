@@ -279,7 +279,7 @@
             <td>
               <span class="badge bg-warning text-dark">{{ player.olympiad_points|default:"-" }}</span>
             </td>
-            <td>{{ player.base }}</td>
+            <td>{{ player.class_name|default:"-" }}</td>
             <td>
               {% if player.online %}
                 <span class="badge bg-success">{% trans "Online" %}</span>

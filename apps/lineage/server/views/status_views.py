@@ -50,14 +50,19 @@ def siege_ranking_view(request):
 def olympiad_ranking_view(request):
     # Obtém o ranking de olimpíada
     db = LineageDB()
-    result = LineageStats.olympiad_ranking() if db.is_connected() else []
+    original_result = LineageStats.olympiad_ranking() if db.is_connected() else []
     
     # Filtra registros com valores None
     filtered_result = []
-    for player in result:
+    for player in original_result:
         # Só inclui se char_name não for None
         if player.get('char_name') is not None:
             filtered_result.append(player)
+    
+    # Preparar dados para os filtros - usar dados originais ANTES de qualquer filtro
+    # Usar a mesma lógica da view que funciona
+    all_classes = list(set([get_class_name(p.get('base', '')) for p in filtered_result if p.get('base')]))
+    all_classes.sort()
     
     # Aplicar filtros baseados nos parâmetros GET
     search_query = request.GET.get('search', '').strip().lower()
@@ -104,16 +109,17 @@ def olympiad_ranking_view(request):
             if player.get('olympiad_points', 0) >= min_points_int
         ]
     
-    result = attach_crests_to_clans(filtered_result)
-    for player in result:
-        player['base'] = get_class_name(player['base'])
+    # Processar os dados para incluir nome da classe (como na view que funciona)
+    for player in filtered_result:
+        if 'base' in player and player['base'] is not None:
+            player['class_name'] = get_class_name(player['base'])
+        else:
+            player['class_name'] = '-'
     
-    # Preparar dados para os filtros - usar dados originais para ter todas as classes
-    all_classes = list(set([get_class_name(p.get('base', '')) for p in result if p.get('base')]))
-    all_classes.sort()
+    final_result = attach_crests_to_clans(filtered_result)
     
     context = {
-        'ranking': result,
+        'ranking': final_result,
         'filters': {
             'search': request.GET.get('search', ''),
             'class': request.GET.get('class', ''),
@@ -122,7 +128,7 @@ def olympiad_ranking_view(request):
             'min_points': request.GET.get('min_points', ''),
         },
         'available_classes': all_classes,
-        'total_players': len(result),
+        'total_players': len(original_result),
         'filtered_players': len(filtered_result),
     }
     
