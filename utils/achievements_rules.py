@@ -6,7 +6,7 @@ from apps.main.solicitation.models import Solicitation
 from apps.main.message.models import Friendship
 
 from apps.lineage.shop.models import ShopPurchase, Cart
-from apps.lineage.auction.models import Bid
+from apps.lineage.auction.models import Bid, Auction
 from apps.lineage.payment.models import PedidoPagamento, Pagamento
 from apps.lineage.wallet.models import TransacaoWallet
 from apps.lineage.inventory.models import InventoryItem, InventoryLog
@@ -95,10 +95,42 @@ def primeira_transferencia_para_jogador(user, request=None):
 def primeira_retirada_item(user, request=None):
     return InventoryItem.objects.filter(inventory__user=user).exists()
 
-@registrar_validador('primeira_retirada_item')
-def primeira_retirada_item(user, request=None):
-    return InventoryItem.objects.filter(inventory__user=user).exists()
+@registrar_validador('primeira_insercao_item')
+def primeira_insercao_item(user, request=None):
+    return InventoryLog.objects.filter(user=user, acao='INSERIU_NO_JOGO').exists()
 
 @registrar_validador('primeira_troca_itens')
 def primeira_troca_itens(user, request=None):
     return InventoryLog.objects.filter(user=user, acao='TROCA_ENTRE_PERSONAGENS').exists()
+
+@registrar_validador('nivel_10')
+def nivel_10(user, request=None):
+    try:
+        perfil = user.perfilgamer
+        return perfil.level >= 10
+    except:
+        return False
+
+@registrar_validador('50_lances')
+def cinquenta_lances(user, request=None):
+    return Bid.objects.filter(bidder=user).count() >= 50
+
+@registrar_validador('primeiro_vencedor_leilao')
+def primeiro_vencedor_leilao(user, request=None):
+    return Auction.objects.filter(highest_bidder=user, status='finished').exists()
+
+@registrar_validador('1000_xp')
+def mil_xp(user, request=None):
+    try:
+        perfil = user.perfilgamer
+        # Calcula XP total acumulado
+        xp_total = perfil.xp
+        level_atual = perfil.level
+        
+        # Adiciona XP de todos os níveis anteriores
+        for nivel in range(1, level_atual):
+            xp_total += 100 + (nivel - 1) * 25
+            
+        return xp_total >= 1000
+    except:
+        return False

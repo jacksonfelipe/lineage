@@ -62,6 +62,10 @@ def criar_conquistas_iniciais(sender, **kwargs):
         {'codigo': 'primeira_retirada_item', 'nome': 'Caçador de Tesouros', 'descricao': 'Retirou seu primeiro item do jogo para o inventário online'},
         {'codigo': 'primeira_insercao_item', 'nome': 'De Volta à Batalha', 'descricao': 'Inseriu um item do inventário online no servidor pela primeira vez'},
         {'codigo': 'primeira_troca_itens', 'nome': 'Comerciante Astuto', 'descricao': 'Realizou sua primeira troca de item entre personagens'},
+        {'codigo': 'nivel_10', 'nome': 'Veterano Iniciante', 'descricao': 'Alcançou o nível 10 no sistema'},
+        {'codigo': '50_lances', 'nome': 'Lanceador Experiente', 'descricao': 'Realizou 50 lances em leilões'},
+        {'codigo': 'primeiro_vencedor_leilao', 'nome': 'Vencedor de Leilão', 'descricao': 'Venceu seu primeiro leilão'},
+        {'codigo': '1000_xp', 'nome': 'Mestre da Experiência', 'descricao': 'Acumulou 1000 pontos de experiência'},
     ]
 
     for conquista in conquistas:
