@@ -109,8 +109,8 @@ https://l2jprmeium.com/
 
 ## Sobre Mim
 >Desenvolvedor - Daniel Amaral Recife/PE
-- Emails:  contato@denky.dev.br
-- Discord: denkyto
+- Emails:  contato@l2jpremium.com
+- Discord: jacksonfelipe
 
 
 ## Grupo de Staffs:
