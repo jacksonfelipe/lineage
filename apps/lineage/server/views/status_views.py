@@ -70,8 +70,8 @@ def olympiad_ranking_view(request):
     if search_query:
         filtered_result = [
             player for player in filtered_result
-            if (player.get('char_name', '').lower().find(search_query) != -1 or
-                player.get('clan_name', '').lower().find(search_query) != -1 or
+            if ((player.get('char_name') or '').lower().find(search_query) != -1 or
+                (player.get('clan_name') or '').lower().find(search_query) != -1 or
                 get_class_name(player.get('base', '')).lower().find(search_query) != -1)
         ]
     
@@ -86,7 +86,7 @@ def olympiad_ranking_view(request):
     if clan_filter:
         filtered_result = [
             player for player in filtered_result
-            if player.get('clan_name', '').lower().find(clan_filter) != -1
+            if (player.get('clan_name') or '').lower().find(clan_filter) != -1
         ]
     
     # Filtrar por status
@@ -108,8 +108,8 @@ def olympiad_ranking_view(request):
     for player in result:
         player['base'] = get_class_name(player['base'])
     
-    # Preparar dados para os filtros
-    all_classes = list(set([get_class_name(p.get('base', '')) for p in filtered_result if p.get('base')]))
+    # Preparar dados para os filtros - usar dados originais para ter todas as classes
+    all_classes = list(set([get_class_name(p.get('base', '')) for p in result if p.get('base')]))
     all_classes.sort()
     
     context = {

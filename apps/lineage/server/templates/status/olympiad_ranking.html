@@ -65,6 +65,43 @@
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
   }
 
+  /* Estilos para as opções do select */
+  .filter-group select option {
+    background-color: #ffffff;
+    color: #495057;
+    padding: 8px 12px;
+  }
+
+  /* Estilo para quando o select está aberto */
+  .filter-group select:focus option:hover,
+  .filter-group select:focus option:focus {
+    background-color: #007bff;
+    color: #ffffff;
+  }
+
+  /* Estilo para a opção selecionada */
+  .filter-group select option:checked {
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  /* Estilos adicionais para compatibilidade */
+  .filter-group select::-ms-expand {
+    display: none;
+  }
+
+  /* Estilo para o dropdown do select (Firefox) */
+  .filter-group select:-moz-focusring {
+    color: transparent;
+    text-shadow: 0 0 0 #495057;
+  }
+
+  /* Estilo para garantir que o texto seja visível no select fechado */
+  .filter-group select {
+    color: #495057 !important;
+  }
+
   .filters-actions {
     display: flex;
     gap: 10px;
