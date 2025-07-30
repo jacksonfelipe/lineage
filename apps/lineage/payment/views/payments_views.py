@@ -9,7 +9,6 @@ from datetime import timedelta
 from django.utils.timezone import now
 from django.contrib import messages
 from django.db import transaction
-from utils.services import verificar_conquistas
 from apps.main.home.models import PerfilGamer
 from apps.lineage.wallet.utils import calcular_bonus_compra
 from decimal import Decimal
@@ -105,7 +104,6 @@ def criar_ou_reaproveitar_pedido(request):
 
             perfil = PerfilGamer.objects.get(user=request.user)
             perfil.adicionar_xp(40)
-            verificar_conquistas(request.user, request=request)
 
             return redirect('payment:detalhes_pedido', pedido_id=novo_pedido.id)
 
@@ -172,7 +170,6 @@ def confirmar_pagamento(request, pedido_id):
 
                 perfil = PerfilGamer.objects.get(user=request.user)
                 perfil.adicionar_xp(100)
-                verificar_conquistas(request.user, request=request)
 
                 return redirect(preference["init_point"])
 
@@ -198,7 +195,6 @@ def confirmar_pagamento(request, pedido_id):
 
                 perfil = PerfilGamer.objects.get(user=request.user)
                 perfil.adicionar_xp(100)
-                verificar_conquistas(request.user, request=request)
 
                 return redirect(session.url, code=303)
 

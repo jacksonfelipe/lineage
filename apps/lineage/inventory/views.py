@@ -8,7 +8,6 @@ from django.utils.translation import gettext as _
 from django.db.models import Sum
 from .utils.items import get_itens_json
 
-from utils.services import verificar_conquistas
 from apps.main.home.models import PerfilGamer
 
 from .models import Inventory, InventoryItem, BlockedServerItem, InventoryLog

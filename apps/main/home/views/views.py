@@ -150,12 +150,6 @@ def edit_avatar(request):
             perfil = PerfilGamer.objects.get(user=request.user)
             perfil.adicionar_xp(20)  # Pode ajustar a quantidade conforme desejar
 
-            # Verifica conquistas
-            conquistas_desbloqueadas = verificar_conquistas(request.user, request=request)
-            if conquistas_desbloqueadas:
-                for conquista in conquistas_desbloqueadas:
-                    messages.success(request, f"🏆 Você desbloqueou a conquista: {conquista.nome}!")
-
             messages.success(request, "Avatar atualizado com sucesso! Você ganhou 20 XP.")
             return redirect('profile')
     else:
@@ -179,12 +173,6 @@ def add_or_edit_address(request):
             # Dá XP por cadastrar ou atualizar o endereço
             perfil = PerfilGamer.objects.get(user=request.user)
             perfil.adicionar_xp(30)  # Altere o valor conforme achar adequado
-
-            # Verifica conquistas
-            conquistas_desbloqueadas = verificar_conquistas(request.user, request=request)
-            if conquistas_desbloqueadas:
-                for conquista in conquistas_desbloqueadas:
-                    messages.success(request, f"🏆 Conquista desbloqueada: {conquista.nome}!")
 
             messages.success(request, "Endereço salvo com sucesso! Você ganhou 30 XP.")
             return redirect('profile')
@@ -328,7 +316,11 @@ def dashboard(request):
         if perfil.pode_receber_bonus_diario():
             ganhou_bonus = perfil.receber_bonus_diario()
 
-        verificar_conquistas(request.user, request=request)
+        # Verifica conquistas
+        conquistas_desbloqueadas = verificar_conquistas(request.user, request=request)
+        if conquistas_desbloqueadas:
+            for conquista in conquistas_desbloqueadas:
+                messages.success(request, f"🏆 Você desbloqueou a conquista: {conquista.nome}!")
 
         # Todas as conquistas disponíveis
         todas_conquistas = Conquista.objects.all()
@@ -448,11 +440,6 @@ def ativar_2fa(request):
             # Dá XP pela ativação
             perfil = PerfilGamer.objects.get(user=user)
             perfil.adicionar_xp(60)
-
-            # Verifica conquistas
-            conquistas_desbloqueadas = verificar_conquistas(request.user, request=request)
-            for conquista in conquistas_desbloqueadas:
-                messages.success(request, f"🏆 Conquista desbloqueada: {conquista.nome}!")
 
             messages.success(request, "Autenticação em 2 etapas ativada com sucesso! Você ganhou 60 XP.")
             return redirect('dashboard')
