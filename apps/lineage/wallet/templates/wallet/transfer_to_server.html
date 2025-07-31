@@ -2,6 +2,40 @@
 {% load i18n %}
 
 {% block content %}
+<style>
+  /* Estilos para o ícone de olho */
+  .password-field {
+    position: relative;
+  }
+
+  .password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.3s ease;
+    z-index: 10;
+  }
+
+  .password-toggle:hover {
+    color: #495057;
+  }
+
+  .password-toggle:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .password-field .form-control {
+    padding-right: 40px; /* Espaço para o ícone */
+  }
+</style>
+
 <div class="container mt-5">
   {% if messages %}
     {% for message in messages %}
@@ -46,7 +80,12 @@
       </div>
       <div class="mb-3">
         <label class="form-label fw-semibold">{% trans "Confirme sua senha" %}</label>
-        <input type="password" name="senha" class="form-control" required>
+        <div class="password-field">
+          <input type="password" name="senha" class="form-control" id="senha" required>
+          <button type="button" class="password-toggle" onclick="togglePassword('senha')">
+            <i class="bi bi-eye" id="eye-icon-senha"></i>
+          </button>
+        </div>
       </div>
       <button type="submit" class="btn btn-primary w-100 mt-3 rounded-pill fw-bold">
         <i class="bi bi-check-circle me-2"></i> {% trans "Confirmar Transferência" %}
@@ -54,4 +93,21 @@
     </form>
   </div>
 </div>
+
+<script>
+function togglePassword(inputId) {
+  const input = document.getElementById(inputId);
+  const icon = document.getElementById('eye-icon-' + inputId);
+  
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.classList.remove('bi-eye');
+    icon.classList.add('bi-eye-slash');
+  } else {
+    input.type = 'password';
+    icon.classList.remove('bi-eye-slash');
+    icon.classList.add('bi-eye');
+  }
+}
+</script>
 {% endblock %}
