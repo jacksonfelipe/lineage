@@ -107,6 +107,28 @@
     padding-right: 40px; /* Espaço para o ícone */
   }
 
+  /* Estilos para o botão de sair */
+  .btn-outline-light {
+    border: 1px solid #e0c36b;
+    color: #e0c36b;
+    background: transparent;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-light:hover {
+    background: #e0c36b;
+    color: #000;
+    border-color: #e0c36b;
+  }
+
+  .btn-outline-light:focus {
+    box-shadow: 0 0 10px rgba(255, 255, 160, 0.5);
+  }
+
+  .btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+  }
 
 </style>
 
@@ -153,6 +175,16 @@
               <button type="submit" class="btn btn-golden">{% trans "Desbloquear" %}</button>
             </div>
           </form>
+
+          <!-- Botão de Sair -->
+          <div class="text-center mt-3">
+            <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">
+              <svg class="icon icon-xs me-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              </svg>
+              {% trans "Sair" %}
+            </a>
+          </div>
         </div>
       </div>
     </div>
