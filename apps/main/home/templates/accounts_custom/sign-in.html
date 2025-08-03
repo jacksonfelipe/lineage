@@ -56,6 +56,38 @@
     text-decoration: underline;
   }
 
+  /* Estilos para o ícone de olho */
+  .password-field {
+    position: relative;
+  }
+
+  .password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #e0c36b;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.3s ease;
+    z-index: 10;
+  }
+
+  .password-toggle:hover {
+    color: #fff;
+  }
+
+  .password-toggle:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .password-field .form-control {
+    padding-right: 40px; /* Espaço para o ícone */
+  }
+
 </style>
 
 <section class="vh-100 d-flex align-items-center justify-content-center">
@@ -87,11 +119,16 @@
 
             <div class="mb-3">
               <label for="password" class="form-label">{{ form.password.label|default:"{% trans 'Senha' %}" }}</label>
-              <div class="input-group">
-                <span class="input-group-text bg-dark border-secondary text-light">
-                  <i class="bi bi-lock-fill"></i>
-                </span>
-                {{ form.password|add_class:"form-control bg-dark border-secondary text-light" }}
+              <div class="password-field">
+                <div class="input-group">
+                  <span class="input-group-text bg-dark border-secondary text-light">
+                    <i class="bi bi-lock-fill"></i>
+                  </span>
+                  {{ form.password|add_class:"form-control bg-dark border-secondary text-light" }}
+                </div>
+                <button type="button" class="password-toggle" onclick="togglePassword('id_password')">
+                  <i class="bi bi-eye" id="eye-icon-password"></i>
+                </button>
               </div>
             </div>
 
@@ -181,4 +218,21 @@
     </div>
   </div>
 </section>
+
+<script>
+function togglePassword(inputId) {
+  const input = document.getElementById(inputId);
+  const icon = document.getElementById('eye-icon-' + inputId.split('_')[1]);
+  
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.classList.remove('bi-eye');
+    icon.classList.add('bi-eye-slash');
+  } else {
+    input.type = 'password';
+    icon.classList.remove('bi-eye-slash');
+    icon.classList.add('bi-eye');
+  }
+}
+</script>
 {% endblock content %}

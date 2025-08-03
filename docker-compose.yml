@@ -39,6 +39,13 @@ services:
     depends_on:
       - redis
       - site
+    hostname: celery-worker
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    environment:
+      - HOSTNAME=celery-worker
+      - CELERY_HOSTNAME=celery-worker
 
   celery-beat:
     container_name: celery_beat

@@ -89,3 +89,6 @@ cryptography
 # Docs
 mkdocs
 mkdocs-material
+
+# PDF Generation
+reportlab
