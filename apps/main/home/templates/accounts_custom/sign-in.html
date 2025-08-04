@@ -149,7 +149,7 @@
                   {% trans "Múltiplas tentativas de login detectadas. Por favor, complete o captcha para continuar." %}
                   <br>
                   <small class="text-muted">
-                    {% trans "Tentativas:" %} {{ login_attempts }}/{{ max_attempts }}
+                    {% trans "Tentativas:" %} {{ login_attempts }} (limite: {{ max_attempts }})
                   </small>
                 </div>
                 <div class="h-captcha" data-sitekey="{{ hcaptcha_site_key }}" data-callback="onCaptchaSuccess" data-expired-callback="onCaptchaExpired"></div>

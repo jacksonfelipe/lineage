@@ -28,7 +28,7 @@ CONFIG_HCAPTCHA_SECRET_KEY=sua_chave_secreta
 
 1. **Rastreamento de Tentativas**: O middleware `LoginAttemptsMiddleware` rastreia todas as tentativas de login por IP
 2. **Contador de Tentativas**: Após cada tentativa falhada, o contador é incrementado
-3. **Exigência de Captcha**: Quando o número de tentativas atinge o limite configurado, o captcha se torna obrigatório
+3. **Exigência de Captcha**: Quando o número de tentativas excede o limite configurado, o captcha se torna obrigatório (ex: após 3 tentativas falhadas, a 4ª tentativa requer captcha)
 4. **Reset Automático**: As tentativas são resetadas automaticamente após um login bem-sucedido
 5. **Expiração**: As tentativas expiram automaticamente após 1 hora
 

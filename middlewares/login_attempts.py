@@ -14,11 +14,14 @@ class LoginAttemptsMiddleware:
         self.get_response = get_response
     
     def __call__(self, request):
+        # Verifica se é uma tentativa de login ANTES de processar
+        is_login_attempt = request.method == 'POST' and request.path.endswith('/login/')
+        
         # Processa a requisição
         response = self.get_response(request)
         
-        # Verifica se é uma tentativa de login
-        if request.method == 'POST' and request.path.endswith('/login/'):
+        # Gerencia tentativas de login APÓS processar
+        if is_login_attempt:
             self._handle_login_attempt(request, response)
         
         return response
@@ -35,6 +38,10 @@ class LoginAttemptsMiddleware:
             attempts = cache.get(cache_key, 0) + 1
             cache.set(cache_key, attempts, 3600)  # Expira em 1 hora
             logger.warning(f"Tentativa de login falhou para IP {client_ip}, tentativa {attempts}")
+            
+            # Se chegou ao limite, força a próxima requisição a mostrar captcha
+            if attempts > getattr(settings, 'LOGIN_MAX_ATTEMPTS', 3):
+                logger.info(f"IP {client_ip} excedeu limite de tentativas ({attempts}). Captcha será exigido na próxima tentativa.")
     
     def _get_client_ip(self, request):
         """Obtém o IP real do cliente"""
@@ -66,7 +73,12 @@ class LoginAttemptsMiddleware:
     def requires_captcha(request):
         """Verifica se o captcha é necessário"""
         attempts = LoginAttemptsMiddleware.get_login_attempts(request)
-        return attempts >= getattr(settings, 'LOGIN_MAX_ATTEMPTS', 3)
+        max_attempts = getattr(settings, 'LOGIN_MAX_ATTEMPTS', 3)
+        # Captcha é necessário quando já excedeu o número máximo de tentativas
+        # Ou seja, após 3 tentativas falhadas, a 4ª tentativa deve ter captcha
+        requires = attempts > max_attempts
+        logger.debug(f"Verificando captcha: {attempts} tentativas > {max_attempts} = {requires}")
+        return requires
     
     @staticmethod
     def reset_attempts(request):
