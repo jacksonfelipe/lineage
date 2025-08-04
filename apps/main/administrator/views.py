@@ -14,7 +14,7 @@ import os
 from core.context_processors import active_theme
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
-from .models import *
+from .models import ChatGroup
 
 
 @staff_member_required
@@ -38,16 +38,15 @@ def chat_room(request, group_name):
 
     try:
         solicitation = Solicitation.objects.get(protocol=group_name)
-        # Verifica se o usuário é participante
-        is_participant = SolicitationParticipant.objects.filter(
-            solicitation=solicitation, user=request.user
-        ).exists()
         type_chat = "Solicitação"
         
-        # Se for um staff, automaticamente adiciona como participante, se não for
-        if request.user.is_staff and not is_participant:
-            SolicitationParticipant.objects.create(solicitation=solicitation, user=request.user)
-            is_participant = True  # Marca como participante
+        # Se for um staff, automaticamente adiciona como participante
+        if request.user.is_staff:
+            solicitation.add_participant(request.user)
+        
+        # Verifica se o usuário é participante
+        is_participant = solicitation.is_participant(request.user)
+        
     except Solicitation.DoesNotExist:
         raise Http404(f"Protocolo {group_name} não encontrado.")
 
@@ -58,16 +57,19 @@ def chat_room(request, group_name):
     # Verifica se o status é final (resolved, closed, cancelled, rejected)
     final_statuses = ['resolved', 'closed', 'cancelled', 'rejected']
     if solicitation.status in final_statuses:
+        print(f"DEBUG: Status final detectado: {solicitation.status}")
         return render(request, 'errors/solicitation_closed.html', {
             'solicitation': solicitation,
             'status': solicitation.get_status_display(),  # Exibe 'Resolvido', 'Fechado', etc
         })
 
-    # Verifica se o status é 'pending' (mantém a verificação original)
-    if solicitation.status != 'pending':
+    # Verifica se o status permite chat (apenas status ativos permitem chat)
+    active_statuses = ['open', 'in_progress', 'waiting_user', 'waiting_third_party']
+    if solicitation.status not in active_statuses:
+        print(f"DEBUG: Status não ativo detectado: {solicitation.status}")
         return render(request, 'errors/solicitation_closed.html', {
             'solicitation': solicitation,
-            'status': solicitation.get_status_display(),  # Exibe 'Aprovado', 'Rejeitado', etc
+            'status': solicitation.get_status_display(),  # Exibe o status atual
         })
 
     if request.user.avatar:
@@ -76,10 +78,13 @@ def chat_room(request, group_name):
     else:
         avatar_url = '/static/assets/img/team/generic_user.png'
 
-    solicitation_name = (
-        str(solicitation.user.username).upper() + ' - ' + str(solicitation.user.email)
-        if solicitation.user else "Solicitação sem usuário..."
-    )
+    if solicitation.user:
+        if solicitation.user.email:
+            solicitation_name = f"{solicitation.user.username.upper()} - {solicitation.user.email}"
+        else:
+            solicitation_name = solicitation.user.username.upper()
+    else:
+        solicitation_name = "Solicitação sem usuário..."
 
     chat_messages = ChatGroup.objects.filter(group_name=group_name).order_by('timestamp')
     solicitation_context = 'do Usuário:'

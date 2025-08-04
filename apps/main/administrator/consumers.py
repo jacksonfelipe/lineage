@@ -109,7 +109,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
             # Verifica se o status é final (resolved, closed, cancelled, rejected)
             final_statuses = ['resolved', 'closed', 'cancelled', 'rejected']
             if solicitation.status in final_statuses:
+                logger.info(f"DEBUG: Status final detectado no consumer: {solicitation.status}")
                 return False  # Bloqueia acesso ao chat para status finais
+
+            # Verifica se o status permite chat (apenas status ativos permitem chat)
+            active_statuses = ['open', 'in_progress', 'waiting_user', 'waiting_third_party']
+            if solicitation.status not in active_statuses:
+                logger.info(f"DEBUG: Status não ativo detectado no consumer: {solicitation.status}")
+                return False  # Bloqueia acesso ao chat para status não ativos
 
             # Se o usuário for admin, automaticamente adiciona como participante
             if user.is_staff:  # Verifica se é admin
