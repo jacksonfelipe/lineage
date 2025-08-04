@@ -178,7 +178,7 @@
       </div>
       <div class="col-lg-3 text-end">
         {% if image %}
-          <img src="{{ image }}" class="avatar-frame" width="70" alt="avatar">
+          <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' request.user.uuid timestamp %}" class="avatar-frame" width="70" alt="avatar">
         {% endif %}
       </div>
     </div>

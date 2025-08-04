@@ -77,7 +77,7 @@
           <div class="text-center mb-4">
             <div class="avatar avatar-lg mx-auto mb-3">
                 {% if user.avatar %}
-                  <img class="avatar rounded-circle" style="background-color: #cbd5e1;" src="{% url 'serve_files:serve_decrypted_file' 'home' 'user' 'avatar' user.uuid %}" alt="User-Profile-Image" class="user-avtar wid-35" />
+                  <img class="avatar rounded-circle" style="background-color: #cbd5e1;" src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" alt="User-Profile-Image" class="user-avtar wid-35" />
                 {% else %}
                   <img class="avatar rounded-circle" style="background-color: #cbd5e1;" alt="Image placeholder" src="{% static 'assets/img/team/generic_user.png' %}">
                 {% endif %}

@@ -175,14 +175,14 @@ def edit_avatar(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Avatar atualizado com sucesso!")
-            return redirect('profile')
+            return redirect('edit_avatar')
     else:
         form = AvatarForm(instance=request.user)
 
     context = {
         'segment': 'avatar',
         'parent': 'home',
-        'form': form
+        'form': form,
     }
     
     return render(request, 'pages/edit_avatar.html', context)

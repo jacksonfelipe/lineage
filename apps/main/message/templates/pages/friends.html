@@ -82,7 +82,7 @@
               <div class="friend-card">
                 <div class="friend-avatar">
                   {% if friendship.friend.avatar %}
-                    <img src="{% url 'serve_files:serve_decrypted_file' 'home' 'user' 'avatar' friendship.friend.uuid %}" alt="{{ friendship.friend.username }}">
+                    <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' friendship.friend.uuid timestamp %}" alt="{{ friendship.friend.username }}">
                   {% else %}
                     <img src="{% static 'assets/img/team/generic_user.png' %}" alt="{% trans 'default profile image' %}">
                   {% endif %}
@@ -204,7 +204,7 @@
             <div class="user-card">
               <div class="user-avatar">
                 {% if user.avatar %}
-                  <img src="{% url 'serve_files:serve_decrypted_file' 'home' 'user' 'avatar' user.uuid %}" alt="{{ user.username }}">
+                  <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" alt="{{ user.username }}">
                 {% else %}
                   <img src="{% static 'assets/img/team/generic_user.png' %}" alt="{% trans 'default profile image' %}">
                 {% endif %}
@@ -307,7 +307,7 @@
               <div class="request-card">
                 <div class="request-avatar">
                   {% if request.user.avatar %}
-                    <img src="{% url 'serve_files:serve_decrypted_file' 'home' 'user' 'avatar' request.user.uuid %}" alt="{{ request.user.username }}">
+                    <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' request.user.uuid timestamp %}" alt="{{ request.user.username }}">
                   {% else %}
                     <img src="{% static 'assets/img/team/generic_user.png' %}" alt="{% trans 'default profile image' %}">
                   {% endif %}
@@ -370,7 +370,7 @@
               <div class="request-card">
                 <div class="request-avatar">
                   {% if request.friend.avatar %}
-                    <img src="{% url 'serve_files:serve_decrypted_file' 'home' 'user' 'avatar' request.friend.uuid %}" alt="{{ request.friend.username }}">
+                    <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' request.friend.uuid timestamp %}" alt="{{ request.friend.username }}">
                   {% else %}
                     <img src="{% static 'assets/img/team/generic_user.png' %}" alt="{% trans 'default profile image' %}">
                   {% endif %}

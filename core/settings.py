@@ -231,6 +231,7 @@ TEMPLATES = [
                 "core.context_processors.slogan_flag",
                 "core.context_processors.social_login_config",
                 "apps.main.home.context_processors.site_logo",
+                "apps.main.home.context_processors.timestamp_processor",
             ],
         },
     },

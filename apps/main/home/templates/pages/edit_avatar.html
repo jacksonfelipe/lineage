@@ -335,13 +335,13 @@
 
             <!-- Avatar Preview -->
             <div class="avatar-preview-section">
-              <div class="avatar-preview" id="avatar-preview">
-                {% if request.user.avatar %}
-                  <img src="{{ request.user.avatar.url }}" alt="Avatar atual" id="preview-image">
-                {% else %}
-                  <i class="fas fa-user"></i>
-                {% endif %}
-              </div>
+                             <div class="avatar-preview" id="avatar-preview">
+                 {% if request.user.avatar %}
+                   <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' request.user.uuid timestamp %}" alt="Avatar atual" id="preview-image">
+                 {% else %}
+                   <i class="fas fa-user"></i>
+                 {% endif %}
+               </div>
               <h5 class="text-muted">{% trans 'Preview do Avatar' %}</h5>
             </div>
 
@@ -565,6 +565,20 @@ document.addEventListener('DOMContentLoaded', function() {
     saveBtn.disabled = true;
     saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>{% trans "Salvando..." %}';
   });
+
+  // Força reload da imagem após upload bem-sucedido
+  // Verifica se há parâmetro de sucesso na URL
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('success')) {
+    // Força o reload da imagem do avatar atual com novo timestamp
+    const currentAvatarImg = document.querySelector('#avatar-preview img');
+    if (currentAvatarImg) {
+      // Extrai a URL base e adiciona novo timestamp
+      const baseUrl = currentAvatarImg.src.split('/').slice(0, -1).join('/');
+      const newTimestamp = Math.floor(Date.now() / 1000); // Timestamp em segundos
+      currentAvatarImg.src = `${baseUrl}/${newTimestamp}/`;
+    }
+  }
 });
 </script>
 {% endblock %}
