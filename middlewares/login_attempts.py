@@ -35,13 +35,13 @@ class LoginAttemptsMiddleware:
             cache_key = f"login_attempts_{client_ip}"
             
             # Obtém tentativas atuais e incrementa
-            attempts = cache.get(cache_key, 0) + 1
+            attempts = cache.get(cache_key, 1) + 1
             cache.set(cache_key, attempts, 3600)  # Expira em 1 hora
             logger.warning(f"Tentativa de login falhou para IP {client_ip}, tentativa {attempts}")
             
             # Se chegou ao limite, força a próxima requisição a mostrar captcha
-            if attempts > getattr(settings, 'LOGIN_MAX_ATTEMPTS', 3):
-                logger.info(f"IP {client_ip} excedeu limite de tentativas ({attempts}). Captcha será exigido na próxima tentativa.")
+            if attempts >= getattr(settings, 'LOGIN_MAX_ATTEMPTS', 3):
+                logger.info(f"IP {client_ip} atingiu limite de tentativas ({attempts}). Captcha será exigido na próxima tentativa.")
     
     def _get_client_ip(self, request):
         """Obtém o IP real do cliente"""
@@ -74,10 +74,10 @@ class LoginAttemptsMiddleware:
         """Verifica se o captcha é necessário"""
         attempts = LoginAttemptsMiddleware.get_login_attempts(request)
         max_attempts = getattr(settings, 'LOGIN_MAX_ATTEMPTS', 3)
-        # Captcha é necessário quando já excedeu o número máximo de tentativas
+        # Captcha é necessário quando atingiu ou excedeu o número máximo de tentativas
         # Ou seja, após 3 tentativas falhadas, a 4ª tentativa deve ter captcha
-        requires = attempts > max_attempts
-        logger.debug(f"Verificando captcha: {attempts} tentativas > {max_attempts} = {requires}")
+        requires = attempts >= max_attempts
+        logger.debug(f"Verificando captcha: {attempts} tentativas >= {max_attempts} = {requires}")
         return requires
     
     @staticmethod
