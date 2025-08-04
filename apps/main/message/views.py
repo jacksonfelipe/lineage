@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import permission_required
 from apps.main.home.decorator import conditional_otp_required
 from .models import Friendship, Chat, Message
 from apps.main.home.models import User
@@ -7,7 +6,7 @@ from django.db.models import Q
 
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-import json
+
 from django.http import Http404
 from django.utils import timezone
 from django.core.cache import cache
@@ -18,6 +17,10 @@ from django.urls import reverse
 from apps.main.home.models import PerfilGamer, ConquistaUsuario
 from django.contrib import messages
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.vary import vary_on_cookie
+
+import json
 import logging
 logger = logging.getLogger(__name__)
 
@@ -123,6 +126,25 @@ def reject_friend_request(request, friendship_id):
 
 
 @conditional_otp_required
+def cancel_friend_request(request, friendship_id):
+    """
+    Cancela uma solicitação de amizade enviada pelo usuário
+    """
+    try:
+        friendship = Friendship.objects.get(
+            id=friendship_id,
+            user=request.user,  # Apenas o usuário que enviou pode cancelar
+            accepted=False
+        )
+        friendship.delete()
+        messages.success(request, "Solicitação de amizade cancelada com sucesso.")
+    except Friendship.DoesNotExist:
+        messages.error(request, "Solicitação de amizade não encontrada.")
+    
+    return redirect('message:friends_list')
+
+
+@conditional_otp_required
 def remove_friend(request, friendship_id):
     try:
         # Obtém a amizade
@@ -146,34 +168,123 @@ def remove_friend(request, friendship_id):
 
 
 @conditional_otp_required
+@vary_on_cookie
 def friends_list(request):
-    # Amigos aceitos
-    accepted_friendships = Friendship.objects.filter(user=request.user, accepted=True)
+    """
+    View otimizada para lista de amigos com paginação e filtros
+    """
+    # Parâmetros de paginação e filtros
+    page = request.GET.get('page', 1)
+    search_query = request.GET.get('search', '').strip()
+    friends_per_page = 20  # Limite de amigos por página
+    users_per_page = 30    # Limite de usuários por página
+    
+    # Amigos aceitos - otimizado com select_related
+    accepted_friendships = Friendship.objects.filter(
+        user=request.user, 
+        accepted=True
+    ).select_related('friend')
     
     # Solicitações de amizade pendentes recebidas
-    pending_friend_requests = Friendship.objects.filter(friend=request.user, accepted=False)
+    pending_friend_requests = Friendship.objects.filter(
+        friend=request.user, 
+        accepted=False
+    ).select_related('user')
     
     # Solicitações de amizade enviadas
-    sent_friend_requests = Friendship.objects.filter(user=request.user, accepted=False)
+    sent_friend_requests = Friendship.objects.filter(
+        user=request.user, 
+        accepted=False
+    ).select_related('friend')
     
-    # Obtém todos os usuários, exceto o usuário logado, os amigos já aceitos, e aqueles com quem há solicitações pendentes
-    users = User.objects.exclude(
-        id=request.user.id
-    ).exclude(
-        id__in=accepted_friendships.values_list('friend_id', flat=True)
-    ).exclude(
-        id__in=sent_friend_requests.values_list('friend_id', flat=True)
-    ).exclude(
-        id__in=pending_friend_requests.values_list('user_id', flat=True)
+    # Query base para usuários disponíveis
+    users_queryset = User.objects.exclude(id=request.user.id)
+    
+    # Excluir usuários que já são amigos ou têm solicitações pendentes
+    excluded_user_ids = set()
+    
+    # IDs de amigos aceitos
+    excluded_user_ids.update(
+        accepted_friendships.values_list('friend_id', flat=True)
     )
-
-    return render(request, 'pages/friends.html', {
+    
+    # IDs de solicitações enviadas
+    excluded_user_ids.update(
+        sent_friend_requests.values_list('friend_id', flat=True)
+    )
+    
+    # IDs de solicitações recebidas
+    excluded_user_ids.update(
+        pending_friend_requests.values_list('user_id', flat=True)
+    )
+    
+    users_queryset = users_queryset.exclude(id__in=excluded_user_ids)
+    
+    # Aplicar filtro de busca se fornecido
+    if search_query:
+        users_queryset = users_queryset.filter(
+            Q(username__icontains=search_query) |
+            Q(first_name__icontains=search_query) |
+            Q(last_name__icontains=search_query) |
+            Q(email__icontains=search_query)
+        )
+    
+    # Ordenar por nome de usuário
+    users_queryset = users_queryset.order_by('username')
+    
+    # Paginação para usuários disponíveis
+    users_paginator = Paginator(users_queryset, users_per_page)
+    
+    try:
+        users_page = users_paginator.page(page)
+    except PageNotAnInteger:
+        users_page = users_paginator.page(1)
+    except EmptyPage:
+        users_page = users_paginator.page(users_paginator.num_pages)
+    
+    # Paginação para amigos aceitos (se houver muitos)
+    if accepted_friendships.count() > friends_per_page:
+        friends_paginator = Paginator(accepted_friendships, friends_per_page)
+        friends_page = request.GET.get('friends_page', 1)
+        try:
+            accepted_friendships = friends_paginator.page(friends_page)
+        except (PageNotAnInteger, EmptyPage):
+            accepted_friendships = friends_paginator.page(1)
+    
+    # Paginação para solicitações pendentes (se houver muitas)
+    pending_per_page = 10
+    if pending_friend_requests.count() > pending_per_page:
+        pending_paginator = Paginator(pending_friend_requests, pending_per_page)
+        pending_page = request.GET.get('pending_page', 1)
+        try:
+            pending_friend_requests = pending_paginator.page(pending_page)
+        except (PageNotAnInteger, EmptyPage):
+            pending_friend_requests = pending_paginator.page(1)
+    
+    # Estatísticas para o template
+    # Contar total antes da paginação
+    total_pending = Friendship.objects.filter(friend=request.user, accepted=False).count()
+    total_sent = Friendship.objects.filter(user=request.user, accepted=False).count()
+    
+    stats = {
+        'total_friends': accepted_friendships.count() if not hasattr(accepted_friendships, 'paginator') else accepted_friendships.paginator.count,
+        'total_pending_requests': total_pending,
+        'total_sent_requests': total_sent,
+        'total_available_users': users_paginator.count,
+        'search_query': search_query,
+    }
+    
+    context = {
         'accepted_friendships': accepted_friendships,
         'pending_friend_requests': pending_friend_requests,
-        'users': users,
+        'sent_friend_requests': sent_friend_requests,
+        'users': users_page,
+        'stats': stats,
         'segment': 'friend-list',
         'parent': 'message',
-    })
+    }
+    
+    return render(request, 'pages/friends.html', context)
 
 
 @conditional_otp_required
@@ -280,3 +391,106 @@ def check_user_activity(request, user_id):
         is_online = (timezone.now() - last_activity).total_seconds() < 300  # Checa se a última atividade foi nos últimos 5 minutos
         return JsonResponse({'is_online': is_online})
     return JsonResponse({'is_online': False})
+
+
+@conditional_otp_required
+def search_users_ajax(request):
+    """
+    View AJAX para busca de usuários em tempo real
+    """
+    if request.method != 'GET':
+        return JsonResponse({'error': 'Método não permitido'}, status=405)
+    
+    search_query = request.GET.get('q', '').strip()
+    page = request.GET.get('page', 1)
+    
+    if not search_query or len(search_query) < 2:
+        return JsonResponse({'users': [], 'has_next': False, 'total': 0})
+    
+    # Buscar usuários que não são amigos nem têm solicitações pendentes
+    excluded_user_ids = set()
+    
+    # IDs de amigos aceitos
+    accepted_friendships = Friendship.objects.filter(
+        user=request.user, 
+        accepted=True
+    ).values_list('friend_id', flat=True)
+    excluded_user_ids.update(accepted_friendships)
+    
+    # IDs de solicitações enviadas
+    sent_requests = Friendship.objects.filter(
+        user=request.user, 
+        accepted=False
+    ).values_list('friend_id', flat=True)
+    excluded_user_ids.update(sent_requests)
+    
+    # IDs de solicitações recebidas
+    received_requests = Friendship.objects.filter(
+        friend=request.user, 
+        accepted=False
+    ).values_list('user_id', flat=True)
+    excluded_user_ids.update(received_requests)
+    
+    # Query de busca
+    users_queryset = User.objects.exclude(
+        id=request.user.id
+    ).exclude(
+        id__in=excluded_user_ids
+    ).filter(
+        Q(username__icontains=search_query) |
+        Q(first_name__icontains=search_query) |
+        Q(last_name__icontains=search_query) |
+        Q(email__icontains=search_query)
+    ).order_by('username')[:10]  # Limitar a 10 resultados
+    
+    # Serializar resultados
+    users_data = []
+    for user in users_queryset:
+        users_data.append({
+            'id': user.id,
+            'username': user.username,
+            'first_name': user.first_name or '',
+            'last_name': user.last_name or '',
+            'email': user.email,
+            'has_avatar': bool(user.avatar),
+            'uuid': str(user.uuid) if user.uuid else None,
+        })
+    
+    return JsonResponse({
+        'users': users_data,
+        'total': len(users_data),
+        'query': search_query
+    })
+
+
+@conditional_otp_required
+def get_friends_stats(request):
+    """
+    View AJAX para obter estatísticas de amigos
+    """
+    if request.method != 'GET':
+        return JsonResponse({'error': 'Método não permitido'}, status=405)
+    
+    # Contar amigos aceitos
+    total_friends = Friendship.objects.filter(
+        user=request.user, 
+        accepted=True
+    ).count()
+    
+    # Contar solicitações pendentes recebidas
+    total_pending_requests = Friendship.objects.filter(
+        friend=request.user, 
+        accepted=False
+    ).count()
+    
+    # Contar solicitações enviadas
+    total_sent_requests = Friendship.objects.filter(
+        user=request.user, 
+        accepted=False
+    ).count()
+    
+    return JsonResponse({
+        'total_friends': total_friends,
+        'total_pending_requests': total_pending_requests,
+        'total_sent_requests': total_sent_requests,
+    })
