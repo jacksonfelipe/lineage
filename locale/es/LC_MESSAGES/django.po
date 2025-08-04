@@ -6294,3 +6294,12 @@ msgstr "No se le permite crear notificaciones públicas del personal."
 
 #~ msgid "date published"
 #~ msgstr "fecha publicada"
+
+msgid "Complete seu perfil!"
+msgstr "¡Completa tu perfil!"
+
+msgid "Adicione seu nome, sobrenome e uma bio para melhorar sua experiência e conectar-se melhor com outros jogadores."
+msgstr "Agrega tu nombre, apellido y una biografía para mejorar tu experiencia y conectarte mejor con otros jugadores."
+
+msgid "Lembrar depois"
+msgstr "Recordar más tarde"

@@ -225,8 +225,7 @@ def friends_list(request):
         users_queryset = users_queryset.filter(
             Q(username__icontains=search_query) |
             Q(first_name__icontains=search_query) |
-            Q(last_name__icontains=search_query) |
-            Q(email__icontains=search_query)
+            Q(last_name__icontains=search_query)
         )
     
     # Ordenar por nome de usuário
@@ -439,8 +438,7 @@ def search_users_ajax(request):
     ).filter(
         Q(username__icontains=search_query) |
         Q(first_name__icontains=search_query) |
-        Q(last_name__icontains=search_query) |
-        Q(email__icontains=search_query)
+        Q(last_name__icontains=search_query)
     ).order_by('username')[:10]  # Limitar a 10 resultados
     
     # Serializar resultados
@@ -451,7 +449,9 @@ def search_users_ajax(request):
             'username': user.username,
             'first_name': user.first_name or '',
             'last_name': user.last_name or '',
-            'email': user.email,
+            'bio': user.bio or '',
+            'is_email_verified': user.is_email_verified,
+            'fichas': user.fichas,
             'has_avatar': bool(user.avatar),
             'uuid': str(user.uuid) if user.uuid else None,
         })

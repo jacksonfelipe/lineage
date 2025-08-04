@@ -6259,3 +6259,12 @@ msgstr "You are not allowed to create staff public notifications."
 
 #~ msgid "date published"
 #~ msgstr "date published"
+
+msgid "Complete seu perfil!"
+msgstr "Complete your profile!"
+
+msgid "Adicione seu nome, sobrenome e uma bio para melhorar sua experiência e conectar-se melhor com outros jogadores."
+msgstr "Add your first name, last name and a bio to improve your experience and connect better with other players."
+
+msgid "Lembrar depois"
+msgstr "Remind me later"

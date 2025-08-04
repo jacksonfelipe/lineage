@@ -93,7 +93,19 @@
                   {% if friendship.friend.first_name or friendship.friend.last_name %}
                     <div class="friend-fullname">{{ friendship.friend.first_name }} {{ friendship.friend.last_name }}</div>
                   {% endif %}
-                  <div class="friend-email">{{ friendship.friend.email }}</div>
+                  {% if friendship.friend.bio %}
+                    <div class="friend-bio">{{ friendship.friend.bio|truncatechars:50 }}</div>
+                  {% endif %}
+                  <div class="friend-status">
+                    {% if friendship.friend.is_email_verified %}
+                      <span class="verified-badge" title="{% trans 'E-mail verificado' %}">
+                        <i class="fas fa-check-circle"></i> {% trans 'Verificado' %}
+                      </span>
+                    {% endif %}
+                    <span class="fichas-badge" title="{% trans 'Fichas do jogo' %}">
+                      <i class="fas fa-coins"></i> {{ friendship.friend.fichas }}
+                    </span>
+                  </div>
                 </div>
                 <div class="friend-actions">
                   <button class="btn-action btn-message" onclick="sendMessage({{ friendship.friend.id }})" title="{% trans 'Enviar mensagem' %}">
@@ -162,7 +174,7 @@
               <input type="text" 
                      name="search" 
                      class="search-input" 
-                     placeholder="{% trans 'Buscar por nome, email ou usuário...' %}" 
+                     placeholder="{% trans 'Buscar por nome ou usuário...' %}" 
                      value="{{ stats.search_query }}"
                      id="search-input">
               <button type="submit" class="search-btn">
@@ -202,7 +214,19 @@
                 {% if user.first_name or user.last_name %}
                   <div class="user-fullname">{{ user.first_name }} {{ user.last_name }}</div>
                 {% endif %}
-                <div class="user-email">{{ user.email }}</div>
+                {% if user.bio %}
+                  <div class="user-bio">{{ user.bio|truncatechars:50 }}</div>
+                {% endif %}
+                <div class="user-status">
+                  {% if user.is_email_verified %}
+                    <span class="verified-badge" title="{% trans 'E-mail verificado' %}">
+                      <i class="fas fa-check-circle"></i> {% trans 'Verificado' %}
+                    </span>
+                  {% endif %}
+                  <span class="fichas-badge" title="{% trans 'Fichas do jogo' %}">
+                    <i class="fas fa-coins"></i> {{ user.fichas }}
+                  </span>
+                </div>
               </div>
               <div class="user-actions">
                 <button class="btn-primary" onclick="sendFriendRequest({{ user.id }})">
@@ -293,7 +317,19 @@
                   {% if request.user.first_name or request.user.last_name %}
                     <div class="request-fullname">{{ request.user.first_name }} {{ request.user.last_name }}</div>
                   {% endif %}
-                  <div class="request-email">{{ request.user.email }}</div>
+                  {% if request.user.bio %}
+                    <div class="request-bio">{{ request.user.bio|truncatechars:50 }}</div>
+                  {% endif %}
+                  <div class="request-status">
+                    {% if request.user.is_email_verified %}
+                      <span class="verified-badge" title="{% trans 'E-mail verificado' %}">
+                        <i class="fas fa-check-circle"></i> {% trans 'Verificado' %}
+                      </span>
+                    {% endif %}
+                    <span class="fichas-badge" title="{% trans 'Fichas do jogo' %}">
+                      <i class="fas fa-coins"></i> {{ request.user.fichas }}
+                    </span>
+                  </div>
                   <div class="request-date">{{ request.created_at|date:"d/m/Y H:i" }}</div>
                 </div>
                 <div class="request-actions">
@@ -344,7 +380,19 @@
                   {% if request.friend.first_name or request.friend.last_name %}
                     <div class="request-fullname">{{ request.friend.first_name }} {{ request.friend.last_name }}</div>
                   {% endif %}
-                  <div class="request-email">{{ request.friend.email }}</div>
+                  {% if request.friend.bio %}
+                    <div class="request-bio">{{ request.friend.bio|truncatechars:50 }}</div>
+                  {% endif %}
+                  <div class="request-status">
+                    {% if request.friend.is_email_verified %}
+                      <span class="verified-badge" title="{% trans 'E-mail verificado' %}">
+                        <i class="fas fa-check-circle"></i> {% trans 'Verificado' %}
+                      </span>
+                    {% endif %}
+                    <span class="fichas-badge" title="{% trans 'Fichas do jogo' %}">
+                      <i class="fas fa-coins"></i> {{ request.friend.fichas }}
+                    </span>
+                  </div>
                   <div class="request-date">{{ request.created_at|date:"d/m/Y H:i" }}</div>
                 </div>
                 <div class="request-actions">

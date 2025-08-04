@@ -6281,3 +6281,12 @@ msgstr "Você não tem permissão para criar notificações públicas staff."
 
 #~ msgid "date published"
 #~ msgstr "data publicada"
+
+msgid "Complete seu perfil!"
+msgstr "Complete seu perfil!"
+
+msgid "Adicione seu nome, sobrenome e uma bio para melhorar sua experiência e conectar-se melhor com outros jogadores."
+msgstr "Adicione seu nome, sobrenome e uma bio para melhorar sua experiência e conectar-se melhor com outros jogadores."
+
+msgid "Lembrar depois"
+msgstr "Lembrar depois"

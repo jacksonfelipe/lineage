@@ -1,4 +1,4 @@
-import json, base64, logging, pyotp
+import json, base64, logging, pyotp, os
 
 from ..models import *
 from ..forms import *
@@ -125,7 +125,20 @@ def edit_profile(request):
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
+            # Verifica se o perfil estava incompleto antes da edição
+            perfil_incompleto_antes = not (request.user.first_name and request.user.last_name and request.user.bio)
+            
             form.save()
+            
+            # Verifica se o perfil ficou completo após a edição
+            if perfil_incompleto_antes and (request.user.first_name and request.user.last_name and request.user.bio):
+                # Dá XP por completar o perfil
+                perfil = PerfilGamer.objects.get(user=request.user)
+                perfil.adicionar_xp(50)  # 50 XP por completar o perfil
+                messages.success(request, "🎉 Perfil completo! Você ganhou 50 XP por completar suas informações pessoais!")
+            else:
+                messages.success(request, "Perfil atualizado com sucesso!")
+                
             return redirect('profile')  # Redireciona para a página de perfil do usuário
     else:
         form = UserProfileForm(instance=request.user)
@@ -141,21 +154,38 @@ def edit_profile(request):
 
 @conditional_otp_required
 def edit_avatar(request):
-    if request.method == 'POST' and request.FILES.get('avatar'):
+    if request.method == 'POST':
+        # Verifica se é para remover o avatar
+        if request.POST.get('remove_avatar'):
+            if request.user.avatar:
+                # Remove o arquivo físico se existir
+                try:
+                    if os.path.exists(request.user.avatar.path):
+                        os.remove(request.user.avatar.path)
+                except:
+                    pass  # Ignora erros de arquivo não encontrado
+                request.user.avatar = None
+                request.user.save()
+                
+                messages.success(request, "Avatar removido com sucesso!")
+                return redirect('profile')
+        
+        # Processa upload normal
         form = AvatarForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
-
-            # Adiciona XP ao perfil
-            perfil = PerfilGamer.objects.get(user=request.user)
-            perfil.adicionar_xp(20)  # Pode ajustar a quantidade conforme desejar
-
-            messages.success(request, "Avatar atualizado com sucesso! Você ganhou 20 XP.")
+            messages.success(request, "Avatar atualizado com sucesso!")
             return redirect('profile')
     else:
         form = AvatarForm(instance=request.user)
 
-    return render(request, 'pages/edit_avatar.html', {'form': form})
+    context = {
+        'segment': 'avatar',
+        'parent': 'home',
+        'form': form
+    }
+    
+    return render(request, 'pages/edit_avatar.html', context)
 
 
 @conditional_otp_required

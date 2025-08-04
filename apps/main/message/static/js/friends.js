@@ -40,22 +40,31 @@ if (searchInput) {
 }
 
 function displaySearchResults(users) {
-    const resultsHtml = users.map(user => `
-        <div class="realtime-result-item" onclick="sendFriendRequest(${user.id})">
-            <div class="result-avatar">
-                <img src="${user.has_avatar ? '/decrypted-file/home/user/avatar/' + user.uuid + '/' : '/static/assets/img/team/generic_user.png'}" 
-                     alt="${user.username}">
+    const resultsHtml = users.map(user => {
+        let statusHtml = '';
+        if (user.is_email_verified) {
+            statusHtml += '<span class="verified-badge" title="E-mail verificado"><i class="fas fa-check-circle"></i> Verificado</span>';
+        }
+        statusHtml += `<span class="fichas-badge" title="Fichas do jogo"><i class="fas fa-coins"></i> ${user.fichas}</span>`;
+        
+        return `
+            <div class="realtime-result-item" onclick="sendFriendRequest(${user.id})">
+                <div class="result-avatar">
+                    <img src="${user.has_avatar ? '/decrypted-file/home/user/avatar/' + user.uuid + '/' : '/static/assets/img/team/generic_user.png'}" 
+                         alt="${user.username}">
+                </div>
+                <div class="result-info">
+                    <div class="result-name">${user.username}</div>
+                    ${user.first_name || user.last_name ? `<div class="result-fullname">${user.first_name} ${user.last_name}</div>` : ''}
+                    ${user.bio ? `<div class="result-bio">${user.bio.substring(0, 50)}${user.bio.length > 50 ? '...' : ''}</div>` : ''}
+                    <div class="result-status">${statusHtml}</div>
+                </div>
+                <div class="result-action">
+                    <i class="fas fa-user-plus"></i>
+                </div>
             </div>
-            <div class="result-info">
-                <div class="result-name">${user.username}</div>
-                ${user.first_name || user.last_name ? `<div class="result-fullname">${user.first_name} ${user.last_name}</div>` : ''}
-                <div class="result-email">${user.email}</div>
-            </div>
-            <div class="result-action">
-                <i class="fas fa-user-plus"></i>
-            </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
     
     searchResults.innerHTML = resultsHtml;
     searchResults.style.display = 'block';

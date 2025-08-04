@@ -303,9 +303,50 @@
   margin-bottom: 3px;
 }
 
-.friend-email {
+.friend-bio {
   font-size: 13px;
-  color: #94a3b8;
+  color: #64748b;
+  font-style: italic;
+  margin-bottom: 5px;
+}
+
+.friend-status {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.verified-badge i {
+  font-size: 10px;
+}
+
+.fichas-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.fichas-badge i {
+  font-size: 10px;
 }
 
 .friend-actions {
@@ -504,9 +545,18 @@
   margin-bottom: 3px;
 }
 
-.user-email {
+.user-bio {
   font-size: 13px;
-  color: #94a3b8;
+  color: #64748b;
+  font-style: italic;
+  margin-bottom: 5px;
+}
+
+.user-status {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 5px;
 }
 
 .user-actions {
@@ -589,10 +639,19 @@
   margin-bottom: 3px;
 }
 
-.request-email {
+.request-bio {
   font-size: 13px;
-  color: #d97706;
-  margin-bottom: 3px;
+  color: #a16207;
+  font-style: italic;
+  margin-bottom: 5px;
+}
+
+.request-status {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .request-date {
@@ -781,9 +840,17 @@
   margin-bottom: 2px;
 }
 
-.result-email {
+.result-bio {
   font-size: 12px;
-  color: #94a3b8;
+  color: #64748b;
+  font-style: italic;
+  margin-bottom: 3px;
+}
+
+.result-status {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .result-action {

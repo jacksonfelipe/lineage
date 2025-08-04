@@ -112,6 +112,40 @@
     <span><b>Receba alertas instantâneos!</b> Instale nosso <a href="/pwa/" class="fw-bold text-decoration-underline text-primary" target="_blank">App de Notificações Push</a> e nunca perca avisos importantes do servidor.</span>
   </div>
 
+  <!-- Lembrete de Perfil Incompleto -->
+  {% if not request.user.first_name or not request.user.last_name or not request.user.bio %}
+    <div class="alert alert-info alert-dismissible fade show mb-4 shadow-sm" role="alert" style="border-left: 4px solid #17a2b8;">
+      <div class="d-flex align-items-center">
+        <i class="fas fa-users me-3 fs-4 text-info"></i>
+        <div class="flex-grow-1">
+          <h6 class="alert-heading fw-bold mb-1">🤝 {% trans "Conecte-se com outros jogadores!" %}</h6>
+          <p class="mb-2">
+            {% if not request.user.first_name and not request.user.last_name %}
+              <strong>{% trans "Adicione seu nome e sobrenome" %}</strong> - {% trans "Torne-se mais reconhecível na comunidade!" %}
+            {% elif not request.user.bio %}
+              <strong>{% trans "Crie uma bio interessante" %}</strong> - {% trans "Conte um pouco sobre você e seus interesses no jogo!" %}
+            {% else %}
+              <strong>{% trans "Complete seu perfil" %}</strong> - {% trans "Adicione suas informações pessoais para se conectar melhor com outros jogadores!" %}
+            {% endif %}
+            <br>
+            <small class="text-muted">💡 {% trans "Perfis completos têm mais chances de fazer amigos e participar da comunidade!" %}</small>
+          </p>
+          <div class="d-flex flex-wrap gap-2">
+                         <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-info">
+               <i class="fas fa-edit me-1"></i>{% trans "Completar Perfil" %}
+             </a>
+            <a href="{% url 'message:friends_list' %}" class="btn btn-sm btn-outline-info">
+              <i class="fas fa-user-plus me-1"></i>{% trans "Ver Amigos" %}
+            </a>
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="alert" aria-label="Close">
+              <i class="fas fa-times me-1"></i>{% trans "Lembrar depois" %}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
   <div class="text-center mb-4">
     <h1 class="text-primary fw-bold">{% trans "Painel do Jogador" %}</h1>
     <p class="text-primary">{% trans "Tudo que você precisa em um só lugar." %}</p>
@@ -137,6 +171,9 @@
           <a href="{% url 'wallet:dashboard' %}" class="btn btn-outline-info btn-glow">
             <i class="fas fa-wallet me-1"></i>{% trans "Carteira" %}
           </a>
+          <a href="{% url 'message:friends_list' %}" class="btn btn-outline-primary btn-glow">
+            <i class="fas fa-users me-1"></i>{% trans "Amigos" %}
+          </a>
         </div>
       </div>
       <div class="col-lg-3 text-end">
@@ -154,10 +191,35 @@
       {% if ganhou_bonus %}
         <small class="text-success">🎉 {% trans "Bônus diário recebido! +25 XP" %}</small>
       {% endif %}
+      
+      <!-- Indicador de Progresso do Perfil -->
+      {% if not request.user.first_name or not request.user.last_name or not request.user.bio %}
+        <div class="mt-2">
+          <small class="text-muted d-block">📊 {% trans "Progresso do Perfil:" %}</small>
+          <div class="progress" style="height: 8px;">
+            {% if not request.user.first_name and not request.user.last_name and not request.user.bio %}
+              <div class="progress-bar bg-info" role="progressbar" style="width: 0%;"></div>
+            {% elif not request.user.first_name or not request.user.last_name %}
+              <div class="progress-bar bg-info" role="progressbar" style="width: 33.33%;"></div>
+            {% elif not request.user.bio %}
+              <div class="progress-bar bg-info" role="progressbar" style="width: 66.66%;"></div>
+            {% endif %}
+          </div>
+          <small class="text-info">
+            {% if not request.user.first_name and not request.user.last_name and not request.user.bio %}
+              {% trans "0/3 campos preenchidos - Complete seu perfil para ganhar 50 XP!" %}
+            {% elif not request.user.first_name or not request.user.last_name %}
+              {% trans "1/3 campos preenchidos - Adicione nome e sobrenome!" %}
+            {% elif not request.user.bio %}
+              {% trans "2/3 campos preenchidos - Adicione uma bio interessante!" %}
+            {% endif %}
+          </small>
+        </div>
+      {% endif %}
     </div>
 
     <div class="row g-3">
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="gamer-card h-100">
           <h6><i class="fas fa-wallet me-2 text-success"></i>{% trans "Carteira" %}</h6>
           {% if wallet %}
@@ -167,13 +229,23 @@
           {% endif %}
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="gamer-card h-100">
           <h6><i class="fas fa-gavel me-2 text-info"></i>{% trans "Leilões" %}</h6>
           <p class="mb-0"><strong>{% trans "Total criados:" %}</strong> {{ leiloes_user }}</p>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
+        <div class="gamer-card h-100">
+          <h6><i class="fas fa-users me-2 text-primary"></i>{% trans "Amigos" %}</h6>
+          <p class="mb-0">
+            <a href="{% url 'message:friends_list' %}" class="text-decoration-none">
+              <strong>{% trans "Ver amigos" %}</strong> <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+          </p>
+        </div>
+      </div>
+      <div class="col-md-3">
         <div class="gamer-card h-100">
           <h6><i class="fas fa-star me-2 text-warning"></i>{% trans "Apoiador" %}</h6>
           {% if is_apoiador %}
