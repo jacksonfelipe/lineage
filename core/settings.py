@@ -195,6 +195,7 @@ MIDDLEWARE = [
 
     'allauth.account.middleware.AccountMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'middlewares.login_attempts.LoginAttemptsMiddleware',
 
     "middlewares.access_apps.LoginRequiredAccess",
     "middlewares.forbidden_redirect_middleware.ForbiddenRedirectMiddleware",
@@ -716,6 +717,9 @@ if not HCAPTCHA_SITE_KEY:
 HCAPTCHA_SECRET_KEY = os.environ.get('CONFIG_HCAPTCHA_SECRET_KEY')
 if not HCAPTCHA_SECRET_KEY:
     raise EnvironmentError(f"Required environment variable not set: HCAPTCHA_SECRET_KEY")
+
+# Configuração para número máximo de tentativas de login antes do captcha
+LOGIN_MAX_ATTEMPTS = int(os.environ.get('CONFIG_LOGIN_MAX_ATTEMPTS', 3))
 
 # =========================== HEAD CONFIGS ===========================
 

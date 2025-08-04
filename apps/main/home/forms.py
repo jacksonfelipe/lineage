@@ -98,6 +98,19 @@ class LoginForm(AuthenticationForm):
         strip=False,
         widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": _("Password")}),
     )
+    captcha_token = forms.CharField(
+        required=False,
+        widget=forms.HiddenInput(),
+        label=_("Captcha")
+    )
+    
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+        
+        # Adiciona campo de captcha se necessário
+        if self.request and hasattr(self.request, 'requires_captcha'):
+            self.fields['captcha_token'].required = True
 
 
 class UserPasswordResetForm(PasswordResetForm):
