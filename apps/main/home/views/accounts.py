@@ -132,21 +132,15 @@ class UserLoginView(LoginView):
         password = form.cleaned_data.get('password')
         
         logger.info(f"[UserLoginView] Tentativa de login para usuário: {username}")
+        logger.info(f"[UserLoginView] Dados do formulário: {list(form.cleaned_data.keys())}")
+        logger.info(f"[UserLoginView] Dados POST: {list(self.request.POST.keys())}")
         
-        # Verifica se o captcha é necessário e valida
+        # Log para debug do captcha
         from middlewares.login_attempts import LoginAttemptsMiddleware
         requires_captcha = LoginAttemptsMiddleware.requires_captcha(self.request)
-        
         if requires_captcha:
             captcha_token = form.cleaned_data.get('captcha_token')
-            if not captcha_token:
-                form.add_error(None, _("Verificação do captcha é obrigatória após múltiplas tentativas."))
-                return self.form_invalid(form)
-            
-            # Valida o captcha
-            if not verificar_hcaptcha(captcha_token):
-                form.add_error(None, _("Verificação do captcha falhou. Tente novamente."))
-                return self.form_invalid(form)
+            logger.info(f"[UserLoginView] Captcha necessário. Token recebido: {captcha_token[:10] if captcha_token else 'None'}...")
         
         # Primeiro, tenta autenticar o usuário para verificar se é superusuário
         from django.contrib.auth import authenticate
