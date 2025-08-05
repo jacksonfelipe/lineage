@@ -98,6 +98,35 @@
     width: 8px;
 }
 
+/* Estilos para o cabeçalho da mensagem */
+.message-header {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 5px;
+}
+
+.message-sender {
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.message-time {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Estilos específicos para mensagens do usuário atual */
+.message.own .message-header .message-sender {
+    color: white;
+}
+
+.message.own .message-header .message-time {
+    color: white;
+    opacity: 0.9;
+}
+
 .chat-messages::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 4px;
