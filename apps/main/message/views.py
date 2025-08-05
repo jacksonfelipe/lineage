@@ -349,34 +349,4 @@ def search_users_ajax(request):
     })
 
 
-@conditional_otp_required
-def get_friends_stats(request):
-    """
-    View AJAX para obter estatísticas de amigos
-    """
-    if request.method != 'GET':
-        return JsonResponse({'error': 'Método não permitido'}, status=405)
-    
-    # Contar amigos aceitos
-    total_friends = Friendship.objects.filter(
-        user=request.user, 
-        accepted=True
-    ).count()
-    
-    # Contar solicitações pendentes recebidas
-    total_pending_requests = Friendship.objects.filter(
-        friend=request.user, 
-        accepted=False
-    ).count()
-    
-    # Contar solicitações enviadas
-    total_sent_requests = Friendship.objects.filter(
-        user=request.user, 
-        accepted=False
-    ).count()
-    
-    return JsonResponse({
-        'total_friends': total_friends,
-        'total_pending_requests': total_pending_requests,
-        'total_sent_requests': total_sent_requests,
-    })
+

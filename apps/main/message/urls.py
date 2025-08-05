@@ -16,5 +16,4 @@ urlpatterns = [
 
     # URLs AJAX mantidas apenas para funcionalidades não relacionadas ao chat
     path('api/search-users/', search_users_ajax, name='search_users_ajax'),
-    path('api/friends-stats/', get_friends_stats, name='get_friends_stats'),
 ]
