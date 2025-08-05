@@ -4,38 +4,392 @@
 {% block title %}{% trans "Notícias" %}{% endblock title %}
 
 {% block content %}
-<div class="container mt-5 mb-5">
-  <h1 class="mb-4" style="color: var(--gold);">{% trans "Notícias Recentes" %}</h1>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
 
-  <div class="row">
-    {% if latest_news_list %}
-      {% for item in latest_news_list %}
-        <div class="col-md-4 mb-4">
-          <div class="card h-100 border-0" style="background-color: var(--bg-section); color: var(--light); box-shadow: 0 0 10px rgba(0,0,0,0.5);">
-            
-            {% if item.news.image %}
-              <img class="card-img-top" src="{{ item.news.image.url }}" alt="{{ item.translation.title }}" style="object-fit: cover; height: 200px;">
-            {% endif %}
+  .news-container {
+    background: radial-gradient(ellipse at center, #1a1a2e 0%, #121220 100%);
+    min-height: 100vh;
+    padding: 2rem 0;
+  }
 
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title mb-2" style="color: var(--gold);">{{ item.translation.title }}</h5>
-              <p class="card-text flex-grow-1">{{ item.translation.summary }}</p>
-              <p class="card-text mt-2">
-                <small style="color: #aaa;">
-                  {% trans "Autor" %}: {{ item.news.author.username }}<br>
-                  {% trans "Publicado em" %}: {{ item.news.pub_date|date:"d/m/Y H:i" }}
-                </small>
-              </p>
-              <a href="{% url 'public_news_detail' item.news.slug %}" class="custom-btn btn-outline-light mt-auto">{% trans "Leia mais" %}</a>
-            </div>
-          </div>
+  .news-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeInDown 0.8s ease-out;
+  }
+
+  .news-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #ffd700, #ffed4e, #ffb347);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    margin-bottom: 1rem;
+  }
+
+  .news-subtitle {
+    color: #a8a8a8;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .news-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.3), 0 0 40px rgba(255, 179, 71, 0.2);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+    animation: slideInUp 0.6s ease-out;
+    height: 100%;
+  }
+
+  .news-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #ffd700, #ffed4e, #ffb347);
+    border-radius: 20px;
+    padding: 2px;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    z-index: -1;
+  }
+
+  .news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 35px rgba(255, 215, 0, 0.4), 0 0 50px rgba(255, 179, 71, 0.3);
+  }
+
+  .news-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 18px 18px 0 0;
+    transition: all 0.3s ease;
+  }
+
+  .news-card:hover .news-image {
+    transform: scale(1.05);
+  }
+
+  .news-card-body {
+    padding: 1.5rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .news-card-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+    transition: color 0.3s ease;
+  }
+
+  .news-card:hover .news-card-title {
+    color: #ffd700;
+  }
+
+  .news-card-summary {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex-grow: 1;
+  }
+
+  .news-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    color: #888;
+  }
+
+  .news-author {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .news-author i {
+    color: #ffd700;
+  }
+
+  .news-date {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .news-date i {
+    color: #ffb347;
+  }
+
+  .news-read-more {
+    background: linear-gradient(135deg, #ffd700, #ffb347);
+    border: none;
+    color: #333;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    margin-top: auto;
+  }
+
+  .news-read-more::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .news-read-more:hover::before {
+    left: 100%;
+  }
+
+  .news-read-more:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+    color: #333;
+    text-decoration: none;
+  }
+
+  .news-empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #6c757d;
+    font-size: 1.1rem;
+  }
+
+  .news-empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    color: #dee2e6;
+    animation: pulse 2s infinite;
+  }
+
+  .news-empty h3 {
+    color: #ffd700;
+    margin-bottom: 1rem;
+  }
+
+  @keyframes fadeInDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .news-title {
+      font-size: 2rem;
+    }
+    
+    .news-card-body {
+      padding: 1.25rem;
+    }
+    
+    .news-card-title {
+      font-size: 1.1rem;
+    }
+    
+    .news-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+</style>
+
+<div class="news-container">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12">
+        <!-- Header das Notícias -->
+        <div class="news-header">
+          <h1 class="news-title">
+            <i class="fas fa-newspaper me-3"></i>
+            {% trans "Notícias Recentes" %}
+          </h1>
+          <p class="news-subtitle">
+            {% trans "Fique por dentro das últimas novidades e atualizações da nossa comunidade." %}
+          </p>
         </div>
-      {% endfor %}
-    {% else %}
-      <div class="col-12">
-        <p class="text-muted">{% trans "Não há notícias disponíveis no momento." %}</p>
+
+        <!-- Grid de Notícias -->
+        {% if latest_news_list %}
+          <div class="row">
+            {% for item in latest_news_list %}
+              <div class="col-lg-4 col-md-6 mb-4">
+                <div class="news-card">
+                  {% if item.news.image %}
+                    <img class="news-image" src="{{ item.news.image.url }}" alt="{{ item.translation.title }}">
+                  {% else %}
+                    <div class="news-image" style="background: linear-gradient(135deg, #ffd700, #ffb347); display: flex; align-items: center; justify-content: center;">
+                      <i class="fas fa-newspaper" style="font-size: 3rem; color: white;"></i>
+                    </div>
+                  {% endif %}
+                  
+                  <div class="news-card-body">
+                    <h5 class="news-card-title">{{ item.translation.title }}</h5>
+                    <p class="news-card-summary">{{ item.translation.summary }}</p>
+                    
+                    <div class="news-meta">
+                      <div class="news-author">
+                        <i class="fas fa-user"></i>
+                        <span>{{ item.news.author.username }}</span>
+                      </div>
+                      <div class="news-date">
+                        <i class="fas fa-calendar"></i>
+                        <span>{{ item.news.pub_date|date:"d/m/Y" }}</span>
+                      </div>
+                    </div>
+                    
+                    <a href="{% url 'public_news_detail' item.news.slug %}" class="news-read-more">
+                      <i class="fas fa-arrow-right"></i>
+                      {% trans "Leia mais" %}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="news-empty">
+            <i class="fas fa-newspaper news-empty-icon"></i>
+            <h3>{% trans "Nenhuma notícia disponível" %}</h3>
+            <p>{% trans "Não há notícias disponíveis no momento. Volte em breve para novidades!" %}</p>
+          </div>
+        {% endif %}
       </div>
-    {% endif %}
+    </div>
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Adiciona efeitos de interação aos cards de notícias
+  const newsCards = document.querySelectorAll('.news-card');
+  
+  newsCards.forEach((card, index) => {
+    // Efeito de entrada para cada card
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(30px)';
+    
+    setTimeout(() => {
+      card.style.transition = 'all 0.6s ease';
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    }, 100 + (index * 150));
+    
+    // Efeito de hover aprimorado
+    card.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-8px) scale(1.02)';
+    });
+    
+    card.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0) scale(1)';
+    });
+  });
+  
+  // Efeito de parallax suave no fundo
+  window.addEventListener('scroll', function() {
+    const scrolled = window.pageYOffset;
+    const parallax = document.querySelector('.news-container');
+    const speed = scrolled * 0.3;
+    
+    if (parallax) {
+      parallax.style.transform = `translateY(${speed}px)`;
+    }
+  });
+  
+  // Animação dos botões "Leia mais"
+  const readMoreButtons = document.querySelectorAll('.news-read-more');
+  
+  readMoreButtons.forEach(button => {
+    button.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-3px) scale(1.05)';
+    });
+    
+    button.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0) scale(1)';
+    });
+  });
+  
+  // Animação do ícone principal
+  const newsIcon = document.querySelector('.news-title i');
+  if (newsIcon) {
+    setInterval(() => {
+      newsIcon.style.transform = 'rotate(5deg)';
+      setTimeout(() => {
+        newsIcon.style.transform = 'rotate(-5deg)';
+        setTimeout(() => {
+          newsIcon.style.transform = 'rotate(0deg)';
+        }, 200);
+      }, 200);
+    }, 5000);
+  }
+});
+</script>
 {% endblock content %}
