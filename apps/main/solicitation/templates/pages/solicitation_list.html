@@ -5,6 +5,14 @@
 
 {% block extrastyle %}
 <link rel="stylesheet" href="{% static 'css/solicitation.css' %}">
+<style>
+    .protocol-text {
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+        color: #495057 !important;
+        letter-spacing: 0.5px;
+    }
+</style>
 {% endblock extrastyle %}
 
 {% block content %}
@@ -87,7 +95,15 @@
             <tbody>
                 {% for solicitation in solicitations %}
                 <tr>
-                    <td><strong>{{ solicitation.protocol }}</strong></td>
+                    <td>
+                        {% if solicitation.get_display_protocol %}
+                            <strong class="protocol-text" style="color: #495057 !important;">{{ solicitation.get_display_protocol }}</strong>
+                        {% else %}
+                            <span class="text-warning">
+                                <i class="fas fa-exclamation-triangle"></i> {% trans "Gerando..." %}
+                            </span>
+                        {% endif %}
+                    </td>
                     <td>{{ solicitation.title|truncatechars:50 }}</td>
                     <td>
                         <span class="badge bg-secondary">{{ solicitation.get_category_display }}</span>
@@ -108,6 +124,8 @@
                     <td>
                         {% if solicitation.status == 'open' %}
                             <span class="badge bg-primary">{{ solicitation.get_status_display }}</span>
+                        {% elif solicitation.status == 'pending' %}
+                            <span class="badge bg-secondary">{{ solicitation.get_status_display }}</span>
                         {% elif solicitation.status == 'in_progress' %}
                             <span class="badge bg-warning">{{ solicitation.get_status_display }}</span>
                         {% elif solicitation.status == 'waiting_user' %}

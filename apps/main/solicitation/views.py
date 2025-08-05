@@ -73,6 +73,7 @@ class SolicitationListView(LoginRequiredMixin, ListView):
         if self.request.user.is_staff:
             # Adiciona estatísticas para staff
             context['total_open'] = Solicitation.objects.filter(status='open').count()
+            context['total_pending'] = Solicitation.objects.filter(status='pending').count()
             context['total_in_progress'] = Solicitation.objects.filter(status='in_progress').count()
             context['total_waiting_user'] = Solicitation.objects.filter(status='waiting_user').count()
             context['total_resolved'] = Solicitation.objects.filter(status='resolved').count()
@@ -138,7 +139,10 @@ class SolicitationStatusUpdateView(LoginRequiredMixin, View):
             solicitation.save()
             
             # Cria entrada no histórico
-            action_text = f"Status alterado de '{dict(STATUS_CHOICES)[old_status]}' para '{dict(STATUS_CHOICES)[new_status]}'"
+            status_choices_dict = dict(STATUS_CHOICES)
+            old_status_display = status_choices_dict.get(old_status, old_status)
+            new_status_display = status_choices_dict.get(new_status, new_status)
+            action_text = f"Status alterado de '{old_status_display}' para '{new_status_display}'"
             if comment:
                 action_text += f" - {comment}"
             
@@ -154,14 +158,14 @@ class SolicitationStatusUpdateView(LoginRequiredMixin, View):
                     send_notification(
                         user=solicitation.user,
                         notification_type='solicitation_update',
-                        message=f'Sua solicitação {solicitation.protocol} teve o status alterado para {dict(STATUS_CHOICES)[new_status]}',
+                        message=f'Sua solicitação {solicitation.protocol} teve o status alterado para {new_status_display}',
                         created_by=request.user,
                         link=reverse('solicitation:solicitation_dashboard', kwargs={'protocol': solicitation.protocol})
                     )
                 except Exception as e:
                     logger.error(f"Erro ao enviar notificação: {str(e)}")
             
-            messages.success(request, f"Status da solicitação alterado para '{dict(STATUS_CHOICES)[new_status]}'")
+            messages.success(request, f"Status da solicitação alterado para '{new_status_display}'")
         else:
             messages.error(request, _("Erro ao alterar status. Verifique os dados informados."))
         

@@ -69,6 +69,36 @@
         font-size: 0.8em;
         padding: 0.4em 0.8em;
     }
+
+    .protocol-badge {
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+        font-size: 0.9em;
+        padding: 0.5em 1em;
+        letter-spacing: 1px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        color: #ffffff !important;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .protocol-badge:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .protocol-badge.bg-warning {
+        color: #856404 !important;
+        background-color: #fff3cd !important;
+        border-color: #ffeaa7;
+    }
+
+    .protocol-badge.bg-dark {
+        color: #ffffff !important;
+        background-color: #343a40 !important;
+        border-color: #495057;
+    }
 </style>
 {% endblock extrastyle %}
 
@@ -107,7 +137,15 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <p><strong>{% trans "Protocolo:" %}</strong> <span class="badge bg-dark">{{ solicitation.protocol }}</span></p>
+                    <p><strong>{% trans "Protocolo:" %}</strong> 
+                        {% if solicitation.get_display_protocol %}
+                            <span class="badge bg-dark protocol-badge" style="color: #ffffff !important;">{{ solicitation.get_display_protocol }}</span>
+                        {% else %}
+                            <span class="badge bg-warning protocol-badge">
+                                <i class="fas fa-exclamation-triangle"></i> {% trans "Gerando..." %}
+                            </span>
+                        {% endif %}
+                    </p>
                     <p><strong>{% trans "Título:" %}</strong> {{ solicitation.title }}</p>
                     <p><strong>{% trans "Categoria:" %}</strong> <span class="badge bg-secondary">{{ solicitation.get_category_display }}</span></p>
                     <p><strong>{% trans "Prioridade:" %}</strong> 
@@ -128,6 +166,8 @@
                     <p><strong>{% trans "Status:" %}</strong> 
                         {% if solicitation.status == 'open' %}
                             <span class="badge bg-primary status-badge">{{ solicitation.get_status_display }}</span>
+                        {% elif solicitation.status == 'pending' %}
+                            <span class="badge bg-secondary status-badge">{{ solicitation.get_status_display }}</span>
                         {% elif solicitation.status == 'in_progress' %}
                             <span class="badge bg-warning status-badge">{{ solicitation.get_status_display }}</span>
                         {% elif solicitation.status == 'waiting_user' %}
