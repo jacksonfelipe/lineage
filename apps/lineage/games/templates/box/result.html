@@ -1,4 +1,4 @@
-]{% extends "layouts/base.html" %}
+{% extends "layouts/base.html" %}
 {% load static %}
 {% load i18n %}
 {% load get_item %}
@@ -10,83 +10,322 @@
     .box-result-bg {
         background: radial-gradient(ellipse at center, #1a1a2e 0%, #121220 100%);
         color: #f8f9fa;
-        padding: 50px 0;
         min-height: 100vh;
+        padding: 2rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .box-result-bg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%236f42c1" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        pointer-events: none;
+    }
+
+    .result-container {
+        position: relative;
+        z-index: 2;
+    }
+
+    .result-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        animation: fadeInDown 0.8s ease-out;
+    }
+
+    .result-header h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        background: linear-gradient(45deg, #00d9ff, #6f42c1, #ffd700);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 0 20px rgba(111, 66, 193, 0.5);
+        margin-bottom: 1rem;
+    }
+
+    .result-header .subtitle {
+        font-size: 1.2rem;
+        color: #ccc;
+        opacity: 0.8;
     }
 
     .result-card {
-        background: linear-gradient(to bottom right, #1a1a2e, #121220);
+        background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(18, 18, 32, 0.9));
         border: 2px solid #6f42c1;
-        border-radius: 12px;
-        box-shadow: 0 0 15px rgba(111, 66, 193, 0.5), 0 0 25px rgba(13, 202, 240, 0.3);
-        transition: transform 0.2s ease-in-out, box-shadow 0.3s;
+        border-radius: 20px;
+        box-shadow: 
+            0 0 30px rgba(111, 66, 193, 0.3),
+            0 0 60px rgba(13, 202, 240, 0.2),
+            inset 0 0 20px rgba(111, 66, 193, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 3rem;
+        margin-bottom: 2rem;
+        animation: slideInUp 0.8s ease-out 0.2s both;
+        position: relative;
+        overflow: hidden;
     }
 
-    .result-card:hover {
-        transform: scale(1.02);
-        box-shadow: 0 0 20px rgba(111, 66, 193, 0.7), 0 0 30px rgba(13, 202, 240, 0.5);
+    .result-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(from 0deg, transparent, rgba(111, 66, 193, 0.1), transparent);
+        animation: rotate 10s linear infinite;
+        z-index: -1;
     }
 
-    .item-details {
-        background: linear-gradient(to bottom right, #1a1a2e, #121220);
-        border: 2px solid #6f42c1;
-        border-radius: 12px;
-        padding: 20px;
-        font-weight: bold;
-        color: #f8f9fa;
-        box-shadow: 0 0 15px rgba(111, 66, 193, 0.5), 0 0 25px rgba(13, 202, 240, 0.3);
+    .item-display {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .booster-section {
+        text-align: center;
+        animation: fadeIn 1s ease-out 0.4s both;
+    }
+
+    .booster-image {
+        width: 120px;
+        height: 120px;
+        border-radius: 15px;
+        border: 3px solid #6f42c1;
+        box-shadow: 0 0 20px rgba(111, 66, 193, 0.5);
+        margin-bottom: 1rem;
+        transition: transform 0.3s ease;
+    }
+
+    .booster-image:hover {
+        transform: scale(1.05);
+    }
+
+    .arrow-section {
+        position: relative;
+        margin: 1.5rem 0;
+        animation: bounce 2s infinite 0.6s;
+    }
+
+    .arrow-section i {
+        font-size: 2.5rem;
+        color: #ffd700;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+
+    .item-section {
+        text-align: center;
+        animation: fadeIn 1s ease-out 0.8s both;
     }
 
     .item-image {
-        max-width: 200px;
-        border-radius: 10px;
-        margin-bottom: 20px;
+        width: 200px;
+        height: 200px;
+        border-radius: 20px;
+        border: 4px solid #6f42c1;
+        box-shadow: 
+            0 0 30px rgba(111, 66, 193, 0.6),
+            0 0 60px rgba(13, 202, 240, 0.3);
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
         object-fit: cover;
+    }
+
+    .item-image:hover {
+        transform: scale(1.05);
+        box-shadow: 
+            0 0 40px rgba(111, 66, 193, 0.8),
+            0 0 80px rgba(13, 202, 240, 0.5);
+    }
+
+    .item-details {
+        background: linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(18, 18, 32, 0.8));
         border: 2px solid #6f42c1;
-        box-shadow: 0 0 10px rgba(111, 66, 193, 0.3);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-top: 2rem;
+        animation: slideInUp 0.8s ease-out 1s both;
     }
 
-    .item-details h3 {
-        color: #00d9ff;
-        font-size: 1.5rem;
+    .item-name {
+        font-size: 2rem;
         font-weight: 700;
-        text-shadow: 1px 1px 2px #000;
+        color: #00d9ff;
+        text-shadow: 0 0 10px rgba(13, 202, 240, 0.5);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
     }
 
-    .item-details p {
-        font-size: 1.1rem;
-        margin-bottom: 10px;
-        color: #ccc;
-    }
-
-    .item-details strong {
+    .item-name i {
         color: #ffd700;
-        text-shadow: 1px 1px 2px #000;
     }
 
-    .btn {
-        font-size: 16px;
-        font-weight: bold;
-        border-radius: 50px;
-        padding: 12px 25px;
-        box-shadow: 0 0 10px rgba(111, 66, 193, 0.3);
+    .item-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
     }
 
-    .badge.bg-common {
-        background-color: #6c757d !important;
+    .info-item {
+        background: rgba(111, 66, 193, 0.1);
+        border: 1px solid rgba(111, 66, 193, 0.3);
+        border-radius: 10px;
+        padding: 1rem;
+        text-align: center;
     }
 
-    .badge.bg-rare {
-        background-color: #007bff !important;
+    .info-item strong {
+        color: #ffd700;
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
-    .badge.bg-epic {
-        background-color: #6f42c1 !important;
+    .info-item span {
+        color: #f8f9fa;
+        font-size: 1.1rem;
+        font-weight: 600;
     }
 
-    .badge.bg-legendary {
-        background-color: #ffc107 !important;
+    .rarity-badge {
+        padding: 0.5rem 1.5rem;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 0 15px rgba(111, 66, 193, 0.3);
+    }
+
+    .rarity-badge.bg-common {
+        background: linear-gradient(45deg, #6c757d, #495057) !important;
+        color: #fff !important;
+    }
+
+    .rarity-badge.bg-rare {
+        background: linear-gradient(45deg, #007bff, #0056b3) !important;
+        color: #fff !important;
+    }
+
+    .rarity-badge.bg-epic {
+        background: linear-gradient(45deg, #6f42c1, #5a2d91) !important;
+        color: #fff !important;
+    }
+
+    .rarity-badge.bg-legendary {
+        background: linear-gradient(45deg, #ffd700, #ffc107) !important;
         color: #000 !important;
+        text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+        animation: fadeIn 1s ease-out 1.2s both;
+    }
+
+    .btn-custom {
+        background: linear-gradient(45deg, #6f42c1, #0dcaf0);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(111, 66, 193, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-custom::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 30px rgba(111, 66, 193, 0.5);
+        color: white;
+        text-decoration: none;
+    }
+
+    .btn-custom:hover::before {
+        left: 100%;
+    }
+
+    .btn-secondary-custom {
+        background: linear-gradient(45deg, #495057, #6c757d);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(108, 117, 125, 0.3);
+    }
+
+    .btn-secondary-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 30px rgba(108, 117, 125, 0.5);
+        color: white;
+        text-decoration: none;
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
     }
 
     @keyframes bounce {
@@ -101,29 +340,71 @@
         }
     }
 
-    .booster-arrow {
-        position: relative;
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
     }
 
-    .booster-arrow::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 60px;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, #ffc107, transparent);
-        z-index: -1;
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .result-header h1 {
+            font-size: 2rem;
+        }
+
+        .result-card {
+            padding: 2rem 1.5rem;
+        }
+
+        .item-image {
+            width: 150px;
+            height: 150px;
+        }
+
+        .booster-image {
+            width: 100px;
+            height: 100px;
+        }
+
+        .item-name {
+            font-size: 1.5rem;
+        }
+
+        .item-info {
+            grid-template-columns: 1fr;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn-custom, .btn-secondary-custom {
+            width: 100%;
+            max-width: 300px;
+        }
     }
 
     @media (max-width: 576px) {
-        .item-image {
-            max-width: 150px;
+        .result-header h1 {
+            font-size: 1.8rem;
         }
 
-        .btn {
-            padding: 10px 20px;
+        .result-card {
+            padding: 1.5rem 1rem;
+        }
+
+        .item-image {
+            width: 120px;
+            height: 120px;
+        }
+
+        .booster-image {
+            width: 80px;
+            height: 80px;
         }
     }
 </style>
@@ -131,35 +412,79 @@
 
 {% block content %}
 <div class="box-result-bg">
-  <div class="container text-center">
-    <h2 class="text-white fw-bold mb-4">🎁 {% trans "Você ganhou um item!" %}</h2>
-
-         <div class="card result-card text-white shadow-lg p-4 rounded-4 d-inline-block w-100 w-sm-75 w-md-50">
-               <div class="item-details mb-3">
-          <!-- Imagem do booster (raridade) -->
-          <img src="{% static 'assets/img/box/booster/'|add:item.rarity|add:'.png' %}" alt="Booster {{ item.rarity }}" class="item-image img-fluid mb-3 rounded-3" style="max-width: 150px;" onerror="this.style.display='none';">
-          
-          <!-- Seta indicando que o item saiu do booster -->
-          <div class="booster-arrow text-center mb-3">
-            <i class="bi bi-arrow-down-circle-fill text-warning" style="font-size: 2rem; animation: bounce 1s infinite;"></i>
-            <p class="text-muted small mt-1">{% trans "Item extraído do booster!" %}</p>
-          </div>
-          
-          <!-- Imagem do item -->
-          <img src="{{ item.image.url }}" alt="{{ item.name }}" class="item-image img-fluid mb-3 rounded-3" style="max-width: 200px;">
-          <h3 class="mb-2">
-            <i class="bi bi-gift me-2"></i>{{ item.name }} +{{ item.enchant }}
-          </h3>
-          <p class="mb-0">{% trans "O item foi adicionado à sua" %} <strong>{% trans "Bag" %}</strong> {% trans "com sucesso!" %}</p>
-          <p class="mt-2"><strong>Raridade:</strong> <span class="badge bg-{{ item.rarity }}">{{ item.get_rarity_display }}</span></p>
+    <div class="container result-container">
+        <!-- Header Section -->
+        <div class="result-header">
+            <h1>🎁 {% trans "Item Descoberto!" %}</h1>
+            <p class="subtitle">{% trans "Parabéns! Você encontrou um item especial na sua caixa!" %}</p>
         </div>
-     </div>
 
-    <div class="mt-4">
-      <a href="{% url 'games:box_user_dashboard' %}" class="btn btn-primary rounded-pill px-4 py-2 mt-3">
-        <i class="bi bi-arrow-left-circle me-2"></i>{% trans "Voltar para o Dashboard" %}
-      </a>
+        <!-- Main Result Card -->
+        <div class="result-card">
+            <!-- Item Display Section -->
+            <div class="item-display">
+                <!-- Booster Section -->
+                <div class="booster-section">
+                    <img src="{% static 'assets/img/box/booster/'|add:item.rarity|add:'.png' %}" 
+                         alt="Booster {{ item.rarity }}" 
+                         class="booster-image" 
+                         onerror="this.style.display='none';">
+                    <p class="text-muted small">{% trans "Booster" %} {{ item.get_rarity_display }}</p>
+                </div>
+
+                <!-- Arrow Section -->
+                <div class="arrow-section">
+                    <i class="bi bi-arrow-down-circle-fill"></i>
+                </div>
+
+                <!-- Item Section -->
+                <div class="item-section">
+                    <img src="{{ item.image.url }}" 
+                         alt="{{ item.name }}" 
+                         class="item-image">
+                    
+                    <div class="item-name">
+                        <i class="bi bi-gift"></i>
+                        {{ item.name }} +{{ item.enchant }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item Details Section -->
+            <div class="item-details">
+                <p class="text-center mb-3">
+                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                    {% trans "O item foi adicionado à sua" %} <strong>{% trans "Bag" %}</strong> {% trans "com sucesso!" %}
+                </p>
+
+                <div class="item-info">
+                    <div class="info-item">
+                        <strong>{% trans "Raridade" %}</strong>
+                        <span class="rarity-badge bg-{{ item.rarity }}">{{ item.get_rarity_display }}</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>{% trans "Enchant" %}</strong>
+                        <span>+{{ item.enchant }}</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>{% trans "ID do Item" %}</strong>
+                        <span>{{ item.item_id }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="{% url 'games:box_user_dashboard' %}" class="btn btn-custom">
+                <i class="bi bi-arrow-left-circle me-2"></i>
+                {% trans "Voltar ao Dashboard" %}
+            </a>
+            <a href="{% url 'games:bag_dashboard' %}" class="btn btn-secondary-custom">
+                <i class="bi bi-bag me-2"></i>
+                {% trans "Ver Minha Bag" %}
+            </a>
+        </div>
     </div>
-  </div>
 </div>
 {% endblock %}

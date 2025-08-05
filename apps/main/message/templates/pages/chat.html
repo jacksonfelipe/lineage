@@ -47,7 +47,11 @@
                                     {% for friendship in accepted_friendships %}
                                         <a href="#" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between friend-item" data-friend-id="{{ friendship.friend.id }}">
                                             <div class="d-flex" style="gap: 8px;">
-                                                <img src="{% if friendship.friend.avatar %}{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' friendship.friend.uuid timestamp %}{% else %}{% static 'assets/img/team/generic_user.png' %}{% endif %}" class="rounded-circle me-3" alt="{{ friendship.friend.username }}" width="40" height="40">
+                                                <div class="avatar-container me-3" style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.2); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); position: relative;">
+                                                    <img src="{% if friendship.friend.avatar %}{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' friendship.friend.uuid timestamp %}{% else %}{% static 'assets/img/team/generic_user.png' %}{% endif %}" 
+                                                         alt="{{ friendship.friend.username }}" 
+                                                         style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+                                                </div>
                                                 <div class="me-auto">
                                                     <h6 class="mb-0 friend-name">{{ friendship.friend.username }}</h6>
                                                     <small class="friend-status">...</small>

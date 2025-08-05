@@ -179,15 +179,23 @@
                 <div class="sidebar">
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                         <div class="image">
-                            {% if jazzmin_settings|has_jazzmin_setting:"user_avatar" %}
-                                {% if request.user.avatar %}
-                                    <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' request.user.uuid timestamp %}" width="160px" class="img-circle elevation-2" alt="User Image">
+                            <div class="avatar-container" style="width: 160px; height: 160px; border-radius: 50%; overflow: hidden; border: 3px solid rgba(255, 255, 255, 0.3); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); position: relative;">
+                                {% if jazzmin_settings|has_jazzmin_setting:"user_avatar" %}
+                                    {% if request.user.avatar %}
+                                        <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' request.user.uuid timestamp %}" 
+                                             alt="User Image"
+                                             style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+                                    {% else %}
+                                        <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                                             alt="User Image"
+                                             style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+                                    {% endif %}
                                 {% else %}
-                                    <img src="{% static 'assets/img/team/generic_user.png' %}" width="160px" class="img-circle elevation-2" alt="User Image">
+                                    <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                                         alt="User Image"
+                                         style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
                                 {% endif %}
-                            {% else %}
-                                <img src="{% static 'assets/img/team/generic_user.png' %}" width="160px" class="img-circle elevation-2" alt="User Image">
-                            {% endif %}
+                            </div>
                         </div>
                         <div class="info">
                             {% if perms|can_view_self %}

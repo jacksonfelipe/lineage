@@ -5,11 +5,17 @@
     <div class="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
       <div class="d-flex align-items-center">
         <div class="avatar-lg me-4">
-          {% if user.avatar %}
-            <img class="card-img-top rounded-circle border-white" src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" alt="User-Profile-Image" class="user-avtar wid-35" />
-          {% else %}
-            <img class="card-img-top rounded-circle border-white" alt="Image placeholder" src="{% static 'assets/img/team/generic_user.png' %}">
-          {% endif %}
+          <div class="avatar-container" style="width: 4.5rem; height: 4.5rem; border-radius: 50%; overflow: hidden; border: 3px solid rgba(255, 255, 255, 0.3); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); position: relative;">
+            {% if user.avatar %}
+              <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
+                   alt="User-Profile-Image" 
+                   style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+            {% else %}
+              <img alt="Image placeholder" 
+                   src="{% static 'assets/img/team/generic_user.png' %}"
+                   style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+            {% endif %}
+          </div>
         </div>
         <div class="d-block">
           <h2 class="h5 mb-3">Olá, {{ request.user.username }}</h2>

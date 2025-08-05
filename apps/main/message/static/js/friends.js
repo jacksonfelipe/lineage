@@ -50,8 +50,11 @@ function displaySearchResults(users) {
         return `
             <div class="realtime-result-item" onclick="sendFriendRequest(${user.id})">
                 <div class="result-avatar">
-                    <img src="${user.has_avatar ? '/decrypted-file/home/user/avatar/' + user.uuid + '/' : '/static/assets/img/team/generic_user.png'}" 
-                         alt="${user.username}">
+                    <div class="avatar-container" style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.3); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15); position: relative;">
+                        <img src="${user.has_avatar ? '/decrypted-file/home/user/avatar/' + user.uuid + '/' : '/static/assets/img/team/generic_user.png'}" 
+                             alt="${user.username}"
+                             style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+                    </div>
                 </div>
                 <div class="result-info">
                     <div class="result-name">${user.username}</div>

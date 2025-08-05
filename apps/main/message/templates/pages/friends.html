@@ -81,11 +81,17 @@
             {% for friendship in accepted_friendships %}
               <div class="friend-card">
                 <div class="friend-avatar">
-                  {% if friendship.friend.avatar %}
-                    <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' friendship.friend.uuid timestamp %}" alt="{{ friendship.friend.username }}">
-                  {% else %}
-                    <img src="{% static 'assets/img/team/generic_user.png' %}" alt="{% trans 'default profile image' %}">
-                  {% endif %}
+                  <div class="avatar-container" style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.3); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15); position: relative;">
+                    {% if friendship.friend.avatar %}
+                      <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' friendship.friend.uuid timestamp %}" 
+                           alt="{{ friendship.friend.username }}"
+                           style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+                    {% else %}
+                      <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                           alt="{% trans 'default profile image' %}"
+                           style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+                    {% endif %}
+                  </div>
                   <div class="online-indicator"></div>
                 </div>
                 <div class="friend-info">
@@ -203,11 +209,17 @@
           {% for user in users %}
             <div class="user-card">
               <div class="user-avatar">
-                {% if user.avatar %}
-                  <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" alt="{{ user.username }}">
-                {% else %}
-                  <img src="{% static 'assets/img/team/generic_user.png' %}" alt="{% trans 'default profile image' %}">
-                {% endif %}
+                <div class="avatar-container" style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.3); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15); position: relative;">
+                  {% if user.avatar %}
+                    <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
+                         alt="{{ user.username }}"
+                         style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+                  {% else %}
+                    <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                         alt="{% trans 'default profile image' %}"
+                         style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+                  {% endif %}
+                </div>
               </div>
               <div class="user-info">
                 <div class="user-name">{{ user.username }}</div>
@@ -306,11 +318,17 @@
             {% for request in pending_friend_requests %}
               <div class="request-card">
                 <div class="request-avatar">
-                  {% if request.user.avatar %}
-                    <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' request.user.uuid timestamp %}" alt="{{ request.user.username }}">
-                  {% else %}
-                    <img src="{% static 'assets/img/team/generic_user.png' %}" alt="{% trans 'default profile image' %}">
-                  {% endif %}
+                  <div class="avatar-container" style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.3); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); position: relative;">
+                    {% if request.user.avatar %}
+                      <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' request.user.uuid timestamp %}" 
+                           alt="{{ request.user.username }}"
+                           style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+                    {% else %}
+                      <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                           alt="{% trans 'default profile image' %}"
+                           style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+                    {% endif %}
+                  </div>
                 </div>
                 <div class="request-info">
                   <div class="request-name">{{ request.user.username }}</div>
@@ -369,11 +387,17 @@
             {% for request in sent_friend_requests %}
               <div class="request-card">
                 <div class="request-avatar">
-                  {% if request.friend.avatar %}
-                    <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' request.friend.uuid timestamp %}" alt="{{ request.friend.username }}">
-                  {% else %}
-                    <img src="{% static 'assets/img/team/generic_user.png' %}" alt="{% trans 'default profile image' %}">
-                  {% endif %}
+                  <div class="avatar-container" style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.3); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); position: relative;">
+                    {% if request.friend.avatar %}
+                      <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' request.friend.uuid timestamp %}" 
+                           alt="{{ request.friend.username }}"
+                           style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+                    {% else %}
+                      <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                           alt="{% trans 'default profile image' %}"
+                           style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+                    {% endif %}
+                  </div>
                 </div>
                 <div class="request-info">
                   <div class="request-name">{{ request.friend.username }}</div>
