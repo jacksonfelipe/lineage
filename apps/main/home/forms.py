@@ -27,6 +27,14 @@ class UserProfileForm(UserChangeForm):
             self.fields[fieldname].widget.attrs.update({'class': 'form-control'})
         self.fields['cpf'].widget.attrs.update({'class': 'form-control', 'id': 'cpf'})
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email:
+            # Verifica se o email já está em uso por outro usuário
+            if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+                raise forms.ValidationError(_("Este e-mail já está em uso por outro usuário."))
+        return email
+
 
 class AvatarForm(forms.ModelForm):
     class Meta:
