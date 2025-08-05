@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-23 23:02-0300\n"
+"POT-Creation-Date: 2025-08-04 21:07-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,596 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+msgid "Erro interno da API."
+msgstr "Erro interno da API."
+
+msgid "Servidor do jogo indisponível."
+msgstr "Servidor del juego no disponible."
+
+msgid "Dados não encontrados."
+msgstr "Datos no encontrados."
+
+msgid "Parâmetro inválido."
+msgstr "Parámetro no válido."
+
+msgid "Limite de requisições excedido."
+msgstr "Excedió el límite de solicitud."
+
+msgid "Erro no sistema de cache."
+msgstr "Erro no sistema de cache."
+
+msgid "Configuração de Endpoints da API"
+msgstr "Configuración de punto final de API"
+
+msgid "Gerencie quais endpoints estarão disponíveis para os usuários"
+msgstr "Administrar qué puntos finales estarán disponibles para los usuarios"
+
+msgid "Ativos"
+msgstr "Activo"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Informação:"
+msgstr "Información:"
+
+msgid ""
+"As alterações são aplicadas imediatamente. Endpoints desativados retornarão "
+"erro 403 para todos os usuários."
+msgstr ""
+"Los cambios se aplican de inmediato. Los puntos finales deshabilitados "
+"devolverán el error 403 a todos los usuarios."
+
+msgid "Endpoints do Servidor"
+msgstr "Endpoints do Servidor"
+
+msgid "Ativo"
+msgstr "Activo"
+
+msgid "Inativo"
+msgstr "Inactivo"
+
+msgid "Autenticação"
+msgstr "Autenticación"
+
+msgid "Usuário"
+msgstr "Usuario"
+
+msgid "Busca"
+msgstr "Busca"
+
+msgid "Dados do Jogo"
+msgstr "Datos del juego"
+
+msgid "Monitoramento"
+msgstr "Escucha"
+
+msgid "Administração"
+msgstr "Administración"
+
+msgid "Resetar Padrões"
+msgstr "Reiniciar"
+
+msgid "Última atualização:"
+msgstr "Última actualización:"
+
+msgid "Nunca"
+msgstr "Nunca"
+
+msgid "Salvar Alterações"
+msgstr "Guardar cambios"
+
+msgid "Erro ao carregar formulário de configuração."
+msgstr "Error de carga del formulario de configuración."
+
+msgid "Tem certeza que deseja resetar todas as configurações para os padrões?"
+msgstr ""
+"¿Estás seguro de que quieres restablecer todas las configuraciones para los "
+"estándares?"
+
+msgid "Salvando..."
+msgstr "Salvando..."
+
+msgid "Resetando..."
+msgstr "Resettando ..."
+
+msgid "Informações da Licença"
+msgstr "Información de licencia"
+
+msgid "Cliente"
+msgstr "Cliente"
+
+msgid "Contrato (PDL PRO)"
+msgstr "Contrato (PDL PRO)"
+
+msgid "Datas"
+msgstr "Fechas"
+
+msgid "Funcionalidades"
+msgstr "Funcionalidades"
+
+msgid "Estatísticas"
+msgstr "Estadística"
+
+msgid "Observações"
+msgstr "Observaciones"
+
+msgid "Metadados"
+msgstr "Metadatos"
+
+msgid "Chave de Licença"
+msgstr "Clave de licencia"
+
+msgid "Tipo"
+msgstr "Tipo"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "Ativar licenças selecionadas"
+msgstr "Active las licencias seleccionadas"
+
+msgid "Desativar licenças selecionadas"
+msgstr "Deshabilitar licencias seleccionadas"
+
+msgid "Renovar licenças por 1 ano"
+msgstr "Renovar las licencias por 1 año"
+
+msgid "Licença"
+msgstr "Licencia"
+
+msgid "Verificação"
+msgstr "Verificación"
+
+msgid "Detalhes da Requisição"
+msgstr "Detalles del requisito"
+
+msgid "Erro (se houver)"
+msgstr "Error (si lo hay)"
+
+msgid "Domínio"
+msgstr "Dominio"
+
+msgid "Resultado"
+msgstr "Resultado"
+
+msgid "Tempo de Resposta"
+msgstr "Tempo de Resposta"
+
+msgid "Sistema de Licenciamento"
+msgstr "Sistema de Licenciamento"
+
+msgid "PDL FREE - Uso Livre"
+msgstr "PDL GRATIS - Uso gratuito"
+
+msgid "PDL PRO - Com Vínculo Contratual"
+msgstr "PDL Pro - con fianza contractual"
+
+msgid "Ativa"
+msgstr "Activo"
+
+msgid "Expirada"
+msgstr "Expirada"
+
+msgid "Suspensa"
+msgstr "Suspendido"
+
+msgid "Pendente"
+msgstr "Pendiente"
+
+msgid "Tipo de Licença"
+msgstr "Tipo de licencia"
+
+msgid "Domínio Ativado"
+msgstr "Dominio activado"
+
+msgid "Nome da Empresa/Cliente"
+msgstr "Nome da Empresa/Cliente"
+
+msgid "E-mail de Contato"
+msgstr "Correo electrónico de contacto"
+
+msgid "Telefone de Contato"
+msgstr "Teléfono de contacto"
+
+msgid "Status da Licença"
+msgstr "Estado de licencia"
+
+msgid "Data de Ativação"
+msgstr "Fecha de activación"
+
+msgid "Data de Expiração"
+msgstr "Fecha de expiración"
+
+msgid "Última Verificação"
+msgstr "Última verificación"
+
+msgid "Contador de Verificações"
+msgstr "Verificar el mostrador"
+
+msgid "Número do Contrato"
+msgstr "Número do Contrato"
+
+msgid "Horas de Suporte Utilizadas"
+msgstr "Horas de Suporte Utilizadas"
+
+msgid "Limite de Horas de Suporte"
+msgstr "Límite de horas de apoyo"
+
+msgid "Funcionalidades Habilitadas"
+msgstr "Funcionalidades Habilitadas"
+
+msgid "Licenças"
+msgstr "Licencia"
+
+msgid "Data da Verificação"
+msgstr "Fecha de verificación"
+
+msgid "Endereço IP"
+msgstr "Dirección IP"
+
+msgid "User Agent"
+msgstr "Agente de usuario"
+
+msgid "Verificação Bem-sucedida"
+msgstr "Verificación exitosa"
+
+msgid "Mensagem de Erro"
+msgstr "Mensaje de error"
+
+msgid "Tempo de Resposta (ms)"
+msgstr "Tiempo de respuesta (MS)"
+
+msgid "Verificação de Licença"
+msgstr "Cheque de licencia"
+
+msgid "Verificações de Licença"
+msgstr "Controles de licencias"
+
+msgid "Criar Nova Licença"
+msgstr "Crear una nueva licencia"
+
+msgid "Criar Nova Licença PDL"
+msgstr "Crear una nueva licencia PDL"
+
+msgid "Voltar"
+msgstr "Volver"
+
+msgid "Domínio onde a licença será ativada"
+msgstr "Dominio donde se activará la licencia"
+
+msgid "Campos Específicos - PDL PRO"
+msgstr "Campos Específicos - PDL PRO"
+
+msgid "Número do contrato comercial (obrigatório para PDL PRO)"
+msgstr "Número de contrato comercial (obligatorio para PDL Pro)"
+
+#, python-brace-format
+msgid "O contrato será validado via registro DNS TXT em pdl-contract.{domain}"
+msgstr ""
+"El contrato se validará mediante el registro DNS TXT en PDL-Contract. "
+"{domain}"
+
+msgid "Cancelar"
+msgstr "Cancelar"
+
+msgid "Criar Licença"
+msgstr "Licencia"
+
+msgid "Tipos de Licença"
+msgstr "Tipos de licencia"
+
+msgid "Uso gratuito"
+msgstr "Uso gratuito"
+
+msgid "Sem contrato"
+msgstr "Sin contrato"
+
+msgid "Funcionalidades básicas"
+msgstr "Funcionalidades básicas"
+
+msgid "Sem suporte oficial"
+msgstr "Sin apoyo oficial"
+
+msgid "Suporte profissional"
+msgstr "Apoyo profesional"
+
+msgid "Atualizações garantidas"
+msgstr "Actualizaciones garantizadas"
+
+msgid "Personalização"
+msgstr "Personalización"
+
+msgid "Código fonte"
+msgstr "Código fonte"
+
+msgid "SLA garantido"
+msgstr "SLA garantizado"
+
+msgid "Painel administrativo"
+msgstr "Panel administrativo"
+
+msgid "Sistema de temas"
+msgstr "Sistema de temas"
+
+msgid "Acesso à API"
+msgstr "Acceso a la API"
+
+msgid "Todas as funcionalidades FREE"
+msgstr "Todas as funcionalidades FREE"
+
+msgid "Suporte técnico"
+msgstr "Apoyo técnico"
+
+msgid "Atualizações automáticas"
+msgstr "Actualizaciones automáticas"
+
+msgid "Personalização avançada"
+msgstr "Personalización avanzada"
+
+msgid "Suporte prioritário"
+msgstr "Apoyo prioritario"
+
+msgid "Código fonte completo"
+msgstr "Código fonte completo"
+
+msgid "Serviço de instalação"
+msgstr "Servicio de instalación"
+
+msgid "Integração com banco de dados"
+msgstr "Integración con base de datos"
+
+msgid "Dashboard de Licenças"
+msgstr "Licencias de tablero"
+
+msgid "Dashboard de Licenças PDL"
+msgstr "Panel de licencia PDL"
+
+msgid "Nova Licença"
+msgstr "Nueva licencia"
+
+msgid "Todas as Licenças"
+msgstr "Todas las licencias"
+
+msgid "Testar Bloqueio"
+msgstr "Cerrar"
+
+msgid "Licença Atual"
+msgstr "Licencia actual"
+
+msgid "Tipo:"
+msgstr "Tipo:"
+
+msgid "Domínio:"
+msgstr "Dominio:"
+
+msgid "Empresa:"
+msgstr "Empresa:"
+
+msgid "E-mail:"
+msgstr "Correo electrónico:"
+
+msgid "Status:"
+msgstr "Estado:"
+
+msgid "Ativada em:"
+msgstr "Activado en:"
+
+msgid "Expira em:"
+msgstr "Expirar en:"
+
+msgid "Verificações:"
+msgstr "Verificaciones:"
+
+msgid "Nenhuma licença ativa encontrada. Crie uma nova licença para começar."
+msgstr ""
+"No se encontró una licencia activa. Cree una nueva licencia para comenzar."
+
+msgid "Total de Licenças"
+msgstr "Licencias totales"
+
+msgid "Licenças Ativas"
+msgstr "Licencias activas"
+
+msgid "Licenças Expiradas"
+msgstr "Licencias vencidas"
+
+msgid "Licenças Suspensas"
+msgstr "Licencias suspendidas"
+
+msgid "Verificações Recentes"
+msgstr "Verificaciones recientes"
+
+msgid "Data/Hora"
+msgstr "Data/Hora"
+
+msgid "IP"
+msgstr "IP"
+
+msgid "Tempo (ms)"
+msgstr "Tempo (MS)"
+
+msgid "Sucesso"
+msgstr "Éxito"
+
+msgid "Falha"
+msgstr "Falla"
+
+msgid "Funcionalidades Disponíveis"
+msgstr "Características disponibles"
+
+msgid "Detalhes da Licença"
+msgstr "Detalles de la licencia"
+
+msgid "Editar"
+msgstr "Editar"
+
+msgid "Chave:"
+msgstr "Llave:"
+
+msgid "Telefone:"
+msgstr "Teléfono:"
+
+msgid "Contrato:"
+msgstr "Contrato:"
+
+msgid "Datas e Status"
+msgstr "Fechado fuera del estado"
+
+msgid "Criada em:"
+msgstr "Creado en:"
+
+msgid "Atualizada em:"
+msgstr "Actualizado en:"
+
+msgid "Última verificação:"
+msgstr "Última verificación:"
+
+msgid "Total de verificações:"
+msgstr "Checks totales:"
+
+msgid "Informações PDL PRO"
+msgstr "Información PDL Pro"
+
+msgid "Número do Contrato:"
+msgstr "Número do Contrato:"
+
+msgid "Horas de Suporte:"
+msgstr "Horas de apoyo:"
+
+msgid "Progresso das horas de suporte utilizadas"
+msgstr "Progreso de las horas de apoyo utilizadas"
+
+msgid "Histórico de Verificações"
+msgstr "Historial de verificaciones"
+
+msgid "Data"
+msgstr "Datos"
+
+msgid "Erro"
+msgstr "Error"
+
+msgid "Notas"
+msgstr "Notas"
+
+msgid "Ações"
+msgstr "Comportamiento"
+
+msgid "Ativar"
+msgstr "Permitir"
+
+msgid "Desativar"
+msgstr "Desactivar"
+
+msgid "Renovar"
+msgstr "Renovar"
+
+msgid "Excluir"
+msgstr "Excluir"
+
+msgid "Licença Não Encontrada"
+msgstr "Licencia no encontrada"
+
+msgid "A licença solicitada não foi encontrada."
+msgstr "No se encontró la licencia solicitada."
+
+msgid "Voltar à Lista"
+msgstr "Volver a la lista"
+
+msgid "Status da Licença PDL"
+msgstr "Estado de la licencia PDL"
+
+msgid "Licença Válida"
+msgstr "Licencia válida"
+
+msgid "Sua licença está ativa e funcionando corretamente."
+msgstr "Su licencia está activa y funciona correctamente."
+
+msgid "Licença Inválida"
+msgstr "Licencia no válida"
+
+msgid "Sua licença não está ativa ou expirou."
+msgstr "Su licencia no está activa o caducada."
+
+msgid "Nenhuma Licença Encontrada"
+msgstr "No se encontró licencia"
+
+msgid "Não foi encontrada nenhuma licença ativa no sistema."
+msgstr "No se encontró una licencia activa en el sistema."
+
+msgid "Ver Detalhes"
+msgstr "Ver detalles"
+
+msgid "Teste de Bloqueio de Licença"
+msgstr "Prueba de bloqueo de licencia"
+
+msgid "Teste de Bloqueio de Login por Licença"
+msgstr "Prueba de inicio de sesión de inicio de sesión"
+
+msgid "Status do Sistema de Bloqueio"
+msgstr "Estado del sistema de bloqueo"
+
+msgid "Status da Licença:"
+msgstr "Estado de la licencia:"
+
+msgid "Válida"
+msgstr "Válida"
+
+msgid "Superusuários podem fazer login normalmente."
+msgstr "Los superusadores pueden iniciar sesión normalmente."
+
+msgid "Inválida/Expirada"
+msgstr "Inválida/Expirada"
+
+msgid "Superusuários serão bloqueados no login."
+msgstr "Los superusadores serán bloqueados en el inicio de sesión."
+
+msgid "Sistema de Bloqueio:"
+msgstr "Sistema de bloqueo:"
+
+msgid "Backend de autenticação configurado e funcionando."
+msgstr "Backend de la autenticación configurada y de trabajo."
+
+msgid "Informações da Licença Atual"
+msgstr "Información de licencia actual"
+
+msgid "Como Testar o Sistema"
+msgstr "Como Testar o Sistema"
+
+msgid "Instruções para Teste:"
+msgstr "Instrucciones de prueba:"
+
+msgid "Para simular licença inválida:"
+msgstr "Para simular la licencia no válida:"
+
+msgid "Edite uma licença e mude o status para 'expired'"
+msgstr "Editar una licencia y cambiar el estado a 'expirado'"
+
+msgid "Ou modifique a data de expiração para uma data passada"
+msgstr "O modificar la fecha de vencimiento a una fecha anterior"
+
+msgid "Tente fazer login com um superusuário"
+msgstr "Intenta iniciar sesión con un Superuser"
+
+msgid "O login deve ser bloqueado com mensagem de erro"
+msgstr "El inicio de sesión debe bloquearse con un mensaje de error"
+
+msgid "Usuários normais continuarão funcionando normalmente"
+msgstr "Los usuarios normales continuarán funcionando normalmente"
+
+msgid "Comando de Teste"
+msgstr "Comando de Teste"
+
+msgid "Execute o comando abaixo para testar o sistema:"
+msgstr "Ejecute el comando a continuación para probar el sistema:"
+
+msgid ""
+"Este comando verificará o status da licença e listará os superusuários "
+"afetados."
+msgstr ""
+"Este comando verificará el estado de la licencia y enumerará los "
+"superusadores afectados."
 
 msgid "Dashboard Contábil"
 msgstr "Contabilidad de tablero"
@@ -42,9 +632,6 @@ msgstr "Volver al administrador"
 msgid "Relatório de Fluxo de Caixa"
 msgstr "Informe de flujo de caja"
 
-msgid "Data"
-msgstr "Datos"
-
 msgid "Entradas"
 msgstr "Entradas"
 
@@ -62,9 +649,6 @@ msgstr "Informe de pedidos y pagos"
 
 msgid "ID Pedido"
 msgstr "ID Pedido"
-
-msgid "Usuário"
-msgstr "Usuario"
 
 msgid "Valor Pago"
 msgstr "Valor Pago"
@@ -134,9 +718,6 @@ msgstr "Tiempo de finalización"
 
 msgid "Character Name"
 msgstr "Nombre del personaje"
-
-msgid "Status"
-msgstr "Estado"
 
 msgid "Auction"
 msgstr "Subasta"
@@ -228,9 +809,6 @@ msgstr "Duración (horas)"
 msgid "Dar Lance"
 msgstr "Dar Lance"
 
-msgid "Voltar"
-msgstr "Volver"
-
 msgid "Lance atual:"
 msgstr "Oferta actual:"
 
@@ -284,9 +862,6 @@ msgstr "Oferta actual:"
 
 msgid "Restante:"
 msgstr "Restante:"
-
-msgid "Cancelar"
-msgstr "Cancelar"
 
 msgid "Finalizar"
 msgstr "Finalizar"
@@ -848,20 +1423,8 @@ msgstr "Caja nueva"
 msgid "ID"
 msgstr "IDENTIFICACIÓN"
 
-msgid "Tipo"
-msgstr "Tipo"
-
 msgid "Aberta?"
 msgstr "¿Abierto?"
-
-msgid "Ações"
-msgstr "Comportamiento"
-
-msgid "Editar"
-msgstr "Editar"
-
-msgid "Excluir"
-msgstr "Excluir"
 
 msgid "Nenhuma caixa encontrada."
 msgstr "No se encontró caja."
@@ -877,9 +1440,6 @@ msgstr "Editar Tipo de Caixa"
 
 msgid "Criar Novo Tipo de Caixa"
 msgstr "Crear un nuevo tipo de cajero"
-
-msgid "Salvar Alterações"
-msgstr "Guardar cambios"
 
 msgid "Criar Tipo de Caixa"
 msgstr "Tipo de efectivo"
@@ -1084,69 +1644,6 @@ msgstr "No has ganado ningún premio."
 msgid "Esta caixa não existe. Você pode comprá-la abaixo."
 msgstr "Esta caja no existe. Puedes comprarlo a continuación."
 
-msgid "Este personagem não existe na sua conta."
-msgstr "Este personaje no existe en tu cuenta."
-
-msgid "Inventário criado para o personagem"
-msgstr "Inventario creado para el personaje"
-
-msgid "Inventários criados para"
-msgstr "Inventarios creados para"
-
-msgid "personagens."
-msgstr "personajes."
-
-msgid "Inventário obsoleto encontrado para o personagem"
-msgstr "Inventario obsoleto encontrado para el personaje"
-
-msgid "não existe mais na conta."
-msgstr "ya no existe en la cuenta."
-
-msgid "Inventários obsoletos encontrados para"
-msgstr "Inventarios obsoletos encontrados para"
-
-msgid "personagens (não existem mais na conta)."
-msgstr "personajes (ya no existen en la cuenta)."
-
-msgid "Obsoleto"
-msgstr "Obsoleto"
-
-msgid "Inventários Obsoletos Detectados"
-msgstr "Inventarios Obsoletos Detectados"
-
-msgid "Os seguintes inventários pertencem a personagens que não existem mais na sua conta:"
-msgstr "Los siguientes inventarios pertenecen a personajes que ya no existen en tu cuenta:"
-
-msgid "Deletar"
-msgstr "Eliminar"
-
-msgid "Deletar Inventário Obsoleto"
-msgstr "Eliminar Inventario Obsoleto"
-
-msgid "Tem certeza que deseja deletar este inventário obsoleto? Os itens serão transferidos para a bag."
-msgstr "¿Estás seguro de que quieres eliminar este inventario obsoleto? Los elementos se transferirán a la bolsa."
-
-msgid "Este personagem ainda existe na sua conta. Não é possível deletar o inventário."
-msgstr "Este personaje aún existe en tu cuenta. No se puede eliminar el inventario."
-
-msgid "Inventário obsoleto deletado. Item transferido para a bag:"
-msgstr "Inventario obsoleto eliminado. Elemento transferido a la bolsa:"
-
-msgid "Inventário obsoleto deletado."
-msgstr "Inventario obsoleto eliminado."
-
-msgid "itens transferidos para a bag."
-msgstr "elementos transferidos a la bolsa."
-
-msgid "Nenhum item encontrado."
-msgstr "No se encontraron elementos."
-
-msgid "Inventário não encontrado."
-msgstr "Inventario no encontrado."
-
-msgid "Erro ao deletar inventário:"
-msgstr "Error al eliminar inventario:"
-
 msgid "Essa caixa não pertence a você. Compre uma nova do mesmo tipo."
 msgstr "Esta caja no te pertenece. Compre uno nuevo del mismo tipo."
 
@@ -1261,6 +1758,19 @@ msgstr "Agregar elemento"
 msgid "Inventário Global"
 msgstr "Inventario global"
 
+msgid "Inventários Obsoletos Detectados"
+msgstr "Inventarios Obsoletos Detectados"
+
+msgid ""
+"Os seguintes inventários pertencem a personagens que não existem mais na sua"
+" conta:"
+msgstr ""
+"Los siguientes inventarios pertenecen a personajes que ya no existen en tu "
+"cuenta:"
+
+msgid "Obsoleto"
+msgstr "Obsoleto"
+
 msgid "Online"
 msgstr "En línea"
 
@@ -1269,6 +1779,16 @@ msgstr "Desconectado"
 
 msgid "Itens"
 msgstr "Elementos"
+
+msgid ""
+"Tem certeza que deseja deletar este inventário obsoleto? Os itens serão "
+"transferidos para a bag."
+msgstr ""
+"¿Estás seguro de que quieres eliminar este inventario obsoleto? Los "
+"elementos se transferirán a la bolsa."
+
+msgid "Deletar Inventário Obsoleto"
+msgstr "Eliminar Inventario Obsoleto"
 
 msgid "Devolver"
 msgstr "Devolver"
@@ -1330,23 +1850,65 @@ msgstr "Personaje de origen"
 msgid "Personagem Destino"
 msgstr "Personaje de destino"
 
+msgid "Inventário criado para o personagem"
+msgstr "Inventario creado para el personaje"
+
+msgid "Inventários criados para"
+msgstr "Inventarios creados para"
+
+msgid "personagens."
+msgstr "personajes."
+
+msgid "Inventário obsoleto encontrado para o personagem"
+msgstr "Inventario obsoleto encontrado para el personaje"
+
+msgid "não existe mais na conta."
+msgstr "ya no existe en la cuenta."
+
+msgid "Inventários obsoletos encontrados para"
+msgstr "Inventarios obsoletos encontrados para"
+
+msgid "personagens (não existem mais na conta)."
+msgstr "personajes (ya no existen en la cuenta)."
+
+msgid ""
+"Este personagem ainda existe na sua conta. Não é possível deletar o "
+"inventário."
+msgstr ""
+"Este personaje aún existe en tu cuenta. No se puede eliminar el inventario."
+
+msgid "Erro ao verificar personagens da conta. Tente novamente."
+msgstr "Error de comprobación de caracteres de cuenta. Intentar otra vez."
+
+msgid "Inventário obsoleto deletado. Item transferido para a bag:"
+msgstr "Inventario obsoleto eliminado. Elemento transferido a la bolsa:"
+
+msgid "Inventário obsoleto deletado."
+msgstr "Inventario obsoleto eliminado."
+
+msgid "itens transferidos para a bag."
+msgstr "elementos transferidos a la bolsa."
+
+msgid "Inventário não encontrado."
+msgstr "Inventario no encontrado."
+
+msgid "Erro ao deletar inventário:"
+msgstr "Error al eliminar inventario:"
+
 msgid "Amount Paid"
 msgstr "Monto pagado"
 
 msgid "Coins Generated"
 msgstr "Monedas generadas"
 
+msgid "Applied Bonus"
+msgstr "Bono aplicado"
+
+msgid "Total Credited"
+msgstr "Total acreditado"
+
 msgid "Payment Method"
 msgstr "Método de pago"
-
-msgid "Purchase of coins via ADMINISTRATOR"
-msgstr "Compra de monedas a través del administrador"
-
-msgid "Payment System"
-msgstr "Sistema de pago"
-
-msgid "Wallet"
-msgstr "Billetera"
 
 msgid "Payment Request"
 msgstr "Solicitud de pago"
@@ -1429,17 +1991,29 @@ msgstr "ID de pedido:"
 msgid "Valor Pago:"
 msgstr "Valor Pago:"
 
+msgid "Bônus Aplicado:"
+msgstr "Bonificación aplicada:"
+
+msgid "Total Creditado:"
+msgstr "Total acreditado:"
+
 msgid "Moedas Geradas:"
 msgstr "Monedas generadas:"
-
-msgid "Status:"
-msgstr "Estado:"
 
 msgid "Método:"
 msgstr "Método:"
 
 msgid "Data de Criação:"
 msgstr "Fecha de creación:"
+
+msgid "Bônus Aplicado!"
+msgstr "Bonificación aplicada!"
+
+msgid "Parabéns! Você receberá um bônus de"
+msgstr "¡Felicidades! Recibirás un bono de"
+
+msgid "além do valor da sua compra."
+msgstr "más allá del valor de su compra."
 
 msgid "Confirmar e Ir para o Pagamento"
 msgstr "Confirmar e Ir para o Pagamento"
@@ -1488,6 +2062,15 @@ msgstr "Raya"
 
 msgid "Gerar Pedido"
 msgstr "Generar orden"
+
+msgid "Bônus Disponíveis"
+msgstr "Bonos disponibles"
+
+msgid "Digite um valor para ver os bônus disponíveis"
+msgstr "Ingrese un valor para ver los bonos disponibles"
+
+msgid "Calculando bônus..."
+msgstr "Bonos calculadores ..."
 
 msgid "Pagamento Recusado ou Falhou"
 msgstr "Pago rechazado o fallido"
@@ -1599,9 +2182,6 @@ msgstr "No hay una subasta popular en este momento."
 
 msgid "Relatório de Movimentações de Itens"
 msgstr "Informe de movimientos de elementos"
-
-msgid "Total"
-msgstr "Total"
 
 msgid "Retirados"
 msgstr "Retirados"
@@ -1757,6 +2337,9 @@ msgstr "leer más"
 msgid "Nenhum item de roadmap disponível."
 msgstr "No hay artículo de hoja de ruta disponible."
 
+msgid "Aguarde novidades em breve!"
+msgstr "¡Espera las noticias pronto!"
+
 msgid "Players Online"
 msgstr "Jugadores en línea"
 
@@ -1801,6 +2384,69 @@ msgstr "Participantes de asedio"
 
 msgid "Boss Jewel Locations"
 msgstr "Ubicaciones de Boss Jewel"
+
+msgid "Auth Login"
+msgstr "Authic inicio de sesión"
+
+msgid "Auth Refresh"
+msgstr "Auth Refresh"
+
+msgid "Auth Logout"
+msgstr "Authalgar el cierre de sesión"
+
+msgid "User Profile"
+msgstr "Perfil de usuario"
+
+msgid "User Change Password"
+msgstr "Contraseña de cambio de usuario"
+
+msgid "User Dashboard"
+msgstr "Tablero de usuarios"
+
+msgid "User Stats"
+msgstr "Estadísticas de usuario"
+
+msgid "Search Character"
+msgstr "Personaje de búsqueda"
+
+msgid "Search Item"
+msgstr "Artículo de búsqueda"
+
+msgid "Clan Detail"
+msgstr "Detalle del clan"
+
+msgid "Auction Items"
+msgstr "Subasta artículos"
+
+msgid "Server Status"
+msgstr "Estado del servidor"
+
+msgid "API Info"
+msgstr "Información de API"
+
+msgid "Health Check"
+msgstr "Cheque de salud"
+
+msgid "Hourly Metrics"
+msgstr "Métricas por hora"
+
+msgid "Daily Metrics"
+msgstr "Métricas diarias"
+
+msgid "Performance Metrics"
+msgstr "Métricas de rendimiento"
+
+msgid "Slow Queries"
+msgstr "Consultas lentas"
+
+msgid "Cache Stats"
+msgstr "Estadísticas de caché"
+
+msgid "API Config"
+msgstr "Configuración de API"
+
+msgid "API Config Panel"
+msgstr "Panel de configuración de API"
 
 msgid "API Endpoint Toggle"
 msgstr "API Punto final Toggle"
@@ -1948,6 +2594,18 @@ msgstr "Comisiones"
 
 msgid "Commission from"
 msgstr "Entregar de"
+
+msgid "Imagem Default"
+msgstr "Imagen predeterminada"
+
+msgid "Ordem"
+msgstr "Orden"
+
+msgid "Imagem Default de Apoiador"
+msgstr "Imagen predeterminada del seguidor"
+
+msgid "Imagens Default de Apoiador"
+msgstr "Fotos predeterminados del seguidor"
 
 msgid "Editar Imagem do Apoiador"
 msgstr "Editar imagen de seguidores"
@@ -2152,9 +2810,6 @@ msgstr "Acceso:"
 msgid "Email:"
 msgstr "Correo electrónico:"
 
-msgid "Criada em:"
-msgstr "Creado en:"
-
 msgid "Não disponível"
 msgstr "Indisponible"
 
@@ -2282,9 +2937,6 @@ msgstr "Asegúrese de que la cuenta aún no esté vinculada a otro usuario."
 msgid "Esqueceu sua senha? Vincular conta via e-mail."
 msgstr "¿Olvidaste tu contraseña? Cuenta de enlace por correo electrónico."
 
-msgid "Configurações de Endpoints da API"
-msgstr "Configuración de punto final de API"
-
 msgid "Personagem:"
 msgstr "Personaje:"
 
@@ -2359,6 +3011,51 @@ msgstr "Olímpicos de héroes actuales"
 
 msgid "Ranking Olimpíada"
 msgstr "Ranking en olímpicos"
+
+msgid "Buscar"
+msgstr "Buscar"
+
+msgid "Nome do jogador, clã ou classe"
+msgstr "Nombre del jugador, clan o clase"
+
+msgid "Todas as classes"
+msgstr "Todas as classes"
+
+msgid "Clã"
+msgstr "Clan"
+
+msgid "Nome do clã"
+msgstr "Nombre del clan"
+
+msgid "Todos"
+msgstr "Todos"
+
+msgid "Pontos Mínimos"
+msgstr "Pontos Mínimos"
+
+msgid "Ex: 1000"
+msgstr "Ej: 1000"
+
+msgid "Filtrar"
+msgstr "Filtrar"
+
+msgid "Limpar"
+msgstr "Para limpiar"
+
+msgid "Mostrando todos os"
+msgstr "Mostrando todos os"
+
+msgid "jogadores"
+msgstr "jugadores"
+
+msgid "Mostrando"
+msgstr "Mostrando"
+
+msgid "de"
+msgstr "de"
+
+msgid "Pontos"
+msgstr "Agujas"
 
 msgid "Castle & Siege Ranking"
 msgstr "Castillo y clasificación de asedio"
@@ -2520,9 +3217,6 @@ msgstr "Descuento (%)"
 msgid "Promotion code"
 msgstr "Código de promoción"
 
-msgid "Ativo"
-msgstr "Activo"
-
 msgid "Item da Loja"
 msgstr "Artículo de la tienda"
 
@@ -2570,6 +3264,15 @@ msgstr "Paquetes"
 
 msgid "Promoção Aplicada"
 msgstr "Promoción aplicada"
+
+msgid "Usar Bônus"
+msgstr "Prima"
+
+msgid "Valor Bônus Usado"
+msgstr "Valor de bonificación usado"
+
+msgid "Valor Dinheiro Usado"
+msgstr "Valor de dinero utilizado"
 
 msgid "Carrinho"
 msgstr "Carro"
@@ -2624,6 +3327,41 @@ msgstr "Código promocional"
 
 msgid "Aplicar"
 msgstr "Aplicar"
+
+msgid "Saldo Principal"
+msgstr "Saldo Principal"
+
+msgid "Saldo Bônus"
+msgstr "Balance de bonificación"
+
+msgid "Forma de Pagamento"
+msgstr "Forma de Pagamento"
+
+msgid "Desativar Pagamento com Bônus"
+msgstr "Deshabilitar el pago con bonos"
+
+msgid "Ativar Pagamento com Bônus"
+msgstr "Activar el pago con bonos"
+
+msgid "O sistema usará primeiro o saldo de bônus e depois o saldo principal."
+msgstr ""
+"El sistema primero usará el balance de bonificación y luego el equilibrio "
+"principal."
+
+msgid "Resumo do Pagamento"
+msgstr "Resumen de pago"
+
+msgid "Total da Compra"
+msgstr "Total da Compra"
+
+msgid "Pagamento"
+msgstr "Pago"
+
+msgid "Bônus"
+msgstr "Prima"
+
+msgid "Dinheiro"
+msgstr "Dinero"
 
 msgid "Finalizar Compra"
 msgstr "Finalizar Compra"
@@ -2703,9 +3441,6 @@ msgstr "No hay artículo en el paquete."
 msgid "Cadastro de Itens"
 msgstr "Registro de artículos"
 
-msgid "Inativo"
-msgstr "Inactivo"
-
 msgid "Nenhum item cadastrado."
 msgstr "No hay artículo registrado."
 
@@ -2738,6 +3473,188 @@ msgstr "Histórico de Compras"
 
 msgid "Nenhuma compra realizada ainda."
 msgstr "No hay compra realizada todavía."
+
+msgid "Este personagem não existe na sua conta."
+msgstr "Este personaje no existe en tu cuenta."
+
+msgid "Os jogadores mais ricos do servidor"
+msgstr "Los jugadores más ricos del servidor"
+
+msgid "Adena"
+msgstr "Influenciado"
+
+msgid "Nenhum dado disponível"
+msgstr "No hay datos disponibles"
+
+msgid "Não foi possível carregar os dados do ranking Adena no momento."
+msgstr ""
+"No fue posible cargar los datos de clasificación Adena en este momento."
+
+msgid "Tops"
+msgstr "Tops"
+
+msgid "Expandir"
+msgstr "Expandir"
+
+msgid "Voltar ao Site"
+msgstr "Volver al sitio web"
+
+msgid "Rankings"
+msgstr "Rankings"
+
+msgid "Início"
+msgstr "Comenzar"
+
+msgid "Castle & Siege"
+msgstr "Castillo y asedio"
+
+msgid "Os clãs mais poderosos"
+msgstr "Los clanes más poderosos"
+
+msgid "Não foi possível carregar os dados do ranking de Clãs no momento."
+msgstr ""
+"No fue posible cargar los datos de clasificación del clan en este momento."
+
+msgid "Rankings do Servidor"
+msgstr "Rankings do Servidor"
+
+msgid "Descubra os melhores jogadores e clãs que dominam nosso mundo"
+msgstr "Descubra los mejores jugadores y clanes que dominan nuestro mundo"
+
+msgid "Categorias"
+msgstr "Categorías"
+
+msgid "Atualizado"
+msgstr "Actualizado"
+
+msgid "Preciso"
+msgstr "Preciso"
+
+msgid "Explore os Rankings"
+msgstr "Explorar las clasificaciones del sistema operativo"
+
+msgid "Escolha uma categoria para ver os melhores do servidor"
+msgstr "Elija una categoría para ver lo mejor del servidor"
+
+msgid "Os guerreiros mais temidos do servidor"
+msgstr "Los guerreros más temidos del servidor"
+
+msgid "Combat"
+msgstr "Combatir"
+
+msgid "Os caçadores mais implacáveis"
+msgstr "Los cazadores más implacables"
+
+msgid "Killer"
+msgstr "Asesino"
+
+msgid "Os magnatas mais ricos do servidor"
+msgstr "Las máquinas más ricas del servidor"
+
+msgid "Wealth"
+msgstr "Poder"
+
+msgid "As guildas mais poderosas"
+msgstr "Los gremios más poderosos"
+
+msgid "Guild"
+msgstr "Gremio"
+
+msgid "Os jogadores de maior nível"
+msgstr "Los jugadores de más alto nivel"
+
+msgid "Quem está online agora"
+msgstr "Quien esta en línea ahora"
+
+msgid "Live"
+msgstr "Vivir"
+
+msgid "Os campeões da arena"
+msgstr "Los campeones de la arena"
+
+msgid "Champion"
+msgstr "Campeón"
+
+msgid "Status dos castelos e cerco"
+msgstr "Status dos castelos e cerco"
+
+msgid "War"
+msgstr "Guerra"
+
+msgid "Atualização Automática"
+msgstr "Actualización automática"
+
+msgid "Os rankings são atualizados automaticamente a cada hora"
+msgstr "Las clasificaciones se actualizan automáticamente cada hora"
+
+msgid "Dados Seguros"
+msgstr "Dados Seguros"
+
+msgid "Todas as informações são extraídas diretamente do servidor"
+msgstr "Toda la información se extrae directamente del servidor"
+
+msgid "Totalmente Responsivo"
+msgstr "Totalmente receptivo"
+
+msgid "Acesse os rankings de qualquer dispositivo"
+msgstr "Acceder a las clasificaciones de cualquier dispositivo"
+
+msgid "Não foi possível carregar os dados do ranking de Nível no momento."
+msgstr ""
+"No fue posible cargar los datos de clasificación de nivel en este momento."
+
+msgid "Os campeões da olimpíada"
+msgstr "Los campeones de los Juegos Olímpicos"
+
+msgid "Não foi possível carregar os dados do ranking da Olimpíada no momento."
+msgstr ""
+"No fue posible cargar los datos de clasificación de los Juegos Olímpicos en "
+"este momento."
+
+msgid "Jogadores online no momento"
+msgstr "Jugadores en línea en este momento"
+
+msgid "Nenhum jogador online"
+msgstr "No hay jugador en línea"
+
+msgid "Não há jogadores online no momento."
+msgstr "No hay jugadores en línea en este momento."
+
+msgid "Os jogadores com mais PKs"
+msgstr "Los jugadores con la mayor cantidad de PKS"
+
+msgid "Não foi possível carregar os dados do ranking PK no momento."
+msgstr "No fue posible cargar los datos de clasificación PK en este momento."
+
+msgid "Os melhores guerreiros PvP do servidor"
+msgstr "Los mejores guerreros PvP del servidor"
+
+msgid "Não foi possível carregar os dados do ranking PvP no momento."
+msgstr "No fue posible cargar los datos de clasificación PVP en este momento."
+
+msgid "Cerco Ativo"
+msgstr "Cerco"
+
+msgid "Sem Cerco"
+msgstr "Cerco"
+
+msgid "Proprietário"
+msgstr "Dueño"
+
+msgid "Sem proprietário"
+msgstr "Dueño"
+
+msgid "Data do Cerco"
+msgstr "Data do Cerco"
+
+msgid "Participantes do Cerco"
+msgstr "Participantes do Cerco"
+
+msgid "Não foi possível carregar os dados dos castelos no momento."
+msgstr "No fue posible cargar los datos de los castillos en este momento."
+
+msgid "Unknown Clan"
+msgstr "Clan desconocido"
 
 msgid "Saldo"
 msgstr "Saldo"
@@ -2772,6 +3689,12 @@ msgstr "Transacción de billetera"
 msgid "Transações da Carteira"
 msgstr "Transacciones de billetera"
 
+msgid "Transação de Bônus"
+msgstr "Transacción de bonificación"
+
+msgid "Transações de Bônus"
+msgstr "Transacciones de bonificación"
+
 msgid "Nome da Moeda"
 msgstr "Nombre de moneda"
 
@@ -2790,20 +3713,46 @@ msgstr "Configuración de divisas"
 msgid "Configurações de Moeda"
 msgstr "Configuración de divisas"
 
+msgid "Valor Mínimo (R$)"
+msgstr "Valor Mínimo (R$)"
+
+msgid "Valor mínimo da compra para aplicar o bônus"
+msgstr "Valor de compra mínimo para aplicar el bono"
+
+msgid "Valor Máximo (R$)"
+msgstr "Valor Máximo (R$)"
+
+msgid "Valor máximo da compra (deixe em branco para sem limite)"
+msgstr "Valor de compra máximo (deje en blanco a sin límite)"
+
+msgid "Bônus (%)"
+msgstr "Bonificaciones (%)"
+
+msgid "Percentual de bônus a ser aplicado (ex: 10.00 para 10%)"
+msgstr "Porcentaje de bonificación a aplicar (ex: 10.00 a 10%)"
+
+msgid "Descrição do bônus (ex: 'Bônus de 10% para compras acima de R$ 50')"
+msgstr ""
+"Descripción de bonificación (por ejemplo, 10% de bono para compras "
+"superiores a R $ 50 ')"
+
+msgid "Ordem de prioridade (menor número = maior prioridade)"
+msgstr "Orden de prioridad (número menor = mayor prioridad)"
+
+msgid "Bônus de Compra de Moedas"
+msgstr "Bonos de compra de monedas"
+
+msgid "Saldo de bônus insuficiente."
+msgstr "Balance de bonificación insuficiente."
+
 msgid "Configuração de Moeda In-game"
 msgstr "Configuración de divisas en el juego"
 
 msgid "Multiplicador"
 msgstr "Multiplicador"
 
-msgid "Ativa"
-msgstr "Activo"
-
 msgid "Inativa"
 msgstr "Inactivo"
-
-msgid "Ativar"
-msgstr "Permitir"
 
 msgid "Atual"
 msgstr "Actual"
@@ -2835,11 +3784,11 @@ msgstr "Registrar moneda"
 msgid "Minha Carteira"
 msgstr "Mi billetera"
 
-msgid "Saldo Atual"
-msgstr "Saldo actual"
-
 msgid "moedas disponíveis"
 msgstr "Monedas disponibles"
+
+msgid "bônus disponíveis"
+msgstr "Bonos disponibles"
 
 msgid "Transferir para o Servidor"
 msgstr "Transferir para o Servidor"
@@ -2850,11 +3799,11 @@ msgstr "Transferir a otro jugador"
 msgid "Abrir Solicitação"
 msgstr "Abierto"
 
-msgid "Últimas Transações"
-msgstr "Últimas transacciones"
+msgid "Transações Recentes"
+msgstr "Transacciones recientes"
 
-msgid "Nenhuma transação registrada ainda."
-msgstr "No hay transacción registrada todavía."
+msgid "Nenhuma transação encontrada."
+msgstr "No se encontró transacción."
 
 msgid "Sobre a Carteira"
 msgstr "En la billetera"
@@ -2871,17 +3820,17 @@ msgstr ""
 msgid "Atualizar Carteira"
 msgstr "Actualización de billetera"
 
-msgid "Pedidos Pendentes"
-msgstr "Pedidos Pendentes"
+msgid "Sobre o Saldo Bônus"
+msgstr "Sobre el equilibrio de bonificación"
 
 msgid ""
-"Visualize pedidos de compra de moedas que ainda não foram pagos ou "
-"processados. Evite criar novos pedidos repetidos e acompanhe o andamento dos"
-" seus pagamentos."
+"O saldo de bônus é creditado automaticamente quando você faz compras que se "
+"qualificam para promoções. Este saldo pode ser usado em funcionalidades "
+"específicas do sistema."
 msgstr ""
-"Visualice los pedidos de compra de divisas que aún no se han pagado o "
-"procesado. Evite la creación de nuevas solicitudes repetidas y siga el "
-"progreso de sus pagos."
+"El saldo de bonos se acredita automáticamente cuando realiza compras que "
+"califican para las promociones. Este equilibrio se puede utilizar en "
+"características específicas del sistema."
 
 msgid "Nome do Jogador"
 msgstr "Nombre del jugador"
@@ -2903,9 +3852,6 @@ msgstr "Usuario:"
 
 msgid "Saldo atual:"
 msgstr "Saldo actual:"
-
-msgid "Saldo insuficiente para transferência."
-msgstr "Balance insuficiente para la transferencia."
 
 msgid "Erro ao adicionar a moeda ao personagem."
 msgstr "Error a agregar la moneda al personaje."
@@ -3035,9 +3981,6 @@ msgstr "Experiencia"
 
 msgid "Drop"
 msgstr "Gota"
-
-msgid "Adena"
-msgstr "Influenciado"
 
 msgid "Spoil"
 msgstr "Arruinar"
@@ -3231,17 +4174,8 @@ msgstr "Semana"
 msgid "Logo do Lineage2"
 msgstr "LOGO DO LINEAGE2"
 
-msgid "Expandir"
-msgstr "Expandir"
-
-msgid "Voltar ao Site"
-msgstr "Volver al sitio web"
-
 msgid "Guia Wiki"
 msgstr "Guía de wiki"
-
-msgid "Início"
-msgstr "Comenzar"
 
 msgid "Informações Gerais"
 msgstr "información general"
@@ -3644,6 +4578,9 @@ msgstr "Y ya no está disponible para la conversación."
 msgid "Se você precisar de mais informações, entre em contato com o suporte."
 msgstr "Si necesita más información, comuníquese con el soporte."
 
+msgid "Voltar para as solicitações"
+msgstr "Volver a las solicitudes"
+
 msgid "Chat da Solicitação"
 msgstr "Chat de la solicitud"
 
@@ -3722,17 +4659,11 @@ msgstr "Tipo de contenido"
 msgid "Corpo"
 msgstr "Cuerpo"
 
-msgid "User Agent"
-msgstr "Agente de usuario"
-
 msgid "Conteúdo da Resposta"
 msgstr "Contenido de respuesta"
 
 msgid "Código de Status da Resposta"
 msgstr "Código de Status da Resposta"
-
-msgid "IP"
-msgstr "IP"
 
 msgid "Proxy Verificado"
 msgstr "Proxy Verificado"
@@ -3863,17 +4794,11 @@ msgstr "Es"
 msgid "Lista"
 msgstr "Lista"
 
-msgid "Ordem"
-msgstr "Orden"
-
 msgid "Categoria de Download"
 msgstr "Categoria de Download"
 
 msgid "Categorias de Download"
 msgstr "Categorias de Download"
-
-msgid "Cliente"
-msgstr "Cliente"
 
 msgid "Patch"
 msgstr "Parche"
@@ -3913,6 +4838,21 @@ msgstr "Links de Download"
 
 msgid "Downloads"
 msgstr "Descargas"
+
+msgid "Baixe tudo o que você precisa para começar sua jornada"
+msgstr "Descargue todo lo que necesita para comenzar su viaje"
+
+msgid "Tamanho"
+msgstr "Tamaño"
+
+msgid "Download"
+msgstr "Descargar"
+
+msgid "Nenhum download disponível"
+msgstr "No hay descarga disponible"
+
+msgid "Nenhum download está disponível no momento."
+msgstr "No hay descarga disponible actualmente."
 
 msgid "Pergunta"
 msgstr "Pregunta"
@@ -4007,6 +4947,15 @@ msgstr "Tu nombre de usuario"
 
 msgid "Your Password"
 msgstr "Tu contraseña"
+
+msgid "Captcha"
+msgstr "Captcha"
+
+msgid "Verificação do captcha é obrigatória após múltiplas tentativas."
+msgstr "Captcha Check es obligatorio después de múltiples intentos."
+
+msgid "Verificação do captcha falhou. Tente novamente."
+msgstr "Captcha Check falló. Intentar otra vez."
 
 msgid "Enter your email"
 msgstr "Ingrese su correo electrónico"
@@ -4174,6 +5123,9 @@ msgstr "Tu contraseña"
 msgid "Desbloquear"
 msgstr "Desbloquear"
 
+msgid "Sair"
+msgstr "Salir"
+
 msgid "Senha alterada com sucesso"
 msgstr "Contraseña cambiada con éxito"
 
@@ -4237,6 +5189,16 @@ msgstr "Acuérdate de mí"
 msgid "Esqueceu a senha?"
 msgstr "¿Olvidó la contraseña?"
 
+msgid ""
+"Múltiplas tentativas de login detectadas. Por favor, complete o captcha para"
+" continuar."
+msgstr ""
+"Múltiples intentos de inicio de sesión detectado. Complete el captcha para "
+"continuar."
+
+msgid "Tentativas:"
+msgstr "Tentativas:"
+
 msgid "Entrar no Reino"
 msgstr "Entrar no Reino"
 
@@ -4288,6 +5250,59 @@ msgstr "Insira o código de 6 dígitos"
 msgid "Verificar Código"
 msgstr "Verificar Código"
 
+msgid "Aviso de Licença"
+msgstr "Aviso de licencia"
+
+msgid ""
+"A licença do sistema não é válida. Algumas funcionalidades podem estar "
+"indisponíveis. Entre em contato com o administrador."
+msgstr ""
+"La licencia del sistema no es válida. Algunas características pueden no "
+"estar disponibles. Póngase en contacto con el administrador."
+
+msgid "Gerenciar Licença"
+msgstr "Administrar licencia"
+
+msgid "Conecte-se com outros jogadores!"
+msgstr "¡Conéctese con otros jugadores!"
+
+msgid "Adicione seu nome e sobrenome"
+msgstr "Agregue su nombre y apellido"
+
+msgid "Torne-se mais reconhecível na comunidade!"
+msgstr "¡Sé más reconocible en la comunidad!"
+
+msgid "Crie uma bio interessante"
+msgstr "Crear una biografía interesante"
+
+msgid "Conte um pouco sobre você e seus interesses no jogo!"
+msgstr "¡Te cuentas un poco sobre ti y tus intereses en el juego!"
+
+msgid "Complete seu perfil"
+msgstr "Completa tu perfil"
+
+msgid ""
+"Adicione suas informações pessoais para se conectar melhor com outros "
+"jogadores!"
+msgstr ""
+"¡Agregue su información personal para conectarse mejor con otros jugadores!"
+
+msgid ""
+"Perfis completos têm mais chances de fazer amigos e participar da "
+"comunidade!"
+msgstr ""
+"¡Es más probable que los perfiles completos hagan amigos y participen en la "
+"comunidad!"
+
+msgid "Completar Perfil"
+msgstr "Completar Perfil"
+
+msgid "Ver Amigos"
+msgstr "Ver Amigos"
+
+msgid "Lembrar depois"
+msgstr "Recordar más tarde"
+
 msgid "Painel do Jogador"
 msgstr "Panel de jugadores"
 
@@ -4306,8 +5321,23 @@ msgstr "Donación"
 msgid "Conta L2"
 msgstr "Conta L2"
 
+msgid "Amigos"
+msgstr "Amigos"
+
 msgid "Bônus diário recebido! +25 XP"
 msgstr "¡Bonificación diaria recibida! +25 xp"
+
+msgid "Progresso do Perfil:"
+msgstr "Progresso do Perfil:"
+
+msgid "0/3 campos preenchidos - Complete seu perfil para ganhar 50 XP!"
+msgstr "Campos llenos 0/3: ¡complete su perfil para ganar 50 XP!"
+
+msgid "1/3 campos preenchidos - Adicione nome e sobrenome!"
+msgstr "Campos llenos de 1/3: ¡agregue el nombre y el apellido!"
+
+msgid "2/3 campos preenchidos - Adicione uma bio interessante!"
+msgstr "2/3 Campos llenos: ¡agregue una biografía interesante!"
 
 msgid "Saldo:"
 msgstr "Saldo:"
@@ -4317,6 +5347,9 @@ msgstr "No se encuentra la billetera."
 
 msgid "Total criados:"
 msgstr "Total criados:"
+
+msgid "Ver amigos"
+msgstr "Ver amigos"
 
 msgid "Você ainda não é um apoiador."
 msgstr "Todavía no eres un partidario."
@@ -4441,20 +5474,127 @@ msgstr "Dirección de edición"
 msgid "Cadastrar Endereço"
 msgstr "Registro de la dirección"
 
+msgid "Complete suas informações de endereço para melhorar sua experiência"
+msgstr "Complete su información de dirección para mejorar su experiencia"
+
+msgid "Progresso do cadastro"
+msgstr "Progreso de registro"
+
+msgid "Dica:"
+msgstr "Consejo:"
+
+msgid "Digite o CEP para preencher automaticamente o endereço"
+msgstr "Ingrese el código postal para llenar automáticamente la dirección"
+
 msgid "Logradouro"
 msgstr "Mierda"
+
+msgid "Salvar Endereço"
+msgstr "Guardar dirección"
+
+msgid "Voltar ao Perfil"
+msgstr "Vuelve al perfil"
 
 msgid "Editar Avatar"
 msgstr "Editar Avatar"
 
-msgid "Voltar para o perfil"
-msgstr "Voltar para o perfil"
+msgid "Personalize sua aparência com uma nova foto de perfil"
+msgstr "Personaliza tu apariencia con una nueva foto de perfil"
+
+msgid ""
+"Use imagens quadradas para melhor resultado. Formatos aceitos: JPG, PNG, GIF"
+" (máx. 5MB)"
+msgstr ""
+"Use imágenes cuadradas para el mejor resultado. Formatos aceptados: JPG, "
+"PNG, GIF (Máx. 5Mb)"
+
+msgid "Preview do Avatar"
+msgstr "Vista previa do avatar"
+
+msgid "Enviando arquivo..."
+msgstr "Enviando arquivo..."
+
+msgid "Processando imagem..."
+msgstr "Imagen de procesamiento ..."
+
+msgid "Arraste e solte sua imagem aqui"
+msgstr "Arrastre y suelte su imagen aquí"
+
+msgid "ou clique para selecionar um arquivo"
+msgstr "o haga clic para seleccionar un archivo"
 
 msgid "Salvar Avatar"
 msgstr "Salvar Avatar"
 
+msgid "Remover Avatar"
+msgstr "Remover Avatar"
+
+msgid "Por favor, selecione apenas arquivos de imagem."
+msgstr "Seleccione solo archivos de imagen."
+
+msgid "O arquivo é muito grande. Tamanho máximo: 5MB"
+msgstr "El archivo es muy grande. Tamaño máximo: 5 MB"
+
+msgid "Tem certeza que deseja remover seu avatar?"
+msgstr "¿Estás seguro de que quieres eliminar tu avatar?"
+
+msgid "Por favor, faça upload de uma imagem."
+msgstr "Sube una imagen."
+
 msgid "Editar Perfil"
 msgstr "Editar Perfil"
+
+msgid "Complete suas informações para se conectar melhor com outros jogadores"
+msgstr "Complete su información para conectarse mejor con otros jugadores"
+
+msgid "Progresso do Perfil"
+msgstr "Progresso do Perfil"
+
+msgid "0/3 campos preenchidos"
+msgstr "0/3 campos completados"
+
+msgid "1/3 campos preenchidos"
+msgstr "1/3 campos completados"
+
+msgid "2/3 campos preenchidos"
+msgstr "2/3 campos completados"
+
+msgid "Ganhe 50 XP ao completar seu perfil!"
+msgstr "¡Gane 50 XP completando su perfil!"
+
+msgid "Dicas para um perfil incrível"
+msgstr "Consejos para un perfil increíble"
+
+msgid "Use seu nome real para ser mais reconhecível"
+msgstr "Usa tu nombre real para ser más reconocible"
+
+msgid "Conte sobre seus interesses no jogo"
+msgstr "Cuente con sus intereses en el juego"
+
+msgid "Mencione suas classes favoritas"
+msgstr "Mencione suas classes favoritas"
+
+msgid "Perfis completos têm mais chances de fazer amigos!"
+msgstr "¡Es más probable que los perfiles completos hagan amigos!"
+
+msgid "Informações Pessoais"
+msgstr "Información personal"
+
+msgid "Sobrenome"
+msgstr "Apellido"
+
+msgid "Sobre Você"
+msgstr "Acerca de ti"
+
+msgid ""
+"Conte um pouco sobre você, seus interesses no jogo e o que você gosta de "
+"fazer!"
+msgstr ""
+"¡Te cuentas un poco sobre ti, tus intereses en el juego y lo que te gusta "
+"hacer!"
+
+msgid "Informações Adicionais"
+msgstr "Información adicional"
 
 msgid "Dashboard de Logs"
 msgstr "Dashboard de Logs"
@@ -4471,38 +5611,8 @@ msgstr "Primero"
 msgid "Página"
 msgstr "Página"
 
-msgid "de"
-msgstr "de"
-
 msgid "Última"
 msgstr "Última"
-
-msgid "Perfil/Biografia"
-msgstr "Perfil/Biografia"
-
-msgid "Endereço de Email"
-msgstr "Dirección de correo electrónico"
-
-msgid "N/A"
-msgstr "N / A"
-
-msgid "Sobrenome"
-msgstr "Apellido"
-
-msgid "Endereço"
-msgstr "DIRECCIÓN"
-
-msgid "Sobre Você"
-msgstr "Acerca de ti"
-
-msgid "000.000.000-00"
-msgstr "000.000.000-00"
-
-msgid "Não Binário"
-msgstr "No binario"
-
-msgid "Prefiro não dizer"
-msgstr "Prefiero no decir"
 
 msgid "Imagem de perfil"
 msgstr "Imagen de perfil"
@@ -4510,30 +5620,38 @@ msgstr "Imagen de perfil"
 msgid "Imagem de perfil padrão"
 msgstr "Imagen de perfil predeterminada"
 
-msgid "O sucesso não é garantido, mas o fracasso é certo se você não tentar."
-msgstr ""
-"El éxito no está garantizado, pero el fracaso es seguro si no lo intenta."
+msgid "E-mail Verificado"
+msgstr "E-mail Verificado"
+
+msgid "2FA Ativo"
+msgstr "2 FACA ACTIVO"
+
+msgid "Endereço"
+msgstr "DIRECCIÓN"
+
+msgid "Bio"
+msgstr "Era"
+
+msgid "Não informado"
+msgstr "No informado"
+
+msgid "Não Binário"
+msgstr "No binario"
+
+msgid "Prefiro não dizer"
+msgstr "Prefiero no decir"
+
+msgid "E-mail não verificado"
+msgstr "Correo electrónico no calificado"
 
 msgid ""
-"Encontre inspiração em cada desafio e mantenha-se comprometido com o seu "
-"crescimento pessoal e profissional. Lembre-se sempre de que o esforço que "
-"você coloca hoje moldará o seu amanhã."
+"Seu e-mail ainda não foi verificado. Verifique sua caixa de entrada ou spam."
 msgstr ""
-"Encuentre inspiración en cada desafío y manténgase comprometido con su "
-"crecimiento personal y profesional. Recuerde siempre que el esfuerzo que "
-"pones hoy dará forma a tu mañana."
+"Su correo electrónico aún no ha sido revisado. Revise su bandeja de entrada "
+"o spam."
 
-msgid "Ver Lista de Amigos"
-msgstr "Ver Lista de Amigos"
-
-msgid "Conta não verificada"
-msgstr "Cuenta no verificada"
-
-msgid "Seu e-mail ainda não foi verificado."
-msgstr "Su correo electrónico aún no ha sido revisado."
-
-msgid "Reenviar E-mail de Verificação"
-msgstr "Correo electrónico de verificación de reinicio"
+msgid "Reenviar Verificação"
+msgstr "Resolución de verificación"
 
 msgid "2FA Desativado"
 msgstr "2folio"
@@ -4541,14 +5659,77 @@ msgstr "2folio"
 msgid "A autenticação em duas etapas ainda não está ativada em sua conta."
 msgstr "La autenticación en dos pasos aún no se activa en su cuenta."
 
-msgid "Ativar Autenticação 2FA"
-msgstr "Activar la autenticación 2fa"
+msgid "Licença Expirada"
+msgstr "Licencia vencida"
 
-msgid "Reenviar Verificação"
-msgstr "Resolución de verificación"
+msgid "ACESSO BLOQUEADO"
+msgstr "Acceso bloqueado"
 
-msgid "Seu e-mail"
-msgstr "Tu correo electrónico"
+msgid ""
+"A licença do sistema PDL expirou ou não é válida. O acesso ao sistema foi "
+"bloqueado."
+msgstr ""
+"La licencia del sistema PDL ha caducado o no válida. El acceso al sistema ha"
+" sido bloqueado."
+
+msgid "Ação Necessária"
+msgstr "Acción necesaria"
+
+msgid ""
+"Como superusuário, você precisa renovar a licença para restaurar o acesso ao"
+" sistema."
+msgstr ""
+"Como superusador, debe renovar la licencia para restaurar el acceso al "
+"sistema."
+
+msgid "O que aconteceu?"
+msgstr "¿Qué pasó?"
+
+msgid "A licença PDL expirou ou foi invalidada"
+msgstr "Licencia PDL expirada o invalidado"
+
+msgid "O sistema bloqueou automaticamente todos os acessos"
+msgstr "El sistema bloqueó automáticamente todos los accesos"
+
+msgid "Usuários comuns veem uma tela de manutenção"
+msgstr "Los usuarios ordinarios ven una pantalla de mantenimiento"
+
+msgid "Apenas superusuários podem ver esta tela de licença"
+msgstr "Solo los superusadores pueden ver esta pantalla de licencia"
+
+msgid "Como resolver?"
+msgstr "Como resolver?"
+
+msgid "Entre em contato com o suporte para renovar a licença"
+msgstr "Comuníquese con el soporte para renovar la licencia"
+
+msgid "Verifique se o domínio está correto na licença"
+msgstr "Verifique que el dominio sea correcto en la licencia"
+
+msgid "Confirme se o pagamento foi processado"
+msgstr "Confirme si el pago ha sido procesado"
+
+msgid "Ative a nova licença no painel administrativo"
+msgstr "Activar la nueva licencia en el panel administrativo"
+
+msgid "Para renovar sua licença ou obter suporte técnico:"
+msgstr "Para renovar su licencia o obtener soporte técnico:"
+
+msgid "Discord:"
+msgstr "Discordia:"
+
+msgid "WhatsApp:"
+msgstr "WhatsApp:"
+
+msgid "Esta é uma medida de segurança para proteger o sistema."
+msgstr "Esta es una medida de seguridad para proteger el sistema."
+
+msgid "Reenviar E-mail de Verificação"
+msgstr "Correo electrónico de verificación de reinicio"
+
+msgid "Informe seu e-mail para receber um novo link de verificação."
+msgstr ""
+"Ingrese su correo electrónico para recibir un nuevo enlace de verificación."
 
 msgid "Reenviar"
 msgstr "Reenviar"
@@ -4556,14 +5737,17 @@ msgstr "Reenviar"
 msgid "Registration failed!"
 msgstr "¡Falló en el registro!"
 
+msgid "Credenciais inválidas. Tente novamente."
+msgstr "Credenciales no válidas. Intentar otra vez."
+
 msgid "Password changed successfully!"
 msgstr "¡La contraseña cambió con éxito!"
 
 msgid "Password change failed!"
 msgstr "¡El cambio de contraseña falló!"
 
-msgid "Password reset email sent!"
-msgstr "¡Restablecer la contraseña por correo electrónico enviado!"
+msgid "Password reset email sent! (async)"
+msgstr "¡Restablecer la contraseña por correo electrónico enviado! (Async)"
 
 msgid "Failed to send password reset email!"
 msgstr ""
@@ -4737,41 +5921,89 @@ msgstr "Haga clic en un amigo para comenzar el chat."
 msgid "Digite uma mensagem..."
 msgstr "Ingrese un mensaje ..."
 
-msgid "Amigos"
-msgstr "Amigos"
-
 msgid "Amigos e Conexões"
 msgstr "Amigos y conexiones"
+
+msgid "Gerencie suas conexões e descubra novos amigos"
+msgstr "Administre sus conexiones y descubre nuevos amigos"
+
+msgid "Enviados"
+msgstr "Enviados"
 
 msgid "Meus Amigos"
 msgstr "Mis amigos"
 
+msgid "Atualizar"
+msgstr "Para actualizar"
+
 msgid "default profile image"
 msgstr "Imagen de perfil predeterminada"
 
-msgid "Deixar de Ser Amigo"
-msgstr "Deja de ser un amigo"
+msgid "Verificado"
+msgstr "Verificado"
 
-msgid "Nenhum amigo adicionado ainda."
-msgstr "No hay amigos agregados todavía."
+msgid "Fichas do jogo"
+msgstr "Chips de juego"
 
-msgid "Adicionar Novos Amigos"
-msgstr "Agregar nuevos amigos"
+msgid "Enviar mensagem"
+msgstr "Mensaje"
 
-msgid "Enviar Pedido"
-msgstr "Enviar Pedido"
+msgid "Remover amigo"
+msgstr "Remover amigo"
 
-msgid "Nenhum usuário disponível para adicionar."
-msgstr "No hay usuario disponible para agregar."
+msgid "Nenhum amigo ainda"
+msgstr "No hay amigo todavía"
 
-msgid "Convites Pendentes"
-msgstr "Invitaciones pendientes"
+msgid "Comece a adicionar amigos para expandir sua rede de conexões!"
+msgstr "¡Comience a agregar amigos para expandir su red de conexión!"
+
+msgid "Buscar Usuários"
+msgstr "Buscar usuarios"
+
+msgid "Buscar por nome ou usuário..."
+msgstr "Buscar por nombre o usuario ..."
+
+msgid "Limpar busca"
+msgstr "Limpar busca"
+
+msgid "Resultados para"
+msgstr "Resultados para"
+
+msgid "encontrados"
+msgstr "encontrados"
+
+msgid "Nenhum usuário encontrado"
+msgstr "No se encontró un usuario"
+
+msgid "Nenhum usuário disponível"
+msgstr "No hay usuario disponible"
+
+msgid "Tente ajustar os termos de busca."
+msgstr "Tente ajustar os termos de busca."
+
+msgid "Todos os usuários já são seus amigos ou têm solicitações pendentes."
+msgstr "Todos los usuarios ya son sus amigos o tienen solicitudes pendientes."
+
+msgid "Solicitações Recebidas"
+msgstr "Solicitudes recibidas"
 
 msgid "Recusar"
 msgstr "Rechazar"
 
-msgid "Nenhum convite de amizade recebido."
-msgstr "No recibió invitación a la amistad."
+msgid "Nenhuma solicitação recebida"
+msgstr "No se recibió la solicitud"
+
+msgid "Quando receber solicitações de amizade, elas aparecerão aqui."
+msgstr "Al recibir amistades, aparecerán aquí."
+
+msgid "Solicitações Enviadas"
+msgstr "Solicitudes enviadas"
+
+msgid "Nenhuma solicitação enviada"
+msgstr "Sin solicitud enviada"
+
+msgid "Quando você enviar solicitações de amizade, elas aparecerão aqui."
+msgstr "Cuando envíe solicitudes de amistad, aparecerán aquí."
 
 msgid "Published"
 msgstr "Publicado"
@@ -4890,6 +6122,21 @@ msgstr "Visualización de notificación pública"
 msgid "Visualizações de Notificações Públicas"
 msgstr "Vistas de las notificaciones públicas"
 
+msgid "Usuário dono do subscription."
+msgstr "Propietario del usuario de suscripción."
+
+msgid "Push Subscription"
+msgstr "Suscripción de empuje"
+
+msgid "Push Subscriptions"
+msgstr "Suscripciones de empuje"
+
+msgid "Enviar Notificação Push"
+msgstr "Enviar notificación push"
+
+msgid "Enviar Notificação"
+msgstr "Enviar notificación"
+
 msgid "Marcar todas como lidas"
 msgstr "Marcar todas como lidas"
 
@@ -4917,17 +6164,95 @@ msgstr "No hay notificaciones públicas."
 msgid "Tem certeza que deseja limpar todas as notificações?"
 msgstr "¿Estás seguro de que quieres limpiar todas las notificaciones?"
 
+msgid "Informações Básicas"
+msgstr "Información básica"
+
+msgid "Classificação"
+msgstr "Clasificación"
+
+msgid "Atribuição"
+msgstr "Asignación"
+
+msgid "Timestamps"
+msgstr "Marcas de tiempo"
+
+msgid "Protocolo da Solicitação"
+msgstr "Protocolo de solicitud"
+
+msgid "Email do Usuário"
+msgstr "Correo electrónico de usuario"
+
+msgid "Digite o título da sua solicitação"
+msgstr "Ingrese el título de su solicitud"
+
+msgid "Descreva detalhadamente sua solicitação"
+msgstr "Describa su solicitud en detalle"
+
+msgid "Descrição do Evento"
+msgstr "Descripción del evento"
+
+msgid "Descreva o que aconteceu ou a ação tomada"
+msgstr "Describe lo que sucedió o la acción tomada"
+
+msgid "Imagem (opcional)"
+msgstr "Imagen (opcional)"
+
+msgid "Novo Status"
+msgstr "Estado de novo"
+
+msgid "Atribuir para"
+msgstr "Atribuir para"
+
+msgid "Comentário"
+msgstr "Comentario"
+
+msgid "Comentário opcional sobre a mudança de status"
+msgstr "Comentario opcional sobre el cambio de estado"
+
 msgid "Protocolo"
 msgstr "Protocolo"
 
 msgid "Código de identificação único da solicitação."
 msgstr "Código de identificación único de la solicitud."
 
+msgid "Título da solicitação."
+msgstr "Título de solicitud."
+
+msgid "Descrição detalhada da solicitação."
+msgstr "Descripción detallada de la solicitud."
+
 msgid "Status atual da solicitação."
 msgstr "Estado actual de la solicitud."
 
+msgid "Categoria da solicitação."
+msgstr "Categoría de solicitud."
+
+msgid "Prioridade"
+msgstr "Prioridad"
+
+msgid "Prioridade da solicitação."
+msgstr "Prioridad de la solicitud."
+
 msgid "Usuário que iniciou a solicitação."
 msgstr "Usuario que comenzó la solicitud."
+
+msgid "Atribuído para"
+msgstr "Atribuído para"
+
+msgid "Usuário responsável por resolver a solicitação."
+msgstr "Usuario responsable de resolver la solicitud."
+
+msgid "Resolvido em"
+msgstr "Resuelto en"
+
+msgid "Data e hora em que a solicitação foi resolvida."
+msgstr "Fecha y hora La solicitud se resolvió."
+
+msgid "Fechado em"
+msgstr "Cerrado"
+
+msgid "Data e hora em que a solicitação foi fechada."
+msgstr "Fecha y hora La solicitud fue cerrada."
 
 msgid "Solicitação criada."
 msgstr "Solicitud creada."
@@ -4965,12 +6290,6 @@ msgstr "Historia de la solicitud"
 msgid "Adicionar Evento ao Histórico"
 msgstr "Agregar evento a la historia"
 
-msgid "Descrição do Evento"
-msgstr "Descripción del evento"
-
-msgid "Imagem (opcional)"
-msgstr "Imagen (opcional)"
-
 msgid "Adicionar Evento"
 msgstr "Adicionar Evento"
 
@@ -4991,21 +6310,21 @@ msgstr ""
 "administración."
 
 msgid ""
-"Enquanto o status da solicitação estiver como Pendente, o chat permanecerá "
-"ativo."
+"Enquanto o status da solicitação estiver como Aberto ou Em Andamento, o chat"
+" permanecerá ativo."
 msgstr ""
-"Mientras el estado de la solicitud está pendiente, el chat permanecerá "
-"activo."
+"Mientras el estado de la solicitud está abierto o en curso, el chat "
+"permanecerá activo."
 
 msgid ""
-"Após a solicitação ser concluída, o chat será desabilitado e o atendimento "
-"encerrado."
+"Após a solicitação ser resolvida ou fechada, o chat será desabilitado e o "
+"atendimento encerrado."
 msgstr ""
-"Después de completar la solicitud, el chat se deshabilitará y el servicio "
-"finalice."
+"Una vez que se resuelva o se cierre la solicitud, el chat se deshabilitará y"
+" el servicio cerrado."
 
-msgid "Somente uma solicitação pendente pode existir por vez."
-msgstr "Solo puede existir una solicitud pendiente a la vez."
+msgid "Você pode criar múltiplas solicitações conforme necessário."
+msgstr "Puede crear varias solicitudes según sea necesario."
 
 msgid ""
 "Seja claro e objetivo ao abrir uma solicitação para que a equipe possa "
@@ -5034,14 +6353,44 @@ msgstr "Detalle de solicitud"
 msgid "Ir para o Chat"
 msgstr "Ir para o Chat"
 
-msgid "Data da Solicitação:"
-msgstr "Fecha de solicitud:"
+msgid "Esta solicitação está"
+msgstr "Esta solicitud es"
+
+msgid "e não permite mais interações."
+msgstr "y ya no permite interacciones."
+
+msgid "Informações da Solicitação"
+msgstr "Solicitar información"
+
+msgid "Categoria:"
+msgstr "Categoría:"
+
+msgid "Prioridade:"
+msgstr "Prioridad:"
+
+msgid "Resolvido em:"
+msgstr "Resuelto en:"
+
+msgid "Fechado em:"
+msgstr "Cerrado en:"
+
+msgid "Atribuído para:"
+msgstr "Atribuído para:"
+
+msgid "Descrição:"
+msgstr "Descripción:"
 
 msgid "Participantes"
 msgstr "Participantes"
 
 msgid "Nenhum participante cadastrado."
 msgstr "No hay participante registrado."
+
+msgid "Alterar Status da Solicitação"
+msgstr "Estado de solicitud de cambio"
+
+msgid "Atualizar Status"
+msgstr "Estado de actualización"
 
 msgid "Histórico de Eventos"
 msgstr "Histórico de Eventos"
@@ -5055,17 +6404,53 @@ msgstr "No hay evento registrado."
 msgid "Lista de Solicitações"
 msgstr "Lista de solicitudes"
 
-msgid "Situação"
-msgstr "Situación"
+msgid "Abertas"
+msgstr "Abierto"
+
+msgid "Em Andamento"
+msgstr "En curso"
+
+msgid "Aguardando Usuário"
+msgstr "Usuario de espera"
+
+msgid "Resolvidas"
+msgstr "Resuelto"
 
 msgid "Data da Solicitação"
 msgstr "Fecha de solicitud"
 
-msgid "Ver Solicitação"
-msgstr "Ver solicitud"
+msgid "Ver"
+msgstr "Ver"
 
 msgid "Nenhuma solicitação encontrada."
 msgstr "No se encontró solicitud."
+
+msgid "Você não tem permissão para alterar o status desta solicitação."
+msgstr "No se le permite cambiar el estado de esta solicitud."
+
+msgid "Erro ao alterar status. Verifique os dados informados."
+msgstr "Error al cambiar el estado. Verifique los datos informados."
+
+msgid ""
+"Você não tem permissão para adicionar eventos ao histórico dessa "
+"solicitação."
+msgstr "No se le permite agregar eventos al historial de esta solicitud."
+
+msgid "Não é possível adicionar eventos a uma solicitação que está {}."
+msgstr "No es posible agregar eventos a una solicitud que es {}."
+
+msgid "O próximo evento precisa ser registrado por um staff."
+msgstr "El próximo evento debe ser registrado por un personal."
+
+msgid ""
+"Você só pode registrar um evento depois que um staff fizer a próxima "
+"alteração."
+msgstr ""
+"Solo puede registrar un evento después de que un personal realice el próximo"
+" cambio."
+
+msgid "Evento registrado com sucesso."
+msgstr "Evento registrado con éxito."
 
 msgid "Meu Perfil"
 msgstr "Mi perfil"
@@ -5075,9 +6460,6 @@ msgstr "Cambiar la contraseña"
 
 msgid "Segurança"
 msgstr "Seguridad"
-
-msgid "Sair"
-msgstr "Salir"
 
 msgid "Search"
 msgstr "Buscar"
@@ -5104,6 +6486,15 @@ msgstr ""
 
 msgid "Close"
 msgstr "Cerca"
+
+msgid "Tem certeza que deseja excluir os temas selecionados?"
+msgstr "¿Estás seguro de que quieres eliminar los temas seleccionados?"
+
+msgid "Esta ação não pode ser desfeita!"
+msgstr "¡Esta acción no se puede deshacer!"
+
+msgid "Confirmar exclusão"
+msgstr "Confirmar la exclusión"
 
 msgid "400 Requisição Inválida"
 msgstr "400 requisitos no válidos"
@@ -5197,6 +6588,9 @@ msgstr "Seguidores"
 msgid "Box Manager"
 msgstr "Gerente de caja"
 
+msgid "Enviar Push"
+msgstr "Enviar Push"
+
 msgid "Inventário"
 msgstr "Inventario"
 
@@ -5223,9 +6617,6 @@ msgstr "Pase de batalla"
 
 msgid "Ajuda (FAQ)"
 msgstr "Ayuda (FAQ)"
-
-msgid "Tops"
-msgstr "Tops"
 
 msgid "Top PVP"
 msgstr "PVP superior"
@@ -5281,9 +6672,6 @@ msgstr "Mi cuenta"
 msgid "Entrar"
 msgstr "Entrar"
 
-msgid "Download"
-msgstr "Descargar"
-
 msgid "Acordo do Usuário"
 msgstr "Acuerdo de usuario"
 
@@ -5293,17 +6681,11 @@ msgstr "Términos de servicio"
 msgid "Política de Privacidade"
 msgstr "Política de Privacidade"
 
-msgid "Baixe tudo o que você precisa para começar sua jornada"
-msgstr "Descargue todo lo que necesita para comenzar su viaje"
-
 msgid "downloads"
 msgstr "descargas"
 
 msgid "Nenhum download disponível no momento."
 msgstr "No hay descarga disponible en este momento."
-
-msgid "Verificação de E-mail"
-msgstr "Cheque por correo electrónico"
 
 msgid "Link inválido ou expirado."
 msgstr "Link inválido ou expirado."
@@ -5370,12 +6752,6 @@ msgstr "Ayuda del juego"
 msgid "Atualização"
 msgstr "Actualizar"
 
-msgid "Trailer Oficial"
-msgstr "Trailer Oficial"
-
-msgid "Assista ao trailer e mergulhe no mundo épico do nosso servidor!"
-msgstr "¡Mira el trailer y sumérgete en el mundo épico de nuestro servidor!"
-
 msgid "Melhores Clãs"
 msgstr "Mejores clanes"
 
@@ -5385,11 +6761,33 @@ msgstr "Cresta"
 msgid "Nome do Clã"
 msgstr "Nombre del clan"
 
-msgid "Jogadores Online Agora"
-msgstr "Jugadores en línea ahora"
+msgid "Ranking Clãs"
+msgstr "Ranking de clanes"
 
-msgid "O campo de batalha está ativo!"
-msgstr "¡El campo de batalla está activo!"
+msgid "Clãs"
+msgstr "Clan"
+
+msgid "Uptime"
+msgstr "Tiempo de actividad"
+
+msgid "Servidor"
+msgstr "Servidor"
+
+msgid "Seja o Melhor!"
+msgstr "¡Sea el mejor!"
+
+msgid "Entre para a competição e mostre suas habilidades no nosso servidor!"
+msgstr ""
+"¡Ingrese la competencia y muestre sus habilidades en nuestro servidor!"
+
+msgid "Baixar Jogo"
+msgstr "Descargar juego"
+
+msgid "Trailer Oficial"
+msgstr "Trailer Oficial"
+
+msgid "Assista ao trailer e mergulhe no mundo épico do nosso servidor!"
+msgstr "¡Mira el trailer y sumérgete en el mundo épico de nuestro servidor!"
 
 msgid "Faça parte da nossa comunidade"
 msgstr "Sea parte de nuestra comunidad"
@@ -5780,12 +7178,6 @@ msgstr "Cambiar mi contraseña"
 msgid "Por favor, corrija os erros abaixo."
 msgstr "Corrija los errores a continuación."
 
-msgid "🔐 Gerador de credenciais"
-msgstr "🔐 Generador de credenciales"
-
-msgid "Digite a senha que deseja proteger: "
-msgstr "Ingrese la contraseña que desea proteger:"
-
 msgid ""
 "Notificações staff só podem ser enviadas para usuários staff ou "
 "superusuários."
@@ -5795,6 +7187,118 @@ msgstr ""
 
 msgid "Você não tem permissão para criar notificações públicas staff."
 msgstr "No se le permite crear notificaciones públicas del personal."
+
+#~ msgid "Purchase of coins via ADMINISTRATOR"
+#~ msgstr "Compra de monedas a través del administrador"
+
+#~ msgid "Payment System"
+#~ msgstr "Sistema de pago"
+
+#~ msgid "Wallet"
+#~ msgstr "Billetera"
+
+#~ msgid "Configurações de Endpoints da API"
+#~ msgstr "Configuración de punto final de API"
+
+#~ msgid "Saldo Atual"
+#~ msgstr "Saldo actual"
+
+#~ msgid "Últimas Transações"
+#~ msgstr "Últimas transacciones"
+
+#~ msgid "Nenhuma transação registrada ainda."
+#~ msgstr "No hay transacción registrada todavía."
+
+#~ msgid "Pedidos Pendentes"
+#~ msgstr "Pedidos Pendentes"
+
+#~ msgid "Saldo insuficiente para transferência."
+#~ msgstr "Balance insuficiente para la transferencia."
+
+#~ msgid "Voltar para o perfil"
+#~ msgstr "Voltar para o perfil"
+
+#~ msgid "Perfil/Biografia"
+#~ msgstr "Perfil/Biografia"
+
+#~ msgid "Endereço de Email"
+#~ msgstr "Dirección de correo electrónico"
+
+#~ msgid "N/A"
+#~ msgstr "N / A"
+
+#~ msgid "000.000.000-00"
+#~ msgstr "000.000.000-00"
+
+#~ msgid "O sucesso não é garantido, mas o fracasso é certo se você não tentar."
+#~ msgstr ""
+#~ "El éxito no está garantizado, pero el fracaso es seguro si no lo intenta."
+
+#~ msgid "Ver Lista de Amigos"
+#~ msgstr "Ver Lista de Amigos"
+
+#~ msgid "Conta não verificada"
+#~ msgstr "Cuenta no verificada"
+
+#~ msgid "Seu e-mail ainda não foi verificado."
+#~ msgstr "Su correo electrónico aún no ha sido revisado."
+
+#~ msgid "Ativar Autenticação 2FA"
+#~ msgstr "Activar la autenticación 2fa"
+
+#~ msgid "Seu e-mail"
+#~ msgstr "Tu correo electrónico"
+
+#~ msgid "Password reset email sent!"
+#~ msgstr "¡Restablecer la contraseña por correo electrónico enviado!"
+
+#~ msgid "Deixar de Ser Amigo"
+#~ msgstr "Deja de ser un amigo"
+
+#~ msgid "Nenhum amigo adicionado ainda."
+#~ msgstr "No hay amigos agregados todavía."
+
+#~ msgid "Adicionar Novos Amigos"
+#~ msgstr "Agregar nuevos amigos"
+
+#~ msgid "Enviar Pedido"
+#~ msgstr "Enviar Pedido"
+
+#~ msgid "Nenhum usuário disponível para adicionar."
+#~ msgstr "No hay usuario disponible para agregar."
+
+#~ msgid "Convites Pendentes"
+#~ msgstr "Invitaciones pendientes"
+
+#~ msgid "Nenhum convite de amizade recebido."
+#~ msgstr "No recibió invitación a la amistad."
+
+#~ msgid "Somente uma solicitação pendente pode existir por vez."
+#~ msgstr "Solo puede existir una solicitud pendiente a la vez."
+
+#~ msgid "Data da Solicitação:"
+#~ msgstr "Fecha de solicitud:"
+
+#~ msgid "Situação"
+#~ msgstr "Situación"
+
+#~ msgid "Ver Solicitação"
+#~ msgstr "Ver solicitud"
+
+#~ msgid "Verificação de E-mail"
+#~ msgstr "Cheque por correo electrónico"
+
+#~ msgid "Jogadores Online Agora"
+#~ msgstr "Jugadores en línea ahora"
+
+#~ msgid "O campo de batalha está ativo!"
+#~ msgstr "¡El campo de batalla está activo!"
+
+#~ msgid "🔐 Gerador de credenciais"
+#~ msgstr "🔐 Generador de credenciales"
+
+#~ msgid "Digite a senha que deseja proteger: "
+#~ msgstr "Ingrese la contraseña que desea proteger:"
 
 #~ msgid "O arquivo é muito grande. Tente um arquivo menor que 20MB."
 #~ msgstr "El archivo es muy grande. Pruebe un archivo de menos de 20 MB."
@@ -5823,12 +7327,6 @@ msgstr "No se le permite crear notificaciones públicas del personal."
 #~ msgid "PvP & Sieges"
 #~ msgstr "PvP y Sieges"
 
-#~ msgid ""
-#~ "Domine castelos, lute por território e mostre sua força no campo de batalha."
-#~ msgstr ""
-#~ "Castillos Domine, lucha territorio y muestran tu fuerza en el campo de "
-#~ "batalla."
-
 #~ msgid "Conteúdo exclusivo com recompensas únicas para jogadores dedicados."
 #~ msgstr "Contenido exclusivo con recompensas únicas para jugadores dedicados."
 
@@ -5841,13 +7339,6 @@ msgstr "No se le permite crear notificaciones públicas del personal."
 #~ msgid "Download & Instalação"
 #~ msgstr "Descargar e instalación"
 
-#~ msgid ""
-#~ "Baixe agora o cliente e patch oficial e comece sua jornada em nosso "
-#~ "servidor."
-#~ msgstr ""
-#~ "Descargue ahora el cliente oficial y el parche y comience su viaje en "
-#~ "nuestro servidor."
-
 #~ msgid "Baixar Patch"
 #~ msgstr "Patch de descarga"
 
@@ -5856,13 +7347,6 @@ msgstr "No se le permite crear notificaciones públicas del personal."
 
 #~ msgid "Junte-se à Comunidade"
 #~ msgstr "Únete a la comunidad"
-
-#~ msgid ""
-#~ "Conecte-se com outros jogadores, tire dúvidas e participe dos eventos via "
-#~ "Discord."
-#~ msgstr ""
-#~ "Conéctese con otros jugadores, haga preguntas y participe en eventos a "
-#~ "través de Discord."
 
 #~ msgid "Entrar no Discord"
 #~ msgstr "Entrar no Discord"
@@ -5890,48 +7374,14 @@ msgstr "No se le permite crear notificaciones públicas del personal."
 #~ msgid "Click here to select the objects across all pages"
 #~ msgstr "Haga clic aquí para seleccionar los objetos en todas las páginas"
 
-#, python-format
-#~ msgid ""
-#~ "\n"
-#~ "                            Select all %(total_count)s %(module_name)s"
-#~ msgstr ""
-#~ "\n"
-#~ "Seleccione todo %(total_count)s S %(module_name)s S"
-
 #~ msgid "Clear selection"
 #~ msgstr "Selección clara"
-
-#~ msgid ""
-#~ "First, enter a username and password. Then, you'll be able to edit more user"
-#~ " options."
-#~ msgstr ""
-#~ "Primero, ingrese un nombre de usuario y contraseña. Luego, podrá editar más "
-#~ "opciones de usuario."
 
 #~ msgid "Enter a username and password."
 #~ msgstr "Ingrese un nombre de usuario y contraseña."
 
-#, python-format
-#~ msgid ""
-#~ "\n"
-#~ "                            Digite uma nova senha para o usuário\n"
-#~ "                            <strong>%(username)s</strong>.\n"
-#~ "                        "
-#~ msgstr ""
-#~ "\n"
-#~ "Ingrese una nueva contraseña para el usuario\n"
-#~ "                            <strong>%(username)s S </strong>."
-
 #~ msgid "Por favor, corrija o erro abaixo."
 #~ msgstr "Corrija el error a continuación."
-
-#, python-format
-#~ msgid ""
-#~ "Add\n"
-#~ "                                %(name)s"
-#~ msgstr ""
-#~ "Agregar\n"
-#~ "                                %(name)s s"
 
 #, python-format
 #~ msgid "Add %(name)s"
@@ -5959,17 +7409,6 @@ msgstr "No se le permite crear notificaciones públicas del personal."
 #~ msgid "Confirmar Ação"
 #~ msgstr "Confirmar acción"
 
-#, python-format
-#~ msgid ""
-#~ "\n"
-#~ "                                Tem certeza de que deseja executar a ação \"%(action_name)s\" nos %(objects_name)s selecionados?\n"
-#~ "                                Esta ação não pode ser desfeita.\n"
-#~ "                            "
-#~ msgstr ""
-#~ "\n"
-#~ "¿Estás seguro de que quieres realizar la acción \" %(action_name)s s\" Nos %(objects_name)s s seleccionado?\n"
-#~ "                                Esta acción no se puede deshacer."
-
 #~ msgid "Objetos Selecionados"
 #~ msgstr "Objetos seleccionados"
 
@@ -5982,41 +7421,6 @@ msgstr "No se le permite crear notificaciones públicas del personal."
 #~ msgid "Delete"
 #~ msgstr "Borrar"
 
-#, python-format
-#~ msgid ""
-#~ "\n"
-#~ "                                    Deleting the %(object_name)s '%(escaped_object)s' would result in deleting\n"
-#~ "                                    related objects, but your account doesn't have permission to delete the\n"
-#~ "                                    following types of objects:\n"
-#~ "                                "
-#~ msgstr ""
-#~ "\n"
-#~ "Eliminar el %(object_name)s S ' %(escaped_object)s S' resultaría en eliminar\n"
-#~ "                                    objetos relacionados, pero su cuenta no tiene permiso para eliminar el\n"
-#~ "                                    siguientes tipos de objetos:"
-
-#, python-format
-#~ msgid ""
-#~ "\n"
-#~ "                                    Deleting the %(object_name)s ' %(escaped_object)s' would require deleting\n"
-#~ "                                    the following protected related objects:\n"
-#~ "                                "
-#~ msgstr ""
-#~ "\n"
-#~ "Eliminar el %(object_name)s S ' %(escaped_object)s S' requeriría eliminar\n"
-#~ "                                    Los siguientes objetos relacionados protegidos:"
-
-#, python-format
-#~ msgid ""
-#~ "\n"
-#~ "                                    Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"?\n"
-#~ "                                    All of the following related items will be deleted:\n"
-#~ "                                "
-#~ msgstr ""
-#~ "\n"
-#~ "¿Estás seguro de que quieres eliminar el %(object_name)s S \" %(escaped_object)s s\"?\n"
-#~ "                                    Se eliminarán todos los siguientes artículos relacionados:"
-
 #~ msgid "Objects"
 #~ msgstr "Objetos"
 
@@ -6025,31 +7429,6 @@ msgstr "No se le permite crear notificaciones públicas del personal."
 
 #~ msgid "Delete multiple objects"
 #~ msgstr "Eliminar múltiples objetos"
-
-#, python-format
-#~ msgid ""
-#~ "\n"
-#~ "                                        Deleting the selected %(objects_name)s would result in deleting related\n"
-#~ "                                        objects, but your account doesn't have permission to delete the following\n"
-#~ "                                        types of objects:\n"
-#~ "                                    "
-#~ msgstr "\n"
-
-#, python-format
-#~ msgid ""
-#~ "\n"
-#~ "                                        Deleting the selected %(objects_name)s would require deleting the\n"
-#~ "                                        following protected related objects:\n"
-#~ "                                    "
-#~ msgstr "\n"
-
-#, python-format
-#~ msgid ""
-#~ "\n"
-#~ "                                        Are you sure you want to delete the selected %(objects_name)s? All of the\n"
-#~ "                                        following objects and their related items will be deleted:\n"
-#~ "                                    "
-#~ msgstr "\n"
 
 #~ msgid "Change"
 #~ msgstr "Cambiar"
@@ -6076,13 +7455,6 @@ msgstr "No se le permite crear notificaciones públicas del personal."
 #~ msgid "Submit"
 #~ msgstr "Entregar"
 
-#~ msgid ""
-#~ "Below is a preview of data to be imported. If you are satisfied with the "
-#~ "results, click 'Confirm import'"
-#~ msgstr ""
-#~ "A continuación se muestra una vista previa de los datos a importar. Si está "
-#~ "satisfecho con los resultados, haga clic en 'Confirmar importar'"
-
 #~ msgid "Confirm import"
 #~ msgstr "Confirmar la importación"
 
@@ -6094,13 +7466,6 @@ msgstr "No se le permite crear notificaciones públicas del personal."
 
 #~ msgid "Some rows failed to validate"
 #~ msgstr "Algunas filas no pudieron validar"
-
-#~ msgid ""
-#~ "Please correct these errors in your data where possible, then reupload it "
-#~ "using the form above."
-#~ msgstr ""
-#~ "Corrija estos errores en sus datos cuando sea posible, luego vuelva a "
-#~ "cargarlos utilizando el formulario anterior."
 
 #~ msgid "Row"
 #~ msgstr "Fila"
@@ -6123,15 +7488,6 @@ msgstr "No se le permite crear notificaciones públicas del personal."
 #~ msgid "This importer will import the following fields: "
 #~ msgstr "Este importador importará los siguientes campos:"
 
-#~ msgid ""
-#~ "Something's wrong with your database installation. Make sure the appropriate"
-#~ " database tables have been created, and make sure the database is readable "
-#~ "by the appropriate user."
-#~ msgstr ""
-#~ "Algo está mal con la instalación de su base de datos. Asegúrese de que se "
-#~ "hayan creado las tablas de la base de datos apropiadas y asegúrese de que el"
-#~ " usuario apropiado sea legible."
-
 #~ msgid "Please correct the error below."
 #~ msgstr "Corrija el error a continuación."
 
@@ -6141,27 +7497,11 @@ msgstr "No se le permite crear notificaciones públicas del personal."
 #~ msgid "Date/time"
 #~ msgstr "Fecha/hora"
 
-#~ msgid ""
-#~ "Este objeto não tem um histórico de alterações. Provavelmente não foi "
-#~ "adicionado por meio deste site de administração."
-#~ msgstr ""
-#~ "Este objeto no tiene antecedentes de cambios. Probablemente no se agregó a "
-#~ "través de este sitio de administración."
-
 #~ msgid "Show all"
 #~ msgstr "Mostrar todo"
 
 #~ msgid "Save"
 #~ msgstr "Ahorrar"
-
-#, python-format
-#~ msgid ""
-#~ "\n"
-#~ "                                    %(full_result_count)s total\n"
-#~ "                                "
-#~ msgstr ""
-#~ "\n"
-#~ "%(full_result_count)s s total"
 
 #~ msgid "Save as new"
 #~ msgstr "Guardar como nuevo"
@@ -6174,15 +7514,6 @@ msgstr "No se le permite crear notificaciones públicas del personal."
 
 #~ msgid "Save and view"
 #~ msgstr "Guardar y ver"
-
-#~ msgid "Tem certeza que deseja excluir os temas selecionados?"
-#~ msgstr "¿Estás seguro de que quieres eliminar los temas seleccionados?"
-
-#~ msgid "Esta ação não pode ser desfeita!"
-#~ msgstr "¡Esta acción no se puede deshacer!"
-
-#~ msgid "Confirmar exclusão"
-#~ msgstr "Confirmar la exclusión"
 
 #~ msgid "Permissões"
 #~ msgstr "Permisos"
@@ -6295,11 +7626,12 @@ msgstr "No se le permite crear notificaciones públicas del personal."
 #~ msgid "date published"
 #~ msgstr "fecha publicada"
 
-msgid "Complete seu perfil!"
-msgstr "¡Completa tu perfil!"
+#~ msgid "Complete seu perfil!"
+#~ msgstr "¡Completa tu perfil!"
 
-msgid "Adicione seu nome, sobrenome e uma bio para melhorar sua experiência e conectar-se melhor com outros jogadores."
-msgstr "Agrega tu nombre, apellido y una biografía para mejorar tu experiencia y conectarte mejor con otros jugadores."
-
-msgid "Lembrar depois"
-msgstr "Recordar más tarde"
+#~ msgid ""
+#~ "Adicione seu nome, sobrenome e uma bio para melhorar sua experiência e "
+#~ "conectar-se melhor com outros jogadores."
+#~ msgstr ""
+#~ "Agrega tu nombre, apellido y una biografía para mejorar tu experiencia y "
+#~ "conectarte mejor con otros jugadores."
