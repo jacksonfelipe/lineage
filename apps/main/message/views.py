@@ -1,15 +1,10 @@
 from django.shortcuts import render, redirect
 from apps.main.home.decorator import conditional_otp_required
-from .models import Friendship, Chat, Message
+from .models import Friendship
 from apps.main.home.models import User
 from django.db.models import Q
 
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-
-from django.http import Http404
-from django.utils import timezone
-from django.core.cache import cache
 
 from utils.notifications import send_notification
 from django.urls import reverse
@@ -20,17 +15,11 @@ from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.vary import vary_on_cookie
 
-import json
 import logging
 logger = logging.getLogger(__name__)
 
 
-def create_or_get_chat(user, friend):
-    user1, user2 = sorted([user, friend], key=lambda u: u.id)
-
-    chat, created = Chat.objects.get_or_create(user1=user1, user2=user2)
-
-    return chat
+# Função movida para o consumer WebSocket
 
 
 @conditional_otp_required
@@ -286,110 +275,7 @@ def friends_list(request):
     return render(request, 'pages/friends.html', context)
 
 
-@conditional_otp_required
-def send_message(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        message_text = data.get('message')
-        friend_id = data.get('friend_id')
-
-        if not message_text or len(message_text) > 500:  # Exemplo de validação
-            return JsonResponse({'success': False, 'error': 'Mensagem inválida.'}, status=400)
-
-        friend = get_object_or_404(User, id=friend_id)
-        chat = create_or_get_chat(request.user, friend)
-
-        message = Message.objects.create(chat=chat, text=message_text, sender=request.user)
-
-        return JsonResponse({'success': True, 'message': message.text, 'timestamp': message.timestamp})
-
-    return JsonResponse({'success': False, 'error': 'Método não permitido.'}, status=405)
-
-
-@conditional_otp_required
-def load_messages(request, friend_id):
-    try:
-        friend = get_object_or_404(User, id=friend_id)
-        chat = create_or_get_chat(request.user, friend)
-
-        # Verificar se existem mensagens não lidas antes de marcá-las como lidas
-        unread_messages_count = chat.messages.filter(sender=friend, is_read=False).count()
-        has_unread_messages = unread_messages_count > 0
-
-        # Marcar as mensagens não lidas como lidas
-        chat.messages.filter(sender=friend, is_read=False).update(is_read=True)
-
-        value_limit = 500  # limita a quantidade de mensagens retornadas (caso a conversa seja muito grande)
-        messages = chat.messages.all().select_related('sender').order_by('timestamp')[:value_limit].values('text', 'timestamp', 'sender__username', 'is_read', 'sender__uuid', 'sender__avatar')
-        default_image = '/static/assets/img/team/generic_user.png'
-        custom_imagem = '/decrypted-file/home/user/avatar/'
-
-        formatted_messages = [
-            {
-                'text': msg['text'],
-                'sender': {'username': msg['sender__username'], "avatar_url": default_image if msg['sender__avatar'] is None else custom_imagem + str(msg['sender__uuid']) + '/'},
-                'timestamp': msg['timestamp'],
-                'is_read': msg['is_read']
-            }
-            for msg in messages
-        ]
-
-        return JsonResponse({
-            'success': True, 
-            'messages': formatted_messages,
-            'has_unread_messages': has_unread_messages  # Retorna se há novas mensagens não lidas
-        }, status=200)
-
-    except Http404 as e:
-        return JsonResponse({'success': False, 'error': str(e)}, status=404)
-    
-    except Exception as e:
-        return JsonResponse({'success': False, 'error': 'Ocorreu um erro inesperado.'}, status=400)
-
-
-@conditional_otp_required
-def get_unread_count(request):
-    # Obtenha todos os amigos aceitos
-    friendships = Friendship.objects.filter(user=request.user, accepted=True).values('friend')
-
-    # Crie um dicionário para armazenar as contagens de mensagens não lidas por amigo
-    unread_counts = {}
-    
-    for friendship in friendships:
-        friend_id = friendship['friend']
-        user1, user2 = sorted([request.user.id, friend_id])
-        
-        # Conte as mensagens não lidas que o amigo enviou para o usuário,
-        # excluindo mensagens enviadas pelo próprio usuário
-        unread_count = Message.objects.filter(
-            chat__user1=user1,  # O remetente
-            chat__user2=user2,  # O destinatário
-            is_read=False,
-            sender=friend_id  # Somente mensagens do amigo
-        ).count()
-
-        unread_counts[friend_id] = unread_count
-
-    return JsonResponse({'unread_counts': unread_counts}, status=200)
-
-
-@conditional_otp_required
-def set_user_active(request):
-    user = request.user
-    if user.is_authenticated:
-        # Armazena o timestamp da última atividade do usuário
-        cache.set(f"user_activity_{user.id}", timezone.now(), timeout=300)  # 300 segundos = 5 minutos
-        return JsonResponse({'status': 'success'})
-    return JsonResponse({'status': 'error'}, status=400)
-
-
-@conditional_otp_required
-def check_user_activity(request, user_id):
-    last_activity = cache.get(f"user_activity_{user_id}")
-    if last_activity:
-        is_online = (timezone.now() - last_activity).total_seconds() < 300  # Checa se a última atividade foi nos últimos 5 minutos
-        return JsonResponse({'is_online': is_online})
-    return JsonResponse({'is_online': False})
+# Endpoints AJAX removidos - agora usando WebSocket
 
 
 @conditional_otp_required

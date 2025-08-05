@@ -14,21 +14,40 @@ from django.core.asgi import get_asgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 
-# Tenta importar as rotas do administrator, mas trata o erro caso o app não exista
-try:
-    from apps.main.administrator.routing import websocket_urlpatterns as admin_ws
-except ImportError:
-    admin_ws = []
-try:
-    from apps.main.notification.routing import websocket_urlpatterns as notif_ws
-except ImportError:
-    notif_ws = []
+# Configurar Django antes de importar os apps
+import django
+django.setup()
+
+def get_websocket_urlpatterns():
+    """Carrega as rotas WebSocket de forma segura"""
+    patterns = []
+    
+    # Tenta importar as rotas do administrator
+    try:
+        from apps.main.administrator.routing import websocket_urlpatterns as admin_ws
+        patterns.extend(admin_ws)
+    except ImportError:
+        pass
+    
+    # Tenta importar as rotas de notificação
+    try:
+        from apps.main.notification.routing import websocket_urlpatterns as notif_ws
+        patterns.extend(notif_ws)
+    except ImportError:
+        pass
+    
+    # Tenta importar as rotas de mensagem
+    try:
+        from apps.main.message.routing import websocket_urlpatterns as message_ws
+        patterns.extend(message_ws)
+    except ImportError:
+        pass
+    
+    return patterns
 
 application = ProtocolTypeRouter({
     'http': get_asgi_application(),
     'websocket': AuthMiddlewareStack(
-        URLRouter(
-            admin_ws + notif_ws
-        )
+        URLRouter(get_websocket_urlpatterns())
     ),
 })

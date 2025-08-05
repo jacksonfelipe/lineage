@@ -14,13 +14,7 @@ urlpatterns = [
     path('remove-friend/<int:friendship_id>/', remove_friend, name='remove_friend'),
     path('friends-list/', friends_list, name='friends_list'),
 
-    # Novas URLs AJAX
+    # URLs AJAX mantidas apenas para funcionalidades não relacionadas ao chat
     path('api/search-users/', search_users_ajax, name='search_users_ajax'),
     path('api/friends-stats/', get_friends_stats, name='get_friends_stats'),
-
-    path('api/send-message/', send_message, name='send_message'),
-    path('api/load-messages/<int:friend_id>/', load_messages, name='load_messages'),
-    path('api/get_unread_count/', get_unread_count, name='unread_count'),
-    path('api/set-user-active/', set_user_active, name='set_user_active'),
-    path('api/check-user-activity/<int:user_id>/', check_user_activity, name='check_user_activity'),
 ]
