@@ -11,29 +11,30 @@ body {
 }
 
 .economy-bg {
-    background: radial-gradient(circle at top center, #1e1e1e, #0d0d0d);
+    background: radial-gradient(ellipse at center, #1a1a2e 0%, #121220 100%);
     color: #f8f9fa;
     padding: 50px 0;
 }
 
 .weapon-card {
-    background: #2b2b2b;
+    background: linear-gradient(to bottom right, #1a1a2e, #121220);
+    border: 2px solid #6f42c1;
     border-radius: 12px;
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.07);
+    box-shadow: 0 0 15px rgba(111, 66, 193, 0.5), 0 0 25px rgba(13, 202, 240, 0.3);
     padding: 20px;
     color: #fff;
 }
 
 .monster-card {
-    background: linear-gradient(145deg, #262626, #1c1c1c);
-    border: 2px solid #6a5acd;
+    background: linear-gradient(to bottom right, #1a1a2e, #121220);
+    border: 2px solid #6f42c1;
     border-radius: 12px;
     padding: 15px;
     margin-bottom: 18px;
     display: flex;
     gap: 15px;
     align-items: center;
-    box-shadow: 0 0 10px rgba(106, 90, 205, 0.4);
+    box-shadow: 0 0 15px rgba(111, 66, 193, 0.5), 0 0 25px rgba(13, 202, 240, 0.3);
     transition: transform 0.2s ease-in-out, box-shadow 0.3s;
 }
 
@@ -98,10 +99,11 @@ body {
 .enchant-section {
     margin-top: 40px;
     padding: 30px;
-    background: linear-gradient(to right, #2c2c2c, #1e1e1e);
+    background: linear-gradient(to bottom right, #1a1a2e, #121220);
+    border: 2px solid #6f42c1;
     border-radius: 12px;
     text-align: center;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    box-shadow: 0 0 15px rgba(111, 66, 193, 0.5), 0 0 25px rgba(13, 202, 240, 0.3);
 }
 
 .enchant-section h3 {
@@ -234,9 +236,6 @@ body {
     </div>
 </div>
 
-<audio id="respawnSound" src="{% static 'sounds/respawn.mp3' %}" preload="auto"></audio>
-<audio id="attackSound" src="{% static 'sounds/attack.mp3' %}" preload="auto"></audio>
-
 <!-- Modal de Compra -->
 <div class="modal fade" id="buyTokensModal" tabindex="-1">
   <div class="modal-dialog">
@@ -304,24 +303,6 @@ function spawnMagicParticles(element) {
 
     setTimeout(() => particle.remove(), 1000);
 }
-
-function playSound(id) {
-    const audio = document.getElementById(id);
-    if (audio) {
-        audio.currentTime = 0;
-        audio.play().catch(() => {});  // ignora erro se autoplay falhar
-    }
-}
-
-// Adicione dentro do respawn, após spawnMagicParticles(monsterCard);
-playSound("respawnSound");
-
-// Também adicione isso para ataque (opcional):
-document.querySelectorAll("form[action*='fight-monster']").forEach(form => {
-    form.addEventListener("submit", e => {
-        playSound("attackSound");
-    });
-});
 
 function getCookie(name) {
     let cookieValue = null;

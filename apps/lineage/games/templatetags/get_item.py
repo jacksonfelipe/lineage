@@ -29,3 +29,5 @@ def get_item_list_json(box_type):
             'image_url': item.image.url if item.image else None
         } for item in unique_items
     ])
+
+

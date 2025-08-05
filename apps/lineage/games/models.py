@@ -119,6 +119,16 @@ class BoxType(BaseModel):
             return 'rare'
         return 'common'
 
+    def get_highest_rarity(self):
+        """Retorna a maior raridade disponível na caixa baseada nas chances"""
+        if self.chance_legendary > 0:
+            return 'legendary'  # Nome correto do arquivo
+        elif self.chance_epic > 0:
+            return 'epic'
+        elif self.chance_rare > 0:
+            return 'rare'
+        return 'common'
+
     class Meta:
         verbose_name = _("Box Type")
         verbose_name_plural = _("Box Types")
