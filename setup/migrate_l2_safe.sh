@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Script de migração segura L2 → PDL
-# Autor: Sistema PDL
+# Script de migração segura L2 → L2JPremium
+# Autor: Sistema L2JPremium
 # Versão: 1.0
 
 set -e  # Para em caso de erro
@@ -68,12 +68,12 @@ if ! $DOCKER_COMPOSE ps | grep -q "site.*Up"; then
 fi
 
 echo "============================================================"
-echo "🔄 MIGRAÇÃO SEGURA L2 → PDL"
+echo "🔄 MIGRAÇÃO SEGURA L2 → L2JPremium"
 echo "============================================================"
 
-# 1. Backup do banco PDL
-log_info "Criando backup do banco PDL..."
-BACKUP_FILE="backup_pdl_$(date +%Y%m%d_%H%M%S).json"
+# 1. Backup do banco L2JPremium
+log_info "Criando backup do banco L2JPremium.."
+BACKUP_FILE="backup_l2jpremium_$(date +%Y%m%d_%H%M%S).json"
 $DOCKER_COMPOSE exec site python3 manage.py dumpdata > "$BACKUP_FILE"
 log_success "Backup criado: $BACKUP_FILE"
 
@@ -93,7 +93,7 @@ $DOCKER_COMPOSE exec site python3 manage.py migrate_l2_accounts --dry-run
 # 4. Confirmação do usuário
 echo
 log_warning "ATENÇÃO: Você está prestes a executar a migração real!"
-echo "Isso irá criar usuários no PDL baseados nas contas do L2."
+echo "Isso irá criar usuários no L2JPremium baseados nas contas do L2."
 echo
 read -p "Continuar com a migração real? (y/N): " -n 1 -r
 echo

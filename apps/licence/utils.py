@@ -95,7 +95,7 @@ class LicenseValidator:
 
     def validate_contract_via_dns(self, contract_number: str, client_domain: str) -> tuple[bool, str]:
         """
-        Valida o número do contrato via registro DNS TXT em denky.dev.br
+        Valida o número do contrato via registro DNS TXT em l2jpremium.com
         """
         # Em modo DEBUG, pula a validação DNS para facilitar desenvolvimento
         if settings.DEBUG:
@@ -103,7 +103,7 @@ class LicenseValidator:
         
         try:
             # Formata o registro TXT esperado
-            txt_record_name = f"pdl-contract-{contract_number}.denky.dev.br"
+            txt_record_name = f"l2jpremium-contract-{contract_number}.l2jpremium.com"
             
             # Resolve o registro TXT
             resolver = dns.resolver.Resolver()

@@ -1,6 +1,6 @@
 # Configuração de Login Social
 
-Este documento explica como configurar o sistema de login social no PDL.
+Este documento explica como configurar o sistema de login social no L2JPremium.
 
 ## Variáveis de Ambiente
 

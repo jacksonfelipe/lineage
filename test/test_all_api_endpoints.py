@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script para testar TODOS os endpoints da API - Lineage 2 PDL
+Script para testar TODOS os endpoints da API - Lineage 2 L2JPremium
 """
 
 import requests
@@ -247,7 +247,7 @@ class CompleteAPITester:
 
 def main():
     """Função principal"""
-    print("🔧 Teste Completo de TODOS os Endpoints da API - Lineage 2 PDL")
+    print("🔧 Teste Completo de TODOS os Endpoints da API - Lineage 2 L2JPremium")
     print("=" * 80)
     
     # Solicita URL base

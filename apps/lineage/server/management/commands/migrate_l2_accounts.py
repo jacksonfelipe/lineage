@@ -11,7 +11,7 @@ User = get_user_model()
 
 
 class Command(BaseCommand):
-    help = 'Migra contas do banco do L2 para o PDL seguindo regras específicas'
+    help = 'Migra contas do banco do L2 para o L2JPremium seguindo regras específicas'
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -89,15 +89,15 @@ class Command(BaseCommand):
             return []
 
     def check_email_exists(self, email):
-        """Verifica se o email já existe no PDL"""
+        """Verifica se o email já existe no L2JPremium"""
         return User.objects.filter(email=email).exists()
 
     def check_username_exists(self, username):
-        """Verifica se o username já existe no PDL"""
+        """Verifica se o username já existe no L2JPremium"""
         return User.objects.filter(username=username).exists()
 
-    def create_pdl_user(self, login, email, password, access_level, created_time):
-        """Cria usuário no PDL"""
+    def create_l2jpremium_user(self, login, email, password, access_level, created_time):
+        """Cria usuário no L2JPremium"""
         try:
             # Cria o usuário
             user = User.objects.create_user(
@@ -203,7 +203,7 @@ class Command(BaseCommand):
                     stats['skipped'] += 1
                     continue
 
-                # Verifica se email já existe no PDL
+                # Verifica se email já existe no L2JPremium
                 original_email = email
                 if self.check_email_exists(email):
                     email = f"{prefix}{email}"
@@ -224,7 +224,7 @@ class Command(BaseCommand):
                 else:
                     # Cria usuário com transação
                     with transaction.atomic():
-                        success, user = self.create_pdl_user(
+                        success, user = self.create_l2jpremium_user(
                             login, email, password, access_level, created_time
                         )
                     
@@ -247,8 +247,8 @@ class Command(BaseCommand):
         password_length = options['password_length']
         batch_size = options['batch_size']
 
-        self.stdout.write(self.style.SUCCESS('🚀 INICIANDO MIGRAÇÃO L2 → PDL'))
-        
+        self.stdout.write(self.style.SUCCESS('🚀 INICIANDO MIGRAÇÃO L2 → L2JPremium'))
+
         if dry_run:
             self.stdout.write(self.style.WARNING('⚠️  MODO DE TESTE - Nenhum usuário será criado'))
 
@@ -281,7 +281,7 @@ class Command(BaseCommand):
         self.stdout.write(f'Usernames já existentes: {stats["existing_usernames"]}')
         self.stdout.write(f'Erros: {stats["errors"]}')
         self.stdout.write(f'Emails duplicados no L2: {stats["l2_duplicates"]}')
-        self.stdout.write(f'Conflitos com PDL resolvidos: {stats["email_conflicts"]}')
+        self.stdout.write(f'Conflitos com L2JPremium resolvidos: {stats["email_conflicts"]}')
         
         if dry_run:
             self.stdout.write('\n⚠️  MODO DE TESTE - Execute sem --dry-run para criar os usuários')

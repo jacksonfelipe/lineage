@@ -1,4 +1,4 @@
-# Guia Básico do Sistema Lineage 2 PDL
+# Guia Básico do Sistema Lineage 2 L2JPremium
 
 ## 🎮 Primeiros Passos
 

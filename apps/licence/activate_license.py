@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script interativo para ativação de licenças PDL
+Script interativo para ativação de licenças L2JPremium
 """
 
 import os
@@ -23,7 +23,7 @@ from apps.licence.models import License
 def print_header():
     """Exibe o cabeçalho do script"""
     print("=" * 60)
-    print("🔑 PDL - Sistema de Ativação de Licenças")
+    print("🔑 L2JPremium - Sistema de Ativação de Licenças")
     print("=" * 60)
     print()
 
@@ -47,7 +47,7 @@ def get_user_input(prompt, required=True, default=""):
 
 def create_free_license():
     """Cria uma licença gratuita"""
-    print("\n📋 Criando licença PDL FREE...")
+    print("\n📋 Criando licença L2JPremium FREE...")
     print("-" * 40)
     
     domain = get_user_input("🌐 Domínio (ex: meusite.com)")
@@ -61,7 +61,7 @@ def create_free_license():
     )
     
     if success:
-        print("✅ Licença PDL FREE criada com sucesso!")
+        print("✅ Licença L2JPremium FREE criada com sucesso!")
         print(f"🔑 Chave: {result}")
         return result
     else:
@@ -71,7 +71,7 @@ def create_free_license():
 
 def create_pro_license():
     """Cria uma licença profissional"""
-    print("\n📋 Criando licença PDL PRO...")
+    print("\n📋 Criando licença L2JPremium PRO...")
     print("-" * 40)
     
     domain = get_user_input("🌐 Domínio (ex: meusite.com)")
@@ -86,7 +86,7 @@ def create_pro_license():
     )
     
     if success:
-        print("✅ Licença PDL PRO criada com sucesso!")
+        print("✅ Licença L2JPremium PRO criada com sucesso!")
         print(f"🔑 Chave: {result}")
         return result
     else:
@@ -156,8 +156,8 @@ def main_menu():
         print("\n" + "=" * 40)
         print("🎯 Menu Principal")
         print("=" * 40)
-        print("1. 📋 Criar licença PDL FREE")
-        print("2. ⭐ Criar licença PDL PRO")
+        print("1. 📋 Criar licença L2JPremium FREE")
+        print("2. ⭐ Criar licença L2JPremium PRO")
         print("3. 🔑 Ativar licença existente")
         print("4. 📊 Ver informações da licença atual")
         print("5. 🔍 Verificar status da licença")

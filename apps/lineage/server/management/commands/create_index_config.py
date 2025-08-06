@@ -13,11 +13,11 @@ class Command(BaseCommand):
             return
 
         config = IndexConfig.objects.create(
-            nome_servidor="Lineage 2 PDL",
+            nome_servidor="Lineage 2 L2JPremium",
             descricao_servidor="Onde Lendas Nascem, Heróis Lutam e a Glória É Eterna.",
-            link_patch="https://pdl.denky.dev.br/",
-            link_cliente="https://pdl.denky.dev.br/",
-            link_discord="https://pdl.denky.dev.br/",
+            link_patch="https://L2JPremium.com/",
+            link_cliente="https://L2JPremium.com/",
+            link_discord="https://L2JPremium.com/",
             trailer_video_id="CsNutvmrHIA?si=2lF1z1jPFkf8uGJB",
             jogadores_online_texto="jogadores online Agora"
         )

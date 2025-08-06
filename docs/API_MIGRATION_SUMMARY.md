@@ -109,7 +109,7 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Lineage 2 PDL API',
+    'TITLE': 'Lineage 2 L2JPremium API',
     'DESCRIPTION': 'API pública para servidores privados de Lineage 2',
     'VERSION': '1.0.0',
     # ...

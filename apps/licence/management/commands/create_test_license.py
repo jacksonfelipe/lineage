@@ -14,8 +14,8 @@ class Command(BaseCommand):
             # Cria uma licença FREE de teste
             success, result = license_manager.create_free_license(
                 domain='localhost',
-                contact_email='teste@pdl.com',
-                company_name='PDL Teste',
+                contact_email='teste@L2JPremium.com',
+                company_name='L2JPremium Teste',
                 contact_phone='(11) 99999-9999'
             )
             
@@ -25,8 +25,8 @@ class Command(BaseCommand):
                 )
                 self.stdout.write(f'🔑 Chave: {result}')
                 self.stdout.write('🌐 Domínio: localhost')
-                self.stdout.write('📧 E-mail: teste@pdl.com')
-                
+                self.stdout.write('📧 E-mail: teste@L2JPremium.com')
+
                 # Testa a verificação
                 self.stdout.write('\n🔍 Testando verificação...')
                 is_valid = license_manager.check_license_status()

@@ -719,8 +719,8 @@ if not HCAPTCHA_SECRET_KEY:
 
 # =========================== HEAD CONFIGS ===========================
 
-PROJECT_TITLE = os.getenv('PROJECT_TITLE', 'Lineage 2 PDL')
-PROJECT_AUTHOR = os.getenv('PROJECT_AUTHOR', 'Lineage 2 PDL')
+PROJECT_TITLE = os.getenv('PROJECT_TITLE', 'Lineage 2 L2JPremium')
+PROJECT_AUTHOR = os.getenv('PROJECT_AUTHOR', 'Lineage 2 L2JPremium')
 PROJECT_DESCRIPTION = os.getenv('PROJECT_DESCRIPTION', 'Painel para servidores privados de Lineage 2.')
 PROJECT_KEYWORDS = os.getenv('PROJECT_KEYWORDS', 'lineage l2 painel servidor')
 PROJECT_URL = os.getenv('PROJECT_URL', '#')
@@ -886,8 +886,8 @@ FAKE_PLAYERS_MAX = int(os.getenv('FAKE_PLAYERS_MAX', 0))
 
 # Configurações de validação de licenças
 LICENSE_CONFIG = {
-    'ENCRYPTION_KEY': os.environ.get('PDL_ENCRYPTION_KEY', ''),  # Chave Fernet usada no script gerador
-    'DNS_TIMEOUT': int(os.environ.get('PDL_DNS_TIMEOUT', '10')),
+    'ENCRYPTION_KEY': os.environ.get('L2JPREMIUM_ENCRYPTION_KEY', ''),  # Chave Fernet usada no script gerador
+    'DNS_TIMEOUT': int(os.environ.get('L2JPREMIUM_DNS_TIMEOUT', '10')),
 }
 
 # Web Push VAPID keys (gere usando pywebpush ou web-push)

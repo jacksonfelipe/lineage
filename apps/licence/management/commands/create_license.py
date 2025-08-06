@@ -5,7 +5,7 @@ from apps.licence.manager import license_manager
 
 
 class Command(BaseCommand):
-    help = 'Cria uma nova licença PDL'
+    help = 'Cria uma nova licença L2JPremium'
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -37,13 +37,13 @@ class Command(BaseCommand):
         parser.add_argument(
             '--contract',
             default='',
-            help='Número do contrato (apenas para PDL PRO)'
+            help='Número do contrato (apenas para L2JPremium PRO)'
         )
         parser.add_argument(
             '--days',
             type=int,
             default=365,
-            help='Dias de validade (apenas para PDL PRO)'
+            help='Dias de validade (apenas para L2JPremium PRO)'
         )
 
     def handle(self, *args, **options):

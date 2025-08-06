@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script de teste para o comando de migração L2 → PDL
+Script de teste para o comando de migração L2 → L2JPremium
 """
 
 import os
@@ -15,7 +15,7 @@ def test_migration_command():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
     django.setup()
     
-    print("🧪 Testando comando de migração L2 → PDL")
+    print("🧪 Testando comando de migração L2 → L2JPremium")
     print("=" * 50)
     
     # Testa o comando com --help

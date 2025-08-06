@@ -1,4 +1,4 @@
-# PDL 1.10.0 - Sistema de Licenciamento Completo
+# L2JPremium 1.10.0 - Sistema de Licenciamento Completo
 
 ## Painel Definitivo Lineage
 ### Sistema de Licenciamento Empresarial com Validação DNS e Criptografia Avançada
@@ -27,7 +27,7 @@
 
 ## 🚀 Visão Geral
 
-A versão 1.10.0 do Painel Definitivo Lineage (PDL) introduz um sistema de licenciamento empresarial completo, revolucionando a forma como servidores privados gerenciam suas licenças com segurança máxima, validação DNS e controle granular de funcionalidades.
+A versão 1.10.0 do Painel Definitivo Lineage (L2JPremium) introduz um sistema de licenciamento empresarial completo, revolucionando a forma como servidores privados gerenciam suas licenças com segurança máxima, validação DNS e controle granular de funcionalidades.
 
 ### Principais Características
 
@@ -46,7 +46,7 @@ A versão 1.10.0 do Painel Definitivo Lineage (PDL) introduz um sistema de licen
 
 ## 🔐 Tipos de Licença
 
-### PDL FREE - Licença Gratuita
+### L2JPremium FREE - Licença Gratuita
 
 **Recursos Incluídos:**
 - Funcionalidades essenciais do painel
@@ -60,7 +60,7 @@ A versão 1.10.0 do Painel Definitivo Lineage (PDL) introduz um sistema de licen
 - Sem código fonte
 - Sem serviços de instalação
 
-### PDL PRO - Licença Profissional
+### L2JPremium PRO - Licença Profissional
 
 **Recursos Incluídos:**
 - Todas as funcionalidades do painel
@@ -81,13 +81,13 @@ A versão 1.10.0 do Painel Definitivo Lineage (PDL) introduz um sistema de licen
 
 ## 🌐 Validação DNS TXT com Criptografia Avançada
 
-A validação de contratos PDL PRO é feita exclusivamente via registro DNS TXT no domínio **denky.dev.br**. Não há consulta a API ou DNS do cliente.
+A validação de contratos L2JPremium PRO é feita exclusivamente via registro DNS TXT no domínio **l2jpremium.com**. Não há consulta a API ou DNS do cliente.
 
 ### Exemplo de Registro DNS
 
 ```
 # Exemplo de registro DNS TXT
-pdl-contract-CONTRATO-2024-001.denky.dev.br TXT "<valor_criptografado>"
+premium-contract-CONTRATO-2024-001.l2jprmeium.com TXT "<valor_criptografado>"
 ```
 
 O valor criptografado deve ser gerado pelo script oficial do DENKY, usando a mesma chave Fernet configurada no projeto do cliente.
@@ -143,7 +143,7 @@ POST /licence/api/activate/
 **Parâmetros:**
 ```json
 {
-    "license_key": "PDL-XXXX-XXXX-XXXX",
+    "license_key": "PREMIUM-XXXX-XXXX-XXXX",
     "domain": "exemplo.com",
     "contact_email": "admin@exemplo.com",
     "company_name": "Empresa Exemplo",
@@ -170,7 +170,7 @@ GET /licence/api/status/
     "success": true,
     "is_valid": true,
     "license_info": {
-        "license_key": "PDL-XXXX-XXXX-XXXX",
+        "license_key": "PREMIUM-XXXX-XXXX-XXXX",
         "license_type": "pro",
         "status": "active",
         "domain": "exemplo.com",
@@ -264,7 +264,7 @@ curl "http://exemplo.com/licence/api/features/?feature=support"
 curl -X POST http://exemplo.com/licence/api/activate/ \
   -H "Content-Type: application/json" \
   -d '{
-    "license_key": "PDL-XXXX-XXXX-XXXX",
+    "license_key": "PREMIUM-XXXX-XXXX-XXXX",
     "domain": "exemplo.com",
     "contact_email": "admin@exemplo.com"
   }'
@@ -354,7 +354,7 @@ python manage.py license_report --type=pro --status=active
 
 O sistema permite controle granular de funcionalidades baseado no tipo de licença:
 
-#### Funcionalidades PDL FREE
+#### Funcionalidades L2JPremium FREE
 
 **Recursos Básicos:**
 - Dashboard básico
@@ -367,7 +367,7 @@ O sistema permite controle granular de funcionalidades baseado no tipo de licen�
 - Sem suporte prioritário
 - Sem código fonte
 
-#### Funcionalidades PDL PRO
+#### Funcionalidades L2JPremium PRO
 
 **Recursos Completos:**
 - Dashboard completo
@@ -540,7 +540,7 @@ Remova qualquer configuração relacionada a API, domínio do cliente ou variáv
 O sistema do cliente irá buscar o registro DNS:
 
 ```
-pdl-contract-<numero_contrato>.denky.dev.br TXT "<valor_criptografado>"
+l2jpremium-contract-<numero_contrato>.l2jpremium.com TXT "<valor_criptografado>"
 ```
 
 E irá descriptografar usando a chave Fernet configurada. Se o número do contrato e domínio batem, a licença é válida.
@@ -603,7 +603,7 @@ if can_use_support:
 ```python
 # Ativar licença remotamente
 success, message = license_manager.activate_license(
-    license_key="PDL-XXXX-XXXX-XXXX",
+    license_key="PREMIUM-XXXX-XXXX-XXXX",
     domain="exemplo.com",
     contact_email="admin@exemplo.com",
     company_name="Empresa Exemplo"
@@ -651,12 +651,12 @@ A: As APIs de verificação são públicas, mas as de gerenciamento requerem aut
 
 ### Canais de Suporte
 
-**PDL FREE:**
+**PREMIUM FREE:**
 - Documentação online
 - Fórum da comunidade
 - GitHub Issues
 
-**PDL PRO:**
+**PREMIUM PRO:**
 - Suporte prioritário 24/7
 - Email dedicado
 - Chat em tempo real

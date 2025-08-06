@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 
-{% block title %}Lista de Licenças - PDL{% endblock %}
+{% block title %}Lista de Licenças - L2JPremium{% endblock %}
 
 {% block content %}
 <div class="container-fluid">
@@ -103,9 +103,9 @@
                             </td>
                             <td>
                                 {% if license.license_type == 'free' %}
-                                <span class="badge bg-info">PDL FREE</span>
+                                <span class="badge bg-info">L2JPremium FREE</span>
                                 {% else %}
-                                <span class="badge bg-success">PDL PRO</span>
+                                <span class="badge bg-success">L2JPremium PRO</span>
                                 {% endif %}
                             </td>
                             <td>
@@ -284,7 +284,7 @@
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                            PDL PRO
+                            L2JPremium PRO
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
                             {{ pro_licenses }}
@@ -304,7 +304,7 @@
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                            PDL FREE
+                            L2JPremium FREE
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
                             {{ free_licenses }}
