@@ -97,6 +97,7 @@ def chat_room(request, group_name):
         'solicitation': solicitation_name,
         'solicitation_context': solicitation_context,
         'type_chat': type_chat,
+        'solicitation_obj': solicitation,  # Passando o objeto completo da solicitação
     })
 
 

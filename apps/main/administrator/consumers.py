@@ -41,6 +41,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data_json['message']
         sender = text_data_json['sender']
         avatar_url = await self.get_avatar_url(sender)
+        timestamp = await self.get_current_timestamp()
         saved = await self.save_message(self.group_name, sender, message)
         
         if not saved:
@@ -55,7 +56,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'type': 'chat_message',
                 'message': message,
                 'sender': sender,
-                'avatar_url': avatar_url
+                'avatar_url': avatar_url,
+                'timestamp': timestamp
             }
         )
 
@@ -63,12 +65,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = event['message']
         sender = event['sender']
         avatar_url = event['avatar_url']
+        timestamp = event.get('timestamp', '')
 
         if sender != self.scope['user'].username:
             await self.send(text_data=json.dumps({
                 'message': message,
                 'sender': sender,
-                'avatar_url': avatar_url
+                'avatar_url': avatar_url,
+                'timestamp': timestamp
             }))
 
     @database_sync_to_async
@@ -97,6 +101,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return avatar_url if user.avatar else '/static/assets/img/team/generic_user.png'
         except User.DoesNotExist:
             return None
+
+    @database_sync_to_async
+    def get_current_timestamp(self):
+        from django.utils import timezone
+        return timezone.now().strftime("%d/%m/%Y, %H:%M:%S")
 
     @database_sync_to_async
     def user_has_access_to_protocol(self, user, protocol):
