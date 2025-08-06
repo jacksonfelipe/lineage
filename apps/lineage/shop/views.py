@@ -3,7 +3,7 @@ from apps.main.home.decorator import conditional_otp_required
 from django.contrib import messages
 from django.db import transaction
 from django.utils.translation import gettext as _
-from .models import ShopItem, ShopPackage, Cart, CartItem, CartPackage, PromotionCode, ShopPurchase
+from .models import ShopItem, ShopPackage, Cart, CartItem, CartPackage, PromotionCode, ShopPurchase, PurchaseItem
 from apps.lineage.wallet.signals import aplicar_transacao
 from apps.lineage.inventory.models import InventoryItem, Inventory
 from apps.lineage.wallet.models import Wallet
@@ -251,7 +251,7 @@ def checkout(request):
                         )
 
             # Registrar a compra
-            ShopPurchase.objects.create(
+            purchase = ShopPurchase.objects.create(
                 user=request.user,
                 character_name=personagem,
                 total_pago=total,
@@ -259,6 +259,38 @@ def checkout(request):
                 valor_dinheiro_usado=valor_dinheiro_usado,
                 promocao_aplicada=cart.promocao_aplicada
             )
+
+            # Registrar os itens individuais da compra
+            for cart_item in cart.cartitem_set.all():
+                PurchaseItem.objects.create(
+                    purchase=purchase,
+                    item_name=cart_item.item.nome,
+                    item_id=cart_item.item.item_id,
+                    quantidade=cart_item.quantidade * cart_item.item.quantidade,
+                    preco_unitario=cart_item.item.preco,
+                    preco_total=cart_item.item.preco * cart_item.quantidade,
+                    tipo_compra='item'
+                )
+
+            # Registrar os itens dos pacotes da compra
+            for cart_package in cart.cartpackage_set.all():
+                for pacote_item in cart_package.pacote.shoppackageitem_set.all():
+                    quantidade_total = pacote_item.quantidade * pacote_item.item.quantidade * cart_package.quantidade
+                    preco_unitario_pacote = cart_package.pacote.preco_total / sum(
+                        pi.quantidade * pi.item.quantidade 
+                        for pi in cart_package.pacote.shoppackageitem_set.all()
+                    )
+                    
+                    PurchaseItem.objects.create(
+                        purchase=purchase,
+                        item_name=pacote_item.item.nome,
+                        item_id=pacote_item.item.item_id,
+                        quantidade=quantidade_total,
+                        preco_unitario=preco_unitario_pacote,
+                        preco_total=preco_unitario_pacote * quantidade_total,
+                        tipo_compra='pacote',
+                        nome_pacote=cart_package.pacote.nome
+                    )
 
             # Limpar o carrinho
             cart.limpar()
@@ -278,7 +310,7 @@ def checkout(request):
 
 @conditional_otp_required
 def purchase_history(request):
-    purchases = ShopPurchase.objects.filter(user=request.user).order_by('-data_compra')
+    purchases = ShopPurchase.objects.filter(user=request.user).prefetch_related('items').order_by('-data_compra')
     return render(request, 'shop/purchases.html', {'purchases': purchases})
 
 

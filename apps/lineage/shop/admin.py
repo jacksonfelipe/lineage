@@ -3,6 +3,16 @@ from core.admin import BaseModelAdmin
 from .models import *
 
 
+class PurchaseItemInline(admin.TabularInline):
+    model = PurchaseItem
+    extra = 0
+    readonly_fields = ('item_name', 'item_id', 'quantidade', 'preco_unitario', 'preco_total', 'tipo_compra', 'nome_pacote')
+    can_delete = False
+    
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
 @admin.register(ShopItem)
 class ShopItemAdmin(BaseModelAdmin):
     list_display = ('nome', 'item_id', 'quantidade', 'preco', 'ativo')
@@ -46,10 +56,11 @@ class CartAdmin(BaseModelAdmin):
 
 @admin.register(ShopPurchase)
 class ShopPurchaseAdmin(BaseModelAdmin):
-    list_display = ('user', 'character_name', 'total_pago', 'valor_bonus_usado', 'valor_dinheiro_usado', 'data_compra')
+    list_display = ('user', 'character_name', 'total_pago', 'valor_bonus_usado', 'valor_dinheiro_usado', 'data_compra', 'get_items_count')
     list_filter = ('data_compra', 'promocao_aplicada')
     search_fields = ('user__username', 'character_name')
     ordering = ('-data_compra',)
+    inlines = [PurchaseItemInline]
     
     fieldsets = (
         ('Informações da Compra', {
@@ -63,6 +74,12 @@ class ShopPurchaseAdmin(BaseModelAdmin):
             'fields': ('promocao_aplicada', 'apoiador')
         }),
     )
+    
+    def get_items_count(self, obj):
+        """Retorna o número de itens na compra"""
+        return obj.items.count()
+    get_items_count.short_description = 'Itens'
+    get_items_count.admin_order_field = 'items__count'
 
 
 @admin.register(ShopPackageItem)
@@ -84,3 +101,33 @@ class CartPackageAdmin(BaseModelAdmin):
     list_display = ('cart', 'pacote', 'quantidade')
     search_fields = ('cart__user__username', 'pacote__nome')
     ordering = ('cart',)
+
+
+@admin.register(PurchaseItem)
+class PurchaseItemAdmin(BaseModelAdmin):
+    list_display = ('purchase', 'item_name', 'item_id', 'quantidade', 'preco_unitario', 'preco_total', 'tipo_compra', 'nome_pacote')
+    list_filter = ('tipo_compra', 'purchase__data_compra', 'purchase__user')
+    search_fields = ('item_name', 'purchase__user__username', 'purchase__character_name', 'nome_pacote')
+    ordering = ('-purchase__data_compra', 'item_name')
+    readonly_fields = ('purchase', 'item_name', 'item_id', 'quantidade', 'preco_unitario', 'preco_total', 'tipo_compra', 'nome_pacote')
+    
+    fieldsets = (
+        ('Informações da Compra', {
+            'fields': ('purchase',)
+        }),
+        ('Detalhes do Item', {
+            'fields': ('item_name', 'item_id', 'quantidade', 'tipo_compra', 'nome_pacote')
+        }),
+        ('Informações de Preço', {
+            'fields': ('preco_unitario', 'preco_total'),
+            'description': 'Valores registrados no momento da compra'
+        }),
+    )
+    
+    def has_add_permission(self, request):
+        """Desabilita a criação manual de itens de compra"""
+        return False
+    
+    def has_change_permission(self, request, obj=None):
+        """Desabilita a edição de itens de compra"""
+        return False
