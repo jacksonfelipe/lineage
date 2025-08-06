@@ -9,7 +9,6 @@ from apps.lineage.inventory.models import InventoryItem, Inventory
 from apps.lineage.wallet.models import Wallet
 from django.core.paginator import Paginator
 
-from utils.services import verificar_conquistas
 from apps.main.home.models import PerfilGamer
 
 from utils.dynamic_import import get_query_class

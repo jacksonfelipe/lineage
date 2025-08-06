@@ -17,7 +17,6 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from apps.main.home.models import PerfilGamer
-from utils.services import verificar_conquistas
 
 
 logger = logging.getLogger(__name__)
@@ -92,12 +91,6 @@ class SolicitationCreateView(LoginRequiredMixin, CreateView):
 
         perfil = PerfilGamer.objects.get(user=self.request.user)
         perfil.adicionar_xp(50)
-
-        # Verifica se alguma conquista foi desbloqueada
-        conquistas_desbloqueadas = verificar_conquistas(self.request.user, request=self.request)
-        if conquistas_desbloqueadas:
-            for conquista in conquistas_desbloqueadas:
-                messages.success(self.request, f"🏆 Você desbloqueou a conquista: {conquista.nome}!")
 
         try:
             # Envia notificação para os staffs

@@ -18,7 +18,6 @@ from django_otp.plugins.otp_totp.models import TOTPDevice
 from django_otp import login as otp_login
 
 from utils.render_theme_page import render_theme_page
-from utils.services import verificar_conquistas
 from utils.dynamic_import import get_query_class
 
 LineageStats = get_query_class("LineageStats")
@@ -78,13 +77,9 @@ def verificar_email(request, uidb64, token):
             perfil = PerfilGamer.objects.get(user=user)
             perfil.adicionar_xp(40)  # valor de XP por verificar e-mail
 
-            # Verifica conquistas
-            conquistas_desbloqueadas = verificar_conquistas(user, request=request)
-
             # Opcional: Armazena mensagem para exibir no template
             context = {
                 'sucesso': True,
-                'conquistas': conquistas_desbloqueadas,
                 'xp': 40,
             }
         else:
@@ -113,9 +108,6 @@ def custom_set_language(request):
                 # Usa uma conquista para marcar se já fez isso antes
                 if not ConquistaUsuario.objects.filter(usuario=request.user, conquista__codigo='idioma_trocado').exists():
                     perfil.adicionar_xp(20)  # XP por trocar idioma
-                    conquistas = verificar_conquistas(request.user, request=request)
-                    for conquista in conquistas:
-                        messages.success(request, f"🏆 Conquista desbloqueada: {conquista.nome}")
                     messages.success(request, "Idioma alterado com sucesso! Você ganhou 20 XP.")
 
             return response

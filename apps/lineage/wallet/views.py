@@ -13,7 +13,6 @@ from apps.lineage.server.database import LineageDB
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.http import require_http_methods
 
-from utils.services import verificar_conquistas
 from apps.main.home.models import PerfilGamer
 
 from utils.dynamic_import import get_query_class
@@ -137,7 +136,6 @@ def transfer_to_server(request):
 
         perfil = PerfilGamer.objects.get(user=request.user)
         perfil.adicionar_xp(40)
-        verificar_conquistas(request.user, request=request)
 
         messages.success(request, f"R${valor:.2f} transferidos com sucesso para o personagem {nome_personagem}.")
         return redirect('wallet:dashboard')
@@ -191,7 +189,6 @@ def transfer_to_player(request):
 
             perfil = PerfilGamer.objects.get(user=request.user)
             perfil.adicionar_xp(40)
-            verificar_conquistas(request.user, request=request)
         except ValueError as e:
             messages.error(request, str(e))
         except Exception:

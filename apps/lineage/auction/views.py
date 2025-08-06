@@ -17,7 +17,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 
-from utils.services import verificar_conquistas
 from apps.main.home.models import PerfilGamer
 
 from utils.dynamic_import import get_query_class
@@ -115,7 +114,6 @@ def fazer_lance(request, auction_id):
 
             perfil = PerfilGamer.objects.get(user=request.user)
             perfil.adicionar_xp(40)
-            verificar_conquistas(request.user, request=request)
 
             messages.success(request, _('Lance efetuado com sucesso!'))
             return redirect('auction:listar_leiloes')
@@ -192,7 +190,6 @@ def criar_leilao(request):
 
             perfil = PerfilGamer.objects.get(user=request.user)
             perfil.adicionar_xp(40)
-            verificar_conquistas(request.user, request=request)
 
             messages.success(request, _('Leilão criado com sucesso!'))
             return redirect('auction:listar_leiloes')
