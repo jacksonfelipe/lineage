@@ -135,8 +135,20 @@ def painel_staff(request):
         except Apoiador.DoesNotExist:
             messages.error(request, 'Apoiador não encontrado.')
 
-    pedidos_pendentes = Apoiador.objects.filter(status='pendente')
-    return render(request, 'apoiadores/painel_staff.html', {'pedidos_pendentes': pedidos_pendentes})
+    # Buscar todos os apoiadores para estatísticas
+    solicitacoes_pendentes = Apoiador.objects.filter(status='pendente').count()
+    apoiadores_aprovados = Apoiador.objects.filter(status='aprovado').count()
+    solicitacoes_rejeitadas = Apoiador.objects.filter(status='rejeitado').count()
+    
+    # Buscar todos os apoiadores para a lista
+    apoiadores = Apoiador.objects.all().order_by('-user__date_joined')
+    
+    return render(request, 'apoiadores/painel_staff.html', {
+        'solicitacoes_pendentes': solicitacoes_pendentes,
+        'apoiadores_aprovados': apoiadores_aprovados,
+        'solicitacoes_rejeitadas': solicitacoes_rejeitadas,
+        'apoiadores': apoiadores
+    })
 
 
 @conditional_otp_required
@@ -191,3 +203,77 @@ def editar_imagem_apoiador(request):
         form = ImagemApoiadorForm(instance=apoiador)
 
     return render(request, 'apoiadores/editar_imagem.html', {'form': form})
+
+
+@staff_member_required
+def aprovar_apoiador(request, apoiador_id):
+    if request.method == 'POST':
+        try:
+            apoiador = Apoiador.objects.get(id=apoiador_id)
+            apoiador.status = 'aprovado'
+            apoiador.save()
+            
+            # Criar cupom padrão de 10%
+            promocao, created = PromotionCode.objects.get_or_create(
+                apoiador=apoiador,
+                defaults={
+                    'codigo': f"{str(apoiador.nome_publico).upper().replace(' ', '_').replace('-', '_')}-10",
+                    'desconto_percentual': 10,
+                    'ativo': True,
+                    'validade': timezone.now() + timezone.timedelta(days=30)
+                }
+            )
+            
+            if not created:
+                promocao.desconto_percentual = 10
+                promocao.validade = timezone.now() + timezone.timedelta(days=30)
+                promocao.ativo = True
+                promocao.save()
+            
+            messages.success(request, f'Apoiador {apoiador.nome_publico} aprovado com sucesso!')
+        except Apoiador.DoesNotExist:
+            messages.error(request, 'Apoiador não encontrado.')
+    
+    return redirect('server:painel_staff')
+
+
+@staff_member_required
+def rejeitar_apoiador(request, apoiador_id):
+    if request.method == 'POST':
+        try:
+            apoiador = Apoiador.objects.get(id=apoiador_id)
+            apoiador.status = 'rejeitado'
+            apoiador.save()
+            messages.info(request, f'Apoiador {apoiador.nome_publico} rejeitado.')
+        except Apoiador.DoesNotExist:
+            messages.error(request, 'Apoiador não encontrado.')
+    
+    return redirect('server:painel_staff')
+
+
+@staff_member_required
+def detalhes_apoiador(request, apoiador_id):
+    try:
+        apoiador = Apoiador.objects.get(id=apoiador_id)
+        
+        # Buscar compras relacionadas
+        compras = ShopPurchase.objects.filter(apoiador=apoiador).order_by('-data_compra')
+        total_vendas = compras.aggregate(total=Sum('total_pago'))['total'] or 0
+        total_usuarios = compras.values('user').distinct().count()
+        
+        # Buscar cupom ativo
+        try:
+            cupom = PromotionCode.objects.get(apoiador=apoiador, ativo=True)
+        except PromotionCode.DoesNotExist:
+            cupom = None
+        
+        return render(request, 'apoiadores/detalhes_apoiador.html', {
+            'apoiador': apoiador,
+            'compras': compras,
+            'total_vendas': total_vendas,
+            'total_usuarios': total_usuarios,
+            'cupom': cupom
+        })
+    except Apoiador.DoesNotExist:
+        messages.error(request, 'Apoiador não encontrado.')
+        return redirect('server:painel_staff')
