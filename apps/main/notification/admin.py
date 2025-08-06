@@ -1,7 +1,7 @@
 # admin.py
 
 from django.contrib import admin
-from .models import Notification, PublicNotificationView, PushSubscription
+from .models import Notification, PublicNotificationView, PushSubscription, PushNotificationLog
 from core.admin import BaseModelAdmin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
@@ -37,3 +37,16 @@ class PublicNotificationViewAdmin(BaseModelAdmin):
 class PushSubscriptionAdmin(BaseModelAdmin):
     list_display = ("user", "endpoint", "created_at")
     search_fields = ("user__username", "endpoint")
+
+
+@admin.register(PushNotificationLog)
+class PushNotificationLogAdmin(BaseModelAdmin):
+    list_display = ("sent_by", "message", "total_subscribers", "successful_sends", "failed_sends", "created_at")
+    list_filter = ("created_at", "sent_by")
+    search_fields = ("sent_by__username", "message")
+    readonly_fields = ("created_at", "updated_at")
+    fields = ("sent_by", "message", "total_subscribers", "successful_sends", "failed_sends", "created_at", "updated_at")
+    
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related('sent_by')

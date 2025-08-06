@@ -3,24 +3,277 @@
 {% load itens_extras %}
 
 {% block extrastyle %}
-<link rel="stylesheet" href="{% static 'css/reports.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard-custom.css' %}">
+<style>
+  .auction-container {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    padding: 2rem 0;
+  }
+
+  .auction-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+
+  .auction-header h1 {
+    color: white;
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
+
+  .auction-header p {
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0.5rem 0 0 0;
+    font-size: 1.1rem;
+  }
+
+  .auction-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+
+  .auction-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  }
+
+  .auction-status {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .auction-status.active {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+  }
+
+  .auction-status.pending {
+    background: linear-gradient(135deg, #ffc107, #fd7e14);
+    color: white;
+  }
+
+  .auction-status.completed {
+    background: linear-gradient(135deg, #6f42c1, #e83e8c);
+    color: white;
+  }
+
+  .auction-status.cancelled {
+    background: linear-gradient(135deg, #dc3545, #fd7e14);
+    color: white;
+  }
+
+  .auction-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .item-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    margin-right: 1rem;
+    object-fit: cover;
+  }
+
+  .item-info h5 {
+    color: white;
+    margin: 0 0 0.5rem 0;
+    font-weight: bold;
+  }
+
+  .item-details {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .item-quantity {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 5px;
+    color: #00d9ff;
+    font-weight: bold;
+  }
+
+  .item-enchant {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    padding: 0.25rem 0.5rem;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+  }
+
+  .auction-info {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    color: white;
+  }
+
+  .info-row:last-child {
+    margin-bottom: 0;
+  }
+
+  .info-row strong {
+    color: #00d9ff;
+  }
+
+  .current-bid {
+    color: #28a745;
+    font-weight: bold;
+  }
+
+  .final-price {
+    color: #ffc107;
+    font-weight: bold;
+  }
+
+  .time-remaining {
+    color: #ff6b6b;
+    font-weight: bold;
+  }
+
+  .auction-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+  }
+
+  .auction-action-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .auction-action-btn.primary {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+  }
+
+  .auction-action-btn.primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+  }
+
+  .auction-action-btn.secondary {
+    background: linear-gradient(135deg, #6f42c1, #e83e8c);
+    color: white;
+  }
+
+  .auction-action-btn.secondary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(111, 66, 193, 0.4);
+  }
+
+  .auction-action-btn.danger {
+    background: linear-gradient(135deg, #dc3545, #fd7e14);
+    color: white;
+  }
+
+  .auction-action-btn.danger:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    color: #6f42c1;
+  }
+
+  .empty-state h3 {
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumb {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .breadcrumb-item a {
+    color: #00d9ff;
+    text-decoration: none;
+  }
+
+  .breadcrumb-item.active {
+    color: white;
+  }
+
+  .create-auction-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    margin-bottom: 2rem;
+  }
+
+  .create-auction-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    color: white;
+    text-decoration: none;
+  }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="reports-container">
+<div class="auction-container">
   <div class="container">
     <!-- Header -->
-    <div class="reports-header">
-      <h1 class="reports-title">
+    <div class="auction-header">
+      <h1>
         <i class="fas fa-gavel me-3"></i>{% trans "Leilões" %}
       </h1>
-      <p class="reports-subtitle">
-        {% trans "Gerencie e participe de leilões do sistema" %}
-      </p>
+      <p>{% trans "Gerencie e participe de leilões do sistema" %}</p>
     </div>
 
     <!-- Breadcrumbs -->
-    <nav aria-label="breadcrumb" class="mb-4">
+    <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
           <a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a>
@@ -29,94 +282,70 @@
       </ol>
     </nav>
 
-    <!-- Action Buttons -->
-    <div class="reports-card">
-      <div class="reports-card-header">
-        <i class="fas fa-plus-circle reports-icon"></i>
-        <h2 class="reports-card-title">{% trans "Ações" %}</h2>
-        <p class="reports-card-description">{% trans "Operações disponíveis" %}</p>
-      </div>
-      <div class="reports-card-body">
-        <div class="auction-actions">
-          <a href="{% url 'auction:criar_leilao' %}" class="auction-action-btn">
-            <div class="action-icon">
-              <i class="fas fa-plus-circle"></i>
-            </div>
-            <div class="action-content">
-              <h4>{% trans "Criar Leilão" %}</h4>
-              <p>{% trans "Crie um novo leilão para vender seus itens" %}</p>
-            </div>
-            <div class="action-arrow">
-              <i class="fas fa-chevron-right"></i>
-            </div>
-          </a>
-        </div>
-      </div>
+    <!-- Create Auction Button -->
+    <div class="text-center">
+      <a href="{% url 'auction:criar_leilao' %}" class="create-auction-btn">
+        <i class="fas fa-plus-circle"></i>{% trans "Criar Leilão" %}
+      </a>
     </div>
 
     <!-- Leilões Ativos -->
-    <div class="reports-card">
-      <div class="reports-card-header">
-        <i class="fas fa-fire reports-icon"></i>
-        <h2 class="reports-card-title">{% trans "Leilões Ativos" %}</h2>
-        <p class="reports-card-description">{% trans "Leilões em andamento" %}</p>
+    <div class="auction-card">
+      <div class="auction-status active">
+        <i class="fas fa-fire me-2"></i>{% trans "Leilões Ativos" %}
       </div>
-      <div class="reports-card-body">
-        {% if leiloes_ativos %}
-        <div class="auctions-grid">
-          {% for leilao in leiloes_ativos %}
-          <div class="auction-card active">
-            <div class="auction-header">
-              <div class="auction-status active">
-                <i class="fas fa-fire"></i>{% trans "Ativo" %}
+      
+      {% if leiloes_ativos %}
+        {% for leilao in leiloes_ativos %}
+          <div class="auction-item">
+            <img src="{% item_image_url leilao.item_id %}" alt="{{ leilao.item_name }}" class="item-image">
+            <div class="item-info">
+              <h5>{{ leilao.item_name }}</h5>
+              <div class="item-details">
+                <span class="item-quantity">{{ leilao.quantity }}x</span>
+                {% if leilao.item_enchant > 0 %}
+                <span class="item-enchant">+{{ leilao.item_enchant }}</span>
+                {% endif %}
               </div>
-              <div class="auction-id">#{{ leilao.id }}</div>
-            </div>
-            <div class="auction-content">
-              <div class="auction-item">
-                <img src="{% item_image_url leilao.item_id %}" alt="{{ leilao.item_name }}" class="item-image">
-                <div class="item-info">
-                  <h5 class="item-name">{{ leilao.item_name }}</h5>
-                  <div class="item-details">
-                    <span class="item-quantity">{{ leilao.quantidade }}x</span>
-                    {% if leilao.encantamento > 0 %}
-                    <span class="item-enchant">+{{ leilao.encantamento }}</span>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-              <div class="auction-details">
-                <div class="auction-info">
-                  <div class="info-row">
-                    <strong>{% trans "Vendedor" %}:</strong>
-                    <span>{{ leilao.vendedor }}</span>
-                  </div>
-                  <div class="info-row">
-                    <strong>{% trans "Lance Atual" %}:</strong>
-                    <span class="current-bid">{{ leilao.lance_atual|floatformat:2 }}</span>
-                  </div>
-                  <div class="info-row">
-                    <strong>{% trans "Lance Mínimo" %}:</strong>
-                    <span>{{ leilao.lance_minimo|floatformat:2 }}</span>
-                  </div>
-                  <div class="info-row">
-                    <strong>{% trans "Termina em" %}:</strong>
-                    <span class="time-remaining">{{ leilao.tempo_restante }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="auction-actions">
-              <a href="{% url 'auction:fazer_lance' leilao.id %}" class="auction-action-btn primary">
-                <i class="fas fa-gavel"></i>{% trans "Fazer Lance" %}
-              </a>
-              <button class="auction-action-btn secondary" onclick="viewAuctionDetails({{ leilao.id }})">
-                <i class="fas fa-eye"></i>{% trans "Ver Detalhes" %}
-              </button>
             </div>
           </div>
-          {% endfor %}
-        </div>
+          
+          <div class="auction-info">
+            <div class="info-row">
+              <strong>{% trans "Vendedor" %}:</strong>
+              <span>{{ leilao.seller.username }}</span>
+            </div>
+            <div class="info-row">
+              <strong>{% trans "Lance Atual" %}:</strong>
+              <span class="current-bid">R$ {{ leilao.current_bid|default:leilao.starting_bid|floatformat:2 }}</span>
+            </div>
+            <div class="info-row">
+              <strong>{% trans "Lance Mínimo" %}:</strong>
+              <span>R$ {{ leilao.starting_bid|floatformat:2 }}</span>
+            </div>
+            <div class="info-row">
+              <strong>{% trans "Termina em" %}:</strong>
+              <span class="time-remaining">{{ leilao.end_time|timeuntil }}</span>
+            </div>
+          </div>
+          
+          <div class="auction-actions">
+            {% if leilao.status == 'pending' %}
+              {% if user == leilao.seller %}
+                <form method="post" action="{% url 'auction:cancelar_leilao' leilao.id %}" style="display: inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="auction-action-btn danger" onclick="return confirm('{% trans 'Tem certeza que deseja cancelar este leilão?' %}')">
+                    <i class="fas fa-times"></i>{% trans "Cancelar Leilão" %}
+                  </button>
+                </form>
+              {% else %}
+                <a href="{% url 'auction:fazer_lance' leilao.id %}" class="auction-action-btn primary">
+                  <i class="fas fa-gavel"></i>{% trans "Fazer Lance" %}
+                </a>
+              {% endif %}
+            {% endif %}
+          </div>
+        {% endfor %}
         
         <!-- Paginação -->
         {% if leiloes_ativos.has_other_pages %}
@@ -149,72 +378,51 @@
         </nav>
         {% endif %}
         
-        {% else %}
+      {% else %}
         <div class="empty-state">
           <i class="fas fa-fire-extinguisher"></i>
           <h3>{% trans "Nenhum leilão ativo" %}</h3>
           <p>{% trans "Não há leilões ativos no momento." %}</p>
         </div>
-        {% endif %}
-      </div>
+      {% endif %}
     </div>
 
     <!-- Leilões Pendentes de Entrega -->
-    <div class="reports-card">
-      <div class="reports-card-header">
-        <i class="fas fa-clock reports-icon"></i>
-        <h2 class="reports-card-title">{% trans "Leilões Pendentes de Entrega" %}</h2>
-        <p class="reports-card-description">{% trans "Leilões aguardando entrega" %}</p>
+    <div class="auction-card">
+      <div class="auction-status pending">
+        <i class="fas fa-clock me-2"></i>{% trans "Leilões Pendentes de Entrega" %}
       </div>
-      <div class="reports-card-body">
-        {% if leiloes_pendentes_entrega %}
-        <div class="auctions-grid">
-          {% for leilao in leiloes_pendentes_entrega %}
-          <div class="auction-card pending">
-            <div class="auction-header">
-              <div class="auction-status pending">
-                <i class="fas fa-clock"></i>{% trans "Pendente" %}
+      
+      {% if leiloes_pendentes_entrega %}
+        {% for leilao in leiloes_pendentes_entrega %}
+          <div class="auction-item">
+            <img src="{% item_image_url leilao.item_id %}" alt="{{ leilao.item_name }}" class="item-image">
+            <div class="item-info">
+              <h5>{{ leilao.item_name }}</h5>
+              <div class="item-details">
+                <span class="item-quantity">{{ leilao.quantity }}x</span>
+                {% if leilao.item_enchant > 0 %}
+                <span class="item-enchant">+{{ leilao.item_enchant }}</span>
+                {% endif %}
               </div>
-              <div class="auction-id">#{{ leilao.id }}</div>
-            </div>
-            <div class="auction-content">
-              <div class="auction-item">
-                <img src="{% item_image_url leilao.item_id %}" alt="{{ leilao.item_name }}" class="item-image">
-                <div class="item-info">
-                  <h5 class="item-name">{{ leilao.item_name }}</h5>
-                  <div class="item-details">
-                    <span class="item-quantity">{{ leilao.quantidade }}x</span>
-                    {% if leilao.encantamento > 0 %}
-                    <span class="item-enchant">+{{ leilao.encantamento }}</span>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-              <div class="auction-details">
-                <div class="auction-info">
-                  <div class="info-row">
-                    <strong>{% trans "Vencedor" %}:</strong>
-                    <span>{{ leilao.comprador }}</span>
-                  </div>
-                  <div class="info-row">
-                    <strong>{% trans "Valor Final" %}:</strong>
-                    <span class="final-price">{{ leilao.valor_final|floatformat:2 }}</span>
-                  </div>
-                  <div class="info-row">
-                    <strong>{% trans "Finalizado em" %}:</strong>
-                    <span>{{ leilao.data_finalizacao|date:"d/m/Y H:i" }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="auction-actions">
-              <button class="auction-action-btn secondary" onclick="viewAuctionDetails({{ leilao.id }})">
-                <i class="fas fa-eye"></i>{% trans "Ver Detalhes" %}
-              </button>
             </div>
           </div>
-          {% endfor %}
-        </div>
+          
+          <div class="auction-info">
+            <div class="info-row">
+              <strong>{% trans "Vencedor" %}:</strong>
+              <span>{% if leilao.highest_bidder %}{{ leilao.highest_bidder.username }}{% else %}Nenhum{% endif %}</span>
+            </div>
+            <div class="info-row">
+              <strong>{% trans "Valor Final" %}:</strong>
+              <span class="final-price">R$ {{ leilao.current_bid|default:leilao.starting_bid|floatformat:2 }}</span>
+            </div>
+            <div class="info-row">
+              <strong>{% trans "Finalizado em" %}:</strong>
+              <span>{{ leilao.updated_at|date:"d/m/Y H:i" }}</span>
+            </div>
+          </div>
+        {% endfor %}
         
         <!-- Paginação -->
         {% if leiloes_pendentes_entrega.has_other_pages %}
@@ -247,73 +455,52 @@
         </nav>
         {% endif %}
         
-        {% else %}
+      {% else %}
         <div class="empty-state">
           <i class="fas fa-check-circle"></i>
           <h3>{% trans "Nenhum leilão pendente" %}</h3>
           <p>{% trans "Não há leilões pendentes de entrega." %}</p>
         </div>
-        {% endif %}
-      </div>
+      {% endif %}
     </div>
 
     {% if user.is_staff %}
     <!-- Leilões Finalizados (Staff) -->
-    <div class="reports-card">
-      <div class="reports-card-header">
-        <i class="fas fa-check-circle reports-icon"></i>
-        <h2 class="reports-card-title">{% trans "Leilões Finalizados" %}</h2>
-        <p class="reports-card-description">{% trans "Histórico de leilões completados" %}</p>
+    <div class="auction-card">
+      <div class="auction-status completed">
+        <i class="fas fa-check-circle me-2"></i>{% trans "Leilões Finalizados" %}
       </div>
-      <div class="reports-card-body">
-        {% if leiloes_finalizados %}
-        <div class="auctions-grid">
-          {% for leilao in leiloes_finalizados %}
-          <div class="auction-card completed">
-            <div class="auction-header">
-              <div class="auction-status completed">
-                <i class="fas fa-check-circle"></i>{% trans "Finalizado" %}
+      
+      {% if leiloes_finalizados %}
+        {% for leilao in leiloes_finalizados %}
+          <div class="auction-item">
+            <img src="{% item_image_url leilao.item_id %}" alt="{{ leilao.item_name }}" class="item-image">
+            <div class="item-info">
+              <h5>{{ leilao.item_name }}</h5>
+              <div class="item-details">
+                <span class="item-quantity">{{ leilao.quantity }}x</span>
+                {% if leilao.item_enchant > 0 %}
+                <span class="item-enchant">+{{ leilao.item_enchant }}</span>
+                {% endif %}
               </div>
-              <div class="auction-id">#{{ leilao.id }}</div>
-            </div>
-            <div class="auction-content">
-              <div class="auction-item">
-                <img src="{% item_image_url leilao.item_id %}" alt="{{ leilao.item_name }}" class="item-image">
-                <div class="item-info">
-                  <h5 class="item-name">{{ leilao.item_name }}</h5>
-                  <div class="item-details">
-                    <span class="item-quantity">{{ leilao.quantidade }}x</span>
-                    {% if leilao.encantamento > 0 %}
-                    <span class="item-enchant">+{{ leilao.encantamento }}</span>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-              <div class="auction-details">
-                <div class="auction-info">
-                  <div class="info-row">
-                    <strong>{% trans "Vencedor" %}:</strong>
-                    <span>{{ leilao.comprador }}</span>
-                  </div>
-                  <div class="info-row">
-                    <strong>{% trans "Valor Final" %}:</strong>
-                    <span class="final-price">{{ leilao.valor_final|floatformat:2 }}</span>
-                  </div>
-                  <div class="info-row">
-                    <strong>{% trans "Finalizado em" %}:</strong>
-                    <span>{{ leilao.data_finalizacao|date:"d/m/Y H:i" }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="auction-actions">
-              <button class="auction-action-btn secondary" onclick="viewAuctionDetails({{ leilao.id }})">
-                <i class="fas fa-eye"></i>{% trans "Ver Detalhes" %}
-              </button>
             </div>
           </div>
-          {% endfor %}
-        </div>
+          
+          <div class="auction-info">
+            <div class="info-row">
+              <strong>{% trans "Vencedor" %}:</strong>
+              <span>{% if leilao.highest_bidder %}{{ leilao.highest_bidder.username }}{% else %}Nenhum{% endif %}</span>
+            </div>
+            <div class="info-row">
+              <strong>{% trans "Valor Final" %}:</strong>
+              <span class="final-price">R$ {{ leilao.current_bid|default:leilao.starting_bid|floatformat:2 }}</span>
+            </div>
+            <div class="info-row">
+              <strong>{% trans "Finalizado em" %}:</strong>
+              <span>{{ leilao.updated_at|date:"d/m/Y H:i" }}</span>
+            </div>
+          </div>
+        {% endfor %}
         
         <!-- Paginação -->
         {% if leiloes_finalizados.has_other_pages %}
@@ -346,72 +533,51 @@
         </nav>
         {% endif %}
         
-        {% else %}
+      {% else %}
         <div class="empty-state">
           <i class="fas fa-history"></i>
           <h3>{% trans "Nenhum leilão finalizado" %}</h3>
           <p>{% trans "Não há leilões finalizados." %}</p>
         </div>
-        {% endif %}
-      </div>
+      {% endif %}
     </div>
 
     <!-- Leilões Cancelados (Staff) -->
-    <div class="reports-card">
-      <div class="reports-card-header">
-        <i class="fas fa-times-circle reports-icon"></i>
-        <h2 class="reports-card-title">{% trans "Leilões Cancelados" %}</h2>
-        <p class="reports-card-description">{% trans "Leilões que foram cancelados" %}</p>
+    <div class="auction-card">
+      <div class="auction-status cancelled">
+        <i class="fas fa-times-circle me-2"></i>{% trans "Leilões Cancelados" %}
       </div>
-      <div class="reports-card-body">
-        {% if leiloes_cancelados %}
-        <div class="auctions-grid">
-          {% for leilao in leiloes_cancelados %}
-          <div class="auction-card cancelled">
-            <div class="auction-header">
-              <div class="auction-status cancelled">
-                <i class="fas fa-times-circle"></i>{% trans "Cancelado" %}
+      
+      {% if leiloes_cancelados %}
+        {% for leilao in leiloes_cancelados %}
+          <div class="auction-item">
+            <img src="{% item_image_url leilao.item_id %}" alt="{{ leilao.item_name }}" class="item-image">
+            <div class="item-info">
+              <h5>{{ leilao.item_name }}</h5>
+              <div class="item-details">
+                <span class="item-quantity">{{ leilao.quantity }}x</span>
+                {% if leilao.item_enchant > 0 %}
+                <span class="item-enchant">+{{ leilao.item_enchant }}</span>
+                {% endif %}
               </div>
-              <div class="auction-id">#{{ leilao.id }}</div>
-            </div>
-            <div class="auction-content">
-              <div class="auction-item">
-                <img src="{% item_image_url leilao.item_id %}" alt="{{ leilao.item_name }}" class="item-image">
-                <div class="item-info">
-                  <h5 class="item-name">{{ leilao.item_name }}</h5>
-                  <div class="item-details">
-                    <span class="item-quantity">{{ leilao.quantidade }}x</span>
-                    {% if leilao.encantamento > 0 %}
-                    <span class="item-enchant">+{{ leilao.encantamento }}</span>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-              <div class="auction-details">
-                <div class="auction-info">
-                  <div class="info-row">
-                    <strong>{% trans "Vendedor" %}:</strong>
-                    <span>{{ leilao.vendedor }}</span>
-                  </div>
-                  <div class="info-row">
-                    <strong>{% trans "Motivo" %}:</strong>
-                    <span>{{ leilao.motivo_cancelamento }}</span>
-                  </div>
-                  <div class="info-row">
-                    <strong>{% trans "Cancelado em" %}:</strong>
-                    <span>{{ leilao.data_cancelamento|date:"d/m/Y H:i" }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="auction-actions">
-              <button class="auction-action-btn secondary" onclick="viewAuctionDetails({{ leilao.id }})">
-                <i class="fas fa-eye"></i>{% trans "Ver Detalhes" %}
-              </button>
             </div>
           </div>
-          {% endfor %}
-        </div>
+          
+          <div class="auction-info">
+            <div class="info-row">
+              <strong>{% trans "Vendedor" %}:</strong>
+              <span>{{ leilao.seller.username }}</span>
+            </div>
+            <div class="info-row">
+              <strong>{% trans "Status" %}:</strong>
+              <span>{{ leilao.get_status_display }}</span>
+            </div>
+            <div class="info-row">
+              <strong>{% trans "Cancelado em" %}:</strong>
+              <span>{{ leilao.updated_at|date:"d/m/Y H:i" }}</span>
+            </div>
+          </div>
+        {% endfor %}
         
         <!-- Paginação -->
         {% if leiloes_cancelados.has_other_pages %}
@@ -444,31 +610,22 @@
         </nav>
         {% endif %}
         
-        {% else %}
+      {% else %}
         <div class="empty-state">
           <i class="fas fa-ban"></i>
           <h3>{% trans "Nenhum leilão cancelado" %}</h3>
           <p>{% trans "Não há leilões cancelados." %}</p>
         </div>
-        {% endif %}
-      </div>
+      {% endif %}
     </div>
     {% endif %}
 
     <!-- Return Button -->
     <div class="text-center mt-4">
-      <a href="{% url 'dashboard' %}" class="report-back-button">
-        <i class="fas fa-arrow-left me-2"></i>{% trans "Voltar ao Dashboard Principal" %}
+      <a href="{% url 'dashboard' %}" class="auction-action-btn secondary">
+        <i class="fas fa-arrow-left"></i>{% trans "Voltar ao Dashboard Principal" %}
       </a>
     </div>
   </div>
 </div>
-
-<script>
-function viewAuctionDetails(auctionId) {
-  // Implementar visualização de detalhes do leilão
-  console.log('Visualizar detalhes do leilão:', auctionId);
-  // Aqui você pode abrir um modal ou redirecionar para uma página de detalhes
-}
-</script>
-{% endblock content %}
+{% endblock %}
