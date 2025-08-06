@@ -1,6 +1,7 @@
 # Status para sistema de helpdesk
 STATUS_CHOICES = [
     ('open', 'Aberto'),
+    ('pending', 'Pendente'),
     ('in_progress', 'Em Andamento'),
     ('waiting_user', 'Aguardando Usuário'),
     ('waiting_third_party', 'Aguardando Terceiros'),

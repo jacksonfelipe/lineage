@@ -28,7 +28,7 @@
         {% for message in chat_messages %}
             <div class="chat-message {% if message.sender.username == username %}sent{% else %}received{% endif %}">
                 <img 
-                    src="{% if message.sender.avatar %}{% url 'serve_files:serve_decrypted_file' 'home' 'user' 'avatar' message.sender.uuid %}{% else %}{% static 'assets/img/team/generic_user.png' %}{% endif %}" 
+                    src="{% if message.sender.avatar %}{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' message.sender.uuid timestamp %}{% else %}{% static 'assets/img/team/generic_user.png' %}{% endif %}" 
                     class="message-avatar" 
                     alt="{{ message.sender.username }}" 
                     width="40" 

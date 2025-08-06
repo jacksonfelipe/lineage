@@ -27,6 +27,14 @@ class UserProfileForm(UserChangeForm):
             self.fields[fieldname].widget.attrs.update({'class': 'form-control'})
         self.fields['cpf'].widget.attrs.update({'class': 'form-control', 'id': 'cpf'})
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email:
+            # Verifica se o email já está em uso por outro usuário
+            if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+                raise forms.ValidationError(_("Este e-mail já está em uso por outro usuário."))
+        return email
+
 
 class AvatarForm(forms.ModelForm):
     class Meta:
@@ -98,6 +106,62 @@ class LoginForm(AuthenticationForm):
         strip=False,
         widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": _("Password")}),
     )
+    captcha_token = forms.CharField(
+        required=False,
+        widget=forms.HiddenInput(),
+        label=_("Captcha")
+    )
+    
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+        
+        # Adiciona campo de captcha se necessário
+        if self.request:
+            from middlewares.login_attempts import LoginAttemptsMiddleware
+            requires_captcha = LoginAttemptsMiddleware.requires_captcha(self.request)
+            if requires_captcha:
+                self.fields['captcha_token'].required = True
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.info(f"[LoginForm] Captcha configurado como obrigatório")
+    
+    def clean(self):
+        """Validação customizada do formulário"""
+        cleaned_data = super().clean()
+        
+        # Se o captcha é necessário, verifica se foi fornecido
+        if self.request:
+            from middlewares.login_attempts import LoginAttemptsMiddleware
+            requires_captcha = LoginAttemptsMiddleware.requires_captcha(self.request)
+            
+            if requires_captcha:
+                captcha_token = cleaned_data.get('captcha_token')
+                if not captcha_token:
+                    import logging
+                    logger = logging.getLogger(__name__)
+                    logger.warning(f"[LoginForm] Captcha é obrigatório mas não foi fornecido")
+                    raise forms.ValidationError(_("Verificação do captcha é obrigatória após múltiplas tentativas."))
+                
+                # Valida o captcha
+                import requests
+                from django.conf import settings
+                
+                secret = settings.HCAPTCHA_SECRET_KEY
+                data = {
+                    'response': captcha_token,
+                    'secret': secret,
+                }
+                r = requests.post('https://hcaptcha.com/siteverify', data=data)
+                captcha_valid = r.json().get('success', False)
+                
+                if not captcha_valid:
+                    import logging
+                    logger = logging.getLogger(__name__)
+                    logger.warning(f"[LoginForm] Captcha falhou na validação")
+                    raise forms.ValidationError(_("Verificação do captcha falhou. Tente novamente."))
+        
+        return cleaned_data
 
 
 class UserPasswordResetForm(PasswordResetForm):

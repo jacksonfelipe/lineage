@@ -85,15 +85,23 @@ class Solicitation(BaseModel):
 
     def can_be_resolved(self):
         """Verifica se a solicitação pode ser resolvida."""
-        return self.status in ['open', 'in_progress', 'waiting_user', 'waiting_third_party']
+        return self.status in ['open', 'pending', 'in_progress', 'waiting_user', 'waiting_third_party']
 
     def can_be_closed(self):
         """Verifica se a solicitação pode ser fechada."""
-        return self.status in ['resolved', 'open', 'in_progress']
+        return self.status in ['resolved', 'open', 'pending', 'in_progress']
+
+    def get_display_protocol(self):
+        """Retorna o protocolo formatado para exibição."""
+        if self.protocol and self.protocol.strip():
+            return self.protocol
+        return None
 
     def save(self, *args, **kwargs):
         is_new = self._state.adding
-        if not self.protocol:
+        
+        # Garante que sempre há um protocolo
+        if not self.protocol or self.protocol.strip() == '':
             self.protocol = create_protocol()
         
         # Atualiza timestamps baseado no status
@@ -109,7 +117,9 @@ class Solicitation(BaseModel):
         if is_new and self.user:
             SolicitationParticipant.objects.get_or_create(solicitation=self, user=self.user)
 
-        SolicitationHistory.objects.create(solicitation=self, action=_('Solicitação criada.'))
+        # Cria histórico apenas para novas solicitações
+        if is_new:
+            SolicitationHistory.objects.create(solicitation=self, action=_('Solicitação criada.'))
 
     def __str__(self):
         return f"{_('Solicitação')} {self.protocol} - {self.title} ({self.status})"

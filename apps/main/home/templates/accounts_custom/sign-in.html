@@ -142,6 +142,21 @@
               </div>
             </div>
 
+            {% if requires_captcha %}
+              <div class="mb-3">
+                <div class="alert alert-warning" role="alert">
+                  <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                  {% trans "Múltiplas tentativas de login detectadas. Por favor, complete o captcha para continuar." %}
+                  <br>
+                  <small class="text-muted">
+                    {% trans "Tentativas:" %} {{ login_attempts }} (limite: {{ max_attempts }})
+                  </small>
+                </div>
+                <div class="h-captcha" data-sitekey="{{ hcaptcha_site_key }}" data-callback="onCaptchaSuccess" data-expired-callback="onCaptchaExpired"></div>
+                <input type="hidden" name="captcha_token" id="captcha_token">
+              </div>
+            {% endif %}
+
             <div class="d-grid">
               <button type="submit" class="btn btn-login btn-block">{% trans "Entrar no Reino" %}</button>
             </div>
@@ -234,5 +249,28 @@ function togglePassword(inputId) {
     icon.classList.add('bi-eye');
   }
 }
+
+{% if requires_captcha %}
+// Script para captcha
+document.addEventListener('DOMContentLoaded', function() {
+  // Aguarda o carregamento do hCaptcha
+  if (typeof hcaptcha !== 'undefined') {
+    hcaptcha.onReady(function() {
+      console.log('hCaptcha carregado');
+    });
+    
+    // Callback quando o captcha é completado
+    window.onCaptchaSuccess = function(token) {
+      document.getElementById('captcha_token').value = token;
+    };
+    
+    // Callback quando o captcha expira
+    window.onCaptchaExpired = function() {
+      document.getElementById('captcha_token').value = '';
+    };
+  }
+});
 </script>
+<script src="https://hcaptcha.com/1/api.js" async defer></script>
+{% endif %}
 {% endblock content %}

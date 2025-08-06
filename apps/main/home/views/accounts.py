@@ -100,6 +100,28 @@ class UserLoginView(LoginView):
     def get_template_names(self):
         # Aqui você retorna o caminho do template com base no tema ativo
         return [resolve_templated_path(self.request, 'accounts_custom', 'sign-in.html')]
+    
+    def get_form_kwargs(self):
+        """Adiciona o request ao formulário para verificar captcha"""
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+    
+    def get_context_data(self, **kwargs):
+        """Adiciona informações do captcha ao contexto"""
+        context = super().get_context_data(**kwargs)
+        
+        # Verifica se o captcha é necessário
+        from middlewares.login_attempts import LoginAttemptsMiddleware
+        requires_captcha = LoginAttemptsMiddleware.requires_captcha(self.request)
+        
+        if requires_captcha:
+            context['hcaptcha_site_key'] = settings.HCAPTCHA_SITE_KEY
+            context['requires_captcha'] = True
+            context['login_attempts'] = LoginAttemptsMiddleware.get_login_attempts(self.request)
+            context['max_attempts'] = getattr(settings, 'LOGIN_MAX_ATTEMPTS', 3)
+        
+        return context
 
     def form_valid(self, form):
         """
@@ -110,6 +132,15 @@ class UserLoginView(LoginView):
         password = form.cleaned_data.get('password')
         
         logger.info(f"[UserLoginView] Tentativa de login para usuário: {username}")
+        logger.info(f"[UserLoginView] Dados do formulário: {list(form.cleaned_data.keys())}")
+        logger.info(f"[UserLoginView] Dados POST: {list(self.request.POST.keys())}")
+        
+        # Log para debug do captcha
+        from middlewares.login_attempts import LoginAttemptsMiddleware
+        requires_captcha = LoginAttemptsMiddleware.requires_captcha(self.request)
+        if requires_captcha:
+            captcha_token = form.cleaned_data.get('captcha_token')
+            logger.info(f"[UserLoginView] Captcha necessário. Token recebido: {captcha_token[:10] if captcha_token else 'None'}...")
         
         # Primeiro, tenta autenticar o usuário para verificar se é superusuário
         from django.contrib.auth import authenticate
@@ -145,6 +176,10 @@ class UserLoginView(LoginView):
 
         # Se não tiver 2FA configurado, faz o login normalmente
         logger.info(f"[UserLoginView] Fazendo login do usuário {user.username}")
+        
+        # Reseta as tentativas de login após sucesso
+        LoginAttemptsMiddleware.reset_attempts(self.request)
+        
         login(self.request, user)
         return redirect(self.get_success_url())
        

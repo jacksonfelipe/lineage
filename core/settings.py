@@ -20,7 +20,7 @@ load_dotenv()  # take environment variables from .env.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # System Version
-VERSION = '1.13.10'
+VERSION = '1.13.20'
 
 # Enable/Disable DEBUG Mode
 DEBUG = str2bool(os.environ.get('DEBUG', False))
@@ -195,6 +195,7 @@ MIDDLEWARE = [
 
     'allauth.account.middleware.AccountMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'middlewares.login_attempts.LoginAttemptsMiddleware',
 
     "middlewares.access_apps.LoginRequiredAccess",
     "middlewares.forbidden_redirect_middleware.ForbiddenRedirectMiddleware",
@@ -230,6 +231,7 @@ TEMPLATES = [
                 "core.context_processors.slogan_flag",
                 "core.context_processors.social_login_config",
                 "apps.main.home.context_processors.site_logo",
+                "apps.main.home.context_processors.timestamp_processor",
             ],
         },
     },
@@ -716,6 +718,9 @@ if not HCAPTCHA_SITE_KEY:
 HCAPTCHA_SECRET_KEY = os.environ.get('CONFIG_HCAPTCHA_SECRET_KEY')
 if not HCAPTCHA_SECRET_KEY:
     raise EnvironmentError(f"Required environment variable not set: HCAPTCHA_SECRET_KEY")
+
+# Configuração para número máximo de tentativas de login antes do captcha
+LOGIN_MAX_ATTEMPTS = int(os.environ.get('CONFIG_LOGIN_MAX_ATTEMPTS', 3))
 
 # =========================== HEAD CONFIGS ===========================
 
