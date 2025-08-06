@@ -2,77 +2,473 @@
 {% load i18n l10n static %}
 {% load itens_extras %}
 
-{% block extrahead %}
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
-
-  h2, h3 {
-    font-family: 'Orbitron', sans-serif;
-    color: #6f42c1;
-    text-transform: uppercase;
-  }
-
-  .btn-primary {
-    background: linear-gradient(to right, #0dcaf0, #6f42c1);
-    border: none;
-    color: white;
-    font-weight: bold;
-    border-radius: 10px;
-    transition: 0.3s;
-    text-shadow: 0 0 2px #000;
-  }
-
-  .btn-primary:hover {
-    box-shadow: 0 0 12px rgba(111, 66, 193, 0.6);
-    transform: scale(1.03);
-  }
-
-  .alert-secondary {
-    background-color: #f8f9fa;
-    color: #6c757d;
-    border: 1px solid #dee2e6;
-  }
-
-  .pagination {
-    justify-content: center;
-    padding: 15px 0;
-  }
-
-  .pagination .page-link {
-    background-color: #333;
-    color: #fff;
-    border: 1px solid #444;
-    text-shadow: 0 0 2px #000;
-  }
-
-  .pagination .page-item.active .page-link {
-    background-color: #6f42c1;
-    border-color: #6f42c1;
-    box-shadow: 0 0 8px rgba(111, 66, 193, 0.6);
-  }
-
-  .pagination .page-link:hover {
-    background-color: #6f42c1;
-    border-color: #6f42c1;
-  }
-</style>
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/reports.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="container my-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">{% trans "Leilões" %}</h2>
-    <a href="{% url 'auction:criar_leilao' %}" class="btn btn-primary">
-      <i class="bi bi-plus-circle"></i> {% trans "Criar Leilão" %}
-    </a>
+<div class="reports-container">
+  <div class="container">
+    <!-- Header -->
+    <div class="reports-header">
+      <h1 class="reports-title">
+        <i class="fas fa-gavel me-3"></i>{% trans "Leilões" %}
+      </h1>
+      <p class="reports-subtitle">
+        {% trans "Gerencie e participe de leilões do sistema" %}
+      </p>
+    </div>
+
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{% trans "Leilões" %}</li>
+      </ol>
+    </nav>
+
+    <!-- Action Buttons -->
+    <div class="reports-card">
+      <div class="reports-card-header">
+        <i class="fas fa-plus-circle reports-icon"></i>
+        <h2 class="reports-card-title">{% trans "Ações" %}</h2>
+        <p class="reports-card-description">{% trans "Operações disponíveis" %}</p>
+      </div>
+      <div class="reports-card-body">
+        <div class="auction-actions">
+          <a href="{% url 'auction:criar_leilao' %}" class="auction-action-btn">
+            <div class="action-icon">
+              <i class="fas fa-plus-circle"></i>
+            </div>
+            <div class="action-content">
+              <h4>{% trans "Criar Leilão" %}</h4>
+              <p>{% trans "Crie um novo leilão para vender seus itens" %}</p>
+            </div>
+            <div class="action-arrow">
+              <i class="fas fa-chevron-right"></i>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leilões Ativos -->
+    <div class="reports-card">
+      <div class="reports-card-header">
+        <i class="fas fa-fire reports-icon"></i>
+        <h2 class="reports-card-title">{% trans "Leilões Ativos" %}</h2>
+        <p class="reports-card-description">{% trans "Leilões em andamento" %}</p>
+      </div>
+      <div class="reports-card-body">
+        {% if leiloes_ativos %}
+        <div class="auctions-grid">
+          {% for leilao in leiloes_ativos %}
+          <div class="auction-card active">
+            <div class="auction-header">
+              <div class="auction-status active">
+                <i class="fas fa-fire"></i>{% trans "Ativo" %}
+              </div>
+              <div class="auction-id">#{{ leilao.id }}</div>
+            </div>
+            <div class="auction-content">
+              <div class="auction-item">
+                <img src="{% item_image_url leilao.item_id %}" alt="{{ leilao.item_name }}" class="item-image">
+                <div class="item-info">
+                  <h5 class="item-name">{{ leilao.item_name }}</h5>
+                  <div class="item-details">
+                    <span class="item-quantity">{{ leilao.quantidade }}x</span>
+                    {% if leilao.encantamento > 0 %}
+                    <span class="item-enchant">+{{ leilao.encantamento }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              <div class="auction-details">
+                <div class="auction-info">
+                  <div class="info-row">
+                    <strong>{% trans "Vendedor" %}:</strong>
+                    <span>{{ leilao.vendedor }}</span>
+                  </div>
+                  <div class="info-row">
+                    <strong>{% trans "Lance Atual" %}:</strong>
+                    <span class="current-bid">{{ leilao.lance_atual|floatformat:2 }}</span>
+                  </div>
+                  <div class="info-row">
+                    <strong>{% trans "Lance Mínimo" %}:</strong>
+                    <span>{{ leilao.lance_minimo|floatformat:2 }}</span>
+                  </div>
+                  <div class="info-row">
+                    <strong>{% trans "Termina em" %}:</strong>
+                    <span class="time-remaining">{{ leilao.tempo_restante }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="auction-actions">
+              <a href="{% url 'auction:fazer_lance' leilao.id %}" class="auction-action-btn primary">
+                <i class="fas fa-gavel"></i>{% trans "Fazer Lance" %}
+              </a>
+              <button class="auction-action-btn secondary" onclick="viewAuctionDetails({{ leilao.id }})">
+                <i class="fas fa-eye"></i>{% trans "Ver Detalhes" %}
+              </button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        
+        <!-- Paginação -->
+        {% if leiloes_ativos.has_other_pages %}
+        <nav aria-label="Navegação de leilões ativos" class="mt-4">
+          <ul class="pagination justify-content-center">
+            {% if leiloes_ativos.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page_ativos={{ leiloes_ativos.previous_page_number }}">{% trans "Anterior" %}</a>
+              </li>
+            {% endif %}
+            
+            {% for num in leiloes_ativos.paginator.page_range %}
+              {% if leiloes_ativos.number == num %}
+                <li class="page-item active">
+                  <span class="page-link">{{ num }}</span>
+                </li>
+              {% elif num > leiloes_ativos.number|add:'-3' and num < leiloes_ativos.number|add:'3' %}
+                <li class="page-item">
+                  <a class="page-link" href="?page_ativos={{ num }}">{{ num }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+            
+            {% if leiloes_ativos.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page_ativos={{ leiloes_ativos.next_page_number }}">{% trans "Próximo" %}</a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+        {% endif %}
+        
+        {% else %}
+        <div class="empty-state">
+          <i class="fas fa-fire-extinguisher"></i>
+          <h3>{% trans "Nenhum leilão ativo" %}</h3>
+          <p>{% trans "Não há leilões ativos no momento." %}</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Leilões Pendentes de Entrega -->
+    <div class="reports-card">
+      <div class="reports-card-header">
+        <i class="fas fa-clock reports-icon"></i>
+        <h2 class="reports-card-title">{% trans "Leilões Pendentes de Entrega" %}</h2>
+        <p class="reports-card-description">{% trans "Leilões aguardando entrega" %}</p>
+      </div>
+      <div class="reports-card-body">
+        {% if leiloes_pendentes_entrega %}
+        <div class="auctions-grid">
+          {% for leilao in leiloes_pendentes_entrega %}
+          <div class="auction-card pending">
+            <div class="auction-header">
+              <div class="auction-status pending">
+                <i class="fas fa-clock"></i>{% trans "Pendente" %}
+              </div>
+              <div class="auction-id">#{{ leilao.id }}</div>
+            </div>
+            <div class="auction-content">
+              <div class="auction-item">
+                <img src="{% item_image_url leilao.item_id %}" alt="{{ leilao.item_name }}" class="item-image">
+                <div class="item-info">
+                  <h5 class="item-name">{{ leilao.item_name }}</h5>
+                  <div class="item-details">
+                    <span class="item-quantity">{{ leilao.quantidade }}x</span>
+                    {% if leilao.encantamento > 0 %}
+                    <span class="item-enchant">+{{ leilao.encantamento }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              <div class="auction-details">
+                <div class="auction-info">
+                  <div class="info-row">
+                    <strong>{% trans "Vencedor" %}:</strong>
+                    <span>{{ leilao.comprador }}</span>
+                  </div>
+                  <div class="info-row">
+                    <strong>{% trans "Valor Final" %}:</strong>
+                    <span class="final-price">{{ leilao.valor_final|floatformat:2 }}</span>
+                  </div>
+                  <div class="info-row">
+                    <strong>{% trans "Finalizado em" %}:</strong>
+                    <span>{{ leilao.data_finalizacao|date:"d/m/Y H:i" }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="auction-actions">
+              <button class="auction-action-btn secondary" onclick="viewAuctionDetails({{ leilao.id }})">
+                <i class="fas fa-eye"></i>{% trans "Ver Detalhes" %}
+              </button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        
+        <!-- Paginação -->
+        {% if leiloes_pendentes_entrega.has_other_pages %}
+        <nav aria-label="Navegação de leilões pendentes" class="mt-4">
+          <ul class="pagination justify-content-center">
+            {% if leiloes_pendentes_entrega.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page_pendentes_entrega={{ leiloes_pendentes_entrega.previous_page_number }}">{% trans "Anterior" %}</a>
+              </li>
+            {% endif %}
+            
+            {% for num in leiloes_pendentes_entrega.paginator.page_range %}
+              {% if leiloes_pendentes_entrega.number == num %}
+                <li class="page-item active">
+                  <span class="page-link">{{ num }}</span>
+                </li>
+              {% elif num > leiloes_pendentes_entrega.number|add:'-3' and num < leiloes_pendentes_entrega.number|add:'3' %}
+                <li class="page-item">
+                  <a class="page-link" href="?page_pendentes_entrega={{ num }}">{{ num }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+            
+            {% if leiloes_pendentes_entrega.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page_pendentes_entrega={{ leiloes_pendentes_entrega.next_page_number }}">{% trans "Próximo" %}</a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+        {% endif %}
+        
+        {% else %}
+        <div class="empty-state">
+          <i class="fas fa-check-circle"></i>
+          <h3>{% trans "Nenhum leilão pendente" %}</h3>
+          <p>{% trans "Não há leilões pendentes de entrega." %}</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if user.is_staff %}
+    <!-- Leilões Finalizados (Staff) -->
+    <div class="reports-card">
+      <div class="reports-card-header">
+        <i class="fas fa-check-circle reports-icon"></i>
+        <h2 class="reports-card-title">{% trans "Leilões Finalizados" %}</h2>
+        <p class="reports-card-description">{% trans "Histórico de leilões completados" %}</p>
+      </div>
+      <div class="reports-card-body">
+        {% if leiloes_finalizados %}
+        <div class="auctions-grid">
+          {% for leilao in leiloes_finalizados %}
+          <div class="auction-card completed">
+            <div class="auction-header">
+              <div class="auction-status completed">
+                <i class="fas fa-check-circle"></i>{% trans "Finalizado" %}
+              </div>
+              <div class="auction-id">#{{ leilao.id }}</div>
+            </div>
+            <div class="auction-content">
+              <div class="auction-item">
+                <img src="{% item_image_url leilao.item_id %}" alt="{{ leilao.item_name }}" class="item-image">
+                <div class="item-info">
+                  <h5 class="item-name">{{ leilao.item_name }}</h5>
+                  <div class="item-details">
+                    <span class="item-quantity">{{ leilao.quantidade }}x</span>
+                    {% if leilao.encantamento > 0 %}
+                    <span class="item-enchant">+{{ leilao.encantamento }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              <div class="auction-details">
+                <div class="auction-info">
+                  <div class="info-row">
+                    <strong>{% trans "Vencedor" %}:</strong>
+                    <span>{{ leilao.comprador }}</span>
+                  </div>
+                  <div class="info-row">
+                    <strong>{% trans "Valor Final" %}:</strong>
+                    <span class="final-price">{{ leilao.valor_final|floatformat:2 }}</span>
+                  </div>
+                  <div class="info-row">
+                    <strong>{% trans "Finalizado em" %}:</strong>
+                    <span>{{ leilao.data_finalizacao|date:"d/m/Y H:i" }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="auction-actions">
+              <button class="auction-action-btn secondary" onclick="viewAuctionDetails({{ leilao.id }})">
+                <i class="fas fa-eye"></i>{% trans "Ver Detalhes" %}
+              </button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        
+        <!-- Paginação -->
+        {% if leiloes_finalizados.has_other_pages %}
+        <nav aria-label="Navegação de leilões finalizados" class="mt-4">
+          <ul class="pagination justify-content-center">
+            {% if leiloes_finalizados.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page_finalizados={{ leiloes_finalizados.previous_page_number }}">{% trans "Anterior" %}</a>
+              </li>
+            {% endif %}
+            
+            {% for num in leiloes_finalizados.paginator.page_range %}
+              {% if leiloes_finalizados.number == num %}
+                <li class="page-item active">
+                  <span class="page-link">{{ num }}</span>
+                </li>
+              {% elif num > leiloes_finalizados.number|add:'-3' and num < leiloes_finalizados.number|add:'3' %}
+                <li class="page-item">
+                  <a class="page-link" href="?page_finalizados={{ num }}">{{ num }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+            
+            {% if leiloes_finalizados.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page_finalizados={{ leiloes_finalizados.next_page_number }}">{% trans "Próximo" %}</a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+        {% endif %}
+        
+        {% else %}
+        <div class="empty-state">
+          <i class="fas fa-history"></i>
+          <h3>{% trans "Nenhum leilão finalizado" %}</h3>
+          <p>{% trans "Não há leilões finalizados." %}</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Leilões Cancelados (Staff) -->
+    <div class="reports-card">
+      <div class="reports-card-header">
+        <i class="fas fa-times-circle reports-icon"></i>
+        <h2 class="reports-card-title">{% trans "Leilões Cancelados" %}</h2>
+        <p class="reports-card-description">{% trans "Leilões que foram cancelados" %}</p>
+      </div>
+      <div class="reports-card-body">
+        {% if leiloes_cancelados %}
+        <div class="auctions-grid">
+          {% for leilao in leiloes_cancelados %}
+          <div class="auction-card cancelled">
+            <div class="auction-header">
+              <div class="auction-status cancelled">
+                <i class="fas fa-times-circle"></i>{% trans "Cancelado" %}
+              </div>
+              <div class="auction-id">#{{ leilao.id }}</div>
+            </div>
+            <div class="auction-content">
+              <div class="auction-item">
+                <img src="{% item_image_url leilao.item_id %}" alt="{{ leilao.item_name }}" class="item-image">
+                <div class="item-info">
+                  <h5 class="item-name">{{ leilao.item_name }}</h5>
+                  <div class="item-details">
+                    <span class="item-quantity">{{ leilao.quantidade }}x</span>
+                    {% if leilao.encantamento > 0 %}
+                    <span class="item-enchant">+{{ leilao.encantamento }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              <div class="auction-details">
+                <div class="auction-info">
+                  <div class="info-row">
+                    <strong>{% trans "Vendedor" %}:</strong>
+                    <span>{{ leilao.vendedor }}</span>
+                  </div>
+                  <div class="info-row">
+                    <strong>{% trans "Motivo" %}:</strong>
+                    <span>{{ leilao.motivo_cancelamento }}</span>
+                  </div>
+                  <div class="info-row">
+                    <strong>{% trans "Cancelado em" %}:</strong>
+                    <span>{{ leilao.data_cancelamento|date:"d/m/Y H:i" }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="auction-actions">
+              <button class="auction-action-btn secondary" onclick="viewAuctionDetails({{ leilao.id }})">
+                <i class="fas fa-eye"></i>{% trans "Ver Detalhes" %}
+              </button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        
+        <!-- Paginação -->
+        {% if leiloes_cancelados.has_other_pages %}
+        <nav aria-label="Navegação de leilões cancelados" class="mt-4">
+          <ul class="pagination justify-content-center">
+            {% if leiloes_cancelados.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page_cancelados={{ leiloes_cancelados.previous_page_number }}">{% trans "Anterior" %}</a>
+              </li>
+            {% endif %}
+            
+            {% for num in leiloes_cancelados.paginator.page_range %}
+              {% if leiloes_cancelados.number == num %}
+                <li class="page-item active">
+                  <span class="page-link">{{ num }}</span>
+                </li>
+              {% elif num > leiloes_cancelados.number|add:'-3' and num < leiloes_cancelados.number|add:'3' %}
+                <li class="page-item">
+                  <a class="page-link" href="?page_cancelados={{ num }}">{{ num }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+            
+            {% if leiloes_cancelados.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page_cancelados={{ leiloes_cancelados.next_page_number }}">{% trans "Próximo" %}</a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+        {% endif %}
+        
+        {% else %}
+        <div class="empty-state">
+          <i class="fas fa-ban"></i>
+          <h3>{% trans "Nenhum leilão cancelado" %}</h3>
+          <p>{% trans "Não há leilões cancelados." %}</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Return Button -->
+    <div class="text-center mt-4">
+      <a href="{% url 'dashboard' %}" class="report-back-button">
+        <i class="fas fa-arrow-left me-2"></i>{% trans "Voltar ao Dashboard Principal" %}
+      </a>
+    </div>
   </div>
-
-  {% include "auction/partials/_leilao_secao.html" with titulo=_("Leilões Ativos") lista=leiloes_ativos msg_vazio=_("Nenhum leilão ativo no momento.") page=leiloes_ativos page_param="page_ativos" %}
-  {% include "auction/partials/_leilao_secao.html" with titulo=_("Leilões Pendentes de Entrega") lista=leiloes_pendentes_entrega msg_vazio=_("Nenhum leilão pendente de entrega.") page=leiloes_pendentes_entrega page_param="page_pendentes_entrega" %}
-
-  {% if user.is_staff %}
-    {% include "auction/partials/_leilao_secao.html" with titulo=_("Leilões Finalizados") lista=leiloes_finalizados msg_vazio=_("Nenhum leilão finalizado.") page=leiloes_finalizados page_param="page_finalizados" %}
-    {% include "auction/partials/_leilao_secao.html" with titulo=_("Leilões Cancelados") lista=leiloes_cancelados msg_vazio=_("Nenhum leilão cancelado.") page=leiloes_cancelados page_param="page_cancelados" %}
-  {% endif %}
 </div>
-{% endblock %}
+
+<script>
+function viewAuctionDetails(auctionId) {
+  // Implementar visualização de detalhes do leilão
+  console.log('Visualizar detalhes do leilão:', auctionId);
+  // Aqui você pode abrir um modal ou redirecionar para uma página de detalhes
+}
+</script>
+{% endblock content %}
