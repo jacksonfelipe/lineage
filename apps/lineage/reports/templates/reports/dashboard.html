@@ -7,7 +7,7 @@
 {% endblock extrastyle %}
 
 {% block breadcrumbs %}
-<li class="breadcrumb-item"><a href="{% url 'admin:index' %}">{% trans "Admin" %}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a></li>
 <li class="breadcrumb-item active" aria-current="page">{% trans "Relatórios" %}</li>
 {% endblock breadcrumbs %}
 
@@ -108,9 +108,9 @@
 
         <!-- Botão de Volta -->
         <div class="text-center mt-5">
-          <a href="{% url 'admin:index' %}" class="report-back-button">
+          <a href="{% url 'dashboard' %}" class="report-back-button">
             <i class="fas fa-arrow-left me-2"></i>
-            {% trans "Voltar para o Admin" %}
+            {% trans "Voltar ao Dashboard Principal" %}
           </a>
         </div>
       </div>

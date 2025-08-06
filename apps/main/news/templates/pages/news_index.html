@@ -259,8 +259,8 @@
 {% endblock extrastyle %}
 
 {% block breadcrumbs %}
-<li class="breadcrumb-item"><a href="#"> {% trans "Notícias" %}</a></li>
-<li class="breadcrumb-item active" aria-current="page">{% trans "Últimas Notícias" %}</li>
+<li class="breadcrumb-item"><a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a></li>
+<li class="breadcrumb-item active" aria-current="page">{% trans "Notícias" %}</li>
 {% endblock breadcrumbs %}
 
 {% block page_header %}

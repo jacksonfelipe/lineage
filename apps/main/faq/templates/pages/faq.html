@@ -272,7 +272,7 @@
 {% endblock extrastyle %}
 
 {% block breadcrumbs %}
-<li class="breadcrumb-item"><a href="#"> {% trans "Ajuda" %}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a></li>
 <li class="breadcrumb-item active" aria-current="page">{% trans "Perguntas Frequentes" %}</li>
 {% endblock breadcrumbs %}
 
