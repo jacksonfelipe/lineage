@@ -441,21 +441,27 @@
             id="submenu-reports" aria-expanded="false">
           <ul class="flex-column nav">
 
-            <li class="nav-item {% if 'movimentacoes-inventario' in segment %}active{% endif %}">
+            <li class="nav-item {% if 'dashboard' in segment %}active{% endif %}">
+              <a class="nav-link" href="{% url 'reports:dashboard' %}">
+                <span class="sidebar-text">{% trans "Dashboard de Relatórios" %}</span>
+              </a>
+            </li>
+
+            <li class="nav-item {% if 'inventory' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'reports:relatorio_movimentacoes_inventario' %}">
-                <span class="sidebar-text">{% trans "Movimentações dos Inventários" %}</span>
+                <span class="sidebar-text">{% trans "Relatório de Inventário" %}</span>
               </a>
             </li>
 
-            <li class="nav-item {% if 'movimentacoes-inventario' in segment %}active{% endif %}">
+            <li class="nav-item {% if 'auctions' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'reports:relatorio_leiloes' %}">
-                <span class="sidebar-text">{% trans "Movimentações dos Leilões" %}</span>
+                <span class="sidebar-text">{% trans "Relatório de Leilões" %}</span>
               </a>
             </li>
 
-            <li class="nav-item {% if 'movimentacoes-inventario' in segment %}active{% endif %}">
+            <li class="nav-item {% if 'purchases' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'reports:relatorio_compras' %}">
-                <span class="sidebar-text">{% trans "Movimentações da Loja" %}</span>
+                <span class="sidebar-text">{% trans "Relatório de Compras" %}</span>
               </a>
             </li>
 
