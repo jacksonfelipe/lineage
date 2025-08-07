@@ -180,3 +180,26 @@ class ShopPurchase(BaseModel):
     def __str__(self):
         bonus_info = f" (Bônus: R${self.valor_bonus_usado})" if self.valor_bonus_usado > 0 else ""
         return f"Compra de {self.user.username} — R${self.total_pago}{bonus_info} — {self.data_compra.strftime('%d/%m/%Y %H:%M')}"
+
+
+class PurchaseItem(BaseModel):
+    purchase = models.ForeignKey(ShopPurchase, verbose_name=_("Compra"), on_delete=models.CASCADE, related_name='items')
+    item_name = models.CharField(_("Nome do Item"), max_length=100)
+    item_id = models.PositiveIntegerField(_("ID do Item"))
+    quantidade = models.PositiveIntegerField(_("Quantidade"), default=1)
+    preco_unitario = models.DecimalField(_("Preço Unitário"), max_digits=10, decimal_places=2)
+    preco_total = models.DecimalField(_("Preço Total"), max_digits=10, decimal_places=2)
+    tipo_compra = models.CharField(_("Tipo de Compra"), max_length=20, choices=[
+        ('item', _('Item Individual')),
+        ('pacote', _('Pacote')),
+    ], default='item')
+    nome_pacote = models.CharField(_("Nome do Pacote"), max_length=100, blank=True, null=True)
+
+    class Meta:
+        verbose_name = _("Item da Compra")
+        verbose_name_plural = _("Itens da Compra")
+
+    def __str__(self):
+        if self.tipo_compra == 'pacote' and self.nome_pacote:
+            return f"{self.nome_pacote} — {self.item_name} x{self.quantidade}"
+        return f"{self.item_name} x{self.quantidade} — R${self.preco_total}"

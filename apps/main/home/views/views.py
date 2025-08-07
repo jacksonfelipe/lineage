@@ -238,7 +238,7 @@ def log_info_dashboard(request):
         'page_logs': page_logs
     }
 
-    return render(request, 'pages/logs.html', context)
+    return render(request, 'pages/logs_info.html', context)
 
 
 @staff_member_required
@@ -261,7 +261,7 @@ def log_error_dashboard(request):
         'page_logs': page_logs
     }
 
-    return render(request, 'pages/logs.html', context)
+    return render(request, 'pages/logs_error.html', context)
 
 
 @conditional_otp_required

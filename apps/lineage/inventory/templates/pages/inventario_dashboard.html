@@ -3,118 +3,200 @@
 {% load static %}
 {% load itens_extras %}
 
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/reports.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="container py-5">
-
-  <!-- Header -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold text-primary">
-      <i class="bi bi-backpack2-fill me-2"></i>{% trans "Meu Inventário" %}
-    </h2>
-    <div class="d-flex gap-3">
-      <a href="{% url 'inventory:retirar_item' %}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm transition">
-        <i class="bi bi-plus-circle me-2"></i>{% trans "Adicionar Item" %}
-      </a>
-      <a href="{% url 'inventory:inventario_global' %}" class="btn btn-primary rounded-pill px-4 shadow-sm transition">
-        <i class="bi bi-boxes me-2"></i>{% trans "Inventário Global" %}
-      </a>
+<div class="reports-container">
+  <div class="container">
+    <!-- Header -->
+    <div class="reports-header">
+      <h1 class="reports-title">
+        <i class="fas fa-backpack me-3"></i>{% trans "Meu Inventário" %}
+      </h1>
+      <p class="reports-subtitle">
+        {% trans "Gerencie os itens dos seus personagens" %}
+      </p>
     </div>
-  </div>
 
-  <!-- Alerta para inventários obsoletos -->
-  {% if inventarios_obsoletos %}
-    <div class="alert alert-warning border-warning border-3 rounded-4 mb-4" role="alert">
-      <div class="d-flex align-items-center">
-        <i class="bi bi-exclamation-triangle-fill me-3 fs-4 text-warning"></i>
-        <div>
-          <h6 class="alert-heading fw-bold mb-1">{% trans "Inventários Obsoletos Detectados" %}</h6>
-          <p class="mb-2">{% trans "Os seguintes inventários pertencem a personagens que não existem mais na sua conta:" %}</p>
-          <ul class="mb-0">
-            {% for personagem in inventarios_obsoletos %}
-              <li><strong>{{ personagem }}</strong></li>
-            {% endfor %}
-          </ul>
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{% trans "Inventário" %}</li>
+      </ol>
+    </nav>
+
+    <!-- Action Buttons -->
+    <div class="reports-card">
+      <div class="reports-card-header">
+        <i class="fas fa-tools reports-icon"></i>
+        <h2 class="reports-card-title">{% trans "Ações" %}</h2>
+        <p class="reports-card-description">{% trans "Operações disponíveis" %}</p>
+      </div>
+      <div class="reports-card-body">
+        <div class="inventory-actions">
+          <a href="{% url 'inventory:retirar_item' %}" class="inventory-action-btn">
+            <div class="action-icon">
+              <i class="fas fa-plus-circle"></i>
+            </div>
+            <div class="action-content">
+              <h4>{% trans "Adicionar Item" %}</h4>
+              <p>{% trans "Adicione itens ao seu inventário" %}</p>
+            </div>
+            <div class="action-arrow">
+              <i class="fas fa-chevron-right"></i>
+            </div>
+          </a>
+          <a href="{% url 'inventory:inventario_global' %}" class="inventory-action-btn">
+            <div class="action-icon">
+              <i class="fas fa-boxes"></i>
+            </div>
+            <div class="action-content">
+              <h4>{% trans "Inventário Global" %}</h4>
+              <p>{% trans "Visualize todos os itens do sistema" %}</p>
+            </div>
+            <div class="action-arrow">
+              <i class="fas fa-chevron-right"></i>
+            </div>
+          </a>
         </div>
       </div>
     </div>
-  {% endif %}
 
-  <!-- Personagens com seus itens -->
-  {% for data in inventory_data %}
-    <div class="card bg-dark text-white border-0 shadow-lg rounded-4 mb-4 {% if data.inventory.character_name in inventarios_obsoletos %}border-warning border-3{% endif %}">
-      <div class="card-header d-flex justify-content-between align-items-center {% if data.inventory.character_name in inventarios_obsoletos %}bg-warning text-dark{% else %}bg-primary{% endif %} rounded-top-4 p-3">
-        <div>
-          <i class="bi bi-person-circle me-2 {% if data.inventory.character_name in inventarios_obsoletos %}text-dark{% else %}text-secondary{% endif %}"></i>
-          <strong class="{% if data.inventory.character_name in inventarios_obsoletos %}text-dark{% else %}text-secondary{% endif %}">{{ data.inventory.character_name }}</strong>
+    <!-- Alerta para inventários obsoletos -->
+    {% if inventarios_obsoletos %}
+    <div class="reports-card warning">
+      <div class="reports-card-header">
+        <i class="fas fa-exclamation-triangle reports-icon"></i>
+        <h2 class="reports-card-title">{% trans "Inventários Obsoletos Detectados" %}</h2>
+        <p class="reports-card-description">{% trans "Personagens que não existem mais na sua conta" %}</p>
+      </div>
+      <div class="reports-card-body">
+        <div class="obsolete-characters">
+          {% for personagem in inventarios_obsoletos %}
+          <div class="obsolete-character">
+            <i class="fas fa-user-times"></i>
+            <span>{{ personagem }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="obsolete-actions">
+          <p class="obsolete-warning">
+            {% trans "Os itens desses inventários podem ser transferidos para a bag ou deletados." %}
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Personagens com seus itens -->
+    {% for data in inventory_data %}
+    <div class="reports-card {% if data.inventory.character_name in inventarios_obsoletos %}obsolete{% endif %}">
+      <div class="reports-card-header">
+        <i class="fas fa-user-circle reports-icon"></i>
+        <h2 class="reports-card-title">{{ data.inventory.character_name }}</h2>
+        <p class="reports-card-description">
           {% if data.inventory.character_name in inventarios_obsoletos %}
-            <span class="badge bg-danger ms-2">
-              <i class="bi bi-exclamation-triangle me-1"></i>{% trans "Obsoleto" %}
+            {% trans "Personagem obsoleto" %}
+          {% else %}
+            {% if data.inventory.is_online %}{% trans "Personagem online" %}{% else %}{% trans "Personagem offline" %}{% endif %}
+          {% endif %}
+        </p>
+        <div class="character-status">
+          {% if data.inventory.character_name in inventarios_obsoletos %}
+            <span class="status-badge obsolete">
+              <i class="fas fa-exclamation-triangle"></i>{% trans "Obsoleto" %}
             </span>
           {% else %}
-            <span class="badge {% if data.inventory.is_online %}bg-success{% else %}bg-danger{% endif %} ms-2">
+            <span class="status-badge {% if data.inventory.is_online %}online{% else %}offline{% endif %}">
               {% if data.inventory.is_online %}{% trans "Online" %}{% else %}{% trans "Offline" %}{% endif %}
             </span>
           {% endif %}
         </div>
-        <div class="d-flex gap-2">
-          <button class="btn btn-outline-secondary btn-sm rounded-pill" type="button" data-bs-toggle="collapse" data-bs-target="#inv{{ data.inventory.id }}">
-            <i class="bi bi-box-seam me-1"></i>{% trans "Itens" %}
+      </div>
+      <div class="reports-card-body">
+        <div class="character-actions">
+          <button class="character-action-btn" type="button" data-bs-toggle="collapse" data-bs-target="#inv{{ data.inventory.id }}">
+            <i class="fas fa-box-seam"></i>{% trans "Ver Itens" %}
           </button>
           {% if data.inventory.character_name in inventarios_obsoletos %}
             <a href="{% url 'inventory:deletar_inventario_obsoleto' character_name=data.inventory.character_name %}" 
-               class="btn btn-outline-danger btn-sm rounded-pill"
+               class="character-action-btn danger"
                onclick="return confirm('{% trans 'Tem certeza que deseja deletar este inventário obsoleto? Os itens serão transferidos para a bag.' %}')"
                title="{% trans 'Deletar Inventário Obsoleto' %}">
-              <i class="bi bi-trash me-1"></i>{% trans "Deletar" %}
+              <i class="fas fa-trash"></i>{% trans "Deletar" %}
             </a>
           {% endif %}
         </div>
-      </div>
 
-      <div id="inv{{ data.inventory.id }}" class="collapse show">
-        <div class="card-body">
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <div id="inv{{ data.inventory.id }}" class="collapse show">
+          <div class="items-grid">
             {% for item in data.items %}
-              <div class="col">
-                <div class="card bg-dark border-0 shadow text-white rounded-4 overflow-hidden h-100">
-                  <div class="card-body text-center py-4 d-flex flex-column justify-content-between h-100">
-                      <img src="{% item_image_url item.item_id %}" 
-                      alt="{{ item.item_name }}"
-                      class="mb-3 rounded border border-secondary d-block mx-auto"
-                      style="width: 32px; height: 32px;">
-                    <h5 class="fw-bold mb-2 text-primary">{{ item.item_name }}</h5>
-                    <p class="mb-3 small text-primary">
-                      <span class="fw-semibold">{% trans "Quantidade" %}:</span>
-                      <span class="fw-semibold text-primary me-3">{{ item.quantity }}</span>
-                      <span class="fw-semibold">{% trans "Encantamento" %}:</span>
-                      <span class="fw-semibold text-primary">+{{ item.enchant }}</span>
-                    </p>
-                    <div class="d-grid gap-2">
-                      <a href="{% url 'inventory:inserir_item' char_name=data.inventory.character_name item_id=item.item_id|unlocalize %}" class="btn btn-outline-success btn-sm rounded-pill">
-                        <i class="bi bi-upload me-1"></i>{% trans "Devolver" %}
-                      </a>
-                      <a href="{% url 'inventory:trocar_item' %}?character_name_origem={{ data.inventory.character_name }}&item_id={{ item.item_id|unlocalize }}" class="btn btn-outline-warning btn-sm rounded-pill">
-                        <i class="bi bi-arrow-left-right me-1"></i>{% trans "Trocar" %}
-                      </a>
-                      <a href="{% url 'inventory:transferir_para_bag' char_name=data.inventory.character_name item_id=item.item_id|unlocalize %}" class="btn btn-outline-info btn-sm rounded-pill">
-                        <i class="bi bi-bag me-1"></i>{% trans "Enviar para Bag" %}
-                      </a>
-                    </div>
-                  </div>
+            <div class="item-card">
+              <div class="item-header">
+                <img src="{% item_image_url item.item_id %}" 
+                     alt="{{ item.item_name }}"
+                     class="item-image">
+                <h5 class="item-name">{{ item.item_name }}</h5>
+              </div>
+              <div class="item-info">
+                <div class="item-detail">
+                  <strong>{% trans "Quantidade" %}:</strong>
+                  <span>{{ item.quantity }}</span>
+                </div>
+                <div class="item-detail">
+                  <strong>{% trans "Encantamento" %}:</strong>
+                  <span>+{{ item.enchant }}</span>
                 </div>
               </div>
+              <div class="item-actions">
+                <a href="{% url 'inventory:inserir_item' char_name=data.inventory.character_name item_id=item.item_id|unlocalize %}" 
+                   class="item-action-btn success">
+                  <i class="fas fa-upload"></i>{% trans "Devolver" %}
+                </a>
+                <a href="{% url 'inventory:trocar_item' %}?character_name_origem={{ data.inventory.character_name }}&item_id={{ item.item_id|unlocalize }}" 
+                   class="item-action-btn warning">
+                  <i class="fas fa-exchange-alt"></i>{% trans "Trocar" %}
+                </a>
+                <a href="{% url 'inventory:transferir_para_bag' char_name=data.inventory.character_name item_id=item.item_id|unlocalize %}" 
+                   class="item-action-btn info">
+                  <i class="fas fa-bag-shopping"></i>{% trans "Enviar para Bag" %}
+                </a>
+              </div>
+            </div>
             {% empty %}
-              <div class="col">
-                <div class="alert alert-info rounded-4 text-center text-primary">
-                  {% trans "Nenhum item no inventário." %}
-                </div>
-              </div>
+            <div class="empty-state">
+              <i class="fas fa-box-open"></i>
+              <h3>{% trans "Nenhum item encontrado" %}</h3>
+              <p>{% trans "Este personagem não possui itens no inventário." %}</p>
+            </div>
             {% endfor %}
           </div>
         </div>
       </div>
     </div>
-  {% endfor %}
+    {% empty %}
+    <div class="reports-card">
+      <div class="reports-card-body">
+        <div class="empty-state">
+          <i class="fas fa-user-slash"></i>
+          <h3>{% trans "Nenhum personagem encontrado" %}</h3>
+          <p>{% trans "Você não possui personagens com inventário no sistema." %}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
 
+    <!-- Return Button -->
+    <div class="text-center mt-4">
+      <a href="{% url 'dashboard' %}" class="report-back-button">
+        <i class="fas fa-arrow-left me-2"></i>{% trans "Voltar ao Dashboard Principal" %}
+      </a>
+    </div>
+  </div>
 </div>
-{% endblock %}
+{% endblock content %}

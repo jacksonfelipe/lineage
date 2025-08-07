@@ -50,8 +50,11 @@ function displaySearchResults(users) {
         return `
             <div class="realtime-result-item" onclick="sendFriendRequest(${user.id})">
                 <div class="result-avatar">
-                    <img src="${user.has_avatar ? '/decrypted-file/home/user/avatar/' + user.uuid + '/' : '/static/assets/img/team/generic_user.png'}" 
-                         alt="${user.username}">
+                    <div class="avatar-container" style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.3); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15); position: relative;">
+                        <img src="${user.has_avatar ? '/decrypted-file/home/user/avatar/' + user.uuid + '/' : '/static/assets/img/team/generic_user.png'}" 
+                             alt="${user.username}"
+                             style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+                    </div>
                 </div>
                 <div class="result-info">
                     <div class="result-name">${user.username}</div>
@@ -149,25 +152,62 @@ window.sendMessage = function(friendId) {
     }
 };
 
-// Update statistics periodically
+// Update statistics using WebSocket
 window.updateStats = function() {
-    fetch('/app/message/api/friends-stats/')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('total-friends').textContent = data.total_friends;
-            document.getElementById('pending-requests').textContent = data.total_pending_requests;
-            document.getElementById('sent-requests').textContent = data.total_sent_requests;
-            
-            // Update section counts
-            const friendsCount = document.querySelector('.friends-section .section-count');
-            const pendingCount = document.querySelector('.pending-section .section-count');
-            if (friendsCount) friendsCount.textContent = data.total_friends;
-            if (pendingCount) pendingCount.textContent = data.total_pending_requests;
-        })
-        .catch(error => {
-            console.error('Erro ao atualizar estatísticas:', error);
-        });
+    // Se o WebSocket estiver disponível, usar ele
+    if (window.websocketChat && window.websocketChat.getFriendsStats) {
+        window.websocketChat.getFriendsStats();
+    } else {
+        // Fallback para AJAX se WebSocket não estiver disponível
+        fetch('/app/message/api/friends-stats/')
+            .then(response => response.json())
+            .then(data => {
+                updateStatsDisplay(data);
+            })
+            .catch(error => {
+                console.error('Erro ao atualizar estatísticas:', error);
+            });
+    }
 };
+
+// Função para atualizar a exibição das estatísticas
+function updateStatsDisplay(data) {
+    document.getElementById('total-friends').textContent = data.total_friends;
+    document.getElementById('pending-requests').textContent = data.total_pending_requests;
+    document.getElementById('sent-requests').textContent = data.total_sent_requests;
+    
+    // Update section counts
+    const friendsCount = document.querySelector('.friends-section .section-count');
+    const pendingCount = document.querySelector('.pending-section .section-count');
+    if (friendsCount) friendsCount.textContent = data.total_friends;
+    if (pendingCount) pendingCount.textContent = data.total_pending_requests;
+}
+
+// Listen for WebSocket friends stats updates
+document.addEventListener('friendsStatsUpdated', function(event) {
+    updateStatsDisplay(event.detail);
+});
+
+// Listen for WebSocket friends status updates
+document.addEventListener('friendsStatusUpdated', function(event) {
+    updateFriendsStatus(event.detail);
+});
+
+// Função para atualizar o status dos amigos
+function updateFriendsStatus(friendsStatus) {
+    Object.entries(friendsStatus).forEach(([friendId, status]) => {
+        const statusElement = document.querySelector(`[data-friend-id="${friendId}"] .friend-status`);
+        if (statusElement) {
+            if (status.is_online) {
+                statusElement.innerHTML = '<span class="text-success"><i class="fas fa-circle"></i> Online</span>';
+                statusElement.className = 'friend-status text-success';
+            } else {
+                statusElement.innerHTML = '<span class="text-muted"><i class="fas fa-circle"></i> Offline</span>';
+                statusElement.className = 'friend-status text-muted';
+            }
+        }
+    });
+}
 
 // Update statistics every 30 seconds
 setInterval(updateStats, 30000);

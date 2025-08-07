@@ -2,236 +2,380 @@
 {% load i18n static l10n %}
 {% load itens_extras %}
 
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/reports.css' %}">
+{% endblock %}
+
 {% block content %}
-<style>
+<div class="reports-container">
+  <div class="container">
+    <!-- Header -->
+    <div class="reports-header">
+      <h1 class="reports-title">
+        <i class="fas fa-shopping-bag me-3"></i>{% trans "Loja Online" %}
+      </h1>
+      <p class="reports-subtitle">
+        {% trans "Descubra itens exclusivos e pacotes especiais para seu personagem" %}
+      </p>
+    </div>
 
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{% trans "Loja" %}</li>
+      </ol>
+    </nav>
 
-  h3, h5 {
-    font-family: 'Orbitron', sans-serif;
-    color: #6f42c1;
-    text-transform: uppercase;
-  }
+    <!-- Cart Button -->
+    <div class="text-end mb-4">
+      <a href="{% url 'shop:view_cart' %}" class="reports-button">
+        <i class="fas fa-shopping-cart me-2"></i>{% trans "Ver Carrinho" %}
+      </a>
+    </div>
 
-  .card {
-    background-color: #1f1f2e;
-    border: 1px solid #333;
-    color: #fff;
-    transition: transform 0.2s;
-  }
+    <!-- Itens Section -->
+    <div class="reports-card">
+      <div class="reports-card-header">
+        <i class="fas fa-gem reports-icon"></i>
+        <h2 class="reports-card-title">{% trans "Itens Disponíveis" %}</h2>
+        <p class="reports-card-description">{% trans "Itens individuais para personalizar seu personagem" %}</p>
+      </div>
+      <div class="reports-card-body">
+        {% if items %}
+        <div class="items-grid">
+          {% for item in items %}
+          <div class="item-card">
+            <div class="item-header">
+              <div class="item-info">
+                <img src="{% item_image_url item.item_id %}" alt="{{ item.item_name }}" class="item-image">
+                <div>
+                  <h4 class="item-name">{{ item.nome }}</h4>
+                  <span class="item-type-badge item">{% trans "Item" %}</span>
+                </div>
+              </div>
+              <div class="item-price">
+                <span class="currency">R$</span>
+                <span class="amount">{{ item.preco }}</span>
+              </div>
+            </div>
+            <div class="item-details">
+              <div>
+                <span>{% trans "Quantidade" %}:</span>
+                <strong>{{ item.quantidade }}</strong>
+              </div>
+              <div>
+                <span>{% trans "ID do Item" %}:</span>
+                <strong>{{ item.item_id }}</strong>
+              </div>
+            </div>
+            <div class="item-actions">
+              <a href="{% url 'shop:add_item_to_cart' item.id %}" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus me-1"></i>{% trans "Adicionar ao Carrinho" %}
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
 
-  .card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 12px rgba(111, 66, 193, 0.4);
-  }
-
-  .btn-primary, .btn-outline-primary {
-    background: linear-gradient(to right, #0dcaf0, #6f42c1);
-    border: none;
-    color: #fff;
-    font-weight: bold;
-    border-radius: 12px;
-    text-shadow: 0 0 2px #000;
-    transition: 0.3s ease;
-  }
-
-  .btn-outline-primary {
-    background: none;
-    border: 2px solid #6f42c1;
-    color: #6f42c1;
-  }
-
-  .btn-outline-primary:hover {
-    background: #6f42c1;
-    color: white;
-    border-color: #6f42c1;
-  }
-
-  .btn-outline-info {
-    border: 2px solid #0dcaf0;
-    color: #0dcaf0;
-  }
-
-  .btn-outline-info:hover {
-    background: #0dcaf0;
-    color: #000;
-  }
-
-  .btn-close {
-    filter: invert(1);
-  }
-
-  .list-group-item {
-    background-color: #2a2a3d;
-    color: #fff;
-    border: 1px solid #444;
-  }
-
-  .modal-content {
-    background-color: #1f1f2e;
-    color: #fff;
-  }
-
-  .modal-header, .modal-footer {
-    border: none;
-  }
-
-  .text-success {
-    color: #0fdf8a !important;
-  }
-
-  .page-link {
-    background-color: #2a2a3d;
-    color: #0dcaf0;
-    border: 1px solid #444;
-    font-weight: bold;
-  }
-
-  .page-link:hover {
-    background-color: #6f42c1;
-    color: white;
-  }
-
-  .page-item.active .page-link {
-    background-color: #0dcaf0;
-    color: #000;
-    border-color: #0dcaf0;
-  }
-</style>
-
-<div class="container py-5">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h3 class="fw-bold">
-      <i class="bi bi-bag me-2"></i>{% trans "Loja Online" %}
-    </h3>
-    <a href="{% url 'shop:view_cart' %}" class="btn btn-primary rounded-pill px-4">
-      <i class="bi bi-cart4 me-2"></i>{% trans "Ver Carrinho" %}
-    </a>
-  </div>
-
-  <!-- Itens -->
-  <h5 class="fw-semibold mb-3">{% trans "Itens Disponíveis" %}</h5>
-  <div class="row g-4 mb-4">
-    {% for item in items %}
-    <div class="col-md-4">
-      <div class="card h-100 shadow-sm rounded-4">
-        <div class="card-body text-center">
-          <img src="{% item_image_url item.item_id %}" alt="{{ item.item_name }}" class="mb-3" style="width: 48px;">
-          <h5 class="fw-bold">{{ item.nome }}</h5>
-          <p class="mb-1">{% trans "Quantidade" %}: {{ item.quantidade }}</p>
-          <p class="fw-semibold text-success">R$ {{ item.preco }}</p>
-          <a href="{% url 'shop:add_item_to_cart' item.id %}" class="btn btn-outline-primary rounded-pill">
-            <i class="bi bi-plus-circle me-1"></i>{% trans "Adicionar" %}
+        <!-- Pagination for Items -->
+        {% if items.has_other_pages %}
+        <div class="logs-pagination">
+          {% if items.has_previous %}
+          <a href="?items_page={{ items.previous_page_number }}{% if packages.number %}&packages_page={{ packages.number }}{% endif %}" class="pagination-item">
+            <i class="fas fa-chevron-left"></i>
           </a>
-        </div>
-      </div>
-    </div>
-    {% empty %}
-    <p>{% trans "Nenhum item disponível." %}</p>
-    {% endfor %}
-  </div>
-
-  {% if items.has_other_pages %}
-  <nav class="mt-3">
-    <ul class="pagination justify-content-center">
-      {% if items.has_previous %}
-      <li class="page-item">
-        <a class="page-link" href="?items_page={{ items.previous_page_number }}{% if packages.number %}&packages_page={{ packages.number }}{% endif %}" aria-label="Anterior">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-      </li>
-      {% endif %}
-      {% for num in items.paginator.page_range %}
-      <li class="page-item {% if num == items.number %}active{% endif %}">
-        <a class="page-link" href="?items_page={{ num }}{% if packages.number %}&packages_page={{ packages.number }}{% endif %}">{{ num }}</a>
-      </li>
-      {% endfor %}
-      {% if items.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?items_page={{ items.next_page_number }}{% if packages.number %}&packages_page={{ packages.number }}{% endif %}" aria-label="Próximo">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-      {% endif %}
-    </ul>
-  </nav>
-  {% endif %}
-
-  <!-- Pacotes -->
-  <h5 class="fw-semibold mt-5 mb-3">{% trans "Pacotes" %}</h5>
-  <div class="row g-4">
-    {% for package in packages %}
-    <div class="col-md-4">
-      <div class="card h-100 shadow-sm rounded-4">
-        <div class="card-body text-center">
-          <h5 class="fw-bold">{{ package.nome }}</h5>
-          <p class="mb-1">{% trans "Itens inclusos" %}: {{ package.itens.count }}</p>
-          <p class="fw-semibold text-success">R$ {{ package.preco_total }}</p>
-          <a href="{% url 'shop:add_package_to_cart' package.id %}" class="btn btn-outline-primary rounded-pill">
-            <i class="bi bi-box-seam me-1"></i>{% trans "Adicionar Pacote" %}
+          {% endif %}
+          
+          {% for num in items.paginator.page_range %}
+          <a href="?items_page={{ num }}{% if packages.number %}&packages_page={{ packages.number }}{% endif %}" 
+             class="pagination-item {% if num == items.number %}active{% endif %}">
+            {{ num }}
           </a>
-          <button type="button" class="btn btn-outline-info rounded-pill mt-2" data-bs-toggle="modal" data-bs-target="#modalPackageItems{{ package.id }}">
-            <i class="bi bi-eye me-1"></i>{% trans "Visualizar Itens" %}
-          </button>
+          {% endfor %}
+          
+          {% if items.has_next %}
+          <a href="?items_page={{ items.next_page_number }}{% if packages.number %}&packages_page={{ packages.number }}{% endif %}" class="pagination-item">
+            <i class="fas fa-chevron-right"></i>
+          </a>
+          {% endif %}
         </div>
+        {% endif %}
+        {% else %}
+        <div class="empty-state">
+          <i class="fas fa-box-open fa-3x"></i>
+          <p>{% trans "Nenhum item disponível no momento." %}</p>
+        </div>
+        {% endif %}
       </div>
     </div>
 
-    <!-- Modal de Itens do Pacote -->
-    <div class="modal fade" id="modalPackageItems{{ package.id }}" tabindex="-1" aria-labelledby="modalPackageItemsLabel{{ package.id }}" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="modalPackageItemsLabel{{ package.id }}">{{ package.nome }} - {% trans "Itens do Pacote" %}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+    <!-- Pacotes Section -->
+    <div class="reports-card">
+      <div class="reports-card-header">
+        <i class="fas fa-box-open reports-icon"></i>
+        <h2 class="reports-card-title">{% trans "Pacotes Especiais" %}</h2>
+        <p class="reports-card-description">{% trans "Coleções completas com desconto especial" %}</p>
+      </div>
+      <div class="reports-card-body">
+        {% if packages %}
+        <div class="items-grid">
+          {% for package in packages %}
+          <div class="item-card">
+            <div class="item-header">
+              <div class="item-info">
+                <div class="package-icon">
+                  <i class="fas fa-gift"></i>
+                </div>
+                <div>
+                  <h4 class="item-name">{{ package.nome }}</h4>
+                  <span class="item-type-badge pacote">{% trans "Pacote" %}</span>
+                </div>
+              </div>
+              <div class="item-price">
+                <span class="currency">R$</span>
+                <span class="amount">{{ package.preco_total }}</span>
+              </div>
+            </div>
+            <div class="item-details">
+              <div>
+                <span>{% trans "Itens inclusos" %}:</span>
+                <strong>{{ package.itens.count }}</strong>
+              </div>
+              <div>
+                <span>{% trans "Desconto" %}:</span>
+                <strong class="text-success">{{ package.desconto|default:"0" }}%</strong>
+              </div>
+            </div>
+            <div class="item-actions">
+              <a href="{% url 'shop:add_package_to_cart' package.id %}" class="btn btn-primary btn-sm me-2">
+                <i class="fas fa-plus me-1"></i>{% trans "Adicionar Pacote" %}
+              </a>
+              <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalPackageItems{{ package.id }}">
+                <i class="fas fa-eye me-1"></i>{% trans "Ver Itens" %}
+              </button>
+            </div>
           </div>
-          <div class="modal-body">
-            <ul class="list-group">
-              {% for item in package.itens.all %}
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                <img src="{% item_image_url item.item_id %}" alt="{{ item.item_name }}" class="me-2" style="width:24px;">
-                {{ item.nome }} <span class="text-muted">x{{ item.quantidade }}</span>
-              </li>
-              {% empty %}
-              <li class="list-group-item">{% trans "Este pacote não contém itens." %}</li>
-              {% endfor %}
-            </ul>
+
+          <!-- Modal de Itens do Pacote -->
+          <div class="modal fade" id="modalPackageItems{{ package.id }}" tabindex="-1" aria-labelledby="modalPackageItemsLabel{{ package.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalPackageItemsLabel{{ package.id }}">
+                    <i class="fas fa-box-seam me-2"></i>{{ package.nome }} - {% trans "Itens do Pacote" %}
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="package-items-list">
+                    {% for item in package.itens.all %}
+                    <div class="package-item">
+                      <img src="{% item_image_url item.item_id %}" alt="{{ item.item_name }}" class="package-item-image">
+                      <div class="package-item-info">
+                        <h6>{{ item.nome }}</h6>
+                        <span class="package-item-quantity">x{{ item.quantidade }}</span>
+                      </div>
+                    </div>
+                    {% empty %}
+                    <div class="empty-state">
+                      <i class="fas fa-exclamation-triangle"></i>
+                      <p>{% trans "Este pacote não contém itens." %}</p>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Fechar" %}</button>
+                  <a href="{% url 'shop:add_package_to_cart' package.id %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>{% trans "Adicionar ao Carrinho" %}
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Fechar" %}</button>
-          </div>
+          {% endfor %}
         </div>
+
+        <!-- Pagination for Packages -->
+        {% if packages.has_other_pages %}
+        <div class="logs-pagination">
+          {% if packages.has_previous %}
+          <a href="?packages_page={{ packages.previous_page_number }}{% if items.number %}&items_page={{ items.number }}{% endif %}" class="pagination-item">
+            <i class="fas fa-chevron-left"></i>
+          </a>
+          {% endif %}
+          
+          {% for num in packages.paginator.page_range %}
+          <a href="?packages_page={{ num }}{% if items.number %}&items_page={{ items.number }}{% endif %}" 
+             class="pagination-item {% if num == packages.number %}active{% endif %}">
+            {{ num }}
+          </a>
+          {% endfor %}
+          
+          {% if packages.has_next %}
+          <a href="?packages_page={{ packages.next_page_number }}{% if items.number %}&items_page={{ items.number }}{% endif %}" class="pagination-item">
+            <i class="fas fa-chevron-right"></i>
+          </a>
+          {% endif %}
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="empty-state">
+          <i class="fas fa-box-open fa-3x"></i>
+          <p>{% trans "Nenhum pacote disponível no momento." %}</p>
+        </div>
+        {% endif %}
       </div>
     </div>
-    {% empty %}
-    <p>{% trans "Nenhum pacote disponível." %}</p>
-    {% endfor %}
+
+    <!-- Return Button -->
+    <div class="text-center mt-4">
+      <a href="{% url 'dashboard' %}" class="report-back-button">
+        <i class="fas fa-arrow-left me-2"></i>{% trans "Voltar ao Dashboard Principal" %}
+      </a>
+    </div>
   </div>
-
-  {% if packages.has_other_pages %}
-  <nav class="mt-3">
-    <ul class="pagination justify-content-center">
-      {% if packages.has_previous %}
-      <li class="page-item">
-        <a class="page-link" href="?packages_page={{ packages.previous_page_number }}{% if items.number %}&items_page={{ items.number }}{% endif %}" aria-label="Anterior">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-      </li>
-      {% endif %}
-      {% for num in packages.paginator.page_range %}
-      <li class="page-item {% if num == packages.number %}active{% endif %}">
-        <a class="page-link" href="?packages_page={{ num }}{% if items.number %}&items_page={{ items.number }}{% endif %}">{{ num }}</a>
-      </li>
-      {% endfor %}
-      {% if packages.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?packages_page={{ packages.next_page_number }}{% if items.number %}&items_page={{ items.number }}{% endif %}" aria-label="Próximo">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-      {% endif %}
-    </ul>
-  </nav>
-  {% endif %}
 </div>
+
+<!-- Script para garantir que os modais e botões funcionem corretamente -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Debug: verificar se os modais estão sendo encontrados
+  const packageModals = document.querySelectorAll('[id^="modalPackageItems"]');
+  console.log('Found package modals:', packageModals.length);
+  
+  // Adicionar event listeners para debug e garantir funcionalidade
+  packageModals.forEach(function(modal) {
+    const modalId = modal.id;
+    const targetButton = document.querySelector(`[data-bs-target="#${modalId}"]`);
+    
+    if (targetButton) {
+      console.log('Found target button for modal:', modalId);
+      
+      // Garantir que o botão sempre seja clicável
+      targetButton.style.pointerEvents = 'auto';
+      targetButton.style.cursor = 'pointer';
+      targetButton.style.zIndex = '1';
+      
+      // Adicionar event listener para garantir que o botão funcione
+      targetButton.addEventListener('click', function(e) {
+        console.log('Button clicked for modal:', modalId);
+        // Garantir que o botão seja clicável
+        this.style.pointerEvents = 'auto';
+        this.style.cursor = 'pointer';
+      });
+    }
+    
+    // Quando o modal é aberto
+    modal.addEventListener('shown.bs.modal', function() {
+      console.log('Modal opened:', modalId);
+      
+      // Garantir que todos os elementos do modal sejam clicáveis
+      const modalElements = modal.querySelectorAll('*');
+      modalElements.forEach(function(element) {
+        element.style.pointerEvents = 'auto';
+      });
+      
+      // Garantir que o modal content seja clicável
+      const modalContent = modal.querySelector('.modal-content');
+      if (modalContent) {
+        modalContent.style.pointerEvents = 'auto';
+        modalContent.style.zIndex = '10001';
+      }
+      
+      // Garantir que os botões sejam clicáveis
+      const buttons = modal.querySelectorAll('.btn, .btn-close');
+      buttons.forEach(function(button) {
+        button.style.pointerEvents = 'auto';
+        button.style.cursor = 'pointer';
+        button.style.zIndex = '10002';
+      });
+    });
+    
+    // Quando o modal é fechado
+    modal.addEventListener('hidden.bs.modal', function() {
+      console.log('Modal closed:', modalId);
+      
+      // Garantir que o botão "Ver Itens" continue funcionando
+      if (targetButton) {
+        // Forçar a reativação do botão
+        targetButton.style.pointerEvents = 'auto';
+        targetButton.style.cursor = 'pointer';
+        targetButton.style.zIndex = '10';
+        
+        // Remover qualquer classe que possa estar interferindo
+        targetButton.classList.remove('disabled');
+        targetButton.removeAttribute('disabled');
+        
+        // Garantir que o botão seja clicável
+        setTimeout(function() {
+          targetButton.style.pointerEvents = 'auto';
+          targetButton.style.cursor = 'pointer';
+          targetButton.style.zIndex = '10';
+          console.log('Button re-enabled for modal:', modalId);
+        }, 100);
+      }
+      
+      // Limpar qualquer backdrop residual
+      const backdrops = document.querySelectorAll('.modal-backdrop');
+      backdrops.forEach(function(backdrop) {
+        backdrop.style.pointerEvents = 'none';
+        backdrop.style.zIndex = '-1';
+        backdrop.style.visibility = 'hidden';
+        backdrop.style.opacity = '0';
+        backdrop.style.display = 'none';
+      });
+      
+      // Garantir que o modal fade não interfira quando fechado
+      modal.style.zIndex = '-1';
+      modal.style.pointerEvents = 'none';
+      modal.style.visibility = 'hidden';
+      modal.style.opacity = '0';
+      
+      // Remover classes que possam estar causando interferência
+      modal.classList.remove('show');
+      modal.classList.remove('fade');
+      
+      // Garantir que todos os elementos fora do modal sejam clicáveis
+      const allElements = document.querySelectorAll('.reports-container *:not(.modal):not(.modal-backdrop)');
+      allElements.forEach(function(element) {
+        if (element.tagName === 'BUTTON' || element.classList.contains('btn')) {
+          element.style.pointerEvents = 'auto';
+          element.style.cursor = 'pointer';
+          element.style.zIndex = '1';
+        }
+      });
+    });
+  });
+  
+  // Garantir que todos os botões "Ver Itens" sejam clicáveis
+  const verItensButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
+  verItensButtons.forEach(function(button) {
+    button.style.pointerEvents = 'auto';
+    button.style.cursor = 'pointer';
+    button.style.zIndex = '10';
+    button.style.position = 'relative';
+    
+    // Garantir que o botão seja sempre clicável
+    button.addEventListener('click', function(e) {
+      console.log('Button clicked:', this.getAttribute('data-bs-target'));
+      this.style.pointerEvents = 'auto';
+      this.style.cursor = 'pointer';
+      this.style.zIndex = '10';
+    });
+  });
+  
+  // Garantir que todos os botões em item-actions sejam clicáveis
+  const itemActionButtons = document.querySelectorAll('.item-actions button, .item-actions .btn');
+  itemActionButtons.forEach(function(button) {
+    button.style.pointerEvents = 'auto';
+    button.style.cursor = 'pointer';
+    button.style.zIndex = '1';
+    button.style.position = 'relative';
+  });
+});
+</script>
 {% endblock %}

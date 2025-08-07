@@ -5,11 +5,17 @@
     <div class="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
       <div class="d-flex align-items-center">
         <div class="avatar-lg me-4">
-          {% if user.avatar %}
-            <img class="card-img-top rounded-circle border-white" src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" alt="User-Profile-Image" class="user-avtar wid-35" />
-          {% else %}
-            <img class="card-img-top rounded-circle border-white" alt="Image placeholder" src="{% static 'assets/img/team/generic_user.png' %}">
-          {% endif %}
+          <div class="avatar-container" style="width: 4.5rem; height: 4.5rem; border-radius: 50%; overflow: hidden; border: 3px solid rgba(255, 255, 255, 0.3); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); position: relative;">
+            {% if user.avatar %}
+              <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
+                   alt="User-Profile-Image" 
+                   style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+            {% else %}
+              <img alt="Image placeholder" 
+                   src="{% static 'assets/img/team/generic_user.png' %}"
+                   style="width: 100%; height: 100%; object-fit: cover; background-color: #cbd5e1;" />
+            {% endif %}
+          </div>
         </div>
         <div class="d-block">
           <h2 class="h5 mb-3">Olá, {{ request.user.username }}</h2>
@@ -379,7 +385,7 @@
       </li>
 
       <li class="nav-item {% if 'grandboss-status' in segment %}active{% endif %}">
-        <a href="{% url 'server:grandboss_status' %}" class="nav-link">
+        <a href="{% url 'server:grandboss' %}" class="nav-link">
           <span class="sidebar-icon">
             <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c.55 0 1 .45 1 1v5h4c.55 0 1 .45 1 1s-.45 1-1 1h-5V6c0-.55.45-1 1-1z" clip-rule="evenodd"/>
@@ -435,21 +441,27 @@
             id="submenu-reports" aria-expanded="false">
           <ul class="flex-column nav">
 
-            <li class="nav-item {% if 'movimentacoes-inventario' in segment %}active{% endif %}">
+            <li class="nav-item {% if 'dashboard' in segment %}active{% endif %}">
+              <a class="nav-link" href="{% url 'reports:dashboard' %}">
+                <span class="sidebar-text">{% trans "Dashboard de Relatórios" %}</span>
+              </a>
+            </li>
+
+            <li class="nav-item {% if 'inventory' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'reports:relatorio_movimentacoes_inventario' %}">
-                <span class="sidebar-text">{% trans "Movimentações dos Inventários" %}</span>
+                <span class="sidebar-text">{% trans "Relatório de Inventário" %}</span>
               </a>
             </li>
 
-            <li class="nav-item {% if 'movimentacoes-inventario' in segment %}active{% endif %}">
+            <li class="nav-item {% if 'auctions' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'reports:relatorio_leiloes' %}">
-                <span class="sidebar-text">{% trans "Movimentações dos Leilões" %}</span>
+                <span class="sidebar-text">{% trans "Relatório de Leilões" %}</span>
               </a>
             </li>
 
-            <li class="nav-item {% if 'movimentacoes-inventario' in segment %}active{% endif %}">
+            <li class="nav-item {% if 'purchases' in segment %}active{% endif %}">
               <a class="nav-link" href="{% url 'reports:relatorio_compras' %}">
-                <span class="sidebar-text">{% trans "Movimentações da Loja" %}</span>
+                <span class="sidebar-text">{% trans "Relatório de Compras" %}</span>
               </a>
             </li>
 
@@ -484,7 +496,7 @@
               <path fill-rule="evenodd" d="M9 10h2v2H9z" clip-rule="evenodd"></path>
             </svg>
           </span>
-          <span class="sidebar-text">{% trans "Logs Info" %}</span>
+          <span class="sidebar-text">{% trans "Logs de Informação" %}</span>
         </a>
       </li>
 
@@ -498,7 +510,7 @@
               <path fill-rule="evenodd" d="M9 10h2v2H9z" clip-rule="evenodd"></path>
             </svg>
           </span>
-          <span class="sidebar-text">{% trans "Logs Errors" %}</span>
+          <span class="sidebar-text">{% trans "Logs de Erro" %}</span>
         </a>
       </li>
 

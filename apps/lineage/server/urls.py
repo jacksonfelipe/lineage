@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views.server_views import painel_apoiador, formulario_apoiador, painel_staff, solicitar_comissao, editar_imagem_apoiador
+from .views.server_views import painel_apoiador, formulario_apoiador, painel_staff, solicitar_comissao, editar_imagem_apoiador, aprovar_apoiador, rejeitar_apoiador, detalhes_apoiador
 from .views.accounts_views import *
 from .views.tops_views import *
 from .views.status_views import *
@@ -20,7 +20,7 @@ urlpatterns = [
     path('status/olympiad-all-heroes/', olympiad_all_heroes_view, name='olympiad_all_heroes'),
     path('status/olympiad-current-heroes/', olympiad_current_heroes_view, name='olympiad_current_heroes'),
     path('status/boss-jewel-locations/', boss_jewel_locations_view, name='boss_jewel_locations'),
-    path('status/grandboss/', grandboss_status_view, name='grandboss_status'),
+    path('status/grandboss/', grandboss_status_view, name='grandboss'),
 
     path('account/update-password/', update_password, name='update_password'),
     path('account/dashboard/', account_dashboard, name='account_dashboard'),
@@ -39,6 +39,9 @@ urlpatterns = [
     path('supporter/panel/staff/', painel_staff, name='painel_staff'),
     path('supporter/request-commission/', solicitar_comissao, name='solicitar_comissao'),
     path('supporter/panel/edit-image/', editar_imagem_apoiador, name='editar_imagem_apoiador'),
+    path('supporter/panel/staff/approve/<int:apoiador_id>/', aprovar_apoiador, name='aprovar_apoiador'),
+    path('supporter/panel/staff/reject/<int:apoiador_id>/', rejeitar_apoiador, name='rejeitar_apoiador'),
+    path('supporter/panel/staff/details/<int:apoiador_id>/', detalhes_apoiador, name='detalhes_apoiador'),
     
     path('api/', include('apps.lineage.server.urls_api')),
 ]

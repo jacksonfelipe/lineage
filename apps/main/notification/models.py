@@ -89,3 +89,39 @@ class PushSubscription(BaseModel):
 
     def __str__(self):
         return f"{self.user} - {self.endpoint[:30]}..."
+
+
+class PushNotificationLog(BaseModel):
+    message = models.TextField(
+        verbose_name=_("Mensagem"),
+        help_text=_("Mensagem enviada via push.")
+    )
+    sent_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name=_("Enviado por"),
+        help_text=_("Usuário que enviou a notificação push.")
+    )
+    total_subscribers = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("Total de Inscritos"),
+        help_text=_("Número total de usuários inscritos no momento do envio.")
+    )
+    successful_sends = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("Enviados com Sucesso"),
+        help_text=_("Número de notificações enviadas com sucesso.")
+    )
+    failed_sends = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("Falhas no Envio"),
+        help_text=_("Número de notificações que falharam ao enviar.")
+    )
+
+    class Meta:
+        verbose_name = _("Log de Notificação Push")
+        verbose_name_plural = _("Logs de Notificações Push")
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Push enviado por {self.sent_by} - {self.created_at.strftime('%d/%m/%Y %H:%M')}"

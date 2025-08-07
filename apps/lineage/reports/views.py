@@ -12,6 +12,12 @@ from apps.lineage.shop.models import ShopPurchase, ShopItem, ShopPackage, Promot
 
 
 @staff_member_required
+def dashboard(request):
+    """Dashboard principal dos relatórios"""
+    return render(request, 'reports/dashboard.html')
+
+
+@staff_member_required
 def relatorio_movimentacoes_inventario(request):
     dias = 15
     data_inicio = now() - timedelta(days=dias)

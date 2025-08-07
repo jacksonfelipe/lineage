@@ -35,7 +35,7 @@
     background-color: #bbe7e1;
     color: #000000;
     border-radius: 10px 0px 10px 10px;
-    padding: 8px;
+    padding: 10px;
     max-width: 70%;
     display: inline-block;
     overflow-wrap: break-word;
@@ -45,7 +45,7 @@
     background-color: #e5e3e3;
     color: #000000;
     border-radius: 0px 10px 10px 10px;
-    padding: 8px;
+    padding: 10px;
     max-width: 70%;
     display: inline-block;
     overflow-wrap: break-word;
@@ -61,15 +61,68 @@
     color: white;
 }
 
+/* Estilos para o status dos amigos */
+.friend-status {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.friend-status i {
+    font-size: 8px;
+}
+
+.friend-status.text-success i {
+    color: #28a745;
+    animation: pulse 2s infinite;
+}
+
+.friend-status.text-muted i {
+    color: #6c757d;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 .title-current {
     display: flex; 
-    gap: 8px;
-    flex-direction: row-reverse;
+    gap: 2px;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 5px;
 }
 
 .title-friend {
     display: flex; 
-    gap: 8px;
+    gap: 2px;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 5px;
+}
+
+/* Estilos para o texto da data/hora */
+.title-current small {
+    font-size: 11px;
+    color: white;
+    opacity: 0.9;
+    line-height: 1.2;
+}
+
+.title-friend small {
+    font-size: 11px;
+    color: #666;
+    opacity: 0.8;
+    line-height: 1.2;
 }
 
 .emoji-modal {

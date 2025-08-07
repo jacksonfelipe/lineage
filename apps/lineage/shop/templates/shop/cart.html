@@ -2,133 +2,213 @@
 {% load i18n static l10n %}
 {% load itens_extras %}
 
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/reports.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="container py-5">
-  <h3 class="fw-bold mb-4">
-    <i class="bi bi-cart4 me-2"></i>{% trans "Meu Carrinho" %}
-  </h3>
+<div class="reports-container">
+  <div class="container">
+    <!-- Header -->
+    <div class="reports-header">
+      <h1 class="reports-title">
+        <i class="fas fa-shopping-cart me-3"></i>{% trans "Meu Carrinho" %}
+      </h1>
+      <p class="reports-subtitle">
+        {% trans "Revise seus itens e finalize sua compra" %}
+      </p>
+    </div>
 
-  {% if cart.cartitem_set.all or cart.cartpackage_set.all %}
-  <div class="mb-4">
-    <h5 class="fw-semibold">{% trans "Itens no Carrinho" %}</h5>
-    <ul class="list-group mb-3">
-      {% for ci in cart.cartitem_set.all %}
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <span>
-          <img src="{% item_image_url ci.item.item_id %}" 
-          alt="{{ ci.item.item_name }}"
-          class="me-2" style="width:24px;">
-          <span title="{{ ci.item.descricao }}">
-            {{ ci.item.nome }} {{ ci.item.quantidade }} x{{ ci.quantidade|unlocalize }}
-          </span>
-        </span>
-        <div class="d-flex align-items-center">
-          <strong class="me-3">R$ {{ ci.item.preco|floatformat:2 }}</strong>
-          <form method="post" action="{% url 'shop:remove_cart_item' ci.item.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-sm btn-outline-danger" title="{% trans 'Remover Item' %}">
-              <i class="bi bi-x-circle"></i>
-            </button>
-          </form>
-        </div>
-      </li>
-      {% endfor %}
-      
-      {% for cp in cart.cartpackage_set.all %}
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <span>
-          📦 {{ cp.pacote.nome }} x{{ cp.quantidade|unlocalize }}
-          <button type="button" class="btn btn-outline-info btn-sm ms-3" data-bs-toggle="modal" data-bs-target="#modalPackageItems{{ cp.pacote.id }}">
-            <i class="bi bi-eye me-1"></i>{% trans "Visualizar Itens" %}
-          </button>
-        </span>
-        <div class="d-flex align-items-center">
-          <strong class="me-3">R$ {{ cp.pacote.preco_total|floatformat:2 }}</strong>
-          <form method="post" action="{% url 'shop:remove_cart_package' cp.pacote.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-sm btn-outline-danger" title="{% trans 'Remover Pacote' %}">
-              <i class="bi bi-x-circle"></i>
-            </button>
-          </form>
-        </div>
-      </li>
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'shop:shop_home' %}">{% trans "Loja" %}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{% trans "Carrinho" %}</li>
+      </ol>
+    </nav>
 
-      <!-- Modal para visualizar itens do pacote -->
-      <div class="modal fade" id="modalPackageItems{{ cp.pacote.id }}" tabindex="-1" aria-labelledby="modalPackageItemsLabel{{ cp.pacote.id }}" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modalPackageItemsLabel{{ cp.pacote.id }}">{{ cp.pacote.nome }} - {% trans "Itens do Pacote" %}</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    {% if cart.cartitem_set.all or cart.cartpackage_set.all %}
+    <!-- Cart Items Section -->
+    <div class="reports-card">
+      <div class="reports-card-header">
+        <i class="fas fa-shopping-bag reports-icon"></i>
+        <h2 class="reports-card-title">{% trans "Itens no Carrinho" %}</h2>
+        <p class="reports-card-description">{% trans "Revise os itens selecionados para compra" %}</p>
+      </div>
+      <div class="reports-card-body">
+        <div class="cart-items-list">
+          {% for ci in cart.cartitem_set.all %}
+          <div class="cart-item">
+            <div class="cart-item-info">
+              <img src="{% item_image_url ci.item.item_id %}" alt="{{ ci.item.item_name }}" class="cart-item-image">
+              <div class="cart-item-details">
+                <h5 class="cart-item-name">{{ ci.item.nome }}</h5>
+                <p class="cart-item-description">{{ ci.item.descricao|default:"Sem descrição" }}</p>
+                <div class="cart-item-meta">
+                  <span class="cart-item-quantity">{% trans "Quantidade" %}: {{ ci.quantidade|unlocalize }}</span>
+                  <span class="cart-item-id">{% trans "ID" %}: {{ ci.item.item_id }}</span>
+                </div>
+              </div>
             </div>
-            <div class="modal-body">
-              <ul class="list-group">
-                {% for item in cp.pacote.itens.all %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <!-- Imagem do ícone do item -->
-                  <img src="{% item_image_url item.item_id %}" 
-                  alt="{{ item.item_name }}"
-                  class="me-2" style="width:24px;">
-                  {{ item.nome }} <span class="text-muted">x{{ item.quantidade }}</span>
-                </li>
-                {% empty %}
-                <li class="list-group-item">{% trans "Este pacote não contém itens." %}</li>
-                {% endfor %}
-              </ul>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Fechar" %}</button>
+            <div class="cart-item-actions">
+              <div class="cart-item-price">
+                <span class="currency">R$</span>
+                <span class="amount">{{ ci.item.preco|floatformat:2 }}</span>
+              </div>
+              <form method="post" action="{% url 'shop:remove_cart_item' ci.item.id %}" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger btn-sm" title="{% trans 'Remover Item' %}">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
             </div>
           </div>
-        </div>
-      </div>
-      {% endfor %}
-    </ul>
-
-    <!-- Código Promocional -->
-    <form method="post" action="{% url 'shop:apply_promo_code' %}" class="mb-3 d-flex">
-      {% csrf_token %}
-      <input type="text" name="promo_code" class="form-control rounded-start-pill" placeholder="{% trans 'Código promocional' %}">
-      <button type="submit" class="btn btn-success rounded-end-pill ms-2">
-        <i class="bi bi-ticket-perforated me-1"></i>{% trans "Aplicar" %}
-      </button>
-    </form>
-
-    <!-- Informações de Saldo -->
-    <div class="row mb-3">
-      <div class="col-md-6">
-        <div class="card border-primary">
-          <div class="card-body text-center">
-            <h6 class="card-title text-primary">
-              <i class="fas fa-wallet me-2"></i>{% trans "Saldo Principal" %}
-            </h6>
-            <h4 class="text-primary mb-0">R$ {{ wallet.saldo|floatformat:2 }}</h4>
+          {% endfor %}
+          
+          {% for cp in cart.cartpackage_set.all %}
+          <div class="cart-item">
+            <div class="cart-item-info">
+              <div class="package-icon">
+                <i class="fas fa-gift"></i>
+              </div>
+              <div class="cart-item-details">
+                <h5 class="cart-item-name">{{ cp.pacote.nome }}</h5>
+                <p class="cart-item-description">{% trans "Pacote com" %} {{ cp.pacote.itens.count }} {% trans "itens" %}</p>
+                <div class="cart-item-meta">
+                  <span class="cart-item-quantity">{% trans "Quantidade" %}: {{ cp.quantidade|unlocalize }}</span>
+                  <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalPackageItems{{ cp.pacote.id }}">
+                    <i class="fas fa-eye me-1"></i>{% trans "Ver Itens" %}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="cart-item-actions">
+              <div class="cart-item-price">
+                <span class="currency">R$</span>
+                <span class="amount">{{ cp.pacote.preco_total|floatformat:2 }}</span>
+              </div>
+              <form method="post" action="{% url 'shop:remove_cart_package' cp.pacote.id %}" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger btn-sm" title="{% trans 'Remover Pacote' %}">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </div>
           </div>
+
+          <!-- Modal para visualizar itens do pacote -->
+          <div class="modal fade" id="modalPackageItems{{ cp.pacote.id }}" tabindex="-1" aria-labelledby="modalPackageItemsLabel{{ cp.pacote.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalPackageItemsLabel{{ cp.pacote.id }}">
+                    <i class="fas fa-box-seam me-2"></i>{{ cp.pacote.nome }} - {% trans "Itens do Pacote" %}
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="package-items-list">
+                    {% for item in cp.pacote.itens.all %}
+                    <div class="package-item">
+                      <img src="{% item_image_url item.item_id %}" alt="{{ item.item_name }}" class="package-item-image">
+                      <div class="package-item-info">
+                        <h6>{{ item.nome }}</h6>
+                        <span class="package-item-quantity">x{{ item.quantidade }}</span>
+                      </div>
+                    </div>
+                    {% empty %}
+                    <div class="empty-state">
+                      <i class="fas fa-exclamation-triangle"></i>
+                      <p>{% trans "Este pacote não contém itens." %}</p>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Fechar" %}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="card border-warning">
-          <div class="card-body text-center">
-            <h6 class="card-title text-warning">
-              <i class="fas fa-gift me-2"></i>{% trans "Saldo Bônus" %}
-            </h6>
-            <h4 class="text-warning mb-0">R$ {{ wallet.saldo_bonus|floatformat:2 }}</h4>
+    </div>
+
+    <!-- Promotion Code Section -->
+    <div class="reports-card">
+      <div class="reports-card-header">
+        <i class="fas fa-ticket-alt reports-icon"></i>
+        <h2 class="reports-card-title">{% trans "Código Promocional" %}</h2>
+        <p class="reports-card-description">{% trans "Aplique um código promocional para obter desconto" %}</p>
+      </div>
+      <div class="reports-card-body">
+        <form method="post" action="{% url 'shop:apply_promo_code' %}" class="promo-form">
+          {% csrf_token %}
+          <div class="input-group">
+            <input type="text" name="promo_code" class="form-control" placeholder="{% trans 'Digite seu código promocional' %}">
+            <button type="submit" class="btn btn-success">
+              <i class="fas fa-ticket-perforated me-1"></i>{% trans "Aplicar" %}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Wallet Information Section -->
+    <div class="reports-card">
+      <div class="reports-card-header">
+        <i class="fas fa-wallet reports-icon"></i>
+        <h2 class="reports-card-title">{% trans "Informações de Saldo" %}</h2>
+        <p class="reports-card-description">{% trans "Seus saldos disponíveis para pagamento" %}</p>
+      </div>
+      <div class="reports-card-body">
+        <div class="wallet-grid">
+          <div class="wallet-card">
+            <div class="wallet-icon">
+              <i class="fas fa-wallet"></i>
+            </div>
+            <div class="wallet-info">
+              <h5>{% trans "Saldo Principal" %}</h5>
+              <div class="wallet-amount">
+                <span class="currency">R$</span>
+                <span class="amount">{{ wallet.saldo|floatformat:2 }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="wallet-card">
+            <div class="wallet-icon bonus">
+              <i class="fas fa-gift"></i>
+            </div>
+            <div class="wallet-info">
+              <h5>{% trans "Saldo Bônus" %}</h5>
+              <div class="wallet-amount">
+                <span class="currency">R$</span>
+                <span class="amount">{{ wallet.saldo_bonus|floatformat:2 }}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Opção de Pagamento com Bônus -->
-    <div class="card mb-3">
-      <div class="card-body">
-        <h6 class="card-title">
-          <i class="fas fa-credit-card me-2"></i>{% trans "Forma de Pagamento" %}
-        </h6>
-        
-        <form method="post" action="{% url 'shop:toggle_bonus_usage' %}" class="d-inline">
+    <!-- Payment Options Section -->
+    <div class="reports-card">
+      <div class="reports-card-header">
+        <i class="fas fa-credit-card reports-icon"></i>
+        <h2 class="reports-card-title">{% trans "Forma de Pagamento" %}</h2>
+        <p class="reports-card-description">{% trans "Escolha como deseja pagar sua compra" %}</p>
+      </div>
+      <div class="reports-card-body">
+        <form method="post" action="{% url 'shop:toggle_bonus_usage' %}" class="payment-form">
           {% csrf_token %}
-          <button type="submit" class="btn {% if cart.usar_bonus %}btn-warning{% else %}btn-outline-warning{% endif %} me-2">
-            <i class="fas fa-gift me-1"></i>
+          <button type="submit" class="btn {% if cart.usar_bonus %}btn-warning{% else %}btn-outline-warning{% endif %} btn-lg">
+            <i class="fas fa-gift me-2"></i>
             {% if cart.usar_bonus %}
               {% trans "Desativar Pagamento com Bônus" %}
             {% else %}
@@ -138,79 +218,256 @@
         </form>
         
         {% if cart.usar_bonus %}
-          <small class="text-muted d-block mt-2">
-            <i class="fas fa-info-circle me-1"></i>
-            {% trans "O sistema usará primeiro o saldo de bônus e depois o saldo principal." %}
-          </small>
+        <div class="payment-info">
+          <i class="fas fa-info-circle"></i>
+          <p>{% trans "O sistema usará primeiro o saldo de bônus e depois o saldo principal." %}</p>
+        </div>
         {% endif %}
       </div>
     </div>
 
-    <!-- Resumo do Pagamento -->
-    <div class="card mb-3">
-      <div class="card-body">
-        <h6 class="card-title">
-          <i class="fas fa-calculator me-2"></i>{% trans "Resumo do Pagamento" %}
-        </h6>
-        
-        <div class="row">
-          <div class="col-md-6">
-            <p class="mb-1"><strong>{% trans "Total da Compra" %}:</strong></p>
-            <h5 class="text-success">R$ {{ cart.calcular_total|floatformat:2 }}</h5>
+    <!-- Payment Summary Section -->
+    <div class="reports-card">
+      <div class="reports-card-header">
+        <i class="fas fa-calculator reports-icon"></i>
+        <h2 class="reports-card-title">{% trans "Resumo do Pagamento" %}</h2>
+        <p class="reports-card-description">{% trans "Confira os valores antes de finalizar" %}</p>
+      </div>
+      <div class="reports-card-body">
+        <div class="payment-summary">
+          <div class="summary-row">
+            <span>{% trans "Total da Compra" %}:</span>
+            <div class="summary-amount">
+              <span class="currency">R$</span>
+              <span class="amount">{{ cart.calcular_total|floatformat:2 }}</span>
+            </div>
           </div>
           
           {% if cart.usar_bonus %}
-            <div class="col-md-6">
-              <p class="mb-1"><strong>{% trans "Pagamento" %}:</strong></p>
-              {% if valor_bonus_usado > 0 %}
-                <p class="mb-1 text-warning">
-                  <i class="fas fa-gift me-1"></i>{% trans "Bônus" %}: R$ {{ valor_bonus_usado|floatformat:2 }}
-                </p>
-              {% endif %}
-              {% if valor_dinheiro_usado > 0 %}
-                <p class="mb-1 text-primary">
-                  <i class="fas fa-wallet me-1"></i>{% trans "Dinheiro" %}: R$ {{ valor_dinheiro_usado|floatformat:2 }}
-                </p>
-              {% endif %}
+          <div class="payment-breakdown">
+            <h6>{% trans "Detalhamento do Pagamento" %}:</h6>
+            {% if valor_bonus_usado > 0 %}
+            <div class="breakdown-item">
+              <i class="fas fa-gift"></i>
+              <span>{% trans "Bônus" %}: R$ {{ valor_bonus_usado|floatformat:2 }}</span>
             </div>
+            {% endif %}
+            {% if valor_dinheiro_usado > 0 %}
+            <div class="breakdown-item">
+              <i class="fas fa-wallet"></i>
+              <span>{% trans "Dinheiro" %}: R$ {{ valor_dinheiro_usado|floatformat:2 }}</span>
+            </div>
+            {% endif %}
+          </div>
           {% endif %}
         </div>
       </div>
     </div>
 
-    <form method="post" action="{% url 'shop:checkout' %}">
-      {% csrf_token %}
-      <div class="mb-3">
-        <label class="form-label fw-semibold">{% trans "Selecione o Personagem" %}</label>
-        <select name="character_name" class="form-select rounded-3" required>
-          <option value="" disabled selected>{% trans "Escolha um personagem" %}</option>
-          {% for p in personagens %}
-            <option value="{{ p.char_name }}">{{ p.char_name }} (Lv.{{ p.base_level }})</option>
-          {% endfor %}
-        </select>
+    <!-- Checkout Section -->
+    <div class="reports-card">
+      <div class="reports-card-header">
+        <i class="fas fa-shopping-cart reports-icon"></i>
+        <h2 class="reports-card-title">{% trans "Finalizar Compra" %}</h2>
+        <p class="reports-card-description">{% trans "Selecione o personagem e confirme sua compra" %}</p>
       </div>
-      <div class="text-end">
-        <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">
-          <i class="bi bi-credit-card me-2"></i>{% trans "Finalizar Compra" %}
+      <div class="reports-card-body">
+        <form method="post" action="{% url 'shop:checkout' %}" class="checkout-form">
+          {% csrf_token %}
+          <div class="form-group">
+            <label class="form-label">{% trans "Selecione o Personagem" %}</label>
+            <select name="character_name" class="form-select" required>
+              <option value="" disabled selected>{% trans "Escolha um personagem" %}</option>
+              {% for p in personagens %}
+              <option value="{{ p.char_name }}">{{ p.char_name }} (Lv.{{ p.base_level }})</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="checkout-actions">
+            <button type="submit" class="btn btn-primary btn-lg">
+              <i class="fas fa-credit-card me-2"></i>{% trans "Finalizar Compra" %}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Cart Actions -->
+    <div class="cart-actions">
+      <form method="post" action="{% url 'shop:clear_cart' %}" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger">
+          <i class="fas fa-trash me-2"></i>{% trans "Esvaziar Carrinho" %}
         </button>
+      </form>
+      
+      <a href="{% url 'shop:shop_home' %}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-2"></i>{% trans "Continuar Comprando" %}
+      </a>
+    </div>
+
+    {% else %}
+    <!-- Empty Cart State -->
+    <div class="reports-card">
+      <div class="reports-card-body">
+        <div class="empty-state">
+          <i class="fas fa-shopping-cart fa-3x"></i>
+          <h3>{% trans "Seu carrinho está vazio" %}</h3>
+          <p>{% trans "Adicione alguns itens para começar suas compras!" %}</p>
+          <a href="{% url 'shop:shop_home' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-shopping-bag me-2"></i>{% trans "Ir para a Loja" %}
+          </a>
+        </div>
       </div>
-    </form>
+    </div>
+    {% endif %}
 
-    <form method="post" action="{% url 'shop:clear_cart' %}" class="text-end mt-3">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">
-        <i class="bi bi-trash me-1"></i>{% trans "Esvaziar Carrinho" %}
-      </button>
-    </form>
-
-    <div class="mt-3">
-      <a href="{% url 'shop:shop_home' %}" class="btn btn-outline-secondary rounded-pill">
-        <i class="bi bi-arrow-left me-1"></i>{% trans "Continuar Comprando" %}
+    <!-- Return Button -->
+    <div class="text-center mt-4">
+      <a href="{% url 'dashboard' %}" class="report-back-button">
+        <i class="fas fa-arrow-left me-2"></i>{% trans "Voltar ao Dashboard Principal" %}
       </a>
     </div>
   </div>
-  {% else %}
-  <p>{% trans "Seu carrinho está vazio." %}</p>
-  {% endif %}
 </div>
+
+<!-- Script para garantir que os modais e botões funcionem corretamente -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Debug: verificar se os modais estão sendo encontrados
+  const packageModals = document.querySelectorAll('[id^="modalPackageItems"]');
+  console.log('Found package modals:', packageModals.length);
+  
+  // Adicionar event listeners para debug e garantir funcionalidade
+  packageModals.forEach(function(modal) {
+    const modalId = modal.id;
+    const targetButton = document.querySelector(`[data-bs-target="#${modalId}"]`);
+    
+    if (targetButton) {
+      console.log('Found target button for modal:', modalId);
+      
+      // Garantir que o botão sempre seja clicável
+      targetButton.style.pointerEvents = 'auto';
+      targetButton.style.cursor = 'pointer';
+      targetButton.style.zIndex = '1';
+      
+      // Adicionar event listener para garantir que o botão funcione
+      targetButton.addEventListener('click', function(e) {
+        console.log('Button clicked for modal:', modalId);
+        // Garantir que o botão seja clicável
+        this.style.pointerEvents = 'auto';
+        this.style.cursor = 'pointer';
+      });
+    }
+    
+    // Quando o modal é aberto
+    modal.addEventListener('shown.bs.modal', function() {
+      console.log('Modal opened:', modalId);
+      
+      // Garantir que todos os elementos do modal sejam clicáveis
+      const modalElements = modal.querySelectorAll('*');
+      modalElements.forEach(function(element) {
+        element.style.pointerEvents = 'auto';
+      });
+      
+      // Garantir que o modal content seja clicável
+      const modalContent = modal.querySelector('.modal-content');
+      if (modalContent) {
+        modalContent.style.pointerEvents = 'auto';
+        modalContent.style.zIndex = '10001';
+      }
+      
+      // Garantir que os botões sejam clicáveis
+      const buttons = modal.querySelectorAll('.btn, .btn-close');
+      buttons.forEach(function(button) {
+        button.style.pointerEvents = 'auto';
+        button.style.cursor = 'pointer';
+        button.style.zIndex = '10002';
+      });
+    });
+    
+    // Quando o modal é fechado
+    modal.addEventListener('hidden.bs.modal', function() {
+      console.log('Modal closed:', modalId);
+      
+      // Garantir que o botão "Ver Itens" continue funcionando
+      if (targetButton) {
+        // Forçar a reativação do botão
+        targetButton.style.pointerEvents = 'auto';
+        targetButton.style.cursor = 'pointer';
+        targetButton.style.zIndex = '10';
+        
+        // Remover qualquer classe que possa estar interferindo
+        targetButton.classList.remove('disabled');
+        targetButton.removeAttribute('disabled');
+        
+        // Garantir que o botão seja clicável
+        setTimeout(function() {
+          targetButton.style.pointerEvents = 'auto';
+          targetButton.style.cursor = 'pointer';
+          targetButton.style.zIndex = '10';
+          console.log('Button re-enabled for modal:', modalId);
+        }, 100);
+      }
+      
+      // Limpar qualquer backdrop residual
+      const backdrops = document.querySelectorAll('.modal-backdrop');
+      backdrops.forEach(function(backdrop) {
+        backdrop.style.pointerEvents = 'none';
+        backdrop.style.zIndex = '-1';
+        backdrop.style.visibility = 'hidden';
+        backdrop.style.opacity = '0';
+        backdrop.style.display = 'none';
+      });
+      
+      // Garantir que o modal fade não interfira quando fechado
+      modal.style.zIndex = '-1';
+      modal.style.pointerEvents = 'none';
+      modal.style.visibility = 'hidden';
+      modal.style.opacity = '0';
+      
+      // Remover classes que possam estar causando interferência
+      modal.classList.remove('show');
+      modal.classList.remove('fade');
+      
+      // Garantir que todos os elementos fora do modal sejam clicáveis
+      const allElements = document.querySelectorAll('.reports-container *:not(.modal):not(.modal-backdrop)');
+      allElements.forEach(function(element) {
+        if (element.tagName === 'BUTTON' || element.classList.contains('btn')) {
+          element.style.pointerEvents = 'auto';
+          element.style.cursor = 'pointer';
+          element.style.zIndex = '1';
+        }
+      });
+    });
+  });
+  
+  // Garantir que todos os botões "Ver Itens" sejam clicáveis
+  const verItensButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
+  verItensButtons.forEach(function(button) {
+    button.style.pointerEvents = 'auto';
+    button.style.cursor = 'pointer';
+    button.style.zIndex = '10';
+    button.style.position = 'relative';
+    
+    // Garantir que o botão seja sempre clicável
+    button.addEventListener('click', function(e) {
+      console.log('Button clicked:', this.getAttribute('data-bs-target'));
+      this.style.pointerEvents = 'auto';
+      this.style.cursor = 'pointer';
+      this.style.zIndex = '10';
+    });
+  });
+  
+  // Garantir que todos os botões em cart-item-actions sejam clicáveis
+  const cartActionButtons = document.querySelectorAll('.cart-item-actions button, .cart-item-actions .btn');
+  cartActionButtons.forEach(function(button) {
+    button.style.pointerEvents = 'auto';
+    button.style.cursor = 'pointer';
+    button.style.zIndex = '1';
+    button.style.position = 'relative';
+  });
+});
+</script>
 {% endblock %}

@@ -8,7 +8,18 @@ from .forms import ShopPackageForm, PromotionCodeForm, ShopItemForm
 
 @staff_member_required
 def dashboard(request):
-    return render(request, 'shop/manager/dashboard.html')
+    # Get statistics for the dashboard
+    items_count = ShopItem.objects.filter(ativo=True).count()
+    packages_count = ShopPackage.objects.filter(ativo=True).count()
+    promotions_count = PromotionCode.objects.filter(ativo=True).count()
+    
+    context = {
+        'items_count': items_count,
+        'packages_count': packages_count,
+        'promotions_count': promotions_count,
+    }
+    
+    return render(request, 'shop/manager/dashboard.html', context)
 
 
 @staff_member_required

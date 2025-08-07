@@ -4,13 +4,13 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.conf import settings
 from django.http import JsonResponse
 from django.urls import reverse
+from django.db import models
 from apps.main.home.decorator import conditional_otp_required
-from .models import Notification, PublicNotificationView
+from .models import Notification, PublicNotificationView, PushSubscription, PushNotificationLog
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from .models import PushSubscription
 import json
 from pywebpush import webpush, WebPushException
 import logging
@@ -238,12 +238,24 @@ def save_subscription(request):
 
 @staff_member_required
 def send_push_view(request):
+    # Estatísticas para exibir na página
+    subscribed_users_count = PushSubscription.objects.values('user').distinct().count()
+    total_sent = PushNotificationLog.objects.aggregate(total=models.Sum('successful_sends'))['total'] or 0
+    
+    # Última notificação enviada
+    last_push = PushNotificationLog.objects.first()
+    last_sent = last_push.created_at.strftime('%d/%m/%Y %H:%M') if last_push else "Nunca"
+    
     if request.method == 'POST':
         message = request.POST.get('message', '').strip()
         total = 0
         errors = []
         logger = logging.getLogger(__name__)
+        
         if message:
+            # Conta total de inscritos antes do envio
+            total_subscribers = PushSubscription.objects.count()
+            
             for sub in PushSubscription.objects.all():
                 subscription_info = {
                     "endpoint": sub.endpoint,
@@ -263,6 +275,16 @@ def send_push_view(request):
                 except WebPushException as ex:
                     logger.error(f"Erro ao enviar push para {sub.user}: {repr(ex)}")
                     errors.append(sub.user)
+            
+            # Registra o log da notificação push
+            PushNotificationLog.objects.create(
+                message=message,
+                sent_by=request.user,
+                total_subscribers=total_subscribers,
+                successful_sends=total,
+                failed_sends=len(errors)
+            )
+            
             if total:
                 messages.success(request, f"Notificações enviadas para {total} inscritos!")
             if errors:
@@ -270,4 +292,10 @@ def send_push_view(request):
         else:
             messages.error(request, "Mensagem não pode ser vazia.")
         return redirect('notification:send_push')
-    return render(request, 'notification/send_push.html')
+    
+    context = {
+        'subscribed_users_count': subscribed_users_count,
+        'total_sent': total_sent,
+        'last_sent': last_sent,
+    }
+    return render(request, 'notification/send_push.html', context)
