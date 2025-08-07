@@ -1,0 +1,210 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+  {% if object %}
+    {% trans "Editar Post" %}
+  {% else %}
+    {% trans "Criar Novo Post" %}
+  {% endif %}
+{% endblock title %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      
+      <div class="card">
+        <div class="card-header">
+          <h4 class="mb-0">
+            <i class="bi bi-pencil-square"></i>
+            {% if object %}
+              {% trans "Editar Post" %}
+            {% else %}
+              {% trans "Criar Novo Post" %}
+            {% endif %}
+          </h4>
+        </div>
+        <div class="card-body">
+          
+          <form method="post" enctype="multipart/form-data" id="post-form">
+            {% csrf_token %}
+            
+            <!-- Conteúdo do post -->
+            <div class="mb-4">
+              <label for="{{ form.content.id_for_label }}" class="form-label">
+                <i class="bi bi-chat-quote"></i> {% trans "O que você está pensando?" %}
+              </label>
+              {{ form.content }}
+              {% if form.content.help_text %}
+                <div class="form-text">{{ form.content.help_text }}</div>
+              {% endif %}
+              {% if form.content.errors %}
+                <div class="text-danger small">{{ form.content.errors.0 }}</div>
+              {% endif %}
+            </div>
+            
+            <!-- Imagem -->
+            <div class="mb-4">
+              <label for="{{ form.image.id_for_label }}" class="form-label">
+                <i class="bi bi-image"></i> {% trans "Adicionar imagem (opcional)" %}
+              </label>
+              {{ form.image }}
+              {% if form.image.help_text %}
+                <div class="form-text">{{ form.image.help_text }}</div>
+              {% endif %}
+              {% if form.image.errors %}
+                <div class="text-danger small">{{ form.image.errors.0 }}</div>
+              {% endif %}
+              
+              <!-- Preview da imagem atual -->
+              {% if object and object.image %}
+                <div class="mt-3">
+                  <label class="form-label">{% trans "Imagem atual:" %}</label>
+                  <div class="text-center">
+                    <img src="{{ object.image.url }}" alt="Imagem atual" class="img-fluid rounded" style="max-height: 200px;">
+                  </div>
+                </div>
+              {% endif %}
+              
+              <!-- Preview da nova imagem -->
+              <div id="image-preview" class="mt-3" style="display: none;">
+                <label class="form-label">{% trans "Preview da nova imagem:" %}</label>
+                <div class="text-center">
+                  <img id="preview-img" alt="Preview" class="img-fluid rounded" style="max-height: 200px;">
+                </div>
+              </div>
+            </div>
+            
+            <!-- Configurações de privacidade -->
+            <div class="mb-4">
+              <div class="form-check">
+                {{ form.is_public }}
+                <label class="form-check-label" for="{{ form.is_public.id_for_label }}">
+                  <i class="bi bi-globe"></i> {% trans "Post público" %}
+                </label>
+              </div>
+              {% if form.is_public.help_text %}
+                <div class="form-text">{{ form.is_public.help_text }}</div>
+              {% endif %}
+              {% if form.is_public.errors %}
+                <div class="text-danger small">{{ form.is_public.errors.0 }}</div>
+              {% endif %}
+            </div>
+            
+            <!-- Dicas -->
+            <div class="alert alert-info">
+              <h6><i class="bi bi-lightbulb"></i> {% trans "Dicas para um post atrativo:" %}</h6>
+              <ul class="mb-0">
+                <li>{% trans "Seja autêntico e compartilhe experiências reais" %}</li>
+                <li>{% trans "Use imagens de alta qualidade quando possível" %}</li>
+                <li>{% trans "Engaje com sua comunidade respondendo comentários" %}</li>
+                <li>{% trans "Posts públicos têm maior alcance" %}</li>
+              </ul>
+            </div>
+            
+            <!-- Botões de ação -->
+            <div class="d-flex justify-content-between align-items-center mt-4 pt-4 border-top">
+              <a href="{% if object %}{% url 'social:post_detail' object.id %}{% else %}{% url 'social:feed' %}{% endif %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> {% trans "Cancelar" %}
+              </a>
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check-circle"></i>
+                {% if object %}
+                  {% trans "Atualizar Post" %}
+                {% else %}
+                  {% trans "Publicar" %}
+                {% endif %}
+              </button>
+            </div>
+            
+          </form>
+          
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript para preview de imagem e contador de caracteres -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Contador de caracteres
+    const contentField = document.querySelector('#{{ form.content.id_for_label }}');
+    const charCount = document.querySelector('#char-count');
+    
+    if (contentField) {
+        // Criar contador se não existir
+        if (!charCount) {
+            const counterDiv = document.createElement('div');
+            counterDiv.className = 'form-text';
+            counterDiv.innerHTML = '<span id="char-count">0</span>/1000 {% trans "caracteres" %}';
+            contentField.parentNode.appendChild(counterDiv);
+        }
+        
+        const counter = document.querySelector('#char-count');
+        if (counter) {
+            contentField.addEventListener('input', function() {
+                counter.textContent = this.value.length;
+                
+                // Mudar cor quando próximo do limite
+                if (this.value.length > 900) {
+                    counter.style.color = '#dc3545';
+                } else if (this.value.length > 800) {
+                    counter.style.color = '#ffc107';
+                } else {
+                    counter.style.color = '';
+                }
+            });
+            
+            // Inicializar contador
+            counter.textContent = contentField.value.length;
+        }
+    }
+    
+    // Preview de imagem
+    const imageInput = document.querySelector('#{{ form.image.id_for_label }}');
+    const imagePreview = document.querySelector('#image-preview');
+    const previewImg = document.querySelector('#preview-img');
+    
+    if (imageInput && imagePreview && previewImg) {
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.style.display = 'none';
+            }
+        });
+    }
+    
+    // Validação do formulário
+    const form = document.querySelector('#post-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const content = contentField.value.trim();
+            if (!content) {
+                e.preventDefault();
+                alert('{% trans "O conteúdo do post não pode estar vazio." %}');
+                contentField.focus();
+                return false;
+            }
+            
+            if (content.length > 1000) {
+                e.preventDefault();
+                alert('{% trans "O conteúdo não pode ter mais de 1000 caracteres." %}');
+                contentField.focus();
+                return false;
+            }
+        });
+    }
+});
+</script>
+{% endblock content %}

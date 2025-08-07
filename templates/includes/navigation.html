@@ -1,6 +1,161 @@
 {% load static %}
 {% load i18n %}
 
+<style>
+  /* Estilos para o botão Social */
+  .btn-social {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 25px;
+    padding: 8px 20px;
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+  }
+
+  .btn-social::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-social:hover::before {
+    left: 100%;
+  }
+
+  .btn-social:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    color: white;
+    text-decoration: none;
+  }
+
+  .btn-social:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  }
+
+  .social-btn-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .social-icon {
+    width: 20px;
+    height: 20px;
+    color: white;
+    transition: transform 0.3s ease;
+  }
+
+  .btn-social:hover .social-icon {
+    transform: scale(1.1) rotate(5deg);
+  }
+
+  .social-text {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Animação de pulso para chamar atenção */
+  @keyframes socialPulse {
+    0% {
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    50% {
+      box-shadow: 0 4px 20px rgba(102, 126, 234, 0.7), 0 0 30px rgba(102, 126, 234, 0.3);
+    }
+    100% {
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+  }
+
+  .btn-social {
+    animation: socialPulse 3s infinite;
+  }
+
+  .btn-social:hover {
+    animation: none;
+  }
+
+  /* Responsividade */
+  @media (max-width: 768px) {
+    .btn-social {
+      min-width: 100px;
+      padding: 6px 16px;
+    }
+    
+    .social-text {
+      font-size: 12px;
+    }
+    
+    .social-icon {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  /* Efeito de brilho no hover */
+  .btn-social::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .btn-social:hover::after {
+    opacity: 1;
+  }
+
+  /* Centralização do botão Social na página */
+  .social-center-item {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+  }
+
+  /* Ajuste do container da navbar para permitir posicionamento absoluto */
+  .navbar {
+    position: relative;
+  }
+
+  /* Responsividade para o botão centralizado */
+  @media (max-width: 768px) {
+    .social-center-item {
+      position: relative;
+      left: auto;
+      top: auto;
+      transform: none;
+      margin: 0 auto;
+    }
+  }
+</style>
+
 <nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark ps-0 pe-2 pb-0">
   <div class="container-fluid px-0">
     <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
@@ -12,21 +167,7 @@
           </svg>
         </a>
 
-        <!-- Search form -->
-        <form class="navbar-search form-inline" id="navbar-search-main">
-          <div class="input-group input-group-merge search-bar">
-            <span class="input-group-text" id="topbar-addon">
-              <svg class="icon icon-xs" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clip-rule="evenodd"></path>
-              </svg>
-            </span>
-            <input type="text" class="form-control" id="topbarInputIconLeft" placeholder="{% trans 'Search' %}"
-              aria-label="{% trans 'Search' %}" aria-describedby="topbar-addon">
-          </div>
-        </form>
-        <!-- / Search form -->
+
       </div>
 
       <!-- Navbar links -->
@@ -43,6 +184,18 @@
           </a>
         </li>
         {% endif %}
+        
+                 <!-- Botão Social Centralizado na Página -->
+         <li class="nav-item social-center-item">
+           <a href="{% url 'social:feed' %}" class="btn btn-social" title="{% trans 'Rede Social' %}">
+             <div class="social-btn-content">
+               <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                 <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+               </svg>
+               <span class="social-text">{% trans "Social" %}</span>
+             </div>
+           </a>
+         </li>
         
         <li class="nav-item dropdown">
           <a class="nav-link text-dark notification-bell read dropdown-toggle" id="notificationToggle" data-unread-notifications="true" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">

@@ -16,8 +16,8 @@ sys.path.append(str(BASE_DIR))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 django.setup()
 
-from apps.licence.manager import license_manager
-from apps.licence.models import License
+from apps.main.licence.manager import license_manager
+from apps.main.licence.models import License
 
 
 def print_header():
