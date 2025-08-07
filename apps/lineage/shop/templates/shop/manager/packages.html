@@ -238,31 +238,10 @@
         <form method="post">
           {% csrf_token %}
           {{ form.media }}
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{% trans "Nome do Pacote" %}</label>
-              {{ form.nome }}
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{% trans "Preço Total" %}</label>
-              {{ form.preco_total }}
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{% trans "Status" %}</label>
-              {{ form.ativo }}
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{% trans "Itens" %}</label>
-              {{ form.itens }}
-            </div>
-          </div>
           <div class="mb-3">
-            <label class="form-label">{% trans "Descrição" %}</label>
-            {{ form.descricao }}
+            {{ form.as_p }}
           </div>
-          <button type="submit" class="action-btn">
+          <button type="submit" class="action-btn w-100">
             <i class="fas fa-save me-2"></i>
             {% trans "Cadastrar Pacote" %}
           </button>

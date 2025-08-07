@@ -226,33 +226,8 @@
       <div class="form-section">
         <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{% trans "Nome do Item" %}</label>
-              {{ form.nome }}
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{% trans "Preço" %}</label>
-              {{ form.preco }}
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{% trans "Categoria" %}</label>
-              {{ form.categoria }}
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{% trans "Status" %}</label>
-              {{ form.ativo }}
-            </div>
-          </div>
           <div class="mb-3">
-            <label class="form-label">{% trans "Descrição" %}</label>
-            {{ form.descricao }}
-          </div>
-          <div class="mb-3">
-            <label class="form-label">{% trans "Imagem" %}</label>
-            {{ form.imagem }}
+            {{ form.as_p }}
           </div>
           <button type="submit" class="action-btn w-100">
             <i class="fas fa-save me-2"></i>

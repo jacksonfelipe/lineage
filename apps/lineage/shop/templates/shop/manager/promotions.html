@@ -232,39 +232,8 @@
       <div class="form-section">
         <form method="post">
           {% csrf_token %}
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{% trans "Código da Promoção" %}</label>
-              {{ form.codigo }}
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{% trans "Desconto (%)" %}</label>
-              {{ form.desconto }}
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{% trans "Data de Início" %}</label>
-              {{ form.data_inicio }}
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{% trans "Data de Fim" %}</label>
-              {{ form.data_fim }}
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{% trans "Usos Máximos" %}</label>
-              {{ form.usos_maximos }}
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">{% trans "Status" %}</label>
-              {{ form.ativo }}
-            </div>
-          </div>
           <div class="mb-3">
-            <label class="form-label">{% trans "Descrição" %}</label>
-            {{ form.descricao }}
+            {{ form.as_p }}
           </div>
           <button type="submit" class="action-btn w-100">
             <i class="fas fa-save me-2"></i>
