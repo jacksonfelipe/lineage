@@ -176,7 +176,7 @@
                   <button class="btn btn-outline-primary btn-sm like-btn" 
                           data-post-id="{{ post.id }}"
                           data-liked="{% if user in post.likes.all %}true{% else %}false{% endif %}">
-                    <i class="bi bi-heart{% if user in post.likes.all %}-fill{% endif %}"></i>
+                    <i class="bi {% if user in post.likes.all %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}"></i>
                     <span class="likes-count">{{ post.likes_count }}</span>
                   </button>
                   
@@ -297,6 +297,36 @@
 <script>
 // JavaScript para interações
 document.addEventListener('DOMContentLoaded', function() {
+  // Like/Unlike posts
+  const likeBtns = document.querySelectorAll('.like-btn');
+  likeBtns.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const postId = this.dataset.postId;
+      const icon = this.querySelector('i');
+      const countSpan = this.querySelector('.likes-count');
+      
+      fetch(`/social/post/${postId}/like/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.liked) {
+          icon.className = 'bi bi-heart-fill text-danger';
+        } else {
+          icon.className = 'bi bi-heart';
+        }
+        countSpan.textContent = data.likes_count;
+      })
+      .catch(error => {
+        console.error('Erro:', error);
+      });
+    });
+  });
+  
   // Compartilhamento
   const shareBtns = document.querySelectorAll('.share-btn');
   const shareModal = new bootstrap.Modal(document.getElementById('shareModal'));

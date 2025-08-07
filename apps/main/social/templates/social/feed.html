@@ -146,13 +146,13 @@
           <form method="post" enctype="multipart/form-data" id="post-form">
             {% csrf_token %}
             <div class="d-flex align-items-start">
-              <div class="avatar-container me-3" style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden;">
+              <div class="avatar-container me-3" style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden; flex-shrink: 0;">
                 {% if user.avatar %}
                   <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
-                       alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
+                       alt="Avatar" class="w-100 h-100" style="object-fit: cover; border-radius: 50%;">
                 {% else %}
                   <img src="{% static 'assets/img/team/generic_user.png' %}" 
-                       alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
+                       alt="Avatar" class="w-100 h-100" style="object-fit: cover; border-radius: 50%;">
                 {% endif %}
               </div>
               <div class="flex-grow-1">
@@ -412,7 +412,7 @@
                     <button class="btn btn-outline-primary btn-sm like-btn" 
                             data-post-id="{{ post.id }}"
                             data-liked="{% if user in post.likes.all %}true{% else %}false{% endif %}">
-                      <i class="bi bi-heart{% if user in post.likes.all %}-fill{% endif %}"></i>
+                      <i class="bi {% if user in post.likes.all %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}"></i>
                       <span class="likes-count">{{ post.likes_count }}</span>
                     </button>
                     <ul class="dropdown-menu">
@@ -730,6 +730,36 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
+  // Like/Unlike posts
+  const likeBtns = document.querySelectorAll('.like-btn');
+  likeBtns.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const postId = this.dataset.postId;
+      const icon = this.querySelector('i');
+      const countSpan = this.querySelector('.likes-count');
+      
+      fetch(`/social/post/${postId}/like/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.liked) {
+          icon.className = 'bi bi-heart-fill text-danger';
+        } else {
+          icon.className = 'bi bi-heart';
+        }
+        countSpan.textContent = data.likes_count;
+      })
+      .catch(error => {
+        console.error('Erro:', error);
+      });
+    });
+  });
+  
   // Reações
   const reactionBtns = document.querySelectorAll('.reaction-btn');
   reactionBtns.forEach(btn => {
@@ -749,11 +779,13 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          // Atualizar contador de likes
+          // Atualizar contador de likes e ícone
           const likeBtn = document.querySelector(`[data-post-id="${postId}"].like-btn`);
           if (likeBtn) {
             const likesCount = likeBtn.querySelector('.likes-count');
+            const icon = likeBtn.querySelector('i');
             likesCount.textContent = data.likes_count;
+            icon.className = 'bi bi-heart-fill text-danger';
           }
         }
       });
