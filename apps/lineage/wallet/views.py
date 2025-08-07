@@ -26,19 +26,41 @@ from django.utils.translation import gettext as _
 def dashboard_wallet(request):
     wallet, created = Wallet.objects.get_or_create(usuario=request.user)
     
-    # Combina transações normais e de bônus, ordenadas por data
-    from django.db.models import Q
-    transacoes_query = (
-        TransacaoWallet.objects.filter(wallet=wallet)
-        .values('id', 'tipo', 'valor', 'descricao', 'data', 'origem', 'destino')
-        .annotate(tipo_transacao=models.Value('normal', output_field=models.CharField()))
-    ).union(
-        TransacaoBonus.objects.filter(wallet=wallet)
-        .values('id', 'tipo', 'valor', 'descricao', 'data', 'origem', 'destino')
-        .annotate(tipo_transacao=models.Value('bonus', output_field=models.CharField()))
-    ).order_by('-data')
+    # Buscar transações normais e de bônus
+    transacoes_normais = TransacaoWallet.objects.filter(wallet=wallet).order_by('-data')
+    transacoes_bonus = TransacaoBonus.objects.filter(wallet=wallet).order_by('-data')
     
-    paginator = Paginator(transacoes_query, 10)
+    # Combina as duas listas em Python para evitar problemas com UNION
+    todas_transacoes = []
+    
+    for transacao in transacoes_normais:
+        todas_transacoes.append({
+            'id': transacao.id,
+            'tipo': transacao.tipo,
+            'valor': transacao.valor,
+            'descricao': transacao.descricao,
+            'data': transacao.data,
+            'origem': transacao.origem,
+            'destino': transacao.destino,
+            'tipo_transacao': 'normal'
+        })
+    
+    for transacao in transacoes_bonus:
+        todas_transacoes.append({
+            'id': transacao.id,
+            'tipo': transacao.tipo,
+            'valor': transacao.valor,
+            'descricao': transacao.descricao,
+            'data': transacao.data,
+            'origem': transacao.origem,
+            'destino': transacao.destino,
+            'tipo_transacao': 'bonus'
+        })
+    
+    # Ordena por data (mais recente primeiro)
+    todas_transacoes.sort(key=lambda x: x['data'], reverse=True)
+    
+    paginator = Paginator(todas_transacoes, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

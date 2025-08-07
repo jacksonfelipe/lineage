@@ -135,46 +135,44 @@
         <p class="reports-card-description">{% trans "Suas transações recentes" %}</p>
       </div>
       <div class="reports-card-body">
-        {% if transactions %}
+        {% if transacoes %}
         <div class="transactions-list">
-          {% for transaction in transactions %}
+          {% for transacao in transacoes %}
           <div class="transaction-item">
             <div class="transaction-icon">
-              {% if transaction.type == 'transfer_to_server' %}
-                <i class="fas fa-server"></i>
-              {% elif transaction.type == 'transfer_to_player' %}
-                <i class="fas fa-user-friends"></i>
-              {% elif transaction.type == 'purchase' %}
-                <i class="fas fa-shopping-cart"></i>
+              {% if transacao.tipo == 'SAIDA' %}
+                <i class="fas fa-arrow-down text-danger"></i>
               {% else %}
-                <i class="fas fa-exchange-alt"></i>
+                <i class="fas fa-arrow-up text-success"></i>
               {% endif %}
             </div>
             <div class="transaction-content">
               <div class="transaction-header">
-                <h5 class="transaction-title">{{ transaction.get_type_display }}</h5>
+                <h5 class="transaction-title">{{ transacao.descricao }}</h5>
                 <div class="transaction-meta">
-                  <span class="transaction-date">{{ transaction.created_at|date:"d/m/Y H:i" }}</span>
-                  <span class="transaction-status {{ transaction.status }}">
-                    {{ transaction.get_status_display }}
-                  </span>
+                  <span class="transaction-date">{{ transacao.data|date:"d/m/Y H:i" }}</span>
+                  {% if transacao.tipo_transacao == 'bonus' %}
+                    <span class="transaction-status bonus">
+                      <i class="fas fa-gift"></i> Bônus
+                    </span>
+                  {% endif %}
                 </div>
               </div>
               <p class="transaction-description">
-                {% if transaction.type == 'transfer_to_server' %}
-                  {% trans "Transferência para servidor" %}: {{ transaction.amount|floatformat:2 }}
-                {% elif transaction.type == 'transfer_to_player' %}
-                  {% trans "Transferência para" %} {{ transaction.recipient }}: {{ transaction.amount|floatformat:2 }}
-                {% elif transaction.type == 'purchase' %}
-                  {% trans "Compra na loja" %}: {{ transaction.amount|floatformat:2 }}
+                {% if transacao.origem and transacao.destino %}
+                  {% trans "De" %} {{ transacao.origem }} {% trans "para" %} {{ transacao.destino }}
+                {% elif transacao.origem %}
+                  {% trans "Origem" %}: {{ transacao.origem }}
+                {% elif transacao.destino %}
+                  {% trans "Destino" %}: {{ transacao.destino }}
                 {% else %}
-                  {{ transaction.description }}
+                  {{ transacao.descricao }}
                 {% endif %}
               </p>
             </div>
             <div class="transaction-amount">
-              <span class="amount-value {% if transaction.amount < 0 %}negative{% else %}positive{% endif %}">
-                {{ transaction.amount|floatformat:2 }}
+              <span class="amount-value {% if transacao.tipo == 'SAIDA' %}negative{% else %}positive{% endif %}">
+                {% if transacao.tipo == 'SAIDA' %}-{% else %}+{% endif %}R$ {{ transacao.valor|floatformat:2 }}
               </span>
             </div>
           </div>
@@ -182,30 +180,30 @@
         </div>
         
         <!-- Paginação -->
-        {% if transactions.has_other_pages %}
+        {% if page_obj.has_other_pages %}
         <nav aria-label="Navegação de transações" class="mt-4">
           <ul class="pagination justify-content-center">
-            {% if transactions.has_previous %}
+            {% if page_obj.has_previous %}
               <li class="page-item">
-                <a class="page-link" href="?page={{ transactions.previous_page_number }}">{% trans "Anterior" %}</a>
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">{% trans "Anterior" %}</a>
               </li>
             {% endif %}
             
-            {% for num in transactions.paginator.page_range %}
-              {% if transactions.number == num %}
+            {% for num in page_obj.paginator.page_range %}
+              {% if page_obj.number == num %}
                 <li class="page-item active">
                   <span class="page-link">{{ num }}</span>
                 </li>
-              {% elif num > transactions.number|add:'-3' and num < transactions.number|add:'3' %}
+              {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
                 <li class="page-item">
                   <a class="page-link" href="?page={{ num }}">{{ num }}</a>
                 </li>
               {% endif %}
             {% endfor %}
             
-            {% if transactions.has_next %}
+            {% if page_obj.has_next %}
               <li class="page-item">
-                <a class="page-link" href="?page={{ transactions.next_page_number }}">{% trans "Próximo" %}</a>
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans "Próximo" %}</a>
               </li>
             {% endif %}
           </ul>
