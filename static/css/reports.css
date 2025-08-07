@@ -528,14 +528,16 @@
   align-items: center;
   gap: 0.5rem;
   margin-top: 2rem;
+  flex-wrap: wrap;
 }
 
 .pagination-item {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
+  min-width: 40px;
   height: 40px;
+  padding: 0 1rem;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 10px;
@@ -543,6 +545,8 @@
   text-decoration: none;
   transition: all 0.3s ease;
   font-weight: 500;
+  white-space: nowrap;
+  text-align: center;
 }
 
 .pagination-item:hover {
@@ -555,12 +559,50 @@
 .pagination-item.active {
   background: linear-gradient(135deg, #6f42c1, #e83e8c);
   border-color: transparent;
+  min-width: auto;
+  padding: 0 1.5rem;
 }
 
 .pagination-item.disabled {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
+}
+
+/* Responsive pagination for mobile devices */
+@media (max-width: 768px) {
+  .logs-pagination {
+    gap: 0.25rem;
+    margin-top: 1.5rem;
+  }
+  
+  .pagination-item {
+    min-width: 35px;
+    height: 35px;
+    padding: 0 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .pagination-item.active {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logs-pagination {
+    gap: 0.2rem;
+  }
+  
+  .pagination-item {
+    min-width: 30px;
+    height: 30px;
+    padding: 0 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .pagination-item.active {
+    padding: 0 0.75rem;
+  }
 }
 
 /* Purchase History Styles */
@@ -901,11 +943,13 @@
 
 /* Modal improvements */
 .modal {
-  z-index: 1055 !important;
+  z-index: 9999 !important;
 }
 
 .modal-backdrop {
-  z-index: 1054 !important;
+  z-index: 9998 !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  pointer-events: none !important;
 }
 
 .modal-content {
@@ -915,6 +959,8 @@
   border-radius: 20px;
   color: #000000;
   box-shadow: 0 0 30px rgba(111, 66, 193, 0.3);
+  position: relative;
+  z-index: 10000 !important;
 }
 
 .modal-header {
@@ -956,6 +1002,214 @@
   font-weight: 600;
   padding: 0.75rem 1.5rem;
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 10001 !important;
+}
+
+/* Garantir que o modal seja clicável */
+.modal-dialog {
+  z-index: 10000 !important;
+  position: relative;
+}
+
+/* Garantir que o backdrop não interfira */
+.modal-backdrop.show {
+  opacity: 0.5 !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Garantir que o modal seja visível */
+.modal.show {
+  display: block !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Forçar visibilidade e interatividade dos modais */
+.modal {
+  pointer-events: auto !important;
+}
+
+.modal-content {
+  pointer-events: auto !important;
+}
+
+.modal-header,
+.modal-body,
+.modal-footer {
+  pointer-events: auto !important;
+}
+
+/* Garantir que botões dentro do modal sejam clicáveis */
+.modal .btn,
+.modal .btn-close {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* Garantir que o backdrop não bloqueie cliques */
+.modal-backdrop {
+  pointer-events: none !important;
+}
+
+/* Forçar interatividade total do modal */
+.modal.show {
+  pointer-events: auto !important;
+  z-index: 9999 !important;
+}
+
+.modal.show .modal-dialog {
+  pointer-events: auto !important;
+  z-index: 10000 !important;
+}
+
+.modal.show .modal-content {
+  pointer-events: auto !important;
+  z-index: 10001 !important;
+}
+
+/* Garantir que todos os elementos dentro do modal sejam clicáveis */
+.modal.show * {
+  pointer-events: auto !important;
+}
+
+/* Remover qualquer overlay invisível que possa estar bloqueando */
+.modal.show::before,
+.modal.show::after {
+  display: none !important;
+}
+
+.modal.show .modal-content::before,
+.modal.show .modal-content::after {
+  display: none !important;
+}
+
+/* Regras específicas para modais da loja */
+#modalPackageItems .modal-content,
+.modal[id^="modalPackageItems"] .modal-content {
+  background: rgba(255, 255, 255, 0.98) !important;
+  color: #000000 !important;
+  z-index: 10001 !important;
+  position: relative !important;
+}
+
+#modalPackageItems .modal-header,
+.modal[id^="modalPackageItems"] .modal-header {
+  background: linear-gradient(135deg, #6f42c1, #e83e8c) !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid rgba(111, 66, 193, 0.1) !important;
+}
+
+#modalPackageItems .modal-body,
+.modal[id^="modalPackageItems"] .modal-body {
+  color: #000000 !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+}
+
+#modalPackageItems .modal-footer,
+.modal[id^="modalPackageItems"] .modal-footer {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-top: 1px solid rgba(111, 66, 193, 0.1) !important;
+}
+
+/* Garantir que os itens do pacote sejam visíveis */
+.package-items-list {
+  color: #000000 !important;
+}
+
+.package-item {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(111, 66, 193, 0.2) !important;
+  color: #000000 !important;
+}
+
+.package-item-info h6 {
+  color: #000000 !important;
+}
+
+/* Forçar visibilidade dos modais - regras de emergência */
+.modal[style*="display: none"] {
+  display: block !important;
+}
+
+.modal[style*="visibility: hidden"] {
+  visibility: visible !important;
+}
+
+.modal[style*="opacity: 0"] {
+  opacity: 1 !important;
+}
+
+/* Garantir que o modal seja sempre visível quando aberto */
+.modal.show,
+.modal[class*="show"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Garantir que o conteúdo do modal seja sempre visível */
+.modal.show .modal-content,
+.modal[class*="show"] .modal-content {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Regras de emergência para garantir clicabilidade */
+.modal.show,
+.modal[class*="show"] {
+  pointer-events: auto !important;
+  z-index: 9999 !important;
+}
+
+.modal.show .modal-dialog,
+.modal[class*="show"] .modal-dialog {
+  pointer-events: auto !important;
+  z-index: 10000 !important;
+}
+
+.modal.show .modal-content,
+.modal[class*="show"] .modal-content {
+  pointer-events: auto !important;
+  z-index: 10001 !important;
+}
+
+/* Garantir que todos os elementos dentro do modal sejam clicáveis */
+.modal.show *,
+.modal[class*="show"] * {
+  pointer-events: auto !important;
+}
+
+/* Remover qualquer pseudo-elemento que possa estar bloqueando */
+.modal.show::before,
+.modal.show::after,
+.modal[class*="show"]::before,
+.modal[class*="show"]::after {
+  display: none !important;
+}
+
+.modal.show .modal-content::before,
+.modal.show .modal-content::after,
+.modal[class*="show"] .modal-content::before,
+.modal[class*="show"] .modal-content::after {
+  display: none !important;
+}
+
+/* Garantir que o backdrop não interfira com cliques */
+.modal-backdrop.show {
+  pointer-events: none !important;
+  z-index: 9998 !important;
+}
+
+/* Forçar interatividade dos botões do modal */
+.modal.show .btn,
+.modal.show .btn-close,
+.modal[class*="show"] .btn,
+.modal[class*="show"] .btn-close {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  z-index: 10002 !important;
 }
 
 .modal .btn-secondary {
@@ -2995,4 +3249,112 @@
   .security-item i {
     margin-top: 0;
   }
+}
+
+/* Garantir que o backdrop não interfira com cliques */
+.modal-backdrop.show {
+  pointer-events: none !important;
+  z-index: 9998 !important;
+}
+
+/* Forçar interatividade dos botões do modal */
+.modal.show .btn,
+.modal.show .btn-close,
+.modal[class*="show"] .btn,
+.modal[class*="show"] .btn-close {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  z-index: 10002 !important;
+}
+
+/* Garantir que os botões "Ver Itens" sempre sejam clicáveis */
+button[data-bs-toggle="modal"],
+.btn[data-bs-toggle="modal"] {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  z-index: 1 !important;
+  position: relative !important;
+}
+
+/* Garantir que os botões "Ver Itens" funcionem mesmo após interação com modal */
+button[data-bs-toggle="modal"]:not(.disabled),
+.btn[data-bs-toggle="modal"]:not(.disabled) {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  z-index: 1 !important;
+}
+
+/* Remover qualquer interferência de CSS após fechamento do modal */
+.modal:not(.show) + .modal-backdrop,
+.modal-backdrop:not(.show) {
+  pointer-events: none !important;
+  z-index: -1 !important;
+  display: none !important;
+}
+
+/* Garantir que botões dentro de item-actions sejam sempre clicáveis */
+.item-actions button,
+.item-actions .btn {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  z-index: 1 !important;
+  position: relative !important;
+}
+
+/* Limpar qualquer estado residual dos botões */
+.item-actions button:not([disabled]),
+.item-actions .btn:not([disabled]) {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* Garantir que modais fade não interfiram quando fechados */
+.modal.fade:not(.show) {
+  z-index: -1 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Garantir que modais fade fechados não bloqueiem cliques */
+.modal.fade[style*="display: none"],
+.modal.fade[style*="visibility: hidden"],
+.modal.fade[style*="opacity: 0"] {
+  z-index: -1 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  display: none !important;
+}
+
+/* Garantir que backdrop fade não interfira quando modal está fechado */
+.modal-backdrop.fade:not(.show) {
+  z-index: -1 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  display: none !important;
+}
+
+/* Forçar que modais fechados não interfiram com outros elementos */
+.modal:not(.show) {
+  z-index: -1 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Garantir que elementos fora do modal sejam sempre clicáveis */
+.reports-container *:not(.modal):not(.modal-backdrop) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Garantir que botões específicos tenham prioridade */
+.item-actions button[data-bs-toggle="modal"],
+.item-actions .btn[data-bs-toggle="modal"] {
+  z-index: 10 !important;
+  position: relative !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
 }
