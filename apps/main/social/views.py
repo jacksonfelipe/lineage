@@ -30,7 +30,13 @@ def feed(request):
     
     posts = Post.objects.filter(
         Q(author__in=following_users) | Q(is_public=True) | Q(author=request.user)
-    ).select_related('author').prefetch_related('likes', 'comments').order_by('-created_at')
+    ).select_related('author').prefetch_related(
+        'likes', 'comments', 'hashtags'
+    ).order_by('-created_at')
+    
+    # Anotar posts com informação se o usuário atual deu like
+    for post in posts:
+        post.is_liked_by_current_user = post.is_liked_by(request.user)
     
     # Paginação
     paginator = Paginator(posts, 10)
@@ -111,6 +117,10 @@ def my_posts(request):
     """Posts do usuário logado"""
     posts = Post.objects.filter(author=request.user).order_by('-is_pinned', '-created_at')
     
+    # Anotar posts com informação se o usuário atual deu like
+    for post in posts:
+        post.is_liked_by_current_user = post.is_liked_by(request.user)
+    
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -136,6 +146,9 @@ def post_detail(request, post_id):
     
     # Incrementar visualizações
     post.increment_views()
+    
+    # Adicionar informação se o usuário atual deu like
+    post.is_liked_by_current_user = post.is_liked_by(request.user)
     
     # Formulário para comentários
     if request.method == 'POST':
@@ -338,6 +351,10 @@ def user_profile(request, username):
     # Buscar posts do usuário
     posts = Post.objects.filter(author=user).order_by('-is_pinned', '-created_at')
     
+    # Anotar posts com informação se o usuário atual deu like
+    for post in posts:
+        post.is_liked_by_current_user = post.is_liked_by(request.user)
+    
     # Verificar se o usuário logado segue este usuário
     is_following = False
     if request.user.is_authenticated and request.user != user:
@@ -439,6 +456,7 @@ def search(request):
                         posts_query = posts_query.filter(created_at__date__gte=date_filter_obj)
                 
                 for post in posts_query[:10]:  # Limitar a 10 resultados
+                    post.is_liked_by_current_user = post.is_liked_by(request.user)
                     results.append({
                         'type': 'post',
                         'object': post
@@ -473,6 +491,10 @@ def hashtag_detail(request, hashtag_name):
         hashtags__hashtag=hashtag,
         is_public=True
     ).order_by('-created_at')
+    
+    # Anotar posts com informação se o usuário atual deu like
+    for post in posts:
+        post.is_liked_by_current_user = post.is_liked_by(request.user)
     
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')

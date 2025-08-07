@@ -82,7 +82,7 @@
               <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
                   <button class="btn btn-link text-decoration-none like-btn" data-post-id="{{ post.id }}">
-                    <i class="bi {% if user in post.likes.all %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}"></i>
+                    <i class="bi {% if post.is_liked_by_current_user %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}"></i>
                     <span class="likes-count">{{ post.likes_count }}</span>
                   </button>
                   <a href="{% url 'social:post_detail' post.id %}" class="btn btn-link text-decoration-none">

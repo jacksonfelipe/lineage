@@ -149,6 +149,12 @@ class Post(BaseModel):
     def has_link(self):
         """Verifica se o post tem link"""
         return bool(self.link)
+    
+    def is_liked_by(self, user):
+        """Verifica se um usuário específico deu like no post"""
+        if not user or not user.is_authenticated:
+            return False
+        return self.likes.filter(user=user).exists()
 
 
 class Comment(BaseModel):

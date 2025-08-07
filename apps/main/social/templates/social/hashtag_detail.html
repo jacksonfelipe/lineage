@@ -175,8 +175,8 @@
                   <!-- Botão de curtir -->
                   <button class="btn btn-outline-primary btn-sm like-btn" 
                           data-post-id="{{ post.id }}"
-                          data-liked="{% if user in post.likes.all %}true{% else %}false{% endif %}">
-                    <i class="bi {% if user in post.likes.all %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}"></i>
+                          data-liked="{% if post.is_liked_by_current_user %}true{% else %}false{% endif %}">
+                    <i class="bi {% if post.is_liked_by_current_user %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}"></i>
                     <span class="likes-count">{{ post.likes_count }}</span>
                   </button>
                   
