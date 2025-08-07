@@ -12,9 +12,12 @@ from django.contrib.auth import get_user_model
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.utils import timezone
+from datetime import datetime, timedelta
+import re
 
-from .models import Post, Comment, Like, Follow, UserProfile
-from .forms import PostForm, CommentForm, UserProfileForm, SearchForm
+from .models import Post, Comment, Like, Follow, UserProfile, Share, Hashtag, PostHashtag, CommentLike
+from .forms import PostForm, CommentForm, UserProfileForm, SearchForm, ShareForm, ReactionForm, HashtagForm
 
 User = get_user_model()
 
@@ -22,13 +25,11 @@ User = get_user_model()
 @login_required
 def feed(request):
     """Feed principal da rede social"""
-    # Buscar posts de usuários que o usuário segue + posts públicos
+    # Buscar posts de usuários que o usuário segue + posts públicos + posts próprios
     following_users = request.user.following.values_list('following_id', flat=True)
     
     posts = Post.objects.filter(
-        Q(author__in=following_users) | Q(is_public=True)
-    ).exclude(
-        author=request.user  # Excluir posts próprios do feed principal
+        Q(author__in=following_users) | Q(is_public=True) | Q(author=request.user)
     ).select_related('author').prefetch_related('likes', 'comments').order_by('-created_at')
     
     # Paginação
@@ -42,7 +43,18 @@ def feed(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
+            
+            # Processar hashtags
+            hashtags = form.cleaned_data.get('hashtags', [])
+            
             post.save()
+            
+            # Adicionar hashtags ao post
+            for hashtag_name in hashtags:
+                hashtag, created = Hashtag.objects.get_or_create(name=hashtag_name)
+                PostHashtag.objects.create(post=post, hashtag=hashtag)
+                hashtag.update_posts_count()
+            
             messages.success(request, _('Post criado com sucesso!'))
             return redirect('social:feed')
     else:
@@ -60,7 +72,7 @@ def feed(request):
 @login_required
 def my_posts(request):
     """Posts do usuário logado"""
-    posts = Post.objects.filter(author=request.user).order_by('-created_at')
+    posts = Post.objects.filter(author=request.user).order_by('-is_pinned', '-created_at')
     
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
@@ -85,9 +97,12 @@ def post_detail(request, post_id):
             messages.error(request, _('Você não tem permissão para ver este post.'))
             return redirect('social:feed')
     
+    # Incrementar visualizações
+    post.increment_views()
+    
     # Formulário para comentários
     if request.method == 'POST':
-        form = CommentForm(request.POST)
+        form = CommentForm(request.POST, request.FILES)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.post = post
@@ -124,24 +139,123 @@ def like_post(request, post_id):
     # Verificar se o usuário pode ver o post
     if not post.is_public and post.author != request.user:
         if not Follow.objects.filter(follower=request.user, following=post.author).exists():
-            return HttpResponseForbidden()
+            return JsonResponse({'error': _('Permissão negada')}, status=403)
     
-    like, created = Like.objects.get_or_create(post=post, user=request.user)
+    like, created = Like.objects.get_or_create(
+        post=post,
+        user=request.user,
+        defaults={'reaction_type': 'like'}
+    )
     
     if not created:
-        # Se já existe, remove a curtida
+        # Se já existe, remover a curtida
         like.delete()
         liked = False
     else:
         liked = True
     
-    # Atualizar contador de likes
+    # Atualizar contador
     post.update_counts()
     
     return JsonResponse({
         'liked': liked,
-        'likes_count': post.likes_count
+        'likes_count': post.likes_count,
+        'reaction_type': like.reaction_type if liked else None
     })
+
+
+@login_required
+@require_POST
+def react_to_post(request, post_id):
+    """Reagir a um post com diferentes emojis"""
+    post = get_object_or_404(Post, id=post_id)
+    form = ReactionForm(request.POST)
+    
+    if form.is_valid():
+        reaction_type = form.cleaned_data['reaction_type']
+        
+        like, created = Like.objects.get_or_create(
+            post=post,
+            user=request.user,
+            defaults={'reaction_type': reaction_type}
+        )
+        
+        if not created:
+            # Se já existe, atualizar o tipo de reação
+            like.reaction_type = reaction_type
+            like.save()
+        
+        # Atualizar contador
+        post.update_counts()
+        
+        return JsonResponse({
+            'success': True,
+            'reaction_type': reaction_type,
+            'likes_count': post.likes_count
+        })
+    
+    return JsonResponse({'error': _('Dados inválidos')}, status=400)
+
+
+@login_required
+@require_POST
+def like_comment(request, comment_id):
+    """Curtir/descurtir um comentário"""
+    comment = get_object_or_404(Comment, id=comment_id)
+    
+    like, created = CommentLike.objects.get_or_create(
+        comment=comment,
+        user=request.user
+    )
+    
+    if not created:
+        # Se já existe, remover a curtida
+        like.delete()
+        liked = False
+    else:
+        liked = True
+    
+    # Atualizar contador
+    comment.update_likes_count()
+    
+    return JsonResponse({
+        'liked': liked,
+        'likes_count': comment.likes_count
+    })
+
+
+@login_required
+@require_POST
+def share_post(request, post_id):
+    """Compartilhar um post"""
+    original_post = get_object_or_404(Post, id=post_id)
+    form = ShareForm(request.POST)
+    
+    if form.is_valid():
+        # Criar novo post como compartilhamento
+        post = Post.objects.create(
+            author=request.user,
+            content=form.cleaned_data.get('comment', ''),
+            is_public=form.cleaned_data.get('is_public', True),
+            link=f"/social/post/{original_post.id}/"
+        )
+        
+        # Criar registro de compartilhamento
+        Share.objects.create(
+            original_post=original_post,
+            user=request.user,
+            comment=form.cleaned_data.get('comment', '')
+        )
+        
+        # Atualizar contador de compartilhamentos
+        original_post.shares_count += 1
+        original_post.save(update_fields=['shares_count'])
+        
+        messages.success(request, _('Post compartilhado com sucesso!'))
+        return redirect('social:feed')
+    
+    messages.error(request, _('Erro ao compartilhar o post.'))
+    return redirect('social:post_detail', post_id=post_id)
 
 
 @login_required
@@ -151,7 +265,7 @@ def follow_user(request, user_id):
     user_to_follow = get_object_or_404(User, id=user_id)
     
     if user_to_follow == request.user:
-        return JsonResponse({'error': _('Você não pode seguir a si mesmo.')}, status=400)
+        return JsonResponse({'error': _('Você não pode seguir a si mesmo')}, status=400)
     
     follow, created = Follow.objects.get_or_create(
         follower=request.user,
@@ -159,7 +273,7 @@ def follow_user(request, user_id):
     )
     
     if not created:
-        # Se já existe, remove o follow
+        # Se já existe, remover o follow
         follow.delete()
         following = False
     else:
@@ -167,7 +281,8 @@ def follow_user(request, user_id):
     
     return JsonResponse({
         'following': following,
-        'followers_count': user_to_follow.followers.count()
+        'followers_count': user_to_follow.followers.count(),
+        'following_count': user_to_follow.following.count()
     })
 
 
@@ -175,15 +290,16 @@ def follow_user(request, user_id):
 def user_profile(request, username):
     """Perfil de um usuário"""
     user = get_object_or_404(User, username=username)
+    profile, created = UserProfile.objects.get_or_create(user=user)
     
     # Verificar se o usuário pode ver o perfil
-    if user.social_profile.is_private and user != request.user:
+    if profile.is_private and user != request.user:
         if not Follow.objects.filter(follower=request.user, following=user).exists():
             messages.error(request, _('Este perfil é privado.'))
             return redirect('social:feed')
     
     # Buscar posts do usuário
-    posts = Post.objects.filter(author=user).order_by('-created_at')
+    posts = Post.objects.filter(author=user).order_by('-is_pinned', '-created_at')
     
     # Verificar se o usuário logado segue este usuário
     is_following = False
@@ -195,6 +311,7 @@ def user_profile(request, username):
     
     context = {
         'profile_user': user,
+        'profile': profile,
         'posts': posts,
         'is_following': is_following,
         'segment': 'user_profile',
@@ -205,7 +322,7 @@ def user_profile(request, username):
 
 @login_required
 def edit_profile(request):
-    """Editar perfil social"""
+    """Editar perfil do usuário logado"""
     profile, created = UserProfile.objects.get_or_create(user=request.user)
     
     if request.method == 'POST':
@@ -215,10 +332,17 @@ def edit_profile(request):
             messages.success(request, _('Perfil atualizado com sucesso!'))
             return redirect('social:user_profile', username=request.user.username)
     else:
-        form = UserProfileForm(instance=profile)
+        # Pré-preencher links sociais
+        initial_data = {}
+        for field in ['facebook', 'twitter', 'instagram', 'linkedin', 'youtube']:
+            if field in profile.social_links:
+                initial_data[field] = profile.social_links[field]
+        
+        form = UserProfileForm(instance=profile, initial=initial_data)
     
     context = {
         'form': form,
+        'profile': profile,
         'segment': 'edit_profile',
         'parent': 'social',
     }
@@ -227,28 +351,71 @@ def edit_profile(request):
 
 @login_required
 def search(request):
-    """Busca de usuários e posts"""
+    """Buscar usuários e posts"""
     form = SearchForm(request.GET)
     results = []
     
-    if form.is_valid() and form.cleaned_data.get('q'):
-        query = form.cleaned_data['q']
-        search_type = form.cleaned_data['search_type']
+    if form.is_valid():
+        query = form.cleaned_data.get('q', '').strip()
+        search_type = form.cleaned_data.get('search_type', 'all')
+        date_filter = form.cleaned_data.get('date_filter', 'all')
         
-        if search_type in ['all', 'users']:
-            users = User.objects.filter(
-                Q(username__icontains=query) |
-                Q(first_name__icontains=query) |
-                Q(last_name__icontains=query)
-            ).exclude(id=request.user.id)[:10]
-            results.extend([('user', user) for user in users])
-        
-        if search_type in ['all', 'posts']:
-            posts = Post.objects.filter(
-                Q(content__icontains=query) |
-                Q(author__username__icontains=query)
-            ).filter(is_public=True)[:10]
-            results.extend([('post', post) for post in posts])
+        if query:
+            # Aplicar filtro de data
+            date_filter_obj = None
+            if date_filter == 'today':
+                date_filter_obj = timezone.now().date()
+            elif date_filter == 'week':
+                date_filter_obj = timezone.now() - timedelta(days=7)
+            elif date_filter == 'month':
+                date_filter_obj = timezone.now() - timedelta(days=30)
+            elif date_filter == 'year':
+                date_filter_obj = timezone.now() - timedelta(days=365)
+            
+            if search_type in ['all', 'users']:
+                # Buscar usuários
+                users = User.objects.filter(
+                    Q(username__icontains=query) |
+                    Q(first_name__icontains=query) |
+                    Q(last_name__icontains=query) |
+                    Q(email__icontains=query)
+                ).exclude(id=request.user.id)
+                
+                for user in users[:10]:  # Limitar a 10 resultados
+                    results.append({
+                        'type': 'user',
+                        'object': user,
+                        'profile': getattr(user, 'social_profile', None)
+                    })
+            
+            if search_type in ['all', 'posts']:
+                # Buscar posts
+                posts_query = Post.objects.filter(
+                    Q(content__icontains=query) |
+                    Q(author__username__icontains=query)
+                ).filter(is_public=True)
+                
+                if date_filter_obj:
+                    if isinstance(date_filter_obj, datetime):
+                        posts_query = posts_query.filter(created_at__gte=date_filter_obj)
+                    else:
+                        posts_query = posts_query.filter(created_at__date__gte=date_filter_obj)
+                
+                for post in posts_query[:10]:  # Limitar a 10 resultados
+                    results.append({
+                        'type': 'post',
+                        'object': post
+                    })
+            
+            if search_type in ['all', 'hashtags']:
+                # Buscar hashtags
+                hashtags = Hashtag.objects.filter(name__icontains=query)
+                
+                for hashtag in hashtags[:5]:  # Limitar a 5 resultados
+                    results.append({
+                        'type': 'hashtag',
+                        'object': hashtag
+                    })
     
     context = {
         'form': form,
@@ -260,15 +427,43 @@ def search(request):
 
 
 @login_required
+def hashtag_detail(request, hashtag_name):
+    """Detalhes de uma hashtag"""
+    hashtag = get_object_or_404(Hashtag, name=hashtag_name.lower())
+    
+    # Buscar posts com esta hashtag
+    posts = Post.objects.filter(
+        hashtags__hashtag=hashtag,
+        is_public=True
+    ).order_by('-created_at')
+    
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'hashtag': hashtag,
+        'page_obj': page_obj,
+        'segment': 'hashtag_detail',
+        'parent': 'social',
+    }
+    return render(request, 'social/hashtag_detail.html', context)
+
+
+@login_required
 def followers_list(request, username):
     """Lista de seguidores de um usuário"""
     user = get_object_or_404(User, username=username)
     followers = user.followers.all()
     
+    paginator = Paginator(followers, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
     context = {
         'profile_user': user,
-        'followers': followers,
-        'segment': 'followers',
+        'page_obj': page_obj,
+        'segment': 'followers_list',
         'parent': 'social',
     }
     return render(request, 'social/followers_list.html', context)
@@ -280,30 +475,75 @@ def following_list(request, username):
     user = get_object_or_404(User, username=username)
     following = user.following.all()
     
+    paginator = Paginator(following, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
     context = {
         'profile_user': user,
-        'following': following,
-        'segment': 'following',
+        'page_obj': page_obj,
+        'segment': 'following_list',
         'parent': 'social',
     }
     return render(request, 'social/following_list.html', context)
 
 
-# Views baseadas em classes para CRUD de posts
+@login_required
+@require_POST
+def pin_post(request, post_id):
+    """Fixar/desfixar um post no perfil"""
+    post = get_object_or_404(Post, id=post_id, author=request.user)
+    
+    post.is_pinned = not post.is_pinned
+    post.save(update_fields=['is_pinned'])
+    
+    return JsonResponse({
+        'pinned': post.is_pinned
+    })
+
+
+@login_required
+@require_POST
+def delete_comment(request, comment_id):
+    """Deletar um comentário"""
+    comment = get_object_or_404(Comment, id=comment_id)
+    
+    # Verificar permissão
+    if comment.author != request.user and comment.post.author != request.user:
+        return JsonResponse({'error': _('Permissão negada')}, status=403)
+    
+    post = comment.post
+    comment.delete()
+    
+    # Atualizar contador
+    post.update_counts()
+    
+    return JsonResponse({'success': True})
+
+
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
     template_name = 'social/post_form.html'
     success_url = reverse_lazy('social:feed')
-    
+
     def form_valid(self, form):
         form.instance.author = self.request.user
+        response = super().form_valid(form)
+        
+        # Processar hashtags
+        hashtags = form.cleaned_data.get('hashtags', [])
+        for hashtag_name in hashtags:
+            hashtag, created = Hashtag.objects.get_or_create(name=hashtag_name)
+            PostHashtag.objects.create(post=form.instance, hashtag=hashtag)
+            hashtag.update_posts_count()
+        
         messages.success(self.request, _('Post criado com sucesso!'))
-        return super().form_valid(form)
-    
+        return response
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['segment'] = 'create_post'
+        context['segment'] = 'post_create'
         context['parent'] = 'social'
         return context
 
@@ -312,21 +552,44 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'social/post_form.html'
-    
+
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
-    
+
     def get_success_url(self):
         return reverse_lazy('social:post_detail', kwargs={'post_id': self.object.id})
-    
+
     def form_valid(self, form):
+        # Marcar como editado
+        self.object.mark_as_edited()
+        
+        # Processar hashtags
+        hashtags = form.cleaned_data.get('hashtags', [])
+        
+        # Remover hashtags antigas
+        self.object.hashtags.all().delete()
+        
+        response = super().form_valid(form)
+        
+        # Adicionar novas hashtags
+        for hashtag_name in hashtags:
+            hashtag, created = Hashtag.objects.get_or_create(name=hashtag_name)
+            PostHashtag.objects.create(post=self.object, hashtag=hashtag)
+            hashtag.update_posts_count()
+        
         messages.success(self.request, _('Post atualizado com sucesso!'))
-        return super().form_valid(form)
-    
+        return response
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['segment'] = 'edit_post'
+        context['segment'] = 'post_edit'
         context['parent'] = 'social'
+        
+        # Pré-preencher hashtags
+        if self.object:
+            hashtags = [f"#{ph.hashtag.name}" for ph in self.object.hashtags.all()]
+            context['form'].fields['hashtags'].initial = ' '.join(hashtags)
+        
         return context
 
 
@@ -334,36 +597,20 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
     template_name = 'social/post_confirm_delete.html'
     success_url = reverse_lazy('social:my_posts')
-    
+
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
-    
+
     def delete(self, request, *args, **kwargs):
-        messages.success(request, _('Post excluído com sucesso!'))
+        # Remover hashtags associadas
+        post = self.get_object()
+        post.hashtags.all().delete()
+        
+        messages.success(request, _('Post deletado com sucesso!'))
         return super().delete(request, *args, **kwargs)
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['segment'] = 'delete_post'
+        context['segment'] = 'post_delete'
         context['parent'] = 'social'
         return context
-
-
-@login_required
-@require_POST
-def delete_comment(request, comment_id):
-    """Excluir um comentário"""
-    comment = get_object_or_404(Comment, id=comment_id)
-    
-    # Verificar se o usuário pode excluir o comentário
-    if comment.author != request.user and comment.post.author != request.user:
-        return HttpResponseForbidden()
-    
-    post_id = comment.post.id
-    comment.delete()
-    
-    # Atualizar contador de comentários
-    comment.post.update_counts()
-    
-    messages.success(request, _('Comentário excluído com sucesso!'))
-    return redirect('social:post_detail', post_id=post_id)

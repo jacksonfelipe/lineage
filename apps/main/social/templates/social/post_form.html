@@ -37,45 +37,140 @@
                 <i class="bi bi-chat-quote"></i> {% trans "O que você está pensando?" %}
               </label>
               {{ form.content }}
-              {% if form.content.help_text %}
-                <div class="form-text">{{ form.content.help_text }}</div>
-              {% endif %}
-              {% if form.content.errors %}
-                <div class="text-danger small">{{ form.content.errors.0 }}</div>
-              {% endif %}
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <div class="form-text">
+                  <span id="char-count">0</span>/1000 {% trans "caracteres" %}
+                </div>
+                {% if form.content.errors %}
+                  <div class="text-danger small">{{ form.content.errors.0 }}</div>
+                {% endif %}
+              </div>
             </div>
             
-            <!-- Imagem -->
+            <!-- Mídia -->
+            <div class="row mb-4">
+              <!-- Imagem -->
+              <div class="col-md-6">
+                <label for="{{ form.image.id_for_label }}" class="form-label">
+                  <i class="bi bi-image text-primary"></i> {% trans "Imagem (opcional)" %}
+                </label>
+                {{ form.image }}
+                {% if form.image.help_text %}
+                  <div class="form-text">{{ form.image.help_text }}</div>
+                {% endif %}
+                {% if form.image.errors %}
+                  <div class="text-danger small">{{ form.image.errors.0 }}</div>
+                {% endif %}
+              </div>
+              
+              <!-- Vídeo -->
+              <div class="col-md-6">
+                <label for="{{ form.video.id_for_label }}" class="form-label">
+                  <i class="bi bi-camera-video text-success"></i> {% trans "Vídeo (opcional)" %}
+                </label>
+                {{ form.video }}
+                {% if form.video.help_text %}
+                  <div class="form-text">{{ form.video.help_text }}</div>
+                {% endif %}
+                {% if form.video.errors %}
+                  <div class="text-danger small">{{ form.video.errors.0 }}</div>
+                {% endif %}
+              </div>
+            </div>
+            
+            <!-- Link -->
             <div class="mb-4">
-              <label for="{{ form.image.id_for_label }}" class="form-label">
-                <i class="bi bi-image"></i> {% trans "Adicionar imagem (opcional)" %}
+              <label for="{{ form.link.id_for_label }}" class="form-label">
+                <i class="bi bi-link-45deg text-info"></i> {% trans "Link para compartilhar (opcional)" %}
               </label>
-              {{ form.image }}
-              {% if form.image.help_text %}
-                <div class="form-text">{{ form.image.help_text }}</div>
+              {{ form.link }}
+              {% if form.link.help_text %}
+                <div class="form-text">{{ form.link.help_text }}</div>
               {% endif %}
-              {% if form.image.errors %}
-                <div class="text-danger small">{{ form.image.errors.0 }}</div>
+              {% if form.link.errors %}
+                <div class="text-danger small">{{ form.link.errors.0 }}</div>
               {% endif %}
               
-              <!-- Preview da imagem atual -->
-              {% if object and object.image %}
-                <div class="mt-3">
-                  <label class="form-label">{% trans "Imagem atual:" %}</label>
+              <!-- Preview do link -->
+              <div id="link-preview" class="mt-3" style="display: none;">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div id="link-content" class="flex-grow-1"></div>
+                      <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearLink()">
+                        <i class="bi bi-x"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Hashtags -->
+            <div class="mb-4">
+              <label for="{{ form.hashtags.id_for_label }}" class="form-label">
+                <i class="bi bi-hash text-warning"></i> {% trans "Hashtags (opcional)" %}
+              </label>
+              {{ form.hashtags }}
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <div class="form-text">
+                  <span id="hashtag-count">0</span> {% trans "hashtags" %}
+                </div>
+                {% if form.hashtags.errors %}
+                  <div class="text-danger small">{{ form.hashtags.errors.0 }}</div>
+                {% endif %}
+              </div>
+              <div class="form-text">
+                {% trans "Exemplo: #tecnologia #programacao #django" %}
+              </div>
+            </div>
+            
+            <!-- Preview de mídia -->
+            <div id="media-preview" class="mb-4" style="display: none;">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div id="preview-content" class="flex-grow-1"></div>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearMedia()">
+                      <i class="bi bi-x"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Mídia atual (apenas na edição) -->
+            {% if object %}
+              {% if object.image or object.video %}
+                <div class="mb-4">
+                  <label class="form-label">{% trans "Mídia atual:" %}</label>
                   <div class="text-center">
-                    <img src="{{ object.image.url }}" alt="Imagem atual" class="img-fluid rounded" style="max-height: 200px;">
+                    {% if object.image %}
+                      <img src="{{ object.image.url }}" alt="Imagem atual" class="img-fluid rounded mb-2" style="max-height: 200px;">
+                    {% endif %}
+                    {% if object.video %}
+                      <video controls class="img-fluid rounded" style="max-height: 200px;">
+                        <source src="{{ object.video.url }}" type="video/mp4">
+                        {% trans "Seu navegador não suporta vídeos." %}
+                      </video>
+                    {% endif %}
                   </div>
                 </div>
               {% endif %}
               
-              <!-- Preview da nova imagem -->
-              <div id="image-preview" class="mt-3" style="display: none;">
-                <label class="form-label">{% trans "Preview da nova imagem:" %}</label>
-                <div class="text-center">
-                  <img id="preview-img" alt="Preview" class="img-fluid rounded" style="max-height: 200px;">
+              {% if object.link %}
+                <div class="mb-4">
+                  <label class="form-label">{% trans "Link atual:" %}</label>
+                  <div class="card">
+                    <div class="card-body">
+                      <a href="{{ object.link }}" target="_blank" class="text-decoration-none">
+                        <i class="bi bi-link-45deg"></i> {{ object.link }}
+                      </a>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              {% endif %}
+            {% endif %}
             
             <!-- Configurações de privacidade -->
             <div class="mb-4">
@@ -98,9 +193,10 @@
               <h6><i class="bi bi-lightbulb"></i> {% trans "Dicas para um post atrativo:" %}</h6>
               <ul class="mb-0">
                 <li>{% trans "Seja autêntico e compartilhe experiências reais" %}</li>
-                <li>{% trans "Use imagens de alta qualidade quando possível" %}</li>
-                <li>{% trans "Engaje com sua comunidade respondendo comentários" %}</li>
-                <li>{% trans "Posts públicos têm maior alcance" %}</li>
+                <li>{% trans "Use imagens ou vídeos de alta qualidade" %}</li>
+                <li>{% trans "Adicione hashtags relevantes para maior alcance" %}</li>
+                <li>{% trans "Compartilhe links interessantes com sua comunidade" %}</li>
+                <li>{% trans "Engaje respondendo comentários" %}</li>
               </ul>
             </div>
             
@@ -128,61 +224,92 @@
   </div>
 </div>
 
-<!-- JavaScript para preview de imagem e contador de caracteres -->
+<!-- JavaScript para interações -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Contador de caracteres
     const contentField = document.querySelector('#{{ form.content.id_for_label }}');
-    const charCount = document.querySelector('#char-count');
+    const charCount = document.getElementById('char-count');
     
-    if (contentField) {
-        // Criar contador se não existir
-        if (!charCount) {
-            const counterDiv = document.createElement('div');
-            counterDiv.className = 'form-text';
-            counterDiv.innerHTML = '<span id="char-count">0</span>/1000 {% trans "caracteres" %}';
-            contentField.parentNode.appendChild(counterDiv);
-        }
-        
-        const counter = document.querySelector('#char-count');
-        if (counter) {
-            contentField.addEventListener('input', function() {
-                counter.textContent = this.value.length;
-                
-                // Mudar cor quando próximo do limite
-                if (this.value.length > 900) {
-                    counter.style.color = '#dc3545';
-                } else if (this.value.length > 800) {
-                    counter.style.color = '#ffc107';
-                } else {
-                    counter.style.color = '';
-                }
-            });
+    if (contentField && charCount) {
+        contentField.addEventListener('input', function() {
+            charCount.textContent = this.value.length;
             
-            // Inicializar contador
-            counter.textContent = contentField.value.length;
-        }
-    }
-    
-    // Preview de imagem
-    const imageInput = document.querySelector('#{{ form.image.id_for_label }}');
-    const imagePreview = document.querySelector('#image-preview');
-    const previewImg = document.querySelector('#preview-img');
-    
-    if (imageInput && imagePreview && previewImg) {
-        imageInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImg.src = e.target.result;
-                    imagePreview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
+            // Mudar cor quando próximo do limite
+            if (this.value.length > 900) {
+                charCount.style.color = '#dc3545';
+            } else if (this.value.length > 800) {
+                charCount.style.color = '#ffc107';
             } else {
-                imagePreview.style.display = 'none';
+                charCount.style.color = '';
             }
         });
+        
+        // Inicializar contador
+        charCount.textContent = contentField.value.length;
+    }
+    
+    // Contador de hashtags
+    const hashtagsField = document.querySelector('#{{ form.hashtags.id_for_label }}');
+    const hashtagCount = document.getElementById('hashtag-count');
+    
+    if (hashtagsField && hashtagCount) {
+        hashtagsField.addEventListener('input', function() {
+            const hashtags = this.value.match(/#\w+/g) || [];
+            hashtagCount.textContent = hashtags.length;
+        });
+        
+        // Inicializar contador
+        const hashtags = hashtagsField.value.match(/#\w+/g) || [];
+        hashtagCount.textContent = hashtags.length;
+    }
+    
+    // Preview de mídia
+    const imageField = document.querySelector('#{{ form.image.id_for_label }}');
+    const videoField = document.querySelector('#{{ form.video.id_for_label }}');
+    const mediaPreview = document.getElementById('media-preview');
+    const previewContent = document.getElementById('preview-content');
+    
+    if (imageField) {
+        imageField.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewContent.innerHTML = `<img src="${e.target.result}" class="img-fluid rounded" style="max-height: 100px;">`;
+                    mediaPreview.style.display = 'block';
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    }
+    
+    if (videoField) {
+        videoField.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                previewContent.innerHTML = `<video controls class="img-fluid rounded" style="max-height: 100px;"><source src="${URL.createObjectURL(this.files[0])}"></video>`;
+                mediaPreview.style.display = 'block';
+            }
+        });
+    }
+    
+    // Preview de link
+    const linkField = document.querySelector('#{{ form.link.id_for_label }}');
+    const linkPreview = document.getElementById('link-preview');
+    const linkContent = document.getElementById('link-content');
+    
+    if (linkField && linkPreview && linkContent) {
+        linkField.addEventListener('blur', function() {
+            if (this.value) {
+                linkContent.innerHTML = `<i class="bi bi-link-45deg"></i> ${this.value}`;
+                linkPreview.style.display = 'block';
+            }
+        });
+        
+        // Se já tem valor (edição), mostrar preview
+        if (linkField.value) {
+            linkContent.innerHTML = `<i class="bi bi-link-45deg"></i> ${linkField.value}`;
+            linkPreview.style.display = 'block';
+        }
     }
     
     // Validação do formulário
@@ -203,8 +330,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 contentField.focus();
                 return false;
             }
+            
+            // Validar se pelo menos uma mídia foi selecionada ou há conteúdo
+            const hasImage = imageField && imageField.files.length > 0;
+            const hasVideo = videoField && videoField.files.length > 0;
+            const hasLink = linkField && linkField.value.trim();
+            
+            if (!hasImage && !hasVideo && !hasLink && content.length < 10) {
+                e.preventDefault();
+                alert('{% trans "Adicione mais conteúdo, uma mídia ou um link para tornar o post mais interessante." %}');
+                return false;
+            }
         });
     }
 });
+
+// Funções auxiliares
+function clearMedia() {
+    document.getElementById('media-preview').style.display = 'none';
+    document.getElementById('preview-content').innerHTML = '';
+    const imageField = document.querySelector('#{{ form.image.id_for_label }}');
+    const videoField = document.querySelector('#{{ form.video.id_for_label }}');
+    if (imageField) imageField.value = '';
+    if (videoField) videoField.value = '';
+}
+
+function clearLink() {
+    document.getElementById('link-preview').style.display = 'none';
+    document.getElementById('link-content').innerHTML = '';
+    const linkField = document.querySelector('#{{ form.link.id_for_label }}');
+    if (linkField) linkField.value = '';
+}
 </script>
 {% endblock content %}

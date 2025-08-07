@@ -16,7 +16,11 @@ urlpatterns = [
     
     # Interações
     path('post/<int:post_id>/like/', views.like_post, name='like_post'),
+    path('post/<int:post_id>/react/', views.react_to_post, name='react_to_post'),
+    path('post/<int:post_id>/share/', views.share_post, name='share_post'),
+    path('post/<int:post_id>/pin/', views.pin_post, name='pin_post'),
     path('user/<int:user_id>/follow/', views.follow_user, name='follow_user'),
+    path('comment/<int:comment_id>/like/', views.like_comment, name='like_comment'),
     path('comment/<int:comment_id>/delete/', views.delete_comment, name='delete_comment'),
     
     # Perfis
@@ -25,6 +29,7 @@ urlpatterns = [
     path('profile/<str:username>/following/', views.following_list, name='following_list'),
     path('edit-profile/', views.edit_profile, name='edit_profile'),
     
-    # Busca
+    # Busca e hashtags
     path('search/', views.search, name='search'),
+    path('hashtag/<str:hashtag_name>/', views.hashtag_detail, name='hashtag_detail'),
 ]
