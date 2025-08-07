@@ -37,6 +37,38 @@ def feed(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
+    # Buscar perfil do usuário
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    
+    # Estatísticas do usuário
+    user_stats = {
+        'posts_count': Post.objects.filter(author=request.user).count(),
+        'followers_count': request.user.followers.count(),
+        'following_count': request.user.following.count(),
+        'total_likes_received': profile.total_likes_received,
+        'total_comments_received': profile.total_comments_received,
+    }
+    
+    # Hashtags populares
+    popular_hashtags = Hashtag.objects.filter(posts_count__gt=0).order_by('-posts_count')[:10]
+    
+    # Usuários sugeridos (não seguidos pelo usuário atual)
+    following_users = request.user.following.values_list('following_id', flat=True)
+    suggested_users = User.objects.exclude(
+        id__in=list(following_users) + [request.user.id]
+    ).annotate(
+        posts_count=Count('social_posts')
+    ).filter(posts_count__gt=0).order_by('-posts_count')[:10]
+    
+    # Estatísticas da rede
+    from datetime import date
+    today = date.today()
+    network_stats = {
+        'total_users': User.objects.count(),
+        'total_posts': Post.objects.count(),
+        'posts_today': Post.objects.filter(created_at__date=today).count(),
+    }
+    
     # Formulário para criar novo post
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
@@ -63,6 +95,11 @@ def feed(request):
     context = {
         'page_obj': page_obj,
         'form': form,
+        'profile': profile,
+        'user_stats': user_stats,
+        'popular_hashtags': popular_hashtags,
+        'suggested_users': suggested_users,
+        'network_stats': network_stats,
         'segment': 'feed',
         'parent': 'social',
     }
