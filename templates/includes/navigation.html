@@ -19,6 +19,7 @@
     align-items: center;
     justify-content: center;
     min-width: 120px;
+    z-index: 1001;
   }
 
   .btn-social::before {
@@ -142,6 +143,7 @@
   /* Ajuste do container da navbar para permitir posicionamento absoluto */
   .navbar {
     position: relative;
+    z-index: 1002;
   }
 
   /* Responsividade para o botão centralizado */
@@ -178,6 +180,50 @@
     
     .order-first {
       order: -1 !important;
+    }
+    
+    /* Garantir que todos os elementos da navbar sejam clicáveis no mobile */
+    .navbar-nav .nav-item {
+      position: relative;
+      z-index: 1003;
+    }
+    
+    .navbar-nav .nav-link {
+      position: relative;
+      z-index: 1003;
+    }
+    
+    .navbar-nav .dropdown-menu {
+      z-index: 1004;
+    }
+    
+    /* Garantir que a navbar tenha prioridade máxima */
+    .navbar-top {
+      z-index: 9999 !important;
+      position: relative;
+    }
+    
+    .navbar-top .container-fluid {
+      z-index: 9999 !important;
+      position: relative;
+    }
+    
+    .navbar-top .navbar-nav {
+      z-index: 9999 !important;
+      position: relative;
+    }
+    
+    /* Garantir que todos os links sejam clicáveis */
+    .navbar-top a {
+      position: relative;
+      z-index: 10000 !important;
+      pointer-events: auto !important;
+    }
+    
+    .navbar-top button {
+      position: relative;
+      z-index: 10000 !important;
+      pointer-events: auto !important;
     }
   }
 </style>

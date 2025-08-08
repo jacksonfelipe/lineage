@@ -385,28 +385,42 @@ def share_post(request, post_id):
 @require_POST
 def follow_user(request, user_id):
     """Seguir/deixar de seguir um usuário"""
-    user_to_follow = get_object_or_404(User, id=user_id)
-    
-    if user_to_follow == request.user:
-        return JsonResponse({'error': _('Você não pode seguir a si mesmo')}, status=400)
-    
-    follow, created = Follow.objects.get_or_create(
-        follower=request.user,
-        following=user_to_follow
-    )
-    
-    if not created:
-        # Se já existe, remover o follow
-        follow.delete()
-        following = False
-    else:
-        following = True
-    
-    return JsonResponse({
-        'following': following,
-        'followers_count': user_to_follow.followers.count(),
-        'following_count': user_to_follow.following.count()
-    })
+    try:
+        user_to_follow = get_object_or_404(User, id=user_id)
+        
+        if user_to_follow == request.user:
+            return JsonResponse({'error': _('Você não pode seguir a si mesmo')}, status=400)
+        
+        follow, created = Follow.objects.get_or_create(
+            follower=request.user,
+            following=user_to_follow
+        )
+        
+        if not created:
+            # Se já existe, remover o follow
+            follow.delete()
+            following = False
+        else:
+            following = True
+        
+        # Calcular contadores atualizados
+        followers_count = user_to_follow.followers.count()
+        following_count = user_to_follow.following.count()
+        
+        response_data = {
+            'following': following,
+            'followers_count': followers_count,
+            'following_count': following_count,
+            'success': True
+        }
+        
+        return JsonResponse(response_data)
+        
+    except Exception as e:
+        return JsonResponse({
+            'error': str(e),
+            'success': False
+        }, status=500)
 
 
 @login_required
