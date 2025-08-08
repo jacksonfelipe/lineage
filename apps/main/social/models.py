@@ -116,10 +116,11 @@ class Post(BaseModel):
         return f"Post de {self.author.username} - {self.created_at.strftime('%d/%m/%Y %H:%M')}"
 
     def update_counts(self):
-        """Atualiza contadores de likes e comentários"""
+        """Atualiza contadores de likes, comentários e compartilhamentos"""
         self.likes_count = self.likes.count()
         self.comments_count = self.comments.count()
-        self.save(update_fields=['likes_count', 'comments_count'])
+        self.shares_count = self.shares.count()
+        self.save(update_fields=['likes_count', 'comments_count', 'shares_count'])
 
     def increment_views(self):
         """Incrementa o contador de visualizações"""

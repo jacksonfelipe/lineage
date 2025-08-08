@@ -80,9 +80,12 @@ def feed(request):
     # Buscar perfil do usuário
     profile, created = UserProfile.objects.get_or_create(user=request.user)
     
+    # Atualizar estatísticas do perfil (garantir que estejam atualizadas)
+    profile.update_statistics()
+    
     # Estatísticas do usuário
     user_stats = {
-        'posts_count': Post.objects.filter(author=request.user).count(),
+        'posts_count': profile.total_posts,
         'followers_count': request.user.followers.count(),
         'following_count': request.user.following.count(),
         'total_likes_received': profile.total_likes_received,
