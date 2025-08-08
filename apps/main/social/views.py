@@ -386,7 +386,23 @@ def share_post(request, post_id):
 def follow_user(request, user_id):
     """Seguir/deixar de seguir um usuário"""
     try:
+        # Log para debug
+        print(f"Tentando seguir usuário com ID: {user_id} (tipo: {type(user_id)})")
+        
+        # Garantir que user_id seja um inteiro
+        try:
+            user_id = int(user_id)
+        except (ValueError, TypeError):
+            return JsonResponse({
+                'error': f'ID de usuário inválido: {user_id}',
+                'success': False
+            }, status=400)
+        
         user_to_follow = get_object_or_404(User, id=user_id)
+        
+        # Log adicional para debug
+        print(f"Usuário encontrado: {user_to_follow.username} (ID: {user_to_follow.id})")
+        print(f"Usuário atual: {request.user.username} (ID: {request.user.id})")
         
         if user_to_follow == request.user:
             return JsonResponse({'error': _('Você não pode seguir a si mesmo')}, status=400)

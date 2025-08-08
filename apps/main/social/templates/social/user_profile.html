@@ -1,6 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load l10n %}
 
 {% block title %} {{ profile_user.get_full_name|default:profile_user.username }} - {% trans "Perfil" %} {% endblock title %}
 
@@ -145,7 +146,7 @@
                 <!-- Botões de ação -->
                 {% if user != profile_user %}
                   <div class="d-flex align-items-center">
-                    <button class="btn btn-primary me-2 follow-btn" data-user-id="{{ profile_user.id }}">
+                    <button class="btn btn-primary me-2 follow-btn" data-user-id="{% localize off %}{{ profile_user.id }}{% endlocalize %}">
                       {% if is_following %}
                         <i class="bi bi-person-check"></i> {% trans "Seguindo" %}
                       {% else %}
@@ -367,14 +368,14 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             e.stopPropagation();
             
-            const userId = this.dataset.userId;
+            const userId = parseInt(this.dataset.userId);
             const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
             
             console.log('Clicou no botão de seguir para usuário:', userId);
             console.log('Token CSRF encontrado:', !!csrfToken);
             
-            if (!userId) {
-                console.error('ID do usuário não encontrado');
+            if (!userId || isNaN(userId)) {
+                console.error('ID do usuário inválido:', this.dataset.userId);
                 return;
             }
             

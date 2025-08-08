@@ -1,6 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load l10n %}
 
 {% block title %} {% trans "Feed Social" %} {% endblock title %}
 
@@ -825,7 +826,7 @@
                   <div class="small fw-bold">{{ suggested_user.get_full_name|default:suggested_user.username }}</div>
                   <div class="small text-muted">@{{ suggested_user.username }}</div>
                 </div>
-                <button class="btn btn-sm btn-outline-primary follow-btn" data-user-id="{{ suggested_user.id }}">
+                <button class="btn btn-sm btn-outline-primary follow-btn" data-user-id="{% localize off %}{{ suggested_user.id }}{% endlocalize %}">
                   <i class="bi bi-person-plus"></i>
                 </button>
               </div>
@@ -1276,11 +1277,11 @@ document.addEventListener('DOMContentLoaded', function() {
      followBtns.forEach(btn => {
        btn.addEventListener('click', function(e) {
          e.preventDefault();
-         const userId = this.dataset.userId;
+         const userId = parseInt(this.dataset.userId);
          const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
          
-         if (!userId || !csrfToken) {
-           console.error('Elementos necessários não encontrados para follow');
+         if (!userId || isNaN(userId) || !csrfToken) {
+           console.error('Elementos necessários não encontrados para follow ou ID inválido:', this.dataset.userId);
            return;
          }
          
