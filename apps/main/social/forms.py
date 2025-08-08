@@ -7,11 +7,13 @@ from django.contrib.auth import get_user_model
 class PostForm(forms.ModelForm):
     """Formulário para criação de posts"""
     content = forms.CharField(
+        required=True,
         widget=forms.Textarea(attrs={
             'class': 'form-control',
             'rows': 4,
             'placeholder': _('O que você está pensando?'),
-            'maxlength': 1000
+            'maxlength': 1000,
+            'required': 'required'
         }),
         max_length=1000,
         help_text=_('Máximo 1000 caracteres')

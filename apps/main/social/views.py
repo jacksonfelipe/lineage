@@ -129,22 +129,32 @@ def feed(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            
-            # Processar hashtags
-            hashtags = form.cleaned_data.get('hashtags', [])
-            
-            post.save()
-            
-            # Adicionar hashtags ao post
-            for hashtag_name in hashtags:
-                hashtag, created = Hashtag.objects.get_or_create(name=hashtag_name)
-                PostHashtag.objects.create(post=post, hashtag=hashtag)
-                hashtag.update_posts_count()
-            
-            messages.success(request, _('Post criado com sucesso!'))
-            return redirect('social:feed')
+            try:
+                post = form.save(commit=False)
+                post.author = request.user
+                
+                # Processar hashtags
+                hashtags = form.cleaned_data.get('hashtags', [])
+                
+                post.save()
+                
+                # Adicionar hashtags ao post
+                for hashtag_name in hashtags:
+                    hashtag, created = Hashtag.objects.get_or_create(name=hashtag_name)
+                    PostHashtag.objects.create(post=post, hashtag=hashtag)
+                    hashtag.update_posts_count()
+                
+                messages.success(request, _('Post criado com sucesso!'))
+                return redirect('social:feed')
+            except Exception as e:
+                messages.error(request, _('Erro ao criar post. Tente novamente.'))
+                # Log do erro para debug
+                print(f"Erro ao criar post: {e}")
+        else:
+            # Exibir erros de validação
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"Erro no campo {field}: {error}")
     else:
         form = PostForm()
     
