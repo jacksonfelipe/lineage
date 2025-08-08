@@ -67,28 +67,32 @@ class PostForm(forms.ModelForm):
     def clean_image(self):
         image = self.cleaned_data.get('image')
         if image:
-            # Verificar tamanho do arquivo (máximo 5MB)
-            if image.size > 5 * 1024 * 1024:
-                raise forms.ValidationError(_('A imagem deve ter no máximo 5MB.'))
-            
-            # Verificar formato
-            allowed_formats = ['image/jpeg', 'image/png', 'image/gif']
-            if image.content_type not in allowed_formats:
-                raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG, PNG ou GIF.'))
+            # Verificar se é um novo upload (tem content_type) ou arquivo existente
+            if hasattr(image, 'content_type'):
+                # Verificar tamanho do arquivo (máximo 5MB)
+                if image.size > 5 * 1024 * 1024:
+                    raise forms.ValidationError(_('A imagem deve ter no máximo 5MB.'))
+                
+                # Verificar formato
+                allowed_formats = ['image/jpeg', 'image/png', 'image/gif']
+                if image.content_type not in allowed_formats:
+                    raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG, PNG ou GIF.'))
         
         return image
 
     def clean_video(self):
         video = self.cleaned_data.get('video')
         if video:
-            # Verificar tamanho do arquivo (máximo 50MB)
-            if video.size > 50 * 1024 * 1024:
-                raise forms.ValidationError(_('O vídeo deve ter no máximo 50MB.'))
-            
-            # Verificar formato
-            allowed_formats = ['video/mp4', 'video/avi', 'video/quicktime']
-            if video.content_type not in allowed_formats:
-                raise forms.ValidationError(_('Formato de vídeo não suportado. Use MP4, AVI ou MOV.'))
+            # Verificar se é um novo upload (tem content_type) ou arquivo existente
+            if hasattr(video, 'content_type'):
+                # Verificar tamanho do arquivo (máximo 50MB)
+                if video.size > 50 * 1024 * 1024:
+                    raise forms.ValidationError(_('O vídeo deve ter no máximo 50MB.'))
+                
+                # Verificar formato
+                allowed_formats = ['video/mp4', 'video/avi', 'video/quicktime']
+                if video.content_type not in allowed_formats:
+                    raise forms.ValidationError(_('Formato de vídeo não suportado. Use MP4, AVI ou MOV.'))
         
         return video
 
@@ -140,14 +144,16 @@ class CommentForm(forms.ModelForm):
     def clean_image(self):
         image = self.cleaned_data.get('image')
         if image:
-            # Verificar tamanho do arquivo (máximo 2MB)
-            if image.size > 2 * 1024 * 1024:
-                raise forms.ValidationError(_('A imagem deve ter no máximo 2MB.'))
-            
-            # Verificar formato
-            allowed_formats = ['image/jpeg', 'image/png', 'image/gif']
-            if image.content_type not in allowed_formats:
-                raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG, PNG ou GIF.'))
+            # Verificar se é um novo upload (tem content_type) ou arquivo existente
+            if hasattr(image, 'content_type'):
+                # Verificar tamanho do arquivo (máximo 2MB)
+                if image.size > 2 * 1024 * 1024:
+                    raise forms.ValidationError(_('A imagem deve ter no máximo 2MB.'))
+                
+                # Verificar formato
+                allowed_formats = ['image/jpeg', 'image/png', 'image/gif']
+                if image.content_type not in allowed_formats:
+                    raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG, PNG ou GIF.'))
         
         return image
 
@@ -273,28 +279,32 @@ class UserProfileForm(forms.ModelForm):
     def clean_avatar(self):
         avatar = self.cleaned_data.get('avatar')
         if avatar:
-            # Verificar tamanho do arquivo (máximo 2MB)
-            if avatar.size > 2 * 1024 * 1024:
-                raise forms.ValidationError(_('A foto de perfil deve ter no máximo 2MB.'))
-            
-            # Verificar formato
-            allowed_formats = ['image/jpeg', 'image/png']
-            if avatar.content_type not in allowed_formats:
-                raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG ou PNG.'))
+            # Verificar se é um novo upload (tem content_type) ou arquivo existente
+            if hasattr(avatar, 'content_type'):
+                # Verificar tamanho do arquivo (máximo 2MB)
+                if avatar.size > 2 * 1024 * 1024:
+                    raise forms.ValidationError(_('A foto de perfil deve ter no máximo 2MB.'))
+                
+                # Verificar formato
+                allowed_formats = ['image/jpeg', 'image/png']
+                if avatar.content_type not in allowed_formats:
+                    raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG ou PNG.'))
         
         return avatar
 
     def clean_cover_image(self):
         cover_image = self.cleaned_data.get('cover_image')
         if cover_image:
-            # Verificar tamanho do arquivo (máximo 5MB)
-            if cover_image.size > 5 * 1024 * 1024:
-                raise forms.ValidationError(_('A imagem de capa deve ter no máximo 5MB.'))
-            
-            # Verificar formato
-            allowed_formats = ['image/jpeg', 'image/png']
-            if cover_image.content_type not in allowed_formats:
-                raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG ou PNG.'))
+            # Verificar se é um novo upload (tem content_type) ou arquivo existente
+            if hasattr(cover_image, 'content_type'):
+                # Verificar tamanho do arquivo (máximo 5MB)
+                if cover_image.size > 5 * 1024 * 1024:
+                    raise forms.ValidationError(_('A imagem de capa deve ter no máximo 5MB.'))
+                
+                # Verificar formato
+                allowed_formats = ['image/jpeg', 'image/png']
+                if cover_image.content_type not in allowed_formats:
+                    raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG ou PNG.'))
         
         return cover_image
 
