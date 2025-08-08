@@ -204,6 +204,10 @@ MIDDLEWARE = [
     "middlewares.rate_limit_api_external.RateLimitMiddleware",
     "middlewares.lock_screen_middleware.SessionLockMiddleware",
     
+    # Middlewares de moderação
+    "middlewares.content_filter_middleware.ContentFilterMiddleware",
+    "middlewares.content_filter_middleware.SpamProtectionMiddleware",
+    
     # Middlewares de licença
     "apps.main.licence.middleware.LicenseMiddleware",
     "apps.main.licence.middleware.LicenseFeatureMiddleware",

@@ -32,4 +32,26 @@ urlpatterns = [
     # Busca e hashtags
     path('search/', views.search, name='search'),
     path('hashtag/<str:hashtag_name>/', views.hashtag_detail, name='hashtag_detail'),
+    
+    # ============================================================================
+    # URLs DE MODERAÇÃO
+    # ============================================================================
+    
+    # Denúncias
+    path('report/<str:content_type>/<int:content_id>/', views.report_content, name='report_content'),
+    
+    # Painel de moderação
+    path('moderation/', views.moderation_dashboard, name='moderation_dashboard'),
+    path('moderation/reports/', views.reports_list, name='reports_list'),
+    path('moderation/reports/<int:report_id>/', views.report_detail, name='report_detail'),
+    
+    # Filtros de conteúdo
+    path('moderation/filters/', views.content_filters, name='content_filters'),
+    path('moderation/filters/<int:filter_id>/edit/', views.edit_filter, name='edit_filter'),
+    path('moderation/filters/<int:filter_id>/toggle/', views.toggle_filter, name='toggle_filter'),
+    path('moderation/filters/test/', views.test_content_filter, name='test_content_filter'),
+    
+    # Logs e ações
+    path('moderation/logs/', views.moderation_logs, name='moderation_logs'),
+    path('moderation/bulk-action/', views.bulk_moderation_action, name='bulk_moderation_action'),
 ]

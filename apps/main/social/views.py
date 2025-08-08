@@ -16,8 +16,8 @@ from django.utils import timezone
 from datetime import datetime, timedelta
 import re
 
-from .models import Post, Comment, Like, Follow, UserProfile, Share, Hashtag, PostHashtag, CommentLike
-from .forms import PostForm, CommentForm, UserProfileForm, SearchForm, ShareForm, ReactionForm, HashtagForm
+from .models import Post, Comment, Like, Follow, UserProfile, Share, Hashtag, PostHashtag, CommentLike, Report, ModerationAction, ContentFilter, ModerationLog
+from .forms import PostForm, CommentForm, UserProfileForm, SearchForm, ShareForm, ReactionForm, HashtagForm, ReportForm, SearchReportForm, BulkModerationForm, ModerationActionForm, ContentFilterForm
 
 User = get_user_model()
 
@@ -673,3 +673,518 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
         context['segment'] = 'post_delete'
         context['parent'] = 'social'
         return context
+
+
+# ============================================================================
+# VIEWS DE MODERAÇÃO
+# ============================================================================
+
+@login_required
+def report_content(request, content_type, content_id):
+    """View para denunciar conteúdo"""
+    if request.method == 'POST':
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            report = form.save(commit=False)
+            report.reporter = request.user
+            
+            # Associar o conteúdo reportado
+            if content_type == 'post':
+                report.reported_post = get_object_or_404(Post, id=content_id)
+            elif content_type == 'comment':
+                report.reported_comment = get_object_or_404(Comment, id=content_id)
+            elif content_type == 'user':
+                report.reported_user = get_object_or_404(User, id=content_id)
+            
+            report.save()
+            
+            # Verificar se há denúncias similares
+            similar_reports = Report.objects.filter(
+                report_type=report.report_type,
+                status__in=['pending', 'reviewing']
+            )
+            
+            if content_type == 'post':
+                similar_reports = similar_reports.filter(reported_post=report.reported_post)
+            elif content_type == 'comment':
+                similar_reports = similar_reports.filter(reported_comment=report.reported_comment)
+            elif content_type == 'user':
+                similar_reports = similar_reports.filter(reported_user=report.reported_user)
+            
+            # Atualizar contador de denúncias similares
+            for similar_report in similar_reports:
+                similar_report.similar_reports_count = similar_reports.count()
+                similar_report.save()
+            
+            messages.success(request, _('Denúncia enviada com sucesso. Nossa equipe irá analisar.'))
+            
+            # Redirecionar de volta
+            if content_type == 'post':
+                return redirect('social:post_detail', post_id=content_id)
+            elif content_type == 'comment':
+                return redirect('social:post_detail', post_id=report.reported_comment.post.id)
+            elif content_type == 'user':
+                return redirect('social:user_profile', username=report.reported_user.username)
+    else:
+        form = ReportForm()
+    
+    # Obter informações do conteúdo reportado
+    content_info = {}
+    if content_type == 'post':
+        content = get_object_or_404(Post, id=content_id)
+        content_info = {
+            'type': 'post',
+            'content': content.content[:100] + '...' if len(content.content) > 100 else content.content,
+            'author': content.author.username,
+            'date': content.created_at
+        }
+    elif content_type == 'comment':
+        content = get_object_or_404(Comment, id=content_id)
+        content_info = {
+            'type': 'comment',
+            'content': content.content[:100] + '...' if len(content.content) > 100 else content.content,
+            'author': content.author.username,
+            'date': content.created_at
+        }
+    elif content_type == 'user':
+        content = get_object_or_404(User, id=content_id)
+        content_info = {
+            'type': 'user',
+            'content': f'Usuário: {content.username}',
+            'author': content.username,
+            'date': content.date_joined
+        }
+    
+    return render(request, 'social/report_content.html', {
+        'form': form,
+        'content_info': content_info,
+        'content_type': content_type,
+        'content_id': content_id
+    })
+
+
+@login_required
+def moderation_dashboard(request):
+    """Painel principal de moderação"""
+    # Verificar permissões
+    if not request.user.has_perm('social.can_moderate_reports'):
+        messages.error(request, _('Você não tem permissão para acessar o painel de moderação.'))
+        return redirect('social:feed')
+    
+    # Estatísticas gerais
+    total_reports = Report.objects.count()
+    pending_reports = Report.objects.filter(status='pending').count()
+    urgent_reports = Report.objects.filter(priority='urgent', status__in=['pending', 'reviewing']).count()
+    resolved_today = Report.objects.filter(
+        status='resolved',
+        resolved_at__date=timezone.now().date()
+    ).count()
+    
+    # Denúncias recentes
+    recent_reports = Report.objects.filter(
+        status__in=['pending', 'reviewing']
+    ).select_related(
+        'reporter', 'assigned_moderator', 'reported_post', 'reported_comment', 'reported_user'
+    ).order_by('-priority', '-created_at')[:10]
+    
+    # Ações de moderação recentes
+    recent_actions = ModerationAction.objects.filter(
+        created_at__gte=timezone.now() - timedelta(days=7)
+    ).select_related('moderator', 'target_post', 'target_comment', 'target_user').order_by('-created_at')[:10]
+    
+    # Filtros ativos
+    active_filters = ContentFilter.objects.filter(is_active=True).count()
+    
+    # Logs recentes
+    recent_logs = ModerationLog.objects.filter(
+        created_at__gte=timezone.now() - timedelta(days=7)
+    ).select_related('moderator').order_by('-created_at')[:10]
+    
+    # Gráficos de atividade (últimos 30 dias)
+    from datetime import date
+    dates = []
+    report_counts = []
+    action_counts = []
+    
+    for i in range(30):
+        d = date.today() - timedelta(days=i)
+        dates.append(d.strftime('%d/%m'))
+        report_counts.append(Report.objects.filter(created_at__date=d).count())
+        action_counts.append(ModerationAction.objects.filter(created_at__date=d).count())
+    
+    dates.reverse()
+    report_counts.reverse()
+    action_counts.reverse()
+    
+    context = {
+        'total_reports': total_reports,
+        'pending_reports': pending_reports,
+        'urgent_reports': urgent_reports,
+        'resolved_today': resolved_today,
+        'recent_reports': recent_reports,
+        'recent_actions': recent_actions,
+        'active_filters': active_filters,
+        'recent_logs': recent_logs,
+        'chart_dates': dates,
+        'report_counts': report_counts,
+        'action_counts': action_counts,
+    }
+    
+    return render(request, 'social/moderation/dashboard.html', context)
+
+
+@login_required
+def reports_list(request):
+    """Lista de denúncias para moderação"""
+    if not request.user.has_perm('social.can_view_reports'):
+        messages.error(request, _('Você não tem permissão para visualizar denúncias.'))
+        return redirect('social:feed')
+    
+    # Formulário de busca
+    search_form = SearchReportForm(request.GET)
+    reports = Report.objects.all()
+    
+    if search_form.is_valid():
+        q = search_form.cleaned_data.get('q')
+        report_type = search_form.cleaned_data.get('report_type')
+        status = search_form.cleaned_data.get('status')
+        priority = search_form.cleaned_data.get('priority')
+        assigned_moderator = search_form.cleaned_data.get('assigned_moderator')
+        date_from = search_form.cleaned_data.get('date_from')
+        date_to = search_form.cleaned_data.get('date_to')
+        
+        if q:
+            reports = reports.filter(
+                Q(description__icontains=q) |
+                Q(reporter__username__icontains=q) |
+                Q(reported_post__content__icontains=q) |
+                Q(reported_comment__content__icontains=q) |
+                Q(reported_user__username__icontains=q)
+            )
+        
+        if report_type:
+            reports = reports.filter(report_type=report_type)
+        
+        if status:
+            reports = reports.filter(status=status)
+        
+        if priority:
+            reports = reports.filter(priority=priority)
+        
+        if assigned_moderator:
+            reports = reports.filter(assigned_moderator=assigned_moderator)
+        
+        if date_from:
+            reports = reports.filter(created_at__date__gte=date_from)
+        
+        if date_to:
+            reports = reports.filter(created_at__date__lte=date_to)
+    
+    # Ordenação
+    order_by = request.GET.get('order_by', '-priority')
+    if order_by in ['priority', '-priority', 'created_at', '-created_at', 'status']:
+        reports = reports.order_by(order_by)
+    else:
+        reports = reports.order_by('-priority', '-created_at')
+    
+    # Paginação
+    paginator = Paginator(reports, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    # Formulário para ações em massa
+    bulk_form = BulkModerationForm()
+    
+    context = {
+        'page_obj': page_obj,
+        'search_form': search_form,
+        'bulk_form': bulk_form,
+        'total_reports': reports.count(),
+        'pending_count': reports.filter(status='pending').count(),
+        'urgent_count': reports.filter(priority='urgent', status__in=['pending', 'reviewing']).count(),
+    }
+    
+    return render(request, 'social/moderation/reports_list.html', context)
+
+
+@login_required
+def report_detail(request, report_id):
+    """Detalhes de uma denúncia específica"""
+    if not request.user.has_perm('social.can_moderate_reports'):
+        messages.error(request, _('Você não tem permissão para moderar denúncias.'))
+        return redirect('social:feed')
+    
+    report = get_object_or_404(Report, id=report_id)
+    
+    # Formulário para ação de moderação
+    if request.method == 'POST':
+        action_form = ModerationActionForm(request.POST)
+        if action_form.is_valid():
+            action = action_form.save(commit=False)
+            action.moderator = request.user
+            
+            # Associar o alvo da ação
+            if report.reported_post:
+                action.target_post = report.reported_post
+            elif report.reported_comment:
+                action.target_comment = report.reported_comment
+            elif report.reported_user:
+                action.target_user = report.reported_user
+            
+            action.save()
+            
+            # Aplicar a ação
+            action.apply_action()
+            
+            # Resolver a denúncia
+            action_taken = action.get_action_type_display()
+            report.resolve(request.user, action_taken, action.reason)
+            
+            messages.success(request, _('Ação de moderação aplicada com sucesso.'))
+            return redirect('social:reports_list')
+    else:
+        action_form = ModerationActionForm()
+    
+    # Denúncias similares
+    similar_reports = Report.objects.filter(
+        report_type=report.report_type,
+        status__in=['pending', 'reviewing']
+    ).exclude(id=report.id)
+    
+    if report.reported_post:
+        similar_reports = similar_reports.filter(reported_post=report.reported_post)
+    elif report.reported_comment:
+        similar_reports = similar_reports.filter(reported_comment=report.reported_comment)
+    elif report.reported_user:
+        similar_reports = similar_reports.filter(reported_user=report.reported_user)
+    
+    # Histórico de ações do usuário reportado
+    user_actions = []
+    if report.reported_user:
+        user_actions = ModerationAction.objects.filter(
+            target_user=report.reported_user
+        ).order_by('-created_at')[:10]
+    
+    context = {
+        'report': report,
+        'action_form': action_form,
+        'similar_reports': similar_reports,
+        'user_actions': user_actions,
+    }
+    
+    return render(request, 'social/moderation/report_detail.html', context)
+
+
+@login_required
+def content_filters(request):
+    """Gerenciamento de filtros de conteúdo"""
+    if not request.user.has_perm('social.can_take_moderation_actions'):
+        messages.error(request, _('Você não tem permissão para gerenciar filtros.'))
+        return redirect('social:feed')
+    
+    filters = ContentFilter.objects.all().order_by('-is_active', 'name')
+    
+    if request.method == 'POST':
+        filter_form = ContentFilterForm(request.POST)
+        if filter_form.is_valid():
+            content_filter = filter_form.save()
+            messages.success(request, _('Filtro criado com sucesso.'))
+            return redirect('social:content_filters')
+    else:
+        filter_form = ContentFilterForm()
+    
+    context = {
+        'filters': filters,
+        'filter_form': filter_form,
+        'total_filters': filters.count(),
+        'active_filters': filters.filter(is_active=True).count(),
+    }
+    
+    return render(request, 'social/moderation/content_filters.html', context)
+
+
+@login_required
+def edit_filter(request, filter_id):
+    """Editar filtro de conteúdo"""
+    if not request.user.has_perm('social.can_take_moderation_actions'):
+        messages.error(request, _('Você não tem permissão para editar filtros.'))
+        return redirect('social:feed')
+    
+    content_filter = get_object_or_404(ContentFilter, id=filter_id)
+    
+    if request.method == 'POST':
+        filter_form = ContentFilterForm(request.POST, instance=content_filter)
+        if filter_form.is_valid():
+            filter_form.save()
+            messages.success(request, _('Filtro atualizado com sucesso.'))
+            return redirect('social:content_filters')
+    else:
+        filter_form = ContentFilterForm(instance=content_filter)
+    
+    context = {
+        'filter_form': filter_form,
+        'content_filter': content_filter,
+    }
+    
+    return render(request, 'social/moderation/edit_filter.html', context)
+
+
+@login_required
+def toggle_filter(request, filter_id):
+    """Ativar/desativar filtro"""
+    if not request.user.has_perm('social.can_take_moderation_actions'):
+        return JsonResponse({'error': _('Permissão negada')}, status=403)
+    
+    content_filter = get_object_or_404(ContentFilter, id=filter_id)
+    content_filter.is_active = not content_filter.is_active
+    content_filter.save()
+    
+    return JsonResponse({
+        'success': True,
+        'is_active': content_filter.is_active,
+        'message': _('Filtro ativado') if content_filter.is_active else _('Filtro desativado')
+    })
+
+
+@login_required
+def moderation_logs(request):
+    """Logs de moderação"""
+    if not request.user.has_perm('social.can_view_moderation_logs'):
+        messages.error(request, _('Você não tem permissão para visualizar logs.'))
+        return redirect('social:feed')
+    
+    logs = ModerationLog.objects.all().select_related('moderator').order_by('-created_at')
+    
+    # Filtros
+    action_type = request.GET.get('action_type')
+    moderator_id = request.GET.get('moderator')
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+    
+    if action_type:
+        logs = logs.filter(action_type=action_type)
+    
+    if moderator_id:
+        logs = logs.filter(moderator_id=moderator_id)
+    
+    if date_from:
+        logs = logs.filter(created_at__date__gte=date_from)
+    
+    if date_to:
+        logs = logs.filter(created_at__date__lte=date_to)
+    
+    # Paginação
+    paginator = Paginator(logs, 50)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    # Estatísticas
+    total_actions = logs.count()
+    actions_today = logs.filter(created_at__date=timezone.now().date()).count()
+    
+    # Moderadores ativos
+    active_moderators = User.objects.filter(
+        moderation_logs__created_at__gte=timezone.now() - timedelta(days=30)
+    ).distinct().count()
+    
+    context = {
+        'page_obj': page_obj,
+        'total_actions': total_actions,
+        'actions_today': actions_today,
+        'active_moderators': active_moderators,
+        'action_types': ModerationLog.LOG_TYPES,
+        'moderators': User.objects.filter(is_staff=True),
+    }
+    
+    return render(request, 'social/moderation/logs.html', context)
+
+
+@login_required
+def bulk_moderation_action(request):
+    """Ação em massa de moderação"""
+    if not request.user.has_perm('social.can_take_moderation_actions'):
+        return JsonResponse({'error': _('Permissão negada')}, status=403)
+    
+    if request.method == 'POST':
+        report_ids = request.POST.getlist('report_ids')
+        action_type = request.POST.get('action_type')
+        reason = request.POST.get('reason', '')
+        assigned_moderator_id = request.POST.get('assigned_moderator')
+        
+        if not report_ids or not action_type:
+            return JsonResponse({'error': _('Dados inválidos')}, status=400)
+        
+        reports = Report.objects.filter(id__in=report_ids)
+        processed_count = 0
+        
+        for report in reports:
+            if action_type == 'assign_moderator' and assigned_moderator_id:
+                report.assigned_moderator_id = assigned_moderator_id
+                report.status = 'reviewing'
+                report.save()
+                processed_count += 1
+                
+                # Log da ação
+                ModerationLog.log_action(
+                    moderator=request.user,
+                    action_type='report_assigned',
+                    target_type='report',
+                    target_id=report.id,
+                    description=f'Denúncia atribuída ao moderador',
+                    details=reason
+                )
+            
+            elif action_type in ['hide_content', 'delete_content']:
+                # Criar ação de moderação
+                action = ModerationAction.objects.create(
+                    moderator=request.user,
+                    action_type=action_type,
+                    reason=reason,
+                    target_post=report.reported_post,
+                    target_comment=report.reported_comment,
+                    target_user=report.reported_user
+                )
+                
+                # Aplicar ação
+                action.apply_action()
+                
+                # Resolver denúncia
+                report.resolve(request.user, action.get_action_type_display(), reason)
+                processed_count += 1
+        
+        return JsonResponse({
+            'success': True,
+            'processed_count': processed_count,
+            'message': _('Ação aplicada com sucesso')
+        })
+    
+    return JsonResponse({'error': _('Método não permitido')}, status=405)
+
+
+@login_required
+def test_content_filter(request):
+    """Testar filtro de conteúdo"""
+    if not request.user.has_perm('social.can_take_moderation_actions'):
+        return JsonResponse({'error': _('Permissão negada')}, status=403)
+    
+    if request.method == 'POST':
+        content = request.POST.get('content', '')
+        filter_id = request.POST.get('filter_id')
+        
+        if not content or not filter_id:
+            return JsonResponse({'error': _('Dados inválidos')}, status=400)
+        
+        try:
+            content_filter = ContentFilter.objects.get(id=filter_id)
+            matches = content_filter.matches_content(content)
+            
+            return JsonResponse({
+                'success': True,
+                'matches': matches,
+                'filter_name': content_filter.name,
+                'action': content_filter.get_action_display()
+            })
+        except ContentFilter.DoesNotExist:
+            return JsonResponse({'error': _('Filtro não encontrado')}, status=404)
+    
+    return JsonResponse({'error': _('Método não permitido')}, status=405)
