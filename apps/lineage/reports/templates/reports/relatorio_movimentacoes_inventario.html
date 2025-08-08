@@ -4,6 +4,25 @@
 
 {% block extrastyle %}
 <link rel="stylesheet" href="{% static 'css/reports.css' %}">
+<style>
+  .report-meta {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  
+  .report-meta .badge {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  @media (max-width: 768px) {
+    .report-meta {
+      justify-content: center;
+    }
+  }
+</style>
 {% endblock extrastyle %}
 
 {% block breadcrumbs %}
@@ -30,6 +49,28 @@
             <p class="reports-subtitle">
               {% trans "Acompanhe todas as movimentações de itens no inventário. Visualize tendências, itens mais movimentados e estatísticas detalhadas." %}
             </p>
+            <div class="report-meta">
+              <span class="badge bg-info">
+                <i class="fas fa-calendar me-1"></i>
+                {% trans "Período" %}: {{ periodo_dias }} {% trans "dias" %}
+              </span>
+              <span class="badge bg-success">
+                <i class="fas fa-chart-line me-1"></i>
+                {{ total_logs }} {% trans "movimentações" %}
+              </span>
+              <span class="badge bg-warning">
+                <i class="fas fa-users me-1"></i>
+                {{ total_usuarios_ativos }} {% trans "usuários ativos" %}
+              </span>
+              <span class="badge bg-primary">
+                <i class="fas fa-gamepad me-1"></i>
+                {{ total_personagens_ativos }} {% trans "personagens" %}
+              </span>
+              <span class="badge bg-secondary">
+                <i class="fas fa-box me-1"></i>
+                {{ total_itens_unicos }} {% trans "itens únicos" %}
+              </span>
+            </div>
           </div>
           
           <div class="report-body">
@@ -126,54 +167,208 @@
                 </div>
               </div>
 
-              <!-- Itens Mais Movimentados -->
-              <div class="col-md-6">
-                <div class="reports-card">
-                  <div class="reports-card-header">
-                    <i class="fas fa-chart-line reports-icon"></i>
-                    <h2 class="reports-card-title">{% trans "Itens Mais Movimentados" %}</h2>
-                    <p class="reports-card-description">
-                      {% trans "Itens com maior volume de movimentação" %}
-                    </p>
-                  </div>
-                  <div class="reports-card-body">
-                    <div class="table-responsive">
-                      <table class="table report-table">
-                        <thead>
+                          <!-- Itens Mais Movimentados -->
+            <div class="col-md-6">
+              <div class="reports-card">
+                <div class="reports-card-header">
+                  <i class="fas fa-chart-line reports-icon"></i>
+                  <h2 class="reports-card-title">{% trans "Itens Mais Movimentados" %}</h2>
+                  <p class="reports-card-description">
+                    {% trans "Itens com maior volume de movimentação" %}
+                  </p>
+                </div>
+                <div class="reports-card-body">
+                  <div class="table-responsive">
+                    <table class="table report-table">
+                      <thead>
+                        <tr>
+                          <th><i class="fas fa-box me-2"></i>{% trans "Item" %}</th>
+                          <th><i class="fas fa-chart-line me-2"></i>{% trans "Total Movimentado" %}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for item in itens_movimentados %}
                           <tr>
-                            <th><i class="fas fa-box me-2"></i>{% trans "Item" %}</th>
-                            <th><i class="fas fa-chart-line me-2"></i>{% trans "Total Movimentado" %}</th>
+                            <td>
+                              <i class="fas fa-box text-success me-2"></i>
+                              {{ item.item_name }}
+                            </td>
+                            <td>
+                              <span class="badge bg-success">
+                                <i class="fas fa-chart-line me-1"></i>
+                                {{ item.total_movimentado }}
+                              </span>
+                            </td>
                           </tr>
-                        </thead>
-                        <tbody>
-                          {% for item in itens_movimentados %}
-                            <tr>
-                              <td>
-                                <i class="fas fa-box text-success me-2"></i>
-                                {{ item.item_name }}
-                              </td>
-                              <td>
-                                <span class="badge bg-success">
-                                  <i class="fas fa-chart-line me-1"></i>
-                                  {{ item.total_movimentado }}
-                                </span>
-                              </td>
-                            </tr>
-                          {% empty %}
-                            <tr>
-                              <td colspan="2" class="text-center py-4">
-                                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                                <p class="text-muted">{% trans "Nenhum item movimentado." %}</p>
-                              </td>
-                            </tr>
-                          {% endfor %}
-                        </tbody>
-                      </table>
-                    </div>
+                        {% empty %}
+                          <tr>
+                            <td colspan="2" class="text-center py-4">
+                              <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                              <p class="text-muted">{% trans "Nenhum item movimentado." %}</p>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+
+          <!-- Novas Estatísticas -->
+          <div class="row g-4 mb-4">
+            <!-- Usuários Mais Ativos -->
+            <div class="col-md-4">
+              <div class="reports-card">
+                <div class="reports-card-header">
+                  <i class="fas fa-users reports-icon"></i>
+                  <h2 class="reports-card-title">{% trans "Usuários Mais Ativos" %}</h2>
+                  <p class="reports-card-description">
+                    {% trans "Usuários com mais movimentações" %}
+                  </p>
+                </div>
+                <div class="reports-card-body">
+                  <div class="table-responsive">
+                    <table class="table report-table">
+                      <thead>
+                        <tr>
+                          <th><i class="fas fa-user me-2"></i>{% trans "Usuário" %}</th>
+                          <th><i class="fas fa-chart-bar me-2"></i>{% trans "Ações" %}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for usuario in usuarios_ativos %}
+                          <tr>
+                            <td>
+                              <i class="fas fa-user-circle text-primary me-2"></i>
+                              {{ usuario.user__username }}
+                            </td>
+                            <td>
+                              <span class="badge bg-primary">
+                                <i class="fas fa-chart-bar me-1"></i>
+                                {{ usuario.total_acoes }}
+                              </span>
+                            </td>
+                          </tr>
+                        {% empty %}
+                          <tr>
+                            <td colspan="2" class="text-center py-4">
+                              <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                              <p class="text-muted">{% trans "Nenhum usuário ativo." %}</p>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Personagens Mais Ativos -->
+            <div class="col-md-4">
+              <div class="reports-card">
+                <div class="reports-card-header">
+                  <i class="fas fa-gamepad reports-icon"></i>
+                  <h2 class="reports-card-title">{% trans "Personagens Mais Ativos" %}</h2>
+                  <p class="reports-card-description">
+                    {% trans "Personagens com mais movimentações" %}
+                  </p>
+                </div>
+                <div class="reports-card-body">
+                  <div class="table-responsive">
+                    <table class="table report-table">
+                      <thead>
+                        <tr>
+                          <th><i class="fas fa-gamepad me-2"></i>{% trans "Personagem" %}</th>
+                          <th><i class="fas fa-chart-bar me-2"></i>{% trans "Ações" %}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for personagem in personagens_ativos %}
+                          <tr>
+                            <td>
+                              <i class="fas fa-gamepad text-success me-2"></i>
+                              {{ personagem.inventory__character_name }}
+                            </td>
+                            <td>
+                              <span class="badge bg-success">
+                                <i class="fas fa-chart-bar me-1"></i>
+                                {{ personagem.total_acoes }}
+                              </span>
+                            </td>
+                          </tr>
+                        {% empty %}
+                          <tr>
+                            <td colspan="2" class="text-center py-4">
+                              <i class="fas fa-gamepad fa-3x text-muted mb-3"></i>
+                              <p class="text-muted">{% trans "Nenhum personagem ativo." %}</p>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Itens Mais Encantados -->
+            <div class="col-md-4">
+              <div class="reports-card">
+                <div class="reports-card-header">
+                  <i class="fas fa-magic reports-icon"></i>
+                  <h2 class="reports-card-title">{% trans "Itens Mais Encantados" %}</h2>
+                  <p class="reports-card-description">
+                    {% trans "Itens com maior volume de encantamentos" %}
+                  </p>
+                </div>
+                <div class="reports-card-body">
+                  <div class="table-responsive">
+                    <table class="table report-table">
+                      <thead>
+                        <tr>
+                          <th><i class="fas fa-magic me-2"></i>{% trans "Item" %}</th>
+                          <th><i class="fas fa-star me-2"></i>{% trans "Total" %}</th>
+                          <th><i class="fas fa-crown me-2"></i>{% trans "Max +" %}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for item in itens_encantados %}
+                          <tr>
+                            <td>
+                              <i class="fas fa-magic text-warning me-2"></i>
+                              {{ item.item_name }}
+                            </td>
+                            <td>
+                              <span class="badge bg-warning">
+                                <i class="fas fa-star me-1"></i>
+                                {{ item.total_encantado }}
+                              </span>
+                            </td>
+                            <td>
+                              <span class="badge bg-danger">
+                                <i class="fas fa-crown me-1"></i>
+                                +{{ item.max_enchant }}
+                              </span>
+                            </td>
+                          </tr>
+                        {% empty %}
+                          <tr>
+                            <td colspan="3" class="text-center py-4">
+                              <i class="fas fa-magic fa-3x text-muted mb-3"></i>
+                              <p class="text-muted">{% trans "Nenhum item encantado." %}</p>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
             <!-- Botão de Volta -->
             <div class="text-center mt-5">

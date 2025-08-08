@@ -31,8 +31,8 @@ def relatorio_fluxo_caixa(request):
     relatorio = fluxo_caixa_por_dia()
 
     labels = [str(item['data'].strftime('%d/%m')) for item in relatorio]
-    entradas = [float(item['entrada']) for item in relatorio]
-    saidas = [float(item['saida']) for item in relatorio]
+    entradas = [float(item['entradas']) for item in relatorio]
+    saidas = [float(item['saidas']) for item in relatorio]
     saldos = [float(item['saldo']) for item in relatorio]
 
     labels.reverse()

@@ -34,11 +34,22 @@ def fluxo_caixa_por_dia():
     # Converte pra lista ordenada por data decrescente
     relatorio = []
     for data, valores in sorted(dias.items(), reverse=True):
+        saldo = valores['entrada'] - valores['saida']
+        
+        # Determina a tendência baseada no saldo
+        if saldo > 0:
+            tendencia = 'positiva'
+        elif saldo < 0:
+            tendencia = 'negativa'
+        else:
+            tendencia = 'estavel'
+        
         relatorio.append({
             'data': data,
-            'entrada': valores['entrada'],
-            'saida': valores['saida'],
-            'saldo': valores['entrada'] - valores['saida']
+            'entradas': valores['entrada'],  # Corrigido para plural
+            'saidas': valores['saida'],      # Corrigido para plural
+            'saldo': saldo,
+            'tendencia': tendencia           # Adicionado campo que estava faltando
         })
 
     return relatorio

@@ -37,9 +37,13 @@
                 <thead>
                   <tr>
                     <th><i class="fas fa-user me-2"></i>{% trans "Usuário" %}</th>
-                    <th><i class="fas fa-wallet me-2"></i>{% trans "Saldo na Wallet" %}</th>
+                    <th><i class="fas fa-wallet me-2"></i>{% trans "Saldo Principal" %}</th>
+                    <th><i class="fas fa-gift me-2"></i>{% trans "Saldo Bônus" %}</th>
                     <th><i class="fas fa-calculator me-2"></i>{% trans "Saldo Calculado" %}</th>
                     <th><i class="fas fa-balance-scale me-2"></i>{% trans "Diferença" %}</th>
+                    <th><i class="fas fa-exchange-alt me-2"></i>{% trans "Transações" %}</th>
+                    <th><i class="fas fa-check-circle me-2"></i>{% trans "Status" %}</th>
+                    <th><i class="fas fa-calendar me-2"></i>{% trans "Última Transação" %}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -56,6 +60,12 @@
                       </span>
                     </td>
                     <td>
+                      <span class="badge bg-warning">
+                        <i class="fas fa-gift me-1"></i>
+                        R$ {{ item.saldo_bonus }}
+                      </span>
+                    </td>
+                    <td>
                       <span class="badge bg-secondary">
                         <i class="fas fa-calculator me-1"></i>
                         R$ {{ item.saldo_calculado }}
@@ -67,17 +77,67 @@
                           <i class="fas fa-check me-1"></i>
                           R$ {{ item.diferenca }}
                         </span>
+                      {% elif item.diferenca > 0 %}
+                        <span class="badge bg-warning">
+                          <i class="fas fa-arrow-up me-1"></i>
+                          +R$ {{ item.diferenca }}
+                        </span>
                       {% else %}
                         <span class="badge bg-danger">
-                          <i class="fas fa-exclamation-triangle me-1"></i>
+                          <i class="fas fa-arrow-down me-1"></i>
                           R$ {{ item.diferenca }}
+                        </span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      <span class="badge bg-secondary">
+                        <i class="fas fa-exchange-alt me-1"></i>
+                        {{ item.num_transacoes }}
+                      </span>
+                    </td>
+                    <td>
+                      {% if item.status == 'consistente' %}
+                        <span class="badge bg-success">
+                          <i class="fas fa-check-circle me-1"></i>
+                          {% trans "Consistente" %}
+                        </span>
+                      {% elif item.status == 'pequena_discrepancia' %}
+                        <span class="badge bg-warning">
+                          <i class="fas fa-exclamation-triangle me-1"></i>
+                          {% trans "Pequena Discrepância" %}
+                        </span>
+                      {% elif item.status == 'discrepancia' %}
+                        <span class="badge bg-danger">
+                          <i class="fas fa-times-circle me-1"></i>
+                          {% trans "Discrepância" %}
+                        </span>
+                      {% elif item.status == 'sem_carteira' %}
+                        <span class="badge bg-secondary">
+                          <i class="fas fa-user-slash me-1"></i>
+                          {% trans "Sem Carteira" %}
+                        </span>
+                      {% else %}
+                        <span class="badge bg-secondary">
+                          <i class="fas fa-question me-1"></i>
+                          {{ item.status|title }}
+                        </span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if item.ultima_transacao %}
+                        <i class="fas fa-calendar-day me-2 text-info"></i>
+                        {{ item.ultima_transacao|date:"d/m/Y H:i" }}
+                      {% else %}
+                        <span class="badge bg-secondary">
+                          <i class="fas fa-minus me-1"></i>
+                          {% trans "Nenhuma" %}
                         </span>
                       {% endif %}
                     </td>
                   </tr>
                   {% empty %}
                   <tr>
-                    <td colspan="4" class="text-center py-4">
+                    <td colspan="8" class="text-center py-4">
                       <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
                       <p class="text-muted">{% trans "Nenhum dado disponível para exibir" %}</p>
                     </td>
