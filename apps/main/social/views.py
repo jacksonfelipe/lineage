@@ -55,6 +55,14 @@ def feed(request):
     # Anotar posts com informação se o usuário atual deu like e status de moderação
     for post in posts:
         post.is_liked_by_current_user = post.is_liked_by(request.user)
+        
+        # Obter a reação atual do usuário
+        try:
+            user_like = post.likes.get(user=request.user)
+            post.current_user_reaction = user_like.reaction_type
+        except Like.DoesNotExist:
+            post.current_user_reaction = None
+            
         # Verificar se o post foi denunciado
         post.is_flagged = post.reports.filter(status='pending').exists()
         # Verificar se o post está oculto por moderação
@@ -272,9 +280,20 @@ def react_to_post(request, post_id):
         )
         
         if not created:
-            # Se já existe, atualizar o tipo de reação
-            like.reaction_type = reaction_type
-            like.save()
+            # Se já existe, verificar se é a mesma reação (para remover) ou trocar
+            if like.reaction_type == reaction_type:
+                # Mesma reação - remover
+                like.delete()
+                post.update_counts()
+                return JsonResponse({
+                    'success': True,
+                    'removed': True,
+                    'likes_count': post.likes_count
+                })
+            else:
+                # Reação diferente - atualizar
+                like.reaction_type = reaction_type
+                like.save()
         
         # Atualizar contador
         post.update_counts()
