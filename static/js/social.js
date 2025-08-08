@@ -29,6 +29,8 @@ function initActionButtons() {
     actionButtons.forEach(button => {
         // Efeito de clique
         button.addEventListener('click', function(e) {
+            const buttonType = this.getAttribute('data-type');
+            
             // Adicionar classe de loading temporariamente
             this.classList.add('loading');
             
@@ -39,35 +41,41 @@ function initActionButtons() {
             
             // Efeito de ripple
             createRippleEffect(e, this);
+            
+            // Mostrar campos específicos baseado no tipo do botão
+            if (buttonType === 'link') {
+                showLinkField();
+            } else if (buttonType === 'hashtag') {
+                showHashtagField();
+            }
         });
         
-        // Efeito de hover com som
+        // Efeito de hover
         button.addEventListener('mouseenter', function() {
-            playHoverSound();
+            // Hover effect without sound
         });
         
-        // Feedback visual ao selecionar arquivo
-        const input = this.parentElement.querySelector('input');
-        if (input) {
-            input.addEventListener('change', function() {
-                const button = this.parentElement.querySelector('.action-button');
-                if (this.files && this.files.length > 0) {
-                    button.style.borderColor = '#28a745';
-                    button.style.backgroundColor = '#f8fff9';
-                    
-                    // Mostrar nome do arquivo selecionado
-                    const fileName = this.files[0].name;
-                    const hint = button.querySelector('.action-hint');
-                    if (hint) {
-                        hint.textContent = fileName.length > 20 ? fileName.substring(0, 20) + '...' : fileName;
-                        hint.style.color = '#28a745';
+        // Feedback visual ao selecionar arquivo (apenas para image e video)
+        const buttonType = button.getAttribute('data-type');
+        if (buttonType === 'image' || buttonType === 'video') {
+            const input = button.parentElement.querySelector('input');
+            if (input) {
+                input.addEventListener('change', function() {
+                    const button = this.parentElement.querySelector('.action-button');
+                    if (this.files && this.files.length > 0) {
+                        button.style.borderColor = '#28a745';
+                        button.style.backgroundColor = '#f8fff9';
+                        
+                        // Mostrar nome do arquivo selecionado
+                        const fileName = this.files[0].name;
+                        const hint = button.querySelector('.action-hint');
+                        if (hint) {
+                            hint.textContent = fileName.length > 20 ? fileName.substring(0, 20) + '...' : fileName;
+                            hint.style.color = '#28a745';
+                        }
                     }
-                } else if (this.value) {
-                    // Para campos de texto (link, hashtags)
-                    button.style.borderColor = '#17a2b8';
-                    button.style.backgroundColor = '#f8fcff';
-                }
-            });
+                });
+            }
         }
     });
 }
@@ -91,24 +99,7 @@ function createRippleEffect(event, element) {
     }, 600);
 }
 
-function playHoverSound() {
-    // Criar um som sutil de hover (opcional)
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-    
-    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.1);
-    
-    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-    
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.1);
-}
+
 
 function initCounters() {
     const contentTextarea = document.querySelector('#id_content');
@@ -202,8 +193,77 @@ function initPreviews() {
             const url = this.value.trim();
             if (url && isValidUrl(url)) {
                 showLinkPreview(url);
+                // Feedback visual no botão
+                const linkButton = document.querySelector('.action-button[data-type="link"]');
+                if (linkButton) {
+                    linkButton.style.borderColor = '#17a2b8';
+                    linkButton.style.backgroundColor = '#f8fcff';
+                    const hint = linkButton.querySelector('.action-hint');
+                    if (hint) {
+                        hint.textContent = 'URL válida';
+                        hint.style.color = '#17a2b8';
+                    }
+                }
+            } else if (url) {
+                hideLinkPreview();
+                // Feedback visual no botão
+                const linkButton = document.querySelector('.action-button[data-type="link"]');
+                if (linkButton) {
+                    linkButton.style.borderColor = '#dc3545';
+                    linkButton.style.backgroundColor = '#fff8f8';
+                    const hint = linkButton.querySelector('.action-hint');
+                    if (hint) {
+                        hint.textContent = 'URL inválida';
+                        hint.style.color = '#dc3545';
+                    }
+                }
             } else {
                 hideLinkPreview();
+                // Resetar feedback visual
+                const linkButton = document.querySelector('.action-button[data-type="link"]');
+                if (linkButton) {
+                    linkButton.style.borderColor = '';
+                    linkButton.style.backgroundColor = '';
+                    const hint = linkButton.querySelector('.action-hint');
+                    if (hint) {
+                        hint.textContent = 'Compartilhar URL';
+                        hint.style.color = '';
+                    }
+                }
+            }
+        });
+    }
+    
+    // Feedback visual para hashtags
+    const hashtagInput = document.querySelector('#id_hashtags');
+    if (hashtagInput) {
+        hashtagInput.addEventListener('input', function() {
+            const hashtags = this.value.trim();
+            if (hashtags) {
+                // Feedback visual no botão
+                const hashtagButton = document.querySelector('.action-button[data-type="hashtag"]');
+                if (hashtagButton) {
+                    hashtagButton.style.borderColor = '#ffc107';
+                    hashtagButton.style.backgroundColor = '#fffbf0';
+                    const hint = hashtagButton.querySelector('.action-hint');
+                    if (hint) {
+                        const hashtagCount = hashtags.split('#').length - 1;
+                        hint.textContent = `${hashtagCount} hashtag(s)`;
+                        hint.style.color = '#ffc107';
+                    }
+                }
+            } else {
+                // Resetar feedback visual
+                const hashtagButton = document.querySelector('.action-button[data-type="hashtag"]');
+                if (hashtagButton) {
+                    hashtagButton.style.borderColor = '';
+                    hashtagButton.style.backgroundColor = '';
+                    const hint = hashtagButton.querySelector('.action-hint');
+                    if (hint) {
+                        hint.textContent = '#tag1 #tag2';
+                        hint.style.color = '';
+                    }
+                }
             }
         });
     }
@@ -282,7 +342,86 @@ function clearLink() {
     if (linkInput) linkInput.value = '';
     
     hideLinkPreview();
-    resetActionButtons();
+    hideLinkField();
+    
+    // Resetar estilo do botão
+    const linkButton = document.querySelector('.action-button[data-type="link"]');
+    if (linkButton) {
+        linkButton.style.borderColor = '';
+        linkButton.style.backgroundColor = '';
+        const hint = linkButton.querySelector('.action-hint');
+        if (hint) {
+            hint.textContent = 'Compartilhar URL';
+            hint.style.color = '';
+        }
+    }
+}
+
+function showLinkField() {
+    const linkContainer = document.getElementById('link-field-container');
+    if (linkContainer) {
+        linkContainer.style.display = 'block';
+        // Focar no campo
+        const linkField = linkContainer.querySelector('input');
+        if (linkField) {
+            linkField.focus();
+        }
+    }
+}
+
+function hideLinkField() {
+    const linkContainer = document.getElementById('link-field-container');
+    if (linkContainer) {
+        linkContainer.style.display = 'none';
+        // Limpar o campo
+        const linkField = document.querySelector('#id_link');
+        if (linkField) {
+            linkField.value = '';
+        }
+    }
+}
+
+function showHashtagField() {
+    const hashtagContainer = document.getElementById('hashtag-field-container');
+    if (hashtagContainer) {
+        hashtagContainer.style.display = 'block';
+        // Focar no campo
+        const hashtagField = hashtagContainer.querySelector('input');
+        if (hashtagField) {
+            hashtagField.focus();
+        }
+    }
+}
+
+function hideHashtagField() {
+    const hashtagContainer = document.getElementById('hashtag-field-container');
+    if (hashtagContainer) {
+        hashtagContainer.style.display = 'none';
+        // Limpar o campo
+        const hashtagField = document.querySelector('#id_hashtags');
+        if (hashtagField) {
+            hashtagField.value = '';
+        }
+    }
+}
+
+function clearHashtags() {
+    const hashtagInput = document.querySelector('#id_hashtags');
+    if (hashtagInput) hashtagInput.value = '';
+    
+    hideHashtagField();
+    
+    // Resetar estilo do botão
+    const hashtagButton = document.querySelector('.action-button[data-type="hashtag"]');
+    if (hashtagButton) {
+        hashtagButton.style.borderColor = '';
+        hashtagButton.style.backgroundColor = '';
+        const hint = hashtagButton.querySelector('.action-hint');
+        if (hint) {
+            hint.textContent = '#tag1 #tag2';
+            hint.style.color = '';
+        }
+    }
 }
 
 function clearMediaMobile() {
@@ -319,6 +458,10 @@ function resetActionButtons() {
             hint.style.color = '#6c757d';
         }
     });
+    
+    // Ocultar campos de link e hashtag
+    hideLinkField();
+    hideHashtagField();
 }
 
 function initValidations() {

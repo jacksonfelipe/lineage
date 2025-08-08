@@ -285,7 +285,7 @@
                   
                   <!-- Botão de Link -->
                   <div class="col-md-3">
-                    <label for="{{ form.link.id_for_label }}" class="action-button-wrapper">
+                    <div class="action-button-wrapper">
                       <div class="action-button" data-type="link" data-tooltip="Compartilhar link com preview">
                         <div class="action-icon">
                           <i class="bi bi-link-45deg text-info"></i>
@@ -293,16 +293,24 @@
                         <div class="action-label">{% trans "Link" %}</div>
                         <div class="action-hint">Compartilhar URL</div>
                       </div>
-                      {{ form.link }}
-                    </label>
-                    {% if form.link.errors %}
-                      <div class="text-danger small mt-1">{{ form.link.errors.0 }}</div>
-                    {% endif %}
+                    </div>
+                    <!-- Campo de link (inicialmente oculto) -->
+                    <div id="link-field-container" class="mt-2" style="display: none;">
+                      <div class="input-group">
+                        {{ form.link }}
+                        <button type="button" class="btn btn-outline-secondary" onclick="hideLinkField()">
+                          <i class="bi bi-x"></i>
+                        </button>
+                      </div>
+                      {% if form.link.errors %}
+                        <div class="text-danger small mt-1">{{ form.link.errors.0 }}</div>
+                      {% endif %}
+                    </div>
                   </div>
                   
                   <!-- Botão de Hashtags -->
                   <div class="col-md-3">
-                    <label for="{{ form.hashtags.id_for_label }}" class="action-button-wrapper">
+                    <div class="action-button-wrapper">
                       <div class="action-button" data-type="hashtag" data-tooltip="Adicionar hashtags para categorizar">
                         <div class="action-icon">
                           <i class="bi bi-hash text-warning"></i>
@@ -310,11 +318,19 @@
                         <div class="action-label">{% trans "Hashtags" %}</div>
                         <div class="action-hint">#tag1 #tag2</div>
                       </div>
-                      {{ form.hashtags }}
-                    </label>
-                    {% if form.hashtags.errors %}
-                      <div class="text-danger small mt-1">{{ form.hashtags.errors.0 }}</div>
-                    {% endif %}
+                    </div>
+                    <!-- Campo de hashtags (inicialmente oculto) -->
+                    <div id="hashtag-field-container" class="mt-2" style="display: none;">
+                      <div class="input-group">
+                        {{ form.hashtags }}
+                        <button type="button" class="btn btn-outline-secondary" onclick="hideHashtagField()">
+                          <i class="bi bi-x"></i>
+                        </button>
+                      </div>
+                      {% if form.hashtags.errors %}
+                        <div class="text-danger small mt-1">{{ form.hashtags.errors.0 }}</div>
+                      {% endif %}
+                    </div>
                   </div>
                 </div>
               </div>
