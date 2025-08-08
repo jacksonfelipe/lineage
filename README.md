@@ -1,6 +1,6 @@
 # Painel Definitivo Lineage [1.13](https://pdl.denky.dev.br)
 
-<img align="right" height="180" src="https://i.imgur.com/y37VikH.png"/>
+<img align="right" height="180" src="https://i.imgur.com/0tL4OQ7.png"/>
 
 O PDL é um painel que nasceu com a missão de oferecer ferramentas poderosas para administradores de servidores privados de Lineage 2. Inicialmente voltado à análise de riscos e estabilidade dos servidores, o projeto evoluiu e se consolidou como uma solução completa para prospecção, gerenciamento e operação de servidores — tudo em código aberto.
 
@@ -38,7 +38,7 @@ O PDL é um painel que nasceu com a missão de oferecer ferramentas poderosas pa
 #
 
 <p align="center">
-<img height="280" src="https://i.imgur.com/mYkfb8X.png">
+<img height="280" src="https://i.imgur.com/gdB0k6o.jpeg">
 </p>
 
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/Django.svg)](https://www.djangoproject.com/)
