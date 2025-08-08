@@ -5,10 +5,45 @@
 {% block title %} {% trans "Feed Social" %} {% endblock title %}
 
 {% block content %}
-<div class="container-fluid py-4">
+<!-- Barra de navegação móvel (só aparece no mobile) -->
+<div class="d-lg-none">
+  <div class="bg-white shadow-sm border-bottom mb-3">
+    <div class="container-fluid px-3 py-2">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <div class="avatar-container me-2" style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden;">
+            {% if user.avatar %}
+              <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
+                   alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
+            {% else %}
+              <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                   alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
+            {% endif %}
+          </div>
+          <span class="fw-bold small">{{ user.get_full_name|default:user.username }}</span>
+        </div>
+        <div class="d-flex gap-2">
+          <a href="{% url 'social:search' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-search"></i>
+          </a>
+          <a href="{% url 'social:user_profile' user.username %}" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-person"></i>
+          </a>
+          {% if can_moderate %}
+            <a href="{% url 'social:moderation_dashboard' %}" class="btn btn-outline-danger btn-sm">
+              <i class="bi bi-shield-check"></i>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid py-lg-4 py-2">
   <div class="row">
-    <!-- Sidebar esquerda com perfil e links -->
-    <div class="col-lg-3">
+    <!-- Sidebar esquerda com perfil e links (oculta no mobile) -->
+    <div class="col-lg-3 d-none d-lg-block">
       <!-- Card do perfil do usuário -->
       <div class="card mb-4">
         <div class="card-body text-center">
@@ -143,64 +178,188 @@
       </div>
     </div>
     
-    <!-- Coluna principal -->
-    <div class="col-lg-6">
+    <!-- Coluna principal (ocupa toda largura no mobile) -->
+    <div class="col-12 col-lg-6">
       
       <!-- Card para criar novo post -->
       <div class="card mb-4">
         <div class="card-body">
           <form method="post" enctype="multipart/form-data" id="post-form">
             {% csrf_token %}
-            <div class="d-flex align-items-start">
-              <div class="avatar-container me-3" style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden; flex-shrink: 0;">
-                {% if user.avatar %}
-                  <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
-                       alt="Avatar" class="w-100 h-100" style="object-fit: cover; border-radius: 50%;">
-                {% else %}
-                  <img src="{% static 'assets/img/team/generic_user.png' %}" 
-                       alt="Avatar" class="w-100 h-100" style="object-fit: cover; border-radius: 50%;">
-                {% endif %}
-              </div>
-              <div class="flex-grow-1">
-                <div class="form-group">
-                  {{ form.content }}
-                  {% if form.content.errors %}
-                    <div class="text-danger small">{{ form.content.errors.0 }}</div>
+            
+            <!-- Layout Desktop (campos sempre visíveis) -->
+            <div class="d-none d-lg-block">
+              <div class="d-flex align-items-start">
+                <div class="avatar-container me-3" style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden; flex-shrink: 0;">
+                  {% if user.avatar %}
+                    <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
+                         alt="Avatar" class="w-100 h-100" style="object-fit: cover; border-radius: 50%;">
+                  {% else %}
+                    <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                         alt="Avatar" class="w-100 h-100" style="object-fit: cover; border-radius: 50%;">
                   {% endif %}
                 </div>
-                
-                <!-- Preview de mídia -->
-                <div id="media-preview" class="mt-3" style="display: none;">
-                  <div class="card">
-                    <div class="card-body p-2">
-                      <div class="d-flex align-items-center">
-                        <div id="preview-content" class="flex-grow-1"></div>
-                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearMedia()">
-                          <i class="bi bi-x"></i>
-                        </button>
+                <div class="flex-grow-1">
+                  <div class="form-group">
+                    {{ form.content }}
+                    {% if form.content.errors %}
+                      <div class="text-danger small">{{ form.content.errors.0 }}</div>
+                    {% endif %}
+                  </div>
+                  
+                  <!-- Preview de mídia -->
+                  <div id="media-preview" class="mt-3" style="display: none;">
+                    <div class="card">
+                      <div class="card-body p-2">
+                        <div class="d-flex align-items-center">
+                          <div id="preview-content" class="flex-grow-1"></div>
+                          <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearMedia()">
+                            <i class="bi bi-x"></i>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                
-                <!-- Preview de link -->
-                <div id="link-preview" class="mt-3" style="display: none;">
-                  <div class="card">
-                    <div class="card-body p-2">
-                      <div class="d-flex align-items-center">
-                        <div id="link-content" class="flex-grow-1"></div>
-                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearLink()">
-                          <i class="bi bi-x"></i>
-                        </button>
+                  
+                  <!-- Preview de link -->
+                  <div id="link-preview" class="mt-3" style="display: none;">
+                    <div class="card">
+                      <div class="card-body p-2">
+                        <div class="d-flex align-items-center">
+                          <div id="link-content" class="flex-grow-1"></div>
+                          <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearLink()">
+                            <i class="bi bi-x"></i>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
+                  
+                  <div class="row mt-3">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="{{ form.image.id_for_label }}" class="form-label">
+                          <i class="bi bi-image text-primary"></i> {% trans "Imagem" %}
+                        </label>
+                        {{ form.image }}
+                        {% if form.image.errors %}
+                          <div class="text-danger small">{{ form.image.errors.0 }}</div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="{{ form.video.id_for_label }}" class="form-label">
+                          <i class="bi bi-camera-video text-success"></i> {% trans "Vídeo" %}
+                        </label>
+                        {{ form.video }}
+                        {% if form.video.errors %}
+                          <div class="text-danger small">{{ form.video.errors.0 }}</div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="{{ form.link.id_for_label }}" class="form-label">
+                          <i class="bi bi-link-45deg text-info"></i> {% trans "Link" %}
+                        </label>
+                        {{ form.link }}
+                        {% if form.link.errors %}
+                          <div class="text-danger small">{{ form.link.errors.0 }}</div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="{{ form.hashtags.id_for_label }}" class="form-label">
+                          <i class="bi bi-hash text-warning"></i> {% trans "Hashtags" %}
+                        </label>
+                        {{ form.hashtags }}
+                        {% if form.hashtags.errors %}
+                          <div class="text-danger small">{{ form.hashtags.errors.0 }}</div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div class="d-flex gap-2">
+                      <small class="text-muted">
+                        <span id="char-count">0</span>/1000 {% trans "caracteres" %}
+                      </small>
+                      <small class="text-muted">
+                        <span id="hashtag-count">0</span> {% trans "hashtags" %}
+                      </small>
+                    </div>
+                    <div class="d-flex gap-2">
+                      <div class="form-check">
+                        {{ form.is_public }}
+                        <label class="form-check-label" for="{{ form.is_public.id_for_label }}">
+                          {% trans "Post público" %}
+                        </label>
+                      </div>
+                      <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-send"></i> {% trans "Publicar" %}
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                
-                <div class="row mt-3">
-                  <div class="col-md-3">
+              </div>
+            </div>
+            
+            <!-- Layout Mobile Compacto -->
+            <div class="d-lg-none">
+              <div class="d-flex align-items-start">
+                <div class="avatar-container me-2" style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden; flex-shrink: 0;">
+                  {% if user.avatar %}
+                    <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
+                         alt="Avatar" class="w-100 h-100" style="object-fit: cover; border-radius: 50%;">
+                  {% else %}
+                    <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                         alt="Avatar" class="w-100 h-100" style="object-fit: cover; border-radius: 50%;">
+                  {% endif %}
+                </div>
+                <div class="flex-grow-1">
+                  <!-- Campo de texto sempre visível -->
+                  <div class="form-group">
+                    {{ form.content }}
+                    {% if form.content.errors %}
+                      <div class="text-danger small">{{ form.content.errors.0 }}</div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Preview de mídia -->
+              <div id="media-preview-mobile" class="mt-2" style="display: none;">
+                <div class="alert alert-info p-2 m-0">
+                  <div class="d-flex align-items-center">
+                    <div id="preview-content-mobile" class="flex-grow-1"></div>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearMediaMobile()">
+                      <i class="bi bi-x"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Preview de link -->
+              <div id="link-preview-mobile" class="mt-2" style="display: none;">
+                <div class="alert alert-info p-2 m-0">
+                  <div class="d-flex align-items-center">
+                    <div id="link-content-mobile" class="flex-grow-1"></div>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearLinkMobile()">
+                      <i class="bi bi-x"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Campos ocultos mobile -->
+              <div id="mobile-extra-fields" class="mt-2" style="display: none;">
+                <div class="row g-2">
+                  <div class="col-6">
                     <div class="form-group">
-                      <label for="{{ form.image.id_for_label }}" class="form-label">
+                      <label for="{{ form.image.id_for_label }}" class="form-label small">
                         <i class="bi bi-image text-primary"></i> {% trans "Imagem" %}
                       </label>
                       {{ form.image }}
@@ -209,9 +368,9 @@
                       {% endif %}
                     </div>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-6">
                     <div class="form-group">
-                      <label for="{{ form.video.id_for_label }}" class="form-label">
+                      <label for="{{ form.video.id_for_label }}" class="form-label small">
                         <i class="bi bi-camera-video text-success"></i> {% trans "Vídeo" %}
                       </label>
                       {{ form.video }}
@@ -220,9 +379,9 @@
                       {% endif %}
                     </div>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-6">
                     <div class="form-group">
-                      <label for="{{ form.link.id_for_label }}" class="form-label">
+                      <label for="{{ form.link.id_for_label }}" class="form-label small">
                         <i class="bi bi-link-45deg text-info"></i> {% trans "Link" %}
                       </label>
                       {{ form.link }}
@@ -231,9 +390,9 @@
                       {% endif %}
                     </div>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-6">
                     <div class="form-group">
-                      <label for="{{ form.hashtags.id_for_label }}" class="form-label">
+                      <label for="{{ form.hashtags.id_for_label }}" class="form-label small">
                         <i class="bi bi-hash text-warning"></i> {% trans "Hashtags" %}
                       </label>
                       {{ form.hashtags }}
@@ -243,27 +402,35 @@
                     </div>
                   </div>
                 </div>
+              </div>
+              
+              <!-- Barra de ações mobile -->
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <div class="d-flex gap-2 align-items-center">
+                  <!-- Botão para mostrar/ocultar campos extras -->
+                  <button type="button" class="btn btn-outline-secondary btn-sm" id="toggle-extra-fields">
+                    <i class="bi bi-plus-circle" id="toggle-icon"></i>
+                  </button>
+                  
+                  <!-- Contador de caracteres compacto -->
+                  <small class="text-muted">
+                    <span id="char-count-mobile">0</span>/1000
+                  </small>
+                </div>
                 
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                  <div class="d-flex gap-2">
-                    <small class="text-muted">
-                      <span id="char-count">0</span>/1000 {% trans "caracteres" %}
-                    </small>
-                    <small class="text-muted">
-                      <span id="hashtag-count">0</span> {% trans "hashtags" %}
-                    </small>
+                <div class="d-flex gap-2 align-items-center">
+                  <!-- Checkbox público compacto -->
+                  <div class="form-check form-check-inline">
+                    {{ form.is_public }}
+                    <label class="form-check-label small" for="{{ form.is_public.id_for_label }}">
+                      <i class="bi bi-globe" title="{% trans 'Post público' %}"></i>
+                    </label>
                   </div>
-                  <div class="d-flex gap-2">
-                    <div class="form-check">
-                      {{ form.is_public }}
-                      <label class="form-check-label" for="{{ form.is_public.id_for_label }}">
-                        {% trans "Post público" %}
-                      </label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">
-                      <i class="bi bi-send"></i> {% trans "Publicar" %}
-                    </button>
-                  </div>
+                  
+                  <!-- Botão publicar -->
+                  <button type="submit" class="btn btn-primary btn-sm">
+                    <i class="bi bi-send"></i>
+                  </button>
                 </div>
               </div>
             </div>
@@ -577,8 +744,8 @@
       {% endif %}
     </div>
     
-    <!-- Sidebar direita com hashtags e sugestões -->
-    <div class="col-lg-3">
+    <!-- Sidebar direita com hashtags e sugestões (oculta no mobile) -->
+    <div class="col-lg-3 d-none d-lg-block">
       <!-- Hashtags populares -->
       <div class="card mb-4">
         <div class="card-header">
@@ -786,13 +953,41 @@
 <script>
 // JavaScript para interações
 document.addEventListener('DOMContentLoaded', function() {
+  // Toggle de campos extras no mobile
+  const toggleExtraFieldsBtn = document.getElementById('toggle-extra-fields');
+  const mobileExtraFields = document.getElementById('mobile-extra-fields');
+  const toggleIcon = document.getElementById('toggle-icon');
+  
+  if (toggleExtraFieldsBtn && mobileExtraFields && toggleIcon) {
+    toggleExtraFieldsBtn.addEventListener('click', function() {
+      if (mobileExtraFields.style.display === 'none' || mobileExtraFields.style.display === '') {
+        mobileExtraFields.style.display = 'block';
+        toggleIcon.className = 'bi bi-dash-circle';
+        this.classList.remove('btn-outline-secondary');
+        this.classList.add('btn-secondary');
+      } else {
+        mobileExtraFields.style.display = 'none';
+        toggleIcon.className = 'bi bi-plus-circle';
+        this.classList.remove('btn-secondary');
+        this.classList.add('btn-outline-secondary');
+      }
+    });
+  }
+  
   // Contador de caracteres
   const contentField = document.querySelector('#{{ form.content.id_for_label }}');
   const charCount = document.getElementById('char-count');
+  const charCountMobile = document.getElementById('char-count-mobile');
   
-  if (contentField && charCount) {
+  if (contentField) {
     contentField.addEventListener('input', function() {
-      charCount.textContent = this.value.length;
+      const length = this.value.length;
+      if (charCount) {
+        charCount.textContent = length;
+      }
+      if (charCountMobile) {
+        charCountMobile.textContent = length;
+      }
     });
   }
   
@@ -1187,5 +1382,157 @@ function clearLink() {
     linkField.value = '';
   }
 }
+
+// Funções auxiliares para mobile
+function clearMediaMobile() {
+  const mediaPreviewMobile = document.getElementById('media-preview-mobile');
+  const previewContentMobile = document.getElementById('preview-content-mobile');
+  const imageField = document.querySelector('#{{ form.image.id_for_label }}');
+  const videoField = document.querySelector('#{{ form.video.id_for_label }}');
+  
+  if (mediaPreviewMobile) {
+    mediaPreviewMobile.style.display = 'none';
+  }
+  if (previewContentMobile) {
+    previewContentMobile.innerHTML = '';
+  }
+  if (imageField) {
+    imageField.value = '';
+  }
+  if (videoField) {
+    videoField.value = '';
+  }
+}
+
+function clearLinkMobile() {
+  const linkPreviewMobile = document.getElementById('link-preview-mobile');
+  const linkContentMobile = document.getElementById('link-content-mobile');
+  const linkField = document.querySelector('#{{ form.link.id_for_label }}');
+  
+  if (linkPreviewMobile) {
+    linkPreviewMobile.style.display = 'none';
+  }
+  if (linkContentMobile) {
+    linkContentMobile.innerHTML = '';
+  }
+  if (linkField) {
+    linkField.value = '';
+  }
+}
 </script>
+
+<!-- CSS para responsividade mobile -->
+<style>
+/* Mobile optimizations */
+@media (max-width: 991.98px) {
+  /* Reduzir padding nos cards para economizar espaço */
+  .card-body {
+    padding: 0.75rem !important;
+  }
+  
+  /* Compactar form de criar post */
+  .card.mb-4 {
+    margin-bottom: 1rem !important;
+  }
+  
+  /* Formulário de post mobile mais compacto */
+  #mobile-extra-fields {
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+  }
+  
+  #mobile-extra-fields .form-label {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  #mobile-extra-fields .form-control {
+    font-size: 0.875rem;
+    padding: 0.375rem;
+  }
+  
+  /* Botão toggle de campos extras */
+  #toggle-extra-fields {
+    transition: all 0.2s ease;
+  }
+  
+  #toggle-extra-fields:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Previews mobile mais compactos */
+  #media-preview-mobile .alert,
+  #link-preview-mobile .alert {
+    font-size: 0.875rem;
+    padding: 0.5rem;
+  }
+  
+  /* Otimizar botões de ação dos posts */
+  .post-actions .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Reduzir espaçamento entre posts */
+  .post-item {
+    margin-bottom: 1rem;
+  }
+  
+  /* Avatar menor no form de criar post */
+  .avatar-container {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  
+  /* Avatar extra pequeno no mobile */
+  .d-lg-none .avatar-container {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  
+  /* Compactar dropdown de reações */
+  .dropdown-menu {
+    font-size: 0.875rem;
+  }
+  
+  /* Otimizar área de texto */
+  .form-control {
+    font-size: 1rem;
+  }
+  
+  /* Textarea no mobile mais compacto */
+  .d-lg-none textarea.form-control {
+    min-height: 60px;
+    font-size: 0.95rem;
+  }
+  
+  /* Ajustar container */
+  .container-fluid {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+/* Mobile extra small devices */
+@media (max-width: 575.98px) {
+  /* Remover bordas laterais dos cards */
+  .card {
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+  }
+  
+  /* Padding mínimo */
+  .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  /* Cards sem margin lateral */
+  .card.mb-4, .card {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+</style>
 {% endblock content %}
