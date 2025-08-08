@@ -1,0 +1,265 @@
+/* ============================================================================
+   ESTILOS PARA A REDE SOCIAL
+   ============================================================================ */
+
+/* Botões de ação do formulário de posts */
+.action-button-wrapper {
+  display: block;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.action-button-wrapper:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.action-button {
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 16px 12px;
+  text-align: center;
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.action-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: left 0.5s;
+}
+
+.action-button:hover::before {
+  left: 100%;
+}
+
+.action-button:hover {
+  border-color: #007bff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+}
+
+.action-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);
+}
+
+.action-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+  transition: transform 0.3s ease;
+}
+
+.action-button:hover .action-icon {
+  transform: scale(1.1);
+}
+
+.action-label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #495057;
+}
+
+.action-hint {
+  font-size: 11px;
+  color: #6c757d;
+  opacity: 0.8;
+}
+
+/* Estados específicos para cada tipo de botão */
+.action-button[data-type="image"]:hover {
+  border-color: #007bff;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+}
+
+.action-button[data-type="video"]:hover {
+  border-color: #28a745;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.15);
+}
+
+.action-button[data-type="link"]:hover {
+  border-color: #17a2b8;
+  box-shadow: 0 4px 12px rgba(23, 162, 184, 0.15);
+}
+
+.action-button[data-type="hashtag"]:hover {
+  border-color: #ffc107;
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.15);
+}
+
+/* Barra de ações */
+.post-actions-bar {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 1px solid #dee2e6;
+  transition: all 0.3s ease;
+}
+
+.post-actions-bar:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Campos de input ocultos */
+.action-button-wrapper input[type="file"],
+.action-button-wrapper input[type="url"],
+.action-button-wrapper input[type="text"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Contadores melhorados */
+.char-counter, .hashtag-counter {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  background: rgba(0, 123, 255, 0.1);
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.char-counter.warning {
+  background: rgba(255, 193, 7, 0.1);
+  color: #856404;
+}
+
+.char-counter.danger {
+  background: rgba(220, 53, 69, 0.1);
+  color: #721c24;
+}
+
+/* Botão de publicar melhorado */
+.btn-publish {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  border: none;
+  border-radius: 25px;
+  padding: 10px 24px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+.btn-publish:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+  background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+}
+
+.btn-publish:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+}
+
+/* Preview de mídia melhorado */
+.media-preview-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.media-preview-card .card-body {
+  padding: 16px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .action-button {
+    padding: 12px 8px;
+  }
+  
+  .action-icon {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+  
+  .action-label {
+    font-size: 12px;
+  }
+  
+  .action-hint {
+    font-size: 10px;
+  }
+}
+
+/* Animações */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.action-button:focus {
+  animation: pulse 0.3s ease-in-out;
+}
+
+/* Estados de loading */
+.action-button.loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.action-button.loading .action-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Melhorias para acessibilidade */
+.action-button:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+.action-button-wrapper:focus-within .action-button {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* Tooltips personalizados */
+.action-button[data-tooltip] {
+  position: relative;
+}
+
+.action-button[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+.action-button[data-tooltip]:hover::before {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-bottom-color: #333;
+  z-index: 1000;
+}
