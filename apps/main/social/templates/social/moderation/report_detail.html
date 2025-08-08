@@ -1,0 +1,443 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %} {% trans "Detalhes da Denúncia" %} #{{ report.id }} {% endblock title %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <!-- Cabeçalho -->
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">
+            <i class="bi bi-flag text-primary"></i> {% trans "Denúncia" %} #{{ report.id }}
+          </h4>
+          <div>
+            <a href="{% url 'social:reports_list' %}" class="btn btn-outline-primary btn-sm">
+              <i class="bi bi-arrow-left"></i> {% trans "Voltar à Lista" %}
+            </a>
+            <a href="{% url 'social:moderation_dashboard' %}" class="btn btn-outline-secondary btn-sm">
+              <i class="bi bi-house"></i> {% trans "Dashboard" %}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Informações da denúncia -->
+    <div class="col-lg-8">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h6 class="mb-0">
+            <i class="bi bi-info-circle"></i> {% trans "Informações da Denúncia" %}
+          </h6>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>{% trans "Tipo" %}:</strong> 
+                <span class="badge bg-{% if report.report_type == 'spam' %}secondary{% elif report.report_type == 'inappropriate' %}warning{% elif report.report_type == 'harassment' %}danger{% elif report.report_type == 'violence' %}danger{% elif report.report_type == 'hate_speech' %}danger{% else %}info{% endif %}">
+                  {{ report.get_report_type_display }}
+                </span>
+              </p>
+              <p><strong>{% trans "Status" %}:</strong> 
+                <span class="badge bg-{% if report.status == 'pending' %}warning{% elif report.status == 'reviewing' %}info{% elif report.status == 'resolved' %}success{% else %}secondary{% endif %}">
+                  {{ report.get_status_display }}
+                </span>
+              </p>
+              <p><strong>{% trans "Prioridade" %}:</strong> 
+                <span class="badge bg-{% if report.priority == 'urgent' %}danger{% elif report.priority == 'high' %}warning{% elif report.priority == 'medium' %}info{% else %}secondary{% endif %}">
+                  {{ report.get_priority_display }}
+                </span>
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>{% trans "Denunciante" %}:</strong> {{ report.reporter.username }}</p>
+              <p><strong>{% trans "Data da Denúncia" %}:</strong> {{ report.created_at|date:"d/m/Y H:i" }}</p>
+              <p><strong>{% trans "Moderador Responsável" %}:</strong> 
+                {% if report.assigned_moderator %}
+                  {{ report.assigned_moderator.username }}
+                {% else %}
+                  <span class="text-muted">{% trans "Não atribuído" %}</span>
+                {% endif %}
+              </p>
+            </div>
+          </div>
+          
+          <hr>
+          
+          <div class="mb-3">
+            <strong>{% trans "Descrição da Denúncia" %}:</strong>
+            <div class="mt-2 p-3 bg-light rounded">
+              {{ report.description|linebreaks }}
+            </div>
+          </div>
+
+          {% if report.moderator_notes %}
+            <div class="mb-3">
+              <strong>{% trans "Notas do Moderador" %}:</strong>
+              <div class="mt-2 p-3 bg-warning bg-opacity-10 rounded">
+                {{ report.moderator_notes|linebreaks }}
+              </div>
+            </div>
+          {% endif %}
+
+          {% if report.resolved_at %}
+            <div class="mb-3">
+              <strong>{% trans "Resolvida em" %}:</strong> {{ report.resolved_at|date:"d/m/Y H:i" }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Conteúdo reportado -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h6 class="mb-0">
+            <i class="bi bi-file-text"></i> {% trans "Conteúdo Reportado" %}
+          </h6>
+        </div>
+        <div class="card-body">
+          {% if report.reported_post %}
+            <div class="border rounded p-3">
+              <div class="d-flex align-items-center mb-2">
+                {% if report.reported_post.author.avatar %}
+                  <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' report.reported_post.author.uuid timestamp %}" 
+                       class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                {% else %}
+                  <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                       class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                {% endif %}
+                <div>
+                  <strong>{{ report.reported_post.author.username }}</strong>
+                  <small class="text-muted d-block">{{ report.reported_post.created_at|date:"d/m/Y H:i" }}</small>
+                </div>
+              </div>
+              
+              <div class="mb-2">
+                {{ report.reported_post.content|linebreaks }}
+              </div>
+              
+              {% if report.reported_post.image %}
+                <img src="{{ report.reported_post.image.url }}" class="img-fluid rounded mb-2" alt="Imagem do post">
+              {% endif %}
+              
+              {% if report.reported_post.link %}
+                <div class="mb-2">
+                  <a href="{{ report.reported_post.link }}" target="_blank" class="text-decoration-none">
+                    <i class="bi bi-link-45deg"></i> {{ report.reported_post.link_title|default:report.reported_post.link }}
+                  </a>
+                </div>
+              {% endif %}
+              
+              <div class="d-flex gap-2">
+                <a href="{% url 'social:post_detail' report.reported_post.id %}" class="btn btn-sm btn-outline-primary">
+                  <i class="bi bi-eye"></i> {% trans "Ver Post Original" %}
+                </a>
+                <a href="{% url 'social:report_content' 'post' report.reported_post.id %}" class="btn btn-sm btn-outline-danger">
+                  <i class="bi bi-flag"></i> {% trans "Denunciar" %}
+                </a>
+              </div>
+            </div>
+          {% elif report.reported_comment %}
+            <div class="border rounded p-3">
+              <div class="d-flex align-items-center mb-2">
+                {% if report.reported_comment.author.avatar %}
+                  <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' report.reported_comment.author.uuid timestamp %}" 
+                       class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                {% else %}
+                  <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                       class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                {% endif %}
+                <div>
+                  <strong>{{ report.reported_comment.author.username }}</strong>
+                  <small class="text-muted d-block">{{ report.reported_comment.created_at|date:"d/m/Y H:i" }}</small>
+                </div>
+              </div>
+              
+              <div class="mb-2">
+                {{ report.reported_comment.content|linebreaks }}
+              </div>
+              
+              <div class="d-flex gap-2">
+                <a href="{% url 'social:post_detail' report.reported_comment.post.id %}" class="btn btn-sm btn-outline-primary">
+                  <i class="bi bi-eye"></i> {% trans "Ver Post Original" %}
+                </a>
+                <a href="{% url 'social:report_content' 'comment' report.reported_comment.id %}" class="btn btn-sm btn-outline-danger">
+                  <i class="bi bi-flag"></i> {% trans "Denunciar" %}
+                </a>
+              </div>
+            </div>
+          {% elif report.reported_user %}
+            <div class="border rounded p-3">
+              <div class="d-flex align-items-center mb-2">
+                {% if report.reported_user.avatar %}
+                  <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' report.reported_user.uuid timestamp %}" 
+                       class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                {% else %}
+                  <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                       class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                {% endif %}
+                <div>
+                  <strong>{{ report.reported_user.username }}</strong>
+                  <small class="text-muted d-block">{% trans "Usuário reportado" %}</small>
+                </div>
+              </div>
+              
+              <div class="mb-2">
+                <p><strong>{% trans "Email" %}:</strong> {{ report.reported_user.email }}</p>
+                <p><strong>{% trans "Data de Registro" %}:</strong> {{ report.reported_user.date_joined|date:"d/m/Y" }}</p>
+                <p><strong>{% trans "Último Login" %}:</strong> {{ report.reported_user.last_login|date:"d/m/Y H:i"|default:"Nunca" }}</p>
+              </div>
+              
+              <div class="d-flex gap-2">
+                <a href="{% url 'social:user_profile' report.reported_user.username %}" class="btn btn-sm btn-outline-primary">
+                  <i class="bi bi-eye"></i> {% trans "Ver Perfil" %}
+                </a>
+                <a href="{% url 'social:report_content' 'user' report.reported_user.id %}" class="btn btn-sm btn-outline-danger">
+                  <i class="bi bi-flag"></i> {% trans "Denunciar" %}
+                </a>
+              </div>
+            </div>
+          {% else %}
+            <p class="text-muted">{% trans "Conteúdo não disponível" %}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Denúncias similares -->
+      {% if similar_reports %}
+        <div class="card mb-4">
+          <div class="card-header">
+            <h6 class="mb-0">
+              <i class="bi bi-exclamation-triangle text-warning"></i> {% trans "Denúncias Similares" %} ({{ similar_reports.count }})
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>{% trans "ID" %}</th>
+                    <th>{% trans "Tipo" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Data" %}</th>
+                    <th>{% trans "Ação" %}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for similar in similar_reports %}
+                  <tr>
+                    <td>#{{ similar.id }}</td>
+                    <td>
+                      <span class="badge bg-{% if similar.report_type == 'spam' %}secondary{% elif similar.report_type == 'inappropriate' %}warning{% elif similar.report_type == 'harassment' %}danger{% else %}info{% endif %}">
+                        {{ similar.get_report_type_display }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge bg-{% if similar.status == 'pending' %}warning{% elif similar.status == 'reviewing' %}info{% elif similar.status == 'resolved' %}success{% else %}secondary{% endif %}">
+                        {{ similar.get_status_display }}
+                      </span>
+                    </td>
+                    <td>{{ similar.created_at|date:"d/m/Y" }}</td>
+                    <td>
+                      <a href="{% url 'social:report_detail' similar.id %}" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-eye"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Painel lateral -->
+    <div class="col-lg-4">
+      <!-- Ação de moderação -->
+      {% if report.status != 'resolved' %}
+        <div class="card mb-4">
+          <div class="card-header">
+            <h6 class="mb-0">
+              <i class="bi bi-gear"></i> {% trans "Ação de Moderação" %}
+            </h6>
+          </div>
+          <div class="card-body">
+            <form method="post">
+              {% csrf_token %}
+              
+              <div class="mb-3">
+                {{ action_form.action_type.label_tag }}
+                {{ action_form.action_type }}
+                {% if action_form.action_type.errors %}
+                  <div class="text-danger small">
+                    {% for error in action_form.action_type.errors %}
+                      {{ error }}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="mb-3">
+                {{ action_form.reason.label_tag }}
+                {{ action_form.reason }}
+                {% if action_form.reason.errors %}
+                  <div class="text-danger small">
+                    {% for error in action_form.reason.errors %}
+                      {{ error }}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="mb-3" id="suspension-fields" style="display: none;">
+                <div class="row">
+                  <div class="col-md-6">
+                    {{ action_form.suspension_duration.label_tag }}
+                    {{ action_form.suspension_duration }}
+                  </div>
+                  <div class="col-md-6">
+                    {{ action_form.suspension_type.label_tag }}
+                    {{ action_form.suspension_type }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <div class="form-check">
+                  {{ action_form.notify_user }}
+                  {{ action_form.notify_user.label_tag }}
+                </div>
+              </div>
+
+              <div class="mb-3" id="notification-message-field" style="display: none;">
+                {{ action_form.notification_message.label_tag }}
+                {{ action_form.notification_message }}
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-check-circle"></i> {% trans "Aplicar Ação" %}
+              </button>
+            </form>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Histórico de ações do usuário -->
+      {% if user_actions %}
+        <div class="card mb-4">
+          <div class="card-header">
+            <h6 class="mb-0">
+              <i class="bi bi-clock-history"></i> {% trans "Histórico de Ações" %}
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="list-group list-group-flush">
+              {% for action in user_actions %}
+                <div class="list-group-item px-0">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <strong>{{ action.get_action_type_display }}</strong>
+                      <small class="text-muted d-block">{{ action.created_at|date:"d/m/Y H:i" }}</small>
+                    </div>
+                    <span class="badge bg-{% if action.action_type == 'delete_content' %}danger{% elif action.action_type == 'hide_content' %}warning{% elif action.action_type == 'suspend_user' %}danger{% else %}info{% endif %}">
+                      {{ action.get_action_type_display }}
+                    </span>
+                  </div>
+                  {% if action.reason %}
+                    <small class="text-muted">{{ action.reason|truncatechars:100 }}</small>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const actionTypeSelect = document.getElementById('id_action_type');
+    const suspensionFields = document.getElementById('suspension-fields');
+    const notifyUserCheckbox = document.getElementById('id_notify_user');
+    const notificationMessageField = document.getElementById('notification-message-field');
+
+    // Mostrar/ocultar campos de suspensão
+    function toggleSuspensionFields() {
+        if (actionTypeSelect && suspensionFields) {
+            const selectedValue = actionTypeSelect.value;
+            if (selectedValue === 'suspend_user' || selectedValue === 'restrict_user') {
+                suspensionFields.style.display = 'block';
+            } else {
+                suspensionFields.style.display = 'none';
+            }
+        }
+    }
+
+    // Mostrar/ocultar campo de mensagem de notificação
+    function toggleNotificationField() {
+        if (notifyUserCheckbox && notificationMessageField) {
+            if (notifyUserCheckbox.checked) {
+                notificationMessageField.style.display = 'block';
+            } else {
+                notificationMessageField.style.display = 'none';
+            }
+        }
+    }
+
+    // Adicionar event listeners apenas se os elementos existem
+    if (actionTypeSelect) {
+        actionTypeSelect.addEventListener('change', toggleSuspensionFields);
+    }
+    if (notifyUserCheckbox) {
+        notifyUserCheckbox.addEventListener('change', toggleNotificationField);
+    }
+
+    // Inicializar
+    toggleSuspensionFields();
+    toggleNotificationField();
+});
+
+
+</script>
+
+<style>
+.badge {
+    font-size: 0.75em;
+}
+
+.list-group-item {
+    border-left: none;
+    border-right: none;
+}
+
+.list-group-item:first-child {
+    border-top: none;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+</style>
+{% endblock content %}

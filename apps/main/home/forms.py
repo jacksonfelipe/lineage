@@ -11,7 +11,7 @@ from django.utils.html import strip_tags
 class UserProfileForm(UserChangeForm):
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'bio', 'cpf', 'gender')
+        fields = ('first_name', 'last_name', 'email', 'bio', 'cpf', 'gender', 'website')
         labels = {
             'first_name': _('First Name'),
             'last_name': _('Last Name'),
@@ -19,13 +19,15 @@ class UserProfileForm(UserChangeForm):
             'bio': _('Biography'),
             'cpf': _('CPF'),
             'gender': _('Gender'),
+            'website': _('Website'),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for fieldname in ['first_name', 'last_name', 'email', 'bio', 'gender']:
+        for fieldname in ['first_name', 'last_name', 'email', 'bio', 'gender', 'website']:
             self.fields[fieldname].widget.attrs.update({'class': 'form-control'})
         self.fields['cpf'].widget.attrs.update({'class': 'form-control', 'id': 'cpf'})
+        self.fields['website'].widget.attrs.update({'placeholder': 'https://seusite.com'})
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -278,7 +280,7 @@ class CustomUserCreationForm(UserCreationForm):
         model = User
         fields = (
             'username', 'email', 'password1', 'password2',
-            'avatar', 'bio', 'cpf', 'gender',
+            'avatar', 'bio', 'cpf', 'gender', 'website',
             'is_email_verified', 'is_2fa_enabled', 'fichas',
         )
         labels = {
@@ -290,6 +292,7 @@ class CustomUserCreationForm(UserCreationForm):
             'bio': _('Biography'),
             'cpf': _('CPF'),
             'gender': _('Gender'),
+            'website': _('Website'),
             'is_email_verified': _('Email Verified'),
             'is_2fa_enabled': _('2FA Enabled'),
             'fichas': _('Credits'),

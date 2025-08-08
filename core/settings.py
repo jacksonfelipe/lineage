@@ -20,7 +20,7 @@ load_dotenv()  # take environment variables from .env.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # System Version
-VERSION = '1.13.50'
+VERSION = '1.13.60'
 
 # Enable/Disable DEBUG Mode
 DEBUG = str2bool(os.environ.get('DEBUG', False))
@@ -133,7 +133,9 @@ INSTALLED_APPS = [
     "django_otp.plugins.otp_totp",
 
     "apps.api",
-    "apps.licence",
+
+    "apps.main.licence",
+    "apps.main.social",
 
     "apps.main.administrator",
     "apps.main.auditor",
@@ -202,9 +204,13 @@ MIDDLEWARE = [
     "middlewares.rate_limit_api_external.RateLimitMiddleware",
     "middlewares.lock_screen_middleware.SessionLockMiddleware",
     
+    # Middlewares de moderação
+    "middlewares.content_filter_middleware.ContentFilterMiddleware",
+    "middlewares.content_filter_middleware.SpamProtectionMiddleware",
+    
     # Middlewares de licença
-    "apps.licence.middleware.LicenseMiddleware",
-    "apps.licence.middleware.LicenseFeatureMiddleware",
+    "apps.main.licence.middleware.LicenseMiddleware",
+    "apps.main.licence.middleware.LicenseFeatureMiddleware",
 ]
 
 # =========================== TEMPLATES CONFIGS ===========================

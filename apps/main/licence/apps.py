@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 class LicenceConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.licence'
+    name = 'apps.main.licence'
     verbose_name = _('Sistema de Licenciamento')
 
     def ready(self):
@@ -13,6 +13,6 @@ class LicenceConfig(AppConfig):
         """
         try:
             # Importa sinais se existirem
-            import apps.licence.signals
+            import apps.main.licence.signals
         except ImportError:
             pass

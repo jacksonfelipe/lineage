@@ -525,6 +525,22 @@
 
                 <div class="info-item">
                   <div class="info-label">
+                    <i class="fas fa-globe"></i> {% trans "Website" %}
+                  </div>
+                  <div class="info-value {% if not user.website %}empty{% endif %}">
+                    {% if user.website %}
+                      <a href="{{ user.website }}" target="_blank" class="text-decoration-none">
+                        {{ user.website }}
+                        <i class="fas fa-external-link-alt ms-1"></i>
+                      </a>
+                    {% else %}
+                      {% trans 'Não informado' %}
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div class="info-item">
+                  <div class="info-label">
                     <i class="fas fa-map-marker-alt"></i> {% trans "Endereço" %}
                   </div>
                   <div class="info-value {% if not user.addresses.exists %}empty{% endif %}">

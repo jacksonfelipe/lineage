@@ -422,6 +422,28 @@
                 </div>
               </div>
 
+              <!-- Website Section -->
+              <div class="form-section">
+                <h4><i class="fas fa-link"></i> {% trans "Links" %}</h4>
+                <div class="form-group">
+                  <label for="{{ form.website.id_for_label }}">
+                    <i class="fas fa-globe me-2"></i>{% trans "Website" %}
+                  </label>
+                  {{ form.website }}
+                  <i class="fas fa-globe field-icon"></i>
+                  <small class="form-text text-muted">
+                    {% trans "Link para seu site pessoal, blog, ou portfólio" %}
+                  </small>
+                  {% if form.website.errors %}
+                    <div class="text-danger mt-1">
+                      {% for error in form.website.errors %}
+                        <small><i class="fas fa-exclamation-circle"></i> {{ error }}</small>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+
               <!-- Additional Information -->
               <div class="form-section">
                 <h4><i class="fas fa-info-circle"></i> {% trans "Informações Adicionais" %}</h4>

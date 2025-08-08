@@ -31,6 +31,7 @@ class User(BaseModel, AbstractUser):
     bio = EncryptedTextField(verbose_name=_('Biografia'), blank=True, null=True, max_length=500)
     cpf = EncryptedCharField(verbose_name=_('CPF'), max_length=14, blank=True, null=True, validators=[validate_cpf])
     gender = EncryptedCharField(verbose_name=_('Gênero'), max_length=50, choices=GENDER_CHOICES, blank=True, null=True)
+    website = models.URLField(verbose_name=_('Website'), blank=True, help_text=_('Link para seu site pessoal'))
     
     is_email_verified = models.BooleanField(default=False, verbose_name=_("E-mail verificado"))
     is_2fa_enabled = models.BooleanField(default=False, verbose_name=_("2FA habilitado"))
