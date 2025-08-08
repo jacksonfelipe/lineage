@@ -105,8 +105,13 @@
           {% if report.reported_post %}
             <div class="border rounded p-3">
               <div class="d-flex align-items-center mb-2">
-                <img src="{{ report.reported_post.author.profile.avatar.url|default:'/static/images/default-avatar.png' }}" 
-                     class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                {% if report.reported_post.author.avatar %}
+                  <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' report.reported_post.author.uuid timestamp %}" 
+                       class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                {% else %}
+                  <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                       class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                {% endif %}
                 <div>
                   <strong>{{ report.reported_post.author.username }}</strong>
                   <small class="text-muted d-block">{{ report.reported_post.created_at|date:"d/m/Y H:i" }}</small>
@@ -141,8 +146,13 @@
           {% elif report.reported_comment %}
             <div class="border rounded p-3">
               <div class="d-flex align-items-center mb-2">
-                <img src="{{ report.reported_comment.author.profile.avatar.url|default:'/static/images/default-avatar.png' }}" 
-                     class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                {% if report.reported_comment.author.avatar %}
+                  <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' report.reported_comment.author.uuid timestamp %}" 
+                       class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                {% else %}
+                  <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                       class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                {% endif %}
                 <div>
                   <strong>{{ report.reported_comment.author.username }}</strong>
                   <small class="text-muted d-block">{{ report.reported_comment.created_at|date:"d/m/Y H:i" }}</small>
@@ -165,8 +175,13 @@
           {% elif report.reported_user %}
             <div class="border rounded p-3">
               <div class="d-flex align-items-center mb-2">
-                <img src="{{ report.reported_user.profile.avatar.url|default:'/static/images/default-avatar.png' }}" 
-                     class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                {% if report.reported_user.avatar %}
+                  <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' report.reported_user.uuid timestamp %}" 
+                       class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                {% else %}
+                  <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                       class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                {% endif %}
                 <div>
                   <strong>{{ report.reported_user.username }}</strong>
                   <small class="text-muted d-block">{% trans "Usuário reportado" %}</small>
@@ -346,133 +361,55 @@
         </div>
       {% endif %}
 
-      <!-- Ações rápidas -->
-      <div class="card">
-        <div class="card-header">
-          <h6 class="mb-0">
-            <i class="bi bi-lightning"></i> {% trans "Ações Rápidas" %}
-          </h6>
-        </div>
-        <div class="card-body">
-          <div class="d-grid gap-2">
-            {% if report.status == 'pending' %}
-              <button type="button" class="btn btn-outline-warning" onclick="updateStatus('reviewing')">
-                <i class="bi bi-clock"></i> {% trans "Marcar como Revisando" %}
-              </button>
-            {% endif %}
-            
-            {% if report.status in 'pending,reviewing' %}
-              <button type="button" class="btn btn-outline-success" onclick="updateStatus('resolved')">
-                <i class="bi bi-check"></i> {% trans "Marcar como Resolvida" %}
-              </button>
-            {% endif %}
-            
-            <button type="button" class="btn btn-outline-secondary" onclick="updateStatus('dismissed')">
-              <i class="bi bi-x-circle"></i> {% trans "Descartar Denúncia" %}
-            </button>
-            
-            {% if not report.assigned_moderator %}
-              <button type="button" class="btn btn-outline-info" onclick="assignToSelf()">
-                <i class="bi bi-person-check"></i> {% trans "Atribuir a Mim" %}
-              </button>
-            {% endif %}
-          </div>
-        </div>
-      </div>
+
     </div>
   </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const actionTypeSelect = document.getElementById('action-type');
+    const actionTypeSelect = document.getElementById('id_action_type');
     const suspensionFields = document.getElementById('suspension-fields');
-    const notifyUserCheckbox = document.getElementById('notify-user');
+    const notifyUserCheckbox = document.getElementById('id_notify_user');
     const notificationMessageField = document.getElementById('notification-message-field');
 
     // Mostrar/ocultar campos de suspensão
     function toggleSuspensionFields() {
-        const selectedValue = actionTypeSelect.value;
-        if (selectedValue === 'suspend_user' || selectedValue === 'restrict_user') {
-            suspensionFields.style.display = 'block';
-        } else {
-            suspensionFields.style.display = 'none';
+        if (actionTypeSelect && suspensionFields) {
+            const selectedValue = actionTypeSelect.value;
+            if (selectedValue === 'suspend_user' || selectedValue === 'restrict_user') {
+                suspensionFields.style.display = 'block';
+            } else {
+                suspensionFields.style.display = 'none';
+            }
         }
     }
 
     // Mostrar/ocultar campo de mensagem de notificação
     function toggleNotificationField() {
-        if (notifyUserCheckbox.checked) {
-            notificationMessageField.style.display = 'block';
-        } else {
-            notificationMessageField.style.display = 'none';
+        if (notifyUserCheckbox && notificationMessageField) {
+            if (notifyUserCheckbox.checked) {
+                notificationMessageField.style.display = 'block';
+            } else {
+                notificationMessageField.style.display = 'none';
+            }
         }
     }
 
-    actionTypeSelect.addEventListener('change', toggleSuspensionFields);
-    notifyUserCheckbox.addEventListener('change', toggleNotificationField);
+    // Adicionar event listeners apenas se os elementos existem
+    if (actionTypeSelect) {
+        actionTypeSelect.addEventListener('change', toggleSuspensionFields);
+    }
+    if (notifyUserCheckbox) {
+        notifyUserCheckbox.addEventListener('change', toggleNotificationField);
+    }
 
     // Inicializar
     toggleSuspensionFields();
     toggleNotificationField();
 });
 
-// Função para atualizar status via AJAX
-function updateStatus(status) {
-    const statusText = {
-        'reviewing': '{% trans "revisando" %}',
-        'resolved': '{% trans "resolvida" %}',
-        'dismissed': '{% trans "descartada" %}'
-    };
-    
-    if (confirm(`{% trans "Tem certeza que deseja marcar esta denúncia como" %} ${statusText[status]}?`)) {
-        fetch(`/social/moderation/reports/{{ report.id }}/update-status/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-            },
-            body: JSON.stringify({ status: status })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('{% trans "Erro ao atualizar status:" %} ' + data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('{% trans "Erro ao processar a requisição." %}');
-        });
-    }
-}
 
-// Função para atribuir denúncia a si mesmo
-function assignToSelf() {
-    if (confirm('{% trans "Tem certeza que deseja atribuir esta denúncia a você mesmo?" %}')) {
-        fetch(`/social/moderation/reports/{{ report.id }}/assign/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('{% trans "Erro ao atribuir denúncia:" %} ' + data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('{% trans "Erro ao processar a requisição." %}');
-        });
-    }
-}
 </script>
 
 <style>

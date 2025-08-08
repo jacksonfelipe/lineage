@@ -9,7 +9,7 @@ from django.db.models import Q, Count
 from django.core.paginator import Paginator
 from django.utils.translation import gettext as _
 from django.contrib.auth import get_user_model
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.utils import timezone
@@ -29,7 +29,7 @@ def feed(request):
     following_users = request.user.following.values_list('following_id', flat=True)
     
     # Filtrar posts baseado em permissões de moderação
-    if request.user.is_staff or request.user.has_perm('social.can_moderate_content'):
+    if request.user.is_superuser or request.user.is_staff or request.user.has_perm('social.can_moderate_content'):
         # Moderadores veem todos os posts, incluindo os ocultos
         posts = Post.objects.filter(
             Q(author__in=following_users) | Q(is_public=True) | Q(author=request.user)
@@ -102,7 +102,7 @@ def feed(request):
     }
     
     # Verificar permissões de moderação
-    can_moderate = request.user.is_staff or request.user.has_perm('social.can_moderate_content')
+    can_moderate = request.user.is_superuser or request.user.is_staff or request.user.has_perm('social.can_moderate_content')
     
     # Estatísticas de moderação (apenas para moderadores)
     moderation_stats = {}
@@ -554,7 +554,7 @@ def hashtag_detail(request, hashtag_name):
 def followers_list(request, username):
     """Lista de seguidores de um usuário"""
     user = get_object_or_404(User, username=username)
-    followers = user.followers.all()
+    followers = user.followers.all()  # Objetos Follow onde following=user
     
     paginator = Paginator(followers, 20)
     page_number = request.GET.get('page')
@@ -563,6 +563,7 @@ def followers_list(request, username):
     context = {
         'profile_user': user,
         'page_obj': page_obj,
+        'followers': page_obj,  # Adicionar para compatibilidade com template
         'segment': 'followers_list',
         'parent': 'social',
     }
@@ -573,7 +574,7 @@ def followers_list(request, username):
 def following_list(request, username):
     """Lista de usuários que um usuário segue"""
     user = get_object_or_404(User, username=username)
-    following = user.following.all()
+    following = user.following.all()  # Objetos Follow onde follower=user
     
     paginator = Paginator(following, 20)
     page_number = request.GET.get('page')
@@ -582,6 +583,7 @@ def following_list(request, username):
     context = {
         'profile_user': user,
         'page_obj': page_obj,
+        'following': page_obj,  # Adicionar para compatibilidade com template
         'segment': 'following_list',
         'parent': 'social',
     }
@@ -726,75 +728,101 @@ def report_content(request, content_type, content_id):
     if request.method == 'POST':
         form = ReportForm(request.POST)
         if form.is_valid():
-            report = form.save(commit=False)
-            report.reporter = request.user
+            try:
+                report = form.save(commit=False)
+                report.reporter = request.user
+                
+                # Associar o conteúdo reportado
+                if content_type == 'post':
+                    report.reported_post = get_object_or_404(Post, id=content_id)
+                elif content_type == 'comment':
+                    report.reported_comment = get_object_or_404(Comment, id=content_id)
+                elif content_type == 'user':
+                    report.reported_user = get_object_or_404(User, id=content_id)
+                else:
+                    return JsonResponse({
+                        'success': False,
+                        'message': _('Tipo de conteúdo inválido.')
+                    })
+                
+                report.save()
+                
+                # Verificar se há denúncias similares
+                similar_reports = Report.objects.filter(
+                    report_type=report.report_type,
+                    status__in=['pending', 'reviewing']
+                )
+                
+                if content_type == 'post':
+                    similar_reports = similar_reports.filter(reported_post=report.reported_post)
+                elif content_type == 'comment':
+                    similar_reports = similar_reports.filter(reported_comment=report.reported_comment)
+                elif content_type == 'user':
+                    similar_reports = similar_reports.filter(reported_user=report.reported_user)
+                
+                # Atualizar contador de denúncias similares
+                for similar_report in similar_reports:
+                    similar_report.similar_reports_count = similar_reports.count()
+                    similar_report.save()
+                
+                # Retornar resposta JSON para AJAX
+                return JsonResponse({
+                    'success': True,
+                    'message': _('Denúncia enviada com sucesso. Nossa equipe irá analisar.')
+                })
+                
+            except Exception as e:
+                return JsonResponse({
+                    'success': False,
+                    'message': _('Erro ao processar denúncia. Tente novamente.')
+                })
+        else:
+            # Retornar erros do formulário em JSON
+            errors = {}
+            for field, error_list in form.errors.items():
+                errors[field] = error_list[0] if error_list else ''
             
-            # Associar o conteúdo reportado
-            if content_type == 'post':
-                report.reported_post = get_object_or_404(Post, id=content_id)
-            elif content_type == 'comment':
-                report.reported_comment = get_object_or_404(Comment, id=content_id)
-            elif content_type == 'user':
-                report.reported_user = get_object_or_404(User, id=content_id)
-            
-            report.save()
-            
-            # Verificar se há denúncias similares
-            similar_reports = Report.objects.filter(
-                report_type=report.report_type,
-                status__in=['pending', 'reviewing']
-            )
-            
-            if content_type == 'post':
-                similar_reports = similar_reports.filter(reported_post=report.reported_post)
-            elif content_type == 'comment':
-                similar_reports = similar_reports.filter(reported_comment=report.reported_comment)
-            elif content_type == 'user':
-                similar_reports = similar_reports.filter(reported_user=report.reported_user)
-            
-            # Atualizar contador de denúncias similares
-            for similar_report in similar_reports:
-                similar_report.similar_reports_count = similar_reports.count()
-                similar_report.save()
-            
-            messages.success(request, _('Denúncia enviada com sucesso. Nossa equipe irá analisar.'))
-            
-            # Redirecionar de volta
-            if content_type == 'post':
-                return redirect('social:post_detail', post_id=content_id)
-            elif content_type == 'comment':
-                return redirect('social:post_detail', post_id=report.reported_comment.post.id)
-            elif content_type == 'user':
-                return redirect('social:user_profile', username=report.reported_user.username)
-    else:
-        form = ReportForm()
+            return JsonResponse({
+                'success': False,
+                'message': _('Por favor, corrija os erros no formulário.'),
+                'errors': errors
+            })
+    
+    # Para requisições GET, retornar página de denúncia (não usado no modal)
+    form = ReportForm()
     
     # Obter informações do conteúdo reportado
     content_info = {}
-    if content_type == 'post':
-        content = get_object_or_404(Post, id=content_id)
-        content_info = {
-            'type': 'post',
-            'content': content.content[:100] + '...' if len(content.content) > 100 else content.content,
-            'author': content.author.username,
-            'date': content.created_at
-        }
-    elif content_type == 'comment':
-        content = get_object_or_404(Comment, id=content_id)
-        content_info = {
-            'type': 'comment',
-            'content': content.content[:100] + '...' if len(content.content) > 100 else content.content,
-            'author': content.author.username,
-            'date': content.created_at
-        }
-    elif content_type == 'user':
-        content = get_object_or_404(User, id=content_id)
-        content_info = {
-            'type': 'user',
-            'content': f'Usuário: {content.username}',
-            'author': content.username,
-            'date': content.date_joined
-        }
+    try:
+        if content_type == 'post':
+            content = get_object_or_404(Post, id=content_id)
+            content_info = {
+                'type': 'post',
+                'content': content.content[:100] + '...' if len(content.content) > 100 else content.content,
+                'author': content.author.username,
+                'date': content.created_at
+            }
+        elif content_type == 'comment':
+            content = get_object_or_404(Comment, id=content_id)
+            content_info = {
+                'type': 'comment',
+                'content': content.content[:100] + '...' if len(content.content) > 100 else content.content,
+                'author': content.author.username,
+                'date': content.created_at
+            }
+        elif content_type == 'user':
+            content = get_object_or_404(User, id=content_id)
+            content_info = {
+                'type': 'user',
+                'content': f'Usuário: {content.username}',
+                'author': content.username,
+                'date': content.date_joined
+            }
+    except:
+        return JsonResponse({
+            'success': False,
+            'message': _('Conteúdo não encontrado.')
+        })
     
     return render(request, 'social/report_content.html', {
         'form': form,
@@ -936,16 +964,106 @@ def reports_list(request):
     # Formulário para ações em massa
     bulk_form = BulkModerationForm()
     
+    # Calcular estatísticas corretas
+    total_reports = reports.count()
+    pending_count = reports.filter(status='pending').count()
+    urgent_count = reports.filter(priority='urgent', status__in=['pending', 'reviewing']).count()
+    resolved_count = reports.filter(status='resolved').count()
+    
     context = {
         'page_obj': page_obj,
         'search_form': search_form,
         'bulk_form': bulk_form,
-        'total_reports': reports.count(),
-        'pending_count': reports.filter(status='pending').count(),
-        'urgent_count': reports.filter(priority='urgent', status__in=['pending', 'reviewing']).count(),
+        'total_reports': total_reports,
+        'pending_count': pending_count,
+        'urgent_count': urgent_count,
+        'resolved_count': resolved_count,
     }
     
     return render(request, 'social/moderation/reports_list.html', context)
+
+
+@login_required
+@require_http_methods(["POST"])
+def update_report_status(request, report_id):
+    """Atualiza o status de uma denúncia via AJAX"""
+    if not request.user.has_perm('social.can_moderate_reports'):
+        return JsonResponse({'success': False, 'error': _('Sem permissão para moderar denúncias.')}, status=403)
+    
+    try:
+        import json
+        data = json.loads(request.body)
+        status = data.get('status')
+        
+        if status not in ['pending', 'reviewing', 'resolved', 'dismissed']:
+            return JsonResponse({'success': False, 'error': _('Status inválido.')}, status=400)
+        
+        report = get_object_or_404(Report, id=report_id)
+        old_status = report.status
+        report.status = status
+        report.assigned_moderator = request.user
+        report.save()
+        
+        # Criar log de moderação
+        ModerationLog.objects.create(
+            moderator=request.user,
+            action_type='report_status_changed',
+            target_type='report',
+            target_id=report.id,
+            description=_('Status da denúncia #{} alterado de {} para {}').format(
+                report.id, old_status, status
+            )
+        )
+        
+        return JsonResponse({
+            'success': True, 
+            'message': _('Status atualizado com sucesso!'),
+            'new_status': status
+        })
+        
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': _('Dados inválidos.')}, status=400)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+@login_required
+@require_http_methods(["POST"])
+def assign_report(request, report_id):
+    """Atribui uma denúncia ao moderador atual"""
+    if not request.user.has_perm('social.can_moderate_reports'):
+        return JsonResponse({'success': False, 'error': _('Sem permissão para moderar denúncias.')}, status=403)
+    
+    try:
+        report = get_object_or_404(Report, id=report_id)
+        
+        # Verificar se já não está atribuído ao usuário atual
+        if report.assigned_moderator == request.user:
+            return JsonResponse({'success': False, 'error': _('Esta denúncia já está atribuída a você.')}, status=400)
+        
+        old_moderator = report.assigned_moderator
+        report.assigned_moderator = request.user
+        report.save()
+        
+        # Criar log de moderação
+        ModerationLog.objects.create(
+            moderator=request.user,
+            action_type='report_assigned',
+            target_type='report',
+            target_id=report.id,
+            description=_('Denúncia #{} atribuída a {}').format(
+                report.id, request.user.username
+            )
+        )
+        
+        return JsonResponse({
+            'success': True, 
+            'message': _('Denúncia atribuída com sucesso!'),
+            'assigned_moderator': request.user.username
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
 @login_required
@@ -955,7 +1073,16 @@ def report_detail(request, report_id):
         messages.error(request, _('Você não tem permissão para moderar denúncias.'))
         return redirect('social:feed')
     
-    report = get_object_or_404(Report, id=report_id)
+    report = get_object_or_404(
+        Report.objects.select_related(
+            'reported_post__author',
+            'reported_comment__author', 
+            'reported_user',
+            'reporter',
+            'assigned_moderator'
+        ), 
+        id=report_id
+    )
     
     # Formulário para ação de moderação
     if request.method == 'POST':

@@ -44,6 +44,8 @@ urlpatterns = [
     path('moderation/', views.moderation_dashboard, name='moderation_dashboard'),
     path('moderation/reports/', views.reports_list, name='reports_list'),
     path('moderation/reports/<int:report_id>/', views.report_detail, name='report_detail'),
+    path('moderation/reports/<int:report_id>/update-status/', views.update_report_status, name='update_report_status'),
+    path('moderation/reports/<int:report_id>/assign/', views.assign_report, name='assign_report'),
     
     # Filtros de conteúdo
     path('moderation/filters/', views.content_filters, name='content_filters'),

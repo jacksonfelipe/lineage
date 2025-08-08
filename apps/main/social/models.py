@@ -1079,6 +1079,8 @@ class ModerationLog(BaseModel):
     LOG_TYPES = [
         ('report_created', _('Denúncia Criada')),
         ('report_resolved', _('Denúncia Resolvida')),
+        ('report_status_changed', _('Status da Denúncia Alterado')),
+        ('report_assigned', _('Denúncia Atribuída')),
         ('content_hidden', _('Conteúdo Ocultado')),
         ('content_deleted', _('Conteúdo Deletado')),
         ('user_suspended', _('Usuário Suspenso')),
@@ -1096,7 +1098,7 @@ class ModerationLog(BaseModel):
         verbose_name=_('Moderador')
     )
     action_type = models.CharField(
-        max_length=20,
+        max_length=30,
         choices=LOG_TYPES,
         verbose_name=_('Tipo de Ação')
     )

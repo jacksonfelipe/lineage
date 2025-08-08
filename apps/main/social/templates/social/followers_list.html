@@ -48,7 +48,7 @@
                         </a>
                       </h6>
                       <p class="text-muted mb-1">@{{ follow.follower.username }}</p>
-                      {% if follow.follower.social_profile.bio %}
+                      {% if follow.follower.social_profile and follow.follower.social_profile.bio %}
                         <small class="text-muted">{{ follow.follower.social_profile.bio|truncatechars:50 }}</small>
                       {% endif %}
                     </div>

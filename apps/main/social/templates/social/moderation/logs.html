@@ -199,8 +199,13 @@
                     <td>
                       {% if log.moderator %}
                         <div class="d-flex align-items-center">
-                          <img src="{{ log.moderator.profile.avatar.url|default:'/static/images/default-avatar.png' }}" 
-                               class="rounded-circle me-2" width="24" height="24" alt="Avatar">
+                          {% if log.moderator.avatar %}
+                            <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' log.moderator.uuid timestamp %}" 
+                                 class="rounded-circle me-2" width="24" height="24" alt="Avatar">
+                          {% else %}
+                            <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                                 class="rounded-circle me-2" width="24" height="24" alt="Avatar">
+                          {% endif %}
                           <span>{{ log.moderator.username }}</span>
                         </div>
                       {% else %}
