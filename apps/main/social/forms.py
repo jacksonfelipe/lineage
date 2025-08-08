@@ -160,120 +160,72 @@ class CommentForm(forms.ModelForm):
 
 class UserProfileForm(forms.ModelForm):
     """Formulário para edição do perfil social"""
-    bio = forms.CharField(
-        widget=forms.Textarea(attrs={
-            'class': 'form-control',
-            'rows': 3,
-            'placeholder': _('Conte um pouco sobre você...'),
-            'maxlength': 500
-        }),
-        max_length=500,
-        required=False,
-        help_text=_('Máximo 500 caracteres')
-    )
-    avatar = forms.ImageField(
-        required=False,
-        widget=forms.FileInput(attrs={
-            'class': 'form-control',
-            'accept': 'image/*'
-        }),
-        help_text=_('Foto de perfil (JPG, PNG)')
-    )
-    cover_image = forms.ImageField(
-        required=False,
-        widget=forms.FileInput(attrs={
-            'class': 'form-control',
-            'accept': 'image/*'
-        }),
-        help_text=_('Imagem de capa (JPG, PNG)')
-    )
-    website = forms.URLField(
-        required=False,
-        widget=forms.URLInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'https://seusite.com'
-        }),
-        help_text=_('Link para seu site pessoal')
-    )
-    location = forms.CharField(
-        max_length=100,
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': _('Sua cidade, país')
-        })
-    )
-    phone = forms.CharField(
-        max_length=20,
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': _('Seu telefone')
-        })
-    )
-    interests = forms.CharField(
-        required=False,
-        widget=forms.Textarea(attrs={
-            'class': 'form-control',
-            'rows': 3,
-            'placeholder': _('Seus hobbies e interesses...')
-        }),
-        help_text=_('Conte sobre seus interesses')
-    )
-    # Links sociais
-    facebook = forms.URLField(
-        required=False,
-        widget=forms.URLInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'https://facebook.com/seuperfil'
-        })
-    )
-    twitter = forms.URLField(
-        required=False,
-        widget=forms.URLInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'https://twitter.com/seuperfil'
-        })
-    )
-    instagram = forms.URLField(
-        required=False,
-        widget=forms.URLInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'https://instagram.com/seuperfil'
-        })
-    )
-    linkedin = forms.URLField(
-        required=False,
-        widget=forms.URLInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'https://linkedin.com/in/seuperfil'
-        })
-    )
-    youtube = forms.URLField(
-        required=False,
-        widget=forms.URLInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'https://youtube.com/@seucanal'
-        })
-    )
-
+    
     class Meta:
         model = UserProfile
         fields = [
             'bio', 'avatar', 'cover_image', 'website', 'location', 
-            'phone', 'gender', 'interests', 'birth_date',
+            'birth_date', 'phone', 'gender', 'interests',
             'is_private', 'show_email', 'show_phone', 'allow_messages'
         ]
         widgets = {
-            'gender': forms.Select(attrs={'class': 'form-control'}),
+            'bio': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': _('Conte um pouco sobre você...'),
+                'maxlength': 500
+            }),
+            'avatar': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
+            }),
+            'cover_image': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
+            }),
+            'website': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://seusite.com'
+            }),
+            'location': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': _('Sua cidade, país')
+            }),
             'birth_date': forms.DateInput(attrs={
                 'class': 'form-control',
                 'type': 'date'
             }),
-            'is_private': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'show_email': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'show_phone': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'allow_messages': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': _('Seu telefone')
+            }),
+            'gender': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+            'interests': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': _('Seus hobbies e interesses...')
+            }),
+            'is_private': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'show_email': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'show_phone': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'allow_messages': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+        help_texts = {
+            'bio': _('Máximo 500 caracteres'),
+            'avatar': _('Foto de perfil (JPG, PNG)'),
+            'cover_image': _('Imagem de capa (JPG, PNG)'),
+            'website': _('Link para seu site pessoal'),
+            'interests': _('Conte sobre seus interesses'),
         }
 
     def clean_avatar(self):
@@ -308,21 +260,7 @@ class UserProfileForm(forms.ModelForm):
         
         return cover_image
 
-    def save(self, commit=True):
-        instance = super().save(commit=False)
-        
-        # Processar links sociais
-        social_links = {}
-        for field in ['facebook', 'twitter', 'instagram', 'linkedin', 'youtube']:
-            value = self.cleaned_data.get(field)
-            if value:
-                social_links[field] = value
-        
-        instance.social_links = social_links
-        
-        if commit:
-            instance.save()
-        return instance
+
 
 
 class SearchForm(forms.Form):

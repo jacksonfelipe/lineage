@@ -67,6 +67,25 @@
                   <p class="mb-3">{{ profile_user.social_profile.bio }}</p>
                 {% endif %}
                 
+                <!-- Links e Website -->
+                {% if profile_user.social_profile.website %}
+                  <div class="mb-3 profile-links">
+                    <div class="d-flex align-items-center mb-2">
+                      <i class="bi bi-link-45deg me-2 text-primary"></i>
+                      <strong class="text-primary">{% trans "Links" %}</strong>
+                    </div>
+                    <div class="ps-4">
+                      <a href="{{ profile_user.social_profile.website }}" target="_blank" 
+                         class="btn btn-outline-primary btn-sm me-2" title="{{ profile_user.social_profile.website }}">
+                        <i class="bi bi-globe me-1"></i>
+                        {% with clean_url=profile_user.social_profile.website|cut:"https://"|cut:"http://"|cut:"www." %}
+                          {{ clean_url|slice:":40" }}{% if clean_url|length > 40 %}...{% endif %}
+                        {% endwith %}
+                      </a>
+                    </div>
+                  </div>
+                {% endif %}
+                
                 <div class="d-flex align-items-center mb-3">
                   {% if profile_user.social_profile.location %}
                     <span class="me-3">
@@ -76,9 +95,11 @@
                   {% endif %}
                   
                   {% if profile_user.social_profile.website %}
-                    <a href="{{ profile_user.social_profile.website }}" target="_blank" class="text-decoration-none me-3">
+                    <a href="{{ profile_user.social_profile.website }}" target="_blank" class="text-decoration-none me-3" title="{{ profile_user.social_profile.website }}">
                       <i class="bi bi-link-45deg"></i>
-                      {% trans "Website" %}
+                      {% with clean_url=profile_user.social_profile.website|cut:"https://"|cut:"http://"|cut:"www." %}
+                        {{ clean_url|slice:":35" }}{% if clean_url|length > 35 %}...{% endif %}
+                      {% endwith %}
                     </a>
                   {% endif %}
                   
@@ -172,9 +193,26 @@
               </div>
             </div>
             
-            <!-- Bio -->
+                        <!-- Bio -->
             {% if profile_user.social_profile.bio %}
-              <p class="mb-3">{{ profile_user.social_profile.bio }}</p>
+<p class="mb-3">{{ profile_user.social_profile.bio }}</p>
+            {% endif %}
+            
+            <!-- Links Mobile -->
+            {% if profile_user.social_profile.website %}
+              <div class="mb-3 profile-links">
+                <div class="d-flex align-items-center mb-2">
+                  <i class="bi bi-link-45deg me-2 text-primary"></i>
+                  <strong class="text-primary small">{% trans "Links" %}</strong>
+                </div>
+                <a href="{{ profile_user.social_profile.website }}" target="_blank" 
+                   class="btn btn-outline-primary btn-sm" title="{{ profile_user.social_profile.website }}">
+                  <i class="bi bi-globe me-1"></i>
+                  {% with clean_url=profile_user.social_profile.website|cut:"https://"|cut:"http://"|cut:"www." %}
+                    {{ clean_url|slice:":25" }}{% if clean_url|length > 25 %}...{% endif %}
+                  {% endwith %}
+                </a>
+              </div>
             {% endif %}
             
             <!-- Informações extras (compactas) -->
@@ -187,9 +225,11 @@
               {% endif %}
               
               {% if profile_user.social_profile.website %}
-                <a href="{{ profile_user.social_profile.website }}" target="_blank" class="text-decoration-none me-3 mb-1">
+                <a href="{{ profile_user.social_profile.website }}" target="_blank" class="text-decoration-none me-3 mb-1" title="{{ profile_user.social_profile.website }}">
                   <i class="bi bi-link-45deg"></i>
-                  {% trans "Website" %}
+                  {% with clean_url=profile_user.social_profile.website|cut:"https://"|cut:"http://"|cut:"www." %}
+                    {{ clean_url|slice:":25" }}{% if clean_url|length > 25 %}...{% endif %}
+                  {% endwith %}
                 </a>
               {% endif %}
               
@@ -632,3 +672,25 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 </style>
 {% endblock content %}
+
+<!-- CSS personalizado para links do perfil -->
+<style>
+.profile-links .btn-outline-primary {
+  border-radius: 20px;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.profile-links .btn-outline-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2);
+}
+
+@media (max-width: 991px) {
+  .profile-links .btn-outline-primary {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
+  }
+}
+</style>

@@ -445,17 +445,16 @@ def edit_profile(request):
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            form.save()
-            messages.success(request, _('Perfil atualizado com sucesso!'))
-            return redirect('social:user_profile', username=request.user.username)
+            try:
+                form.save()
+                messages.success(request, _('Perfil atualizado com sucesso!'))
+                return redirect('social:user_profile', username=request.user.username)
+            except Exception as e:
+                messages.error(request, _('Erro ao salvar o perfil: {}').format(str(e)))
+        else:
+            messages.error(request, _('Por favor, corrija os erros abaixo.'))
     else:
-        # Pré-preencher links sociais
-        initial_data = {}
-        for field in ['facebook', 'twitter', 'instagram', 'linkedin', 'youtube']:
-            if field in profile.social_links:
-                initial_data[field] = profile.social_links[field]
-        
-        form = UserProfileForm(instance=profile, initial=initial_data)
+        form = UserProfileForm(instance=profile)
     
     context = {
         'form': form,

@@ -135,19 +135,19 @@ class FollowAdmin(BaseModelAdmin):
 @admin.register(UserProfile)
 class UserProfileAdmin(BaseModelAdmin):
     list_display = [
-        'user', 'bio_preview', 'is_private', 'location', 
+        'user', 'bio_preview', 'website_preview', 'is_private', 'location', 
         'total_posts', 'total_likes_received', 'created_at'
     ]
     list_filter = [
         'is_private', 'show_email', 'show_phone', 'allow_messages', 
-        'gender', 'location'
+        'gender', 'location', 'created_at'
     ]
     search_fields = [
         'user__username', 'user__first_name', 'user__last_name', 
-        'bio', 'location', 'interests'
+        'bio', 'location', 'interests', 'website'
     ]
     readonly_fields = [
-        'user', 'total_posts', 'total_likes_received', 'total_comments_received'
+        'total_posts', 'total_likes_received', 'total_comments_received', 'created_at', 'updated_at'
     ]
     fieldsets = (
         (_('Informações Básicas'), {
@@ -177,6 +177,18 @@ class UserProfileAdmin(BaseModelAdmin):
     def bio_preview(self, obj):
         return obj.bio[:50] + '...' if obj.bio and len(obj.bio) > 50 else obj.bio
     bio_preview.short_description = _('Biografia')
+
+    def website_preview(self, obj):
+        if obj.website:
+            # Remove protocolo para exibição mais limpa
+            clean_url = obj.website.replace('https://', '').replace('http://', '').replace('www.', '')
+            # Trunca se muito longo
+            display_url = clean_url[:30] + '...' if len(clean_url) > 30 else clean_url
+            return format_html('<a href="{}" target="_blank" title="{}">{}</a>', 
+                             obj.website, obj.website, display_url)
+        return '-'
+    website_preview.short_description = _('Website')
+    website_preview.admin_order_field = 'website'
 
 
 @admin.register(Hashtag)
