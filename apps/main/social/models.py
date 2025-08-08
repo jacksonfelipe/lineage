@@ -499,6 +499,7 @@ class UserProfile(BaseModel):
     def posts_count(self):
         return self.user.social_posts.count()
 
+
     def update_statistics(self):
         """Atualiza estatísticas do perfil"""
         self.total_posts = self.user.social_posts.count()

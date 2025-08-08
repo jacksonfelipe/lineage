@@ -72,12 +72,12 @@ class PostForm(forms.ModelForm):
                 # Verificar tamanho do arquivo (máximo 5MB)
                 if image.size > 5 * 1024 * 1024:
                     raise forms.ValidationError(_('A imagem deve ter no máximo 5MB.'))
-                
+
                 # Verificar formato
                 allowed_formats = ['image/jpeg', 'image/png', 'image/gif']
                 if image.content_type not in allowed_formats:
                     raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG, PNG ou GIF.'))
-        
+
         return image
 
     def clean_video(self):
@@ -88,12 +88,12 @@ class PostForm(forms.ModelForm):
                 # Verificar tamanho do arquivo (máximo 50MB)
                 if video.size > 50 * 1024 * 1024:
                     raise forms.ValidationError(_('O vídeo deve ter no máximo 50MB.'))
-                
+
                 # Verificar formato
                 allowed_formats = ['video/mp4', 'video/avi', 'video/quicktime']
                 if video.content_type not in allowed_formats:
                     raise forms.ValidationError(_('Formato de vídeo não suportado. Use MP4, AVI ou MOV.'))
-        
+
         return video
 
     def clean_hashtags(self):
@@ -149,22 +149,22 @@ class CommentForm(forms.ModelForm):
                 # Verificar tamanho do arquivo (máximo 2MB)
                 if image.size > 2 * 1024 * 1024:
                     raise forms.ValidationError(_('A imagem deve ter no máximo 2MB.'))
-                
+
                 # Verificar formato
                 allowed_formats = ['image/jpeg', 'image/png', 'image/gif']
                 if image.content_type not in allowed_formats:
                     raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG, PNG ou GIF.'))
-        
+
         return image
 
 
 class UserProfileForm(forms.ModelForm):
     """Formulário para edição do perfil social"""
-    
+
     class Meta:
         model = UserProfile
         fields = [
-            'bio', 'avatar', 'cover_image', 'website', 'location', 
+            'bio', 'avatar', 'cover_image', 'website', 'location',
             'birth_date', 'phone', 'gender', 'interests',
             'is_private', 'show_email', 'show_phone', 'allow_messages'
         ]
@@ -236,12 +236,12 @@ class UserProfileForm(forms.ModelForm):
                 # Verificar tamanho do arquivo (máximo 2MB)
                 if avatar.size > 2 * 1024 * 1024:
                     raise forms.ValidationError(_('A foto de perfil deve ter no máximo 2MB.'))
-                
+
                 # Verificar formato
                 allowed_formats = ['image/jpeg', 'image/png']
                 if avatar.content_type not in allowed_formats:
                     raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG ou PNG.'))
-        
+
         return avatar
 
     def clean_cover_image(self):
@@ -252,27 +252,26 @@ class UserProfileForm(forms.ModelForm):
                 # Verificar tamanho do arquivo (máximo 5MB)
                 if cover_image.size > 5 * 1024 * 1024:
                     raise forms.ValidationError(_('A imagem de capa deve ter no máximo 5MB.'))
-                
+
                 # Verificar formato
                 allowed_formats = ['image/jpeg', 'image/png']
                 if cover_image.content_type not in allowed_formats:
                     raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG ou PNG.'))
-        
+
         return cover_image
 
 
-
-
 class SearchForm(forms.Form):
-    """Formulário para busca de usuários e posts"""
+    """Formulário de busca"""
     q = forms.CharField(
         max_length=100,
-        required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': _('Buscar usuários ou posts...'),
-            'autocomplete': 'off'
-        })
+            'placeholder': _('Buscar usuários, posts...'),
+            'aria-label': _('Buscar')
+        }),
+        label=_('Buscar'),
+        required=False
     )
     search_type = forms.ChoiceField(
         choices=[
@@ -407,7 +406,7 @@ class ReportForm(forms.ModelForm):
         model = Report
         fields = ['report_type', 'description']
         exclude = [
-            'reporter', 'status', 'reported_post', 'reported_comment', 
+            'reporter', 'status', 'reported_post', 'reported_comment',
             'reported_user', 'assigned_moderator', 'moderator_notes',
             'resolved_at', 'priority', 'similar_reports_count'
         ]
@@ -440,7 +439,7 @@ class ModerationActionForm(forms.ModelForm):
         label=_('Motivo'),
         help_text=_('Máximo 500 caracteres')
     )
-    
+
     # Campos condicionais para suspensões
     suspension_duration = forms.DurationField(
         required=False,
@@ -461,7 +460,7 @@ class ModerationActionForm(forms.ModelForm):
         }),
         label=_('Tipo de Suspensão')
     )
-    
+
     # Notificação
     notify_user = forms.BooleanField(
         required=False,
@@ -502,14 +501,14 @@ class ModerationActionForm(forms.ModelForm):
         action_type = cleaned_data.get('action_type')
         suspension_duration = cleaned_data.get('suspension_duration')
         suspension_type = cleaned_data.get('suspension_type')
-        
+
         # Validar campos de suspensão
         if action_type in ['suspend_user', 'restrict_user']:
             if not suspension_duration:
                 raise forms.ValidationError(_('Duração da suspensão é obrigatória para este tipo de ação.'))
             if not suspension_type:
                 raise forms.ValidationError(_('Tipo de suspensão é obrigatório para este tipo de ação.'))
-        
+
         return cleaned_data
 
 
@@ -558,7 +557,7 @@ class ContentFilterForm(forms.ModelForm):
         }),
         label=_('Descrição')
     )
-    
+
     # Campos de controle
     case_sensitive = forms.BooleanField(
         required=False,
@@ -604,10 +603,10 @@ class ContentFilterForm(forms.ModelForm):
     def clean_pattern(self):
         pattern = self.cleaned_data.get('pattern')
         filter_type = self.cleaned_data.get('filter_type')
-        
+
         if not pattern or pattern.strip() == '':
             raise forms.ValidationError(_('O padrão é obrigatório.'))
-        
+
         # Validar regex se for do tipo regex
         if filter_type == 'regex':
             import re
@@ -615,7 +614,7 @@ class ContentFilterForm(forms.ModelForm):
                 re.compile(pattern)
             except re.error as e:
                 raise forms.ValidationError(_(f'Expressão regular inválida: {e}'))
-        
+
         return pattern.strip()
 
     def clean(self):
@@ -623,11 +622,11 @@ class ContentFilterForm(forms.ModelForm):
         apply_to_posts = cleaned_data.get('apply_to_posts')
         apply_to_comments = cleaned_data.get('apply_to_comments')
         apply_to_usernames = cleaned_data.get('apply_to_usernames')
-        
+
         # Pelo menos um tipo de conteúdo deve ser selecionado
         if not any([apply_to_posts, apply_to_comments, apply_to_usernames]):
             raise forms.ValidationError(_('Selecione pelo menos um tipo de conteúdo para aplicar o filtro.'))
-        
+
         return cleaned_data
 
 
@@ -742,8 +741,8 @@ class BulkModerationForm(forms.Form):
         cleaned_data = super().clean()
         action_type = cleaned_data.get('action_type')
         assigned_moderator = cleaned_data.get('assigned_moderator')
-        
+
         if action_type == 'assign_moderator' and not assigned_moderator:
             raise forms.ValidationError(_('Selecione um moderador para atribuir.'))
-        
+
         return cleaned_data

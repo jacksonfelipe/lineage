@@ -403,7 +403,10 @@ def follow_user(request, user_id):
 def user_profile(request, username):
     """Perfil de um usuário"""
     user = get_object_or_404(User, username=username)
-    profile, created = UserProfile.objects.get_or_create(user=user)
+    # Usar diretamente o social_profile do usuário para evitar problemas de cache
+    profile = getattr(user, 'social_profile', None)
+    if not profile:
+        profile, created = UserProfile.objects.get_or_create(user=user)
     
     # Verificar se o usuário pode ver o perfil
     if profile.is_private and user != request.user:
@@ -445,17 +448,14 @@ def edit_profile(request):
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            try:
-                form.save()
-                messages.success(request, _('Perfil atualizado com sucesso!'))
-                return redirect('social:user_profile', username=request.user.username)
-            except Exception as e:
-                messages.error(request, _('Erro ao salvar o perfil: {}').format(str(e)))
+            form.save()
+            messages.success(request, _('Perfil atualizado com sucesso!'))
+            return redirect('social:user_profile', username=request.user.username)
         else:
             messages.error(request, _('Por favor, corrija os erros abaixo.'))
     else:
         form = UserProfileForm(instance=profile)
-    
+
     context = {
         'form': form,
         'profile': profile,

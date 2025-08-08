@@ -5,26 +5,7 @@
 {% block title %} {% trans "Editar Perfil" %} {% endblock title %}
 
 {% block content %}
-<!-- Barra de navegação móvel (só aparece no mobile) -->
-<div class="d-lg-none">
-  <div class="bg-white shadow-sm border-bottom mb-3">
-    <div class="container-fluid px-3 py-2">
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center">
-          <a href="{% url 'social:user_profile' user.username %}" class="btn btn-outline-secondary btn-sm me-2">
-            <i class="bi bi-arrow-left"></i>
-          </a>
-          <span class="fw-bold">{% trans "Editar Perfil" %}</span>
-        </div>
-        <button type="submit" form="profile-form" class="btn btn-primary btn-sm">
-          <i class="bi bi-check"></i> {% trans "Salvar" %}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="container-fluid py-lg-4 py-2">
+<div class="container-fluid py-4">
   <div class="row">
     <div class="col-12 col-lg-8 mx-auto">
       
@@ -36,7 +17,7 @@
         </div>
         <div class="card-body">
           
-          <!-- Mensagens de sucesso/erro -->
+          <!-- Mensagens -->
           {% if messages %}
             {% for message in messages %}
               <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
@@ -46,16 +27,15 @@
             {% endfor %}
           {% endif %}
           
-          <form method="post" enctype="multipart/form-data" id="profile-form">
+          <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             
-            <!-- Layout Desktop -->
-            <div class="row d-none d-lg-flex">
+            <div class="row">
               <!-- Coluna da esquerda -->
               <div class="col-md-8">
                 
                 <!-- Biografia -->
-                <div class="mb-4">
+                <div class="mb-3">
                   <label for="{{ form.bio.id_for_label }}" class="form-label">
                     <i class="bi bi-chat-quote"></i> {% trans "Biografia" %}
                   </label>
@@ -69,7 +49,7 @@
                 </div>
                 
                 <!-- Localização -->
-                <div class="mb-4">
+                <div class="mb-3">
                   <label for="{{ form.location.id_for_label }}" class="form-label">
                     <i class="bi bi-geo-alt"></i> {% trans "Localização" %}
                   </label>
@@ -80,7 +60,7 @@
                 </div>
                 
                 <!-- Website -->
-                <div class="mb-4">
+                <div class="mb-3">
                   <label for="{{ form.website.id_for_label }}" class="form-label">
                     <i class="bi bi-link-45deg"></i> {% trans "Website" %}
                   </label>
@@ -94,39 +74,31 @@
                 </div>
                 
                 <!-- Data de nascimento -->
-                <div class="mb-4">
+                <div class="mb-3">
                   <label for="{{ form.birth_date.id_for_label }}" class="form-label">
                     <i class="bi bi-calendar"></i> {% trans "Data de Nascimento" %}
                   </label>
                   {{ form.birth_date }}
-                  {% if form.birth_date.help_text %}
-                    <div class="form-text">{{ form.birth_date.help_text }}</div>
-                  {% endif %}
                   {% if form.birth_date.errors %}
                     <div class="text-danger small">{{ form.birth_date.errors.0 }}</div>
                   {% endif %}
                 </div>
 
-                <!-- Informações Adicionais -->
+                <!-- Telefone e Gênero -->
                 <div class="row">
                   <div class="col-md-6">
-                    <!-- Telefone -->
-                    <div class="mb-4">
+                    <div class="mb-3">
                       <label for="{{ form.phone.id_for_label }}" class="form-label">
                         <i class="bi bi-phone"></i> {% trans "Telefone" %}
                       </label>
                       {{ form.phone }}
-                      {% if form.phone.help_text %}
-                        <div class="form-text">{{ form.phone.help_text }}</div>
-                      {% endif %}
                       {% if form.phone.errors %}
                         <div class="text-danger small">{{ form.phone.errors.0 }}</div>
                       {% endif %}
                     </div>
                   </div>
                   <div class="col-md-6">
-                    <!-- Gênero -->
-                    <div class="mb-4">
+                    <div class="mb-3">
                       <label for="{{ form.gender.id_for_label }}" class="form-label">
                         <i class="bi bi-person"></i> {% trans "Gênero" %}
                       </label>
@@ -139,75 +111,48 @@
                 </div>
 
                 <!-- Interesses -->
-                <div class="mb-4">
+                <div class="mb-3">
                   <label for="{{ form.interests.id_for_label }}" class="form-label">
                     <i class="bi bi-heart"></i> {% trans "Interesses" %}
                   </label>
                   {{ form.interests }}
-                  {% if form.interests.help_text %}
-                    <div class="form-text">{{ form.interests.help_text }}</div>
-                  {% endif %}
                   {% if form.interests.errors %}
                     <div class="text-danger small">{{ form.interests.errors.0 }}</div>
                   {% endif %}
                 </div>
                 
                 <!-- Configurações de Privacidade -->
-                <div class="mb-4">
+                <div class="mb-3">
                   <h5 class="mb-3">
                     <i class="bi bi-shield-check"></i> {% trans "Configurações de Privacidade" %}
                   </h5>
                   
-                  <div class="form-check mb-3">
+                  <div class="form-check mb-2">
                     {{ form.is_private }}
                     <label class="form-check-label" for="{{ form.is_private.id_for_label }}">
                       <i class="bi bi-lock"></i> {% trans "Perfil privado" %}
                     </label>
-                    {% if form.is_private.help_text %}
-                      <div class="form-text">{{ form.is_private.help_text }}</div>
-                    {% endif %}
-                    {% if form.is_private.errors %}
-                      <div class="text-danger small">{{ form.is_private.errors.0 }}</div>
-                    {% endif %}
                   </div>
 
-                  <div class="form-check mb-3">
+                  <div class="form-check mb-2">
                     {{ form.show_email }}
                     <label class="form-check-label" for="{{ form.show_email.id_for_label }}">
                       <i class="bi bi-envelope"></i> {% trans "Mostrar email no perfil" %}
                     </label>
-                    {% if form.show_email.help_text %}
-                      <div class="form-text">{{ form.show_email.help_text }}</div>
-                    {% endif %}
-                    {% if form.show_email.errors %}
-                      <div class="text-danger small">{{ form.show_email.errors.0 }}</div>
-                    {% endif %}
                   </div>
 
-                  <div class="form-check mb-3">
+                  <div class="form-check mb-2">
                     {{ form.show_phone }}
                     <label class="form-check-label" for="{{ form.show_phone.id_for_label }}">
                       <i class="bi bi-phone"></i> {% trans "Mostrar telefone no perfil" %}
                     </label>
-                    {% if form.show_phone.help_text %}
-                      <div class="form-text">{{ form.show_phone.help_text }}</div>
-                    {% endif %}
-                    {% if form.show_phone.errors %}
-                      <div class="text-danger small">{{ form.show_phone.errors.0 }}</div>
-                    {% endif %}
                   </div>
 
-                  <div class="form-check mb-3">
+                  <div class="form-check mb-2">
                     {{ form.allow_messages }}
                     <label class="form-check-label" for="{{ form.allow_messages.id_for_label }}">
                       <i class="bi bi-chat"></i> {% trans "Permitir mensagens de outros usuários" %}
                     </label>
-                    {% if form.allow_messages.help_text %}
-                      <div class="form-text">{{ form.allow_messages.help_text }}</div>
-                    {% endif %}
-                    {% if form.allow_messages.errors %}
-                      <div class="text-danger small">{{ form.allow_messages.errors.0 }}</div>
-                    {% endif %}
                   </div>
                 </div>
                 
@@ -216,81 +161,18 @@
               <!-- Coluna da direita -->
               <div class="col-md-4">
                 
-                <!-- Avatar atual -->
-                <div class="mb-4">
-                  <label class="form-label">
-                    <i class="bi bi-person-circle"></i> {% trans "Foto de Perfil Atual" %}
-                  </label>
-                  <div class="text-center">
-                    {% if user.avatar %}
-                      <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
-                           alt="Avatar atual" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
-                    {% else %}
-                      <img src="{% static 'assets/img/team/generic_user.png' %}" 
-                           alt="Avatar padrão" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
-                    {% endif %}
-                  </div>
-                  
-                  <!-- Upload de novo avatar -->
-                  <label for="{{ form.avatar.id_for_label }}" class="form-label">
-                    {% trans "Nova foto de perfil" %}
-                  </label>
-                  {{ form.avatar }}
-                  {% if form.avatar.help_text %}
-                    <div class="form-text">{{ form.avatar.help_text }}</div>
-                  {% endif %}
-                  {% if form.avatar.errors %}
-                    <div class="text-danger small">{{ form.avatar.errors.0 }}</div>
-                  {% endif %}
-                </div>
-                
-                <!-- Imagem de capa atual -->
-                <div class="mb-4">
-                  <label class="form-label">
-                    <i class="bi bi-image"></i> {% trans "Imagem de Capa Atual" %}
-                  </label>
-                  <div class="text-center">
-                    {% if user.social_profile.cover_image %}
-                      <img src="{{ user.social_profile.cover_image.url }}" 
-                           alt="Capa atual" class="img-fluid rounded mb-3" style="max-height: 100px; width: 100%; object-fit: cover;">
-                    {% else %}
-                      <div class="bg-light rounded mb-3" style="height: 100px; display: flex; align-items: center; justify-content: center;">
-                        <i class="bi bi-image text-muted display-6"></i>
-                      </div>
-                    {% endif %}
-                  </div>
-                  
-                  <!-- Upload de nova imagem de capa -->
-                  <label for="{{ form.cover_image.id_for_label }}" class="form-label">
-                    {% trans "Nova imagem de capa" %}
-                  </label>
-                  {{ form.cover_image }}
-                  {% if form.cover_image.help_text %}
-                    <div class="form-text">{{ form.cover_image.help_text }}</div>
-                  {% endif %}
-                  {% if form.cover_image.errors %}
-                    <div class="text-danger small">{{ form.cover_image.errors.0 }}</div>
-                  {% endif %}
-                </div>
-                
-              </div>
-            </div>
-            
-            <!-- Layout Mobile Compacto -->
-            <div class="d-lg-none">
-              <!-- Avatar e capa juntos no mobile -->
-              <div class="row mb-4">
-                <div class="col-6">
+                <!-- Avatar -->
+                <div class="mb-3">
                   <label class="form-label">
                     <i class="bi bi-person-circle"></i> {% trans "Foto de Perfil" %}
                   </label>
                   <div class="text-center mb-2">
                     {% if user.avatar %}
                       <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
-                           alt="Avatar" class="img-fluid rounded-circle mobile-avatar" style="width: 80px; height: 80px; object-fit: cover;">
+                           alt="Avatar" class="img-fluid rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
                     {% else %}
                       <img src="{% static 'assets/img/team/generic_user.png' %}" 
-                           alt="Avatar" class="img-fluid rounded-circle mobile-avatar" style="width: 80px; height: 80px; object-fit: cover;">
+                           alt="Avatar" class="img-fluid rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
                     {% endif %}
                   </div>
                   {{ form.avatar }}
@@ -299,16 +181,17 @@
                   {% endif %}
                 </div>
                 
-                <div class="col-6">
+                <!-- Imagem de capa -->
+                <div class="mb-3">
                   <label class="form-label">
-                    <i class="bi bi-image"></i> {% trans "Capa" %}
+                    <i class="bi bi-image"></i> {% trans "Imagem de Capa" %}
                   </label>
                   <div class="text-center mb-2">
                     {% if user.social_profile.cover_image %}
                       <img src="{{ user.social_profile.cover_image.url }}" 
-                           alt="Capa" class="img-fluid rounded mobile-cover" style="height: 60px; width: 100%; object-fit: cover;">
+                           alt="Capa" class="img-fluid rounded" style="max-height: 80px; width: 100%; object-fit: cover;">
                     {% else %}
-                      <div class="bg-light rounded mobile-cover" style="height: 60px; display: flex; align-items: center; justify-content: center;">
+                      <div class="bg-light rounded" style="height: 80px; display: flex; align-items: center; justify-content: center;">
                         <i class="bi bi-image text-muted"></i>
                       </div>
                     {% endif %}
@@ -318,123 +201,12 @@
                     <div class="text-danger small">{{ form.cover_image.errors.0 }}</div>
                   {% endif %}
                 </div>
-              </div>
-              
-              <!-- Biografia -->
-              <div class="mb-3">
-                <label for="{{ form.bio.id_for_label }}" class="form-label">
-                  <i class="bi bi-chat-quote"></i> {% trans "Biografia" %}
-                </label>
-                {{ form.bio }}
-                {% if form.bio.errors %}
-                  <div class="text-danger small">{{ form.bio.errors.0 }}</div>
-                {% endif %}
-              </div>
-              
-              <!-- Localização -->
-              <div class="mb-3">
-                <label for="{{ form.location.id_for_label }}" class="form-label">
-                  <i class="bi bi-geo-alt"></i> {% trans "Localização" %}
-                </label>
-                {{ form.location }}
-                {% if form.location.errors %}
-                  <div class="text-danger small">{{ form.location.errors.0 }}</div>
-                {% endif %}
-              </div>
-              
-              <!-- Website -->
-              <div class="mb-3">
-                <label for="{{ form.website.id_for_label }}" class="form-label">
-                  <i class="bi bi-link-45deg"></i> {% trans "Website" %}
-                </label>
-                {{ form.website }}
-                {% if form.website.errors %}
-                  <div class="text-danger small">{{ form.website.errors.0 }}</div>
-                {% endif %}
-              </div>
-              
-              <!-- Data de nascimento -->
-              <div class="mb-3">
-                <label for="{{ form.birth_date.id_for_label }}" class="form-label">
-                  <i class="bi bi-calendar"></i> {% trans "Data de Nascimento" %}
-                </label>
-                {{ form.birth_date }}
-                {% if form.birth_date.errors %}
-                  <div class="text-danger small">{{ form.birth_date.errors.0 }}</div>
-                {% endif %}
-              </div>
-
-              <!-- Telefone -->
-              <div class="mb-3">
-                <label for="{{ form.phone.id_for_label }}" class="form-label">
-                  <i class="bi bi-phone"></i> {% trans "Telefone" %}
-                </label>
-                {{ form.phone }}
-                {% if form.phone.errors %}
-                  <div class="text-danger small">{{ form.phone.errors.0 }}</div>
-                {% endif %}
-              </div>
-
-              <!-- Gênero -->
-              <div class="mb-3">
-                <label for="{{ form.gender.id_for_label }}" class="form-label">
-                  <i class="bi bi-person"></i> {% trans "Gênero" %}
-                </label>
-                {{ form.gender }}
-                {% if form.gender.errors %}
-                  <div class="text-danger small">{{ form.gender.errors.0 }}</div>
-                {% endif %}
-              </div>
-
-              <!-- Interesses -->
-              <div class="mb-3">
-                <label for="{{ form.interests.id_for_label }}" class="form-label">
-                  <i class="bi bi-heart"></i> {% trans "Interesses" %}
-                </label>
-                {{ form.interests }}
-                {% if form.interests.errors %}
-                  <div class="text-danger small">{{ form.interests.errors.0 }}</div>
-                {% endif %}
-              </div>
-              
-              <!-- Configurações de Privacidade Mobile -->
-              <div class="mb-3">
-                <h6 class="mb-2">
-                  <i class="bi bi-shield-check"></i> {% trans "Privacidade" %}
-                </h6>
                 
-                <div class="form-check mb-2">
-                  {{ form.is_private }}
-                  <label class="form-check-label" for="{{ form.is_private.id_for_label }}">
-                    <i class="bi bi-lock"></i> {% trans "Perfil privado" %}
-                  </label>
-                </div>
-
-                <div class="form-check mb-2">
-                  {{ form.show_email }}
-                  <label class="form-check-label" for="{{ form.show_email.id_for_label }}">
-                    <i class="bi bi-envelope"></i> {% trans "Mostrar email" %}
-                  </label>
-                </div>
-
-                <div class="form-check mb-2">
-                  {{ form.show_phone }}
-                  <label class="form-check-label" for="{{ form.show_phone.id_for_label }}">
-                    <i class="bi bi-phone"></i> {% trans "Mostrar telefone" %}
-                  </label>
-                </div>
-
-                <div class="form-check mb-2">
-                  {{ form.allow_messages }}
-                  <label class="form-check-label" for="{{ form.allow_messages.id_for_label }}">
-                    <i class="bi bi-chat"></i> {% trans "Permitir mensagens" %}
-                  </label>
-                </div>
               </div>
             </div>
             
-            <!-- Botões de ação Desktop -->
-            <div class="d-none d-lg-flex justify-content-between align-items-center mt-4 pt-4 border-top">
+            <!-- Botões -->
+            <div class="d-flex justify-content-between align-items-center mt-4 pt-4 border-top">
               <a href="{% url 'social:user_profile' user.username %}" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left"></i> {% trans "Cancelar" %}
               </a>
@@ -445,39 +217,6 @@
             
           </form>
           
-        </div>
-      </div>
-      
-      <!-- Dicas (ocultar no mobile) -->
-      <div class="card mt-4 d-none d-lg-block">
-        <div class="card-header">
-          <h5 class="mb-0">
-            <i class="bi bi-lightbulb"></i> {% trans "Dicas para um perfil atrativo" %}
-          </h5>
-        </div>
-        <div class="card-body">
-          <ul class="list-unstyled mb-0">
-            <li class="mb-2">
-              <i class="bi bi-check-circle text-success me-2"></i>
-              {% trans "Escreva uma biografia interessante que conte um pouco sobre você" %}
-            </li>
-            <li class="mb-2">
-              <i class="bi bi-check-circle text-success me-2"></i>
-              {% trans "Use uma foto de perfil clara e profissional" %}
-            </li>
-            <li class="mb-2">
-              <i class="bi bi-check-circle text-success me-2"></i>
-              {% trans "Adicione sua localização para conectar com pessoas próximas" %}
-            </li>
-            <li class="mb-2">
-              <i class="bi bi-check-circle text-success me-2"></i>
-              {% trans "Inclua links para suas redes sociais ou website pessoal" %}
-            </li>
-            <li>
-              <i class="bi bi-check-circle text-success me-2"></i>
-              {% trans "Uma imagem de capa pode tornar seu perfil mais atrativo" %}
-            </li>
-          </ul>
         </div>
       </div>
       
@@ -514,64 +253,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const coverContainer = document.querySelector('.bg-light.rounded.mb-3');
+                    const coverContainer = document.querySelector('.bg-light.rounded');
                     if (coverContainer) {
-                        coverContainer.innerHTML = `<img src="${e.target.result}" alt="Preview" class="img-fluid rounded" style="max-height: 100px; width: 100%; object-fit: cover;">`;
+                        coverContainer.innerHTML = `<img src="${e.target.result}" alt="Preview" class="img-fluid rounded" style="max-height: 80px; width: 100%; object-fit: cover;">`;
                     }
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-    
-    // Contador de caracteres para biografia
-    const bioField = document.querySelector('#{{ form.bio.id_for_label }}');
-    if (bioField) {
-        bioField.addEventListener('input', function() {
-            const maxLength = 500;
-            const currentLength = this.value.length;
-            const remaining = maxLength - currentLength;
-            
-            // Atualizar texto de ajuda se existir
-            const helpText = this.parentNode.querySelector('.form-text');
-            if (helpText) {
-                helpText.textContent = `${currentLength}/${maxLength} caracteres (${remaining} restantes)`;
-                
-                if (currentLength > maxLength * 0.9) {
-                    helpText.className = 'form-text text-warning';
-                } else if (currentLength > maxLength) {
-                    helpText.className = 'form-text text-danger';
-                } else {
-                    helpText.className = 'form-text';
-                }
-            }
-        });
-    }
-    
-    // Preview mobile específico
-    const mobileAvatarImg = document.querySelector('.mobile-avatar');
-    const mobileCoverImg = document.querySelector('.mobile-cover');
-    
-    if (avatarInput && mobileAvatarImg) {
-        avatarInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    mobileAvatarImg.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-    
-    if (coverInput && mobileCoverImg) {
-        coverInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    mobileCoverImg.innerHTML = `<img src="${e.target.result}" alt="Preview" class="img-fluid rounded" style="height: 60px; width: 100%; object-fit: cover;">`;
                 };
                 reader.readAsDataURL(file);
             }
@@ -579,172 +264,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-
-<!-- CSS para responsividade mobile do edit-profile -->
-<style>
-/* Mobile optimizations para edit-profile */
-@media (max-width: 991.98px) {
-  /* Container */
-  .container-fluid {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-  }
-  
-  /* Card header oculto no mobile */
-  .card-header {
-    display: none;
-  }
-  
-  /* Card body mais compacto */
-  .card-body {
-    padding: 1rem !important;
-  }
-  
-  /* Form fields compactos */
-  .form-label {
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-  }
-  
-  .form-control {
-    font-size: 0.9rem;
-    padding: 0.5rem;
-  }
-  
-  .form-control[type="file"] {
-    font-size: 0.8rem;
-    padding: 0.375rem;
-  }
-  
-  /* Textarea menor no mobile */
-  textarea.form-control {
-    min-height: 80px;
-    rows: 3;
-  }
-  
-  /* Campos de data compactos */
-  input[type="date"].form-control {
-    padding: 0.4rem;
-  }
-  
-  /* Preview de imagens mobile */
-  .mobile-avatar,
-  .mobile-cover {
-    border: 2px solid #dee2e6;
-    transition: border-color 0.2s ease;
-  }
-  
-  .mobile-avatar:hover,
-  .mobile-cover:hover {
-    border-color: #0d6efd;
-  }
-  
-  /* Checkbox styling */
-  .form-check {
-    padding: 0.75rem;
-    background-color: #f8f9fa;
-    border-radius: 0.375rem;
-    border: 1px solid #dee2e6;
-  }
-  
-  .form-check-input {
-    margin-top: 0.125rem;
-  }
-  
-  .form-check-label {
-    font-size: 0.9rem;
-    margin-left: 0.25rem;
-  }
-  
-  /* Espaçamento entre campos */
-  .mb-3 {
-    margin-bottom: 1rem !important;
-  }
-  
-  .mb-4 {
-    margin-bottom: 1.5rem !important;
-  }
-  
-  /* Text danger */
-  .text-danger.small {
-    font-size: 0.8rem;
-    margin-top: 0.25rem;
-  }
-  
-  /* Icons nos labels */
-  .form-label i {
-    margin-right: 0.5rem;
-    color: #6c757d;
-  }
-}
-
-/* Mobile extra small devices */
-@media (max-width: 575.98px) {
-  /* Cards full-width */
-  .card {
-    border-left: none;
-    border-right: none;
-    border-radius: 0;
-  }
-  
-  /* Container sem padding lateral */
-  .container-fluid {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  
-  /* Card body ainda mais compacto */
-  .card-body {
-    padding: 0.75rem !important;
-  }
-  
-  /* Avatar e capa menores em telas pequenas */
-  .mobile-avatar {
-    width: 60px !important;
-    height: 60px !important;
-  }
-  
-  .mobile-cover {
-    height: 45px !important;
-  }
-  
-  /* Form controls menores */
-  .form-control {
-    font-size: 0.85rem;
-    padding: 0.4rem;
-  }
-  
-  /* Labels menores */
-  .form-label {
-    font-size: 0.85rem;
-  }
-}
-
-/* Melhorias visuais */
-.mobile-avatar {
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.mobile-cover {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-/* Animações */
-.form-control:focus {
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-}
-
-.form-check:hover {
-  background-color: #e9ecef;
-}
-
-/* Esconder elementos desnecessários no mobile */
-@media (max-width: 991.98px) {
-  .form-text {
-    display: none;
-  }
-}
-</style>
 {% endblock content %}
