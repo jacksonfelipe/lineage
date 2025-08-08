@@ -28,15 +28,41 @@ def feed(request):
     # Buscar posts de usuários que o usuário segue + posts públicos + posts próprios
     following_users = request.user.following.values_list('following_id', flat=True)
     
-    posts = Post.objects.filter(
-        Q(author__in=following_users) | Q(is_public=True) | Q(author=request.user)
-    ).select_related('author').prefetch_related(
-        'likes', 'comments', 'hashtags'
-    ).order_by('-created_at')
+    # Filtrar posts baseado em permissões de moderação
+    if request.user.is_staff or request.user.has_perm('social.can_moderate_content'):
+        # Moderadores veem todos os posts, incluindo os ocultos
+        posts = Post.objects.filter(
+            Q(author__in=following_users) | Q(is_public=True) | Q(author=request.user)
+        ).select_related('author').prefetch_related(
+            'likes', 'comments', 'hashtags', 'reports'
+        ).order_by('-created_at')
+    else:
+        # Usuários regulares não veem posts ocultos ou deletados
+        hidden_posts = ModerationAction.objects.filter(
+            action_type__in=['hide_content', 'delete_content'],
+            is_active=True,
+            target_post__isnull=False
+        ).values_list('target_post_id', flat=True)
+        
+        posts = Post.objects.filter(
+            Q(author__in=following_users) | Q(is_public=True) | Q(author=request.user)
+        ).exclude(
+            id__in=hidden_posts
+        ).select_related('author').prefetch_related(
+            'likes', 'comments', 'hashtags', 'reports'
+        ).order_by('-created_at')
     
-    # Anotar posts com informação se o usuário atual deu like
+    # Anotar posts com informação se o usuário atual deu like e status de moderação
     for post in posts:
         post.is_liked_by_current_user = post.is_liked_by(request.user)
+        # Verificar se o post foi denunciado
+        post.is_flagged = post.reports.filter(status='pending').exists()
+        # Verificar se o post está oculto por moderação
+        post.is_hidden = ModerationAction.objects.filter(
+            target_post=post,
+            action_type__in=['hide_content', 'delete_content'],
+            is_active=True
+        ).exists()
     
     # Paginação
     paginator = Paginator(posts, 10)
@@ -75,6 +101,19 @@ def feed(request):
         'posts_today': Post.objects.filter(created_at__date=today).count(),
     }
     
+    # Verificar permissões de moderação
+    can_moderate = request.user.is_staff or request.user.has_perm('social.can_moderate_content')
+    
+    # Estatísticas de moderação (apenas para moderadores)
+    moderation_stats = {}
+    if can_moderate:
+        moderation_stats = {
+            'pending_reports': Report.objects.filter(status='pending').count(),
+            'total_reports': Report.objects.count(),
+            'reports_today': Report.objects.filter(created_at__date=today).count(),
+            'active_filters': ContentFilter.objects.filter(is_active=True).count(),
+        }
+    
     # Formulário para criar novo post
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
@@ -106,6 +145,8 @@ def feed(request):
         'popular_hashtags': popular_hashtags,
         'suggested_users': suggested_users,
         'network_stats': network_stats,
+        'moderation_stats': moderation_stats,
+        'can_moderate': can_moderate,
         'segment': 'feed',
         'parent': 'social',
     }
