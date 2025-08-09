@@ -229,19 +229,19 @@
                         {% endif %}
                       </small>
                     </div>
-                    {% if user == post.author %}
-                      <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                          <i class="bi bi-three-dots"></i>
-                        </button>
-                        <ul class="dropdown-menu">
+                    <div class="dropdown">
+                      <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-three-dots"></i>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'social:post_detail' post.id %}">
+                          <i class="bi bi-eye"></i> {% trans "Ver post" %}
+                        </a></li>
+                        {% if user == post.author %}
+                          <li><hr class="dropdown-divider"></li>
                           <li><a class="dropdown-item" href="{% url 'social:post_edit' post.id %}">
                             <i class="bi bi-pencil"></i> {% trans "Editar" %}
                           </a></li>
-                          <li><a class="dropdown-item" href="{% url 'social:post_delete' post.id %}">
-                            <i class="bi bi-trash"></i> {% trans "Excluir" %}
-                          </a></li>
-                          <li><hr class="dropdown-divider"></li>
                           <li><a class="dropdown-item pin-post-btn" href="#" data-post-id="{{ post.id }}">
                             {% if post.is_pinned %}
                               <i class="bi bi-pin-angle-fill"></i> {% trans "Desfixar" %}
@@ -249,9 +249,21 @@
                               <i class="bi bi-pin-angle"></i> {% trans "Fixar" %}
                             {% endif %}
                           </a></li>
-                        </ul>
-                      </div>
-                    {% endif %}
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item text-danger" href="{% url 'social:post_delete' post.id %}">
+                            <i class="bi bi-trash"></i> {% trans "Excluir" %}
+                          </a></li>
+                        {% else %}
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="{% url 'social:user_profile' post.author.username %}">
+                            <i class="bi bi-person"></i> {% trans "Ver perfil" %}
+                          </a></li>
+                          <li><a class="dropdown-item text-warning report-btn" href="#" data-content-type="post" data-content-id="{{ post.id }}">
+                            <i class="bi bi-flag"></i> {% trans "Denunciar" %}
+                          </a></li>
+                        {% endif %}
+                      </ul>
+                    </div>
                   </div>
                 </div>
                 

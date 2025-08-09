@@ -258,10 +258,15 @@ def post_detail(request, post_id):
     # Buscar comentários do post
     comments = post.comments.filter(parent=None).order_by('created_at')
     
+    # Timestamp para cache busting de avatares
+    import time
+    timestamp = int(time.time())
+    
     context = {
         'post': post,
         'comments': comments,
         'form': form,
+        'timestamp': timestamp,
         'segment': 'post_detail',
         'parent': 'social',
     }
