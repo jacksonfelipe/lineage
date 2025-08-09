@@ -1132,17 +1132,28 @@ def reports_list(request):
         if date_to:
             reports = reports.filter(created_at__date__lte=date_to)
     
+    # Separar relatórios resolvidos dos não resolvidos
+    unresolved_reports = reports.exclude(status__in=['resolved', 'dismissed'])
+    resolved_reports = reports.filter(status__in=['resolved', 'dismissed'])
+    
     # Ordenação
     order_by = request.GET.get('order_by', '-priority')
     if order_by in ['priority', '-priority', 'created_at', '-created_at', 'status']:
-        reports = reports.order_by(order_by)
+        unresolved_reports = unresolved_reports.order_by(order_by)
+        resolved_reports = resolved_reports.order_by('-resolved_at' if order_by.startswith('-') else 'resolved_at')
     else:
-        reports = reports.order_by('-priority', '-created_at')
+        unresolved_reports = unresolved_reports.order_by('-priority', '-created_at')
+        resolved_reports = resolved_reports.order_by('-resolved_at')
     
-    # Paginação
-    paginator = Paginator(reports, 20)
+    # Paginação para relatórios não resolvidos
+    paginator = Paginator(unresolved_reports, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    
+    # Paginação para relatórios resolvidos (separada)
+    resolved_paginator = Paginator(resolved_reports, 20)
+    resolved_page_number = request.GET.get('resolved_page', 1)
+    resolved_page_obj = resolved_paginator.get_page(resolved_page_number)
     
     # Formulário para ações em massa
     bulk_form = BulkModerationForm()
@@ -1151,16 +1162,19 @@ def reports_list(request):
     total_reports = reports.count()
     pending_count = reports.filter(status='pending').count()
     urgent_count = reports.filter(priority='urgent', status__in=['pending', 'reviewing']).count()
-    resolved_count = reports.filter(status='resolved').count()
+    resolved_count = resolved_reports.count()
+    unresolved_count = unresolved_reports.count()
     
     context = {
         'page_obj': page_obj,
+        'resolved_page_obj': resolved_page_obj,
         'search_form': search_form,
         'bulk_form': bulk_form,
         'total_reports': total_reports,
         'pending_count': pending_count,
         'urgent_count': urgent_count,
         'resolved_count': resolved_count,
+        'unresolved_count': unresolved_count,
     }
     
     return render(request, 'social/moderation/reports_list.html', context)
