@@ -196,6 +196,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 
     'allauth.account.middleware.AccountMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 
     'middlewares.login_attempts.LoginAttemptsMiddleware',
     "middlewares.access_apps.LoginRequiredAccess",

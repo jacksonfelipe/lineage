@@ -1057,7 +1057,7 @@ class ContentFilter(BaseModel):
         ordering = ['-is_active', 'name']
 
         def __str__(self):
-        return f"{self.name} ({self.get_filter_type_display()})"
+            return f"{self.name} ({self.get_filter_type_display()})"
 
     def matches_content(self, content):
         """Verifica se o conteúdo corresponde ao filtro"""
