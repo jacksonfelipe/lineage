@@ -1,7 +1,7 @@
 import json
 
 from django.shortcuts import render
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, Max, F
 from django.contrib.admin.views.decorators import staff_member_required
 from django.utils import timezone
 from django.utils.timezone import now, timedelta
@@ -61,6 +61,38 @@ def relatorio_movimentacoes_inventario(request):
         .order_by('-total_movimentado')[:5]
     )
 
+    # Usuários mais ativos
+    usuarios_ativos = (
+        logs.values('user__username')
+        .annotate(total_acoes=Count('id'))
+        .order_by('-total_acoes')[:5]
+    )
+
+    # Personagens mais ativos
+    personagens_ativos = (
+        logs.values('inventory__character_name')
+        .annotate(total_acoes=Count('id'))
+        .order_by('-total_acoes')[:5]
+    )
+
+    # Itens mais encantados
+    itens_encantados = (
+        logs.filter(enchant__gt=0)
+        .values('item_name')
+        .annotate(
+            total_encantado=Sum('quantity'),
+            max_enchant=Max('enchant'),
+            avg_enchant=Sum(F('enchant') * F('quantity')) / Sum('quantity')
+        )
+        .order_by('-total_encantado')[:5]
+    )
+
+    # Estatísticas gerais
+    total_logs = logs.count()
+    total_itens_unicos = logs.values('item_name').distinct().count()
+    total_usuarios_ativos = logs.values('user').distinct().count()
+    total_personagens_ativos = logs.values('inventory__character_name').distinct().count()
+
     total_retirado = sum(dados_por_acao['RETIROU_DO_JOGO'])
     total_inserido = sum(dados_por_acao['INSERIU_NO_JOGO'])
     total_troca = sum(dados_por_acao['TROCA_ENTRE_PERSONAGENS'])
@@ -76,11 +108,19 @@ def relatorio_movimentacoes_inventario(request):
         'bag_para_inventario': json.dumps(dados_por_acao['BAG_PARA_INVENTARIO']),
         'itens_trocados': itens_trocados,
         'itens_movimentados': itens_movimentados,
+        'usuarios_ativos': usuarios_ativos,
+        'personagens_ativos': personagens_ativos,
+        'itens_encantados': itens_encantados,
         'total_retirado': total_retirado,
         'total_inserido': total_inserido,
         'total_troca': total_troca,
         'total_recebido': total_recebido,
         'total_bag_para_inventario': total_bag_para_inventario,
+        'total_logs': total_logs,
+        'total_itens_unicos': total_itens_unicos,
+        'total_usuarios_ativos': total_usuarios_ativos,
+        'total_personagens_ativos': total_personagens_ativos,
+        'periodo_dias': dias,
     }
 
     return render(request, 'reports/relatorio_movimentacoes_inventario.html', contexto)

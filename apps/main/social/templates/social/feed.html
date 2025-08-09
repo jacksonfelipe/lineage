@@ -1,8 +1,17 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load l10n %}
 
 {% block title %} {% trans "Feed Social" %} {% endblock title %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/social.css' %}">
+{% endblock extrastyle %}
+
+{% block extra_js %}
+<script src="{% static 'js/social.js' %}"></script>
+{% endblock extra_js %}
 
 {% block content %}
 <!-- Barra de navegação móvel (só aparece no mobile) -->
@@ -187,149 +196,173 @@
           <form method="post" enctype="multipart/form-data" id="post-form">
             {% csrf_token %}
             
-            <!-- Layout Desktop (campos sempre visíveis) -->
-            <div class="d-none d-lg-block">
-              <div class="d-flex align-items-start">
-                <div class="avatar-container me-3" style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden; flex-shrink: 0;">
-                  {% if user.avatar %}
-                    <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
-                         alt="Avatar" class="w-100 h-100" style="object-fit: cover; border-radius: 50%;">
-                  {% else %}
-                    <img src="{% static 'assets/img/team/generic_user.png' %}" 
-                         alt="Avatar" class="w-100 h-100" style="object-fit: cover; border-radius: 50%;">
+            <!-- Campo de conteúdo sempre visível -->
+            <div class="d-flex align-items-start mb-3">
+              <div class="avatar-container me-2 me-lg-3" style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden; flex-shrink: 0;">
+                {% if user.avatar %}
+                  <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
+                       alt="Avatar" class="w-100 h-100" style="object-fit: cover; border-radius: 50%;">
+                {% else %}
+                  <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                       alt="Avatar" class="w-100 h-100" style="object-fit: cover; border-radius: 50%;">
+                {% endif %}
+              </div>
+              <div class="flex-grow-1">
+                <div class="form-group">
+                  {{ form.content }}
+                  {% if form.content.errors %}
+                    <div class="text-danger small">{{ form.content.errors.0 }}</div>
                   {% endif %}
                 </div>
-                <div class="flex-grow-1">
-                  <div class="form-group">
-                    {{ form.content }}
-                    {% if form.content.errors %}
-                      <div class="text-danger small">{{ form.content.errors.0 }}</div>
-                    {% endif %}
-                  </div>
-                  
-                  <!-- Preview de mídia -->
-                  <div id="media-preview" class="mt-3" style="display: none;">
-                    <div class="card">
-                      <div class="card-body p-2">
-                        <div class="d-flex align-items-center">
-                          <div id="preview-content" class="flex-grow-1"></div>
-                          <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearMedia()">
-                            <i class="bi bi-x"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <!-- Preview de link -->
-                  <div id="link-preview" class="mt-3" style="display: none;">
-                    <div class="card">
-                      <div class="card-body p-2">
-                        <div class="d-flex align-items-center">
-                          <div id="link-content" class="flex-grow-1"></div>
-                          <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearLink()">
-                            <i class="bi bi-x"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="row mt-3">
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <label for="{{ form.image.id_for_label }}" class="form-label">
-                          <i class="bi bi-image text-primary"></i> {% trans "Imagem" %}
-                        </label>
-                        {{ form.image }}
-                        {% if form.image.errors %}
-                          <div class="text-danger small">{{ form.image.errors.0 }}</div>
-                        {% endif %}
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <label for="{{ form.video.id_for_label }}" class="form-label">
-                          <i class="bi bi-camera-video text-success"></i> {% trans "Vídeo" %}
-                        </label>
-                        {{ form.video }}
-                        {% if form.video.errors %}
-                          <div class="text-danger small">{{ form.video.errors.0 }}</div>
-                        {% endif %}
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <label for="{{ form.link.id_for_label }}" class="form-label">
-                          <i class="bi bi-link-45deg text-info"></i> {% trans "Link" %}
-                        </label>
-                        {{ form.link }}
-                        {% if form.link.errors %}
-                          <div class="text-danger small">{{ form.link.errors.0 }}</div>
-                        {% endif %}
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <label for="{{ form.hashtags.id_for_label }}" class="form-label">
-                          <i class="bi bi-hash text-warning"></i> {% trans "Hashtags" %}
-                        </label>
-                        {{ form.hashtags }}
-                        {% if form.hashtags.errors %}
-                          <div class="text-danger small">{{ form.hashtags.errors.0 }}</div>
-                        {% endif %}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <div class="d-flex gap-2">
-                      <small class="text-muted">
-                        <span id="char-count">0</span>/1000 {% trans "caracteres" %}
-                      </small>
-                      <small class="text-muted">
-                        <span id="hashtag-count">0</span> {% trans "hashtags" %}
-                      </small>
-                    </div>
-                    <div class="d-flex gap-2">
-                      <div class="form-check">
-                        {{ form.is_public }}
-                        <label class="form-check-label" for="{{ form.is_public.id_for_label }}">
-                          {% trans "Post público" %}
-                        </label>
-                      </div>
-                      <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-send"></i> {% trans "Publicar" %}
+              </div>
+            </div>
+            
+            <!-- Layout Desktop (campos sempre visíveis) -->
+            <div class="d-none d-lg-block">
+              <!-- Preview de mídia -->
+              <div id="media-preview" class="mt-3" style="display: none;">
+                <div class="card border-0 bg-light">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center">
+                      <div id="preview-content" class="flex-grow-1"></div>
+                      <button type="button" class="btn btn-sm btn-outline-danger rounded-circle" onclick="clearMedia()" style="width: 32px; height: 32px; padding: 0;">
+                        <i class="bi bi-x"></i>
                       </button>
                     </div>
                   </div>
+                </div>
+              </div>
+              
+              <!-- Preview de link -->
+              <div id="link-preview" class="mt-3" style="display: none;">
+                <div class="card border-0 bg-light">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center">
+                      <div id="link-content" class="flex-grow-1"></div>
+                      <button type="button" class="btn btn-sm btn-outline-danger rounded-circle" onclick="clearLink()" style="width: 32px; height: 32px; padding: 0;">
+                        <i class="bi bi-x"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Barra de ações melhorada para desktop -->
+              <div class="post-actions-bar mt-3 p-3 bg-light rounded-3 border">
+                <div class="row g-3">
+                  <!-- Botão de Imagem -->
+                  <div class="col-md-3">
+                    <label for="{{ form.image.id_for_label }}" class="action-button-wrapper">
+                      <div class="action-button" data-type="image" data-tooltip="Adicionar imagem ao post">
+                        <div class="action-icon">
+                          <i class="bi bi-image-fill text-primary"></i>
+                        </div>
+                        <div class="action-label">{% trans "Imagem" %}</div>
+                        <div class="action-hint">JPG, PNG, GIF</div>
+                      </div>
+                      {{ form.image }}
+                    </label>
+                    {% if form.image.errors %}
+                      <div class="text-danger small mt-1">{{ form.image.errors.0 }}</div>
+                    {% endif %}
+                  </div>
+                  
+                  <!-- Botão de Vídeo -->
+                  <div class="col-md-3">
+                    <label for="{{ form.video.id_for_label }}" class="action-button-wrapper">
+                      <div class="action-button" data-type="video" data-tooltip="Adicionar vídeo ao post">
+                        <div class="action-icon">
+                          <i class="bi bi-camera-video-fill text-success"></i>
+                        </div>
+                        <div class="action-label">{% trans "Vídeo" %}</div>
+                        <div class="action-hint">MP4, AVI, MOV</div>
+                      </div>
+                      {{ form.video }}
+                    </label>
+                    {% if form.video.errors %}
+                      <div class="text-danger small mt-1">{{ form.video.errors.0 }}</div>
+                    {% endif %}
+                  </div>
+                  
+                  <!-- Botão de Link -->
+                  <div class="col-md-3">
+                    <div class="action-button-wrapper">
+                      <div class="action-button" data-type="link" data-tooltip="Compartilhar link com preview">
+                        <div class="action-icon">
+                          <i class="bi bi-link-45deg text-info"></i>
+                        </div>
+                        <div class="action-label">{% trans "Link" %}</div>
+                        <div class="action-hint">Compartilhar URL</div>
+                      </div>
+                    </div>
+                    <!-- Campo de link (inicialmente oculto) -->
+                    <div id="link-field-container" class="mt-2" style="display: none;">
+                      <div class="input-group">
+                        {{ form.link }}
+                        <button type="button" class="btn btn-outline-secondary" onclick="hideLinkField()">
+                          <i class="bi bi-x"></i>
+                        </button>
+                      </div>
+                      {% if form.link.errors %}
+                        <div class="text-danger small mt-1">{{ form.link.errors.0 }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  
+                  <!-- Botão de Hashtags -->
+                  <div class="col-md-3">
+                    <div class="action-button-wrapper">
+                      <div class="action-button" data-type="hashtag" data-tooltip="Adicionar hashtags para categorizar">
+                        <div class="action-icon">
+                          <i class="bi bi-hash text-warning"></i>
+                        </div>
+                        <div class="action-label">{% trans "Hashtags" %}</div>
+                        <div class="action-hint">#tag1 #tag2</div>
+                      </div>
+                    </div>
+                    <!-- Campo de hashtags (inicialmente oculto) -->
+                    <div id="hashtag-field-container" class="mt-2" style="display: none;">
+                      <div class="input-group">
+                        {{ form.hashtags }}
+                        <button type="button" class="btn btn-outline-secondary" onclick="hideHashtagField()">
+                          <i class="bi bi-x"></i>
+                        </button>
+                      </div>
+                      {% if form.hashtags.errors %}
+                        <div class="text-danger small mt-1">{{ form.hashtags.errors.0 }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <div class="d-flex gap-3">
+                  <small class="text-muted d-flex align-items-center">
+                    <i class="bi bi-text-paragraph me-1"></i>
+                    <span id="char-count">0</span>/1000 {% trans "caracteres" %}
+                  </small>
+                  <small class="text-muted d-flex align-items-center">
+                    <i class="bi bi-hash me-1"></i>
+                    <span id="hashtag-count">0</span> {% trans "hashtags" %}
+                  </small>
+                </div>
+                <div class="d-flex gap-3 align-items-center">
+                  <div class="form-check">
+                    {{ form.is_public }}
+                    <label class="form-check-label" for="{{ form.is_public.id_for_label }}">
+                      <i class="bi bi-globe me-1"></i> {% trans "Post público" %}
+                    </label>
+                  </div>
+                  <button type="submit" class="btn btn-primary px-4 btn-publish">
+                    <i class="bi bi-send me-2"></i> {% trans "Publicar" %}
+                  </button>
                 </div>
               </div>
             </div>
             
             <!-- Layout Mobile Compacto -->
             <div class="d-lg-none">
-              <div class="d-flex align-items-start">
-                <div class="avatar-container me-2" style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden; flex-shrink: 0;">
-                  {% if user.avatar %}
-                    <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
-                         alt="Avatar" class="w-100 h-100" style="object-fit: cover; border-radius: 50%;">
-                  {% else %}
-                    <img src="{% static 'assets/img/team/generic_user.png' %}" 
-                         alt="Avatar" class="w-100 h-100" style="object-fit: cover; border-radius: 50%;">
-                  {% endif %}
-                </div>
-                <div class="flex-grow-1">
-                  <!-- Campo de texto sempre visível -->
-                  <div class="form-group">
-                    {{ form.content }}
-                    {% if form.content.errors %}
-                      <div class="text-danger small">{{ form.content.errors.0 }}</div>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-              
               <!-- Preview de mídia -->
               <div id="media-preview-mobile" class="mt-2" style="display: none;">
                 <div class="alert alert-info p-2 m-0">
@@ -793,7 +826,7 @@
                   <div class="small fw-bold">{{ suggested_user.get_full_name|default:suggested_user.username }}</div>
                   <div class="small text-muted">@{{ suggested_user.username }}</div>
                 </div>
-                <button class="btn btn-sm btn-outline-primary follow-btn" data-user-id="{{ suggested_user.id }}">
+                <button class="btn btn-sm btn-outline-primary follow-btn" data-user-id="{% localize off %}{{ suggested_user.id }}{% endlocalize %}">
                   <i class="bi bi-person-plus"></i>
                 </button>
               </div>
@@ -953,6 +986,45 @@
 <script>
 // JavaScript para interações
 document.addEventListener('DOMContentLoaded', function() {
+  // Validação do formulário
+  const postForm = document.getElementById('post-form');
+  if (postForm) {
+    postForm.addEventListener('submit', function(e) {
+      const contentField = document.querySelector('#{{ form.content.id_for_label }}');
+      const content = contentField ? contentField.value.trim() : '';
+      
+      if (!content) {
+        e.preventDefault();
+        alert('{% trans "O conteúdo do post não pode estar vazio." %}');
+        if (contentField) {
+          contentField.focus();
+        }
+        return false;
+      }
+      
+      if (content.length > 1000) {
+        e.preventDefault();
+        alert('{% trans "O conteúdo não pode ter mais de 1000 caracteres." %}');
+        if (contentField) {
+          contentField.focus();
+        }
+        return false;
+      }
+      
+                   // Verificar se pelo menos uma mídia foi selecionada ou há conteúdo
+             const imageField = document.querySelector('#{{ form.image.id_for_label }}');
+             const videoField = document.querySelector('#{{ form.video.id_for_label }}');
+             const linkField = document.querySelector('#{{ form.link.id_for_label }}');
+             
+             const hasImage = imageField && imageField.files.length > 0;
+             const hasVideo = videoField && videoField.files.length > 0;
+             const hasLink = linkField && linkField.value.trim();
+             
+             // Removido: não forçar conteúdo mínimo quando não há mídia/link
+             // Agora posts podem ser apenas texto, independente do tamanho
+    });
+  }
+  
   // Toggle de campos extras no mobile
   const toggleExtraFieldsBtn = document.getElementById('toggle-extra-fields');
   const mobileExtraFields = document.getElementById('mobile-extra-fields');
@@ -1205,11 +1277,11 @@ document.addEventListener('DOMContentLoaded', function() {
      followBtns.forEach(btn => {
        btn.addEventListener('click', function(e) {
          e.preventDefault();
-         const userId = this.dataset.userId;
+         const userId = parseInt(this.dataset.userId);
          const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
          
-         if (!userId || !csrfToken) {
-           console.error('Elementos necessários não encontrados para follow');
+         if (!userId || isNaN(userId) || !csrfToken) {
+           console.error('Elementos necessários não encontrados para follow ou ID inválido:', this.dataset.userId);
            return;
          }
          
@@ -1423,6 +1495,15 @@ function clearLinkMobile() {
 
 <!-- CSS para responsividade mobile -->
 <style>
+/* Garantir que o campo content seja sempre visível e acessível */
+#{{ form.content.id_for_label }} {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
 /* Mobile optimizations */
 @media (max-width: 991.98px) {
   /* Reduzir padding nos cards para economizar espaço */

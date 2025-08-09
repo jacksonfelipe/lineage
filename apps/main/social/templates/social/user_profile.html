@@ -1,10 +1,12 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load l10n %}
 
 {% block title %} {{ profile_user.get_full_name|default:profile_user.username }} - {% trans "Perfil" %} {% endblock title %}
 
 {% block content %}
+{% csrf_token %}
 <!-- Barra de navegação móvel -->
 <div class="d-lg-none">
   <div class="bg-white shadow-sm border-bottom mb-3">
@@ -134,25 +136,26 @@
                     <strong>{{ posts.count }}</strong> {% trans "posts" %}
                   </a>
                   <a href="{% url 'social:followers_list' profile_user.username %}" class="text-decoration-none me-4">
-                    <strong>{{ profile_user.followers_count }}</strong> {% trans "seguidores" %}
+                    <strong class="followers-count">{{ profile_user.followers_count }}</strong> {% trans "seguidores" %}
                   </a>
                   <a href="{% url 'social:following_list' profile_user.username %}" class="text-decoration-none">
-                    <strong>{{ profile_user.following_count }}</strong> {% trans "seguindo" %}
+                    <strong class="following-count">{{ profile_user.following_count }}</strong> {% trans "seguindo" %}
                   </a>
                 </div>
                 
                 <!-- Botões de ação -->
                 {% if user != profile_user %}
                   <div class="d-flex align-items-center">
-                    <button class="btn btn-primary me-2 follow-btn" data-user-id="{{ profile_user.id }}">
+                    <button class="btn btn-primary me-2 follow-btn" data-user-id="{% localize off %}{{ profile_user.id }}{% endlocalize %}">
                       {% if is_following %}
                         <i class="bi bi-person-check"></i> {% trans "Seguindo" %}
                       {% else %}
                         <i class="bi bi-person-plus"></i> {% trans "Seguir" %}
                       {% endif %}
                     </button>
+                    
                     {% if profile_user.social_profile.allow_messages %}
-                      <a href="#" class="btn btn-outline-primary me-2">
+                      <a href="/app/message/index/" class="btn btn-outline-primary me-2">
                         <i class="bi bi-chat"></i> {% trans "Mensagem" %}
                       </a>
                     {% endif %}
@@ -344,30 +347,110 @@
 <!-- JavaScript para interações -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM carregado, inicializando botões de seguir...');
+    
+    // Teste para verificar se o botão existe
+    const followButtons = document.querySelectorAll('.follow-btn');
+    console.log('Número de botões de seguir encontrados:', followButtons.length);
+    
+    if (followButtons.length === 0) {
+        console.error('Nenhum botão de seguir encontrado!');
+        return;
+    }
+    
     // Follow/Unfollow
-    document.querySelectorAll('.follow-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const userId = this.dataset.userId;
-                         fetch(`/social/user/${userId}/follow/`, {
+    followButtons.forEach((btn, index) => {
+        console.log(`Botão de seguir ${index + 1} encontrado:`, btn);
+        console.log('ID do usuário:', btn.dataset.userId);
+        console.log('Classes do botão:', btn.className);
+        
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const userId = parseInt(this.dataset.userId);
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+            
+            console.log('Clicou no botão de seguir para usuário:', userId);
+            console.log('Token CSRF encontrado:', !!csrfToken);
+            
+            if (!userId || isNaN(userId)) {
+                console.error('ID do usuário inválido:', this.dataset.userId);
+                return;
+            }
+            
+            if (!csrfToken) {
+                console.error('Token CSRF não encontrado');
+                return;
+            }
+            
+            // Desabilitar o botão temporariamente para evitar cliques duplos
+            this.disabled = true;
+            this.style.opacity = '0.6';
+            
+            fetch(`/social/user/${userId}/follow/`, {
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'X-CSRFToken': csrfToken.value,
+                    'Content-Type': 'application/json',
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log('Resposta recebida:', response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
-                if (data.success) {
-                    if (data.is_following) {
-                        this.innerHTML = '<i class="bi bi-person-check"></i> Seguindo';
+                console.log('Dados recebidos:', data);
+                if (data.following !== undefined) {
+                    if (data.following) {
+                        this.innerHTML = '<i class="bi bi-person-check"></i> {% trans "Seguindo" %}';
                         this.classList.remove('btn-primary');
                         this.classList.add('btn-success');
+                        console.log('Agora seguindo o usuário');
                     } else {
-                        this.innerHTML = '<i class="bi bi-person-plus"></i> Seguir';
+                        this.innerHTML = '<i class="bi bi-person-plus"></i> {% trans "Seguir" %}';
                         this.classList.remove('btn-success');
                         this.classList.add('btn-primary');
+                        console.log('Deixou de seguir o usuário');
                     }
+                    
+                    // Atualizar contadores se existirem
+                    const followersCount = document.querySelector('.followers-count');
+                    const followingCount = document.querySelector('.following-count');
+                    
+                    if (followersCount && data.followers_count !== undefined) {
+                        followersCount.textContent = data.followers_count;
+                        console.log('Contador de seguidores atualizado:', data.followers_count);
+                    }
+                    if (followingCount && data.following_count !== undefined) {
+                        followingCount.textContent = data.following_count;
+                        console.log('Contador de seguindo atualizado:', data.following_count);
+                    }
+                } else {
+                    console.error('Resposta não contém campo "following":', data);
                 }
+            })
+            .catch(error => {
+                console.error('Erro ao seguir/deixar de seguir:', error);
+                alert('Erro ao processar a ação. Tente novamente.');
+            })
+            .finally(() => {
+                // Reabilitar o botão
+                this.disabled = false;
+                this.style.opacity = '1';
             });
+        });
+        
+        // Adicionar evento de teste para verificar se o botão responde
+        btn.addEventListener('mouseenter', function() {
+            console.log('Mouse entrou no botão de seguir');
+        });
+        
+        btn.addEventListener('mouseleave', function() {
+            console.log('Mouse saiu do botão de seguir');
         });
     });
     
@@ -416,6 +499,40 @@ document.addEventListener('DOMContentLoaded', function() {
     height: 100% !important;
     border-radius: 50% !important;
   }
+  
+  /* Estilos específicos para o botão de seguir */
+  .follow-btn {
+    position: relative !important;
+    z-index: 1000 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+  }
+  
+  .follow-btn:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+  }
+  
+  .follow-btn:active {
+    transform: translateY(0) !important;
+  }
+  
+  /* Garantir que o botão seja visível e clicável */
+  .btn {
+    position: relative !important;
+    z-index: 1 !important;
+    pointer-events: auto !important;
+  }
+  
+  /* Garantir que os contadores sejam atualizáveis */
+  .followers-count,
+  .following-count {
+    transition: all 0.3s ease !important;
+  }
  
    /* Responsividade */
   @media (max-width: 991.98px) {
@@ -436,6 +553,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     .post-card {
       margin-bottom: 1rem !important;
+    }
+    
+    /* Garantir que o botão de seguir seja clicável no mobile */
+    .follow-btn {
+      min-height: 38px !important;
+      padding: 0.375rem 0.75rem !important;
+      font-size: 0.875rem !important;
+      line-height: 1.5 !important;
+      border-radius: 0.25rem !important;
     }
   }
   
@@ -463,3 +589,5 @@ document.addEventListener('DOMContentLoaded', function() {
  }
  </style>
 {% endblock content %}
+
+

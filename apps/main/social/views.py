@@ -129,22 +129,32 @@ def feed(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            
-            # Processar hashtags
-            hashtags = form.cleaned_data.get('hashtags', [])
-            
-            post.save()
-            
-            # Adicionar hashtags ao post
-            for hashtag_name in hashtags:
-                hashtag, created = Hashtag.objects.get_or_create(name=hashtag_name)
-                PostHashtag.objects.create(post=post, hashtag=hashtag)
-                hashtag.update_posts_count()
-            
-            messages.success(request, _('Post criado com sucesso!'))
-            return redirect('social:feed')
+            try:
+                post = form.save(commit=False)
+                post.author = request.user
+                
+                # Processar hashtags
+                hashtags = form.cleaned_data.get('hashtags', [])
+                
+                post.save()
+                
+                # Adicionar hashtags ao post
+                for hashtag_name in hashtags:
+                    hashtag, created = Hashtag.objects.get_or_create(name=hashtag_name)
+                    PostHashtag.objects.create(post=post, hashtag=hashtag)
+                    hashtag.update_posts_count()
+                
+                messages.success(request, _('Post criado com sucesso!'))
+                return redirect('social:feed')
+            except Exception as e:
+                messages.error(request, _('Erro ao criar post. Tente novamente.'))
+                # Log do erro para debug
+                print(f"Erro ao criar post: {e}")
+        else:
+            # Exibir erros de validação
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"Erro no campo {field}: {error}")
     else:
         form = PostForm()
     
@@ -375,28 +385,58 @@ def share_post(request, post_id):
 @require_POST
 def follow_user(request, user_id):
     """Seguir/deixar de seguir um usuário"""
-    user_to_follow = get_object_or_404(User, id=user_id)
-    
-    if user_to_follow == request.user:
-        return JsonResponse({'error': _('Você não pode seguir a si mesmo')}, status=400)
-    
-    follow, created = Follow.objects.get_or_create(
-        follower=request.user,
-        following=user_to_follow
-    )
-    
-    if not created:
-        # Se já existe, remover o follow
-        follow.delete()
-        following = False
-    else:
-        following = True
-    
-    return JsonResponse({
-        'following': following,
-        'followers_count': user_to_follow.followers.count(),
-        'following_count': user_to_follow.following.count()
-    })
+    try:
+        # Log para debug
+        print(f"Tentando seguir usuário com ID: {user_id} (tipo: {type(user_id)})")
+        
+        # Garantir que user_id seja um inteiro
+        try:
+            user_id = int(user_id)
+        except (ValueError, TypeError):
+            return JsonResponse({
+                'error': f'ID de usuário inválido: {user_id}',
+                'success': False
+            }, status=400)
+        
+        user_to_follow = get_object_or_404(User, id=user_id)
+        
+        # Log adicional para debug
+        print(f"Usuário encontrado: {user_to_follow.username} (ID: {user_to_follow.id})")
+        print(f"Usuário atual: {request.user.username} (ID: {request.user.id})")
+        
+        if user_to_follow == request.user:
+            return JsonResponse({'error': _('Você não pode seguir a si mesmo')}, status=400)
+        
+        follow, created = Follow.objects.get_or_create(
+            follower=request.user,
+            following=user_to_follow
+        )
+        
+        if not created:
+            # Se já existe, remover o follow
+            follow.delete()
+            following = False
+        else:
+            following = True
+        
+        # Calcular contadores atualizados
+        followers_count = user_to_follow.followers.count()
+        following_count = user_to_follow.following.count()
+        
+        response_data = {
+            'following': following,
+            'followers_count': followers_count,
+            'following_count': following_count,
+            'success': True
+        }
+        
+        return JsonResponse(response_data)
+        
+    except Exception as e:
+        return JsonResponse({
+            'error': str(e),
+            'success': False
+        }, status=500)
 
 
 @login_required

@@ -2476,14 +2476,18 @@
 
 .item-info {
   margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .item-detail {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 0.5rem 0;
   border-bottom: 1px solid rgba(111, 66, 193, 0.1);
+  display: block;
+  width: 100%;
+  clear: both;
+  float: none;
 }
 
 .item-detail:last-child {
@@ -2497,9 +2501,22 @@
   text-transform: uppercase;
 }
 
+.item-detail span strong {
+  color: #6f42c1;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  display: inline;
+  white-space: nowrap;
+}
+
 .item-detail span {
   color: #333;
   font-weight: 500;
+  display: block;
+  width: 100%;
+  line-height: 1.4;
+  white-space: nowrap;
 }
 
 .item-actions {

@@ -1,6 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load l10n %}
 
 {% block title %} {% trans "Seguidores de" %} {{ profile_user.get_full_name|default:profile_user.username }} {% endblock title %}
 
@@ -54,7 +55,7 @@
                     </div>
                     <div class="ms-3">
                       {% if user != follow.follower %}
-                        <button class="btn btn-outline-primary btn-sm follow-btn" data-user-id="{{ follow.follower.id }}">
+                        <button class="btn btn-outline-primary btn-sm follow-btn" data-user-id="{% localize off %}{{ follow.follower.id }}{% endlocalize %}">
                           {% if user in follow.follower.followers.all %}
                             <i class="bi bi-person-check"></i> {% trans "Seguindo" %}
                           {% else %}
@@ -85,7 +86,7 @@
                 {% endif %}
               </p>
               {% if user != profile_user %}
-                <button class="btn btn-primary follow-btn" data-user-id="{{ profile_user.id }}">
+                <button class="btn btn-primary follow-btn" data-user-id="{% localize off %}{{ profile_user.id }}{% endlocalize %}">
                   <i class="bi bi-person-plus"></i> {% trans "Seguir" %}
                 </button>
               {% endif %}
@@ -106,8 +107,13 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.follow-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
-            const userId = this.dataset.userId;
+            const userId = parseInt(this.dataset.userId);
             const icon = this.querySelector('i');
+            
+            if (!userId || isNaN(userId)) {
+                console.error('ID do usuário inválido:', this.dataset.userId);
+                return;
+            }
             
             fetch(`/social/user/${userId}/follow/`, {
                 method: 'POST',

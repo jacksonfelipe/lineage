@@ -38,7 +38,9 @@
                   <tr>
                     <th><i class="fas fa-hashtag me-2"></i>{% trans "ID do Pedido" %}</th>
                     <th><i class="fas fa-user me-2"></i>{% trans "Usuário" %}</th>
-                    <th><i class="fas fa-dollar-sign me-2"></i>{% trans "Valor" %}</th>
+                    <th><i class="fas fa-dollar-sign me-2"></i>{% trans "Valor Pago" %}</th>
+                    <th><i class="fas fa-gift me-2"></i>{% trans "Bônus" %}</th>
+                    <th><i class="fas fa-coins me-2"></i>{% trans "Total Creditado" %}</th>
                     <th><i class="fas fa-calendar me-2"></i>{% trans "Data" %}</th>
                     <th><i class="fas fa-info-circle me-2"></i>{% trans "Status" %}</th>
                     <th><i class="fas fa-credit-card me-2"></i>{% trans "Método de Pagamento" %}</th>
@@ -61,6 +63,25 @@
                       <span class="badge bg-success">
                         <i class="fas fa-dollar-sign me-1"></i>
                         R$ {{ item.valor }}
+                      </span>
+                    </td>
+                    <td>
+                      {% if item.bonus_aplicado > 0 %}
+                        <span class="badge bg-warning">
+                          <i class="fas fa-gift me-1"></i>
+                          R$ {{ item.bonus_aplicado }}
+                        </span>
+                      {% else %}
+                        <span class="badge bg-secondary">
+                          <i class="fas fa-minus me-1"></i>
+                          R$ 0,00
+                        </span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      <span class="badge bg-info">
+                        <i class="fas fa-coins me-1"></i>
+                        R$ {{ item.total_creditado }}
                       </span>
                     </td>
                     <td>
@@ -121,7 +142,7 @@
                   </tr>
                   {% empty %}
                   <tr>
-                    <td colspan="6" class="text-center py-4">
+                    <td colspan="8" class="text-center py-4">
                       <i class="fas fa-credit-card fa-3x text-muted mb-3"></i>
                       <p class="text-muted">{% trans "Nenhum pedido ou pagamento encontrado" %}</p>
                     </td>

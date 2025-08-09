@@ -38,8 +38,9 @@
                   <tr>
                     <th><i class="fas fa-user me-2"></i>{% trans "Usuário" %}</th>
                     <th><i class="fas fa-wallet me-2"></i>{% trans "Saldo na Wallet" %}</th>
-                    <th><i class="fas fa-database me-2"></i>{% trans "Saldo no Banco" %}</th>
-                    <th><i class="fas fa-calculator me-2"></i>{% trans "Diferença" %}</th>
+                    <th><i class="fas fa-calculator me-2"></i>{% trans "Saldo Calculado" %}</th>
+                    <th><i class="fas fa-balance-scale me-2"></i>{% trans "Diferença" %}</th>
+                    <th><i class="fas fa-exchange-alt me-2"></i>{% trans "Transações" %}</th>
                     <th><i class="fas fa-check-circle me-2"></i>{% trans "Status" %}</th>
                     <th><i class="fas fa-calendar me-2"></i>{% trans "Última Verificação" %}</th>
                   </tr>
@@ -82,6 +83,12 @@
                       {% endif %}
                     </td>
                     <td>
+                      <span class="badge bg-secondary">
+                        <i class="fas fa-exchange-alt me-1"></i>
+                        {{ item.num_transacoes }}
+                      </span>
+                    </td>
+                    <td>
                       {% if item.status == 'reconciliado' %}
                         <span class="badge bg-success">
                           <i class="fas fa-check-circle me-1"></i>
@@ -111,12 +118,12 @@
                     </td>
                     <td>
                       <i class="fas fa-calendar-day me-2 text-info"></i>
-                      {{ item.ultima_verificacao }}
+                      {{ item.ultima_verificacao|date:"d/m/Y H:i" }}
                     </td>
                   </tr>
                   {% empty %}
                   <tr>
-                    <td colspan="6" class="text-center py-4">
+                    <td colspan="7" class="text-center py-4">
                       <i class="fas fa-balance-scale fa-3x text-muted mb-3"></i>
                       <p class="text-muted">{% trans "Nenhum dado de reconciliação disponível" %}</p>
                     </td>
