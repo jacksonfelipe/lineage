@@ -1308,10 +1308,19 @@ def report_detail(request, report_id):
     # Formulário para ação de moderação
     if request.method == 'POST':
         action_form = ModerationActionForm(request.POST)
+        
+        # Debug: Log dos dados recebidos
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"POST data recebido: {request.POST}")
+        
         if action_form.is_valid():
             try:
                 action = action_form.save(commit=False)
                 action.moderator = request.user
+                
+                # Debug: Log dos dados do formulário processado
+                logger.info(f"Dados processados do formulário: action_type={action.action_type}, suspension_duration={action.suspension_duration}, suspension_type={action.suspension_type}")
                 
                 # Verificar se o conteúdo ainda existe
                 content_exists = True
@@ -1350,8 +1359,56 @@ def report_detail(request, report_id):
                         
                 elif report.reported_user:
                     action.target_user = report.reported_user
-                    
-                else:
+                
+                # Para ações que requerem usuário alvo (suspensão, banimento, etc), 
+                # inferir o usuário a partir do conteúdo se necessário
+                if action.action_type in ['suspend_user', 'ban_user', 'restrict_user', 'warn'] and not action.target_user:
+                    if report.reported_post and hasattr(report.reported_post, 'author'):
+                        action.target_user = report.reported_post.author
+                    elif report.reported_comment and hasattr(report.reported_comment, 'author'):
+                        action.target_user = report.reported_comment.author
+                    else:
+                        # Se não conseguir determinar o usuário, é um erro
+                        messages.error(request, _('Não foi possível determinar o usuário alvo para esta ação. Verifique se o conteúdo reportado ainda existe.'))
+                        action_form = ModerationActionForm(request.POST)
+                        # Re-adicionar erros ao formulário para exibição
+                        action_form.add_error(None, _('Usuário alvo não identificado para ação de suspensão.'))
+                        
+                        # Não continuar o processamento
+                        similar_reports = Report.objects.filter(
+                            report_type=report.report_type,
+                            status__in=['pending', 'reviewing']
+                        ).exclude(id=report.id)
+                        
+                        user_actions = []
+                        try:
+                            if report.reported_user and hasattr(report.reported_user, 'id'):
+                                user_actions = ModerationAction.objects.filter(
+                                    target_user=report.reported_user
+                                ).order_by('-created_at')[:10]
+                        except Exception:
+                            user_actions = []
+                        
+                        import time
+                        timestamp = int(time.time())
+                        filter_flags = report.filter_flags.select_related('content_filter').order_by('-confidence_score')
+                        max_confidence = 0
+                        if filter_flags.exists():
+                            max_confidence = filter_flags.first().confidence_score * 100
+                        
+                        context = {
+                            'report': report,
+                            'action_form': action_form,
+                            'similar_reports': similar_reports,
+                            'user_actions': user_actions,
+                            'filter_flags': filter_flags,
+                            'max_confidence': max_confidence,
+                            'timestamp': timestamp,
+                        }
+                        
+                        return render(request, 'social/moderation/report_detail.html', context)
+                
+                if not action.target_user and not action.target_post and not action.target_comment:
                     # Se não há conteúdo associado, marcar como não existente
                     content_exists = False
                     content_status = "Conteúdo não disponível"
@@ -1383,9 +1440,28 @@ def report_detail(request, report_id):
                 return redirect('social:reports_list')
                 
             except Exception as e:
+                # Log detalhado do erro
+                logger.error(f"Erro ao aplicar ação de moderação: {str(e)}", exc_info=True)
                 messages.error(request, f'Erro ao aplicar ação de moderação: {str(e)}')
         else:
-            messages.error(request, _('Por favor, corrija os erros abaixo.'))
+            # Log dos erros de validação para debug
+            logger.warning(f"Erros de validação no formulário: {action_form.errors}")
+            
+            # Criar mensagem detalhada com os erros
+            error_details = []
+            for field, errors in action_form.errors.items():
+                if field == '__all__':
+                    for error in errors:
+                        error_details.append(f"Erro geral: {error}")
+                else:
+                    field_label = action_form.fields.get(field, {}).label or field
+                    for error in errors:
+                        error_details.append(f"{field_label}: {error}")
+            
+            if error_details:
+                messages.error(request, f"Por favor, corrija os erros abaixo: {'; '.join(error_details)}")
+            else:
+                messages.error(request, _('Por favor, corrija os erros abaixo.'))
     else:
         action_form = ModerationActionForm()
     
@@ -1430,6 +1506,20 @@ def report_detail(request, report_id):
     if filter_flags.exists():
         max_confidence = filter_flags.first().confidence_score * 100  # Converter para porcentagem
     
+    # Informações de debug (apenas em desenvolvimento)
+    from django.conf import settings
+    debug_info = {}
+    if settings.DEBUG:
+        debug_info = {
+            'report_has_post': bool(report.reported_post),
+            'report_has_comment': bool(report.reported_comment),
+            'report_has_user': bool(report.reported_user),
+            'post_author': getattr(report.reported_post, 'author', None) if report.reported_post else None,
+            'comment_author': getattr(report.reported_comment, 'author', None) if report.reported_comment else None,
+            'form_errors': action_form.errors if hasattr(action_form, 'errors') else {},
+            'form_is_bound': action_form.is_bound if hasattr(action_form, 'is_bound') else False,
+        }
+
     context = {
         'report': report,
         'action_form': action_form,
@@ -1438,6 +1528,7 @@ def report_detail(request, report_id):
         'filter_flags': filter_flags,
         'max_confidence': max_confidence,
         'timestamp': timestamp,
+        'debug_info': debug_info,
     }
     
     return render(request, 'social/moderation/report_detail.html', context)
