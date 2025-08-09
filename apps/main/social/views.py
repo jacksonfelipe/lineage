@@ -1363,16 +1363,8 @@ def report_detail(request, report_id):
                 notes = action.reason
                 if not content_exists:
                     notes += f"\n\nOBS: {content_status} - ação não pôde ser aplicada ao conteúdo."
-
-                print("==========================================================================")
-                print("AQUI VAI DAR ERRO")
-                print("==========================================================================")
                 
                 report.resolve(request.user, action_taken, notes)
-
-                print("==========================================================================")
-                print("CHEGOU AQUI!")
-                print("==========================================================================")
                 
                 return redirect('social:reports_list')
                 

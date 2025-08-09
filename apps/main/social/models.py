@@ -793,6 +793,26 @@ class Report(BaseModel):
             
         self.moderator_notes = notes
         self.resolved_at = timezone.now()
+        
+        # Verificar se os objetos referenciados ainda existem antes de salvar
+        if self.reported_post:
+            try:
+                Post.objects.get(id=self.reported_post.id)
+            except Post.DoesNotExist:
+                self.reported_post = None
+        
+        if self.reported_comment:
+            try:
+                Comment.objects.get(id=self.reported_comment.id)
+            except Comment.DoesNotExist:
+                self.reported_comment = None
+        
+        if self.reported_user:
+            try:
+                User.objects.get(id=self.reported_user.id)
+            except User.DoesNotExist:
+                self.reported_user = None
+        
         self.save()
         
         # Criar log da ação
