@@ -647,10 +647,19 @@ def followers_list(request, username):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
+    # Para verificar quem o usuário atual segue (para botões corretos)
+    user_following_ids = list(request.user.following.values_list('following_id', flat=True))
+    
+    # Timestamp para cache busting de avatares
+    import time
+    timestamp = int(time.time())
+    
     context = {
         'profile_user': user,
         'page_obj': page_obj,
         'followers': page_obj,  # Adicionar para compatibilidade com template
+        'user_following_ids': user_following_ids,
+        'timestamp': timestamp,
         'segment': 'followers_list',
         'parent': 'social',
     }
