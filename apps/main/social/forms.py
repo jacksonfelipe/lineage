@@ -149,12 +149,6 @@ class CommentForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     """Formulário para edição do perfil social"""
     
-    avatar = forms.ImageField(
-        required=False,
-        help_text=_('Foto de perfil (máx. 5MB, será redimensionada para 400x400px)'),
-        validators=[validate_avatar_image]
-    )
-    
     cover_image = forms.ImageField(
         required=False,
         help_text=_('Imagem de capa (máx. 10MB, recomendado: 1200x400px)'),
@@ -164,7 +158,7 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = [
-            'bio', 'avatar', 'cover_image', 'website', 'location',
+            'bio', 'cover_image', 'website', 'location',
             'birth_date', 'phone', 'gender', 'interests',
             'is_private', 'show_email', 'show_phone', 'allow_messages'
         ]
@@ -174,10 +168,6 @@ class UserProfileForm(forms.ModelForm):
                 'rows': 3,
                 'placeholder': _('Conte um pouco sobre você...'),
                 'maxlength': 500
-            }),
-            'avatar': forms.FileInput(attrs={
-                'class': 'form-control',
-                'accept': 'image/jpeg,image/png,image/webp'
             }),
             'cover_image': forms.FileInput(attrs={
                 'class': 'form-control',

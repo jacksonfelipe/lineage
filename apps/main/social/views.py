@@ -522,9 +522,22 @@ def edit_profile(request):
     else:
         form = UserProfileForm(instance=profile)
 
+    # Estatísticas do usuário para sidebar
+    user_stats = {
+        'posts_count': request.user.social_posts.count(),
+        'followers_count': request.user.followers.count(),
+        'following_count': request.user.following.count(),
+    }
+    
+    # Timestamp para cache busting de avatares
+    import time
+    timestamp = int(time.time())
+
     context = {
         'form': form,
         'profile': profile,
+        'user_stats': user_stats,
+        'timestamp': timestamp,
         'segment': 'edit_profile',
         'parent': 'social',
     }
