@@ -2,12 +2,19 @@
 Validadores e processadores de mídia para redes sociais
 """
 import os
-from PIL import Image, ImageOps
+import tempfile
+import subprocess
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.utils.translation import gettext as _
-import tempfile
-import subprocess
+
+try:
+    from PIL import Image, ImageOps
+    PIL_AVAILABLE = True
+except ImportError:
+    PIL_AVAILABLE = False
+    Image = None
+    ImageOps = None
 
 
 # ============================================================================
@@ -32,6 +39,25 @@ ALLOWED_VIDEO_FORMATS = ['.mp4', '.mov', '.avi', '.webm']
 # Durações máximas para vídeos (em segundos)
 MAX_VIDEO_DURATION = 300  # 5 minutos
 MAX_SHORT_VIDEO_DURATION = 60  # 1 minuto para vídeos curtos
+
+# Caminho para ffprobe (pode ser configurado via settings)
+FFPROBE_PATH = getattr(settings, 'FFPROBE_PATH', 'ffprobe')
+if os.name == 'nt':  # Windows
+    # Tentar caminhos comuns no Windows
+    possible_paths = [
+        'C:\\ffmpeg\\bin\\ffprobe.exe',
+        'C:\\ffmpeg\\ffprobe.exe', 
+        'ffprobe.exe',
+        'ffprobe'
+    ]
+    for path in possible_paths:
+        try:
+            result = subprocess.run([path, '-version'], capture_output=True, timeout=5)
+            if result.returncode == 0:
+                FFPROBE_PATH = path
+                break
+        except:
+            continue
 
 
 # ============================================================================
@@ -60,7 +86,14 @@ def validate_avatar_size(image):
 
 def validate_image_format(image):
     """Valida o formato da imagem"""
+    if not PIL_AVAILABLE:
+        raise ValidationError(_('Pillow não está instalado. Não é possível validar imagens.'))
+    
     try:
+        # Garantir que o arquivo está no início
+        if hasattr(image, 'seek'):
+            image.seek(0)
+            
         with Image.open(image) as img:
             if img.format not in ALLOWED_IMAGE_FORMATS:
                 raise ValidationError(
@@ -68,13 +101,28 @@ def validate_image_format(image):
                         'formats': ', '.join(ALLOWED_IMAGE_FORMATS)
                     }
                 )
-    except Exception:
+    except ValidationError:
+        # Re-lançar erros de validação
+        raise
+    except (IOError, OSError):
+        raise ValidationError(_('Arquivo de imagem inválido ou corrompido.'))
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f'Erro inesperado na validação de formato da imagem: {str(e)}')
         raise ValidationError(_('Arquivo de imagem inválido ou corrompido.'))
 
 
 def validate_image_dimensions(image):
     """Valida as dimensões da imagem"""
+    if not PIL_AVAILABLE:
+        raise ValidationError(_('Pillow não está instalado. Não é possível validar imagens.'))
+    
     try:
+        # Garantir que o arquivo está no início
+        if hasattr(image, 'seek'):
+            image.seek(0)
+        
         with Image.open(image) as img:
             width, height = img.size
             if width > MAX_IMAGE_WIDTH or height > MAX_IMAGE_HEIGHT:
@@ -84,13 +132,30 @@ def validate_image_dimensions(image):
                         'height': MAX_IMAGE_HEIGHT
                     }
                 )
-    except Exception:
+    except ValidationError:
+        # Re-lançar erros de validação
+        raise
+    except (IOError, OSError) as e:
+        # Erros específicos de I/O ou arquivo corrompido
+        raise ValidationError(_('Arquivo de imagem inválido ou corrompido.'))
+    except Exception as e:
+        # Log do erro para debug (opcional)
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f'Erro inesperado na validação de dimensões da imagem: {str(e)}')
         raise ValidationError(_('Não foi possível validar as dimensões da imagem.'))
 
 
 def validate_image_content(image):
     """Valida se a imagem não contém conteúdo suspeito baseado em metadados"""
+    if not PIL_AVAILABLE:
+        raise ValidationError(_('Pillow não está instalado. Não é possível validar imagens.'))
+    
     try:
+        # Garantir que o arquivo está no início
+        if hasattr(image, 'seek'):
+            image.seek(0)
+            
         with Image.open(image) as img:
             # Verificar se a imagem tem dimensões válidas
             if img.size[0] < 1 or img.size[1] < 1:
@@ -100,9 +165,15 @@ def validate_image_content(image):
             if img.size[0] < 50 and img.size[1] < 50:
                 raise ValidationError(_('Imagem muito pequena. Mínimo: 50x50 pixels.'))
                 
+    except ValidationError:
+        # Re-lançar erros de validação
+        raise
+    except (IOError, OSError):
+        raise ValidationError(_('Arquivo de imagem inválido ou corrompido.'))
     except Exception as e:
-        if isinstance(e, ValidationError):
-            raise
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f'Erro inesperado na validação de conteúdo da imagem: {str(e)}')
         raise ValidationError(_('Erro ao processar a imagem.'))
 
 
@@ -112,28 +183,57 @@ def validate_image_content(image):
 
 def validate_video_size(video):
     """Valida o tamanho do arquivo de vídeo"""
-    if video.size > MAX_VIDEO_SIZE_MB * 1024 * 1024:
-        raise ValidationError(
-            _('O vídeo é muito grande. Tamanho máximo permitido: %(max_size)sMB') % {
-                'max_size': MAX_VIDEO_SIZE_MB
-            }
-        )
+    try:
+        if not hasattr(video, 'size') or video.size is None:
+            raise ValidationError(_('Não foi possível determinar o tamanho do arquivo de vídeo.'))
+        
+        if video.size > MAX_VIDEO_SIZE_MB * 1024 * 1024:
+            raise ValidationError(
+                _('O vídeo é muito grande. Tamanho máximo permitido: %(max_size)sMB') % {
+                    'max_size': MAX_VIDEO_SIZE_MB
+                }
+            )
+    except ValidationError:
+        # Re-lançar erros de validação
+        raise
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f'Erro inesperado na validação de tamanho do vídeo: {str(e)}')
+        raise ValidationError(_('Erro ao validar tamanho do vídeo.'))
 
 
 def validate_video_format(video):
     """Valida o formato do vídeo"""
-    file_extension = os.path.splitext(video.name)[1].lower()
-    if file_extension not in ALLOWED_VIDEO_FORMATS:
-        raise ValidationError(
-            _('Formato de vídeo não suportado. Formatos permitidos: %(formats)s') % {
-                'formats': ', '.join(ALLOWED_VIDEO_FORMATS)
-            }
-        )
+    try:
+        if not video.name:
+            raise ValidationError(_('Nome do arquivo de vídeo não encontrado.'))
+        
+        file_extension = os.path.splitext(video.name)[1].lower()
+        if file_extension not in ALLOWED_VIDEO_FORMATS:
+            raise ValidationError(
+                _('Formato de vídeo não suportado. Formatos permitidos: %(formats)s') % {
+                    'formats': ', '.join(ALLOWED_VIDEO_FORMATS)
+                }
+            )
+    except ValidationError:
+        # Re-lançar erros de validação
+        raise
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f'Erro inesperado na validação de formato do vídeo: {str(e)}')
+        raise ValidationError(_('Erro ao validar formato do vídeo.'))
 
 
 def validate_video_duration(video):
     """Valida a duração do vídeo usando ffprobe"""
+    temp_file_path = None
     try:
+        # Garantir que o arquivo está no início
+        if hasattr(video, 'seek'):
+            video.seek(0)
+        
         # Salvar temporariamente o arquivo para análise
         with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(video.name)[1]) as temp_file:
             for chunk in video.chunks():
@@ -143,7 +243,7 @@ def validate_video_duration(video):
         # Usar ffprobe para obter informações do vídeo
         try:
             result = subprocess.run([
-                'ffprobe', '-v', 'quiet', '-print_format', 'json', '-show_format',
+                FFPROBE_PATH, '-v', 'quiet', '-print_format', 'json', '-show_format',
                 temp_file_path
             ], capture_output=True, text=True, timeout=30)
             
@@ -160,21 +260,34 @@ def validate_video_duration(video):
                         }
                     )
             else:
-                # Se ffprobe falhar, usar validação básica por tamanho
-                pass
+                # Se ffprobe falhar, apenas log o erro mas não impedir o upload
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.warning(f'ffprobe falhou para validar vídeo: {result.stderr}')
                 
-        except (subprocess.TimeoutExpired, FileNotFoundError, json.JSONDecodeError):
-            # ffprobe não disponível ou falhou, usar validação básica
-            pass
+        except (subprocess.TimeoutExpired, FileNotFoundError, json.JSONDecodeError) as e:
+            # ffprobe não disponível ou falhou, apenas log mas não impedir o upload
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning(f'ffprobe não disponível ou falhou: {str(e)}')
             
-    except Exception:
-        raise ValidationError(_('Erro ao validar o vídeo.'))
+    except ValidationError:
+        # Re-lançar erros de validação
+        raise
+    except Exception as e:
+        # Log do erro para debug mas usar validação mais permissiva
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f'Erro inesperado na validação de duração do vídeo: {str(e)}')
+        # Não lançar erro se não conseguir validar duração - apenas log
+        pass
     finally:
         # Limpar arquivo temporário
-        try:
-            os.unlink(temp_file_path)
-        except:
-            pass
+        if temp_file_path:
+            try:
+                os.unlink(temp_file_path)
+            except Exception:
+                pass
 
 
 # ============================================================================
