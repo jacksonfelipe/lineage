@@ -1,6 +1,8 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
+from django.contrib import messages
+from django.utils.translation import gettext as _
 from .models import Post, Comment, ContentFilter, Report, ModerationLog
 import re
 
@@ -25,9 +27,25 @@ def apply_content_filters_to_post(sender, instance, created, **kwargs):
     if not content_to_check:
         return
     
+    # Coletar filtros acionados para consolidar mensagens
+    triggered_filters = {
+        'flag': [],
+        'auto_hide': [],
+        'auto_delete': [],
+        'notify_moderator': []
+    }
+    
     for content_filter in active_filters:
         if content_filter.matches_content(content_to_check):
-            apply_filter_action(content_filter, instance, 'post')
+            apply_filter_action(content_filter, instance, 'post', triggered_filters)
+    
+    # Mostrar mensagens consolidadas (se há uma request disponível no contexto)
+    try:
+        current_request = getattr(instance, '_current_request', None)
+        if current_request:
+            show_consolidated_messages(current_request, triggered_filters)
+    except:
+        pass  # Não há request disponível, pular mensagens
 
 
 @receiver(post_save, sender=Comment)
@@ -50,12 +68,28 @@ def apply_content_filters_to_comment(sender, instance, created, **kwargs):
     if not content_to_check:
         return
     
+    # Coletar filtros acionados para consolidar mensagens
+    triggered_filters = {
+        'flag': [],
+        'auto_hide': [],
+        'auto_delete': [],
+        'notify_moderator': []
+    }
+    
     for content_filter in active_filters:
         if content_filter.matches_content(content_to_check):
-            apply_filter_action(content_filter, instance, 'comment')
+            apply_filter_action(content_filter, instance, 'comment', triggered_filters)
+    
+    # Mostrar mensagens consolidadas (se há uma request disponível no contexto)
+    try:
+        current_request = getattr(instance, '_current_request', None)
+        if current_request:
+            show_consolidated_messages(current_request, triggered_filters)
+    except:
+        pass  # Não há request disponível, pular mensagens
 
 
-def apply_filter_action(content_filter, content_instance, content_type):
+def apply_filter_action(content_filter, content_instance, content_type, triggered_filters=None):
     """Aplica a ação do filtro ao conteúdo"""
     try:
         # Determinar campos baseados no tipo de conteúdo
@@ -96,6 +130,10 @@ def apply_filter_action(content_filter, content_instance, content_type):
                 details=f"Padrão detectado: {content_filter.pattern[:100]}...\nConteúdo: {content_instance.content[:200]}..."
             )
             
+            # Registrar filtro acionado
+            if triggered_filters is not None:
+                triggered_filters['flag'].append(content_filter.name)
+            
         elif content_filter.action == 'auto_hide':
             # Ocultar conteúdo automaticamente
             if content_type == 'post':
@@ -117,7 +155,15 @@ def apply_filter_action(content_filter, content_instance, content_type):
                 details=f"Padrão detectado: {content_filter.pattern[:100]}...\nConteúdo: {content_instance.content[:200]}..."
             )
             
+            # Registrar filtro acionado
+            if triggered_filters is not None:
+                triggered_filters['auto_hide'].append(content_filter.name)
+            
         elif content_filter.action == 'auto_delete':
+            # Registrar filtro acionado antes de deletar
+            if triggered_filters is not None:
+                triggered_filters['auto_delete'].append(content_filter.name)
+            
             # Deletar conteúdo automaticamente
             content_instance.delete()
             
@@ -158,6 +204,10 @@ def apply_filter_action(content_filter, content_instance, content_type):
                 description=f"Moderadores notificados pelo filtro: {content_filter.name}",
                 details=f"Padrão detectado: {content_filter.pattern[:100]}...\nConteúdo: {content_instance.content[:200]}..."
             )
+            
+            # Registrar filtro acionado
+            if triggered_filters is not None:
+                triggered_filters['notify_moderator'].append(content_filter.name)
         
         # Atualizar estatísticas do filtro
         content_filter.matches_count += 1
@@ -216,3 +266,34 @@ def check_spam_patterns(content):
             return True
     
     return False
+
+
+def show_consolidated_messages(request, triggered_filters):
+    """Exibe mensagens consolidadas dos filtros acionados"""
+    if not request.user.is_authenticated:
+        return
+    
+    # Consolidar mensagens por tipo de ação
+    if triggered_filters['flag']:
+        messages.warning(
+            request, 
+            _('Seu conteúdo foi marcado para revisão por nossos filtros automáticos.')
+        )
+    
+    if triggered_filters['auto_hide']:
+        messages.info(
+            request, 
+            _('Seu conteúdo foi ocultado automaticamente devido aos nossos filtros.')
+        )
+    
+    if triggered_filters['auto_delete']:
+        messages.error(
+            request, 
+            _('Seu conteúdo foi removido por violar nossas diretrizes.')
+        )
+    
+    if triggered_filters['notify_moderator']:
+        messages.info(
+            request, 
+            _('Seu conteúdo será revisado pela equipe de moderação.')
+        )

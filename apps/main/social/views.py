@@ -136,6 +136,9 @@ def feed(request):
                 # Processar hashtags
                 hashtags = form.cleaned_data.get('hashtags', [])
                 
+                # Anexar request ao post para uso no signal
+                post._current_request = request
+                
                 post.save()
                 
                 # Adicionar hashtags ao post
