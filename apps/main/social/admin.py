@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 from .models import (
     Post, Comment, Like, Follow, UserProfile, 
     Share, Hashtag, PostHashtag, CommentLike,
-    Report, ModerationAction, ContentFilter, ModerationLog
+    Report, ModerationAction, ContentFilter, ModerationLog, ReportFilterFlag
 )
 from core.admin import BaseModelAdmin
 from django.utils import timezone
@@ -225,24 +225,35 @@ class PostHashtagAdmin(BaseModelAdmin):
 # ADMIN DE MODERAÇÃO
 # ============================================================================
 
+class ReportFilterFlagInline(admin.TabularInline):
+    model = ReportFilterFlag
+    extra = 0
+    readonly_fields = ['content_filter', 'matched_pattern', 'confidence_score', 'created_at']
+    can_delete = False
+
+
 @admin.register(Report)
 class ReportAdmin(BaseModelAdmin):
     list_display = [
         'get_reported_content_short', 'report_type', 'reporter', 'status', 
-        'priority', 'assigned_moderator', 'created_at'
+        'priority', 'get_filters_count', 'assigned_moderator', 'created_at'
     ]
     list_filter = [
-        'report_type', 'status', 'priority', 'created_at', 'assigned_moderator'
+        'report_type', 'status', 'priority', 'created_at', 'assigned_moderator',
+        'filter_flags__content_filter'
     ]
     search_fields = [
         'description', 'reporter__username', 'reported_post__content',
-        'reported_comment__content', 'reported_user__username'
+        'reported_comment__content', 'reported_user__username',
+        'filter_flags__content_filter__name'
     ]
     readonly_fields = [
-        'similar_reports_count', 'created_at', 'updated_at', 'resolved_at'
+        'similar_reports_count', 'created_at', 'updated_at', 'resolved_at',
+        'get_filter_flags_display'
     ]
     date_hierarchy = 'created_at'
     ordering = ['-priority', '-created_at']
+    inlines = [ReportFilterFlagInline]
     
     fieldsets = (
         (_('Informações da Denúncia'), {
@@ -267,6 +278,46 @@ class ReportAdmin(BaseModelAdmin):
         content = obj.get_reported_content()
         return content[:50] + '...' if len(content) > 50 else content
     get_reported_content_short.short_description = _('Conteúdo Reportado')
+    
+    def get_filters_count(self, obj):
+        count = obj.filter_flags.count()
+        if count == 0:
+            return _('Manual')
+        elif count == 1:
+            filter_name = obj.filter_flags.first().content_filter.name
+            return format_html(
+                '<span style="background: #e3f2fd; padding: 2px 6px; border-radius: 3px; font-size: 11px;">{}</span>',
+                filter_name[:15] + '...' if len(filter_name) > 15 else filter_name
+            )
+        else:
+            return format_html(
+                '<span style="background: #fff3e0; padding: 2px 6px; border-radius: 3px; font-size: 11px; color: #f57c00;">{} filtros</span>',
+                count
+            )
+    get_filters_count.short_description = _('Filtros')
+    
+    def get_filter_flags_display(self, obj):
+        flags = obj.filter_flags.select_related('content_filter').all()
+        if not flags:
+            return _('Denúncia manual - não foi gerada por filtros automáticos')
+        
+        html_parts = []
+        for flag in flags:
+            confidence_color = '#4caf50' if flag.confidence_score >= 0.8 else '#ff9800' if flag.confidence_score >= 0.5 else '#f44336'
+            html_parts.append(format_html(
+                '<div style="margin: 8px 0; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">'
+                '<strong>{}</strong> <span style="color: {};">({:.0%})</span><br>'
+                '<small style="color: #666;">{}</small><br>'
+                '<code style="background: #f5f5f5; padding: 2px 4px; border-radius: 2px; font-size: 11px;">{}</code>'
+                '</div>',
+                flag.content_filter.name,
+                confidence_color,
+                flag.confidence_score,
+                flag.content_filter.get_filter_type_display(),
+                flag.matched_pattern[:100] + '...' if flag.matched_pattern and len(flag.matched_pattern) > 100 else flag.matched_pattern or 'N/A'
+            ))
+        return format_html(''.join(html_parts))
+    get_filter_flags_display.short_description = _('Detalhes dos Filtros Acionados')
     
     def assign_to_moderator(self, request, queryset):
         """Ação para atribuir denúncias a um moderador"""
@@ -427,6 +478,29 @@ class ContentFilterAdmin(BaseModelAdmin):
         queryset.update(matches_count=0, last_matched=None)
         self.message_user(request, f'Estatísticas de {queryset.count()} filtros foram resetadas.')
     reset_statistics.short_description = _('Resetar estatísticas')
+
+
+@admin.register(ReportFilterFlag)
+class ReportFilterFlagAdmin(BaseModelAdmin):
+    list_display = [
+        'report', 'content_filter', 'get_matched_pattern_short', 'confidence_score', 'created_at'
+    ]
+    list_filter = [
+        'content_filter', 'confidence_score', 'created_at'
+    ]
+    search_fields = [
+        'report__description', 'content_filter__name', 'matched_pattern'
+    ]
+    readonly_fields = ['created_at', 'updated_at']
+    date_hierarchy = 'created_at'
+    ordering = ['-created_at']
+    
+    def get_matched_pattern_short(self, obj):
+        if not obj.matched_pattern:
+            return '-'
+        pattern = obj.matched_pattern
+        return pattern[:50] + '...' if len(pattern) > 50 else pattern
+    get_matched_pattern_short.short_description = _('Padrão Detectado')
 
 
 @admin.register(ModerationLog)

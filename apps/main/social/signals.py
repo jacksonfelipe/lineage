@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django.contrib import messages
 from django.utils.translation import gettext as _
-from .models import Post, Comment, ContentFilter, Report, ModerationLog
+from .models import Post, Comment, ContentFilter, Report, ModerationLog, ReportFilterFlag
 import re
 
 
@@ -104,21 +104,53 @@ def apply_filter_action(content_filter, content_instance, content_type, triggere
         
         # Aplicar ação baseada no tipo
         if content_filter.action == 'flag':
-            # Criar denúncia automática
-            report = Report.objects.create(
-                reporter=None,  # Sistema
-                report_type='spam' if 'spam' in content_filter.name.lower() else 'inappropriate',
-                description=f"Conteúdo filtrado automaticamente pelo filtro: {content_filter.name}",
-                status='pending',
-                priority='medium'
-            )
-            
-            # Associar o conteúdo à denúncia
+            # Buscar ou criar report consolidado para este conteúdo
+            existing_report = None
             if content_type == 'post':
-                report.reported_post = content_instance
+                existing_report = Report.objects.filter(
+                    reported_post=content_instance,
+                    reporter__isnull=True,  # Reports do sistema
+                    status='pending'
+                ).first()
             elif content_type == 'comment':
-                report.reported_comment = content_instance
-            report.save()
+                existing_report = Report.objects.filter(
+                    reported_comment=content_instance,
+                    reporter__isnull=True,  # Reports do sistema
+                    status='pending'
+                ).first()
+            
+            if existing_report:
+                # Adicionar flag ao report existente
+                report = existing_report
+                # Atualizar descrição para incluir novo filtro
+                current_filters = [flag.content_filter.name for flag in report.filter_flags.all()]
+                if content_filter.name not in current_filters:
+                    report.description = f"Conteúdo filtrado por múltiplos filtros: {', '.join(current_filters + [content_filter.name])}"
+                    report.save()
+            else:
+                # Criar novo report consolidado
+                report = Report.objects.create(
+                    reporter=None,  # Sistema
+                    report_type='spam' if 'spam' in content_filter.name.lower() else 'inappropriate',
+                    description=f"Conteúdo filtrado automaticamente pelo filtro: {content_filter.name}",
+                    status='pending',
+                    priority='medium'
+                )
+                
+                # Associar o conteúdo à denúncia
+                if content_type == 'post':
+                    report.reported_post = content_instance
+                elif content_type == 'comment':
+                    report.reported_comment = content_instance
+                report.save()
+            
+            # Adicionar flag do filtro ao report
+            matched_pattern = _extract_matched_pattern(content_instance.content, content_filter)
+            report.add_filter_flag(
+                content_filter=content_filter,
+                matched_pattern=matched_pattern,
+                confidence=1.0
+            )
             
             # Log da ação
             ModerationLog.log_action(
@@ -297,3 +329,40 @@ def show_consolidated_messages(request, triggered_filters):
             request, 
             _('Seu conteúdo será revisado pela equipe de moderação.')
         )
+
+
+def _extract_matched_pattern(content, content_filter):
+    """Extrai o padrão específico que foi detectado no conteúdo"""
+    try:
+        if content_filter.filter_type == 'keyword':
+            # Para palavras-chave, retornar a palavra encontrada
+            pattern = content_filter.pattern.lower()
+            content_lower = content.lower() if not content_filter.case_sensitive else content
+            
+            # Verificar se a palavra existe no conteúdo
+            if pattern in content_lower:
+                # Encontrar a posição e extrair contexto
+                start_pos = content_lower.find(pattern)
+                context_start = max(0, start_pos - 20)
+                context_end = min(len(content), start_pos + len(pattern) + 20)
+                return f"...{content[context_start:context_end]}..."
+                
+        elif content_filter.filter_type == 'regex':
+            # Para regex, tentar encontrar a correspondência
+            import re
+            flags = 0 if content_filter.case_sensitive else re.IGNORECASE
+            match = re.search(content_filter.pattern, content, flags)
+            if match:
+                # Retornar o texto que correspondeu ao regex
+                matched_text = match.group(0)
+                start_pos = match.start()
+                context_start = max(0, start_pos - 20)
+                context_end = min(len(content), match.end() + 20)
+                return f"...{content[context_start:context_end]}..."
+        
+        # Para outros tipos, retornar apenas uma amostra do conteúdo
+        return content[:100] + '...' if len(content) > 100 else content
+        
+    except Exception as e:
+        print(f"Erro ao extrair padrão: {e}")
+        return content[:50] + '...' if len(content) > 50 else content

@@ -794,6 +794,77 @@ class Report(BaseModel):
             description=f"Denúncia resolvida: {action_taken}",
             details=notes
         )
+    
+    def get_triggered_filters(self):
+        """Retorna lista de filtros que acionaram este report"""
+        return [flag.content_filter for flag in self.filter_flags.all()]
+    
+    def get_filter_flags_summary(self):
+        """Retorna resumo das flags dos filtros"""
+        flags = self.filter_flags.select_related('content_filter').order_by('-confidence_score')
+        summary = []
+        for flag in flags:
+            summary.append({
+                'filter_name': flag.content_filter.name,
+                'filter_type': flag.content_filter.get_filter_type_display(),
+                'action': flag.content_filter.get_action_display(),
+                'confidence': flag.confidence_score,
+                'pattern': flag.matched_pattern[:50] + '...' if flag.matched_pattern and len(flag.matched_pattern) > 50 else flag.matched_pattern
+            })
+        return summary
+    
+    def add_filter_flag(self, content_filter, matched_pattern=None, confidence=1.0):
+        """Adiciona uma flag de filtro a este report"""
+        flag, created = ReportFilterFlag.objects.get_or_create(
+            report=self,
+            content_filter=content_filter,
+            defaults={
+                'matched_pattern': matched_pattern,
+                'confidence_score': confidence
+            }
+        )
+        if not created and matched_pattern:
+            # Atualizar padrão se foi fornecido um novo
+            flag.matched_pattern = matched_pattern
+            flag.confidence_score = max(flag.confidence_score, confidence)
+            flag.save()
+        return flag
+
+
+class ReportFilterFlag(BaseModel):
+    """Modelo para flags de filtros que acionaram um report"""
+    report = models.ForeignKey(
+        Report,
+        on_delete=models.CASCADE,
+        related_name='filter_flags',
+        verbose_name=_('Report')
+    )
+    content_filter = models.ForeignKey(
+        'ContentFilter',
+        on_delete=models.CASCADE,
+        related_name='report_flags',
+        verbose_name=_('Filtro de Conteúdo')
+    )
+    matched_pattern = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name=_('Padrão Detectado'),
+        help_text=_('Parte do conteúdo que acionou o filtro')
+    )
+    confidence_score = models.FloatField(
+        default=1.0,
+        verbose_name=_('Nível de Confiança'),
+        help_text=_('Quão confiante o filtro está na detecção (0.0 a 1.0)')
+    )
+    
+    class Meta:
+        verbose_name = _('Flag de Filtro')
+        verbose_name_plural = _('Flags de Filtros')
+        unique_together = ['report', 'content_filter']
+        ordering = ['-confidence_score', '-created_at']
+    
+    def __str__(self):
+        return f"{self.content_filter.name} → {self.report}"
 
 
 class ModerationAction(BaseModel):
