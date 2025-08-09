@@ -397,6 +397,15 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# =========================== MEDIA PROCESSING CONFIGS ===========================
+
+# Configurações para processamento de mídia (ffmpeg/ffprobe)
+FFMPEG_PATH = os.getenv('FFMPEG_PATH', 'ffmpeg')
+FFPROBE_PATH = os.getenv('FFPROBE_PATH', 'ffprobe')
+
+# Configurações de upload de arquivos
+FILE_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50MB
+
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'themes'),
