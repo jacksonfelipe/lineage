@@ -12,17 +12,24 @@
       
       <div class="card">
         <div class="card-header">
-          <div class="d-flex align-items-center">
-            <a href="{% url 'social:user_profile' profile_user.username %}" class="btn btn-link text-decoration-none me-3">
-              <i class="bi bi-arrow-left"></i>
-            </a>
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+              <a href="{% url 'social:user_profile' profile_user.username %}" class="btn btn-link text-decoration-none me-3">
+                <i class="bi bi-arrow-left"></i>
+              </a>
+              <div>
+                <h4 class="mb-0">
+                  <i class="bi bi-people"></i> {% trans "Seguidores" %}
+                </h4>
+                <small class="text-muted">
+                  {% trans "Pessoas que seguem" %} {{ profile_user.get_full_name|default:profile_user.username }}
+                </small>
+              </div>
+            </div>
             <div>
-              <h4 class="mb-0">
-                <i class="bi bi-people"></i> {% trans "Seguidores" %}
-              </h4>
-              <small class="text-muted">
-                {% trans "Pessoas que seguem" %} {{ profile_user.get_full_name|default:profile_user.username }}
-              </small>
+              <a href="{% url 'social:feed' %}" class="btn btn-primary">
+                <i class="bi bi-house"></i> {% trans "Feed" %}
+              </a>
             </div>
           </div>
         </div>
