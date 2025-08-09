@@ -2,6 +2,10 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from .models import Post, Comment, UserProfile, Hashtag, Report, ModerationAction, ContentFilter
 from django.contrib.auth import get_user_model
+from utils.media_validators import (
+    validate_social_media_image, validate_social_media_video, 
+    validate_avatar_image
+)
 
 
 class PostForm(forms.ModelForm):
@@ -22,17 +26,19 @@ class PostForm(forms.ModelForm):
         required=False,
         widget=forms.FileInput(attrs={
             'class': 'form-control',
-            'accept': 'image/*'
+            'accept': 'image/jpeg,image/png,image/webp,image/gif'
         }),
-        help_text=_('Imagem opcional (JPG, PNG, GIF)')
+        help_text=_('Imagem opcional (máx. 10MB, formatos: JPEG, PNG, WEBP, GIF)'),
+        validators=[validate_social_media_image]
     )
     video = forms.FileField(
         required=False,
         widget=forms.FileInput(attrs={
             'class': 'form-control',
-            'accept': 'video/*'
+            'accept': 'video/mp4,video/quicktime,video/x-msvideo,video/webm'
         }),
-        help_text=_('Vídeo opcional (MP4, AVI, MOV - máx. 50MB)')
+        help_text=_('Vídeo opcional (máx. 100MB, 5min, formatos: MP4, MOV, AVI, WEBM)'),
+        validators=[validate_social_media_video]
     )
     link = forms.URLField(
         required=False,
@@ -66,37 +72,31 @@ class PostForm(forms.ModelForm):
             raise forms.ValidationError(_('O conteúdo não pode estar vazio.'))
         return content.strip()
 
-    def clean_image(self):
-        image = self.cleaned_data.get('image')
-        if image:
-            # Verificar se é um novo upload (tem content_type) ou arquivo existente
-            if hasattr(image, 'content_type'):
-                # Verificar tamanho do arquivo (máximo 5MB)
-                if image.size > 5 * 1024 * 1024:
-                    raise forms.ValidationError(_('A imagem deve ter no máximo 5MB.'))
+    def clean(self):
+        cleaned_data = super().clean()
+        content = cleaned_data.get('content', '')
+        image = cleaned_data.get('image')
+        video = cleaned_data.get('video')
+        link = cleaned_data.get('link')
+        
+        # Verificar se há pelo menos um tipo de conteúdo
+        if not content and not image and not video and not link:
+            raise forms.ValidationError(_('O post deve ter pelo menos um conteúdo: texto, imagem, vídeo ou link.'))
+        
+        # Não permitir imagem e vídeo ao mesmo tempo
+        if image and video:
+            raise forms.ValidationError(_('Não é possível anexar imagem e vídeo no mesmo post. Escolha apenas um.'))
+        
+        # Validar limite de caracteres considerando hashtags
+        hashtags_text = ' '.join([f'#{tag}' for tag in cleaned_data.get('hashtags', [])])
+        total_content = f"{content} {hashtags_text}".strip()
+        
+        if len(total_content) > 1000:
+            raise forms.ValidationError(_('O conteúdo total (incluindo hashtags) excede 1000 caracteres.'))
+        
+        return cleaned_data
 
-                # Verificar formato
-                allowed_formats = ['image/jpeg', 'image/png', 'image/gif']
-                if image.content_type not in allowed_formats:
-                    raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG, PNG ou GIF.'))
 
-        return image
-
-    def clean_video(self):
-        video = self.cleaned_data.get('video')
-        if video:
-            # Verificar se é um novo upload (tem content_type) ou arquivo existente
-            if hasattr(video, 'content_type'):
-                # Verificar tamanho do arquivo (máximo 50MB)
-                if video.size > 50 * 1024 * 1024:
-                    raise forms.ValidationError(_('O vídeo deve ter no máximo 50MB.'))
-
-                # Verificar formato
-                allowed_formats = ['video/mp4', 'video/avi', 'video/quicktime']
-                if video.content_type not in allowed_formats:
-                    raise forms.ValidationError(_('Formato de vídeo não suportado. Use MP4, AVI ou MOV.'))
-
-        return video
 
     def clean_hashtags(self):
         hashtags = self.cleaned_data.get('hashtags', '')
@@ -143,25 +143,23 @@ class CommentForm(forms.ModelForm):
             raise forms.ValidationError(_('O comentário não pode estar vazio.'))
         return content.strip()
 
-    def clean_image(self):
-        image = self.cleaned_data.get('image')
-        if image:
-            # Verificar se é um novo upload (tem content_type) ou arquivo existente
-            if hasattr(image, 'content_type'):
-                # Verificar tamanho do arquivo (máximo 2MB)
-                if image.size > 2 * 1024 * 1024:
-                    raise forms.ValidationError(_('A imagem deve ter no máximo 2MB.'))
 
-                # Verificar formato
-                allowed_formats = ['image/jpeg', 'image/png', 'image/gif']
-                if image.content_type not in allowed_formats:
-                    raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG, PNG ou GIF.'))
-
-        return image
 
 
 class UserProfileForm(forms.ModelForm):
     """Formulário para edição do perfil social"""
+    
+    avatar = forms.ImageField(
+        required=False,
+        help_text=_('Foto de perfil (máx. 5MB, será redimensionada para 400x400px)'),
+        validators=[validate_avatar_image]
+    )
+    
+    cover_image = forms.ImageField(
+        required=False,
+        help_text=_('Imagem de capa (máx. 10MB, recomendado: 1200x400px)'),
+        validators=[validate_social_media_image]
+    )
 
     class Meta:
         model = UserProfile
@@ -179,11 +177,11 @@ class UserProfileForm(forms.ModelForm):
             }),
             'avatar': forms.FileInput(attrs={
                 'class': 'form-control',
-                'accept': 'image/*'
+                'accept': 'image/jpeg,image/png,image/webp'
             }),
             'cover_image': forms.FileInput(attrs={
                 'class': 'form-control',
-                'accept': 'image/*'
+                'accept': 'image/jpeg,image/png,image/webp'
             }),
             'website': forms.URLInput(attrs={
                 'class': 'form-control',
@@ -230,37 +228,9 @@ class UserProfileForm(forms.ModelForm):
             'interests': _('Conte sobre seus interesses'),
         }
 
-    def clean_avatar(self):
-        avatar = self.cleaned_data.get('avatar')
-        if avatar:
-            # Verificar se é um novo upload (tem content_type) ou arquivo existente
-            if hasattr(avatar, 'content_type'):
-                # Verificar tamanho do arquivo (máximo 2MB)
-                if avatar.size > 2 * 1024 * 1024:
-                    raise forms.ValidationError(_('A foto de perfil deve ter no máximo 2MB.'))
 
-                # Verificar formato
-                allowed_formats = ['image/jpeg', 'image/png']
-                if avatar.content_type not in allowed_formats:
-                    raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG ou PNG.'))
 
-        return avatar
 
-    def clean_cover_image(self):
-        cover_image = self.cleaned_data.get('cover_image')
-        if cover_image:
-            # Verificar se é um novo upload (tem content_type) ou arquivo existente
-            if hasattr(cover_image, 'content_type'):
-                # Verificar tamanho do arquivo (máximo 5MB)
-                if cover_image.size > 5 * 1024 * 1024:
-                    raise forms.ValidationError(_('A imagem de capa deve ter no máximo 5MB.'))
-
-                # Verificar formato
-                allowed_formats = ['image/jpeg', 'image/png']
-                if cover_image.content_type not in allowed_formats:
-                    raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG ou PNG.'))
-
-        return cover_image
 
 
 class SearchForm(forms.Form):

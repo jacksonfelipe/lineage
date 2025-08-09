@@ -3,6 +3,12 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from core.models import BaseModel
+from utils.media_validators import (
+    validate_social_media_image, validate_social_media_video, 
+    validate_avatar_image, process_image_for_social_media,
+    process_avatar_image, create_image_thumbnail
+)
+import os
 
 User = get_user_model()
 
@@ -24,7 +30,8 @@ class Post(BaseModel):
         blank=True,
         null=True,
         verbose_name=_('Imagem'),
-        help_text=_('Imagem opcional para o post')
+        help_text=_('Imagem opcional para o post (máx. 10MB, 1920x1080px)'),
+        validators=[validate_social_media_image]
     )
     # Novos campos para melhorar a rede social
     video = models.FileField(
@@ -32,7 +39,8 @@ class Post(BaseModel):
         blank=True,
         null=True,
         verbose_name=_('Vídeo'),
-        help_text=_('Vídeo opcional para o post (MP4, AVI, MOV)')
+        help_text=_('Vídeo opcional para o post (máx. 100MB, 5min, MP4/MOV/AVI/WEBM)'),
+        validators=[validate_social_media_video]
     )
     link = models.URLField(
         blank=True,
@@ -156,6 +164,23 @@ class Post(BaseModel):
         if not user or not user.is_authenticated:
             return False
         return self.likes.filter(user=user).exists()
+    
+    def save(self, *args, **kwargs):
+        """Override save para processar mídia automaticamente"""
+        # Processar imagem se foi alterada
+        if self.image and hasattr(self.image, 'file'):
+            try:
+                # Processar imagem para otimização
+                processed_path = process_image_for_social_media(
+                    self.image.path if hasattr(self.image, 'path') else self.image.file,
+                    max_width=1920,
+                    max_height=1080,
+                    quality=85
+                )
+            except Exception:
+                pass  # Se falhar, manter imagem original
+        
+        super().save(*args, **kwargs)
 
 
 class Comment(BaseModel):
@@ -191,7 +216,8 @@ class Comment(BaseModel):
         blank=True,
         null=True,
         verbose_name=_('Imagem'),
-        help_text=_('Imagem opcional no comentário')
+        help_text=_('Imagem opcional no comentário (máx. 5MB)'),
+        validators=[validate_social_media_image]
     )
     likes_count = models.PositiveIntegerField(
         default=0,
@@ -391,14 +417,16 @@ class UserProfile(BaseModel):
         blank=True,
         null=True,
         verbose_name=_('Avatar'),
-        help_text=_('Foto de perfil')
+        help_text=_('Foto de perfil (máx. 5MB, será redimensionada para 400x400px)'),
+        validators=[validate_avatar_image]
     )
     cover_image = models.ImageField(
         upload_to='social/covers/',
         blank=True,
         null=True,
         verbose_name=_('Imagem de capa'),
-        help_text=_('Imagem de capa do perfil')
+        help_text=_('Imagem de capa do perfil (máx. 10MB, recomendado: 1200x400px)'),
+        validators=[validate_social_media_image]
     )
     website = models.URLField(
         blank=True,
@@ -506,6 +534,32 @@ class UserProfile(BaseModel):
         self.total_likes_received = sum(post.likes_count for post in self.user.social_posts.all())
         self.total_comments_received = sum(post.comments_count for post in self.user.social_posts.all())
         self.save(update_fields=['total_posts', 'total_likes_received', 'total_comments_received'])
+    
+    def save(self, *args, **kwargs):
+        """Override save para processar mídia automaticamente"""
+        # Processar avatar se foi alterado
+        if self.avatar and hasattr(self.avatar, 'file'):
+            try:
+                processed_path = process_avatar_image(
+                    self.avatar.path if hasattr(self.avatar, 'path') else self.avatar.file,
+                    size=400
+                )
+            except Exception:
+                pass  # Se falhar, manter avatar original
+        
+        # Processar imagem de capa se foi alterada
+        if self.cover_image and hasattr(self.cover_image, 'file'):
+            try:
+                processed_path = process_image_for_social_media(
+                    self.cover_image.path if hasattr(self.cover_image, 'path') else self.cover_image.file,
+                    max_width=1200,
+                    max_height=400,
+                    quality=90
+                )
+            except Exception:
+                pass  # Se falhar, manter imagem original
+        
+        super().save(*args, **kwargs)
 
 
 class Hashtag(BaseModel):
