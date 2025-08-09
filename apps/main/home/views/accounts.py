@@ -147,8 +147,9 @@ class UserLoginView(LoginView):
         
         # Primeiro, tenta autenticar o usuário para verificar se é superusuário
         from django.contrib.auth import authenticate
-        from django.contrib.auth.models import User
+        from django.contrib.auth import get_user_model
         
+        User = get_user_model()
         user = authenticate(username=username, password=password)
         
         if not user:
@@ -166,6 +167,8 @@ class UserLoginView(LoginView):
             # Verifica se o usuário existe mas está inativo
             try:
                 inactive_user = User.objects.get(username=username)
+                logger.info(f"[UserLoginView] Usuário {username} encontrado: is_active={inactive_user.is_active}")
+                
                 if not inactive_user.is_active:
                     logger.warning(f"[UserLoginView] Usuário {username} existe mas está inativo")
                     

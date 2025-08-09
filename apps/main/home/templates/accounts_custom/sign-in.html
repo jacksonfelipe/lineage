@@ -288,26 +288,36 @@ function togglePassword(inputId) {
 }
 
 {% if requires_captcha %}
-// Script para captcha
+// Script para captcha - Callbacks globais
+window.onCaptchaSuccess = function(token) {
+  console.log('Captcha completado:', token);
+  document.getElementById('captcha_token').value = token;
+};
+
+window.onCaptchaExpired = function() {
+  console.log('Captcha expirado');
+  document.getElementById('captcha_token').value = '';
+};
+
 document.addEventListener('DOMContentLoaded', function() {
-  // Aguarda o carregamento do hCaptcha
-  if (typeof hcaptcha !== 'undefined') {
-    hcaptcha.onReady(function() {
-      console.log('hCaptcha carregado');
-    });
-    
-    // Callback quando o captcha é completado
-    window.onCaptchaSuccess = function(token) {
-      document.getElementById('captcha_token').value = token;
-    };
-    
-    // Callback quando o captcha expira
-    window.onCaptchaExpired = function() {
-      document.getElementById('captcha_token').value = '';
-    };
+  // Função para inicializar o hCaptcha
+  function initHcaptcha() {
+    if (typeof hcaptcha !== 'undefined' && hcaptcha.onReady) {
+      hcaptcha.onReady(function() {
+        console.log('hCaptcha carregado com sucesso');
+      });
+    } else {
+      // Se hcaptcha ainda não estiver disponível, tenta novamente em 100ms
+      setTimeout(initHcaptcha, 100);
+    }
   }
+  
+  // Inicia a verificação
+  initHcaptcha();
 });
+{% endif %}
 </script>
+{% if requires_captcha %}
 <script src="https://hcaptcha.com/1/api.js" async defer></script>
 {% endif %}
 {% endblock content %}
