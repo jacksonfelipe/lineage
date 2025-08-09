@@ -1188,8 +1188,19 @@ def update_report_status(request, report_id):
         report.save()
         
         # Criar log de moderação
+        # Verificar se moderator é válido
+        moderator_id = None
+        if request.user and hasattr(request.user, 'id'):
+            moderator_id = request.user.id
+            try:
+                from django.contrib.auth import get_user_model
+                User = get_user_model()
+                User.objects.get(id=moderator_id)
+            except User.DoesNotExist:
+                moderator_id = None
+        
         ModerationLog.objects.create(
-            moderator=request.user,
+            moderator_id=moderator_id,
             action_type='report_status_changed',
             target_type='report',
             target_id=report.id,
@@ -1229,8 +1240,19 @@ def assign_report(request, report_id):
         report.save()
         
         # Criar log de moderação
+        # Verificar se moderator é válido
+        moderator_id = None
+        if request.user and hasattr(request.user, 'id'):
+            moderator_id = request.user.id
+            try:
+                from django.contrib.auth import get_user_model
+                User = get_user_model()
+                User.objects.get(id=moderator_id)
+            except User.DoesNotExist:
+                moderator_id = None
+        
         ModerationLog.objects.create(
-            moderator=request.user,
+            moderator_id=moderator_id,
             action_type='report_assigned',
             target_type='report',
             target_id=report.id,
@@ -1263,6 +1285,8 @@ def report_detail(request, report_id):
             'reported_user',
             'reporter',
             'assigned_moderator'
+        ).prefetch_related(
+            'filter_flags__content_filter'
         ), 
         id=report_id
     )
@@ -1271,28 +1295,91 @@ def report_detail(request, report_id):
     if request.method == 'POST':
         action_form = ModerationActionForm(request.POST)
         if action_form.is_valid():
-            action = action_form.save(commit=False)
-            action.moderator = request.user
-            
-            # Associar o alvo da ação
-            if report.reported_post:
-                action.target_post = report.reported_post
-            elif report.reported_comment:
-                action.target_comment = report.reported_comment
-            elif report.reported_user:
-                action.target_user = report.reported_user
-            
-            action.save()
-            
-            # Aplicar a ação
-            action.apply_action()
-            
-            # Resolver a denúncia
-            action_taken = action.get_action_type_display()
-            report.resolve(request.user, action_taken, action.reason)
-            
-            messages.success(request, _('Ação de moderação aplicada com sucesso.'))
-            return redirect('social:reports_list')
+            try:
+                action = action_form.save(commit=False)
+                action.moderator = request.user
+                
+                # Verificar se o conteúdo ainda existe
+                content_exists = True
+                content_status = ""
+                
+                # Associar o alvo da ação e verificar se existe
+                if report.reported_post:
+                    try:
+                        # Verificar se o objeto ainda existe no banco
+                        existing_post = Post.objects.get(id=report.reported_post.id)
+                        action.target_post = existing_post
+                    except (Post.DoesNotExist, AttributeError):
+                        content_exists = False
+                        content_status = "Post foi deletado"
+                        # Tentar obter ID do backup ou do report original
+                        try:
+                            post_id = report.reported_post.id if report.reported_post else None
+                        except:
+                            post_id = None
+                        action.target_post_id_backup = post_id
+                        
+                elif report.reported_comment:
+                    try:
+                        # Verificar se o objeto ainda existe no banco
+                        existing_comment = Comment.objects.get(id=report.reported_comment.id)
+                        action.target_comment = existing_comment
+                    except (Comment.DoesNotExist, AttributeError):
+                        content_exists = False
+                        content_status = "Comentário foi deletado"
+                        # Tentar obter ID do backup ou do report original
+                        try:
+                            comment_id = report.reported_comment.id if report.reported_comment else None
+                        except:
+                            comment_id = None
+                        action.target_comment_id_backup = comment_id
+                        
+                elif report.reported_user:
+                    action.target_user = report.reported_user
+                    
+                else:
+                    # Se não há conteúdo associado, marcar como não existente
+                    content_exists = False
+                    content_status = "Conteúdo não disponível"
+                    # Tentar preencher dados de backup do próprio report
+                    if hasattr(report, 'description') and report.description:
+                        action.target_content_backup = report.description[:500]
+                
+                action.save()
+                
+                # Aplicar a ação
+                if content_exists:
+                    success = action.apply_action()
+                    if success:
+                        messages.success(request, _('Ação de moderação aplicada com sucesso.'))
+                    else:
+                        messages.warning(request, _('Ação de moderação registrada, mas houve problemas na aplicação. Verifique os logs.'))
+                else:
+                    # Conteúdo foi deletado, apenas registrar a ação
+                    messages.info(request, f'Ação registrada, mas {content_status.lower()}. A ação não pôde ser aplicada.')
+                
+                # Resolver a denúncia
+                action_taken = action.get_action_type_display()
+                notes = action.reason
+                if not content_exists:
+                    notes += f"\n\nOBS: {content_status} - ação não pôde ser aplicada ao conteúdo."
+
+                print("==========================================================================")
+                print("AQUI VAI DAR ERRO")
+                print("==========================================================================")
+                
+                report.resolve(request.user, action_taken, notes)
+
+                print("==========================================================================")
+                print("CHEGOU AQUI!")
+                print("==========================================================================")
+                
+                return redirect('social:reports_list')
+                
+            except Exception as e:
+                messages.error(request, f'Erro ao aplicar ação de moderação: {str(e)}')
+        else:
+            messages.error(request, _('Por favor, corrija os erros abaixo.'))
     else:
         action_form = ModerationActionForm()
     
@@ -1302,25 +1389,49 @@ def report_detail(request, report_id):
         status__in=['pending', 'reviewing']
     ).exclude(id=report.id)
     
-    if report.reported_post:
-        similar_reports = similar_reports.filter(reported_post=report.reported_post)
-    elif report.reported_comment:
-        similar_reports = similar_reports.filter(reported_comment=report.reported_comment)
-    elif report.reported_user:
-        similar_reports = similar_reports.filter(reported_user=report.reported_user)
+    # Filtrar por conteúdo relacionado apenas se ainda existir
+    try:
+        if report.reported_post and hasattr(report.reported_post, 'id'):
+            similar_reports = similar_reports.filter(reported_post=report.reported_post)
+        elif report.reported_comment and hasattr(report.reported_comment, 'id'):
+            similar_reports = similar_reports.filter(reported_comment=report.reported_comment)
+        elif report.reported_user and hasattr(report.reported_user, 'id'):
+            similar_reports = similar_reports.filter(reported_user=report.reported_user)
+    except Exception:
+        # Se houver erro ao acessar relacionamentos, ignorar filtros similares
+        pass
     
     # Histórico de ações do usuário reportado
     user_actions = []
-    if report.reported_user:
-        user_actions = ModerationAction.objects.filter(
-            target_user=report.reported_user
-        ).order_by('-created_at')[:10]
+    try:
+        if report.reported_user and hasattr(report.reported_user, 'id'):
+            user_actions = ModerationAction.objects.filter(
+                target_user=report.reported_user
+            ).order_by('-created_at')[:10]
+    except Exception:
+        # Se houver erro ao acessar usuário, deixar lista vazia
+        user_actions = []
+    
+    # Timestamp para cache busting de avatares
+    import time
+    timestamp = int(time.time())
+    
+    # Obter flags dos filtros
+    filter_flags = report.filter_flags.select_related('content_filter').order_by('-confidence_score')
+    
+    # Calcular estatísticas dos filtros
+    max_confidence = 0
+    if filter_flags.exists():
+        max_confidence = filter_flags.first().confidence_score * 100  # Converter para porcentagem
     
     context = {
         'report': report,
         'action_form': action_form,
         'similar_reports': similar_reports,
         'user_actions': user_actions,
+        'filter_flags': filter_flags,
+        'max_confidence': max_confidence,
+        'timestamp': timestamp,
     }
     
     return render(request, 'social/moderation/report_detail.html', context)

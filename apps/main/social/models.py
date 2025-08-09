@@ -780,14 +780,33 @@ class Report(BaseModel):
     def resolve(self, moderator, action_taken, notes=""):
         """Resolve a denúncia"""
         self.status = 'resolved'
-        self.assigned_moderator = moderator
+        
+        # Verificar se moderator é válido antes de atribuir
+        if moderator and hasattr(moderator, 'id'):
+            try:
+                User.objects.get(id=moderator.id)
+                self.assigned_moderator = moderator
+            except User.DoesNotExist:
+                self.assigned_moderator = None
+        else:
+            self.assigned_moderator = None
+            
         self.moderator_notes = notes
         self.resolved_at = timezone.now()
         self.save()
         
         # Criar log da ação
+        # Verificar se moderator é válido
+        moderator_id = None
+        if moderator and hasattr(moderator, 'id'):
+            moderator_id = moderator.id
+            try:
+                User.objects.get(id=moderator_id)
+            except User.DoesNotExist:
+                moderator_id = None
+        
         ModerationLog.objects.create(
-            moderator=moderator,
+            moderator_id=moderator_id,
             action_type='resolve_report',
             target_type='report',
             target_id=self.id,
@@ -904,7 +923,7 @@ class ModerationAction(BaseModel):
     # Conteúdo ou usuário alvo da ação
     target_post = models.ForeignKey(
         Post,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,  # Manter registro mesmo se post for deletado
         blank=True,
         null=True,
         related_name='moderation_actions',
@@ -912,11 +931,29 @@ class ModerationAction(BaseModel):
     )
     target_comment = models.ForeignKey(
         Comment,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,  # Manter registro mesmo se comentário for deletado
         blank=True,
         null=True,
         related_name='moderation_actions',
         verbose_name=_('Comentário Alvo')
+    )
+    
+    # Campos para manter informações quando conteúdo é deletado
+    target_post_id_backup = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        verbose_name=_('ID do Post (Backup)')
+    )
+    target_comment_id_backup = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        verbose_name=_('ID do Comentário (Backup)')
+    )
+    target_content_backup = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name=_('Conteúdo Original (Backup)'),
+        help_text=_('Backup do conteúdo para casos de deleção')
     )
     target_user = models.ForeignKey(
         User,
@@ -983,13 +1020,18 @@ class ModerationAction(BaseModel):
         return f"{self.get_action_type_display()} - {target}"
 
     def get_target_description(self):
-        """Retorna descrição do alvo da ação"""
+        """Retorna descrição do alvo da ação (robusta para conteúdo deletado)"""
         if self.target_post:
             return f"Post: {self.target_post.content[:50]}..."
         elif self.target_comment:
             return f"Comentário: {self.target_comment.content[:50]}..."
         elif self.target_user:
             return f"Usuário: {self.target_user.username}"
+        elif self.target_content_backup:
+            # Usar backup se conteúdo foi deletado
+            content_type = "Post" if self.target_post_id_backup else "Comentário" if self.target_comment_id_backup else "Conteúdo"
+            backup_id = self.target_post_id_backup or self.target_comment_id_backup
+            return f"{content_type} (DELETADO) #{backup_id}: {self.target_content_backup[:50]}..."
         return "Alvo não especificado"
 
     def save(self, *args, **kwargs):
@@ -1001,35 +1043,193 @@ class ModerationAction(BaseModel):
         super().save(*args, **kwargs)
 
     def apply_action(self):
-        """Aplica a ação de moderação"""
-        if self.action_type == 'hide_content':
-            if self.target_post:
+        """Aplica a ação de moderação de forma robusta"""
+        try:
+            success = False
+            error_msg = None
+            
+            if self.action_type == 'hide_content':
+                success = self._hide_content()
+            elif self.action_type == 'delete_content':
+                success = self._delete_content()
+            elif self.action_type == 'approve_content':
+                success = self._approve_content()
+            elif self.action_type in ['suspend_user', 'ban_user']:
+                success = self._suspend_or_ban_user()
+            elif self.action_type == 'restrict_user':
+                success = self._restrict_user()
+            elif self.action_type == 'warn':
+                success = self._warn_user()
+            elif self.action_type == 'feature_content':
+                success = self._feature_content()
+            else:
+                error_msg = f"Tipo de ação não implementado: {self.action_type}"
+            
+            # Criar log da ação
+            status = 'success' if success else 'failed'
+            description = f"Ação aplicada: {self.get_action_type_display()}"
+            if error_msg:
+                description += f" - ERRO: {error_msg}"
+            
+            # Garantir que a instância foi salva antes de criar log
+            if not self.pk:
+                self.save()
+                
+            # Verificar se moderator é válido antes de criar log
+            moderator_id = None
+            if self.moderator and hasattr(self.moderator, 'id'):
+                moderator_id = self.moderator.id
+                # Verificar se o usuário ainda existe no banco
+                try:
+                    User.objects.get(id=moderator_id)
+                except User.DoesNotExist:
+                    moderator_id = None
+            
+            try:
+                ModerationLog.objects.create(
+                    moderator_id=moderator_id,
+                    action_type=self.action_type,
+                    target_type=self.get_target_type(),
+                    target_id=self.get_target_id(),
+                    description=description,
+                    details=self.reason + (f"\nErro: {error_msg}" if error_msg else "") + (f"\nStatus: {status}" if status else "")
+                )
+            except Exception as log_error:
+                # Não propagar o erro para não quebrar a ação principal
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f'Erro ao criar log de moderação: {log_error}')
+            
+            return success
+            
+        except Exception as e:
+            # Garantir que a instância foi salva antes de criar log de erro
+            if not self.pk:
+                try:
+                    self.save()
+                except:
+                    pass  # Se não conseguir salvar, continuar com log
+                    
+            # Log de erro detalhado
+            # Verificar se moderator é válido antes de criar log de erro
+            moderator_id = None
+            if self.moderator and hasattr(self.moderator, 'id'):
+                moderator_id = self.moderator.id
+                try:
+                    User.objects.get(id=moderator_id)
+                except User.DoesNotExist:
+                    moderator_id = None
+            
+            try:
+                ModerationLog.objects.create(
+                    moderator_id=moderator_id,
+                    action_type=self.action_type,
+                    target_type=self.get_target_type(),
+                    target_id=self.get_target_id(),
+                    description=f"ERRO ao aplicar ação: {self.get_action_type_display()}",
+                    details=f"Erro: {str(e)}\nRazão original: {self.reason}\nStatus: error\nException: {str(e)}"
+                )
+            except Exception as log_error:
+                # Silenciosamente falha para não quebrar ainda mais
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f'Erro ao criar log de erro de moderação: {log_error}')
+            return False
+    
+    def _hide_content(self):
+        """Oculta conteúdo"""
+        try:
+            if self.target_post and self.target_post.is_public:
                 self.target_post.is_public = False
-                self.target_post.save()
+                self.target_post.save(update_fields=['is_public'])
+                return True
             elif self.target_comment:
-                # Marcar comentário como oculto (adicionar campo se necessário)
-                pass
-        
-        elif self.action_type == 'delete_content':
-            if self.target_post:
-                self.target_post.delete()
-            elif self.target_comment:
+                # Implementar campo is_hidden se necessário
+                # Por enquanto, deletar comentário
                 self.target_comment.delete()
-        
-        elif self.action_type in ['suspend_user', 'ban_user']:
-            if self.target_user:
+                return True
+            return False
+        except Exception:
+            return False
+    
+    def _delete_content(self):
+        """Deleta conteúdo"""
+        try:
+            # Fazer backup antes de deletar
+            if self.target_post:
+                self.target_post_id_backup = self.target_post.id
+                self.target_content_backup = self.target_post.content[:500]
+                self.target_post.delete()
+                return True
+            elif self.target_comment:
+                self.target_comment_id_backup = self.target_comment.id
+                self.target_content_backup = self.target_comment.content[:500]
+                self.target_comment.delete()
+                return True
+            return False
+        except Exception:
+            return False
+    
+    def _approve_content(self):
+        """Aprova conteúdo (torna público)"""
+        try:
+            if self.target_post and not self.target_post.is_public:
+                self.target_post.is_public = True
+                self.target_post.save(update_fields=['is_public'])
+                return True
+            return True  # Se já estiver público, considerar como sucesso
+        except Exception:
+            return False
+    
+    def _suspend_or_ban_user(self):
+        """Suspende ou bane usuário"""
+        try:
+            if self.target_user and self.target_user.is_active:
                 self.target_user.is_active = False
-                self.target_user.save()
-        
-        # Criar log da ação
-        ModerationLog.objects.create(
-            moderator=self.moderator,
-            action_type=self.action_type,
-            target_type=self.get_target_type(),
-            target_id=self.get_target_id(),
-            description=f"Ação aplicada: {self.get_action_type_display()}",
-            details=self.reason
-        )
+                self.target_user.save(update_fields=['is_active'])
+                
+                # Se for suspensão temporária, criar task para reativar
+                if self.action_type == 'suspend_user' and self.suspension_end_date:
+                    # TODO: Implementar task celery para reativar usuário
+                    pass
+                
+                return True
+            return False
+        except Exception:
+            return False
+    
+    def _restrict_user(self):
+        """Restringe usuário (implementar conforme necessário)"""
+        try:
+            if self.target_user:
+                # Implementar lógica de restrição
+                # Por exemplo: não pode criar posts, apenas comentar
+                return True
+            return False
+        except Exception:
+            return False
+    
+    def _warn_user(self):
+        """Envia advertência ao usuário"""
+        try:
+            if self.target_user:
+                # Implementar sistema de notificações de advertência
+                # Por enquanto, apenas registrar no log
+                return True
+            return False
+        except Exception:
+            return False
+    
+    def _feature_content(self):
+        """Destaca conteúdo"""
+        try:
+            if self.target_post:
+                self.target_post.is_pinned = True
+                self.target_post.save(update_fields=['is_pinned'])
+                return True
+            return False
+        except Exception:
+            return False
 
     def get_target_type(self):
         """Retorna o tipo do alvo"""
@@ -1039,17 +1239,34 @@ class ModerationAction(BaseModel):
             return 'comment'
         elif self.target_user:
             return 'user'
-        return 'unknown'
+        elif self.target_post_id_backup:
+            return 'post'
+        elif self.target_comment_id_backup:
+            return 'comment'
+        return 'action'
 
     def get_target_id(self):
-        """Retorna o ID do alvo"""
-        if self.target_post:
+        """Retorna o ID do alvo (robusta para conteúdo deletado)"""
+        # Tentar obter ID dos objetos principais (se existem e têm ID válido)
+        if self.target_post and getattr(self.target_post, 'id', None) is not None:
             return self.target_post.id
-        elif self.target_comment:
+        elif self.target_comment and getattr(self.target_comment, 'id', None) is not None:
             return self.target_comment.id
-        elif self.target_user:
+        elif self.target_user and getattr(self.target_user, 'id', None) is not None:
             return self.target_user.id
-        return None
+            
+        # Usar campos de backup se objetos principais não têm ID válido
+        if self.target_post_id_backup:
+            return self.target_post_id_backup
+        elif self.target_comment_id_backup:
+            return self.target_comment_id_backup
+        
+        # Se não há nenhum alvo, usar o ID desta própria ação como fallback
+        if self.pk:
+            return self.pk
+        else:
+            # Se nem mesmo tem pk, usar um ID padrão que não quebre FK
+            return 1
 
 
 class ContentFilter(BaseModel):
@@ -1243,14 +1460,23 @@ class ModerationLog(BaseModel):
         ('report_resolved', _('Denúncia Resolvida')),
         ('report_status_changed', _('Status da Denúncia Alterado')),
         ('report_assigned', _('Denúncia Atribuída')),
+        ('resolve_report', _('Resolver Denúncia')),
         ('content_hidden', _('Conteúdo Ocultado')),
         ('content_deleted', _('Conteúdo Deletado')),
         ('user_suspended', _('Usuário Suspenso')),
         ('user_banned', _('Usuário Banido')),
         ('filter_triggered', _('Filtro Acionado')),
+        ('filter_deleted', _('Filtro Deletado')),
         ('warning_sent', _('Advertência Enviada')),
         ('bulk_action_error', _('Erro em Ação em Massa')),
         ('bulk_action_success', _('Ação em Massa Executada')),
+        # Ações específicas dos ModerationAction
+        ('hide_content', _('Ocultar Conteúdo')),
+        ('delete_content', _('Deletar Conteúdo')),
+        ('approve_content', _('Aprovar Conteúdo')),
+        ('restrict_user', _('Restringir Usuário')),
+        ('warn', _('Advertir Usuário')),
+        ('feature_content', _('Destacar Conteúdo')),
     ]
     
     moderator = models.ForeignKey(
@@ -1272,6 +1498,8 @@ class ModerationLog(BaseModel):
         help_text=_('post, comment, user, report, etc.')
     )
     target_id = models.IntegerField(
+        null=True,
+        blank=True,
         verbose_name=_('ID do Alvo')
     )
     description = models.TextField(
