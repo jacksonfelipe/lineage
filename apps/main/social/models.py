@@ -1178,6 +1178,8 @@ class ModerationLog(BaseModel):
         ('user_banned', _('Usuário Banido')),
         ('filter_triggered', _('Filtro Acionado')),
         ('warning_sent', _('Advertência Enviada')),
+        ('bulk_action_error', _('Erro em Ação em Massa')),
+        ('bulk_action_success', _('Ação em Massa Executada')),
     ]
     
     moderator = models.ForeignKey(
@@ -1236,18 +1238,41 @@ class ModerationLog(BaseModel):
     @classmethod
     def log_action(cls, moderator, action_type, target_type, target_id, description, details=None, request=None):
         """Método de classe para facilitar a criação de logs"""
-        log = cls.objects.create(
-            moderator=moderator,
-            action_type=action_type,
-            target_type=target_type,
-            target_id=target_id,
-            description=description,
-            details=details
-        )
+        # Validar campos obrigatórios
+        if not action_type:
+            raise ValueError('action_type é obrigatório')
+        if not target_type:
+            raise ValueError('target_type é obrigatório')
+        if target_id is None:
+            raise ValueError('target_id é obrigatório')
+        if not description:
+            raise ValueError('description é obrigatório')
         
-        if request:
-            log.ip_address = request.META.get('REMOTE_ADDR')
-            log.user_agent = request.META.get('HTTP_USER_AGENT')
-            log.save()
+        # Verificar se action_type é válido
+        valid_types = [choice[0] for choice in cls.LOG_TYPES]
+        if action_type not in valid_types:
+            raise ValueError(f'Tipo de ação inválido: {action_type}. Tipos válidos: {valid_types}')
         
-        return log
+        try:
+            log = cls.objects.create(
+                moderator=moderator,
+                action_type=action_type,
+                target_type=target_type,
+                target_id=target_id,
+                description=description,
+                details=details
+            )
+            
+            if request:
+                log.ip_address = request.META.get('REMOTE_ADDR')
+                log.user_agent = request.META.get('HTTP_USER_AGENT')
+                log.save()
+            
+            return log
+        except Exception as e:
+            # Em caso de erro, não propagar a exceção para não quebrar o fluxo principal
+            # Log do erro em outra forma se necessário
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f'Erro ao criar log de moderação: {e}')
+            return None

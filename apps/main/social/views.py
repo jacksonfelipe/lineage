@@ -1815,46 +1815,123 @@ def bulk_moderation_action(request):
         
         reports = Report.objects.filter(id__in=report_ids)
         processed_count = 0
+        failed_count = 0
+        errors = []
+        
+        if not reports.exists():
+            return JsonResponse({'error': _('Nenhuma denúncia válida encontrada')}, status=400)
         
         for report in reports:
-            if action_type == 'assign_moderator' and assigned_moderator_id:
-                report.assigned_moderator_id = assigned_moderator_id
-                report.status = 'reviewing'
-                report.save()
-                processed_count += 1
+            try:
+                if action_type == 'assign_moderator' and assigned_moderator_id:
+                    # Verificar se o moderador existe e tem permissões
+                    try:
+                        moderator = get_user_model().objects.get(id=assigned_moderator_id, is_staff=True)
+                        if not moderator.has_perm('social.can_take_moderation_actions'):
+                            raise ValueError(_('Moderador selecionado não tem permissões necessárias'))
+                    except get_user_model().DoesNotExist:
+                        raise ValueError(_('Moderador selecionado não encontrado'))
+                    
+                    report.assigned_moderator_id = assigned_moderator_id
+                    report.status = 'reviewing'
+                    report.save()
+                    processed_count += 1
+                    
+                    # Log da ação
+                    try:
+                        ModerationLog.log_action(
+                            moderator=request.user,
+                            action_type='report_assigned',
+                            target_type='report',
+                            target_id=report.id,
+                            description=f'Denúncia atribuída ao moderador',
+                            details=reason
+                        )
+                    except Exception:
+                        # Falha no log não deve impedir a operação principal
+                        pass
                 
-                # Log da ação
-                ModerationLog.log_action(
-                    moderator=request.user,
-                    action_type='report_assigned',
-                    target_type='report',
-                    target_id=report.id,
-                    description=f'Denúncia atribuída ao moderador',
-                    details=reason
-                )
-            
-            elif action_type in ['hide_content', 'delete_content']:
-                # Criar ação de moderação
-                action = ModerationAction.objects.create(
-                    moderator=request.user,
-                    action_type=action_type,
-                    reason=reason,
-                    target_post=report.reported_post,
-                    target_comment=report.reported_comment,
-                    target_user=report.reported_user
-                )
+                elif action_type in ['hide_content', 'delete_content', 'warn']:
+                    # Verificar se há conteúdo para aplicar a ação
+                    if not (report.reported_post or report.reported_comment or report.reported_user):
+                        raise ValueError(_('Denúncia não possui conteúdo válido para aplicar ação'))
+                    
+                    # Validações específicas por tipo de ação
+                    if action_type in ['hide_content', 'delete_content']:
+                        # Verificar se o conteúdo ainda existe
+                        content_exists = False
+                        if report.reported_post:
+                            try:
+                                # Verificar se o post ainda existe
+                                Post.objects.get(id=report.reported_post.id)
+                                content_exists = True
+                            except Post.DoesNotExist:
+                                raise ValueError(_('Post reportado não existe mais'))
+                        elif report.reported_comment:
+                            try:
+                                # Verificar se o comentário ainda existe
+                                Comment.objects.get(id=report.reported_comment.id)
+                                content_exists = True
+                            except Comment.DoesNotExist:
+                                raise ValueError(_('Comentário reportado não existe mais'))
+                        
+                        if not content_exists:
+                            raise ValueError(_('Conteúdo reportado não existe mais'))
+                    
+                    if action_type == 'warn' and not report.reported_user:
+                        raise ValueError(_('Ação de advertência requer usuário reportado'))
+                    
+                    # Criar ação de moderação
+                    action = ModerationAction.objects.create(
+                        moderator=request.user,
+                        action_type=action_type,
+                        reason=reason,
+                        target_post=report.reported_post,
+                        target_comment=report.reported_comment,
+                        target_user=report.reported_user
+                    )
+                    
+                    # Aplicar ação
+                    action.apply_action()
+                    
+                    # Resolver denúncia
+                    report.resolve(request.user, action.get_action_type_display(), reason)
+                    processed_count += 1
+                    
+            except Exception as e:
+                failed_count += 1
+                error_msg = f'Denúncia #{report.id}: {str(e)}'
+                errors.append(error_msg)
                 
-                # Aplicar ação
-                action.apply_action()
-                
-                # Resolver denúncia
-                report.resolve(request.user, action.get_action_type_display(), reason)
-                processed_count += 1
+                # Log do erro mas continua processando outras denúncias
+                try:
+                    ModerationLog.log_action(
+                        moderator=request.user,
+                        action_type='bulk_action_error',
+                        target_type='report',
+                        target_id=report.id,
+                        description=f'Erro ao processar denúncia: {str(e)}',
+                        details=reason
+                    )
+                except Exception:
+                    # Falha no log não deve impedir a operação principal
+                    pass
+        
+        # Preparar resposta
+        success_message = _('Ação aplicada com sucesso')
+        if failed_count > 0:
+            success_message = _('Ação aplicada com sucesso em %(processed)d denúncia(s). %(failed)d falharam.') % {
+                'processed': processed_count,
+                'failed': failed_count
+            }
         
         return JsonResponse({
             'success': True,
             'processed_count': processed_count,
-            'message': _('Ação aplicada com sucesso')
+            'failed_count': failed_count,
+            'total_count': len(report_ids),
+            'errors': errors,
+            'message': success_message
         })
     
     return JsonResponse({'error': _('Método não permitido')}, status=405)

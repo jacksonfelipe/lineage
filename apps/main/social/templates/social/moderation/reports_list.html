@@ -424,17 +424,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Confirmação de ação em massa
     bulkActionForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
         const checkedBoxes = document.querySelectorAll('.report-checkbox:checked');
         const actionType = document.getElementById('bulk-action-type').value;
         
         if (checkedBoxes.length === 0) {
-            e.preventDefault();
             alert('{% trans "Selecione pelo menos uma denúncia." %}');
             return;
         }
 
         if (!actionType) {
-            e.preventDefault();
             alert('{% trans "Selecione uma ação." %}');
             return;
         }
@@ -442,8 +442,43 @@ document.addEventListener('DOMContentLoaded', function() {
         const confirmMessage = `{% trans "Tem certeza que deseja aplicar a ação" %} "${actionType}" {% trans "em" %} ${checkedBoxes.length} {% trans "denúncia(s)?" %}`;
         
         if (!confirm(confirmMessage)) {
-            e.preventDefault();
+            return;
         }
+
+        // Limpar inputs anteriores de report_ids
+        const existingInputs = bulkActionForm.querySelectorAll('input[name="report_ids"]');
+        existingInputs.forEach(input => input.remove());
+
+        // Adicionar IDs dos relatórios selecionados ao formulário
+        checkedBoxes.forEach(checkbox => {
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'report_ids';
+            hiddenInput.value = checkbox.value;
+            bulkActionForm.appendChild(hiddenInput);
+        });
+
+        // Submeter o formulário via AJAX para melhor feedback
+        fetch(bulkActionForm.action, {
+            method: 'POST',
+            body: new FormData(bulkActionForm)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let message = data.message;
+                if (data.errors && data.errors.length > 0) {
+                    message += '\n\nErros encontrados:\n' + data.errors.join('\n');
+                }
+                alert(message);
+                location.reload();
+            } else {
+                alert('Erro: ' + (data.error || 'Erro desconhecido'));
+            }
+        })
+        .catch(error => {
+            alert('Erro de conexão: ' + error.message);
+        });
     });
 });
 
