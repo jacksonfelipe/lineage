@@ -20,7 +20,7 @@
     <div class="container-fluid px-3 py-2">
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
-          <div class="avatar-container me-2" style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden;">
+          <div class="social-avatar-container me-2" style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden;">
             {% if user.avatar %}
               <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
                    alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
@@ -154,7 +154,7 @@
             </h5>
           </div>
           <div class="card-body text-center">
-            <div class="avatar-container mb-3" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin: 0 auto;">
+            <div class="social-avatar-container mb-3" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin: 0 auto;">
               {% if user.avatar %}
                 <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
                      alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
@@ -498,12 +498,12 @@ document.addEventListener('DOMContentLoaded', function() {
     margin-bottom: 1rem !important;
   }
   
-  .avatar-container {
+  .social-avatar-container {
     width: 40px !important;
     height: 40px !important;
   }
   
-  .d-lg-none .avatar-container {
+  .d-lg-none .social-avatar-container {
     width: 32px !important;
     height: 32px !important;
   }

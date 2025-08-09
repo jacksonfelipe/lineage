@@ -183,7 +183,7 @@
     max-width: 70%;
   }
 
-  .avatar-container {
+  .admin-admin-avatar-container {
     width: 45px;
     height: 45px;
     border-radius: 50%;
@@ -193,7 +193,7 @@
     flex-shrink: 0;
   }
 
-  .avatar-container img {
+  .admin-admin-avatar-container img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -490,7 +490,7 @@
       <div id="messages-container">
         {% for message in chat_messages %}
           <div class="chat-message {% if message.sender.username == username %}sent{% else %}received{% endif %}">
-            <div class="avatar-container">
+            <div class="admin-avatar-container">
               <img 
                 src="{% if message.sender.avatar %}{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' message.sender.uuid timestamp %}{% else %}{% static 'assets/img/team/generic_user.png' %}{% endif %}" 
                 alt="{{ message.sender.username }}" />

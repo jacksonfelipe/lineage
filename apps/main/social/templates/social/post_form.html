@@ -26,7 +26,7 @@
     <div class="container-fluid px-3 py-2">
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
-          <div class="avatar-container me-2" style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden;">
+          <div class="social-avatar-container me-2" style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden;">
             {% if user.avatar %}
               <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
                    alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
@@ -57,7 +57,7 @@
       <!-- Card do perfil do usuário -->
       <div class="card mb-4">
         <div class="card-body text-center">
-          <div class="avatar-container mb-3" style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; margin: 0 auto;">
+          <div class="social-avatar-container mb-3" style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; margin: 0 auto;">
             {% if user.avatar %}
               <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
                    alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
@@ -165,7 +165,7 @@
             
             <!-- Campo de conteúdo sempre visível -->
             <div class="d-flex align-items-start mb-3">
-              <div class="avatar-container me-2 me-lg-3" style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden; flex-shrink: 0;">
+              <div class="social-avatar-container me-2 me-lg-3" style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden; flex-shrink: 0;">
                 {% if user.avatar %}
                   <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
                        alt="Avatar" class="w-100 h-100" style="object-fit: cover; border-radius: 50%;">
@@ -562,7 +562,7 @@
           <div class="list-group list-group-flush">
             {% for suggested_user in suggested_users|slice:":5" %}
               <div class="list-group-item d-flex align-items-center">
-                <div class="avatar-container me-2" style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden;">
+                <div class="social-avatar-container me-2" style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden;">
                   {% if suggested_user.avatar %}
                     <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' suggested_user.uuid timestamp %}" 
                          alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
@@ -1020,12 +1020,12 @@ function clearLinkMobile() {
     transform: scale(1.05);
   }
   
-  .avatar-container {
+  .social-social-avatar-container {
     width: 40px !important;
     height: 40px !important;
   }
   
-  .d-lg-none .avatar-container {
+  .d-lg-none .social-social-avatar-container {
     width: 32px !important;
     height: 32px !important;
   }
