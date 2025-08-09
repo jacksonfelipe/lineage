@@ -654,8 +654,11 @@ class Report(BaseModel):
     reporter = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        blank=True,
+        null=True,
         related_name='reports_made',
-        verbose_name=_('Denunciante')
+        verbose_name=_('Denunciante'),
+        help_text=_('Deixe em branco para denúncias geradas pelo sistema')
     )
     report_type = models.CharField(
         max_length=20,
@@ -1075,7 +1078,12 @@ class ContentFilter(BaseModel):
             pattern = self.pattern.lower()
         
         if self.filter_type == 'keyword':
-            return pattern in text
+            # Para keywords, dividir o padrão em palavras individuais
+            keywords = pattern.split()
+            for keyword in keywords:
+                if keyword.strip() in text:
+                    return True
+            return False
         elif self.filter_type == 'regex':
             import re
             try:
@@ -1086,11 +1094,34 @@ class ContentFilter(BaseModel):
             except re.error:
                 return False
         elif self.filter_type == 'spam_pattern':
-            # Padrões comuns de spam
+            # Padrões comuns de spam em português e inglês
             spam_patterns = [
-                r'\b(buy|sell|cheap|discount|free|money|earn|rich)\b',
+                # Palavras de ganho fácil (português e inglês)
+                r'\b(ganhe|ganhar|dinheiro|fácil|rápido|grátis|free|money|earn|easy|rich)\b',
+                r'\b(clique|click|here|aqui|agora|now|urgente|urgent)\b',
+                
+                # Frases comuns de spam
+                r'ganhe? dinheiro',
+                r'dinheiro fácil',
+                r'renda extra',
+                r'trabalhe em casa',
+                r'oportunidade única',
+                r'limited time',
+                r'act now',
+                r'click here',
+                r'clique aqui',
+                
+                # Padrões originais em inglês
+                r'\b(buy|sell|cheap|discount|business|opportunity)\b',
                 r'\b(viagra|cialis|casino|poker|lottery)\b',
                 r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+',
+                
+                # Múltiplos sinais de exclamação ou interrogação
+                r'[!]{3,}',
+                r'[?]{3,}',
+                
+                # Caps excessivo
+                r'[A-Z]{10,}',
             ]
             import re
             for spam_pattern in spam_patterns:

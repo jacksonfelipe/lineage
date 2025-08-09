@@ -311,6 +311,28 @@ class Command(BaseCommand):
         # ============================================================================
         brazil_specific_filters = [
             {
+                'name': 'Spam Comercial em Português',
+                'filter_type': 'regex',
+                'pattern': r'\b(ganhe|ganhar|dinheiro|fácil|rápido|grátis)\b.*\b(clique|click|aqui|agora|urgente)\b',
+                'action': 'flag',
+                'description': 'Detecta spam comercial típico em português',
+                'case_sensitive': False,
+                'apply_to_posts': True,
+                'apply_to_comments': True,
+                'apply_to_usernames': False
+            },
+            {
+                'name': 'Palavras de Golpe em Português',
+                'filter_type': 'keyword',
+                'pattern': 'ganhe dinheiro fácil clique aqui agora renda extra trabalhe casa oportunidade única grátis urgente',
+                'action': 'flag',
+                'description': 'Detecta palavras comuns em golpes e spam em português',
+                'case_sensitive': False,
+                'apply_to_posts': True,
+                'apply_to_comments': True,
+                'apply_to_usernames': False
+            },
+            {
                 'name': 'Golpes Brasileiros',
                 'filter_type': 'keyword',
                 'pattern': 'pix gratis auxilio emergencial bolsa familia cpf liberado fgts saque',
