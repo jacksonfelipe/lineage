@@ -2062,35 +2062,7 @@ def bulk_moderation_action(request):
         
         for report in reports:
             try:
-                if action_type == 'assign_moderator' and assigned_moderator_id:
-                    # Verificar se o moderador existe e tem permissões
-                    try:
-                        moderator = get_user_model().objects.get(id=assigned_moderator_id, is_staff=True)
-                        if not moderator.has_perm('social.can_take_moderation_actions'):
-                            raise ValueError(_('Moderador selecionado não tem permissões necessárias'))
-                    except get_user_model().DoesNotExist:
-                        raise ValueError(_('Moderador selecionado não encontrado'))
-                    
-                    report.assigned_moderator_id = assigned_moderator_id
-                    report.status = 'reviewing'
-                    report.save()
-                    processed_count += 1
-                    
-                    # Log da ação
-                    try:
-                        ModerationLog.log_action(
-                            moderator=request.user,
-                            action_type='report_assigned',
-                            target_type='report',
-                            target_id=report.id,
-                            description=f'Denúncia atribuída ao moderador',
-                            details=reason
-                        )
-                    except Exception:
-                        # Falha no log não deve impedir a operação principal
-                        pass
-                
-                elif action_type in ['hide_content', 'delete_content', 'warn']:
+                if action_type in ['hide_content', 'delete_content', 'warn']:
                     # Verificar se há conteúdo para aplicar a ação
                     if not (report.reported_post or report.reported_comment or report.reported_user):
                         raise ValueError(_('Denúncia não possui conteúdo válido para aplicar ação'))
@@ -2117,8 +2089,17 @@ def bulk_moderation_action(request):
                         if not content_exists:
                             raise ValueError(_('Conteúdo reportado não existe mais'))
                     
-                    if action_type == 'warn' and not report.reported_user:
-                        raise ValueError(_('Ação de advertência requer usuário reportado'))
+                    # Para ações de advertência, determinar o usuário alvo
+                    target_user = report.reported_user
+                    if action_type == 'warn':
+                        if not target_user:
+                            # Inferir usuário a partir do conteúdo reportado
+                            if report.reported_post:
+                                target_user = report.reported_post.author
+                            elif report.reported_comment:
+                                target_user = report.reported_comment.author
+                            else:
+                                raise ValueError(_('Ação de advertência requer usuário reportado ou conteúdo com autor'))
                     
                     # Criar ação de moderação
                     action = ModerationAction.objects.create(
@@ -2127,7 +2108,7 @@ def bulk_moderation_action(request):
                         reason=reason,
                         target_post=report.reported_post,
                         target_comment=report.reported_comment,
-                        target_user=report.reported_user
+                        target_user=target_user
                     )
                     
                     # Aplicar ação
@@ -2136,6 +2117,10 @@ def bulk_moderation_action(request):
                     # Resolver denúncia
                     report.resolve(request.user, action.get_action_type_display(), reason)
                     processed_count += 1
+                
+                else:
+                    # Ação não reconhecida
+                    raise ValueError(_('Tipo de ação não reconhecido: %(action)s') % {'action': action_type})
                     
             except Exception as e:
                 failed_count += 1

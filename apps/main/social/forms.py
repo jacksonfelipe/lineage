@@ -669,7 +669,6 @@ class BulkModerationForm(forms.Form):
             ('hide_content', _('Ocultar Conteúdo')),
             ('delete_content', _('Deletar Conteúdo')),
             ('warn', _('Enviar Advertência')),
-            ('assign_moderator', _('Atribuir Moderador')),
         ],
         widget=forms.Select(attrs={
             'class': 'form-control',
@@ -701,10 +700,5 @@ class BulkModerationForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        action_type = cleaned_data.get('action_type')
-        assigned_moderator = cleaned_data.get('assigned_moderator')
-
-        if action_type == 'assign_moderator' and not assigned_moderator:
-            raise forms.ValidationError(_('Selecione um moderador para atribuir.'))
-
+        # Validações podem ser adicionadas aqui conforme necessário
         return cleaned_data
