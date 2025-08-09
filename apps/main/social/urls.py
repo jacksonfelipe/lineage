@@ -55,5 +55,7 @@ urlpatterns = [
     
     # Logs e ações
     path('moderation/logs/', views.moderation_logs, name='moderation_logs'),
+    path('moderation/logs/export/excel/', views.export_logs_excel, name='export_logs_excel'),
+    path('moderation/logs/export/csv/', views.export_logs_csv, name='export_logs_csv'),
     path('moderation/bulk-action/', views.bulk_moderation_action, name='bulk_moderation_action'),
 ]

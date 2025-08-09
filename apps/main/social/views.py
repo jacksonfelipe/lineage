@@ -1323,9 +1323,355 @@ def moderation_logs(request):
         'active_moderators': active_moderators,
         'action_types': ModerationLog.LOG_TYPES,
         'moderators': User.objects.filter(is_staff=True),
+        'current_filters': {
+            'action_type': action_type,
+            'moderator_id': moderator_id,
+            'date_from': date_from,
+            'date_to': date_to,
+        }
     }
     
     return render(request, 'social/moderation/logs.html', context)
+
+
+@login_required
+def export_logs_excel(request):
+    """Exportar logs de moderação em Excel formatado"""
+    if not request.user.has_perm('social.can_view_moderation_logs'):
+        messages.error(request, _('Você não tem permissão para exportar logs.'))
+        return redirect('social:moderation_logs')
+    
+    try:
+        import openpyxl
+        from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+        from openpyxl.utils import get_column_letter
+    except ImportError:
+        messages.error(request, _('Biblioteca openpyxl não está instalada. Use: pip install openpyxl'))
+        return redirect('social:moderation_logs')
+    
+    from django.http import HttpResponse
+    from datetime import datetime
+    
+    # Aplicar os mesmos filtros da view de logs
+    logs = ModerationLog.objects.all().select_related('moderator').order_by('-created_at')
+    
+    # Filtros da query string
+    action_type = request.GET.get('action_type')
+    moderator_id = request.GET.get('moderator')
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+    
+    if action_type:
+        logs = logs.filter(action_type=action_type)
+    if moderator_id:
+        logs = logs.filter(moderator_id=moderator_id)
+    if date_from:
+        logs = logs.filter(created_at__date__gte=date_from)
+    if date_to:
+        logs = logs.filter(created_at__date__lte=date_to)
+    
+    # Limitar a 10.000 registros para evitar problemas de performance
+    logs = logs[:10000]
+    
+    # Criar workbook
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Logs de Moderação"
+    
+    # Estilos
+    header_font = Font(name='Calibri', size=11, bold=True, color='FFFFFF')
+    header_fill = PatternFill(start_color='2E75B6', end_color='2E75B6', fill_type='solid')
+    header_alignment = Alignment(horizontal='center', vertical='center')
+    
+    border_thin = Border(
+        left=Side(style='thin', color='D1D1D1'),
+        right=Side(style='thin', color='D1D1D1'),
+        top=Side(style='thin', color='D1D1D1'),
+        bottom=Side(style='thin', color='D1D1D1')
+    )
+    
+    data_font = Font(name='Calibri', size=10)
+    data_alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+    
+    # Cabeçalhos
+    headers = [
+        'Data/Hora', 'Moderador', 'Tipo de Ação', 'Tipo do Alvo', 
+        'ID do Alvo', 'Descrição', 'Detalhes', 'IP', 'Navegador'
+    ]
+    
+    # Configurar cabeçalho
+    for col_num, header in enumerate(headers, 1):
+        cell = ws.cell(row=1, column=col_num, value=header)
+        cell.font = header_font
+        cell.fill = header_fill
+        cell.alignment = header_alignment
+        cell.border = border_thin
+    
+    # Dados
+    for row_num, log in enumerate(logs, 2):
+        # Data formatada brasileiro
+        ws.cell(row=row_num, column=1, value=log.created_at.strftime('%d/%m/%Y %H:%M:%S'))
+        
+        # Moderador com nome completo ou username
+        moderator_name = log.moderator.get_full_name() if log.moderator and log.moderator.get_full_name() else (
+            log.moderator.username if log.moderator else 'Sistema Automático'
+        )
+        ws.cell(row=row_num, column=2, value=moderator_name)
+        
+        # Tipo de ação traduzido
+        ws.cell(row=row_num, column=3, value=log.get_action_type_display())
+        
+        # Tipo do alvo com primeira letra maiúscula
+        ws.cell(row=row_num, column=4, value=log.target_type.title())
+        
+        # ID do alvo
+        ws.cell(row=row_num, column=5, value=log.target_id)
+        
+        # Descrição limitada
+        description = log.description[:300] + '...' if len(log.description) > 300 else log.description
+        ws.cell(row=row_num, column=6, value=description)
+        
+        # Detalhes limitados
+        details = log.details
+        if details:
+            details = details[:300] + '...' if len(details) > 300 else details
+        else:
+            details = '-'
+        ws.cell(row=row_num, column=7, value=details)
+        
+        # IP
+        ws.cell(row=row_num, column=8, value=log.ip_address or '-')
+        
+        # Navegador simplificado
+        user_agent = '-'
+        if log.user_agent:
+            ua = log.user_agent.lower()
+            if 'chrome' in ua and 'edge' not in ua:
+                user_agent = 'Chrome'
+            elif 'firefox' in ua:
+                user_agent = 'Firefox'
+            elif 'safari' in ua and 'chrome' not in ua:
+                user_agent = 'Safari'
+            elif 'edge' in ua:
+                user_agent = 'Edge'
+            elif 'opera' in ua:
+                user_agent = 'Opera'
+            else:
+                user_agent = 'Outro'
+        ws.cell(row=row_num, column=9, value=user_agent)
+        
+        # Aplicar estilos
+        for col_num in range(1, 10):
+            cell = ws.cell(row=row_num, column=col_num)
+            cell.font = data_font
+            cell.alignment = data_alignment
+            cell.border = border_thin
+    
+    # Ajustar largura das colunas
+    column_widths = {
+        1: 16,  # Data/Hora
+        2: 18,  # Moderador  
+        3: 22,  # Tipo de Ação
+        4: 14,  # Tipo do Alvo
+        5: 8,   # ID do Alvo
+        6: 45,  # Descrição
+        7: 35,  # Detalhes
+        8: 14,  # IP
+        9: 12,  # Navegador
+    }
+    
+    for col_num, width in column_widths.items():
+        ws.column_dimensions[get_column_letter(col_num)].width = width
+    
+    # Adicionar aba de estatísticas e filtros
+    stats_ws = wb.create_sheet(title="Relatório e Estatísticas")
+    
+    # Cabeçalho do relatório
+    title_font = Font(name='Calibri', size=16, bold=True, color='2E75B6')
+    stats_ws.cell(row=1, column=1, value="RELATÓRIO DE LOGS DE MODERAÇÃO").font = title_font
+    stats_ws.cell(row=2, column=1, value=f"Gerado em: {datetime.now().strftime('%d/%m/%Y às %H:%M:%S')}")
+    stats_ws.cell(row=3, column=1, value=f"Total de registros: {logs.count():,}")
+    
+    # Filtros aplicados
+    row = 5
+    if any([action_type, moderator_id, date_from, date_to]):
+        stats_ws.cell(row=row, column=1, value="FILTROS APLICADOS:").font = Font(bold=True)
+        row += 1
+        if action_type:
+            action_display = dict(ModerationLog.LOG_TYPES).get(action_type, action_type)
+            stats_ws.cell(row=row, column=1, value=f"• Tipo de Ação: {action_display}")
+            row += 1
+        if moderator_id:
+            try:
+                moderator = User.objects.get(id=moderator_id)
+                moderator_name = moderator.get_full_name() or moderator.username
+                stats_ws.cell(row=row, column=1, value=f"• Moderador: {moderator_name}")
+                row += 1
+            except User.DoesNotExist:
+                pass
+        if date_from:
+            stats_ws.cell(row=row, column=1, value=f"• Data inicial: {date_from}")
+            row += 1
+        if date_to:
+            stats_ws.cell(row=row, column=1, value=f"• Data final: {date_to}")
+            row += 1
+        row += 1
+    
+    # Estatísticas por tipo de ação
+    stats_ws.cell(row=row, column=1, value="AÇÕES POR TIPO:").font = Font(bold=True)
+    stats_ws.cell(row=row, column=2, value="Quantidade").font = Font(bold=True)
+    row += 1
+    
+    action_stats = {}
+    for log in logs:
+        action_type_display = log.get_action_type_display()
+        action_stats[action_type_display] = action_stats.get(action_type_display, 0) + 1
+    
+    for action, count in sorted(action_stats.items(), key=lambda x: x[1], reverse=True):
+        stats_ws.cell(row=row, column=1, value=action)
+        stats_ws.cell(row=row, column=2, value=count)
+        row += 1
+    
+    row += 1
+    
+    # Estatísticas por moderador
+    stats_ws.cell(row=row, column=1, value="AÇÕES POR MODERADOR:").font = Font(bold=True)
+    stats_ws.cell(row=row, column=2, value="Quantidade").font = Font(bold=True)
+    row += 1
+    
+    moderator_stats = {}
+    for log in logs:
+        moderator_name = log.moderator.get_full_name() if log.moderator and log.moderator.get_full_name() else (
+            log.moderator.username if log.moderator else 'Sistema Automático'
+        )
+        moderator_stats[moderator_name] = moderator_stats.get(moderator_name, 0) + 1
+    
+    for moderator, count in sorted(moderator_stats.items(), key=lambda x: x[1], reverse=True):
+        stats_ws.cell(row=row, column=1, value=moderator)
+        stats_ws.cell(row=row, column=2, value=count)
+        row += 1
+    
+    # Ajustar largura das colunas da aba de estatísticas
+    stats_ws.column_dimensions['A'].width = 35
+    stats_ws.column_dimensions['B'].width = 12
+    
+    # Preparar resposta
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    
+    # Nome do arquivo com timestamp e filtros
+    filename_parts = ['logs_moderacao']
+    if action_type:
+        filename_parts.append(f'acao_{action_type}')
+    if date_from or date_to:
+        if date_from and date_to:
+            filename_parts.append(f'{date_from}_a_{date_to}')
+        elif date_from:
+            filename_parts.append(f'desde_{date_from}')
+        elif date_to:
+            filename_parts.append(f'ate_{date_to}')
+    
+    filename_parts.append(datetime.now().strftime('%Y%m%d_%H%M%S'))
+    filename = '_'.join(filename_parts) + '.xlsx'
+    
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    
+    wb.save(response)
+    return response
+
+
+@login_required
+def export_logs_csv(request):
+    """Exportar logs de moderação em CSV"""
+    if not request.user.has_perm('social.can_view_moderation_logs'):
+        messages.error(request, _('Você não tem permissão para exportar logs.'))
+        return redirect('social:moderation_logs')
+    
+    import csv
+    from django.http import HttpResponse
+    from datetime import datetime
+    
+    # Aplicar os mesmos filtros da view de logs
+    logs = ModerationLog.objects.all().select_related('moderator').order_by('-created_at')
+    
+    action_type = request.GET.get('action_type')
+    moderator_id = request.GET.get('moderator')
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+    
+    if action_type:
+        logs = logs.filter(action_type=action_type)
+    if moderator_id:
+        logs = logs.filter(moderator_id=moderator_id)
+    if date_from:
+        logs = logs.filter(created_at__date__gte=date_from)
+    if date_to:
+        logs = logs.filter(created_at__date__lte=date_to)
+    
+    # Preparar resposta CSV
+    response = HttpResponse(content_type='text/csv; charset=utf-8')
+    
+    filename_parts = ['logs_moderacao']
+    if action_type:
+        filename_parts.append(f'acao_{action_type}')
+    if date_from or date_to:
+        if date_from and date_to:
+            filename_parts.append(f'{date_from}_a_{date_to}')
+        elif date_from:
+            filename_parts.append(f'desde_{date_from}')
+        elif date_to:
+            filename_parts.append(f'ate_{date_to}')
+    
+    filename_parts.append(datetime.now().strftime('%Y%m%d_%H%M%S'))
+    filename = '_'.join(filename_parts) + '.csv'
+    
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    
+    # BOM para UTF-8 (para Excel abrir corretamente)
+    response.write('\ufeff')
+    
+    writer = csv.writer(response)
+    writer.writerow([
+        'Data/Hora', 'Moderador', 'Tipo de Ação', 'Tipo do Alvo', 'ID do Alvo',
+        'Descrição', 'Detalhes', 'Endereço IP', 'Navegador'
+    ])
+    
+    for log in logs:
+        moderator_name = log.moderator.get_full_name() if log.moderator and log.moderator.get_full_name() else (
+            log.moderator.username if log.moderator else 'Sistema Automático'
+        )
+        
+        # Navegador simplificado
+        user_agent = '-'
+        if log.user_agent:
+            ua = log.user_agent.lower()
+            if 'chrome' in ua and 'edge' not in ua:
+                user_agent = 'Chrome'
+            elif 'firefox' in ua:
+                user_agent = 'Firefox'
+            elif 'safari' in ua and 'chrome' not in ua:
+                user_agent = 'Safari'
+            elif 'edge' in ua:
+                user_agent = 'Edge'
+            elif 'opera' in ua:
+                user_agent = 'Opera'
+            else:
+                user_agent = 'Outro'
+        
+        writer.writerow([
+            log.created_at.strftime('%d/%m/%Y %H:%M:%S'),
+            moderator_name,
+            log.get_action_type_display(),
+            log.target_type.title(),
+            log.target_id,
+            log.description,
+            log.details or '-',
+            log.ip_address or '-',
+            user_agent
+        ])
+    
+    return response
 
 
 @login_required
