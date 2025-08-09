@@ -494,10 +494,29 @@ CACHES = {
 
 # =========================== CELERY CONFIGS ===========================
 
-# e.g., 'redis://localhost:6379/1'
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URI', 'redis://redis:6379/1')
-# e.g., 'redis://localhost:6379/1'
-CELERY_RESULT_BACKEND = os.getenv('CELERY_BACKEND_URI', 'redis://redis:6379/1')
+if DEBUG:
+    # Em modo DEBUG, usar configuração que não depende do Redis
+    CELERY_TASK_ALWAYS_EAGER = True  # Executa tarefas síncronamente
+    CELERY_TASK_EAGER_PROPAGATES = True  # Propaga exceções
+    CELERY_BROKER_URL = 'memory://'  # Broker em memória
+    CELERY_RESULT_BACKEND = 'cache+memory://'  # Backend em memória
+    CELERY_BEAT_SCHEDULE = {}  # Desabilita tarefas periódicas em DEBUG
+else:
+    # e.g., 'redis://localhost:6379/1'
+    CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URI', 'redis://redis:6379/1')
+    # e.g., 'redis://localhost:6379/1'
+    CELERY_RESULT_BACKEND = os.getenv('CELERY_BACKEND_URI', 'redis://redis:6379/1')
+    CELERY_BEAT_SCHEDULE = {
+        'encerrar-leiloes-expirados-cada-minuto': {
+            'task': 'apps.lineage.auction.tasks.encerrar_leiloes_expirados',
+            'schedule': crontab(minute='*/1'),
+        },
+        'encerrar-apoiadores-expirados-cada-minuto': {
+            'task': 'apps.lineage.server.tasks.verificar_cupons_expirados',
+            'schedule': crontab(minute='*/1'),
+        },
+    }
+
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
@@ -505,17 +524,6 @@ CELERY_IGNORE_RESULT = False  # Altere para True se não precisar dos resultados
 CELERY_TIMEZONE = TIME_ZONE
 # Pode ser definido como False se não precisar de rastreio
 CELERY_TRACK_STARTED = True
-
-CELERY_BEAT_SCHEDULE = {
-    'encerrar-leiloes-expirados-cada-minuto': {
-        'task': 'apps.lineage.auction.tasks.encerrar_leiloes_expirados',
-        'schedule': crontab(minute='*/1'),
-    },
-    'encerrar-apoiadores-expirados-cada-minuto': {
-        'task': 'apps.lineage.server.tasks.verificar_cupons_expirados',
-        'schedule': crontab(minute='*/1'),
-    },
-}
 
 # =========================== CHANNELS CONFIGS ===========================
 
