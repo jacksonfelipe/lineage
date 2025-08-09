@@ -194,7 +194,7 @@ Adiciona informações da licença ao request:
 ### Verificar Licença
 
 ```python
-from apps.licence.manager import license_manager
+from apps.main.licence.manager import license_manager
 
 # Verificar se a licença está válida
 if license_manager.check_license_status():

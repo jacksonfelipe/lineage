@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from apps.licence.models import License, LicenseVerification
-from apps.licence.manager import license_manager
+from apps.main.licence.models import License, LicenseVerification
+from apps.main.licence.manager import license_manager
 
 
 class Command(BaseCommand):

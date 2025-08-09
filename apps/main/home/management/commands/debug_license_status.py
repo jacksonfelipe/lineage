@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand
 from django.core.cache import cache
 from django.conf import settings
-from apps.licence.models import License
-from apps.licence.manager import license_manager
+from apps.main.licence.models import License
+from apps.main.licence.manager import license_manager
 from django.utils import timezone
 import logging
 

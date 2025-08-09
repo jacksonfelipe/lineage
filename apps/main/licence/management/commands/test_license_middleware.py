@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from django.test import RequestFactory
 from django.contrib.auth import get_user_model
 from apps.licence.middleware import LicenseMiddleware
-from apps.licence.manager import license_manager
+from apps.main.licence.manager import license_manager
 
 User = get_user_model()
 

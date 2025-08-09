@@ -216,7 +216,7 @@ class UserLoginView(LoginView):
         logger.info(f"[UserLoginView] Usuário autenticado com sucesso: {user.username} (is_superuser: {user.is_superuser})")
         
         # Verifica se o usuário está ativo (pode ter sido autenticado mas estar suspenso)
-        if not user.is_active:
+        if not user.is_active or hasattr(user, '_is_inactive_for_suspension'):
             logger.warning(f"[UserLoginView] Usuário {user.username} autenticado mas está inativo - verificando motivo")
             
             # Obtém informações sobre a suspensão

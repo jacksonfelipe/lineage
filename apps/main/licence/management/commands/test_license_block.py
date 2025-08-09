@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from utils.license_manager import check_license_status
-from apps.licence.manager import license_manager
+from apps.main.licence.manager import license_manager
 
 User = get_user_model()
 

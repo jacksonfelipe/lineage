@@ -548,7 +548,7 @@ E irá descriptografar usando a chave Fernet configurada. Se o número do contra
 ### Criação de Licença FREE
 
 ```python
-from apps.licence.manager import license_manager
+from apps.main.licence.manager import license_manager
 
 # Criar licença FREE
 success, result = license_manager.create_free_license(

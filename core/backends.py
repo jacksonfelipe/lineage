@@ -46,6 +46,10 @@ class LicenseBackend(ModelBackend):
             logger.warning(f"[LicenseBackend] Usuário {user.username} está inativo - permitindo autenticação para tratamento na view")
             # Retorna o usuário mesmo inativo para que a view possa tratar a mensagem
             # A view irá verificar is_active e mostrar a mensagem apropriada
+            # Adiciona um atributo para identificar que é um usuário inativo
+            user._is_inactive_for_suspension = True
+            # Retorna o usuário para que a view possa processar
+            return user
         
         # 4. Define o backend no usuário para que o Django saiba qual backend foi usado
         user.backend = 'core.backends.LicenseBackend'

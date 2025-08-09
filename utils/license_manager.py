@@ -7,7 +7,7 @@ def check_license_status():
     """
     try:
         # Importa o gerenciador de licenças do PDL
-        from apps.licence.manager import license_manager
+        from apps.main.licence.manager import license_manager
         
         # Verifica o status da licença atual
         is_valid = license_manager.check_license_status()
@@ -18,11 +18,13 @@ def check_license_status():
     except ImportError as e:
         print(f"[LicenseManager] Erro ao importar sistema de licença: {e}")
         # Se não conseguir importar o sistema de licença, permite o login
+        print(f"[LicenseManager] Permitindo login sem verificação de licença")
         return True
         
     except Exception as e:
         print(f"[LicenseManager] Erro ao verificar licença: {e}")
         # Em caso de erro, permite o login para não bloquear o sistema
+        print(f"[LicenseManager] Permitindo login devido a erro na verificação de licença")
         return True
 
 def check_license_status_for_testing():
