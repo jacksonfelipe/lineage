@@ -278,6 +278,11 @@
               </a>
             </div>
             <div class="col-md-3 mb-3">
+              <a href="{% url 'social:apply_retroactive_filters' %}" class="btn btn-warning btn-block">
+                <i class="bi bi-arrow-clockwise"></i> {% trans "Filtros Retroativos" %}
+              </a>
+            </div>
+            <div class="col-md-3 mb-3">
               <a href="{% url 'social:moderation_logs' %}" class="btn btn-secondary btn-block">
                 <i class="bi bi-journal-text"></i> {% trans "Logs de Moderação" %}
               </a>

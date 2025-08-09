@@ -1056,7 +1056,7 @@ class ContentFilter(BaseModel):
         verbose_name_plural = _('Filtros de Conteúdo')
         ordering = ['-is_active', 'name']
 
-    def __str__(self):
+        def __str__(self):
         return f"{self.name} ({self.get_filter_type_display()})"
 
     def matches_content(self, content):

@@ -1675,6 +1675,91 @@ def export_logs_csv(request):
 
 
 @login_required
+def apply_retroactive_filters(request):
+    """Aplicar filtros a conteúdo retroativo"""
+    if not request.user.has_perm('social.can_take_moderation_actions'):
+        messages.error(request, _('Você não tem permissão para esta ação.'))
+        return redirect('social:moderation_dashboard')
+    
+    if request.method == 'POST':
+        from django.core.management import call_command
+        from io import StringIO
+        import json
+        
+        content_type = request.POST.get('content_type', 'all')
+        dry_run = request.POST.get('dry_run') == 'on'
+        filter_id = request.POST.get('filter_id')
+        
+        try:
+            # Capturar saída do comando
+            out = StringIO()
+            
+            # Preparar argumentos do comando
+            command_args = [
+                '--content-type', content_type,
+                '--batch-size', '50',  # Lotes menores para interface web
+            ]
+            
+            if dry_run:
+                command_args.append('--dry-run')
+            
+            if filter_id:
+                command_args.extend(['--filter-id', filter_id])
+            
+            # Executar comando
+            call_command('apply_filters_retroactive', *command_args, stdout=out)
+            
+            # Capturar resultado
+            output = out.getvalue()
+            
+            # Log da ação
+            ModerationLog.log_action(
+                moderator=request.user,
+                action_type='report_created',
+                target_type='system',
+                target_id=0,
+                description=f"Filtros retroativos aplicados via interface web",
+                details=f"Tipo: {content_type}, Dry-run: {dry_run}, Filtro: {filter_id or 'todos'}",
+                request=request
+            )
+            
+            if dry_run:
+                messages.info(request, _('Simulação concluída! Verifique os logs para detalhes.'))
+            else:
+                messages.success(request, _('Filtros aplicados com sucesso ao conteúdo existente!'))
+            
+            # Retornar resultado para AJAX
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': True,
+                    'message': _('Operação concluída com sucesso'),
+                    'output': output,
+                    'dry_run': dry_run
+                })
+            
+        except Exception as e:
+            error_msg = f'Erro ao aplicar filtros retroativos: {str(e)}'
+            messages.error(request, error_msg)
+            
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': False,
+                    'error': error_msg
+                })
+    
+    # Obter filtros disponíveis para o formulário
+    active_filters = ContentFilter.objects.filter(is_active=True).order_by('name')
+    
+    context = {
+        'active_filters': active_filters,
+        'segment': 'moderation',
+        'parent': 'social',
+    }
+    
+    return render(request, 'social/moderation/apply_retroactive.html', context)
+
+
+@login_required
 def bulk_moderation_action(request):
     """Ação em massa de moderação"""
     if not request.user.has_perm('social.can_take_moderation_actions'):

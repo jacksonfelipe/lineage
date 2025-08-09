@@ -196,19 +196,15 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 
     'allauth.account.middleware.AccountMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'middlewares.login_attempts.LoginAttemptsMiddleware',
 
+    'middlewares.login_attempts.LoginAttemptsMiddleware',
     "middlewares.access_apps.LoginRequiredAccess",
     "middlewares.forbidden_redirect_middleware.ForbiddenRedirectMiddleware",
     "middlewares.rate_limit_api_external.RateLimitMiddleware",
     "middlewares.lock_screen_middleware.SessionLockMiddleware",
-    
-    # Middlewares de moderação
     "middlewares.content_filter_middleware.ContentFilterMiddleware",
     "middlewares.content_filter_middleware.SpamProtectionMiddleware",
     
-    # Middlewares de licença
     "apps.main.licence.middleware.LicenseMiddleware",
     "apps.main.licence.middleware.LicenseFeatureMiddleware",
 ]
