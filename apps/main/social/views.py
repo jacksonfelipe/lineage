@@ -177,18 +177,44 @@ def feed(request):
 @login_required
 def my_posts(request):
     """Posts do usuário logado"""
-    posts = Post.objects.filter(author=request.user).order_by('-is_pinned', '-created_at')
+    posts = Post.objects.filter(author=request.user).select_related('author').prefetch_related(
+        'likes', 'comments', 'hashtags', 'reports'
+    ).order_by('-is_pinned', '-created_at')
     
-    # Anotar posts com informação se o usuário atual deu like
+    # Verificar se o usuário pode moderar
+    can_moderate = request.user.is_superuser or request.user.is_staff or request.user.has_perm('social.can_moderate_content')
+    
+    # Anotar posts com informação se o usuário atual deu like e status de moderação
     for post in posts:
         post.is_liked_by_current_user = post.is_liked_by(request.user)
+        # Verificar reação atual do usuário
+        user_like = post.likes.filter(user=request.user).first()
+        post.current_user_reaction = user_like.reaction_type if user_like else None
+        
+        # Status de moderação (apenas para moderadores)
+        if can_moderate:
+            post.is_flagged = post.reports.filter(status='pending').exists()
+            post.is_hidden = ModerationAction.objects.filter(
+                action_type='hide_content',
+                target_post=post,
+                is_active=True
+            ).exists()
+        else:
+            post.is_flagged = False
+            post.is_hidden = False
     
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
+    # Timestamp para cache busting de avatares
+    import time
+    timestamp = int(time.time())
+    
     context = {
         'page_obj': page_obj,
+        'can_moderate': can_moderate,
+        'timestamp': timestamp,
         'segment': 'my_posts',
         'parent': 'social',
     }
@@ -706,8 +732,69 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['segment'] = 'post_create'
-        context['parent'] = 'social'
+        
+        # Adicionar os mesmos dados do feed
+        user = self.request.user
+        
+        # Estatísticas do usuário
+        user_stats = {
+            'posts_count': user.social_posts.count(),
+            'followers_count': user.followers.count(),
+            'following_count': user.following.count(),
+            'total_likes_received': Like.objects.filter(post__author=user).count(),
+            'total_comments_received': Comment.objects.filter(post__author=user).count(),
+        }
+        
+        # Hashtags populares
+        popular_hashtags = Hashtag.objects.filter(posts_count__gt=0).order_by('-posts_count')[:10]
+        
+        # Usuários sugeridos (usuários ativos que o usuário atual não segue)
+        following_users = user.following.values_list('following_id', flat=True)
+        suggested_users = User.objects.exclude(
+            Q(id=user.id) | Q(id__in=following_users)
+        ).filter(
+            is_active=True,
+            social_posts__isnull=False
+        ).annotate(
+            posts_count=Count('social_posts')
+        ).filter(posts_count__gt=0).order_by('-posts_count')[:5]
+        
+        # Verificar se o usuário pode moderar
+        can_moderate = user.is_superuser or user.is_staff or user.has_perm('social.can_moderate_content')
+        
+        # Estatísticas da rede (apenas para moderadores)
+        network_stats = {}
+        moderation_stats = {}
+        if can_moderate:
+            network_stats = {
+                'total_users': User.objects.filter(is_active=True).count(),
+                'total_posts': Post.objects.count(),
+                'posts_today': Post.objects.filter(created_at__date=timezone.now().date()).count(),
+            }
+            
+            moderation_stats = {
+                'pending_reports': Report.objects.filter(status='pending').count(),
+                'total_reports': Report.objects.count(),
+                'reports_today': Report.objects.filter(created_at__date=timezone.now().date()).count(),
+                'active_filters': ContentFilter.objects.filter(is_active=True).count(),
+            }
+        
+        # Timestamp para cache busting de avatares
+        import time
+        timestamp = int(time.time())
+        
+        context.update({
+            'user_stats': user_stats,
+            'popular_hashtags': popular_hashtags,
+            'suggested_users': suggested_users,
+            'network_stats': network_stats,
+            'moderation_stats': moderation_stats,
+            'can_moderate': can_moderate,
+            'timestamp': timestamp,
+            'segment': 'post_create',
+            'parent': 'social',
+        })
+        
         return context
 
 
