@@ -1069,6 +1069,7 @@ class ContentFilter(BaseModel):
         
         if self.case_sensitive:
             text = content
+            pattern = self.pattern
         else:
             text = content.lower()
             pattern = self.pattern.lower()
@@ -1078,7 +1079,10 @@ class ContentFilter(BaseModel):
         elif self.filter_type == 'regex':
             import re
             try:
-                return bool(re.search(pattern, text))
+                # Para regex, usar o padrão original (case sensitivity é controlada pelo regex)
+                regex_pattern = self.pattern
+                flags = 0 if self.case_sensitive else re.IGNORECASE
+                return bool(re.search(regex_pattern, content, flags))
             except re.error:
                 return False
         elif self.filter_type == 'spam_pattern':
