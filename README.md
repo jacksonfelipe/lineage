@@ -1,9 +1,5 @@
 # Painel Definitivo Lineage [1.13](https://l2jprmeium.com)
 
-
-# Painel Definitivo Lineage [1.13](https://l2jprmeium.com)
-
-
 <img align="right" height="180" src="https://i.imgur.com/EzJCcrr.png"/>
 
  A Platafrma L2JPremium é um painel que nasceu com a missão de oferecer ferramentas poderosas para administradores de servidores privados de Lineage 2. Inicialmente voltado à análise de riscos e estabilidade dos servidores, o projeto evoluiu e se consolidou como uma solução completa para prospecção, gerenciamento e operação de servidores.
