@@ -34,14 +34,32 @@ class LoginAttemptsMiddleware:
             client_ip = self._get_client_ip(request)
             cache_key = f"login_attempts_{client_ip}"
             
-            # Obtém tentativas atuais e incrementa
-            attempts = cache.get(cache_key, 1) + 1
-            cache.set(cache_key, attempts, 3600)  # Expira em 1 hora
-            logger.warning(f"Tentativa de login falhou para IP {client_ip}, tentativa {attempts}")
+            # Verifica se há mensagens de erro específicas de suspensão
+            # Se houver, não incrementa as tentativas para não interferir com a mensagem
+            has_suspension_error = False
+            if hasattr(response, 'context_data') and response.context_data:
+                form = response.context_data.get('form')
+                if form and hasattr(form, 'non_field_errors'):
+                    non_field_errors = form.non_field_errors()
+                    if non_field_errors:
+                        for error in non_field_errors:
+                            if "🔴" in str(error) or "🟡" in str(error):
+                                has_suspension_error = True
+                                logger.info(f"Detectada mensagem de suspensão para IP {client_ip}, não incrementando tentativas")
+                                break
             
-            # Se chegou ao limite, força a próxima requisição a mostrar captcha
-            if attempts >= getattr(settings, 'LOGIN_MAX_ATTEMPTS', 3):
-                logger.info(f"IP {client_ip} atingiu limite de tentativas ({attempts}). Captcha será exigido na próxima tentativa.")
+            # Só incrementa tentativas se não for um erro de suspensão
+            if not has_suspension_error:
+                # Obtém tentativas atuais e incrementa
+                attempts = cache.get(cache_key, 1) + 1
+                cache.set(cache_key, attempts, 3600)  # Expira em 1 hora
+                logger.warning(f"Tentativa de login falhou para IP {client_ip}, tentativa {attempts}")
+                
+                # Se chegou ao limite, força a próxima requisição a mostrar captcha
+                if attempts >= getattr(settings, 'LOGIN_MAX_ATTEMPTS', 3):
+                    logger.info(f"IP {client_ip} atingiu limite de tentativas ({attempts}). Captcha será exigido na próxima tentativa.")
+            else:
+                logger.info(f"Tentativa de login com usuário suspenso para IP {client_ip}, mantendo contador atual")
     
     def _get_client_ip(self, request):
         """Obtém o IP real do cliente"""

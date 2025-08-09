@@ -40,10 +40,17 @@ class LicenseBackend(ModelBackend):
             
         logger.info(f"[LicenseBackend] Usuário autenticado com sucesso: {user.username} (is_superuser: {user.is_superuser})")
         
-        # 3. Define o backend no usuário para que o Django saiba qual backend foi usado
+        # 3. Verifica se o usuário está ativo
+        # Não bloqueia aqui, deixa a view de login tratar as mensagens de suspensão
+        if not user.is_active:
+            logger.warning(f"[LicenseBackend] Usuário {user.username} está inativo - permitindo autenticação para tratamento na view")
+            # Retorna o usuário mesmo inativo para que a view possa tratar a mensagem
+            # A view irá verificar is_active e mostrar a mensagem apropriada
+        
+        # 4. Define o backend no usuário para que o Django saiba qual backend foi usado
         user.backend = 'core.backends.LicenseBackend'
         
-        # 4. Verificações adicionais para superusuários (se necessário)
+        # 5. Verificações adicionais para superusuários (se necessário)
         if user.is_superuser:
             logger.debug(f"[LicenseBackend] Usuário é superusuário: {user.username}")
             # Aqui você pode adicionar verificações específicas para superusuários se necessário
