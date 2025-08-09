@@ -1222,11 +1222,21 @@ def content_filters(request):
     else:
         filter_form = ContentFilterForm()
     
+    # Calcular estatísticas dos filtros
+    total_matches = sum(filter.matches_count for filter in filters)
+    last_activity = None
+    if filters.exists():
+        last_matched_filter = filters.exclude(last_matched__isnull=True).order_by('-last_matched').first()
+        if last_matched_filter:
+            last_activity = last_matched_filter.last_matched
+    
     context = {
         'filters': filters,
         'filter_form': filter_form,
         'total_filters': filters.count(),
         'active_filters': filters.filter(is_active=True).count(),
+        'total_matches': total_matches,
+        'last_activity': last_activity,
     }
     
     return render(request, 'social/moderation/content_filters.html', context)
@@ -1272,6 +1282,35 @@ def toggle_filter(request, filter_id):
         'success': True,
         'is_active': content_filter.is_active,
         'message': _('Filtro ativado') if content_filter.is_active else _('Filtro desativado')
+    })
+
+
+@login_required
+def delete_filter(request, filter_id):
+    """Deletar filtro de conteúdo"""
+    if not request.user.has_perm('social.can_take_moderation_actions'):
+        return JsonResponse({'error': _('Permissão negada')}, status=403)
+    
+    if request.method != 'POST':
+        return JsonResponse({'error': _('Método não permitido')}, status=405)
+    
+    content_filter = get_object_or_404(ContentFilter, id=filter_id)
+    
+    # Log da ação
+    ModerationLog.log_action(
+        moderator=request.user,
+        action_type='filter_deleted',
+        target_type='filter',
+        target_id=filter_id,
+        description=f"Filtro '{content_filter.name}' foi deletado",
+        details=f"Tipo: {content_filter.get_filter_type_display()}\nPadrão: {content_filter.pattern[:100]}..."
+    )
+    
+    content_filter.delete()
+    
+    return JsonResponse({
+        'success': True,
+        'message': _('Filtro deletado com sucesso')
     })
 
 
@@ -1825,26 +1864,54 @@ def bulk_moderation_action(request):
 def test_content_filter(request):
     """Testar filtro de conteúdo"""
     if not request.user.has_perm('social.can_take_moderation_actions'):
-        return JsonResponse({'error': _('Permissão negada')}, status=403)
+        messages.error(request, _('Você não tem permissão para testar filtros.'))
+        return redirect('social:content_filters')
     
     if request.method == 'POST':
-        content = request.POST.get('content', '')
-        filter_id = request.POST.get('filter_id')
+        pattern = request.POST.get('pattern', '').strip()
+        filter_type = request.POST.get('filter_type', 'keyword')
+        content = request.POST.get('content', '').strip()
         
-        if not content or not filter_id:
-            return JsonResponse({'error': _('Dados inválidos')}, status=400)
+        if not pattern or not content:
+            messages.error(request, _('Padrão e conteúdo são obrigatórios.'))
+            return redirect('social:content_filters')
         
-        try:
-            content_filter = ContentFilter.objects.get(id=filter_id)
-            matches = content_filter.matches_content(content)
-            
-            return JsonResponse({
-                'success': True,
-                'matches': matches,
-                'filter_name': content_filter.name,
-                'action': content_filter.get_action_display()
-            })
-        except ContentFilter.DoesNotExist:
-            return JsonResponse({'error': _('Filtro não encontrado')}, status=404)
+        # Criar um filtro temporário para teste (não salva no banco)
+        temp_filter = ContentFilter(
+            name='Teste Temporário',
+            filter_type=filter_type,
+            pattern=pattern,
+            is_active=True,
+            case_sensitive=False
+        )
+        
+        # Testar se o conteúdo corresponde ao filtro
+        matches = temp_filter.matches_content(content)
+        
+        # Redirecionar com resultado
+        filters = ContentFilter.objects.all().order_by('-is_active', 'name')
+        
+        # Calcular estatísticas dos filtros
+        total_matches = sum(filter.matches_count for filter in filters)
+        last_activity = None
+        if filters.exists():
+            last_matched_filter = filters.exclude(last_matched__isnull=True).order_by('-last_matched').first()
+            if last_matched_filter:
+                last_activity = last_matched_filter.last_matched
+        
+        context = {
+            'filters': filters,
+            'filter_form': ContentFilterForm(),
+            'total_filters': filters.count(),
+            'active_filters': filters.filter(is_active=True).count(),
+            'total_matches': total_matches,
+            'last_activity': last_activity,
+            'test_result': matches,
+            'test_pattern': pattern,
+            'test_filter_type': filter_type,
+            'test_content': content,
+        }
+        
+        return render(request, 'social/moderation/content_filters.html', context)
     
-    return JsonResponse({'error': _('Método não permitido')}, status=405)
+    return redirect('social:content_filters')

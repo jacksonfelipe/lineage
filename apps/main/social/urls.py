@@ -51,6 +51,7 @@ urlpatterns = [
     path('moderation/filters/', views.content_filters, name='content_filters'),
     path('moderation/filters/<int:filter_id>/edit/', views.edit_filter, name='edit_filter'),
     path('moderation/filters/<int:filter_id>/toggle/', views.toggle_filter, name='toggle_filter'),
+    path('moderation/filters/<int:filter_id>/delete/', views.delete_filter, name='delete_filter'),
     path('moderation/filters/test/', views.test_content_filter, name='test_content_filter'),
     
     # Logs e ações
