@@ -55,13 +55,21 @@
                     </div>
                     <div class="ms-3">
                       {% if user != follow.following %}
-                        <button class="btn btn-outline-primary btn-sm follow-btn" data-user-id="{% localize off %}{{ follow.following.id }}{% endlocalize %}">
-                          {% if user in follow.following.followers.all %}
+                        {% if user == profile_user %}
+                          <!-- Se é a página do próprio usuário, sempre mostra "Seguindo" (pode deixar de seguir) -->
+                          <button class="btn btn-success btn-sm follow-btn" data-user-id="{% localize off %}{{ follow.following.id }}{% endlocalize %}">
                             <i class="bi bi-person-check"></i> {% trans "Seguindo" %}
-                          {% else %}
-                            <i class="bi bi-person-plus"></i> {% trans "Seguir" %}
-                          {% endif %}
-                        </button>
+                          </button>
+                        {% else %}
+                          <!-- Se é página de outro usuário, verifica se o usuário atual segue esta pessoa -->
+                          <button class="btn btn-outline-primary btn-sm follow-btn" data-user-id="{% localize off %}{{ follow.following.id }}{% endlocalize %}">
+                            {% if user in follow.following.followers.all %}
+                              <i class="bi bi-person-check"></i> {% trans "Seguindo" %}
+                            {% else %}
+                              <i class="bi bi-person-plus"></i> {% trans "Seguir" %}
+                            {% endif %}
+                          </button>
+                        {% endif %}
                       {% endif %}
                     </div>
                   </div>
@@ -100,6 +108,9 @@
   </div>
 </div>
 
+<!-- Token CSRF para JavaScript -->
+{% csrf_token %}
+
 <!-- JavaScript para follow/unfollow -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -108,36 +119,80 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             const userId = parseInt(this.dataset.userId);
-            const icon = this.querySelector('i');
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
             
             if (!userId || isNaN(userId)) {
                 console.error('ID do usuário inválido:', this.dataset.userId);
                 return;
             }
             
+            if (!csrfToken) {
+                console.error('CSRF token não encontrado');
+                return;
+            }
+            
+            // Salvar estado original para rollback em caso de erro
+            const originalHTML = this.innerHTML;
+            const originalClasses = this.className;
+            
+            // Mostrar estado de carregamento
+            this.innerHTML = '<i class="bi bi-arrow-repeat"></i> {% trans "Processando..." %}';
+            this.disabled = true;
+            
             fetch(`/social/user/${userId}/follow/`, {
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken.value,
                 },
             })
             .then(response => response.json())
             .then(data => {
-                if (data.following) {
-                    icon.className = 'bi bi-person-check';
-                    this.innerHTML = '<i class="bi bi-person-check"></i> {% trans "Seguindo" %}';
-                    this.classList.remove('btn-primary');
-                    this.classList.add('btn-outline-primary');
+                if (data.success) {
+                    if (data.following) {
+                        // Agora está seguindo
+                        this.innerHTML = '<i class="bi bi-person-check"></i> {% trans "Seguindo" %}';
+                        this.className = 'btn btn-success btn-sm follow-btn';
+                    } else {
+                        // Parou de seguir
+                        this.innerHTML = '<i class="bi bi-person-plus"></i> {% trans "Seguir" %}';
+                        this.className = 'btn btn-outline-primary btn-sm follow-btn';
+                        
+                        // Se estivermos na página "meus seguindo" e o usuário parou de seguir,
+                        // remover o usuário da lista
+                        const isMyFollowingPage = window.location.pathname.includes('/{{ user.username }}/following/');
+                        if (isMyFollowingPage && !data.following) {
+                            const userCard = this.closest('.col-md-6');
+                            if (userCard) {
+                                userCard.style.transition = 'opacity 0.3s ease';
+                                userCard.style.opacity = '0.5';
+                                setTimeout(() => {
+                                    userCard.remove();
+                                    
+                                    // Verificar se não há mais usuários
+                                    const remainingUsers = document.querySelectorAll('.col-md-6').length;
+                                    if (remainingUsers === 0) {
+                                        location.reload(); // Recarregar para mostrar a mensagem "não segue ninguém"
+                                    }
+                                }, 500);
+                            }
+                        }
+                    }
                 } else {
-                    icon.className = 'bi bi-person-plus';
-                    this.innerHTML = '<i class="bi bi-person-plus"></i> {% trans "Seguir" %}';
-                    this.classList.remove('btn-outline-primary');
-                    this.classList.add('btn-primary');
+                    // Erro na resposta
+                    this.innerHTML = originalHTML;
+                    this.className = originalClasses;
+                    alert(data.error || 'Erro ao processar solicitação');
                 }
             })
             .catch(error => {
                 console.error('Erro:', error);
+                // Restaurar estado original
+                this.innerHTML = originalHTML;
+                this.className = originalClasses;
+                alert('Erro de conexão. Tente novamente.');
+            })
+            .finally(() => {
+                this.disabled = false;
             });
         });
     });

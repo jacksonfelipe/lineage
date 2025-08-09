@@ -667,10 +667,15 @@ def following_list(request, username):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
+    # Timestamp para cache busting de avatares
+    import time
+    timestamp = int(time.time())
+    
     context = {
         'profile_user': user,
         'page_obj': page_obj,
         'following': page_obj,  # Adicionar para compatibilidade com template
+        'timestamp': timestamp,
         'segment': 'following_list',
         'parent': 'social',
     }
