@@ -34,21 +34,42 @@ class LoginAttemptsMiddleware:
             client_ip = self._get_client_ip(request)
             cache_key = f"login_attempts_{client_ip}"
             
-            # Verifica se há mensagens de erro específicas de suspensão
+            # Verifica se há mensagens de erro específicas de suspensão ou conta inativa
             # Se houver, não incrementa as tentativas para não interferir com a mensagem
             has_suspension_error = False
+            
+            # Verifica no context_data da resposta
             if hasattr(response, 'context_data') and response.context_data:
                 form = response.context_data.get('form')
                 if form and hasattr(form, 'non_field_errors'):
                     non_field_errors = form.non_field_errors()
                     if non_field_errors:
                         for error in non_field_errors:
-                            if "🔴" in str(error) or "🟡" in str(error):
+                            error_str = str(error)
+                            # Detecta mensagens de suspensão (🔴 🟡) ou conta inativa
+                            if ("🔴" in error_str or "🟡" in error_str or 
+                                "não está activa" in error_str or 
+                                "não está ativa" in error_str or
+                                "suspensa" in error_str.lower() or
+                                "banida" in error_str.lower() or
+                                "desativada" in error_str.lower()):
                                 has_suspension_error = True
-                                logger.info(f"Detectada mensagem de suspensão para IP {client_ip}, não incrementando tentativas")
+                                logger.info(f"Detectada mensagem de conta inativa para IP {client_ip}, não incrementando tentativas")
                                 break
             
-            # Só incrementa tentativas se não for um erro de suspensão
+            # Verifica também no conteúdo da resposta para casos onde context_data não está disponível
+            if not has_suspension_error and hasattr(response, 'content'):
+                content_str = str(response.content)
+                if ("🔴" in content_str or "🟡" in content_str or 
+                    "não está activa" in content_str or 
+                    "não está ativa" in content_str or
+                    "suspensa" in content_str.lower() or
+                    "banida" in content_str.lower() or
+                    "desativada" in content_str.lower()):
+                    has_suspension_error = True
+                    logger.info(f"Detectada mensagem de conta inativa no conteúdo para IP {client_ip}, não incrementando tentativas")
+            
+            # Só incrementa tentativas se não for um erro de suspensão/conta inativa
             if not has_suspension_error:
                 # Obtém tentativas atuais e incrementa
                 attempts = cache.get(cache_key, 1) + 1
@@ -59,7 +80,7 @@ class LoginAttemptsMiddleware:
                 if attempts >= getattr(settings, 'LOGIN_MAX_ATTEMPTS', 3):
                     logger.info(f"IP {client_ip} atingiu limite de tentativas ({attempts}). Captcha será exigido na próxima tentativa.")
             else:
-                logger.info(f"Tentativa de login com usuário suspenso para IP {client_ip}, mantendo contador atual")
+                logger.info(f"Tentativa de login com conta inativa para IP {client_ip}, não incrementando contador")
     
     def _get_client_ip(self, request):
         """Obtém o IP real do cliente"""

@@ -179,21 +179,21 @@ class UserLoginView(LoginView):
                         # Cria uma mensagem detalhada sobre a suspensão
                         if suspension_info['is_permanent']:
                             message = f"🔴 {suspension_info['message']}\n\n"
-                            message += f"📋 **Motivo:** {suspension_info['public_reason']}\n"
-                            message += f"👤 **Moderador:** {suspension_info['moderator']}\n"
-                            message += f"📅 **Data:** {suspension_info['created_at']}\n\n"
+                            message += f"📋 Motivo: {suspension_info['public_reason']}\n"
+                            message += f"👤 Moderador: {suspension_info['moderator']}\n"
+                            message += f"📅 Data: {suspension_info['created_at']}\n\n"
                             message += f"ℹ️ Esta ação é permanente. Entre em contato com o suporte se acredita que isso foi um erro."
                         else:
                             message = f"🟡 {suspension_info['message']}\n\n"
-                            message += f"📋 **Motivo:** {suspension_info['public_reason']}\n"
-                            message += f"👤 **Moderador:** {suspension_info['moderator']}\n"
-                            message += f"📅 **Suspenso em:** {suspension_info['created_at']}\n"
+                            message += f"📋 Motivo: {suspension_info['public_reason']}\n"
+                            message += f"👤 Moderador: {suspension_info['moderator']}\n"
+                            message += f"📅 Suspenso em: {suspension_info['created_at']}\n"
                             
                             if suspension_info['is_expired']:
-                                message += f"✅ **Status:** Suspensão expirada\n\n"
+                                message += f"✅ Status: Suspensão expirada\n\n"
                                 message += f"ℹ️ Sua suspensão já expirou, mas sua conta ainda não foi reativada automaticamente. Entre em contato com o suporte."
                             elif suspension_info['end_date']:
-                                message += f"⏰ **Válida até:** {suspension_info['end_date']}\n\n"
+                                message += f"⏰ Válida até: {suspension_info['end_date']}\n\n"
                                 message += f"ℹ️ Sua conta será reativada automaticamente após esta data."
                             else:
                                 message += f"ℹ️ Entre em contato com o suporte para mais informações."
@@ -271,6 +271,9 @@ class UserLoginView(LoginView):
         
         login(self.request, user)
         return redirect(self.get_success_url())
+    
+    def form_invalid(self, form):
+        return super().form_invalid(form)
        
 
 class UserPasswordChangeView(PasswordChangeView):

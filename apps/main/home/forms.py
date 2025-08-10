@@ -130,40 +130,72 @@ class LoginForm(AuthenticationForm):
     
     def clean(self):
         """Validação customizada do formulário"""
-        cleaned_data = super().clean()
+        # Validação básica dos campos (sem autenticação)
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
         
-        # Se o captcha é necessário, verifica se foi fornecido
-        if self.request:
-            from middlewares.login_attempts import LoginAttemptsMiddleware
-            requires_captcha = LoginAttemptsMiddleware.requires_captcha(self.request)
+        if username and password:
+            # Se o captcha é necessário, verifica se foi fornecido
+            if self.request:
+                from middlewares.login_attempts import LoginAttemptsMiddleware
+                requires_captcha = LoginAttemptsMiddleware.requires_captcha(self.request)
+                
+                if requires_captcha:
+                    captcha_token = self.cleaned_data.get('captcha_token')
+                    if not captcha_token:
+                        import logging
+                        logger = logging.getLogger(__name__)
+                        logger.warning(f"[LoginForm] Captcha é obrigatório mas não foi fornecido")
+                        raise forms.ValidationError(_("Verificação do captcha é obrigatória após múltiplas tentativas."))
+                    
+                    # Valida o captcha
+                    import requests
+                    from django.conf import settings
+                    
+                    secret = settings.HCAPTCHA_SECRET_KEY
+                    data = {
+                        'response': captcha_token,
+                        'secret': secret,
+                    }
+                    r = requests.post('https://hcaptcha.com/siteverify', data=data)
+                    captcha_valid = r.json().get('success', False)
+                    
+                    if not captcha_valid:
+                        import logging
+                        logger = logging.getLogger(__name__)
+                        logger.warning(f"[LoginForm] Captcha falhou na validação")
+                        raise forms.ValidationError(_("Verificação do captcha falhou. Tente novamente."))
             
-            if requires_captcha:
-                captcha_token = cleaned_data.get('captcha_token')
-                if not captcha_token:
-                    import logging
-                    logger = logging.getLogger(__name__)
-                    logger.warning(f"[LoginForm] Captcha é obrigatório mas não foi fornecido")
-                    raise forms.ValidationError(_("Verificação do captcha é obrigatória após múltiplas tentativas."))
-                
-                # Valida o captcha
-                import requests
-                from django.conf import settings
-                
-                secret = settings.HCAPTCHA_SECRET_KEY
-                data = {
-                    'response': captcha_token,
-                    'secret': secret,
-                }
-                r = requests.post('https://hcaptcha.com/siteverify', data=data)
-                captcha_valid = r.json().get('success', False)
-                
-                if not captcha_valid:
-                    import logging
-                    logger = logging.getLogger(__name__)
-                    logger.warning(f"[LoginForm] Captcha falhou na validação")
-                    raise forms.ValidationError(_("Verificação do captcha falhou. Tente novamente."))
+            # Agora vamos fazer nossa própria autenticação para tratar usuários suspensos
+            from django.contrib.auth import authenticate, get_user_model
+            User = get_user_model()
+            
+            # Tenta autenticar usando nossos backends
+            user = authenticate(self.request, username=username, password=password)
+            
+            if not user:
+                # Verifica se o usuário existe mas está inativo
+                try:
+                    inactive_user = User.objects.get(username=username)
+                    
+                    if not inactive_user.is_active:
+                        # Se o usuário está inativo, não invalida o formulário
+                        # Deixa a view tratar a suspensão
+                        print(f"🔍 [LoginForm] Usuário {username} está inativo - permitindo que a view trate")
+                        return self.cleaned_data
+                except User.DoesNotExist:
+                    # Usuário não existe, credenciais inválidas
+                    pass
+            
+            # Se chegou aqui, o usuário foi autenticado com sucesso
+            # Verifica se está inativo (pode ter sido autenticado mas estar suspenso)
+            elif not user.is_active or hasattr(user, '_is_inactive_for_suspension'):
+                # Se o usuário está inativo, não invalida o formulário
+                # Deixa a view tratar a suspensão
+                print(f"🔍 [LoginForm] Usuário {user.username} autenticado mas está inativo - permitindo que a view trate")
+                return self.cleaned_data
         
-        return cleaned_data
+        return self.cleaned_data
 
 
 class UserPasswordResetForm(PasswordResetForm):
