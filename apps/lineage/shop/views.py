@@ -66,7 +66,8 @@ def add_item_to_cart(request, item_id):
     cart, created = Cart.objects.get_or_create(user=request.user)
     item = get_object_or_404(ShopItem, id=item_id, ativo=True)
     
-    quantidade = int(request.POST.get('quantidade', 1))
+    quantidade = int(request.GET.get('quantidade', 1))
+    
     if quantidade < 1:
         messages.error(request, "A quantidade deve ser maior que zero.")
         return redirect('shop:shop_home')
@@ -75,14 +76,28 @@ def add_item_to_cart(request, item_id):
         messages.error(request, "Quantidade máxima excedida.")
         return redirect('shop:shop_home')
     
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, item=item)
-    if not created:
+    # Verificar se já existe o item no carrinho (lidando com possíveis duplicatas)
+    cart_items = CartItem.objects.filter(cart=cart, item=item)
+    
+    if cart_items.exists():
+        # Se existem múltiplos registros, pegar o primeiro e deletar os outros
+        if cart_items.count() > 1:
+            # Manter apenas o primeiro registro e deletar os duplicados
+            first_item = cart_items.first()
+            cart_items.exclude(id=first_item.id).delete()
+            cart_item = first_item
+        else:
+            cart_item = cart_items.first()
+        
+        # Atualizar quantidade
         cart_item.quantidade += quantidade
         if cart_item.quantidade > 99:
             messages.error(request, "Quantidade máxima no carrinho excedida.")
             return redirect('shop:shop_home')
     else:
-        cart_item.quantidade = quantidade
+        # Criar novo item no carrinho
+        cart_item = CartItem.objects.create(cart=cart, item=item, quantidade=quantidade)
+    
     cart_item.save()
     
     messages.success(request, f"{item.nome} adicionado ao carrinho.")
