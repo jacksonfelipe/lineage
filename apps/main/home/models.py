@@ -35,6 +35,7 @@ class User(BaseModel, AbstractUser):
     
     is_email_verified = models.BooleanField(default=False, verbose_name=_("E-mail verificado"))
     is_2fa_enabled = models.BooleanField(default=False, verbose_name=_("2FA habilitado"))
+    is_verified = models.BooleanField(default=False, verbose_name=_("Conta verificada"), help_text=_("Indica se a conta foi verificada pela equipe"))
 
     # game
     fichas = models.PositiveIntegerField(default=0, verbose_name=_("Fichas"))

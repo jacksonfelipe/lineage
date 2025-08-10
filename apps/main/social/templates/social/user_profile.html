@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load l10n %}
+{% load social_tags %}
 
 {% block title %} {{ profile_user.get_full_name|default:profile_user.username }} - {% trans "Perfil" %} {% endblock title %}
 
@@ -16,7 +17,7 @@
           <a href="{% url 'social:feed' %}" class="btn btn-outline-secondary btn-sm me-2">
             <i class="bi bi-arrow-left"></i>
           </a>
-          <span class="fw-bold">{{ profile_user.get_full_name|default:profile_user.username }}</span>
+                      <span class="fw-bold">{{ profile_user.get_full_name|default:profile_user.username }}{% verified_badge profile_user "14px" %}</span>
         </div>
         <div class="d-flex gap-2">
           {% if user == profile_user %}
@@ -62,8 +63,8 @@
               </div>
               
               <div class="flex-grow-1">
-                <h3 class="mb-1">{{ profile_user.get_full_name|default:profile_user.username }}</h3>
-                <p class="text-muted mb-2">@{{ profile_user.username }}</p>
+                            <h3 class="mb-1">{{ profile_user.get_full_name|default:profile_user.username }}{% verified_badge profile_user "20px" %}</h3>
+            <p class="text-muted mb-2">@{{ profile_user.username }}{% verified_badge profile_user "16px" %}</p>
                 
                 {% if profile_user.social_profile.bio %}
                   <p class="mb-3">{{ profile_user.social_profile.bio }}</p>
@@ -212,9 +213,9 @@
                     <div class="flex-grow-1">
                       <div class="d-flex align-items-center">
                         <h6 class="mb-0">
-                          <a href="{% url 'social:user_profile' post.author.username %}" class="text-decoration-none">
-                            {{ post.author.get_full_name|default:post.author.username }}
-                          </a>
+                                                <a href="{% url 'social:user_profile' post.author.username %}" class="text-decoration-none">
+                        {{ post.author.get_full_name|default:post.author.username }}{% verified_badge post.author "14px" %}
+                      </a>
                         </h6>
                         {% if post.is_pinned %}
                           <span class="badge bg-warning ms-2">

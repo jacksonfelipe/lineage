@@ -1,6 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load social_tags %}
 {% load l10n %}
 
 {% block title %} {% trans "Seguindo por" %} {{ profile_user.get_full_name|default:profile_user.username }} {% endblock title %}

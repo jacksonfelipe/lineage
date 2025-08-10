@@ -1,6 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load social_tags %}
 
 {% block title %} #{{ hashtag.name }} - {% trans "Hashtag" %} {% endblock title %}
 
@@ -58,7 +59,7 @@
                   <div class="d-flex align-items-center">
                     <h6 class="mb-0">
                       <a href="{% url 'social:user_profile' post.author.username %}" class="text-decoration-none">
-                        {{ post.author.get_full_name|default:post.author.username }}
+                        {{ post.author.get_full_name|default:post.author.username }}{% verified_badge post.author "14px" %}
                       </a>
                     </h6>
                     {% if not post.is_public %}
