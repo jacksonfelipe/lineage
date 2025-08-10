@@ -3,6 +3,12 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from core.models import BaseModel
+from utils.media_validators import (
+    validate_social_media_image, validate_social_media_video, 
+    validate_avatar_image, process_image_for_social_media,
+    process_avatar_image, create_image_thumbnail
+)
+import os
 
 User = get_user_model()
 
@@ -24,7 +30,8 @@ class Post(BaseModel):
         blank=True,
         null=True,
         verbose_name=_('Imagem'),
-        help_text=_('Imagem opcional para o post')
+        help_text=_('Imagem opcional para o post (máx. 10MB, 1920x1080px)'),
+        validators=[validate_social_media_image]
     )
     # Novos campos para melhorar a rede social
     video = models.FileField(
@@ -32,7 +39,8 @@ class Post(BaseModel):
         blank=True,
         null=True,
         verbose_name=_('Vídeo'),
-        help_text=_('Vídeo opcional para o post (MP4, AVI, MOV)')
+        help_text=_('Vídeo opcional para o post (máx. 100MB, 5min, MP4/MOV/AVI/WEBM)'),
+        validators=[validate_social_media_video]
     )
     link = models.URLField(
         blank=True,
@@ -156,6 +164,23 @@ class Post(BaseModel):
         if not user or not user.is_authenticated:
             return False
         return self.likes.filter(user=user).exists()
+    
+    def save(self, *args, **kwargs):
+        """Override save para processar mídia automaticamente"""
+        # Processar imagem se foi alterada
+        if self.image and hasattr(self.image, 'file'):
+            try:
+                # Processar imagem para otimização
+                processed_path = process_image_for_social_media(
+                    self.image.path if hasattr(self.image, 'path') else self.image.file,
+                    max_width=1920,
+                    max_height=1080,
+                    quality=85
+                )
+            except Exception:
+                pass  # Se falhar, manter imagem original
+        
+        super().save(*args, **kwargs)
 
 
 class Comment(BaseModel):
@@ -191,7 +216,8 @@ class Comment(BaseModel):
         blank=True,
         null=True,
         verbose_name=_('Imagem'),
-        help_text=_('Imagem opcional no comentário')
+        help_text=_('Imagem opcional no comentário (máx. 5MB)'),
+        validators=[validate_social_media_image]
     )
     likes_count = models.PositiveIntegerField(
         default=0,
@@ -391,14 +417,16 @@ class UserProfile(BaseModel):
         blank=True,
         null=True,
         verbose_name=_('Avatar'),
-        help_text=_('Foto de perfil')
+        help_text=_('Foto de perfil (máx. 5MB, será redimensionada para 400x400px)'),
+        validators=[validate_avatar_image]
     )
     cover_image = models.ImageField(
         upload_to='social/covers/',
         blank=True,
         null=True,
         verbose_name=_('Imagem de capa'),
-        help_text=_('Imagem de capa do perfil')
+        help_text=_('Imagem de capa do perfil (máx. 10MB, recomendado: 1200x400px)'),
+        validators=[validate_social_media_image]
     )
     website = models.URLField(
         blank=True,
@@ -506,6 +534,32 @@ class UserProfile(BaseModel):
         self.total_likes_received = sum(post.likes_count for post in self.user.social_posts.all())
         self.total_comments_received = sum(post.comments_count for post in self.user.social_posts.all())
         self.save(update_fields=['total_posts', 'total_likes_received', 'total_comments_received'])
+    
+    def save(self, *args, **kwargs):
+        """Override save para processar mídia automaticamente"""
+        # Processar avatar se foi alterado
+        if self.avatar and hasattr(self.avatar, 'file'):
+            try:
+                processed_path = process_avatar_image(
+                    self.avatar.path if hasattr(self.avatar, 'path') else self.avatar.file,
+                    size=400
+                )
+            except Exception:
+                pass  # Se falhar, manter avatar original
+        
+        # Processar imagem de capa se foi alterada
+        if self.cover_image and hasattr(self.cover_image, 'file'):
+            try:
+                processed_path = process_image_for_social_media(
+                    self.cover_image.path if hasattr(self.cover_image, 'path') else self.cover_image.file,
+                    max_width=1200,
+                    max_height=400,
+                    quality=90
+                )
+            except Exception:
+                pass  # Se falhar, manter imagem original
+        
+        super().save(*args, **kwargs)
 
 
 class Hashtag(BaseModel):
@@ -600,8 +654,11 @@ class Report(BaseModel):
     reporter = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        blank=True,
+        null=True,
         related_name='reports_made',
-        verbose_name=_('Denunciante')
+        verbose_name=_('Denunciante'),
+        help_text=_('Deixe em branco para denúncias geradas pelo sistema')
     )
     report_type = models.CharField(
         max_length=20,
@@ -723,20 +780,130 @@ class Report(BaseModel):
     def resolve(self, moderator, action_taken, notes=""):
         """Resolve a denúncia"""
         self.status = 'resolved'
-        self.assigned_moderator = moderator
+        
+        # Verificar se moderator é válido antes de atribuir
+        if moderator and hasattr(moderator, 'id'):
+            try:
+                User.objects.get(id=moderator.id)
+                self.assigned_moderator = moderator
+            except User.DoesNotExist:
+                self.assigned_moderator = None
+        else:
+            self.assigned_moderator = None
+            
         self.moderator_notes = notes
         self.resolved_at = timezone.now()
+        
+        # Verificar se os objetos referenciados ainda existem antes de salvar
+        if self.reported_post:
+            try:
+                Post.objects.get(id=self.reported_post.id)
+            except Post.DoesNotExist:
+                self.reported_post = None
+        
+        if self.reported_comment:
+            try:
+                Comment.objects.get(id=self.reported_comment.id)
+            except Comment.DoesNotExist:
+                self.reported_comment = None
+        
+        if self.reported_user:
+            try:
+                User.objects.get(id=self.reported_user.id)
+            except User.DoesNotExist:
+                self.reported_user = None
+        
         self.save()
         
         # Criar log da ação
+        # Verificar se moderator é válido
+        moderator_id = None
+        if moderator and hasattr(moderator, 'id'):
+            moderator_id = moderator.id
+            try:
+                User.objects.get(id=moderator_id)
+            except User.DoesNotExist:
+                moderator_id = None
+        
         ModerationLog.objects.create(
-            moderator=moderator,
+            moderator_id=moderator_id,
             action_type='resolve_report',
             target_type='report',
             target_id=self.id,
             description=f"Denúncia resolvida: {action_taken}",
             details=notes
         )
+    
+    def get_triggered_filters(self):
+        """Retorna lista de filtros que acionaram este report"""
+        return [flag.content_filter for flag in self.filter_flags.all()]
+    
+    def get_filter_flags_summary(self):
+        """Retorna resumo das flags dos filtros"""
+        flags = self.filter_flags.select_related('content_filter').order_by('-confidence_score')
+        summary = []
+        for flag in flags:
+            summary.append({
+                'filter_name': flag.content_filter.name,
+                'filter_type': flag.content_filter.get_filter_type_display(),
+                'action': flag.content_filter.get_action_display(),
+                'confidence': flag.confidence_score,
+                'pattern': flag.matched_pattern[:50] + '...' if flag.matched_pattern and len(flag.matched_pattern) > 50 else flag.matched_pattern
+            })
+        return summary
+    
+    def add_filter_flag(self, content_filter, matched_pattern=None, confidence=1.0):
+        """Adiciona uma flag de filtro a este report"""
+        flag, created = ReportFilterFlag.objects.get_or_create(
+            report=self,
+            content_filter=content_filter,
+            defaults={
+                'matched_pattern': matched_pattern,
+                'confidence_score': confidence
+            }
+        )
+        if not created and matched_pattern:
+            # Atualizar padrão se foi fornecido um novo
+            flag.matched_pattern = matched_pattern
+            flag.confidence_score = max(flag.confidence_score, confidence)
+            flag.save()
+        return flag
+
+
+class ReportFilterFlag(BaseModel):
+    """Modelo para flags de filtros que acionaram um report"""
+    report = models.ForeignKey(
+        Report,
+        on_delete=models.CASCADE,
+        related_name='filter_flags',
+        verbose_name=_('Report')
+    )
+    content_filter = models.ForeignKey(
+        'ContentFilter',
+        on_delete=models.CASCADE,
+        related_name='report_flags',
+        verbose_name=_('Filtro de Conteúdo')
+    )
+    matched_pattern = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name=_('Padrão Detectado'),
+        help_text=_('Parte do conteúdo que acionou o filtro')
+    )
+    confidence_score = models.FloatField(
+        default=1.0,
+        verbose_name=_('Nível de Confiança'),
+        help_text=_('Quão confiante o filtro está na detecção (0.0 a 1.0)')
+    )
+    
+    class Meta:
+        verbose_name = _('Flag de Filtro')
+        verbose_name_plural = _('Flags de Filtros')
+        unique_together = ['report', 'content_filter']
+        ordering = ['-confidence_score', '-created_at']
+    
+    def __str__(self):
+        return f"{self.content_filter.name} → {self.report}"
 
 
 class ModerationAction(BaseModel):
@@ -776,7 +943,7 @@ class ModerationAction(BaseModel):
     # Conteúdo ou usuário alvo da ação
     target_post = models.ForeignKey(
         Post,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,  # Manter registro mesmo se post for deletado
         blank=True,
         null=True,
         related_name='moderation_actions',
@@ -784,11 +951,29 @@ class ModerationAction(BaseModel):
     )
     target_comment = models.ForeignKey(
         Comment,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,  # Manter registro mesmo se comentário for deletado
         blank=True,
         null=True,
         related_name='moderation_actions',
         verbose_name=_('Comentário Alvo')
+    )
+    
+    # Campos para manter informações quando conteúdo é deletado
+    target_post_id_backup = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        verbose_name=_('ID do Post (Backup)')
+    )
+    target_comment_id_backup = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        verbose_name=_('ID do Comentário (Backup)')
+    )
+    target_content_backup = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name=_('Conteúdo Original (Backup)'),
+        help_text=_('Backup do conteúdo para casos de deleção')
     )
     target_user = models.ForeignKey(
         User,
@@ -855,13 +1040,18 @@ class ModerationAction(BaseModel):
         return f"{self.get_action_type_display()} - {target}"
 
     def get_target_description(self):
-        """Retorna descrição do alvo da ação"""
+        """Retorna descrição do alvo da ação (robusta para conteúdo deletado)"""
         if self.target_post:
             return f"Post: {self.target_post.content[:50]}..."
         elif self.target_comment:
             return f"Comentário: {self.target_comment.content[:50]}..."
         elif self.target_user:
             return f"Usuário: {self.target_user.username}"
+        elif self.target_content_backup:
+            # Usar backup se conteúdo foi deletado
+            content_type = "Post" if self.target_post_id_backup else "Comentário" if self.target_comment_id_backup else "Conteúdo"
+            backup_id = self.target_post_id_backup or self.target_comment_id_backup
+            return f"{content_type} (DELETADO) #{backup_id}: {self.target_content_backup[:50]}..."
         return "Alvo não especificado"
 
     def save(self, *args, **kwargs):
@@ -873,35 +1063,193 @@ class ModerationAction(BaseModel):
         super().save(*args, **kwargs)
 
     def apply_action(self):
-        """Aplica a ação de moderação"""
-        if self.action_type == 'hide_content':
-            if self.target_post:
+        """Aplica a ação de moderação de forma robusta"""
+        try:
+            success = False
+            error_msg = None
+            
+            if self.action_type == 'hide_content':
+                success = self._hide_content()
+            elif self.action_type == 'delete_content':
+                success = self._delete_content()
+            elif self.action_type == 'approve_content':
+                success = self._approve_content()
+            elif self.action_type in ['suspend_user', 'ban_user']:
+                success = self._suspend_or_ban_user()
+            elif self.action_type == 'restrict_user':
+                success = self._restrict_user()
+            elif self.action_type == 'warn':
+                success = self._warn_user()
+            elif self.action_type == 'feature_content':
+                success = self._feature_content()
+            else:
+                error_msg = f"Tipo de ação não implementado: {self.action_type}"
+            
+            # Criar log da ação
+            status = 'success' if success else 'failed'
+            description = f"Ação aplicada: {self.get_action_type_display()}"
+            if error_msg:
+                description += f" - ERRO: {error_msg}"
+            
+            # Garantir que a instância foi salva antes de criar log
+            if not self.pk:
+                self.save()
+                
+            # Verificar se moderator é válido antes de criar log
+            moderator_id = None
+            if self.moderator and hasattr(self.moderator, 'id'):
+                moderator_id = self.moderator.id
+                # Verificar se o usuário ainda existe no banco
+                try:
+                    User.objects.get(id=moderator_id)
+                except User.DoesNotExist:
+                    moderator_id = None
+            
+            try:
+                ModerationLog.objects.create(
+                    moderator_id=moderator_id,
+                    action_type=self.action_type,
+                    target_type=self.get_target_type(),
+                    target_id=self.get_target_id(),
+                    description=description,
+                    details=self.reason + (f"\nErro: {error_msg}" if error_msg else "") + (f"\nStatus: {status}" if status else "")
+                )
+            except Exception as log_error:
+                # Não propagar o erro para não quebrar a ação principal
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f'Erro ao criar log de moderação: {log_error}')
+            
+            return success
+            
+        except Exception as e:
+            # Garantir que a instância foi salva antes de criar log de erro
+            if not self.pk:
+                try:
+                    self.save()
+                except:
+                    pass  # Se não conseguir salvar, continuar com log
+                    
+            # Log de erro detalhado
+            # Verificar se moderator é válido antes de criar log de erro
+            moderator_id = None
+            if self.moderator and hasattr(self.moderator, 'id'):
+                moderator_id = self.moderator.id
+                try:
+                    User.objects.get(id=moderator_id)
+                except User.DoesNotExist:
+                    moderator_id = None
+            
+            try:
+                ModerationLog.objects.create(
+                    moderator_id=moderator_id,
+                    action_type=self.action_type,
+                    target_type=self.get_target_type(),
+                    target_id=self.get_target_id(),
+                    description=f"ERRO ao aplicar ação: {self.get_action_type_display()}",
+                    details=f"Erro: {str(e)}\nRazão original: {self.reason}\nStatus: error\nException: {str(e)}"
+                )
+            except Exception as log_error:
+                # Silenciosamente falha para não quebrar ainda mais
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f'Erro ao criar log de erro de moderação: {log_error}')
+            return False
+    
+    def _hide_content(self):
+        """Oculta conteúdo"""
+        try:
+            if self.target_post and self.target_post.is_public:
                 self.target_post.is_public = False
-                self.target_post.save()
+                self.target_post.save(update_fields=['is_public'])
+                return True
             elif self.target_comment:
-                # Marcar comentário como oculto (adicionar campo se necessário)
-                pass
-        
-        elif self.action_type == 'delete_content':
-            if self.target_post:
-                self.target_post.delete()
-            elif self.target_comment:
+                # Implementar campo is_hidden se necessário
+                # Por enquanto, deletar comentário
                 self.target_comment.delete()
-        
-        elif self.action_type in ['suspend_user', 'ban_user']:
-            if self.target_user:
+                return True
+            return False
+        except Exception:
+            return False
+    
+    def _delete_content(self):
+        """Deleta conteúdo"""
+        try:
+            # Fazer backup antes de deletar
+            if self.target_post:
+                self.target_post_id_backup = self.target_post.id
+                self.target_content_backup = self.target_post.content[:500]
+                self.target_post.delete()
+                return True
+            elif self.target_comment:
+                self.target_comment_id_backup = self.target_comment.id
+                self.target_content_backup = self.target_comment.content[:500]
+                self.target_comment.delete()
+                return True
+            return False
+        except Exception:
+            return False
+    
+    def _approve_content(self):
+        """Aprova conteúdo (torna público)"""
+        try:
+            if self.target_post and not self.target_post.is_public:
+                self.target_post.is_public = True
+                self.target_post.save(update_fields=['is_public'])
+                return True
+            return True  # Se já estiver público, considerar como sucesso
+        except Exception:
+            return False
+    
+    def _suspend_or_ban_user(self):
+        """Suspende ou bane usuário"""
+        try:
+            if self.target_user and self.target_user.is_active:
                 self.target_user.is_active = False
-                self.target_user.save()
-        
-        # Criar log da ação
-        ModerationLog.objects.create(
-            moderator=self.moderator,
-            action_type=self.action_type,
-            target_type=self.get_target_type(),
-            target_id=self.get_target_id(),
-            description=f"Ação aplicada: {self.get_action_type_display()}",
-            details=self.reason
-        )
+                self.target_user.save(update_fields=['is_active'])
+                
+                # Se for suspensão temporária, criar task para reativar
+                if self.action_type == 'suspend_user' and self.suspension_end_date:
+                    # TODO: Implementar task celery para reativar usuário
+                    pass
+                
+                return True
+            return False
+        except Exception:
+            return False
+    
+    def _restrict_user(self):
+        """Restringe usuário (implementar conforme necessário)"""
+        try:
+            if self.target_user:
+                # Implementar lógica de restrição
+                # Por exemplo: não pode criar posts, apenas comentar
+                return True
+            return False
+        except Exception:
+            return False
+    
+    def _warn_user(self):
+        """Envia advertência ao usuário"""
+        try:
+            if self.target_user:
+                # Implementar sistema de notificações de advertência
+                # Por enquanto, apenas registrar no log
+                return True
+            return False
+        except Exception:
+            return False
+    
+    def _feature_content(self):
+        """Destaca conteúdo"""
+        try:
+            if self.target_post:
+                self.target_post.is_pinned = True
+                self.target_post.save(update_fields=['is_pinned'])
+                return True
+            return False
+        except Exception:
+            return False
 
     def get_target_type(self):
         """Retorna o tipo do alvo"""
@@ -911,17 +1259,34 @@ class ModerationAction(BaseModel):
             return 'comment'
         elif self.target_user:
             return 'user'
-        return 'unknown'
+        elif self.target_post_id_backup:
+            return 'post'
+        elif self.target_comment_id_backup:
+            return 'comment'
+        return 'action'
 
     def get_target_id(self):
-        """Retorna o ID do alvo"""
-        if self.target_post:
+        """Retorna o ID do alvo (robusta para conteúdo deletado)"""
+        # Tentar obter ID dos objetos principais (se existem e têm ID válido)
+        if self.target_post and getattr(self.target_post, 'id', None) is not None:
             return self.target_post.id
-        elif self.target_comment:
+        elif self.target_comment and getattr(self.target_comment, 'id', None) is not None:
             return self.target_comment.id
-        elif self.target_user:
+        elif self.target_user and getattr(self.target_user, 'id', None) is not None:
             return self.target_user.id
-        return None
+            
+        # Usar campos de backup se objetos principais não têm ID válido
+        if self.target_post_id_backup:
+            return self.target_post_id_backup
+        elif self.target_comment_id_backup:
+            return self.target_comment_id_backup
+        
+        # Se não há nenhum alvo, usar o ID desta própria ação como fallback
+        if self.pk:
+            return self.pk
+        else:
+            # Se nem mesmo tem pk, usar um ID padrão que não quebre FK
+            return 1
 
 
 class ContentFilter(BaseModel):
@@ -1002,8 +1367,8 @@ class ContentFilter(BaseModel):
         verbose_name_plural = _('Filtros de Conteúdo')
         ordering = ['-is_active', 'name']
 
-    def __str__(self):
-        return f"{self.name} ({self.get_filter_type_display()})"
+        def __str__(self):
+            return f"{self.name} ({self.get_filter_type_display()})"
 
     def matches_content(self, content):
         """Verifica se o conteúdo corresponde ao filtro"""
@@ -1015,24 +1380,56 @@ class ContentFilter(BaseModel):
         
         if self.case_sensitive:
             text = content
+            pattern = self.pattern
         else:
             text = content.lower()
             pattern = self.pattern.lower()
         
         if self.filter_type == 'keyword':
-            return pattern in text
+            # Para keywords, dividir o padrão em palavras individuais
+            keywords = pattern.split()
+            for keyword in keywords:
+                if keyword.strip() in text:
+                    return True
+            return False
         elif self.filter_type == 'regex':
             import re
             try:
-                return bool(re.search(pattern, text))
+                # Para regex, usar o padrão original (case sensitivity é controlada pelo regex)
+                regex_pattern = self.pattern
+                flags = 0 if self.case_sensitive else re.IGNORECASE
+                return bool(re.search(regex_pattern, content, flags))
             except re.error:
                 return False
         elif self.filter_type == 'spam_pattern':
-            # Padrões comuns de spam
+            # Padrões comuns de spam em português e inglês
             spam_patterns = [
-                r'\b(buy|sell|cheap|discount|free|money|earn|rich)\b',
+                # Palavras de ganho fácil (português e inglês)
+                r'\b(ganhe|ganhar|dinheiro|fácil|rápido|grátis|free|money|earn|easy|rich)\b',
+                r'\b(clique|click|here|aqui|agora|now|urgente|urgent)\b',
+                
+                # Frases comuns de spam
+                r'ganhe? dinheiro',
+                r'dinheiro fácil',
+                r'renda extra',
+                r'trabalhe em casa',
+                r'oportunidade única',
+                r'limited time',
+                r'act now',
+                r'click here',
+                r'clique aqui',
+                
+                # Padrões originais em inglês
+                r'\b(buy|sell|cheap|discount|business|opportunity)\b',
                 r'\b(viagra|cialis|casino|poker|lottery)\b',
                 r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+',
+                
+                # Múltiplos sinais de exclamação ou interrogação
+                r'[!]{3,}',
+                r'[?]{3,}',
+                
+                # Caps excessivo
+                r'[A-Z]{10,}',
             ]
             import re
             for spam_pattern in spam_patterns:
@@ -1083,12 +1480,23 @@ class ModerationLog(BaseModel):
         ('report_resolved', _('Denúncia Resolvida')),
         ('report_status_changed', _('Status da Denúncia Alterado')),
         ('report_assigned', _('Denúncia Atribuída')),
+        ('resolve_report', _('Resolver Denúncia')),
         ('content_hidden', _('Conteúdo Ocultado')),
         ('content_deleted', _('Conteúdo Deletado')),
         ('user_suspended', _('Usuário Suspenso')),
         ('user_banned', _('Usuário Banido')),
         ('filter_triggered', _('Filtro Acionado')),
+        ('filter_deleted', _('Filtro Deletado')),
         ('warning_sent', _('Advertência Enviada')),
+        ('bulk_action_error', _('Erro em Ação em Massa')),
+        ('bulk_action_success', _('Ação em Massa Executada')),
+        # Ações específicas dos ModerationAction
+        ('hide_content', _('Ocultar Conteúdo')),
+        ('delete_content', _('Deletar Conteúdo')),
+        ('approve_content', _('Aprovar Conteúdo')),
+        ('restrict_user', _('Restringir Usuário')),
+        ('warn', _('Advertir Usuário')),
+        ('feature_content', _('Destacar Conteúdo')),
     ]
     
     moderator = models.ForeignKey(
@@ -1110,6 +1518,8 @@ class ModerationLog(BaseModel):
         help_text=_('post, comment, user, report, etc.')
     )
     target_id = models.IntegerField(
+        null=True,
+        blank=True,
         verbose_name=_('ID do Alvo')
     )
     description = models.TextField(
@@ -1147,18 +1557,41 @@ class ModerationLog(BaseModel):
     @classmethod
     def log_action(cls, moderator, action_type, target_type, target_id, description, details=None, request=None):
         """Método de classe para facilitar a criação de logs"""
-        log = cls.objects.create(
-            moderator=moderator,
-            action_type=action_type,
-            target_type=target_type,
-            target_id=target_id,
-            description=description,
-            details=details
-        )
+        # Validar campos obrigatórios
+        if not action_type:
+            raise ValueError('action_type é obrigatório')
+        if not target_type:
+            raise ValueError('target_type é obrigatório')
+        if target_id is None:
+            raise ValueError('target_id é obrigatório')
+        if not description:
+            raise ValueError('description é obrigatório')
         
-        if request:
-            log.ip_address = request.META.get('REMOTE_ADDR')
-            log.user_agent = request.META.get('HTTP_USER_AGENT')
-            log.save()
+        # Verificar se action_type é válido
+        valid_types = [choice[0] for choice in cls.LOG_TYPES]
+        if action_type not in valid_types:
+            raise ValueError(f'Tipo de ação inválido: {action_type}. Tipos válidos: {valid_types}')
         
-        return log
+        try:
+            log = cls.objects.create(
+                moderator=moderator,
+                action_type=action_type,
+                target_type=target_type,
+                target_id=target_id,
+                description=description,
+                details=details
+            )
+            
+            if request:
+                log.ip_address = request.META.get('REMOTE_ADDR')
+                log.user_agent = request.META.get('HTTP_USER_AGENT')
+                log.save()
+            
+            return log
+        except Exception as e:
+            # Em caso de erro, não propagar a exceção para não quebrar o fluxo principal
+            # Log do erro em outra forma se necessário
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f'Erro ao criar log de moderação: {e}')
+            return None

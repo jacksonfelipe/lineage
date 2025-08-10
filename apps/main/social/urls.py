@@ -51,9 +51,13 @@ urlpatterns = [
     path('moderation/filters/', views.content_filters, name='content_filters'),
     path('moderation/filters/<int:filter_id>/edit/', views.edit_filter, name='edit_filter'),
     path('moderation/filters/<int:filter_id>/toggle/', views.toggle_filter, name='toggle_filter'),
+    path('moderation/filters/<int:filter_id>/delete/', views.delete_filter, name='delete_filter'),
     path('moderation/filters/test/', views.test_content_filter, name='test_content_filter'),
     
     # Logs e ações
     path('moderation/logs/', views.moderation_logs, name='moderation_logs'),
+    path('moderation/logs/export/excel/', views.export_logs_excel, name='export_logs_excel'),
+    path('moderation/logs/export/csv/', views.export_logs_csv, name='export_logs_csv'),
+    path('moderation/apply-retroactive/', views.apply_retroactive_filters, name='apply_retroactive_filters'),
     path('moderation/bulk-action/', views.bulk_moderation_action, name='bulk_moderation_action'),
 ]

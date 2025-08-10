@@ -251,42 +251,7 @@
     </div>
   </div>
 
-  <!-- Links rápidos -->
-  <div class="row">
-    <div class="col-12">
-      <div class="card shadow">
-        <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">
-            <i class="bi bi-lightning"></i> {% trans "Ações Rápidas" %}
-          </h6>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-3 mb-3">
-              <a href="{% url 'social:reports_list' %}?status=pending" class="btn btn-warning btn-block">
-                <i class="bi bi-clock"></i> {% trans "Denúncias Pendentes" %}
-              </a>
-            </div>
-            <div class="col-md-3 mb-3">
-              <a href="{% url 'social:reports_list' %}?priority=urgent" class="btn btn-danger btn-block">
-                <i class="bi bi-exclamation-triangle"></i> {% trans "Denúncias Urgentes" %}
-              </a>
-            </div>
-            <div class="col-md-3 mb-3">
-              <a href="{% url 'social:content_filters' %}" class="btn btn-info btn-block">
-                <i class="bi bi-funnel"></i> {% trans "Filtros de Conteúdo" %}
-              </a>
-            </div>
-            <div class="col-md-3 mb-3">
-              <a href="{% url 'social:moderation_logs' %}" class="btn btn-secondary btn-block">
-                <i class="bi bi-journal-text"></i> {% trans "Logs de Moderação" %}
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+
 </div>
 
 <!-- Script para o gráfico -->

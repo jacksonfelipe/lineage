@@ -1,10 +1,12 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from django.utils.html import format_html
+from django.contrib import messages
+from django.shortcuts import redirect
 from .models import (
     Post, Comment, Like, Follow, UserProfile, 
     Share, Hashtag, PostHashtag, CommentLike,
-    Report, ModerationAction, ContentFilter, ModerationLog
+    Report, ModerationAction, ContentFilter, ModerationLog, ReportFilterFlag
 )
 from core.admin import BaseModelAdmin
 from django.utils import timezone
@@ -223,24 +225,35 @@ class PostHashtagAdmin(BaseModelAdmin):
 # ADMIN DE MODERAÇÃO
 # ============================================================================
 
+class ReportFilterFlagInline(admin.TabularInline):
+    model = ReportFilterFlag
+    extra = 0
+    readonly_fields = ['content_filter', 'matched_pattern', 'confidence_score', 'created_at']
+    can_delete = False
+
+
 @admin.register(Report)
 class ReportAdmin(BaseModelAdmin):
     list_display = [
         'get_reported_content_short', 'report_type', 'reporter', 'status', 
-        'priority', 'assigned_moderator', 'created_at'
+        'priority', 'get_filters_count', 'assigned_moderator', 'created_at'
     ]
     list_filter = [
-        'report_type', 'status', 'priority', 'created_at', 'assigned_moderator'
+        'report_type', 'status', 'priority', 'created_at', 'assigned_moderator',
+        'filter_flags__content_filter'
     ]
     search_fields = [
         'description', 'reporter__username', 'reported_post__content',
-        'reported_comment__content', 'reported_user__username'
+        'reported_comment__content', 'reported_user__username',
+        'filter_flags__content_filter__name'
     ]
     readonly_fields = [
-        'similar_reports_count', 'created_at', 'updated_at', 'resolved_at'
+        'similar_reports_count', 'created_at', 'updated_at', 'resolved_at',
+        'get_filter_flags_display'
     ]
     date_hierarchy = 'created_at'
     ordering = ['-priority', '-created_at']
+    inlines = [ReportFilterFlagInline]
     
     fieldsets = (
         (_('Informações da Denúncia'), {
@@ -265,6 +278,46 @@ class ReportAdmin(BaseModelAdmin):
         content = obj.get_reported_content()
         return content[:50] + '...' if len(content) > 50 else content
     get_reported_content_short.short_description = _('Conteúdo Reportado')
+    
+    def get_filters_count(self, obj):
+        count = obj.filter_flags.count()
+        if count == 0:
+            return _('Manual')
+        elif count == 1:
+            filter_name = obj.filter_flags.first().content_filter.name
+            return format_html(
+                '<span style="background: #e3f2fd; padding: 2px 6px; border-radius: 3px; font-size: 11px;">{}</span>',
+                filter_name[:15] + '...' if len(filter_name) > 15 else filter_name
+            )
+        else:
+            return format_html(
+                '<span style="background: #fff3e0; padding: 2px 6px; border-radius: 3px; font-size: 11px; color: #f57c00;">{} filtros</span>',
+                count
+            )
+    get_filters_count.short_description = _('Filtros')
+    
+    def get_filter_flags_display(self, obj):
+        flags = obj.filter_flags.select_related('content_filter').all()
+        if not flags:
+            return _('Denúncia manual - não foi gerada por filtros automáticos')
+        
+        html_parts = []
+        for flag in flags:
+            confidence_color = '#4caf50' if flag.confidence_score >= 0.8 else '#ff9800' if flag.confidence_score >= 0.5 else '#f44336'
+            html_parts.append(format_html(
+                '<div style="margin: 8px 0; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">'
+                '<strong>{}</strong> <span style="color: {};">({:.0%})</span><br>'
+                '<small style="color: #666;">{}</small><br>'
+                '<code style="background: #f5f5f5; padding: 2px 4px; border-radius: 2px; font-size: 11px;">{}</code>'
+                '</div>',
+                flag.content_filter.name,
+                confidence_color,
+                flag.confidence_score,
+                flag.content_filter.get_filter_type_display(),
+                flag.matched_pattern[:100] + '...' if flag.matched_pattern and len(flag.matched_pattern) > 100 else flag.matched_pattern or 'N/A'
+            ))
+        return format_html(''.join(html_parts))
+    get_filter_flags_display.short_description = _('Detalhes dos Filtros Acionados')
     
     def assign_to_moderator(self, request, queryset):
         """Ação para atribuir denúncias a um moderador"""
@@ -427,6 +480,29 @@ class ContentFilterAdmin(BaseModelAdmin):
     reset_statistics.short_description = _('Resetar estatísticas')
 
 
+@admin.register(ReportFilterFlag)
+class ReportFilterFlagAdmin(BaseModelAdmin):
+    list_display = [
+        'report', 'content_filter', 'get_matched_pattern_short', 'confidence_score', 'created_at'
+    ]
+    list_filter = [
+        'content_filter', 'confidence_score', 'created_at'
+    ]
+    search_fields = [
+        'report__description', 'content_filter__name', 'matched_pattern'
+    ]
+    readonly_fields = ['created_at', 'updated_at']
+    date_hierarchy = 'created_at'
+    ordering = ['-created_at']
+    
+    def get_matched_pattern_short(self, obj):
+        if not obj.matched_pattern:
+            return '-'
+        pattern = obj.matched_pattern
+        return pattern[:50] + '...' if len(pattern) > 50 else pattern
+    get_matched_pattern_short.short_description = _('Padrão Detectado')
+
+
 @admin.register(ModerationLog)
 class ModerationLogAdmin(BaseModelAdmin):
     list_display = [
@@ -469,10 +545,10 @@ class ModerationLogAdmin(BaseModelAdmin):
         """Impedir edição de logs"""
         return False
     
-    actions = ['export_logs']
+
     
-    def export_logs(self, request, queryset):
-        """Exportar logs selecionados"""
+    def export_logs_csv(self, request, queryset):
+        """Exportar logs selecionados em CSV"""
         import csv
         from django.http import HttpResponse
         
@@ -482,7 +558,7 @@ class ModerationLogAdmin(BaseModelAdmin):
         writer = csv.writer(response)
         writer.writerow([
             'Data', 'Moderador', 'Tipo de Ação', 'Tipo do Alvo', 'ID do Alvo',
-            'Descrição', 'Detalhes', 'IP'
+            'Descrição', 'Detalhes', 'IP', 'User Agent'
         ])
         
         for log in queryset:
@@ -494,11 +570,180 @@ class ModerationLogAdmin(BaseModelAdmin):
                 log.target_id,
                 log.description,
                 log.details or '',
-                log.ip_address or ''
+                log.ip_address or '',
+                log.user_agent or ''
             ])
         
         return response
-    export_logs.short_description = _('Exportar logs selecionados')
+    export_logs_csv.short_description = _('Exportar logs CSV')
+
+    def export_logs_excel(self, request, queryset):
+        """Exportar logs selecionados em Excel formatado"""
+        try:
+            import openpyxl
+            from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+            from openpyxl.utils import get_column_letter
+        except ImportError:
+            messages.error(request, _('openpyxl não está instalado. Use: pip install openpyxl'))
+            return redirect(request.META.get('HTTP_REFERER', '/admin/'))
+        
+        from django.http import HttpResponse
+        from datetime import datetime
+        
+        # Criar workbook
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Logs de Moderação"
+        
+        # Estilos
+        header_font = Font(name='Arial', size=12, bold=True, color='FFFFFF')
+        header_fill = PatternFill(start_color='366092', end_color='366092', fill_type='solid')
+        header_alignment = Alignment(horizontal='center', vertical='center')
+        
+        border_thin = Border(
+            left=Side(style='thin'), right=Side(style='thin'),
+            top=Side(style='thin'), bottom=Side(style='thin')
+        )
+        
+        data_font = Font(name='Arial', size=10)
+        data_alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+        
+        # Cabeçalhos
+        headers = [
+            'Data/Hora', 'Moderador', 'Tipo de Ação', 'Tipo do Alvo', 
+            'ID do Alvo', 'Descrição', 'Detalhes', 'Endereço IP', 'Navegador'
+        ]
+        
+        # Configurar cabeçalho
+        for col_num, header in enumerate(headers, 1):
+            cell = ws.cell(row=1, column=col_num, value=header)
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.alignment = header_alignment
+            cell.border = border_thin
+        
+        # Dados
+        for row_num, log in enumerate(queryset, 2):
+            # Data formatada
+            ws.cell(row=row_num, column=1, value=log.created_at.strftime('%d/%m/%Y %H:%M:%S'))
+            
+            # Moderador
+            moderator_name = log.moderator.get_full_name() if log.moderator and log.moderator.get_full_name() else (
+                log.moderator.username if log.moderator else 'Sistema Automático'
+            )
+            ws.cell(row=row_num, column=2, value=moderator_name)
+            
+            # Tipo de ação
+            ws.cell(row=row_num, column=3, value=log.get_action_type_display())
+            
+            # Tipo do alvo
+            ws.cell(row=row_num, column=4, value=log.target_type.title())
+            
+            # ID do alvo
+            ws.cell(row=row_num, column=5, value=log.target_id)
+            
+            # Descrição
+            ws.cell(row=row_num, column=6, value=log.description[:500])  # Limitar tamanho
+            
+            # Detalhes
+            details = log.details[:500] if log.details else 'N/A'
+            ws.cell(row=row_num, column=7, value=details)
+            
+            # IP
+            ws.cell(row=row_num, column=8, value=log.ip_address or 'N/A')
+            
+            # User Agent simplificado
+            user_agent = 'N/A'
+            if log.user_agent:
+                if 'Chrome' in log.user_agent:
+                    user_agent = 'Chrome'
+                elif 'Firefox' in log.user_agent:
+                    user_agent = 'Firefox'
+                elif 'Safari' in log.user_agent:
+                    user_agent = 'Safari'
+                elif 'Edge' in log.user_agent:
+                    user_agent = 'Edge'
+                else:
+                    user_agent = 'Outro'
+            ws.cell(row=row_num, column=9, value=user_agent)
+            
+            # Aplicar estilos às células de dados
+            for col_num in range(1, 10):
+                cell = ws.cell(row=row_num, column=col_num)
+                cell.font = data_font
+                cell.alignment = data_alignment
+                cell.border = border_thin
+        
+        # Ajustar largura das colunas
+        column_widths = {
+            1: 18,  # Data/Hora
+            2: 20,  # Moderador
+            3: 25,  # Tipo de Ação
+            4: 15,  # Tipo do Alvo
+            5: 10,  # ID do Alvo
+            6: 40,  # Descrição
+            7: 30,  # Detalhes
+            8: 15,  # IP
+            9: 12,  # Navegador
+        }
+        
+        for col_num, width in column_widths.items():
+            ws.column_dimensions[get_column_letter(col_num)].width = width
+        
+        # Adicionar aba de estatísticas
+        stats_ws = wb.create_sheet(title="Estatísticas")
+        
+        # Cabeçalho da aba de estatísticas
+        stats_ws.cell(row=1, column=1, value="RELATÓRIO DE LOGS DE MODERAÇÃO").font = Font(size=16, bold=True)
+        stats_ws.cell(row=2, column=1, value=f"Gerado em: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
+        stats_ws.cell(row=3, column=1, value=f"Total de registros: {queryset.count()}")
+        
+        # Estatísticas por tipo de ação
+        stats_ws.cell(row=5, column=1, value="Ações por Tipo:").font = Font(bold=True)
+        action_stats = {}
+        for log in queryset:
+            action_type = log.get_action_type_display()
+            action_stats[action_type] = action_stats.get(action_type, 0) + 1
+        
+        row = 6
+        for action, count in action_stats.items():
+            stats_ws.cell(row=row, column=1, value=action)
+            stats_ws.cell(row=row, column=2, value=count)
+            row += 1
+        
+        # Estatísticas por moderador
+        stats_ws.cell(row=row + 1, column=1, value="Ações por Moderador:").font = Font(bold=True)
+        moderator_stats = {}
+        for log in queryset:
+            moderator_name = log.moderator.get_full_name() if log.moderator and log.moderator.get_full_name() else (
+                log.moderator.username if log.moderator else 'Sistema Automático'
+            )
+            moderator_stats[moderator_name] = moderator_stats.get(moderator_name, 0) + 1
+        
+        row += 2
+        for moderator, count in moderator_stats.items():
+            stats_ws.cell(row=row, column=1, value=moderator)
+            stats_ws.cell(row=row, column=2, value=count)
+            row += 1
+        
+        # Ajustar largura das colunas da aba de estatísticas
+        stats_ws.column_dimensions['A'].width = 30
+        stats_ws.column_dimensions['B'].width = 10
+        
+        # Preparar resposta
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        filename = f"logs_moderacao_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        
+        # Salvar workbook na resposta
+        wb.save(response)
+        return response
+    
+    export_logs_excel.short_description = _('Exportar logs Excel')
+
+    actions = ['export_logs_csv', 'export_logs_excel']
 
 
 # Configurações do admin

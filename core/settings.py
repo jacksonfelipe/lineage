@@ -20,7 +20,7 @@ load_dotenv()  # take environment variables from .env.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # System Version
-VERSION = '1.13.70'
+VERSION = '1.13.90'
 
 # Enable/Disable DEBUG Mode
 DEBUG = str2bool(os.environ.get('DEBUG', False))
@@ -197,18 +197,15 @@ MIDDLEWARE = [
 
     'allauth.account.middleware.AccountMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'middlewares.login_attempts.LoginAttemptsMiddleware',
 
+    'middlewares.login_attempts.LoginAttemptsMiddleware',
     "middlewares.access_apps.LoginRequiredAccess",
     "middlewares.forbidden_redirect_middleware.ForbiddenRedirectMiddleware",
     "middlewares.rate_limit_api_external.RateLimitMiddleware",
     "middlewares.lock_screen_middleware.SessionLockMiddleware",
-    
-    # Middlewares de moderação
     "middlewares.content_filter_middleware.ContentFilterMiddleware",
     "middlewares.content_filter_middleware.SpamProtectionMiddleware",
     
-    # Middlewares de licença
     "apps.main.licence.middleware.LicenseMiddleware",
     "apps.main.licence.middleware.LicenseFeatureMiddleware",
 ]
@@ -400,6 +397,15 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# =========================== MEDIA PROCESSING CONFIGS ===========================
+
+# Configurações para processamento de mídia (ffmpeg/ffprobe)
+FFMPEG_PATH = os.getenv('FFMPEG_PATH', 'ffmpeg')
+FFPROBE_PATH = os.getenv('FFPROBE_PATH', 'ffprobe')
+
+# Configurações de upload de arquivos
+FILE_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50MB
+
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'themes'),
@@ -497,10 +503,29 @@ CACHES = {
 
 # =========================== CELERY CONFIGS ===========================
 
-# e.g., 'redis://localhost:6379/1'
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URI', 'redis://redis:6379/1')
-# e.g., 'redis://localhost:6379/1'
-CELERY_RESULT_BACKEND = os.getenv('CELERY_BACKEND_URI', 'redis://redis:6379/1')
+if DEBUG:
+    # Em modo DEBUG, usar configuração que não depende do Redis
+    CELERY_TASK_ALWAYS_EAGER = True  # Executa tarefas síncronamente
+    CELERY_TASK_EAGER_PROPAGATES = True  # Propaga exceções
+    CELERY_BROKER_URL = 'memory://'  # Broker em memória
+    CELERY_RESULT_BACKEND = 'cache+memory://'  # Backend em memória
+    CELERY_BEAT_SCHEDULE = {}  # Desabilita tarefas periódicas em DEBUG
+else:
+    # e.g., 'redis://localhost:6379/1'
+    CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URI', 'redis://redis:6379/1')
+    # e.g., 'redis://localhost:6379/1'
+    CELERY_RESULT_BACKEND = os.getenv('CELERY_BACKEND_URI', 'redis://redis:6379/1')
+    CELERY_BEAT_SCHEDULE = {
+        'encerrar-leiloes-expirados-cada-minuto': {
+            'task': 'apps.lineage.auction.tasks.encerrar_leiloes_expirados',
+            'schedule': crontab(minute='*/1'),
+        },
+        'encerrar-apoiadores-expirados-cada-minuto': {
+            'task': 'apps.lineage.server.tasks.verificar_cupons_expirados',
+            'schedule': crontab(minute='*/1'),
+        },
+    }
+
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
@@ -508,17 +533,6 @@ CELERY_IGNORE_RESULT = False  # Altere para True se não precisar dos resultados
 CELERY_TIMEZONE = TIME_ZONE
 # Pode ser definido como False se não precisar de rastreio
 CELERY_TRACK_STARTED = True
-
-CELERY_BEAT_SCHEDULE = {
-    'encerrar-leiloes-expirados-cada-minuto': {
-        'task': 'apps.lineage.auction.tasks.encerrar_leiloes_expirados',
-        'schedule': crontab(minute='*/1'),
-    },
-    'encerrar-apoiadores-expirados-cada-minuto': {
-        'task': 'apps.lineage.server.tasks.verificar_cupons_expirados',
-        'schedule': crontab(minute='*/1'),
-    },
-}
 
 # =========================== CHANNELS CONFIGS ===========================
 

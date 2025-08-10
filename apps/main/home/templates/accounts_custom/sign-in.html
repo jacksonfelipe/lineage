@@ -88,6 +88,27 @@
     padding-right: 40px; /* Espaço para o ícone */
   }
 
+  /* Estilos para mensagens de suspensão */
+  .alert-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-color: #dc3545;
+    color: #f8d7da;
+  }
+
+  .alert-warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    border-color: #ffc107;
+    color: #fff3cd;
+  }
+
+  .alert strong {
+    color: #e0c36b;
+  }
+
+  .alert small {
+    color: #aaa;
+  }
+
 </style>
 
 <section class="vh-100 d-flex align-items-center justify-content-center">
@@ -103,7 +124,23 @@
 
             {% if form.non_field_errors %}
               {% for error in form.non_field_errors %}
-                <div class="text-danger mb-3">{{ error }}</div>
+                {% if "🔴" in error or "🟡" in error %}
+                  <!-- Mensagem de suspensão/banimento -->
+                  <div class="alert alert-danger border-danger mb-3" role="alert">
+                    <div class="d-flex align-items-start">
+                      <i class="bi bi-exclamation-triangle-fill me-2 mt-1" style="font-size: 1.2em;"></i>
+                      <div class="flex-grow-1">
+                        {{ error|linebreaks }}
+                      </div>
+                    </div>
+                  </div>
+                {% else %}
+                  <!-- Outras mensagens de erro -->
+                  <div class="alert alert-warning border-warning mb-3" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    {{ error }}
+                  </div>
+                {% endif %}
               {% endfor %}
             {% endif %}
 
@@ -251,26 +288,36 @@ function togglePassword(inputId) {
 }
 
 {% if requires_captcha %}
-// Script para captcha
+// Script para captcha - Callbacks globais
+window.onCaptchaSuccess = function(token) {
+  console.log('Captcha completado:', token);
+  document.getElementById('captcha_token').value = token;
+};
+
+window.onCaptchaExpired = function() {
+  console.log('Captcha expirado');
+  document.getElementById('captcha_token').value = '';
+};
+
 document.addEventListener('DOMContentLoaded', function() {
-  // Aguarda o carregamento do hCaptcha
-  if (typeof hcaptcha !== 'undefined') {
-    hcaptcha.onReady(function() {
-      console.log('hCaptcha carregado');
-    });
-    
-    // Callback quando o captcha é completado
-    window.onCaptchaSuccess = function(token) {
-      document.getElementById('captcha_token').value = token;
-    };
-    
-    // Callback quando o captcha expira
-    window.onCaptchaExpired = function() {
-      document.getElementById('captcha_token').value = '';
-    };
+  // Função para inicializar o hCaptcha
+  function initHcaptcha() {
+    if (typeof hcaptcha !== 'undefined' && hcaptcha.onReady) {
+      hcaptcha.onReady(function() {
+        console.log('hCaptcha carregado com sucesso');
+      });
+    } else {
+      // Se hcaptcha ainda não estiver disponível, tenta novamente em 100ms
+      setTimeout(initHcaptcha, 100);
+    }
   }
+  
+  // Inicia a verificação
+  initHcaptcha();
 });
+{% endif %}
 </script>
+{% if requires_captcha %}
 <script src="https://hcaptcha.com/1/api.js" async defer></script>
 {% endif %}
 {% endblock content %}

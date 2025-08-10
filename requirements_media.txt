@@ -1,0 +1,24 @@
+# Dependências para processamento de mídia
+# Instale estas dependências para funcionalidades completas de validação e processamento
+
+# Processamento de imagens
+Pillow>=10.0.0
+
+# Processamento de vídeos (opcional, mas recomendado)
+# Requer ffmpeg instalado no sistema
+# Ubuntu/Debian: sudo apt-get install ffmpeg
+# CentOS/RHEL: sudo yum install ffmpeg
+# macOS: brew install ffmpeg
+# Windows: baixar de https://ffmpeg.org/download.html
+
+# Para detecção de conteúdo NSFW (opcional)
+# tensorflow>=2.10.0
+# nudenet>=2.0.9
+
+# Para detecção de faces (opcional)
+# face-recognition>=1.3.0
+# opencv-python>=4.7.0
+
+# Para análise de sentimento em comentários (opcional)
+# transformers>=4.21.0
+# torch>=1.12.0

@@ -51,7 +51,7 @@
           <div class="profile-info p-4">
             <div class="d-flex align-items-end">
                              <!-- Avatar -->
-               <div class="avatar-container me-4 d-none d-lg-block" style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; border: 4px solid white; margin-top: -60px; position: relative;">
+               <div class="profile-avatar-container me-4 d-none d-lg-block" style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; border: 4px solid white; margin-top: -60px; position: relative;">
                 {% if profile_user.avatar %}
                   <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' profile_user.uuid timestamp %}" 
                        alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
@@ -159,14 +159,22 @@
                         <i class="bi bi-chat"></i> {% trans "Mensagem" %}
                       </a>
                     {% endif %}
-                    <a href="{% url 'social:search' %}?q={{ profile_user.username }}" class="btn btn-outline-secondary">
+                    <a href="{% url 'social:search' %}?q={{ profile_user.username }}" class="btn btn-outline-secondary me-2">
                       <i class="bi bi-search"></i> {% trans "Buscar posts" %}
+                    </a>
+                    <a href="{% url 'social:feed' %}" class="btn btn-success">
+                      <i class="bi bi-house"></i> {% trans "Feed" %}
                     </a>
                   </div>
                 {% else %}
-                  <a href="{% url 'social:edit_profile' %}" class="btn btn-primary">
-                    <i class="bi bi-pencil"></i> {% trans "Editar perfil" %}
-                  </a>
+                  <div class="d-flex align-items-center">
+                    <a href="{% url 'social:edit_profile' %}" class="btn btn-primary me-2">
+                      <i class="bi bi-pencil"></i> {% trans "Editar perfil" %}
+                    </a>
+                    <a href="{% url 'social:feed' %}" class="btn btn-success">
+                      <i class="bi bi-house"></i> {% trans "Feed" %}
+                    </a>
+                  </div>
                 {% endif %}
               </div>
             </div>
@@ -221,19 +229,19 @@
                         {% endif %}
                       </small>
                     </div>
-                    {% if user == post.author %}
-                      <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                          <i class="bi bi-three-dots"></i>
-                        </button>
-                        <ul class="dropdown-menu">
+                    <div class="dropdown">
+                      <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-three-dots"></i>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'social:post_detail' post.id %}">
+                          <i class="bi bi-eye"></i> {% trans "Ver post" %}
+                        </a></li>
+                        {% if user == post.author %}
+                          <li><hr class="dropdown-divider"></li>
                           <li><a class="dropdown-item" href="{% url 'social:post_edit' post.id %}">
                             <i class="bi bi-pencil"></i> {% trans "Editar" %}
                           </a></li>
-                          <li><a class="dropdown-item" href="{% url 'social:post_delete' post.id %}">
-                            <i class="bi bi-trash"></i> {% trans "Excluir" %}
-                          </a></li>
-                          <li><hr class="dropdown-divider"></li>
                           <li><a class="dropdown-item pin-post-btn" href="#" data-post-id="{{ post.id }}">
                             {% if post.is_pinned %}
                               <i class="bi bi-pin-angle-fill"></i> {% trans "Desfixar" %}
@@ -241,9 +249,21 @@
                               <i class="bi bi-pin-angle"></i> {% trans "Fixar" %}
                             {% endif %}
                           </a></li>
-                        </ul>
-                      </div>
-                    {% endif %}
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item text-danger" href="{% url 'social:post_delete' post.id %}">
+                            <i class="bi bi-trash"></i> {% trans "Excluir" %}
+                          </a></li>
+                        {% else %}
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="{% url 'social:user_profile' post.author.username %}">
+                            <i class="bi bi-person"></i> {% trans "Ver perfil" %}
+                          </a></li>
+                          <li><a class="dropdown-item text-warning report-btn" href="#" data-content-type="post" data-content-id="{{ post.id }}">
+                            <i class="bi bi-flag"></i> {% trans "Denunciar" %}
+                          </a></li>
+                        {% endif %}
+                      </ul>
+                    </div>
                   </div>
                 </div>
                 
@@ -487,13 +507,13 @@ document.addEventListener('DOMContentLoaded', function() {
    <!-- CSS para responsividade -->
   <style>
   /* Avatar principal do perfil sempre redondo */
-  .profile-info .avatar-container {
+  .profile-info .profile-avatar-container {
     border-radius: 50% !important;
     overflow: hidden !important;
     position: relative !important;
   }
   
-  .profile-info .avatar-container img {
+  .profile-info .profile-avatar-container img {
     object-fit: cover !important;
     width: 100% !important;
     height: 100% !important;
@@ -540,7 +560,7 @@ document.addEventListener('DOMContentLoaded', function() {
       height: 120px !important;
     }
     
-    .profile-info .avatar-container {
+    .profile-info .profile-avatar-container {
       width: 80px !important;
       height: 80px !important;
       margin-top: -40px !important;
@@ -567,7 +587,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   /* Mobile extra pequeno */
   @media (max-width: 575.98px) {
-    .profile-info .avatar-container {
+    .profile-info .profile-avatar-container {
       width: 70px !important;
       height: 70px !important;
       margin-top: -35px !important;

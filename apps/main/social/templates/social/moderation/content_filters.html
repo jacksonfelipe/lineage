@@ -37,7 +37,7 @@
               <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                 {% trans "Total de Filtros" %}
               </div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ filters.count }}</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_filters }}</div>
             </div>
             <div class="col-auto">
               <i class="bi bi-funnel fa-2x text-gray-300"></i>
@@ -88,7 +88,13 @@
               <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                 {% trans "Última Atividade" %}
               </div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ last_activity|default:"Nunca" }}</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {% if last_activity %}
+                  {{ last_activity|date:"d/m/Y H:i" }}
+                {% else %}
+                  {% trans "Nunca" %}
+                {% endif %}
+              </div>
             </div>
             <div class="col-auto">
               <i class="bi bi-clock fa-2x text-gray-300"></i>
@@ -114,19 +120,23 @@
             <div class="row">
               <div class="col-md-4">
                 <label for="test_pattern" class="form-label">{% trans "Padrão" %}</label>
-                <input type="text" class="form-control" id="test_pattern" name="pattern" placeholder="{% trans 'Digite o padrão para testar...' %}">
+                <input type="text" class="form-control" id="test_pattern" name="pattern" 
+                       value="{{ test_pattern|default:'' }}" 
+                       placeholder="{% trans 'Digite o padrão para testar...' %}">
               </div>
               <div class="col-md-3">
                 <label for="test_filter_type" class="form-label">{% trans "Tipo" %}</label>
                 <select class="form-control" id="test_filter_type" name="filter_type">
-                  <option value="keyword">{% trans "Palavra-chave" %}</option>
-                  <option value="regex">{% trans "Expressão Regular" %}</option>
-                  <option value="spam_pattern">{% trans "Padrão de Spam" %}</option>
+                  <option value="keyword" {% if test_filter_type == 'keyword' %}selected{% endif %}>{% trans "Palavra-chave" %}</option>
+                  <option value="regex" {% if test_filter_type == 'regex' %}selected{% endif %}>{% trans "Expressão Regular" %}</option>
+                  <option value="spam_pattern" {% if test_filter_type == 'spam_pattern' %}selected{% endif %}>{% trans "Padrão de Spam" %}</option>
                 </select>
               </div>
               <div class="col-md-3">
                 <label for="test_content" class="form-label">{% trans "Conteúdo para Testar" %}</label>
-                <input type="text" class="form-control" id="test_content" name="content" placeholder="{% trans 'Digite o conteúdo...' %}">
+                <input type="text" class="form-control" id="test_content" name="content" 
+                       value="{{ test_content|default:'' }}" 
+                       placeholder="{% trans 'Digite o conteúdo...' %}">
               </div>
               <div class="col-md-2">
                 <label class="form-label">&nbsp;</label>
@@ -139,13 +149,29 @@
           
           {% if test_result is not None %}
             <div class="mt-3">
-              <div class="alert alert-{% if test_result %}success{% else %}info{% endif %}">
-                <strong>{% trans "Resultado do Teste" %}:</strong>
-                {% if test_result %}
-                  {% trans "O conteúdo corresponde ao filtro!" %}
-                {% else %}
-                  {% trans "O conteúdo não corresponde ao filtro." %}
-                {% endif %}
+              <div class="alert alert-{% if test_result %}warning{% else %}success{% endif %} d-flex align-items-center">
+                <div class="me-3">
+                  {% if test_result %}
+                    <i class="bi bi-exclamation-triangle fs-4"></i>
+                  {% else %}
+                    <i class="bi bi-check-circle fs-4"></i>
+                  {% endif %}
+                </div>
+                <div class="flex-grow-1">
+                  <h6 class="alert-heading mb-1">{% trans "Resultado do Teste" %}</h6>
+                  {% if test_result %}
+                    <strong>⚠️ {% trans "FILTRO ACIONADO!" %}</strong><br>
+                    <small>{% trans "O conteúdo seria detectado pelo filtro e sofreria ação de moderação." %}</small>
+                  {% else %}
+                    <strong>✅ {% trans "CONTEÚDO APROVADO" %}</strong><br>
+                    <small>{% trans "O conteúdo não corresponde ao padrão e passaria pela moderação." %}</small>
+                  {% endif %}
+                  <br>
+                  <small class="text-muted">
+                    <strong>{% trans "Padrão testado" %}:</strong> "{{ test_pattern }}" 
+                    ({{ test_filter_type|title }})
+                  </small>
+                </div>
               </div>
             </div>
           {% endif %}

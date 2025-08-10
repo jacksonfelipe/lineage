@@ -13,7 +13,9 @@ class ForbiddenRedirectMiddleware:
     def __call__(self, request):
         response = self.get_response(request)
         login_url = reverse('login')
-        if response.status_code == 403 and request.path != login_url:
+        
+        # Não redireciona se já estiver na página de login ou se for um POST para login
+        if response.status_code == 403 and request.path != login_url and not request.path.endswith('/login/'):
             # Log para verificar de onde vem o erro 403
             logger.warning(f'Erro 403: Acesso negado para {request.path} por {request.user}')
             # Redirecionamento para a página de login

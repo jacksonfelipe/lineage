@@ -79,7 +79,7 @@
 
   <!-- Estatísticas rápidas -->
   <div class="row mb-4">
-    <div class="col-md-3">
+    <div class="col-md-2">
       <div class="card border-left-primary shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
@@ -96,7 +96,24 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                {% trans "Ativas" %}
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ unresolved_count }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="bi bi-hourglass fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
       <div class="card border-left-warning shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
@@ -113,7 +130,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
       <div class="card border-left-danger shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
@@ -130,7 +147,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
       <div class="card border-left-success shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
@@ -186,13 +203,13 @@
     </div>
   </div>
 
-  <!-- Lista de denúncias -->
-  <div class="row">
+  <!-- Denúncias Ativas/Não Resolvidas -->
+  <div class="row mb-4">
     <div class="col-12">
       <div class="card shadow">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
           <h6 class="m-0 font-weight-bold text-primary">
-            {% trans "Denúncias" %} ({{ page_obj.paginator.count }})
+            <i class="bi bi-hourglass text-info"></i> {% trans "Denúncias Ativas" %} ({{ page_obj.paginator.count }})
           </h6>
           <div class="form-check">
             <input class="form-check-input" type="checkbox" id="select-all">
@@ -358,10 +375,165 @@
           {% else %}
             <div class="text-center py-5">
               <i class="bi bi-flag fa-3x text-muted mb-3"></i>
-              <h5 class="text-muted">{% trans "Nenhuma denúncia encontrada" %}</h5>
-              <p class="text-muted">{% trans "Não há denúncias que correspondam aos filtros aplicados." %}</p>
+              <h5 class="text-muted">{% trans "Nenhuma denúncia ativa encontrada" %}</h5>
+              <p class="text-muted">{% trans "Não há denúncias ativas que correspondam aos filtros aplicados." %}</p>
             </div>
           {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Denúncias Resolvidas -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center bg-light">
+          <h6 class="m-0 font-weight-bold text-success">
+            <i class="bi bi-check-circle text-success"></i> {% trans "Denúncias Resolvidas" %} ({{ resolved_page_obj.paginator.count }})
+          </h6>
+          <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#resolvedReports" aria-expanded="false" aria-controls="resolvedReports">
+            <i class="bi bi-chevron-down"></i> {% trans "Mostrar/Ocultar" %}
+          </button>
+        </div>
+        <div class="collapse" id="resolvedReports">
+          <div class="card-body">
+            {% if resolved_page_obj %}
+              <div class="table-responsive">
+                <table class="table table-hover table-sm">
+                  <thead class="table-light">
+                    <tr>
+                      <th>{% trans "Tipo" %}</th>
+                      <th>{% trans "Conteúdo" %}</th>
+                      <th>{% trans "Denunciante" %}</th>
+                      <th>{% trans "Status" %}</th>
+                      <th>{% trans "Moderador" %}</th>
+                      <th>{% trans "Resolvida em" %}</th>
+                      <th>{% trans "Ações" %}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for report in resolved_page_obj %}
+                    <tr class="table-light">
+                      <td>
+                        <span class="badge bg-{% if report.report_type == 'spam' %}secondary{% elif report.report_type == 'inappropriate' %}warning{% elif report.report_type == 'harassment' %}danger{% elif report.report_type == 'violence' %}danger{% elif report.report_type == 'hate_speech' %}danger{% else %}info{% endif %}">
+                          {{ report.get_report_type_display }}
+                        </span>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="flex-shrink-0">
+                            {% if report.reported_post %}
+                              <i class="bi bi-file-text text-primary"></i>
+                            {% elif report.reported_comment %}
+                              <i class="bi bi-chat text-info"></i>
+                            {% elif report.reported_user %}
+                              <i class="bi bi-person text-warning"></i>
+                            {% endif %}
+                          </div>
+                          <div class="flex-grow-1 ms-2">
+                            <div class="fw-bold">
+                              {% if report.reported_post %}
+                                {{ report.reported_post.content|truncatechars:40 }}
+                              {% elif report.reported_comment %}
+                                {{ report.reported_comment.content|truncatechars:40 }}
+                              {% elif report.reported_user %}
+                                {{ report.reported_user.username }}
+                              {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <small>{{ report.reporter.username }}</small>
+                      </td>
+                      <td>
+                        <span class="badge bg-{% if report.status == 'resolved' %}success{% else %}secondary{% endif %}">
+                          {{ report.get_status_display }}
+                        </span>
+                      </td>
+                      <td>
+                        {% if report.assigned_moderator %}
+                          <small>{{ report.assigned_moderator.username }}</small>
+                        {% else %}
+                          <span class="text-muted">-</span>
+                        {% endif %}
+                      </td>
+                      <td>
+                        <small class="text-muted">
+                          {% if report.resolved_at %}
+                            {{ report.resolved_at|date:"d/m/Y H:i" }}
+                          {% else %}
+                            {{ report.updated_at|date:"d/m/Y H:i" }}
+                          {% endif %}
+                        </small>
+                      </td>
+                      <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                          <a href="{% url 'social:report_detail' report.id %}" class="btn btn-outline-primary" title="{% trans 'Ver Detalhes' %}">
+                            <i class="bi bi-eye"></i>
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Paginação Resolvidas -->
+              {% if resolved_page_obj.has_other_pages %}
+                <nav aria-label="{% trans 'Navegação de páginas - Resolvidas' %}">
+                  <ul class="pagination justify-content-center">
+                    {% if resolved_page_obj.has_previous %}
+                      <li class="page-item">
+                        <a class="page-link" href="?resolved_page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.report_type %}&report_type={{ request.GET.report_type }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}">
+                          <i class="bi bi-chevron-double-left"></i>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="?resolved_page={{ resolved_page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.report_type %}&report_type={{ request.GET.report_type }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}">
+                          <i class="bi bi-chevron-left"></i>
+                        </a>
+                      </li>
+                    {% endif %}
+
+                    {% for num in resolved_page_obj.paginator.page_range %}
+                      {% if resolved_page_obj.number == num %}
+                        <li class="page-item active">
+                          <span class="page-link">{{ num }}</span>
+                        </li>
+                      {% elif num > resolved_page_obj.number|add:'-3' and num < resolved_page_obj.number|add:'3' %}
+                        <li class="page-item">
+                          <a class="page-link" href="?resolved_page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.report_type %}&report_type={{ request.GET.report_type }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}">{{ num }}</a>
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+
+                    {% if resolved_page_obj.has_next %}
+                      <li class="page-item">
+                        <a class="page-link" href="?resolved_page={{ resolved_page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.report_type %}&report_type={{ request.GET.report_type }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}">
+                          <i class="bi bi-chevron-right"></i>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="?resolved_page={{ resolved_page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.report_type %}&report_type={{ request.GET.report_type }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.priority %}&priority={{ request.GET.priority }}{% endif %}">
+                          <i class="bi bi-chevron-double-right"></i>
+                        </a>
+                      </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+              {% endif %}
+
+            {% else %}
+              <div class="text-center py-3">
+                <i class="bi bi-check-circle fa-2x text-muted mb-2"></i>
+                <h6 class="text-muted">{% trans "Nenhuma denúncia resolvida encontrada" %}</h6>
+                <p class="text-muted small">{% trans "Não há denúncias resolvidas que correspondam aos filtros aplicados." %}</p>
+              </div>
+            {% endif %}
+          </div>
         </div>
       </div>
     </div>
@@ -397,11 +569,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const bulkActionForm = document.getElementById('bulk-action-form');
 
     function updateBulkActionButton() {
+        // Apenas considerar checkboxes das denúncias ativas (não resolvidas)
         const checkedBoxes = document.querySelectorAll('.report-checkbox:checked');
         bulkActionBtn.disabled = checkedBoxes.length === 0;
     }
 
     function selectAll(checked) {
+        // Apenas selecionar checkboxes das denúncias ativas (não resolvidas)
         reportCheckboxes.forEach(checkbox => {
             checkbox.checked = checked;
         });
@@ -424,17 +598,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Confirmação de ação em massa
     bulkActionForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
         const checkedBoxes = document.querySelectorAll('.report-checkbox:checked');
         const actionType = document.getElementById('bulk-action-type').value;
         
         if (checkedBoxes.length === 0) {
-            e.preventDefault();
             alert('{% trans "Selecione pelo menos uma denúncia." %}');
             return;
         }
 
         if (!actionType) {
-            e.preventDefault();
             alert('{% trans "Selecione uma ação." %}');
             return;
         }
@@ -442,8 +616,47 @@ document.addEventListener('DOMContentLoaded', function() {
         const confirmMessage = `{% trans "Tem certeza que deseja aplicar a ação" %} "${actionType}" {% trans "em" %} ${checkedBoxes.length} {% trans "denúncia(s)?" %}`;
         
         if (!confirm(confirmMessage)) {
-            e.preventDefault();
+            return;
         }
+
+        // Limpar inputs anteriores de report_ids
+        const existingInputs = bulkActionForm.querySelectorAll('input[name="report_ids"]');
+        existingInputs.forEach(input => input.remove());
+
+        // Adicionar IDs dos relatórios selecionados ao formulário (apenas relatórios ativos)
+        checkedBoxes.forEach(checkbox => {
+            // Verificar se o checkbox está na seção de relatórios ativos
+            const isActiveReport = checkbox.closest('.card').querySelector('.text-primary .bi-hourglass');
+            if (isActiveReport) {
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'report_ids';
+                hiddenInput.value = checkbox.value;
+                bulkActionForm.appendChild(hiddenInput);
+            }
+        });
+
+        // Submeter o formulário via AJAX para melhor feedback
+        fetch(bulkActionForm.action, {
+            method: 'POST',
+            body: new FormData(bulkActionForm)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let message = data.message;
+                if (data.errors && data.errors.length > 0) {
+                    message += '\n\nErros encontrados:\n' + data.errors.join('\n');
+                }
+                alert(message);
+                location.reload();
+            } else {
+                alert('Erro: ' + (data.error || 'Erro desconhecido'));
+            }
+        })
+        .catch(error => {
+            alert('Erro de conexão: ' + error.message);
+        });
     });
 });
 
@@ -509,6 +722,36 @@ function updateStatus(reportId, status) {
 
 .border-left-success {
     border-left: 0.25rem solid #28a745 !important;
+}
+
+.border-left-info {
+    border-left: 0.25rem solid #17a2b8 !important;
+}
+
+/* Estilo para a seção de relatórios resolvidos */
+#resolvedReports .table {
+    opacity: 0.8;
+}
+
+#resolvedReports .table-light {
+    background-color: #f8f9fa !important;
+}
+
+/* Destacar a diferença entre seções ativas e resolvidas */
+.active-reports-section {
+    border: 2px solid #007bff;
+    border-radius: 8px;
+}
+
+.resolved-reports-section {
+    border: 2px solid #28a745;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+}
+
+/* Animação para a expansão da seção resolvida */
+.collapse {
+    transition: all 0.3s ease-in-out;
 }
 </style>
 {% endblock content %}

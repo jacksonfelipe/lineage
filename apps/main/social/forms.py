@@ -2,6 +2,10 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from .models import Post, Comment, UserProfile, Hashtag, Report, ModerationAction, ContentFilter
 from django.contrib.auth import get_user_model
+from utils.media_validators import (
+    validate_social_media_image, validate_social_media_video, 
+    validate_avatar_image
+)
 
 
 class PostForm(forms.ModelForm):
@@ -22,17 +26,19 @@ class PostForm(forms.ModelForm):
         required=False,
         widget=forms.FileInput(attrs={
             'class': 'form-control',
-            'accept': 'image/*'
+            'accept': 'image/jpeg,image/png,image/webp,image/gif'
         }),
-        help_text=_('Imagem opcional (JPG, PNG, GIF)')
+        help_text=_('Imagem opcional (máx. 10MB, formatos: JPEG, PNG, WEBP, GIF)'),
+        validators=[validate_social_media_image]
     )
     video = forms.FileField(
         required=False,
         widget=forms.FileInput(attrs={
             'class': 'form-control',
-            'accept': 'video/*'
+            'accept': 'video/mp4,video/quicktime,video/x-msvideo,video/webm'
         }),
-        help_text=_('Vídeo opcional (MP4, AVI, MOV - máx. 50MB)')
+        help_text=_('Vídeo opcional (máx. 100MB, 5min, formatos: MP4, MOV, AVI, WEBM)'),
+        validators=[validate_social_media_video]
     )
     link = forms.URLField(
         required=False,
@@ -66,37 +72,31 @@ class PostForm(forms.ModelForm):
             raise forms.ValidationError(_('O conteúdo não pode estar vazio.'))
         return content.strip()
 
-    def clean_image(self):
-        image = self.cleaned_data.get('image')
-        if image:
-            # Verificar se é um novo upload (tem content_type) ou arquivo existente
-            if hasattr(image, 'content_type'):
-                # Verificar tamanho do arquivo (máximo 5MB)
-                if image.size > 5 * 1024 * 1024:
-                    raise forms.ValidationError(_('A imagem deve ter no máximo 5MB.'))
+    def clean(self):
+        cleaned_data = super().clean()
+        content = cleaned_data.get('content', '')
+        image = cleaned_data.get('image')
+        video = cleaned_data.get('video')
+        link = cleaned_data.get('link')
+        
+        # Verificar se há pelo menos um tipo de conteúdo
+        if not content and not image and not video and not link:
+            raise forms.ValidationError(_('O post deve ter pelo menos um conteúdo: texto, imagem, vídeo ou link.'))
+        
+        # Não permitir imagem e vídeo ao mesmo tempo
+        if image and video:
+            raise forms.ValidationError(_('Não é possível anexar imagem e vídeo no mesmo post. Escolha apenas um.'))
+        
+        # Validar limite de caracteres considerando hashtags
+        hashtags_text = ' '.join([f'#{tag}' for tag in cleaned_data.get('hashtags', [])])
+        total_content = f"{content} {hashtags_text}".strip()
+        
+        if len(total_content) > 1000:
+            raise forms.ValidationError(_('O conteúdo total (incluindo hashtags) excede 1000 caracteres.'))
+        
+        return cleaned_data
 
-                # Verificar formato
-                allowed_formats = ['image/jpeg', 'image/png', 'image/gif']
-                if image.content_type not in allowed_formats:
-                    raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG, PNG ou GIF.'))
 
-        return image
-
-    def clean_video(self):
-        video = self.cleaned_data.get('video')
-        if video:
-            # Verificar se é um novo upload (tem content_type) ou arquivo existente
-            if hasattr(video, 'content_type'):
-                # Verificar tamanho do arquivo (máximo 50MB)
-                if video.size > 50 * 1024 * 1024:
-                    raise forms.ValidationError(_('O vídeo deve ter no máximo 50MB.'))
-
-                # Verificar formato
-                allowed_formats = ['video/mp4', 'video/avi', 'video/quicktime']
-                if video.content_type not in allowed_formats:
-                    raise forms.ValidationError(_('Formato de vídeo não suportado. Use MP4, AVI ou MOV.'))
-
-        return video
 
     def clean_hashtags(self):
         hashtags = self.cleaned_data.get('hashtags', '')
@@ -143,30 +143,22 @@ class CommentForm(forms.ModelForm):
             raise forms.ValidationError(_('O comentário não pode estar vazio.'))
         return content.strip()
 
-    def clean_image(self):
-        image = self.cleaned_data.get('image')
-        if image:
-            # Verificar se é um novo upload (tem content_type) ou arquivo existente
-            if hasattr(image, 'content_type'):
-                # Verificar tamanho do arquivo (máximo 2MB)
-                if image.size > 2 * 1024 * 1024:
-                    raise forms.ValidationError(_('A imagem deve ter no máximo 2MB.'))
 
-                # Verificar formato
-                allowed_formats = ['image/jpeg', 'image/png', 'image/gif']
-                if image.content_type not in allowed_formats:
-                    raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG, PNG ou GIF.'))
-
-        return image
 
 
 class UserProfileForm(forms.ModelForm):
     """Formulário para edição do perfil social"""
+    
+    cover_image = forms.ImageField(
+        required=False,
+        help_text=_('Imagem de capa (máx. 10MB, recomendado: 1200x400px)'),
+        validators=[validate_social_media_image]
+    )
 
     class Meta:
         model = UserProfile
         fields = [
-            'bio', 'avatar', 'cover_image', 'website', 'location',
+            'bio', 'cover_image', 'website', 'location',
             'birth_date', 'phone', 'gender', 'interests',
             'is_private', 'show_email', 'show_phone', 'allow_messages'
         ]
@@ -177,13 +169,9 @@ class UserProfileForm(forms.ModelForm):
                 'placeholder': _('Conte um pouco sobre você...'),
                 'maxlength': 500
             }),
-            'avatar': forms.FileInput(attrs={
-                'class': 'form-control',
-                'accept': 'image/*'
-            }),
             'cover_image': forms.FileInput(attrs={
                 'class': 'form-control',
-                'accept': 'image/*'
+                'accept': 'image/jpeg,image/png,image/webp'
             }),
             'website': forms.URLInput(attrs={
                 'class': 'form-control',
@@ -230,37 +218,9 @@ class UserProfileForm(forms.ModelForm):
             'interests': _('Conte sobre seus interesses'),
         }
 
-    def clean_avatar(self):
-        avatar = self.cleaned_data.get('avatar')
-        if avatar:
-            # Verificar se é um novo upload (tem content_type) ou arquivo existente
-            if hasattr(avatar, 'content_type'):
-                # Verificar tamanho do arquivo (máximo 2MB)
-                if avatar.size > 2 * 1024 * 1024:
-                    raise forms.ValidationError(_('A foto de perfil deve ter no máximo 2MB.'))
 
-                # Verificar formato
-                allowed_formats = ['image/jpeg', 'image/png']
-                if avatar.content_type not in allowed_formats:
-                    raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG ou PNG.'))
 
-        return avatar
 
-    def clean_cover_image(self):
-        cover_image = self.cleaned_data.get('cover_image')
-        if cover_image:
-            # Verificar se é um novo upload (tem content_type) ou arquivo existente
-            if hasattr(cover_image, 'content_type'):
-                # Verificar tamanho do arquivo (máximo 5MB)
-                if cover_image.size > 5 * 1024 * 1024:
-                    raise forms.ValidationError(_('A imagem de capa deve ter no máximo 5MB.'))
-
-                # Verificar formato
-                allowed_formats = ['image/jpeg', 'image/png']
-                if cover_image.content_type not in allowed_formats:
-                    raise forms.ValidationError(_('Formato de imagem não suportado. Use JPG ou PNG.'))
-
-        return cover_image
 
 
 class SearchForm(forms.Form):
@@ -426,7 +386,7 @@ class ModerationActionForm(forms.ModelForm):
         choices=ModerationAction.ACTION_TYPES,
         widget=forms.Select(attrs={
             'class': 'form-control',
-            'id': 'action-type'
+            'id': 'id_action_type'
         }),
         label=_('Tipo de Ação')
     )
@@ -443,24 +403,61 @@ class ModerationActionForm(forms.ModelForm):
     )
 
     # Campos condicionais para suspensões
-    suspension_duration = forms.DurationField(
+    suspension_duration = forms.CharField(
         required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': '1 day, 2 hours, 30 minutes',
-            'id': 'suspension-duration'
+            'placeholder': '7 (dias) ou 24:00:00 (horas:min:seg)',
+            'id': 'id_suspension_duration'
         }),
         label=_('Duração da Suspensão'),
-        help_text=_('Ex: 1 day, 2 hours, 30 minutes')
+        help_text=_('Ex: 7 (para 7 dias) ou 24:00:00 (para 24 horas)')
     )
     suspension_type = forms.ChoiceField(
         choices=ModerationAction.SUSPENSION_TYPES,
         required=False,
         widget=forms.Select(attrs={
             'class': 'form-control',
-            'id': 'suspension-type'
+            'id': 'id_suspension_type'
         }),
         label=_('Tipo de Suspensão')
+    )
+    
+    # Campo para ações que precisam de usuário específico
+    target_username = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': _('Digite o nome do usuário'),
+            'id': 'id_target_username'
+        }),
+        label=_('Usuário Alvo'),
+        help_text=_('Nome do usuário para aplicar a ação')
+    )
+    
+    # Campo para prazo de suspensão específico
+    custom_expiry_date = forms.DateTimeField(
+        required=False,
+        widget=forms.DateTimeInput(attrs={
+            'class': 'form-control',
+            'type': 'datetime-local',
+            'id': 'id_custom_expiry_date'
+        }),
+        label=_('Data de Expiração'),
+        help_text=_('Data específica para expiração da ação')
+    )
+    
+    # Campo para motivo público (visível ao usuário)
+    public_reason = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 2,
+            'placeholder': _('Motivo que será mostrado ao usuário'),
+            'id': 'id_public_reason'
+        }),
+        label=_('Motivo Público'),
+        help_text=_('Motivo que será exibido para o usuário afetado')
     )
 
     # Notificação
@@ -491,6 +488,7 @@ class ModerationActionForm(forms.ModelForm):
         model = ModerationAction
         fields = [
             'action_type', 'reason', 'suspension_duration', 'suspension_type',
+            'target_username', 'custom_expiry_date', 'public_reason',
             'notify_user', 'notification_message'
         ]
         exclude = [
@@ -498,18 +496,70 @@ class ModerationActionForm(forms.ModelForm):
             'suspension_end_date', 'is_active', 'expires_at'
         ]
 
+    def clean_suspension_duration(self):
+        """Converte string em timedelta"""
+        duration_str = self.cleaned_data.get('suspension_duration')
+        if not duration_str:
+            return None
+            
+        try:
+            # Se for apenas um número, assumir dias
+            if duration_str.isdigit():
+                from datetime import timedelta
+                return timedelta(days=int(duration_str))
+            
+            # Se for formato HH:MM:SS, converter
+            if ':' in duration_str:
+                from datetime import timedelta
+                parts = duration_str.split(':')
+                if len(parts) == 3:
+                    hours, minutes, seconds = map(int, parts)
+                    return timedelta(hours=hours, minutes=minutes, seconds=seconds)
+                elif len(parts) == 2:
+                    hours, minutes = map(int, parts)
+                    return timedelta(hours=hours, minutes=minutes)
+            
+            # Tentar parsing padrão do Django
+            from django.utils.dateparse import parse_duration
+            parsed = parse_duration(duration_str)
+            if parsed:
+                return parsed
+                
+            raise ValueError("Formato inválido")
+            
+        except (ValueError, TypeError):
+            raise forms.ValidationError(_('Formato inválido. Use: 7 (dias) ou 24:00:00 (horas:min:seg)'))
+
     def clean(self):
         cleaned_data = super().clean()
         action_type = cleaned_data.get('action_type')
         suspension_duration = cleaned_data.get('suspension_duration')
         suspension_type = cleaned_data.get('suspension_type')
+        target_username = cleaned_data.get('target_username')
+        public_reason = cleaned_data.get('public_reason')
 
-        # Validar campos de suspensão
-        if action_type in ['suspend_user', 'restrict_user']:
+        # Debug: Log dos dados limpos
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"Validando formulário - action_type: {action_type}")
+
+        # Validar campos específicos por tipo de ação
+        if action_type in ['suspend_user', 'restrict_user', 'ban_user']:
+            # Ações de suspensão/banimento precisam de duração e tipo
             if not suspension_duration:
-                raise forms.ValidationError(_('Duração da suspensão é obrigatória para este tipo de ação.'))
+                self.add_error('suspension_duration', _('Duração é obrigatória para ações de suspensão/banimento.'))
             if not suspension_type:
-                raise forms.ValidationError(_('Tipo de suspensão é obrigatório para este tipo de ação.'))
+                self.add_error('suspension_type', _('Tipo de suspensão é obrigatório.'))
+        
+        # Ações que afetam usuários específicos precisam de motivo público
+        if action_type in ['suspend_user', 'ban_user', 'warn']:
+            if not public_reason:
+                self.add_error('public_reason', _('Motivo público é obrigatório para ações que afetam usuários.'))
+        
+        # Validar se há conteúdo suficiente para aplicar a ação
+        if action_type in ['hide_content', 'delete_content', 'approve_content', 'feature_content']:
+            # Essas ações serão validadas na view pois dependem do contexto do report
+            pass
 
         return cleaned_data
 
@@ -709,7 +759,6 @@ class BulkModerationForm(forms.Form):
             ('hide_content', _('Ocultar Conteúdo')),
             ('delete_content', _('Deletar Conteúdo')),
             ('warn', _('Enviar Advertência')),
-            ('assign_moderator', _('Atribuir Moderador')),
         ],
         widget=forms.Select(attrs={
             'class': 'form-control',
@@ -741,10 +790,5 @@ class BulkModerationForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        action_type = cleaned_data.get('action_type')
-        assigned_moderator = cleaned_data.get('assigned_moderator')
-
-        if action_type == 'assign_moderator' and not assigned_moderator:
-            raise forms.ValidationError(_('Selecione um moderador para atribuir.'))
-
+        # Validações podem ser adicionadas aqui conforme necessário
         return cleaned_data

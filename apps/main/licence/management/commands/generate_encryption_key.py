@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from apps.licence.utils import license_crypto
+from apps.main.licence.utils import license_crypto
 
 
 class Command(BaseCommand):
@@ -9,7 +9,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('Gerando nova chave de criptografia...'))
         
         # Gera uma nova chave
-        from apps.licence.utils import _get_license_crypto
+        from apps.main.licence.utils import _get_license_crypto
         new_key = _get_license_crypto().generate_encryption_key()
         
         self.stdout.write('\n' + '='*60)

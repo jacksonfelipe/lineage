@@ -10,7 +10,8 @@ User = get_user_model()
 
 class ContentFilterMiddleware(MiddlewareMixin):
     """
-    Middleware para aplicar filtros de conteúdo automaticamente
+    Middleware para bloqueios críticos de conteúdo (auto_delete)
+    Outros filtros são processados pelos signals após criação
     """
     
     def process_request(self, request):
@@ -19,136 +20,44 @@ class ContentFilterMiddleware(MiddlewareMixin):
         if request.method == 'POST':
             # Verificar se é criação de post ou comentário
             if any(path in request.path for path in ['/social/feed/', '/social/post/create/', '/social/post/']):
-                # Armazenar dados da requisição para processamento posterior
-                request._content_to_filter = True
+                # Verificar filtros de bloqueio crítico
+                return self._check_critical_filters(request)
         return None
     
-    def process_response(self, request, response):
-        """Processa a resposta após a view"""
-        # Verificar se há conteúdo para filtrar
-        if hasattr(request, '_content_to_filter') and request._content_to_filter:
-            # Aplicar filtros se necessário
-            self._apply_content_filters(request)
-        
-        return response
-    
-    def _apply_content_filters(self, request):
-        """Aplica filtros de conteúdo"""
+    def _check_critical_filters(self, request):
+        """Verifica apenas filtros críticos que bloqueiam criação (auto_delete)"""
         try:
-            # Obter filtros ativos
-            active_filters = ContentFilter.objects.filter(is_active=True)
+            # Obter apenas filtros de bloqueio crítico
+            critical_filters = ContentFilter.objects.filter(
+                is_active=True, 
+                action='auto_delete'
+            )
             
-            if not active_filters.exists():
-                return
+            if not critical_filters.exists():
+                return None
             
             # Verificar se há dados POST
             if not request.POST:
-                return
+                return None
             
             # Extrair conteúdo para verificação
-            content_to_check = []
+            content = request.POST.get('content') or request.POST.get('comment_content')
+            if not content:
+                return None
             
-            # Verificar posts
-            if 'content' in request.POST:
-                content_to_check.append({
-                    'type': 'post',
-                    'content': request.POST.get('content', ''),
-                    'id': None  # Será definido após criação
-                })
-            
-            # Verificar comentários
-            if 'comment_content' in request.POST:
-                content_to_check.append({
-                    'type': 'comment',
-                    'content': request.POST.get('comment_content', ''),
-                    'id': None
-                })
-            
-            # Aplicar filtros
-            for content_item in content_to_check:
-                self._check_content_against_filters(content_item, request)
+            # Verificar filtros críticos
+            for content_filter in critical_filters:
+                if content_filter.matches_content(content):
+                    # Bloquear criação imediatamente
+                    return JsonResponse({
+                        'error': _('Conteúdo bloqueado por violar nossas diretrizes'),
+                        'filter_name': content_filter.name
+                    }, status=400)
                 
         except Exception as e:
-            # Log do erro, mas não interromper o fluxo
-            print(f"Erro ao aplicar filtros de conteúdo: {e}")
-    
-    def _check_content_against_filters(self, content_item, request):
-        """Verifica conteúdo contra filtros ativos"""
-        content = content_item['content']
-        content_type = content_item['type']
+            print(f"Erro ao verificar filtros críticos: {e}")
         
-        # Obter filtros relevantes
-        filters = ContentFilter.objects.filter(is_active=True)
-        
-        if content_type == 'post':
-            filters = filters.filter(apply_to_posts=True)
-        elif content_type == 'comment':
-            filters = filters.filter(apply_to_comments=True)
-        
-        for content_filter in filters:
-            if content_filter.matches_content(content):
-                # Aplicar ação do filtro
-                self._apply_filter_action(content_filter, content, content_type, request)
-    
-    def _apply_filter_action(self, content_filter, content, content_type, request):
-        """Aplica a ação do filtro"""
-        try:
-            if content_filter.action == 'flag':
-                # Criar denúncia automática
-                Report.objects.create(
-                    reporter=request.user if request.user.is_authenticated else None,
-                    report_type='spam' if content_filter.filter_type == 'spam_pattern' else 'inappropriate',
-                    description=f"Conteúdo filtrado automaticamente: {content_filter.name}",
-                    status='pending',
-                    priority='medium'
-                )
-                
-                # Log da ação
-                ModerationLog.log_action(
-                    moderator=None,  # Sistema
-                    action_type='filter_triggered',
-                    target_type=content_type,
-                    target_id=0,  # Será atualizado quando o conteúdo for criado
-                    description=f"Filtro '{content_filter.name}' acionado",
-                    details=f"Conteúdo: {content[:100]}...",
-                    request=request
-                )
-                
-                # Notificar usuário
-                if request.user.is_authenticated:
-                    messages.warning(
-                        request, 
-                        _('Seu conteúdo foi marcado para revisão por nossos filtros automáticos.')
-                    )
-            
-            elif content_filter.action == 'auto_hide':
-                # Marcar para ocultação (será aplicado após criação)
-                if request.user.is_authenticated:
-                    messages.info(
-                        request, 
-                        _('Seu conteúdo foi ocultado automaticamente devido aos nossos filtros.')
-                    )
-            
-            elif content_filter.action == 'auto_delete':
-                # Bloquear criação
-                if request.user.is_authenticated:
-                    messages.error(
-                        request, 
-                        _('Seu conteúdo foi bloqueado por violar nossas diretrizes.')
-                    )
-                
-                # Retornar erro para impedir criação
-                return JsonResponse({
-                    'error': _('Conteúdo bloqueado por filtros automáticos'),
-                    'filter_name': content_filter.name
-                }, status=400)
-            
-            elif content_filter.action == 'notify_moderator':
-                # Notificar moderadores (implementar sistema de notificações)
-                pass
-                
-        except Exception as e:
-            print(f"Erro ao aplicar ação do filtro: {e}")
+        return None
 
 
 class SpamProtectionMiddleware(MiddlewareMixin):

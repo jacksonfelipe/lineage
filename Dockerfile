@@ -5,14 +5,24 @@ FROM python:3.13.3
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+# Defina variáveis de ambiente para FFmpeg/FFprobe
+ENV FFMPEG_PATH /usr/bin/ffmpeg
+ENV FFPROBE_PATH /usr/bin/ffprobe
+
 # Configure o diretório de trabalho dentro do contêiner
 WORKDIR /usr/src/app
 
 # Atualize o sistema e instale dependências necessárias
+# FFmpeg inclui ffprobe automaticamente e é necessário para media_validators.py
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/* \
+    && echo "Verificando instalação do FFmpeg..." \
+    && ffmpeg -version \
+    && echo "Verificando instalação do FFprobe..." \
+    && ffprobe -version
 
 # Crie o diretório de logs para evitar problemas de ausência de diretórios
 RUN mkdir -p /usr/src/app/logs && \

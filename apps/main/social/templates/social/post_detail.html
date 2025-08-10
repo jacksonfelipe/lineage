@@ -56,30 +56,124 @@
         </div>
         
         <div class="card-body">
-          <p class="card-text">{{ post.content|linebreaks }}</p>
+          <!-- Conteúdo do post -->
+          <div class="post-content mb-3">
+            {{ post.content|linebreaks }}
+          </div>
           
-          {% if post.image %}
-            <div class="text-center mb-3">
-              <img src="{{ post.image.url }}" alt="Post image" class="img-fluid rounded" style="max-height: 500px;">
+          <!-- Mídia do post -->
+          {% if post.has_media %}
+            {% if post.image %}
+              <div class="post-media mb-3">
+                <img src="{{ post.image.url }}" alt="Post image" class="img-fluid rounded" style="max-height: 500px;">
+              </div>
+            {% endif %}
+            {% if post.video %}
+              <div class="post-media mb-3">
+                <video controls class="w-100 rounded" style="max-height: 500px;">
+                  <source src="{{ post.video.url }}" type="video/mp4">
+                  {% trans "Seu navegador não suporta vídeos." %}
+                </video>
+              </div>
+            {% endif %}
+          {% endif %}
+          
+          <!-- Link compartilhado -->
+          {% if post.has_link %}
+            <div class="shared-link mb-3">
+              <div class="card bg-light">
+                <div class="card-body">
+                  {% if post.link_image %}
+                    <img src="{{ post.link_image }}" alt="Link preview" class="img-fluid rounded mb-2" style="max-height: 200px;">
+                  {% endif %}
+                  <h6 class="card-title">{{ post.link_title|default:post.link }}</h6>
+                  {% if post.link_description %}
+                    <p class="card-text text-muted">{{ post.link_description|truncatewords:30 }}</p>
+                  {% endif %}
+                  <a href="{{ post.link }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-box-arrow-up-right"></i> {% trans "Abrir link" %}
+                  </a>
+                </div>
+              </div>
             </div>
           {% endif %}
           
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-              <button class="btn btn-link text-decoration-none like-btn" data-post-id="{{ post.id }}">
-                <i class="bi {% if post.is_liked_by_current_user %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}"></i>
-                <span class="likes-count">{{ post.likes_count }}</span>
-              </button>
-              <span class="btn btn-link text-decoration-none">
-                <i class="bi bi-chat"></i>
-                <span>{{ post.comments_count }}</span>
-              </span>
+          <!-- Hashtags -->
+          {% if post.hashtags.all %}
+            <div class="hashtags mb-3">
+              {% for post_hashtag in post.hashtags.all %}
+                <a href="{% url 'social:hashtag_detail' post_hashtag.hashtag.name %}" 
+                   class="badge bg-primary text-decoration-none me-1 mb-1">
+                  #{{ post_hashtag.hashtag.name }}
+                </a>
+              {% endfor %}
             </div>
-            <small class="text-muted">
-              <a href="{% url 'social:user_profile' post.author.username %}" class="text-decoration-none">
-                <i class="bi bi-person"></i> {% trans "Ver perfil" %}
-              </a>
-            </small>
+          {% endif %}
+          
+          <!-- Informações do post -->
+          {% if post.is_edited %}
+            <div class="post-info mb-3">
+              <small class="text-muted">
+                <i class="bi bi-pencil"></i> {% trans "Editado em" %} {{ post.edited_at|date:"d/m/Y H:i" }}
+              </small>
+            </div>
+          {% endif %}
+          
+          <!-- Estatísticas do post -->
+          <div class="post-stats mb-3 p-2 bg-light rounded">
+            <div class="row text-center">
+              <div class="col">
+                <i class="bi bi-eye text-info"></i>
+                <small class="ms-1">{{ post.views_count }} {% trans "visualizações" %}</small>
+              </div>
+              <div class="col">
+                <i class="bi bi-heart text-danger"></i>
+                <small class="ms-1">{{ post.likes_count }} {% trans "curtidas" %}</small>
+              </div>
+              <div class="col">
+                <i class="bi bi-chat text-success"></i>
+                <small class="ms-1">{{ post.comments_count }} {% trans "comentários" %}</small>
+              </div>
+              {% if post.shares_count > 0 %}
+              <div class="col">
+                <i class="bi bi-share text-warning"></i>
+                <small class="ms-1">{{ post.shares_count }} {% trans "compartilhamentos" %}</small>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <!-- Ações do post -->
+          <div class="post-actions border-top pt-3">
+            <div class="row g-2">
+              <div class="col-auto">
+                <button class="btn btn-outline-danger btn-sm like-btn" data-post-id="{{ post.id }}">
+                  <i class="bi {% if post.is_liked_by_current_user %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+                  <span class="likes-count">{{ post.likes_count }}</span>
+                  {% trans "Curtir" %}
+                </button>
+              </div>
+              <div class="col-auto">
+                <button class="btn btn-outline-success btn-sm" onclick="document.querySelector('#comment-form').scrollIntoView();">
+                  <i class="bi bi-chat"></i>
+                  {{ post.comments_count }}
+                  {% trans "Comentar" %}
+                </button>
+              </div>
+              {% if post.author != user %}
+              <div class="col-auto">
+                <button class="btn btn-outline-warning btn-sm share-btn" data-post-id="{{ post.id }}">
+                  <i class="bi bi-share"></i>
+                  {% trans "Compartilhar" %}
+                </button>
+              </div>
+              {% endif %}
+              <div class="col-auto ms-auto">
+                <a href="{% url 'social:user_profile' post.author.username %}" class="btn btn-outline-info btn-sm">
+                  <i class="bi bi-person"></i> {% trans "Ver perfil" %}
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -92,7 +186,7 @@
         <div class="card-body">
           
           <!-- Formulário para novo comentário -->
-          <form method="post" class="mb-4">
+          <form method="post" class="mb-4" id="comment-form">
             {% csrf_token %}
             <div class="d-flex align-items-start">
               <div class="avatar-container me-3" style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden;">
@@ -240,6 +334,18 @@ document.addEventListener('DOMContentLoaded', function() {
     if (commentField && commentCharCount) {
         commentField.addEventListener('input', function() {
             commentCharCount.textContent = this.value.length;
+            
+            // Mudar cor baseado na quantidade de caracteres
+            if (this.value.length > 450) {
+                commentCharCount.classList.add('text-warning');
+                commentCharCount.classList.remove('text-muted');
+            } else if (this.value.length > 500) {
+                commentCharCount.classList.add('text-danger');
+                commentCharCount.classList.remove('text-warning');
+            } else {
+                commentCharCount.classList.add('text-muted');
+                commentCharCount.classList.remove('text-warning', 'text-danger');
+            }
         });
     }
     
@@ -252,6 +358,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const icon = this.querySelector('i');
             const countSpan = this.querySelector('.likes-count');
             
+            // Adicionar feedback visual
+            this.disabled = true;
+            
             fetch(`/social/post/${postId}/like/`, {
                 method: 'POST',
                 headers: {
@@ -262,15 +371,94 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.liked) {
-                    icon.className = 'bi bi-heart-fill text-danger';
+                    icon.className = 'bi bi-heart-fill';
+                    this.classList.remove('btn-outline-danger');
+                    this.classList.add('btn-danger');
                 } else {
                     icon.className = 'bi bi-heart';
+                    this.classList.remove('btn-danger');
+                    this.classList.add('btn-outline-danger');
                 }
                 countSpan.textContent = data.likes_count;
+                
+                // Atualizar também nas estatísticas
+                const statsLikes = document.querySelector('.post-stats .bi-heart').nextElementSibling;
+                if (statsLikes) {
+                    statsLikes.textContent = `${data.likes_count} curtidas`;
+                }
             })
             .catch(error => {
                 console.error('Erro:', error);
+                alert('Erro ao curtir o post. Tente novamente.');
+            })
+            .finally(() => {
+                this.disabled = false;
             });
+        });
+    }
+    
+    // Compartilhar post
+    const shareBtn = document.querySelector('.share-btn');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const postId = this.dataset.postId;
+            const currentUrl = window.location.href;
+            
+            // Verificar se a API de compartilhamento nativo está disponível
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Post do {{ post.author.get_full_name|default:post.author.username }}',
+                    text: '{{ post.content|truncatewords:20|escapejs }}',
+                    url: currentUrl
+                }).catch(err => console.log('Erro ao compartilhar:', err));
+            } else {
+                // Fallback: copiar para área de transferência
+                navigator.clipboard.writeText(currentUrl).then(() => {
+                    // Feedback visual
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="bi bi-check"></i> Copiado!';
+                    this.classList.add('btn-success');
+                    this.classList.remove('btn-outline-warning');
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.classList.remove('btn-success');
+                        this.classList.add('btn-outline-warning');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Erro ao copiar:', err);
+                    alert('Link do post: ' + currentUrl);
+                });
+            }
+        });
+    }
+    
+    // Smooth scroll para comentários
+    const commentButtons = document.querySelectorAll('[onclick*="comment-form"]');
+    commentButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('#comment-form').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+            
+            // Focar no campo de comentário
+            setTimeout(() => {
+                const commentField = document.querySelector('#{{ form.content.id_for_label }}');
+                if (commentField) {
+                    commentField.focus();
+                }
+            }, 500);
+        });
+    });
+    
+    // Auto-resize do textarea de comentário
+    if (commentField) {
+        commentField.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
         });
     }
 });
