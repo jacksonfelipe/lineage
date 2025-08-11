@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 21:01-0300\n"
+"POT-Creation-Date: 2025-08-11 10:41-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,506 +109,30 @@ msgstr "Saving ..."
 msgid "Resetando..."
 msgstr "Resettando ..."
 
-msgid "Informações da Licença"
-msgstr "License information"
-
-msgid "Cliente"
-msgstr "Customer"
-
-msgid "Contrato (PDL PRO)"
-msgstr "Contract (PDL Pro)"
-
-msgid "Datas"
-msgstr "Dates"
-
-msgid "Funcionalidades"
-msgstr "Functionality"
-
-msgid "Estatísticas"
-msgstr "Statistics"
-
-msgid "Observações"
-msgstr "Observations"
-
-msgid "Metadados"
-msgstr "Metadata"
-
-msgid "Chave de Licença"
-msgstr "License key"
-
-msgid "Tipo"
-msgstr "Type"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Ativar licenças selecionadas"
-msgstr "Activate selected licenses"
-
-msgid "Desativar licenças selecionadas"
-msgstr "Disable Selected Licenses"
-
-msgid "Renovar licenças por 1 ano"
-msgstr "Renew licenses for 1 year"
-
-msgid "Licença"
-msgstr "License"
-
-msgid "Verificação"
-msgstr "Verification"
-
-msgid "Detalhes da Requisição"
-msgstr "REQUIREMENT DETAILS"
-
-msgid "Erro (se houver)"
-msgstr "Error (if any)"
-
-msgid "Domínio"
-msgstr "Domain"
-
-msgid "Resultado"
-msgstr "Result"
-
-msgid "Tempo de Resposta"
-msgstr "Response time"
-
-msgid "Sistema de Licenciamento"
-msgstr "Licensing system"
-
-msgid "PDL FREE - Uso Livre"
-msgstr "PDL FREE - Uso Livre"
-
-msgid "PDL PRO - Com Vínculo Contratual"
-msgstr "PDL PRO - With contractual bond"
-
-msgid "Ativa"
-msgstr "Active"
-
-msgid "Expirada"
-msgstr "Expired"
-
-msgid "Suspensa"
-msgstr "Suspended"
-
-msgid "Pendente"
-msgstr "Pending"
-
-msgid "Tipo de Licença"
-msgstr "License type"
-
-msgid "Domínio Ativado"
-msgstr "Activated domain"
-
-msgid "Nome da Empresa/Cliente"
-msgstr "Company/Customer Name"
-
-msgid "E-mail de Contato"
-msgstr "Contact email"
-
-msgid "Telefone de Contato"
-msgstr "Contact phone"
-
-msgid "Status da Licença"
-msgstr "License status"
-
-msgid "Data de Ativação"
-msgstr "Activation date"
-
-msgid "Data de Expiração"
-msgstr "Expiration date"
-
-msgid "Última Verificação"
-msgstr "Last verification"
-
-msgid "Contador de Verificações"
-msgstr "Check counter"
-
-msgid "Número do Contrato"
-msgstr "Contract number"
-
-msgid "Horas de Suporte Utilizadas"
-msgstr "Support hours used"
-
-msgid "Limite de Horas de Suporte"
-msgstr "SUPPORT HOURS LIMIT"
-
-msgid "Funcionalidades Habilitadas"
-msgstr "Enabled functionalities"
-
-msgid "Licenças"
-msgstr "Licensity"
-
-msgid "Data da Verificação"
-msgstr "Verification date"
-
-msgid "Endereço IP"
-msgstr "IP address"
-
-msgid "User Agent"
-msgstr "User Agent"
-
-msgid "Verificação Bem-sucedida"
-msgstr "Successful verification"
-
-msgid "Mensagem de Erro"
-msgstr "Error message"
-
-msgid "Tempo de Resposta (ms)"
-msgstr "Response time (MS)"
-
-msgid "Verificação de Licença"
-msgstr "License check"
-
-msgid "Verificações de Licença"
-msgstr "License checks"
-
-msgid "Criar Nova Licença"
-msgstr "Create a new license"
-
-msgid "Criar Nova Licença PDL"
-msgstr "Create new PDL license"
-
-msgid "Voltar"
-msgstr "To go back"
-
-msgid "Domínio onde a licença será ativada"
-msgstr "Domain where the license will be activated"
-
-msgid "Campos Específicos - PDL PRO"
-msgstr "Specific fields - PDL Pro"
-
-msgid "Número do contrato comercial (obrigatório para PDL PRO)"
-msgstr "Commercial Contract number (mandatory for PDL Pro)"
-
-#, python-brace-format
-msgid "O contrato será validado via registro DNS TXT em pdl-contract.{domain}"
-msgstr ""
-"The contract will be validated via DNS TXT registration in PDL-Contract. "
-"{domain}"
-
-msgid "Cancelar"
-msgstr "Cancel"
-
-msgid "Criar Licença"
-msgstr "License"
-
-msgid "Tipos de Licença"
-msgstr "Types of license"
-
-msgid "Uso gratuito"
-msgstr "Free use"
-
-msgid "Sem contrato"
-msgstr "Contractless"
-
-msgid "Funcionalidades básicas"
-msgstr "Basic features"
-
-msgid "Sem suporte oficial"
-msgstr "Without official support"
-
-msgid "Suporte profissional"
-msgstr "Professional support"
-
-msgid "Atualizações garantidas"
-msgstr "GUARANTEED UPDATES"
-
-msgid "Personalização"
-msgstr "Personalization"
-
-msgid "Código fonte"
-msgstr "Source code"
-
-msgid "SLA garantido"
-msgstr "SLA guaranteed"
-
-msgid "Painel administrativo"
-msgstr "Administrative panel"
-
-msgid "Sistema de temas"
-msgstr "System of topics"
-
-msgid "Acesso à API"
-msgstr "API access"
-
-msgid "Todas as funcionalidades FREE"
-msgstr "All free features"
-
-msgid "Suporte técnico"
-msgstr "Technical support"
-
-msgid "Atualizações automáticas"
-msgstr "Automatic Updates"
-
-msgid "Personalização avançada"
-msgstr "Advanced personalization"
-
-msgid "Suporte prioritário"
-msgstr "Priority support"
-
-msgid "Código fonte completo"
-msgstr "Full source code"
-
-msgid "Serviço de instalação"
-msgstr "Installation service"
-
-msgid "Integração com banco de dados"
-msgstr "Integration with database"
-
-msgid "Dashboard de Licenças"
-msgstr "Dashboard licenses"
-
-msgid "Dashboard de Licenças PDL"
-msgstr "PDL license dashboard"
-
-msgid "Nova Licença"
-msgstr "New license"
-
-msgid "Todas as Licenças"
-msgstr "All licenses"
-
-msgid "Testar Bloqueio"
-msgstr "Lock"
-
-msgid "Licença Atual"
-msgstr "Current license"
-
-msgid "Tipo:"
-msgstr "Type:"
-
-msgid "Domínio:"
-msgstr "Domain:"
-
-msgid "Empresa:"
-msgstr "Enterprise:"
-
-msgid "E-mail:"
-msgstr "E-mail:"
-
-msgid "Status:"
-msgstr "Status:"
-
-msgid "Ativada em:"
-msgstr "Activated in:"
-
-msgid "Expira em:"
-msgstr "Expire in:"
-
-msgid "Verificações:"
-msgstr "Verifications:"
-
-msgid "Nenhuma licença ativa encontrada. Crie uma nova licença para começar."
-msgstr "No active license found. Create a new license to start."
-
-msgid "Total de Licenças"
-msgstr "Total licenses"
-
-msgid "Licenças Ativas"
-msgstr "Active licenses"
-
-msgid "Licenças Expiradas"
-msgstr "Expired Licenses"
-
-msgid "Licenças Suspensas"
-msgstr "Licenses suspended"
-
-msgid "Verificações Recentes"
-msgstr "Recent Verifications"
-
-msgid "Data/Hora"
-msgstr "Date/hour"
-
-msgid "IP"
-msgstr "IP"
-
-msgid "Tempo (ms)"
-msgstr "Tempo (ms)"
-
-msgid "Sucesso"
-msgstr "Success"
-
-msgid "Falha"
-msgstr "Failure"
-
-msgid "Funcionalidades Disponíveis"
-msgstr "Available features"
-
-msgid "Detalhes da Licença"
-msgstr "License details"
-
-msgid "Editar"
-msgstr "Edit"
-
-msgid "Chave:"
-msgstr "Key:"
-
-msgid "Telefone:"
-msgstr "Telephone:"
-
-msgid "Contrato:"
-msgstr "Contract:"
-
-msgid "Datas e Status"
-msgstr "Dated out of the state"
-
-msgid "Criada em:"
-msgstr "Created in:"
-
-msgid "Atualizada em:"
-msgstr "Updated in:"
-
-msgid "Última verificação:"
-msgstr "Last verification:"
-
-msgid "Total de verificações:"
-msgstr "Total checks:"
-
-msgid "Informações PDL PRO"
-msgstr "PDL PRO information"
-
-msgid "Número do Contrato:"
-msgstr "Contract number:"
-
-msgid "Horas de Suporte:"
-msgstr "Support hours:"
-
-msgid "Progresso das horas de suporte utilizadas"
-msgstr "Progress of the hours of support used"
-
-msgid "Histórico de Verificações"
-msgstr "Verifications History"
-
-msgid "Data"
-msgstr "Data"
-
-msgid "Erro"
-msgstr "Error"
-
-msgid "Notas"
-msgstr "Grades"
-
-msgid "Ações"
-msgstr "Actions"
-
-msgid "Ativar"
-msgstr "Enable"
-
-msgid "Desativar"
-msgstr "Disable"
-
-msgid "Renovar"
-msgstr "Renew"
-
-msgid "Excluir"
-msgstr "Delete"
-
-msgid "Licença Não Encontrada"
-msgstr "License not found"
-
-msgid "A licença solicitada não foi encontrada."
-msgstr "The requested license was not found."
-
-msgid "Voltar à Lista"
-msgstr "Back to the list"
-
-msgid "Status da Licença PDL"
-msgstr "PDL license status"
-
-msgid "Licença Válida"
-msgstr "Valid license"
-
-msgid "Sua licença está ativa e funcionando corretamente."
-msgstr "Your license is active and working properly."
-
-msgid "Licença Inválida"
-msgstr "Invalid license"
-
-msgid "Sua licença não está ativa ou expirou."
-msgstr "Your license is not active or expired."
-
-msgid "Nenhuma Licença Encontrada"
-msgstr "No license found"
-
-msgid "Não foi encontrada nenhuma licença ativa no sistema."
-msgstr "No active license was found in the system."
-
-msgid "Ver Detalhes"
-msgstr "See details"
-
-msgid "Teste de Bloqueio de Licença"
-msgstr "License lock test"
-
-msgid "Teste de Bloqueio de Login por Licença"
-msgstr "Login Login Block Test"
-
-msgid "Status do Sistema de Bloqueio"
-msgstr "Locking system status"
-
-msgid "Status da Licença:"
-msgstr "License status:"
-
-msgid "Válida"
-msgstr "Valid"
-
-msgid "Superusuários podem fazer login normalmente."
-msgstr "Superusers can login normally."
-
-msgid "Inválida/Expirada"
-msgstr "Invalid/Expired"
-
-msgid "Superusuários serão bloqueados no login."
-msgstr "Superusers will be blocked on the login."
-
-msgid "Sistema de Bloqueio:"
-msgstr "Blocking System:"
-
-msgid "Backend de autenticação configurado e funcionando."
-msgstr "Backend of configured and working authentication."
-
-msgid "Informações da Licença Atual"
-msgstr "Current license information"
-
-msgid "Como Testar o Sistema"
-msgstr "How to test the system"
-
-msgid "Instruções para Teste:"
-msgstr "Test Instructions:"
-
-msgid "Para simular licença inválida:"
-msgstr "To simulate invalid license:"
-
-msgid "Edite uma licença e mude o status para 'expired'"
-msgstr "Edit a license and change the status to 'Expired'"
-
-msgid "Ou modifique a data de expiração para uma data passada"
-msgstr "Or modify the expiration date to a past date"
-
-msgid "Tente fazer login com um superusuário"
-msgstr "Try to login with a superuser"
-
-msgid "O login deve ser bloqueado com mensagem de erro"
-msgstr "Login should be blocked with error message"
-
-msgid "Usuários normais continuarão funcionando normalmente"
-msgstr "Normal users will continue to function normally"
-
-msgid "Comando de Teste"
-msgstr "Test command"
-
-msgid "Execute o comando abaixo para testar o sistema:"
-msgstr "Run the command below to test the system:"
-
-msgid ""
-"Este comando verificará o status da licença e listará os superusuários "
-"afetados."
-msgstr ""
-"This command will check the license status and list the affected superusers."
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Contabilidade"
+msgstr "Accounting"
 
 msgid "Dashboard Contábil"
 msgstr "Dashboard accounting"
 
+msgid ""
+"Gerencie e visualize todos os relatórios financeiros do servidor. Acompanhe "
+"saldos, fluxo de caixa e reconciliações de forma eficiente."
+msgstr ""
+"Manage and view all the financial reports of the server. Follow balances, "
+"cash flow and reconciliations efficiently."
+
 msgid "Saldo de Usuários"
 msgstr "Balance of Users"
+
+msgid ""
+"Visualize o saldo atual de todos os usuários e compare com os valores "
+"calculados"
+msgstr ""
+"View the current balance of all users and compare with the calculated values"
 
 msgid "Ver Relatório"
 msgstr "See report"
@@ -616,17 +140,38 @@ msgstr "See report"
 msgid "Fluxo de Caixa Diário"
 msgstr "Daily Cash Flow"
 
+msgid "Acompanhe o movimento financeiro diário e identifique tendências"
+msgstr "Follow the daily financial movement and identify trends"
+
 msgid "Pedidos e Pagamentos"
 msgstr "Orders and Payments"
+
+msgid "Analise todos os pedidos e status de pagamentos dos usuários"
+msgstr "Analyze all orders and payment status of users"
 
 msgid "Reconciliação de Carteiras"
 msgstr "Reconciliation of Wallets"
 
-msgid "Voltar para o Admin"
-msgstr "Back to Admin"
+msgid "Verifique a consistência entre carteiras e identifique discrepâncias"
+msgstr "Check consistency between wallets and identify discrepancies"
 
-msgid "Relatório de Fluxo de Caixa"
-msgstr "Cash Flow Report"
+msgid "Voltar ao Dashboard Principal"
+msgstr "Back to the main dashboard"
+
+msgid "Fluxo de Caixa"
+msgstr "Cash flow"
+
+msgid "Relatório de Fluxo de Caixa Diário"
+msgstr "Daily Cash Flow Report"
+
+msgid ""
+"Acompanhe o movimento financeiro diário e identifique tendências de receitas"
+" e despesas"
+msgstr ""
+"Follow the daily financial movement and identify revenue and expenses trends"
+
+msgid "Data"
+msgstr "Data"
 
 msgid "Entradas"
 msgstr "Input"
@@ -634,8 +179,23 @@ msgstr "Input"
 msgid "Saídas"
 msgstr "Exits"
 
-msgid "Saldo do Dia"
-msgstr "Balance of the Day"
+msgid "Saldo"
+msgstr "Balance"
+
+msgid "Tendência"
+msgstr "Trend"
+
+msgid "Positiva"
+msgstr "Positive"
+
+msgid "Negativa"
+msgstr "Negative"
+
+msgid "Estável"
+msgstr "Stable"
+
+msgid "Nenhum dado de fluxo de caixa disponível"
+msgstr "No cash flow data available"
 
 msgid "Voltar para o Dashboard"
 msgstr "Back to Dashboard"
@@ -643,35 +203,58 @@ msgstr "Back to Dashboard"
 msgid "Relatório de Pedidos e Pagamentos"
 msgstr "Report of Orders and Payments"
 
-msgid "ID Pedido"
-msgstr "ID Request"
+msgid ""
+"Analise todos os pedidos e status de pagamentos dos usuários do servidor"
+msgstr "Analyze all orders and payment status of server users"
+
+msgid "ID do Pedido"
+msgstr "Order ID"
 
 msgid "Valor Pago"
 msgstr "Payment value"
 
-msgid "Moedas"
-msgstr "Coins"
+msgid "Bônus"
+msgstr "Bonus"
 
-msgid "Status Pedido"
-msgstr "Status pedido"
+msgid "Total Creditado"
+msgstr "Total credited"
 
-msgid "Status Pagamento"
-msgstr "Payment status"
+msgid "Status"
+msgstr "Status"
 
-msgid "Método"
-msgstr "Method"
+msgid "Método de Pagamento"
+msgstr "Payment method"
 
-msgid "CONFIRMADO"
-msgstr "CONFIRMED"
+msgid "Aprovado"
+msgstr "Approved"
 
-msgid "PENDENTE"
+msgid "Pendente"
 msgstr "Pending"
 
-msgid "confirmed"
-msgstr "confirmed"
+msgid "Cancelado"
+msgstr "Canceled"
 
-msgid "pending"
-msgstr "pending"
+msgid "Processando"
+msgstr "Process"
+
+msgid "Cartão"
+msgstr "Card"
+
+msgid "Boleto"
+msgstr "Ticket"
+
+msgid "Nenhum pedido ou pagamento encontrado"
+msgstr "No requests or payment found"
+
+msgid "Relatório de Reconciliação de Carteiras"
+msgstr "Wallet Reconciliation Report"
+
+msgid ""
+"Verifique a consistência entre as carteiras dos usuários e identifique "
+"possíveis discrepâncias"
+msgstr ""
+"Check the consistency between users' portfolios and identify possible "
+"discrepancies"
 
 msgid "Saldo na Wallet"
 msgstr "Saldo wallet"
@@ -682,8 +265,58 @@ msgstr "Calculated balance"
 msgid "Diferença"
 msgstr "Difference"
 
+msgid "Transações"
+msgstr "Transactions"
+
+msgid "Última Verificação"
+msgstr "Last verification"
+
+msgid "Reconciliado"
+msgstr "Reconciled"
+
+msgid "Discrepância"
+msgstr "Discrepancy"
+
+msgid "Em Análise"
+msgstr "Under analysis"
+
+msgid "Nenhum dado de reconciliação disponível"
+msgstr "No reconciliation data available"
+
+msgid "Relatório de Saldo"
+msgstr "Balance"
+
 msgid "Relatório de Saldo dos Usuários"
 msgstr "User Balance Report"
+
+msgid ""
+"Visualize e compare os saldos das carteiras dos usuários com os valores "
+"calculados"
+msgstr "View and compare the balances of users with the calculated values"
+
+msgid "Saldo Principal"
+msgstr "Main balance"
+
+msgid "Saldo Bônus"
+msgstr "Bonus balance"
+
+msgid "Última Transação"
+msgstr "Last transaction"
+
+msgid "Consistente"
+msgstr "Consistent"
+
+msgid "Pequena Discrepância"
+msgstr "Discrepancy"
+
+msgid "Sem Carteira"
+msgstr "Wallet"
+
+msgid "Nenhuma"
+msgstr "None"
+
+msgid "Nenhum dado disponível para exibir"
+msgstr "No data available to display"
 
 msgid "Item ID"
 msgstr "Item ID"
@@ -781,6 +414,30 @@ msgstr "%(qtd)d Auctions automatically closed."
 msgid "Criar Leilão"
 msgstr "Auction"
 
+msgid "Criar Novo Leilão"
+msgstr "Create a new auction"
+
+msgid "Venda seus itens através do sistema de leilões"
+msgstr "Sell your items through the auction system"
+
+msgid "Leilões"
+msgstr "Auctions"
+
+msgid "Como funciona?"
+msgstr "How does it work?"
+
+msgid ""
+"Selecione um personagem, escolha o item que deseja leiloar, defina a "
+"quantidade, lance inicial e duração. O item será removido do seu inventário "
+"e colocado em leilão automaticamente."
+msgstr ""
+"Select a character, choose the item you want to auction, set the quantity, "
+"initial bid and duration. The item will be removed from your inventory and "
+"automatically placed auction."
+
+msgid "Informações do Leilão"
+msgstr "Auction information"
+
 msgid "Personagem"
 msgstr "Character"
 
@@ -802,14 +459,23 @@ msgstr "Initial bid ($)"
 msgid "Duração (horas)"
 msgstr "Duration (hours)"
 
+msgid "Cancelar"
+msgstr "Cancel"
+
 msgid "Dar Lance"
 msgstr "Bid"
 
-msgid "Lance atual:"
-msgstr "Current bid:"
+msgid "Faça sua oferta no leilão"
+msgstr "Make your offer at auction"
 
-msgid "Tempo restante:"
-msgstr "Remaining time:"
+msgid "Lance Atual"
+msgstr "Current bid"
+
+msgid "Tempo Restante"
+msgstr "Remaining time"
+
+msgid "Vendedor"
+msgstr "Seller"
 
 msgid "Selecione o Personagem"
 msgstr "Select the character"
@@ -817,38 +483,92 @@ msgstr "Select the character"
 msgid "Escolha um personagem"
 msgstr "Choose a character"
 
-msgid "Seu lance"
+msgid "Seu Lance"
 msgstr "Your bid"
+
+msgid "Digite o valor do seu lance"
+msgstr "Enter the value of your bid"
+
+msgid "Lance mínimo:"
+msgstr "Minimum bid:"
 
 msgid "Confirmar Lance"
 msgstr "Confirm bid"
 
-msgid "Leilões"
-msgstr "Auctions"
+msgid "Voltar"
+msgstr "To go back"
+
+msgid "Gerencie e participe de leilões do sistema"
+msgstr "Manage and participate in system auctions"
 
 msgid "Leilões Ativos"
 msgstr "Active auctions"
 
-msgid "Nenhum leilão ativo no momento."
-msgstr "No active auction at the moment."
+msgid "Lance Mínimo"
+msgstr "Minimum"
+
+msgid "Termina em"
+msgstr "Ends in"
+
+msgid "Tem certeza que deseja cancelar este leilão?"
+msgstr "Are you sure you want to cancel this auction?"
+
+msgid "Cancelar Leilão"
+msgstr "Auction"
+
+msgid "Fazer Lance"
+msgstr "Bid"
+
+msgid "Anterior"
+msgstr "Anterior"
+
+msgid "Próximo"
+msgstr "Next"
+
+msgid "Nenhum leilão ativo"
+msgstr "No active auction"
+
+msgid "Não há leilões ativos no momento."
+msgstr "There are no active auctions at the moment."
 
 msgid "Leilões Pendentes de Entrega"
 msgstr "Pending delivery auctions"
 
-msgid "Nenhum leilão pendente de entrega."
-msgstr "No auction pending delivery."
+msgid "Vencedor"
+msgstr "Winner"
+
+msgid "Valor Final"
+msgstr "Final value"
+
+msgid "Finalizado em"
+msgstr "Finished in"
+
+msgid "Nenhum leilão pendente"
+msgstr "No pending auction"
+
+msgid "Não há leilões pendentes de entrega."
+msgstr "There are no outstanding auctions."
 
 msgid "Leilões Finalizados"
 msgstr "Finished auctions"
 
-msgid "Nenhum leilão finalizado."
-msgstr "No finished auction."
+msgid "Nenhum leilão finalizado"
+msgstr "No auction finished"
+
+msgid "Não há leilões finalizados."
+msgstr "There are no finished auctions."
 
 msgid "Leilões Cancelados"
 msgstr "Canceled auctions"
 
-msgid "Nenhum leilão cancelado."
-msgstr "No canceled auction."
+msgid "Cancelado em"
+msgstr "Canceled in"
+
+msgid "Nenhum leilão cancelado"
+msgstr "No canceled auction"
+
+msgid "Não há leilões cancelados."
+msgstr "There are no canceled auctions."
 
 msgid "Vendedor:"
 msgstr "Seller:"
@@ -1336,8 +1056,8 @@ msgstr "Back to the homepage"
 msgid "Tipos de Caixa Disponíveis"
 msgstr "Available cash types"
 
-msgid "Seu Saldo:"
-msgstr "Your balance:"
+msgid "Seu Saldo"
+msgstr "Your balance"
 
 msgid "Boosters"
 msgstr "Boosters"
@@ -1394,17 +1114,35 @@ msgstr "Edit cashier"
 msgid "Criar Nova Caixa"
 msgstr "Create New Box"
 
+msgid "Editar Informações"
+msgstr "Edit information"
+
+msgid "Informações da Caixa"
+msgstr "Caixa information"
+
 msgid "Salvar"
 msgstr "Save"
 
 msgid "Confirmar Exclusão"
 msgstr "Confirm exclusion"
 
-msgid "Tem certeza que deseja excluir a caixa "
+msgid "Excluir Caixa"
+msgstr "Exclude cashier"
+
+msgid "Tem certeza que deseja excluir a caixa"
 msgstr "You're sure you want to delete the box"
 
-msgid "Confirmar"
-msgstr "Confirm"
+msgid "ID"
+msgstr "ID"
+
+msgid "Aberta"
+msgstr "Open"
+
+msgid "Fechada"
+msgstr "Closed"
+
+msgid "Esta ação não pode ser desfeita!"
+msgstr "This action cannot be undone!"
 
 msgid "Caixas Criadas"
 msgstr "Created boxes"
@@ -1412,17 +1150,29 @@ msgstr "Created boxes"
 msgid "Nova Caixa"
 msgstr "New box"
 
-msgid "ID"
-msgstr "ID"
+msgid "Tipo"
+msgstr "Type"
 
-msgid "Aberta?"
-msgstr "Open?"
+msgid "Ações"
+msgstr "Actions"
 
-msgid "Nenhuma caixa encontrada."
-msgstr "No box found."
+msgid "Editar"
+msgstr "Edit"
+
+msgid "Excluir"
+msgstr "Delete"
+
+msgid "Nenhuma caixa encontrada"
+msgstr "No box found"
+
+msgid "Comece criando sua primeira caixa."
+msgstr "Start by creating your first box."
 
 msgid "Voltar ao Dashboard"
 msgstr "Return to Dashboard"
+
+msgid "Excluir Tipo de Caixa"
+msgstr "Cash Type Delete"
 
 msgid "Tem certeza que deseja excluir o tipo de caixa"
 msgstr "You're sure you want to delete the type of cashier"
@@ -1432,6 +1182,9 @@ msgstr "Cash Type"
 
 msgid "Criar Novo Tipo de Caixa"
 msgstr "Create new type of cashier"
+
+msgid "Informações do Tipo de Caixa"
+msgstr "Cash type information"
 
 msgid "Criar Tipo de Caixa"
 msgstr "Cash type"
@@ -1448,8 +1201,11 @@ msgstr "Name"
 msgid "Deletar"
 msgstr "Delete"
 
-msgid "Nenhum tipo de caixa encontrado."
-msgstr "No box found."
+msgid "Nenhum tipo de caixa encontrado"
+msgstr "No box found"
+
+msgid "Comece criando seu primeiro tipo de caixa."
+msgstr "Start by creating your first type of cash."
 
 msgid "Painel de Gerenciamento de Caixas"
 msgstr "Box Management Panel"
@@ -1484,11 +1240,35 @@ msgstr "Register new items available for the boxes."
 msgid "Novo Item"
 msgstr "New item"
 
-msgid "Novo"
-msgstr "Novo"
+msgid "Excluir Item"
+msgstr "Delete item"
 
-msgid "Nenhum item encontrado."
-msgstr "No item found."
+msgid "Tem certeza que deseja excluir o item"
+msgstr "You're sure you want to delete the item"
+
+msgid "Pode ser Populado"
+msgstr "Can be populated"
+
+msgid "Sim"
+msgstr "Sim"
+
+msgid "Não"
+msgstr "No"
+
+msgid "Editar Item"
+msgstr "Edit item"
+
+msgid "Informações do Item"
+msgstr "Item Information"
+
+msgid "Criar Item"
+msgstr "Create item"
+
+msgid "Nenhum item encontrado"
+msgstr "No item found"
+
+msgid "Comece cadastrando seu primeiro item."
+msgstr "Start by registering your first item."
 
 msgid "Suas Caixas"
 msgstr "Your boxes"
@@ -1496,26 +1276,35 @@ msgstr "Your boxes"
 msgid "Abaixo estão todas as caixas que você comprou e ainda não abriu."
 msgstr "Below are all the boxes you bought and have not opened yet."
 
+msgid "Aberta?"
+msgstr "Open?"
+
 msgid "Ação"
 msgstr "Action"
 
 msgid "Abrir"
 msgstr "Open"
 
-msgid "Aberta"
-msgstr "Open"
-
 msgid "Você ainda não possui nenhuma caixa para abrir."
 msgstr "You still have no box to open."
 
-msgid "Você ganhou um item!"
-msgstr "You won an item!"
+msgid "Item Descoberto!"
+msgstr "Discovered item!"
+
+msgid "Parabéns! Você encontrou um item especial na sua caixa!"
+msgstr "Congratulations! You have found a special item in your box!"
+
+msgid "Booster"
+msgstr "Booster"
 
 msgid "O item foi adicionado à sua"
 msgstr "The item was added to your"
 
 msgid "com sucesso!"
 msgstr "Successfully!"
+
+msgid "Ver Minha Bag"
+msgstr "See my bag"
 
 msgid "Minha Arma"
 msgstr "My gun"
@@ -1565,6 +1354,9 @@ msgstr "Try to delight"
 msgid "Minha Bag"
 msgstr "My bag"
 
+msgid "Gerencie seus itens e transferências"
+msgstr "Manage your items and transfers"
+
 msgid "Mover todos para inventário"
 msgstr "Move all for inventory"
 
@@ -1574,8 +1366,14 @@ msgstr "Enchantment"
 msgid "Mover para inventário"
 msgstr "Inventory"
 
-msgid "Nenhum item na bag."
-msgstr "No item in the bag."
+msgid "Bag Vazia"
+msgstr "Bag will"
+
+msgid "Nenhum item na bag no momento."
+msgstr "No item in the bag at the moment."
+
+msgid "Bag não encontrada"
+msgstr "BAG NOT FOUND"
 
 msgid "Você ainda não possui uma bag."
 msgstr "You don't have a bag yet."
@@ -1743,21 +1541,46 @@ msgstr "Confirm return"
 msgid "Meu Inventário"
 msgstr "My inventory"
 
+msgid "Gerencie os itens dos seus personagens"
+msgstr "Manage your characters' items"
+
+msgid "Inventário"
+msgstr "Inventory"
+
+msgid "Operações disponíveis"
+msgstr "Available operations"
+
 msgid "Adicionar Item"
 msgstr "Add item"
+
+msgid "Adicione itens ao seu inventário"
+msgstr "Add items to your inventory"
 
 msgid "Inventário Global"
 msgstr "Global inventory"
 
+msgid "Visualize todos os itens do sistema"
+msgstr "View all system items"
+
 msgid "Inventários Obsoletos Detectados"
 msgstr "Obsolete Inventories Detected"
 
+msgid "Personagens que não existem mais na sua conta"
+msgstr "Characters that no longer exist in your account"
+
 msgid ""
-"Os seguintes inventários pertencem a personagens que não existem mais na sua"
-" conta:"
+"Os itens desses inventários podem ser transferidos para a bag ou deletados."
 msgstr ""
-"The following inventories belong to characters that no longer exist in your "
-"account:"
+"The items of these inventories can be transferred to the bag or deleted."
+
+msgid "Personagem obsoleto"
+msgstr "Obsolete character"
+
+msgid "Personagem online"
+msgstr "Online"
+
+msgid "Personagem offline"
+msgstr "Offline"
 
 msgid "Obsoleto"
 msgstr "Obsolete"
@@ -1767,9 +1590,6 @@ msgstr "Online"
 
 msgid "Offline"
 msgstr "Offline"
-
-msgid "Itens"
-msgstr "Items"
 
 msgid ""
 "Tem certeza que deseja deletar este inventário obsoleto? Os itens serão "
@@ -1790,14 +1610,95 @@ msgstr "Trocar"
 msgid "Enviar para Bag"
 msgstr "Submit to Bag"
 
-msgid "Nenhum item no inventário."
-msgstr "No item in the inventory."
+msgid "Este personagem não possui itens no inventário."
+msgstr "This character has no items in the inventory."
+
+msgid "Nenhum personagem encontrado"
+msgstr "No character found"
+
+msgid "Você não possui personagens com inventário no sistema."
+msgstr "You do not have inventory characters in the system."
+
+msgid "Visão geral de todos os itens em seus inventários"
+msgstr "Overview of all items in their inventories"
+
+msgid "Resumo Geral"
+msgstr "Overall summary"
+
+msgid "Estatísticas do seu inventário global"
+msgstr "Statistics of your global inventory"
+
+msgid "Total de Itens"
+msgstr "Total items"
+
+msgid "tipos diferentes"
+msgstr "different types"
 
 msgid "Quantidade Total"
 msgstr "Total amount"
 
+msgid "itens no total"
+msgstr "items in total"
+
+msgid "Item Mais Comum"
+msgstr "Most common item"
+
+msgid "Nenhum item"
+msgstr "No item"
+
+msgid "Itens do Inventário Global"
+msgstr "Global Inventory Items"
+
+msgid "Todos os itens organizados por quantidade"
+msgstr "All items organized by quantity"
+
+msgid "Ver detalhes"
+msgstr "See details"
+
+msgid "Transferir para bag"
+msgstr "Bag"
+
+msgid "Você ainda não possui itens em seus inventários."
+msgstr "You still don't have items in your inventories."
+
+msgid "Ações Rápidas"
+msgstr "Rapid actions"
+
+msgid "Operações frequentes"
+msgstr "Frequent operations"
+
+msgid "Dashboard do Inventário"
+msgstr "Dashboard of Inventory"
+
+msgid "Gerencie seus inventários por personagem"
+msgstr "Manage your inventories by character"
+
+msgid "Retirar Item"
+msgstr "Remove item"
+
+msgid "Retire itens do servidor do jogo"
+msgstr "Remove items from the game server"
+
+msgid "Trocar Itens"
+msgstr "Change items"
+
+msgid "Troque itens com outros jogadores"
+msgstr "Change items with other players"
+
+msgid "Voltar ao Dashboard do Inventário"
+msgstr "Return to the inventory dashboard"
+
 msgid "Retirar Item do Servidor"
 msgstr "Remove item from the server"
+
+msgid "Selecione um personagem e retire itens do seu inventário"
+msgstr "Select a character and remove items from your inventory"
+
+msgid "Selecionar Personagem"
+msgstr "Select Character"
+
+msgid "Escolha o personagem para visualizar o inventário"
+msgstr "Choose the character to view the inventory"
 
 msgid "Selecione um personagem"
 msgstr "Select a character"
@@ -1805,14 +1706,17 @@ msgstr "Select a character"
 msgid "Inventário de"
 msgstr "Inventory of"
 
+msgid "Clique em um item para selecioná-lo"
+msgstr "Click an item to select it"
+
 msgid "Localização"
 msgstr "Location"
 
-msgid "Anterior"
-msgstr "Anterior"
-
 msgid "Próxima"
 msgstr "Next"
+
+msgid "Preencha os dados para retirar o item selecionado"
+msgstr "Fill in the data to remove the selected item"
 
 msgid "Item Selecionado"
 msgstr "Selected item"
@@ -1820,14 +1724,17 @@ msgstr "Selected item"
 msgid "Sua senha"
 msgstr "Your password"
 
-msgid "Retirar"
-msgstr "To remove"
+msgid "Inventário Vazio"
+msgstr "Empty inventory"
+
+msgid "Este personagem não possui itens no inventário"
+msgstr "This character has no items in the inventory"
 
 msgid "Nenhum item encontrado no inventário deste personagem."
 msgstr "No item found in the inventory of this character."
 
-msgid "Voltar para o Inventário"
-msgstr "Go back to inventory"
+msgid "Voltar ao Inventário"
+msgstr "Inventory"
 
 msgid "Transferir para Bag"
 msgstr "Bag"
@@ -1879,6 +1786,9 @@ msgstr "Obsolete inventory deleted."
 
 msgid "itens transferidos para a bag."
 msgstr "items transferred to bag."
+
+msgid "Nenhum item encontrado."
+msgstr "No item found."
 
 msgid "Inventário não encontrado."
 msgstr "Inventory not found."
@@ -1976,26 +1886,26 @@ msgstr "Go to the wallet"
 msgid "Detalhes do Pedido"
 msgstr "Order Details"
 
-msgid "ID do Pedido:"
-msgstr "Order ID:"
+msgid "Informações completas sobre sua compra"
+msgstr "Complete information about your purchase"
 
-msgid "Valor Pago:"
-msgstr "Payment value:"
+msgid "Pedidos"
+msgstr "Requests"
 
-msgid "Bônus Aplicado:"
-msgstr "Bonus applied:"
+msgid "Detalhes"
+msgstr "Details"
 
-msgid "Total Creditado:"
-msgstr "Total credited:"
+msgid "Informações do Pedido"
+msgstr "Order Information"
 
-msgid "Moedas Geradas:"
-msgstr "Coins generated:"
+msgid "Bônus Aplicado"
+msgstr "Applied bonus"
 
-msgid "Método:"
-msgstr "Method:"
+msgid "Moedas Geradas"
+msgstr "Coins generated"
 
-msgid "Data de Criação:"
-msgstr "Creation Date:"
+msgid "Data de Criação"
+msgstr "Creation date"
 
 msgid "Bônus Aplicado!"
 msgstr "Bonus applied!"
@@ -2015,20 +1925,32 @@ msgstr "Back to pending orders"
 msgid "Meus Pedidos Pendentes"
 msgstr "My Pending Requests"
 
+msgid "Gerencie seus pedidos em andamento"
+msgstr "Manage your requests in progress"
+
+msgid "Carteira"
+msgstr "Portfolio"
+
+msgid "Pedidos Pendentes"
+msgstr "Pending orders"
+
+msgid "Pedidos em Andamento"
+msgstr "ORDERS IN PROGRESS"
+
 msgid "Pedido"
 msgstr "Order"
-
-msgid "Valor:"
-msgstr "Valor:"
 
 msgid "Criado em:"
 msgstr "Created in:"
 
-msgid "Detalhes"
-msgstr "Details"
+msgid "Tem certeza que deseja cancelar este pedido?"
+msgstr "Are you sure you want to cancel this order?"
 
-msgid "Você não possui pedidos pendentes."
-msgstr "You have no pending orders."
+msgid "Nenhum Pedido Pendente"
+msgstr "No pending requests"
+
+msgid "Você não possui pedidos pendentes no momento."
+msgstr "You have no pending orders at the moment."
 
 msgid "Criar Novo Pedido"
 msgstr "Create new request"
@@ -2036,14 +1958,26 @@ msgstr "Create new request"
 msgid "Comprar Moedas"
 msgstr "Coins"
 
+msgid "Adicione moedas à sua carteira para usar no jogo"
+msgstr "Add coins to your wallet to use in the game"
+
+msgid "Nova Compra"
+msgstr "New purchase"
+
+msgid "Configure sua compra de moedas"
+msgstr "Configure your purchase of coins"
+
 msgid "Valor em Reais (R$)"
 msgstr "Value in reais ($)"
 
 msgid "Digite o valor que deseja comprar"
 msgstr "Enter the value you want to buy"
 
-msgid "Escolha o Meio de Pagamento"
-msgstr "Choose the payment method"
+msgid "Valor mínimo: R$ 1,00"
+msgstr "Minimum value: R $ 1.00"
+
+msgid "Selecione um método de pagamento"
+msgstr "Select a payment method"
 
 msgid "Mercado Pago"
 msgstr "Payment market"
@@ -2051,17 +1985,99 @@ msgstr "Payment market"
 msgid "Stripe"
 msgstr "Stripe"
 
+msgid "Escolha a forma de pagamento de sua preferência"
+msgstr "Choose the payment method of your choice"
+
+msgid "Resumo da Compra"
+msgstr "Purchase summary"
+
+msgid "Valor da Compra"
+msgstr "Purchase value"
+
+msgid "Moedas Recebidas"
+msgstr "Coins received"
+
+msgid "Bônus Adicional"
+msgstr "Additional bonus"
+
+msgid "Total de Moedas"
+msgstr "Total coins"
+
 msgid "Gerar Pedido"
 msgstr "Generate order"
 
 msgid "Bônus Disponíveis"
 msgstr "Bonuses available"
 
+msgid "Promoções ativas"
+msgstr "Active promotions"
+
+msgid "Como Funciona"
+msgstr "How it works"
+
+#, python-format
+msgid "Compras acima de R$ 10,00 ganham 5%% de bônus"
+msgstr "Purchases over R $ 10,00 earn 5 %% bonus"
+
+#, python-format
+msgid "Compras acima de R$ 25,00 ganham 10%% de bônus"
+msgstr "Purchases over R $ 25.00 earn 10 %% bonus"
+
+#, python-format
+msgid "Compras acima de R$ 50,00 ganham 15%% de bônus"
+msgstr "Purchases over R $ 50,00 earn 15 %% bonus"
+
+#, python-format
+msgid "Compras acima de R$ 100,00 ganham 20%% de bônus"
+msgstr "Purchases over R $ 100.00 earn 20 %% bonus"
+
 msgid "Digite um valor para ver os bônus disponíveis"
 msgstr "Enter a value to see the available bonuses"
 
+msgid "Segurança"
+msgstr "Security"
+
+msgid "Suas informações estão seguras"
+msgstr "Your information is safe"
+
+msgid "Pagamento Seguro"
+msgstr "Secure payment"
+
+msgid "Todas as transações são criptografadas"
+msgstr "All transactions are encrypted"
+
+msgid "Métodos Confiáveis"
+msgstr "Reliable methods"
+
+msgid "Utilizamos apenas gateways de pagamento seguros"
+msgstr "We only use secure payment gateways"
+
+msgid "Suporte 24/7"
+msgstr "24/7 support"
+
+msgid "Nossa equipe está sempre disponível para ajudar"
+msgstr "Our team is always available to help"
+
 msgid "Calculando bônus..."
 msgstr "Calculating bonuses ..."
+
+msgid "Bônus Disponível!"
+msgstr "Bonus available!"
+
+msgid "de bônus"
+msgstr "bonus"
+
+msgid "Nenhum bônus disponível para este valor"
+msgstr "No bonuses available for this value"
+
+msgid "Aumente o valor para ganhar bônus"
+msgstr "Increase the value to earn bonuses"
+
+msgid "Erro ao calcular bônus"
+msgstr "Error by calculating bonus"
+
+msgid "Erro de conexão"
+msgstr "Connection error"
 
 msgid "Pagamento Recusado ou Falhou"
 msgstr "Refused or failed payment"
@@ -2081,8 +2097,65 @@ msgstr "Approved payment!"
 msgid "Suas moedas foram creditadas com sucesso na sua carteira."
 msgstr "Your coins were successfully credited to your wallet."
 
+msgid "Relatórios"
+msgstr "Reports"
+
+msgid "Dashboard de Relatórios"
+msgstr "Dashboard of reports"
+
+msgid ""
+"Acesse todos os relatórios do sistema. Visualize estatísticas de inventário,"
+" leilões, compras e muito mais de forma organizada e intuitiva."
+msgstr ""
+"Access all system reports. Visualize inventory, auctions, shopping and much "
+"more organized and intuitive statistics."
+
+msgid "Relatório de Inventário"
+msgstr "Inventory report"
+
+msgid ""
+"Acompanhe todas as movimentações de itens no inventário. Visualize "
+"tendências e itens mais movimentados."
+msgstr ""
+"Follow all item movements in the inventory. Visualize more busy trends and "
+"items."
+
+msgid "Relatório de Leilões"
+msgstr "Auction report"
+
+msgid ""
+"Analise leilões ativos, histórico de lances e estatísticas detalhadas do "
+"sistema de leilões."
+msgstr ""
+"Analyze active auctions, history of bids and detailed statistics from the "
+"auction system."
+
 msgid "Relatório de Compras"
 msgstr "Purchasing report"
+
+msgid ""
+"Analise todas as compras realizadas, itens mais vendidos e estatísticas de "
+"receita."
+msgstr ""
+"Analyze all purchases made, best -selling items and revenue statistics."
+
+msgid "Relatórios Contábeis"
+msgstr "Accounting reports"
+
+msgid ""
+"Acesse relatórios financeiros, saldos de usuários e fluxo de caixa do "
+"sistema."
+msgstr "Visit financial reports, user balances and cash flow from the system."
+
+msgid "Ver Relatórios"
+msgstr "See reports"
+
+msgid ""
+"Analise todas as compras realizadas, itens mais vendidos e estatísticas de "
+"receita do sistema."
+msgstr ""
+"Analyze all purchases made, best selling items and system revenue "
+"statistics."
 
 msgid "Total de Compras"
 msgstr "Total purchases"
@@ -2099,29 +2172,60 @@ msgstr "Last week's recipe"
 msgid "Itens Mais Vendidos"
 msgstr "Best -selling items"
 
+msgid "Produtos com maior volume de vendas"
+msgstr "Products with higher sales volume"
+
 msgid "unidades"
 msgstr "units"
+
+msgid "Nenhum item vendido."
+msgstr "No item sold."
 
 msgid "Pacotes Populares"
 msgstr "Popular packages"
 
+msgid "Pacotes com maior procura pelos jogadores"
+msgstr "Packages with greater demand for players"
+
+msgid "Pacote"
+msgstr "Package"
+
 msgid "pacotes"
 msgstr "packages"
+
+msgid "Nenhum pacote vendido."
+msgstr "No package sold."
 
 msgid "Promoções Utilizadas"
 msgstr "Promotions used"
 
+msgid "Códigos promocionais mais utilizados"
+msgstr "Most used promotional codes"
+
+msgid "Código"
+msgstr "Code"
+
+msgid "Utilizações"
+msgstr "Uses"
+
 msgid "vezes"
 msgstr "times"
 
-msgid "Relatório de Leilões"
-msgstr "Auction report"
+msgid "Nenhuma promoção utilizada."
+msgstr "No promotion used."
 
-msgid "Status dos Leilões"
-msgstr "Auction status"
+msgid "Voltar ao Dashboard de Relatórios"
+msgstr "Return to the Dashboard of Reports"
 
-msgid "Resumo dos Status dos Leilões"
-msgstr "Auction status summary"
+msgid "Quantidade Vendida"
+msgstr "Quantity sold"
+
+msgid ""
+"Acompanhe todos os leilões ativos, histórico de lances e estatísticas "
+"detalhadas do sistema de leilões."
+msgstr ""
+"Follow all active auctions, history of bids and detailed auction system "
+"statistics."
 
 msgid "Pendentes"
 msgstr "Pending"
@@ -2135,20 +2239,29 @@ msgstr "Expired"
 msgid "Cancelados"
 msgstr "Canceled"
 
+msgid "Leilões em andamento com informações detalhadas"
+msgstr "Ongoing auctions with detailed information"
+
 msgid "Lance Inicial"
 msgstr "Initial bid"
 
 msgid "Maior Lance"
 msgstr "Biggest bid"
 
-msgid "Tempo Restante"
-msgstr "Remaining time"
+msgid "Sem lance"
+msgstr "Bidding"
 
 msgid "restante"
 msgstr "remaining"
 
+msgid "Nenhum leilão ativo no momento."
+msgstr "No active auction at the moment."
+
 msgid "Histórico de Lances"
 msgstr "Bidding history"
+
+msgid "Registro de todos os lances realizados no sistema"
+msgstr "Registration of all bids made in the system"
 
 msgid "Jogador"
 msgstr "Player"
@@ -2165,14 +2278,45 @@ msgstr "No registered bids."
 msgid "Leilões Mais Populares"
 msgstr "Most popular auctions"
 
+msgid "Itens que receberam mais lances"
+msgstr "Items that received more bids"
+
 msgid "Total de Lances"
 msgstr "Total sets"
 
 msgid "Nenhum leilão popular no momento."
 msgstr "No popular auction at the moment."
 
+msgid "Status dos Leilões"
+msgstr "Auction status"
+
 msgid "Relatório de Movimentações de Itens"
 msgstr "Item movements report"
+
+msgid ""
+"Acompanhe todas as movimentações de itens no inventário. Visualize "
+"tendências, itens mais movimentados e estatísticas detalhadas."
+msgstr ""
+"Follow all item movements in the inventory. Visualize trends, busiest items "
+"and detailed statistics."
+
+msgid "Período"
+msgstr "Period"
+
+msgid "dias"
+msgstr "dias"
+
+msgid "movimentações"
+msgstr "movements"
+
+msgid "usuários ativos"
+msgstr "active users"
+
+msgid "personagens"
+msgstr "characters"
+
+msgid "itens únicos"
+msgstr "unique items"
 
 msgid "Retirados"
 msgstr "Removed"
@@ -2192,6 +2336,9 @@ msgstr "Inventory bag"
 msgid "Itens Mais Trocados"
 msgstr "Most changed items"
 
+msgid "Itens que foram mais trocados pelos jogadores"
+msgstr "Items that were more exchanged by players"
+
 msgid "Total Trocado"
 msgstr "Total exchanged"
 
@@ -2201,14 +2348,44 @@ msgstr "No item exchanged."
 msgid "Itens Mais Movimentados"
 msgstr "Busiest items"
 
+msgid "Itens com maior volume de movimentação"
+msgstr "Items with the highest movement volume"
+
 msgid "Total Movimentado"
 msgstr "Total busy"
 
 msgid "Nenhum item movimentado."
 msgstr "No busy item."
 
-msgid "Voltar para Dashboard"
-msgstr "Back to Dashboard"
+msgid "Usuários Mais Ativos"
+msgstr "More active users"
+
+msgid "Usuários com mais movimentações"
+msgstr "Users with more movements"
+
+msgid "Nenhum usuário ativo."
+msgstr "No active user."
+
+msgid "Personagens Mais Ativos"
+msgstr "More active characters"
+
+msgid "Personagens com mais movimentações"
+msgstr "Characters with more movements"
+
+msgid "Nenhum personagem ativo."
+msgstr "No active character."
+
+msgid "Itens Mais Encantados"
+msgstr "Most enchanted items"
+
+msgid "Itens com maior volume de encantamentos"
+msgstr "Items with the highest volume of enchantments"
+
+msgid "Max +"
+msgstr "Max +"
+
+msgid "Nenhum item encantado."
+msgstr "No enchanted item."
 
 msgid "Movimentação de Itens nos Últimos Dias"
 msgstr "Movement of items in recent days"
@@ -2313,20 +2490,35 @@ msgstr "Roadmap item translation"
 msgid "Traduções de Itens de Roadmap"
 msgstr "Roadmap items translations"
 
+msgid "Publicado em"
+msgstr "Published in"
+
+msgid "Concluído em"
+msgstr "Completed in"
+
 msgid "Voltar para o roadmap"
 msgstr "Back to Roadmap"
 
 msgid "Roadmap"
 msgstr "Roadmap"
 
+msgid "Acompanhe o desenvolvimento e as novidades do projeto"
+msgstr "Follow the development and the news of the project"
+
+msgid "Em Andamento"
+msgstr "In progress"
+
 msgid "Leia mais"
 msgstr "read more"
 
-msgid "Nenhum item de roadmap disponível."
-msgstr "No Roadmap item available."
+msgid "Nenhum item de roadmap disponível"
+msgstr "No roadmap item available"
 
 msgid "Aguarde novidades em breve!"
 msgstr "Wait news soon!"
+
+msgid "Em breve"
+msgstr "Shortly"
 
 msgid "Players Online"
 msgstr "Players Online"
@@ -2595,27 +2787,115 @@ msgstr "Supporter Default Image"
 msgid "Imagens Default de Apoiador"
 msgstr "Supporter Default Pictures"
 
-msgid "Editar Imagem do Apoiador"
-msgstr "Edit supporter image"
+msgid "Detalhes do Apoiador"
+msgstr "Supporter details"
+
+msgid "Painel Staff"
+msgstr "Staff panel"
+
+msgid "Informações do Apoiador"
+msgstr "Supporter Information"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Data de Registro"
+msgstr "Registration date"
+
+msgid "Nenhuma descrição fornecida."
+msgstr "No description provided."
+
+msgid "Redes Sociais"
+msgstr "Social media"
+
+msgid "Nenhuma rede social fornecida."
+msgstr "No social network provided."
+
+msgid "Cupom Ativo"
+msgstr "Active coupon"
+
+msgid "Desconto"
+msgstr "Discount"
+
+msgid "Válido até"
+msgstr "Valid until"
+
+msgid "Estatísticas"
+msgstr "Statistics"
+
+msgid "Total de Vendas"
+msgstr "Total Sales"
+
+msgid "Valor Total"
+msgstr "Full value"
+
+msgid "Usuários Impactados"
+msgstr "Impacted users"
+
+msgid "Histórico de Compras"
+msgstr "Purchasing history"
+
+msgid "Nenhuma compra registrada"
+msgstr "No registered purchase"
+
+msgid "Este apoiador ainda não possui compras registradas."
+msgstr "This supporter does not yet have registered purchases."
+
+msgid "Voltar para o Painel Staff"
+msgstr "Back to the Staff Panel"
 
 msgid "Editar Imagem"
 msgstr "Edit image"
 
-msgid "Apoio Expirado"
-msgstr "Expired support"
+msgid "Atualize sua imagem de perfil como apoiador"
+msgstr "Update your profile image as a supporter"
 
-msgid "Seu cupom de apoiador expirou."
-msgstr "His supporter coupon expired."
+msgid "Painel do Apoiador"
+msgstr "Supporter panel"
+
+msgid "Imagem Atual"
+msgstr "Current image"
+
+msgid "Nova Imagem"
+msgstr "New image"
+
+msgid "Formatos aceitos: JPG, PNG, GIF (máx. 5MB)"
+msgstr "Accepted formats: JPG, PNG, GIF (max. 5MB)"
+
+msgid "Salvar Imagem"
+msgstr "Save image"
+
+msgid "Voltar para o Painel"
+msgstr "Return to the Panel"
+
+msgid "Acesso Expirado"
+msgstr "Expired access"
+
+msgid "Seu Acesso Expirou"
+msgstr "Your access expired"
 
 msgid ""
-"Para continuar como apoiador e receber um novo cupom de desconto, você pode "
-"reenviar sua solicitação agora mesmo."
+"Seu período como apoiador expirou. Para continuar aproveitando os benefícios"
+" exclusivos, você precisa renovar seu acesso."
 msgstr ""
-"To continue as a supporter and receive a new discount coupon, you can resend"
-" your request right now."
+"His period as a supporter expired. To continue enjoying the exclusive "
+"benefits, you need to renew your access."
 
-msgid "Enviar Nova Solicitação"
-msgstr "Send a new request"
+msgid "O que acontece agora?"
+msgstr "What happens now?"
+
+msgid ""
+"Você pode renovar seu acesso como apoiador ou entrar em contato conosco para"
+" mais informações sobre os benefícios."
+msgstr ""
+"You can renew your access as a supporter or contact us for more information "
+"about the benefits."
+
+msgid "Renovar Acesso"
+msgstr "Renew"
+
+msgid "Contatar Staff"
+msgstr "Contact staff"
 
 msgid "Solicitar Acesso como Apoiador"
 msgstr "Request access as a supporter"
@@ -2624,14 +2904,26 @@ msgid "Torne-se um Apoiador"
 msgstr "Become a supporter"
 
 msgid ""
-"Preencha o formulário abaixo. Após a análise, você poderá acessar benefícios"
-" exclusivos, gerar códigos promocionais e acompanhar seu desempenho!"
-msgstr ""
-"Fill out the form below. After analysis, you can access exclusive benefits, "
-"generate promotional codes and track your performance!"
+"Preencha o formulário abaixo para solicitar acesso aos benefícios exclusivos"
+msgstr "Fill in the form below to request access to exclusive benefits"
+
+msgid "Solicitar Acesso"
+msgstr "Request access"
 
 msgid "Nome Público"
 msgstr "Public name"
+
+msgid "Seu nome público como apoiador"
+msgstr "Your public name as a supporter"
+
+msgid "Este será o nome exibido publicamente"
+msgstr "This will be the name displayed publicly"
+
+msgid "Conte um pouco sobre você e seu conteúdo..."
+msgstr "Tell you a little about you and your content ..."
+
+msgid "Descreva seu conteúdo e público"
+msgstr "Describe your content and audience"
 
 msgid "Link do Twitch"
 msgstr "Link do Twitch"
@@ -2660,38 +2952,17 @@ msgstr ""
 "supporter, you can generate promotional codes, have your own panel and gain "
 "rewards for each indication."
 
-msgid "Solicitar Acesso"
-msgstr "Request access"
-
 msgid ""
 "Já é apoiador? Entre em contato com a staff caso enfrente problemas de "
 "acesso."
 msgstr ""
 "Is it already a supporter? Contact the staff if you face access problems."
 
-msgid "Painel do Apoiador"
-msgstr "Supporter panel"
-
 msgid "Seu Cupom Ativo"
 msgstr "Your active coupon"
 
-msgid "Código"
-msgstr "Code"
-
-msgid "Desconto"
-msgstr "Discount"
-
-msgid "Válido até"
-msgstr "Valid until"
-
 msgid "Ainda não há cupom ativo."
 msgstr "There is no active coupon yet."
-
-msgid "Total de Vendas"
-msgstr "Total Sales"
-
-msgid "Usuários Impactados"
-msgstr "Impacted users"
 
 msgid "Solicitar Comissão"
 msgstr "Request Commission"
@@ -2699,78 +2970,100 @@ msgstr "Request Commission"
 msgid "Nenhuma compra registrada ainda."
 msgstr "No registered purchase yet."
 
-msgid "Painel de Staff"
-msgstr "Staff painel"
+msgid "Painel Staff - Apoiadores"
+msgstr "Staff Panel - Supporters"
 
-msgid "Pedidos Pendentes de Apoiadores"
-msgstr "Pending requests from supporters"
+msgid "Gerencie solicitações e apoiadores do sistema"
+msgstr "Manage system requests and supporters"
 
-msgid "Data de Solicitação"
-msgstr "Request Date"
+msgid "Solicitações Pendentes"
+msgstr "Pending Requests"
 
-msgid "Sem descrição"
-msgstr "Described"
+msgid "Apoiadores Aprovados"
+msgstr "Approved Supporters"
 
-msgid "Detalhes do Apoiador"
-msgstr "Supporter details"
+msgid "Solicitações Rejeitadas"
+msgstr "Rejected Requests"
 
-msgid "Link Twitch"
-msgstr "Link Twitch"
+msgid "Solicitações de Apoiadores"
+msgstr "Supporters Requests"
 
-msgid "Nenhum link fornecido"
-msgstr "No link supplied"
+msgid "Ver Detalhes"
+msgstr "See details"
 
-msgid "Link YouTube"
-msgstr "Link YouTube"
+msgid "Aprovar"
+msgstr "Approve"
 
-msgid "Imagem do Apoiador"
-msgstr "Supporter Image"
-
-msgid "Nenhuma imagem fornecida."
-msgstr "No image provided."
-
-msgid "Digite a porcentagem de desconto"
-msgstr "Enter the discount percentage"
-
-msgid "Aceitar"
-msgstr "To accept"
+msgid "Tem certeza que deseja rejeitar este apoiador?"
+msgstr "Are you sure you want to reject this supporter?"
 
 msgid "Rejeitar"
 msgstr "Reject"
 
-msgid "Não há pedidos pendentes no momento."
-msgstr "There are no pending orders at the moment."
+msgid "Nenhuma solicitação encontrada"
+msgstr "No request found"
 
-msgid "Solicitação em Análise"
-msgstr "Request on Analysis"
+msgid "Não há solicitações de apoiadores para revisar no momento."
+msgstr "There are no requests for supporters to review at the moment."
+
+msgid "Solicitação Pendente"
+msgstr "Pending request"
+
+msgid "Aguarde a Análise"
+msgstr "Wait for the analysis"
 
 msgid ""
-"Sua solicitação para se tornar um apoiador está sendo analisada por nossa "
-"equipe."
-msgstr "Your request to become a supporter is being analyzed by our team."
+"Sua solicitação para se tornar um apoiador está sendo analisada pela nossa "
+"equipe. Você receberá uma notificação assim que a análise for concluída."
+msgstr ""
+"Your request to become a supporter is being analyzed by our team. You will "
+"receive a notification as soon as the analysis is completed."
 
-msgid "Você receberá uma resposta em breve. Obrigado pelo interesse!"
-msgstr "You will receive an answer soon. Thanks for the interest!"
+msgid ""
+"Nossa equipe irá analisar suas informações e entrar em contato em breve. O "
+"processo geralmente leva de 24 a 48 horas."
+msgstr ""
+"Our team will analyze your information and contact you soon. The process "
+"usually takes 24 to 48 hours."
 
-msgid "Voltar para o Painel"
-msgstr "Return to the Panel"
+msgid "Notificações"
+msgstr "Notifications"
+
+msgid ""
+"Você receberá uma notificação por email assim que sua solicitação for "
+"aprovada ou se precisarmos de mais informações."
+msgstr ""
+"You will receive an email notification as soon as your request is approved "
+"or if we need more information."
 
 msgid "Solicitação Rejeitada"
 msgstr "Rejected Request"
 
-msgid ""
-"Infelizmente, sua solicitação para se tornar um apoiador foi recusada no "
-"momento."
-msgstr ""
-"Unfortunately, your request to become a supporter has been rejected at the "
-"moment."
+msgid "Solicitação Não Aprovada"
+msgstr "UNPROVED REQUEST"
 
 msgid ""
-"Caso ache que houve um engano ou queira mais informações, entre em contato "
-"com a staff."
+"Infelizmente sua solicitação para se tornar um apoiador não foi aprovada. "
+"Isso pode acontecer por diversos motivos, mas não desanime!"
 msgstr ""
-"If you think there was a mistake or want more information, contact the "
-"staff."
+"Unfortunately your request to become a supporter has not been approved. This"
+" can happen for many reasons, but don't be discouraged!"
+
+msgid "O que você pode fazer?"
+msgstr "What can you do?"
+
+msgid ""
+"Você pode tentar novamente em 30 dias, melhorando suas informações e "
+"conteúdo. Entre em contato conosco se tiver dúvidas."
+msgstr ""
+"You can try again in 30 days, improving your information and content. "
+"Contact us if you have questions."
+
+msgid "Informe o valor que deseja solicitar como comissão"
+msgstr "Enter the amount you want to request as a commission"
+
+msgid "Valor disponível para saque"
+msgstr "Available value for withdrawal"
 
 msgid ""
 "Informe o valor que deseja solicitar como comissão. Ele deve ser compatível "
@@ -2779,29 +3072,26 @@ msgstr ""
 "Enter the amount you want to request as a commission. It must be compatible "
 "with the available value."
 
-msgid "Valor disponível para saque:"
-msgstr "Available value for withdrawal:"
-
 msgid "Valor da Comissão"
 msgstr "Value of the Commission"
+
+msgid "Dashboard da Conta Lineage"
+msgstr "Dashboard Lineage Account"
+
+msgid "Bem-vindo ao seu centro de controle do jogo"
+msgstr "Welcome to your game control center"
 
 msgid "Informações da Conta"
 msgstr "Account information"
 
-msgid "Login:"
-msgstr "Login:"
+msgid "Login"
+msgstr "Login"
 
-msgid "Email:"
-msgstr "Email:"
+msgid "Último IP"
+msgstr "Last IP"
 
-msgid "Não disponível"
-msgstr "Unavailable"
-
-msgid "Último IP:"
-msgstr "Last IP:"
-
-msgid "Total de Personagens:"
-msgstr "Total characters:"
+msgid "Total de Personagens"
+msgstr "Total Characters"
 
 msgid "Logo Lineage 2"
 msgstr "Logo Lineage 2"
@@ -2809,17 +3099,8 @@ msgstr "Logo Lineage 2"
 msgid "Seus Personagens"
 msgstr "Your characters"
 
-msgid "Título:"
-msgstr "Title:"
-
-msgid "Nível:"
-msgstr "Level:"
-
-msgid "Classe Base:"
-msgstr "Basic class:"
-
-msgid "Online:"
-msgstr "Online:"
+msgid "Classe Base"
+msgstr "Basic class"
 
 msgid "Alterar Sexo"
 msgstr "Change sex"
@@ -2839,8 +3120,8 @@ msgstr "Account services"
 msgid "Alterar Senha"
 msgstr "Change password"
 
-msgid "Vincular Conta Lineage via E-mail"
-msgstr "Link Lineage Account via email"
+msgid "Vincular Conta via E-mail"
+msgstr "Link account via email"
 
 msgid ""
 "Se você não lembra sua senha do jogo, informe o e-mail cadastrado na conta "
@@ -2865,9 +3146,6 @@ msgstr "Send Binding Link"
 msgid "Criar Conta L2"
 msgstr "Create L2 Account"
 
-msgid "Login"
-msgstr "Login"
-
 msgid "E-mail"
 msgstr "E-mail"
 
@@ -2890,17 +3168,47 @@ msgstr "It can take up to 5 minutes to be available in the game and panel."
 msgid "Ir para o painel"
 msgstr "Go to the panel"
 
+msgid "Proteja sua conta com uma senha segura"
+msgstr "Protect your account with a safe password"
+
 msgid "Nova Senha"
 msgstr "New Password"
+
+msgid "Digite sua nova senha"
+msgstr "Enter your new password"
 
 msgid "Confirmar Nova Senha"
 msgstr "Confirm new password"
 
+msgid "Confirme sua nova senha"
+msgstr "Confirm your new password"
+
 msgid "Salvar Senha"
 msgstr "Save password"
 
-msgid "Vincular Conta do Jogo (Lineage 2)"
-msgstr "Link the game account (lineage 2)"
+msgid "Dicas para uma Senha Segura"
+msgstr "Tips for a safe password"
+
+msgid "Use pelo menos 8 caracteres"
+msgstr "Use at least 8 characters"
+
+msgid "Combine letras maiúsculas e minúsculas"
+msgstr "Combine uppercase and lowercase letters"
+
+msgid "Inclua números e símbolos"
+msgstr "Include numbers and symbols"
+
+msgid "Evite informações pessoais óbvias"
+msgstr "Avoid obvious personal information"
+
+msgid "Não use a mesma senha em outros sites"
+msgstr "Do not use the same password on other sites"
+
+msgid "Voltar para Dashboard"
+msgstr "Back to Dashboard"
+
+msgid "Vincular Conta do Jogo"
+msgstr "Link the game"
 
 msgid "Login da Conta Lineage"
 msgstr "Lineage login"
@@ -2920,17 +3228,62 @@ msgstr "Make sure the account is not yet linked to another user."
 msgid "Esqueceu sua senha? Vincular conta via e-mail."
 msgstr "Forgot your password? Link account via email."
 
-msgid "Personagem:"
-msgstr "Character:"
+msgid "Personalize o nome do seu personagem"
+msgstr "Customize your character's name"
 
-msgid "Preço do serviço:"
-msgstr "Service Price:"
+msgid "Preço do serviço"
+msgstr "Service price"
+
+msgid "Regras para Nicknames"
+msgstr "Rules for Nicknames"
+
+msgid "Mínimo de 3 caracteres"
+msgstr "Minimum of 3 characters"
+
+msgid "Máximo de 16 caracteres"
+msgstr "Maximum of 16 characters"
+
+msgid "Apenas letras, números e underscore"
+msgstr "Only letters, numbers and underScore"
+
+msgid "Não pode conter espaços"
+msgstr "Cannot contain spaces"
+
+msgid "Não pode ser ofensivo ou inapropriado"
+msgstr "Cannot be offensive or inappropriate"
 
 msgid "Novo Nickname"
 msgstr "Novo Nickname"
 
+msgid "Digite o novo nickname"
+msgstr "Enter the new nickname"
+
+msgid "Informações Importantes"
+msgstr "Important information"
+
+msgid "Esta alteração é permanente"
+msgstr "This change is permanent"
+
+msgid "O personagem será desconectado durante o processo"
+msgstr "The character will be disconnected during the process"
+
+msgid "Certifique-se de estar em uma área segura"
+msgstr "Be sure to be in a safe area"
+
+msgid "O serviço será cobrado imediatamente"
+msgstr "The service will be charged immediately"
+
+msgid "Nicknames duplicados não são permitidos"
+msgstr "Duplicate nicknames are not allowed"
+
+msgid "Personalize seu personagem"
+msgstr "Customize your character"
+
 msgid "Novo Sexo"
 msgstr "New sex"
+
+msgid "Selecione o novo sexo"
+msgstr "Select the new sex"
 
 msgid "Masculino"
 msgstr "Masculine"
@@ -2941,20 +3294,75 @@ msgstr "Feminine"
 msgid "Configurar Preços de Serviços"
 msgstr "Configure service prices"
 
+msgid "Defina os valores para os serviços disponíveis no servidor"
+msgstr "Set the values for the services available on the server"
+
+msgid "Preços de Serviços"
+msgstr "Services prices"
+
+msgid "Alteração de Nickname"
+msgstr "Nickname change"
+
+msgid "Alteração de Sexo"
+msgstr "Sex change"
+
+msgid "Informações sobre os Serviços"
+msgstr "Services Information"
+
+msgid "Definir Novos Preços"
+msgstr "Define new prices"
+
+msgid ""
+"Atualize os valores dos serviços. Use números decimais separados por ponto "
+"(ex: 10.50)"
+msgstr ""
+"Update the values of services. Use decimal numbers separated by point (Ex: "
+"10.50)"
+
 msgid "Preço para Alteração de Nickname"
 msgstr "Price for Nickname Change"
 
-msgid "Insira o valor"
-msgstr "Enter the value"
+msgid "Ex: 10.50"
+msgstr "Ex: 10.50"
 
 msgid "Preço para Alteração de Sexo"
 msgstr "Price for sex change"
+
+msgid "Ex: 15.00"
+msgstr "Ex: 15.00"
 
 msgid "Salvar Configurações"
 msgstr "Save Settings"
 
 msgid "Desbugar Personagem"
 msgstr "Unleash"
+
+msgid "Libere seu personagem de situações complicadas"
+msgstr "Release your character from complicated situations"
+
+msgid "O que este serviço faz?"
+msgstr "What does this service do?"
+
+msgid ""
+"Este serviço irá teleportar seu personagem para uma localização segura, "
+"resolvendo problemas como travamentos, quedas em locais inacessíveis ou "
+"qualquer situação que impeça o movimento normal do personagem."
+msgstr ""
+"This service will teleport your character to a safe location, solving "
+"problems such as crashes, falls in inaccessible places or any situation that"
+" prevents the normal movement of the character."
+
+msgid "O personagem será teleportado para uma localização segura"
+msgstr "The character will be teleported for a safe location"
+
+msgid "Este serviço é gratuito e pode ser usado quando necessário"
+msgstr "This service is free and can be used when necessary"
+
+msgid "Use apenas quando realmente estiver travado"
+msgstr "Use only when it is really locked"
+
+msgid "O personagem será desconectado brevemente durante o processo"
+msgstr "The character will be disconnected briefly during the process"
 
 msgid "Count"
 msgstr "Count"
@@ -3224,6 +3632,9 @@ msgstr "Promotional codes"
 msgid "Preço Total"
 msgstr "Total price"
 
+msgid "Itens"
+msgstr "Items"
+
 msgid "Promoção"
 msgstr "Promotion"
 
@@ -3232,9 +3643,6 @@ msgstr "Store package"
 
 msgid "Pacotes da Loja"
 msgstr "Store packages"
-
-msgid "Pacote"
-msgstr "Package"
 
 msgid "Item do Pacote"
 msgstr "Package item"
@@ -3290,14 +3698,44 @@ msgstr "Buy"
 msgid "Compras"
 msgstr "Shopping"
 
+msgid "Preço Unitário"
+msgstr "Unit price"
+
+msgid "Tipo de Compra"
+msgstr "Purchase type"
+
+msgid "Item Individual"
+msgstr "Item Individual"
+
+msgid "Nome do Pacote"
+msgstr "Package name"
+
+msgid "Item da Compra"
+msgstr "Purchase item"
+
+msgid "Itens da Compra"
+msgstr "Purchase items"
+
 msgid "Meu Carrinho"
 msgstr "My cart"
+
+msgid "Revise seus itens e finalize sua compra"
+msgstr "Review your items and finish your purchase"
+
+msgid "Loja"
+msgstr "Store"
+
+msgid "Revise os itens selecionados para compra"
+msgstr "Review selected items for purchase"
 
 msgid "Remover Item"
 msgstr "Remover Item"
 
-msgid "Visualizar Itens"
-msgstr "View items"
+msgid "Pacote com"
+msgstr "Packet with"
+
+msgid "itens"
+msgstr "items"
 
 msgid "Remover Pacote"
 msgstr "Package"
@@ -3305,20 +3743,26 @@ msgstr "Package"
 msgid "Este pacote não contém itens."
 msgstr "This package does not contain items."
 
-msgid "Código promocional"
-msgstr "Promotional code"
+msgid "Aplique um código promocional para obter desconto"
+msgstr "Apply a promotional code for discount"
+
+msgid "Digite seu código promocional"
+msgstr "Enter your promotional code"
 
 msgid "Aplicar"
 msgstr "Apply"
 
-msgid "Saldo Principal"
-msgstr "Main balance"
+msgid "Informações de Saldo"
+msgstr "Balance information"
 
-msgid "Saldo Bônus"
-msgstr "Bonus balance"
+msgid "Seus saldos disponíveis para pagamento"
+msgstr "Your balances available for payment"
 
 msgid "Forma de Pagamento"
 msgstr "Form of payment"
+
+msgid "Escolha como deseja pagar sua compra"
+msgstr "Choose how you want to pay your purchase"
 
 msgid "Desativar Pagamento com Bônus"
 msgstr "Disable payment with bonuses"
@@ -3333,14 +3777,14 @@ msgstr ""
 msgid "Resumo do Pagamento"
 msgstr "Payment Summary"
 
+msgid "Confira os valores antes de finalizar"
+msgstr "Check out the values before finishing"
+
 msgid "Total da Compra"
 msgstr "Total purchase"
 
-msgid "Pagamento"
-msgstr "Payment"
-
-msgid "Bônus"
-msgstr "Bonus"
+msgid "Detalhamento do Pagamento"
+msgstr "Payment detail"
 
 msgid "Dinheiro"
 msgstr "Money"
@@ -3348,17 +3792,29 @@ msgstr "Money"
 msgid "Finalizar Compra"
 msgstr "Finish purchase"
 
+msgid "Selecione o personagem e confirme sua compra"
+msgstr "Select the character and confirm your purchase"
+
 msgid "Esvaziar Carrinho"
 msgstr "Trickle"
 
 msgid "Continuar Comprando"
 msgstr "Keep buying"
 
-msgid "Seu carrinho está vazio."
-msgstr "Your cart is empty."
+msgid "Seu carrinho está vazio"
+msgstr "Your cart is empty"
+
+msgid "Adicione alguns itens para começar suas compras!"
+msgstr "Add some items to start your purchases!"
+
+msgid "Ir para a Loja"
+msgstr "Go to the store"
 
 msgid "Loja Online"
 msgstr "Online store"
+
+msgid "Descubra itens exclusivos e pacotes especiais para seu personagem"
+msgstr "Discover exclusive items and special packages for your character"
 
 msgid "Ver Carrinho"
 msgstr "See cart"
@@ -3366,11 +3822,20 @@ msgstr "See cart"
 msgid "Itens Disponíveis"
 msgstr "Available items"
 
-msgid "Adicionar"
-msgstr "To add"
+msgid "Itens individuais para personalizar seu personagem"
+msgstr "Individual items to customize your character"
 
-msgid "Nenhum item disponível."
-msgstr "No available item."
+msgid "Adicionar ao Carrinho"
+msgstr "Add to Cart"
+
+msgid "Nenhum item disponível no momento."
+msgstr "No item available at the moment."
+
+msgid "Pacotes Especiais"
+msgstr "Special packages"
+
+msgid "Coleções completas com desconto especial"
+msgstr "Complete collections with special discount"
 
 msgid "Itens inclusos"
 msgstr "Items included"
@@ -3378,35 +3843,84 @@ msgstr "Items included"
 msgid "Adicionar Pacote"
 msgstr "Add package"
 
-msgid "Nenhum pacote disponível."
-msgstr "No package available."
+msgid "Nenhum pacote disponível no momento."
+msgstr "No package available at the moment."
 
 msgid "Painel de Gerenciamento do Shop"
 msgstr "Shop Management Panel"
 
+msgid ""
+"Gerencie itens, pacotes e promoções do seu shop de forma eficiente e "
+"intuitiva"
+msgstr ""
+"Manage items, packages and promotions of your shop efficiently and "
+"intuitively"
+
+msgid "Ver Shop"
+msgstr "Ver Shop"
+
+msgid "Itens Ativos"
+msgstr "Active items"
+
+msgid "Promoções"
+msgstr "Promotions"
+
 msgid "Gerenciar Itens"
 msgstr "Manage items"
 
-msgid "Adicione, edite ou desative itens disponíveis no shop."
-msgstr "Add, edit or disable items available to the Shop."
-
-msgid "Acessar"
-msgstr "Access"
+msgid ""
+"Adicione, edite ou desative itens disponíveis no shop. Controle preços, "
+"estoques e categorias de forma simples."
+msgstr ""
+"Add, edit or disable items available to the Shop. Control prices, "
+"inventories and categories simply."
 
 msgid "Gerenciar Pacotes"
 msgstr "Manage packages"
 
-msgid "Monte pacotes personalizados com itens e promoções."
-msgstr "Mount custom packages with items and promotions."
+msgid ""
+"Monte pacotes personalizados com itens e promoções. Crie ofertas especiais "
+"para aumentar as vendas."
+msgstr ""
+"Mount custom packages with items and promotions. Create special offers to "
+"increase sales."
 
 msgid "Gerenciar Promoções"
 msgstr "Manage Promotions"
 
-msgid "Crie e gerencie códigos promocionais para o shop."
-msgstr "Create and manage promotional codes for the shop."
+msgid ""
+"Crie e gerencie códigos promocionais para o shop. Aumente as vendas com "
+"descontos e ofertas especiais."
+msgstr ""
+"Create and manage promotional codes for the shop. Increase sales with "
+"discounts and special offers."
+
+msgid "Dicas de Gerenciamento"
+msgstr "Management Tips"
+
+msgid "Itens Populares"
+msgstr "Popular items"
+
+msgid "Mantenha os itens mais vendidos sempre em estoque"
+msgstr "Keep the items best selling in stock"
+
+msgid "Crie pacotes com desconto para aumentar as vendas"
+msgstr "Create discount packages to increase sales"
+
+msgid "Promoções Temporárias"
+msgstr "Temporary promotions"
+
+msgid "Use promoções com prazo para criar urgência"
+msgstr "Use promotions with time to create urgency"
 
 msgid "Editar Pacote"
 msgstr "Edit package"
+
+msgid "Modifique as informações do pacote"
+msgstr "Modify Package Information"
+
+msgid "Informações do Pacote"
+msgstr "Package information"
 
 msgid "Salvar Pacote"
 msgstr "Save"
@@ -3417,17 +3931,29 @@ msgstr "Package items"
 msgid "Remover"
 msgstr "Remover"
 
-msgid "Nenhum item no pacote."
-msgstr "No item in the package."
+msgid "Nenhum item no pacote"
+msgstr "No item in the package"
 
-msgid "Cadastro de Itens"
-msgstr "Registration of items"
+msgid "Adicione itens ao pacote usando o formulário acima."
+msgstr "Add items to the package using the form above."
 
-msgid "Nenhum item cadastrado."
-msgstr "No registered item."
+msgid "Adicione, edite ou desative itens disponíveis no shop"
+msgstr "Add, edit or disable items available in the Shop"
 
-msgid "Cadastro de Pacotes"
-msgstr "Package registration"
+msgid "Cadastrar Novo Item"
+msgstr "Register new item"
+
+msgid "Nenhum item cadastrado"
+msgstr "No registered item"
+
+msgid "Comece cadastrando seu primeiro item usando o formulário acima."
+msgstr "Start by registering your first item using the form above."
+
+msgid "Monte pacotes personalizados com itens e promoções"
+msgstr "Mount custom packages with items and promotions"
+
+msgid "Cadastrar Novo Pacote"
+msgstr "Register new package"
 
 msgid "Cadastrar Pacote"
 msgstr "Register package"
@@ -3435,26 +3961,86 @@ msgstr "Register package"
 msgid "Pacotes Cadastrados"
 msgstr "Registered packages"
 
-msgid "Nenhum pacote cadastrado."
-msgstr "No registered package."
+msgid "Nenhum pacote cadastrado"
+msgstr "No registered package"
 
-msgid "Cadastro de Códigos Promocionais"
-msgstr "Promotional Codes Registration"
+msgid "Comece cadastrando seu primeiro pacote usando o formulário acima."
+msgstr "Start by registering your first package using the form above."
+
+msgid "Crie e gerencie códigos promocionais para o shop"
+msgstr "Create and manage promotional codes for the Shop"
+
+msgid "Cadastrar Nova Promoção"
+msgstr "Register new promotion"
 
 msgid "Cadastrar Promoção"
 msgstr "Register Promotion"
 
-msgid "Códigos Cadastrados"
-msgstr "Registered codes"
+msgid "Promoções Cadastradas"
+msgstr "Registered Promotions"
 
-msgid "Nenhuma promoção cadastrada."
-msgstr "No registered promotion."
+msgid "De"
+msgstr "Of"
 
-msgid "Histórico de Compras"
-msgstr "Purchasing history"
+msgid "até"
+msgstr "until"
 
-msgid "Nenhuma compra realizada ainda."
-msgstr "No purchase made yet."
+msgid "Ativa"
+msgstr "Active"
+
+msgid "Inativa"
+msgstr "Inactive"
+
+msgid "Nenhuma promoção cadastrada"
+msgstr "No registered promotion"
+
+msgid "Comece cadastrando sua primeira promoção usando o formulário acima."
+msgstr "Start by registering your first promotion using the form above."
+
+msgid "Acompanhe todas as suas compras realizadas na loja do servidor"
+msgstr "Follow all your purchases made at the server store"
+
+msgid "Suas Compras"
+msgstr "Your purchases"
+
+msgid "Total de"
+msgstr "Total of"
+
+msgid "compra(s) realizada(s)"
+msgstr "purchase (s) made (s)"
+
+msgid "Promoção Aplicada:"
+msgstr "Applied Promotion:"
+
+msgid "de desconto"
+msgstr "discount"
+
+msgid "Apoiador:"
+msgstr "Supporter:"
+
+msgid "Itens Comprados"
+msgstr "Purchased items"
+
+msgid "Quantidade:"
+msgstr "Amount:"
+
+msgid "Preço Unitário:"
+msgstr "Unit Price:"
+
+msgid "Total:"
+msgstr "Total:"
+
+msgid "Pacote:"
+msgstr "Package:"
+
+msgid "Nenhuma Compra Encontrada"
+msgstr "No purchase found"
+
+msgid "Você ainda não realizou nenhuma compra na loja"
+msgstr "You have not made any purchase at the store yet"
+
+msgid "Faça sua primeira compra na loja para ver o histórico aqui!"
+msgstr "Make your first purchase at the store to see the history here!"
 
 msgid "Este personagem não existe na sua conta."
 msgstr "This character does not exist in your account."
@@ -3633,12 +4219,6 @@ msgstr "It was not possible to load the castles data at the moment."
 msgid "Unknown Clan"
 msgstr "Unknown Clan"
 
-msgid "Saldo"
-msgstr "Balance"
-
-msgid "Carteira"
-msgstr "Portfolio"
-
 msgid "Carteiras"
 msgstr "Portfolio"
 
@@ -3726,8 +4306,8 @@ msgstr "In-game currency configuration"
 msgid "Multiplicador"
 msgstr "Multiplier"
 
-msgid "Inativa"
-msgstr "Inactive"
+msgid "Ativar"
+msgstr "Enable"
 
 msgid "Atual"
 msgstr "Current"
@@ -3759,52 +4339,62 @@ msgstr "Register currency"
 msgid "Minha Carteira"
 msgstr "My wallet"
 
+msgid "Gerencie seus saldos e transações"
+msgstr "Manage your balances and transactions"
+
+msgid "Saldos Disponíveis"
+msgstr "Available balances"
+
+msgid "Seus saldos atuais"
+msgstr "Your current balances"
+
 msgid "moedas disponíveis"
 msgstr "Available coins"
 
 msgid "bônus disponíveis"
 msgstr "bonuses available"
 
-msgid "Transferir para o Servidor"
-msgstr "Transfer to the server"
+msgid "Adicione moedas à sua carteira"
+msgstr "Add coins to your wallet"
+
+msgid "Transferir para Servidor"
+msgstr "Transfer to server"
+
+msgid "Envie moedas para o servidor do jogo"
+msgstr "Send coins to the game server"
+
+msgid "Transferir para Jogador"
+msgstr "Transfer to player"
+
+msgid "Envie moedas para outro jogador"
+msgstr "Send coins to another player"
+
+msgid "Histórico de Transações"
+msgstr "Transactions history"
+
+msgid "Suas transações recentes"
+msgstr "Your recent transactions"
+
+msgid "para"
+msgstr "to"
+
+msgid "Nenhuma transação encontrada"
+msgstr "No transaction found"
+
+msgid "Você ainda não realizou nenhuma transação."
+msgstr "You have not yet made any transaction."
+
+msgid "Transferência para servidor"
+msgstr "Server transfer"
+
+msgid "Transferência para"
+msgstr "Transfer to"
+
+msgid "Compra na loja"
+msgstr "Purchase in store"
 
 msgid "Transferir para Outro Jogador"
 msgstr "Transfer to another player"
-
-msgid "Abrir Solicitação"
-msgstr "Open"
-
-msgid "Transações Recentes"
-msgstr "Recent Transactions"
-
-msgid "Nenhuma transação encontrada."
-msgstr "No transaction found."
-
-msgid "Sobre a Carteira"
-msgstr "On the wallet"
-
-msgid ""
-"Gerencie seu saldo virtual e acompanhe suas transações recentes. Use as "
-"moedas para realizar compras, enviar presentes ou desbloquear recursos "
-"exclusivos dentro do servidor."
-msgstr ""
-"Manage your virtual balance and follow your recent transactions. Use the "
-"coins to make purchases, send gifts or unlock exclusive features within the "
-"server."
-
-msgid "Atualizar Carteira"
-msgstr "Wallet Update"
-
-msgid "Sobre o Saldo Bônus"
-msgstr "About the Bonus Balance"
-
-msgid ""
-"O saldo de bônus é creditado automaticamente quando você faz compras que se "
-"qualificam para promoções. Este saldo pode ser usado em funcionalidades "
-"específicas do sistema."
-msgstr ""
-"Bonus balance is automatically credited when you make purchases that qualify"
-" for promotions. This balance can be used in specific system features."
 
 msgid "Nome do Jogador"
 msgstr "Player's name"
@@ -3820,6 +4410,9 @@ msgstr "Confirm your password"
 
 msgid "Confirmar Transferência"
 msgstr "Confirm transfer"
+
+msgid "Transferir para o Servidor"
+msgstr "Transfer to the server"
 
 msgid "Usuário:"
 msgstr "User:"
@@ -4445,8 +5038,8 @@ msgstr "Her"
 msgid "Temas"
 msgstr "Themes"
 
-msgid "O arquivo é muito grande. Tente um arquivo menor que 30MB."
-msgstr "The file is very large. Try a file less than 30mb."
+msgid "O arquivo é muito grande. Tente um arquivo menor que 50MB."
+msgstr "The file is very large. Try a file less than 50mb."
 
 msgid "O arquivo não é um ZIP válido."
 msgstr "The file is not a valid zip."
@@ -4557,11 +5150,50 @@ msgstr "Back to requests"
 msgid "Chat da Solicitação"
 msgstr "Chat of the request"
 
-msgid "Conversa sobre a"
-msgstr "Conversation about"
+msgid "Conversa para identificação e resolução do problema"
+msgstr "Conversation for problem identification and resolution"
 
 msgid "Protocolo:"
 msgstr "Protocol:"
+
+msgid "Solicitante:"
+msgstr "Applicant:"
+
+msgid "Atendente:"
+msgstr "Attendant:"
+
+msgid "Status:"
+msgstr "Status:"
+
+msgid "Aberto"
+msgstr "Open"
+
+msgid "Aguardando Usuário"
+msgstr "Waiting user"
+
+msgid "Aguardando Terceiros"
+msgstr "Waiting for third parties"
+
+msgid "Detalhes do Chamado:"
+msgstr "Call details:"
+
+msgid "Problema Reportado:"
+msgstr "Reported problem:"
+
+msgid "Status do Chamado:"
+msgstr "Call status:"
+
+msgid "Tipo de Problema:"
+msgstr "Type of problem:"
+
+msgid "Nível de Urgência:"
+msgstr "Urgency level:"
+
+msgid "Chamado Aberto em:"
+msgstr "Called open in:"
+
+msgid "Última Atualização:"
+msgstr "Last update:"
 
 msgid "Digite sua mensagem aqui..."
 msgstr "Enter your message here ..."
@@ -4575,10 +5207,8 @@ msgstr "To send"
 msgid "Configurações de Segurança"
 msgstr "Security Settings"
 
-msgid ""
-"Mantenha sua conta protegida ativando a autenticação em duas etapas (2FA)."
-msgstr ""
-"Keep your account protected by activating authentication in two steps (2FA)."
+msgid "Mantenha sua conta protegida com recursos avançados de segurança"
+msgstr "Keep your account protected with advanced security features"
 
 msgid "Autenticação em Duas Etapas (2FA)"
 msgstr "Two steps authentication (2FA)"
@@ -4598,6 +5228,30 @@ msgstr ""
 
 msgid "Ativar 2FA"
 msgstr "Activate 2FA"
+
+msgid "Códigos Únicos"
+msgstr "Unique codes"
+
+msgid ""
+"Códigos temporários gerados a cada 30 segundos, válidos apenas uma vez."
+msgstr "Temporary codes generated every 30 seconds, valid only once."
+
+msgid "Proteção Extra"
+msgstr "Extra protection"
+
+msgid ""
+"Mesmo que alguém descubra sua senha, não conseguirá acessar sua conta sem o "
+"código 2FA."
+msgstr ""
+"Even if someone finds out your password, you will not be able to access your"
+" account without code 2FA."
+
+msgid "Acesso Rápido"
+msgstr "Rapid access"
+
+msgid ""
+"Processo simples e rápido que adiciona apenas alguns segundos ao seu login."
+msgstr "Simple and fast process that adds only a few seconds to your login."
 
 msgid "Tema não encontrado."
 msgstr "Theme not found."
@@ -4620,6 +5274,9 @@ msgstr "Total consultations"
 msgid "Caminho"
 msgstr "Path"
 
+msgid "Método"
+msgstr "Method"
+
 msgid "Host"
 msgstr "Host"
 
@@ -4632,11 +5289,17 @@ msgstr "Content type"
 msgid "Corpo"
 msgstr "Body"
 
+msgid "User Agent"
+msgstr "User Agent"
+
 msgid "Conteúdo da Resposta"
 msgstr "Response Content"
 
 msgid "Código de Status da Resposta"
 msgstr "Response Status Code"
+
+msgid "IP"
+msgstr "IP"
 
 msgid "Proxy Verificado"
 msgstr "Verified Proxy"
@@ -4650,17 +5313,20 @@ msgstr "Historic"
 msgid "Históricos"
 msgstr "Historical"
 
+msgid "Auditoria"
+msgstr "Audit"
+
 msgid "Real-time Auditor Middleware Data"
 msgstr "Real-time Auditor Middleware Data"
+
+msgid "Monitoramento em tempo real das atividades do sistema"
+msgstr "Real -time monitoring of system activities"
 
 msgid "Carregando dados..."
 msgstr "Loading data ..."
 
 msgid "Erro ao carregar os dados de auditoria. Tente novamente."
 msgstr "Error loading the audit data. Try again."
-
-msgid "Date:"
-msgstr "Date:"
 
 msgid "Path:"
 msgstr "Path:"
@@ -4677,14 +5343,11 @@ msgstr "DB Time:"
 msgid "Total Queries:"
 msgstr "Total Queries:"
 
-msgid "Method:"
-msgstr "Method:"
+msgid "Response Status Code:"
+msgstr "Response Status Code:"
 
 msgid "User Agent:"
 msgstr "User Agent:"
-
-msgid "Response Status Code:"
-msgstr "Response Status Code:"
 
 msgid "Nenhum dado de auditoria encontrado."
 msgstr "No audit data found."
@@ -4749,9 +5412,6 @@ msgstr "Calendar element not found"
 msgid "Erro ao carregar eventos:"
 msgstr "Error when carrying events:"
 
-msgid "Próximo"
-msgstr "Next"
-
 msgid "Hoje"
 msgstr "Today"
 
@@ -4772,6 +5432,9 @@ msgstr "Download category"
 
 msgid "Categorias de Download"
 msgstr "Download categories"
+
+msgid "Cliente"
+msgstr "Customer"
 
 msgid "Patch"
 msgstr "Patch"
@@ -4812,20 +5475,38 @@ msgstr "Links de Download"
 msgid "Downloads"
 msgstr "Downloads"
 
-msgid "Baixe tudo o que você precisa para começar sua jornada"
-msgstr "Download everything you need to start your journey"
+msgid "Hub de Downloads"
+msgstr "Hub de Downloads"
 
-msgid "Tamanho"
-msgstr "Size"
+msgid "Acesse todos os arquivos e recursos disponíveis para download"
+msgstr "Access all files and resources available for download"
 
-msgid "Download"
-msgstr "Download"
+msgid "Total de Downloads:"
+msgstr "Total de Downloads:"
 
-msgid "Nenhum download disponível"
-msgstr "No download available"
+msgid "Arquivos"
+msgstr "Files"
 
-msgid "Nenhum download está disponível no momento."
-msgstr "No download is currently available."
+msgid "Downloads Totais"
+msgstr "Downloads Totais"
+
+msgid "Downloads Ativos"
+msgstr "Active downloads"
+
+msgid "downloads"
+msgstr "downloads"
+
+msgid "Baixar"
+msgstr "To go down"
+
+msgid "Nenhum download disponível nesta categoria."
+msgstr "No download available in this category."
+
+msgid "Nenhuma Categoria"
+msgstr "No category"
+
+msgid "Nenhuma categoria de downloads disponível no momento."
+msgstr "No download category available at the moment."
 
 msgid "Pergunta"
 msgstr "Question"
@@ -4848,25 +5529,35 @@ msgstr "FAQ Translation"
 msgid "Traduções de FAQ"
 msgstr "FAQ translations"
 
-msgid "Ajuda"
-msgstr "Help"
-
 msgid ""
 "Encontre as respostas para as perguntas mais comuns feitas pelos nossos "
-"usuários."
-msgstr "Find the answers to the most common questions asked by our users."
+"usuários. Nossa equipe está sempre pronta para ajudar!"
+msgstr ""
+"Find the answers to the most common questions asked by our users. Our team "
+"is always ready to help!"
 
-msgid "Não há perguntas frequentes disponíveis no momento."
-msgstr "There are no frequent questions available at the moment."
+msgid "Central de Ajuda"
+msgstr "Help center"
+
+msgid ""
+"Explore as seções abaixo para encontrar as informações que você precisa"
+msgstr "Explore the sections below to find the information you need"
+
+msgid "Nenhuma pergunta disponível"
+msgstr "No question available"
+
+msgid ""
+"Não há perguntas frequentes disponíveis no momento. Entre em contato conosco"
+" se precisar de ajuda!"
+msgstr ""
+"There are no frequent questions available at the moment. Contact us if you "
+"need help!"
 
 msgid "First Name"
 msgstr "First Name"
 
 msgid "Last Name"
 msgstr "Last Name"
-
-msgid "Email"
-msgstr "Email"
 
 msgid "Biography"
 msgstr "Biography"
@@ -4876,6 +5567,12 @@ msgstr "CPF"
 
 msgid "Gender"
 msgstr "Gender"
+
+msgid "Website"
+msgstr "Website"
+
+msgid "Este e-mail já está em uso por outro usuário."
+msgstr "This email is already in use by another user."
 
 msgid "Profile Picture"
 msgstr "Profile Picture"
@@ -4976,11 +5673,53 @@ msgstr "Biography"
 msgid "Gênero"
 msgstr "Gender"
 
+msgid "Link para seu site pessoal"
+msgstr "Link to your personal site"
+
 msgid "E-mail verificado"
 msgstr "Verified Email"
 
 msgid "2FA habilitado"
 msgstr "2Fa qualified"
+
+msgid "Conta verificada"
+msgstr "Verified account"
+
+msgid "Indica se a conta foi verificada pela equipe"
+msgstr "Indicates if the account was verified by the team"
+
+msgid "Verificado na rede social"
+msgstr "Verified on the social network"
+
+msgid "Indica se o usuário é verificado na rede social"
+msgstr "Indicates whether the user is verified on the social network"
+
+msgid "Super Administrador"
+msgstr "Super administrator"
+
+msgid "Acesso total ao sistema"
+msgstr "Total access to the system"
+
+msgid "Membro da Equipe"
+msgstr "Team member"
+
+msgid "Acesso administrativo limitado"
+msgstr "Limited administrative access"
+
+msgid "Moderador"
+msgstr "Moderator"
+
+msgid "Pode acessar o painel de moderação do social"
+msgstr "You can access the social moderation panel"
+
+msgid "Usuário Verificado"
+msgstr "Verified user"
+
+msgid "Perfil com destaque azul"
+msgstr "BLUE HIGHLIGHT PROFILE"
+
+msgid "Perfil com destaque vermelho"
+msgstr "Profile with red highlight"
 
 msgid "Fichas"
 msgstr "Chips"
@@ -5020,9 +5759,6 @@ msgstr "States"
 
 msgid "Cidades"
 msgstr "Cities"
-
-msgid "Dashboard"
-msgstr "Dashboard"
 
 msgid "Dashboards"
 msgstr "Dashboards"
@@ -5271,17 +6007,11 @@ msgstr "See friends"
 msgid "Lembrar depois"
 msgstr "Remind me later"
 
-msgid "Painel do Jogador"
-msgstr "Player Panel"
-
-msgid "Tudo que você precisa em um só lugar."
-msgstr "Everything you need in one place."
-
 msgid "Olá,"
 msgstr "Hello,"
 
-msgid "Confira seu progresso abaixo."
-msgstr "Check out your progress below."
+msgid "Bem-vindo ao seu painel personalizado"
+msgstr "Welcome to your personalized panel"
 
 msgid "Doação"
 msgstr "Donation"
@@ -5291,6 +6021,9 @@ msgstr "Tell L2"
 
 msgid "Amigos"
 msgstr "Friends"
+
+msgid "Download"
+msgstr "Download"
 
 msgid "Bônus diário recebido! +25 XP"
 msgstr "Daily bonus received! +25 xp"
@@ -5307,29 +6040,17 @@ msgstr "1/3 Filled fields - Add name and surname!"
 msgid "2/3 campos preenchidos - Adicione uma bio interessante!"
 msgstr "2/3 Filled fields - Add an interesting bio!"
 
-msgid "Saldo:"
-msgstr "Balance:"
+msgid "Saldo da Carteira"
+msgstr "Portfolio balance"
 
-msgid "Nenhuma carteira encontrada."
-msgstr "No wallet found."
+msgid "Leilões Criados"
+msgstr "Created Auctions"
 
-msgid "Total criados:"
-msgstr "Total Created:"
+msgid "Ver"
+msgstr "Ver"
 
-msgid "Ver amigos"
-msgstr "See friends"
-
-msgid "Você ainda não é um apoiador."
-msgstr "You are not yet a supporter."
-
-msgid "Inventários"
-msgstr "Inventories"
-
-msgid "Ver Inventário"
-msgstr "See inventory"
-
-msgid "Nenhum inventário encontrado."
-msgstr "No inventory found."
+msgid "Seus Inventários"
+msgstr "Your inventories"
 
 msgid "🏆 Conquistas"
 msgstr "🏆 achievements"
@@ -5542,6 +6263,9 @@ msgstr "Mention your favorite classes"
 msgid "Perfis completos têm mais chances de fazer amigos!"
 msgstr "Full profiles are more likely to make friends!"
 
+msgid "Erro ao salvar o perfil"
+msgstr "Error saving the profile"
+
 msgid "Informações Pessoais"
 msgstr "Personal information"
 
@@ -5558,11 +6282,23 @@ msgstr ""
 "Tell you a little about you, your interests in the game and what you like to"
 " do!"
 
+msgid "Links"
+msgstr "Links"
+
+msgid "Link para seu site pessoal, blog, ou portfólio"
+msgstr "Link to your personal website, blog, or portfolio"
+
 msgid "Informações Adicionais"
 msgstr "Additional information"
 
+msgid "Logs"
+msgstr "Logs"
+
 msgid "Dashboard de Logs"
 msgstr "Dashboard de Logs"
+
+msgid "Monitoramento e análise dos logs do sistema"
+msgstr "Monitoring and Analysis of System Logs"
 
 msgid "Nenhum log encontrado."
 msgstr "No logs found."
@@ -5579,11 +6315,32 @@ msgstr "Page"
 msgid "Última"
 msgstr "Last"
 
+msgid "Logs de Erro"
+msgstr "Error logs"
+
+msgid "Monitoramento e análise dos erros do sistema"
+msgstr "Monitoring and analysis of system errors"
+
+msgid "Nenhum log de erro encontrado."
+msgstr "No error log found."
+
+msgid "Logs de Informação"
+msgstr "Information logs"
+
+msgid "Monitoramento das atividades informativas do sistema"
+msgstr "Monitoring system informative activities"
+
+msgid "Nenhum log de informação encontrado."
+msgstr "No information logs found."
+
 msgid "Imagem de perfil"
 msgstr "Profile image"
 
 msgid "Imagem de perfil padrão"
 msgstr "Default profile image"
+
+msgid "Conta Verificada"
+msgstr "Verified Account"
 
 msgid "E-mail Verificado"
 msgstr "Verified Email"
@@ -5678,6 +6435,9 @@ msgstr "Activate the new license on the administrative panel"
 msgid "Para renovar sua licença ou obter suporte técnico:"
 msgstr "To renew your license or get technical support:"
 
+msgid "E-mail:"
+msgstr "E-mail:"
+
 msgid "Discord:"
 msgstr "Discord:"
 
@@ -5699,6 +6459,11 @@ msgstr "Render"
 msgid "Registration failed!"
 msgstr "Registration failed!"
 
+msgid ""
+"Sua conta foi desativada. Entre em contato com o suporte para mais "
+"informações."
+msgstr "Your account was disabled. Contact support for more information."
+
 msgid "Credenciais inválidas. Tente novamente."
 msgstr "Invalid credentials. Try again."
 
@@ -5719,6 +6484,30 @@ msgstr "Password has been reset!"
 
 msgid "Password reset failed!"
 msgstr "Password reset failed!"
+
+msgid "Sua conta foi desativada por um administrador."
+msgstr "Your account was disabled by an administrator."
+
+msgid "Motivo não especificado"
+msgstr "Unpretentive reason"
+
+msgid "Sua conta foi permanentemente banida."
+msgstr "Your account was permanently banned."
+
+msgid "Sua conta foi temporariamente suspensa."
+msgstr "Your account was temporarily suspended."
+
+msgid "Sua suspensão expirou, mas sua conta ainda não foi reativada."
+msgstr "His suspension expired, but his account has not yet been reactivated."
+
+msgid "Sistema"
+msgstr "System"
+
+msgid "Erro ao verificar status da conta."
+msgstr "Error when checking account status."
+
+msgid "Entre em contato com o suporte."
+msgstr "Contact the support."
 
 msgid "Notícia privada não está disponível."
 msgstr "Private news is not available."
@@ -5774,6 +6563,444 @@ msgstr "Server Features - Wiki"
 msgid "Information about server features"
 msgstr "Information about server features"
 
+msgid "Informações da Licença"
+msgstr "License information"
+
+msgid "Contrato (PDL PRO)"
+msgstr "Contract (PDL Pro)"
+
+msgid "Datas"
+msgstr "Dates"
+
+msgid "Funcionalidades"
+msgstr "Functionality"
+
+msgid "Observações"
+msgstr "Observations"
+
+msgid "Metadados"
+msgstr "Metadata"
+
+msgid "Chave de Licença"
+msgstr "License key"
+
+msgid "Ativar licenças selecionadas"
+msgstr "Activate selected licenses"
+
+msgid "Desativar licenças selecionadas"
+msgstr "Disable Selected Licenses"
+
+msgid "Renovar licenças por 1 ano"
+msgstr "Renew licenses for 1 year"
+
+msgid "Licença"
+msgstr "License"
+
+msgid "Verificação"
+msgstr "Verification"
+
+msgid "Detalhes da Requisição"
+msgstr "REQUIREMENT DETAILS"
+
+msgid "Erro (se houver)"
+msgstr "Error (if any)"
+
+msgid "Domínio"
+msgstr "Domain"
+
+msgid "Resultado"
+msgstr "Result"
+
+msgid "Tempo de Resposta"
+msgstr "Response time"
+
+msgid "Sistema de Licenciamento"
+msgstr "Licensing system"
+
+msgid "PDL FREE - Uso Livre"
+msgstr "PDL FREE - Uso Livre"
+
+msgid "PDL PRO - Com Vínculo Contratual"
+msgstr "PDL PRO - With contractual bond"
+
+msgid "Expirada"
+msgstr "Expired"
+
+msgid "Suspensa"
+msgstr "Suspended"
+
+msgid "Tipo de Licença"
+msgstr "License type"
+
+msgid "Domínio Ativado"
+msgstr "Activated domain"
+
+msgid "Nome da Empresa/Cliente"
+msgstr "Company/Customer Name"
+
+msgid "E-mail de Contato"
+msgstr "Contact email"
+
+msgid "Telefone de Contato"
+msgstr "Contact phone"
+
+msgid "Status da Licença"
+msgstr "License status"
+
+msgid "Data de Ativação"
+msgstr "Activation date"
+
+msgid "Data de Expiração"
+msgstr "Expiration date"
+
+msgid "Contador de Verificações"
+msgstr "Check counter"
+
+msgid "Número do Contrato"
+msgstr "Contract number"
+
+msgid "Horas de Suporte Utilizadas"
+msgstr "Support hours used"
+
+msgid "Limite de Horas de Suporte"
+msgstr "SUPPORT HOURS LIMIT"
+
+msgid "Funcionalidades Habilitadas"
+msgstr "Enabled functionalities"
+
+msgid "Licenças"
+msgstr "Licensity"
+
+msgid "Data da Verificação"
+msgstr "Verification date"
+
+msgid "Endereço IP"
+msgstr "IP address"
+
+msgid "Verificação Bem-sucedida"
+msgstr "Successful verification"
+
+msgid "Mensagem de Erro"
+msgstr "Error message"
+
+msgid "Tempo de Resposta (ms)"
+msgstr "Response time (MS)"
+
+msgid "Verificação de Licença"
+msgstr "License check"
+
+msgid "Verificações de Licença"
+msgstr "License checks"
+
+msgid "Criar Nova Licença"
+msgstr "Create a new license"
+
+msgid "Criar Nova Licença PDL"
+msgstr "Create new PDL license"
+
+msgid "Domínio onde a licença será ativada"
+msgstr "Domain where the license will be activated"
+
+msgid "Campos Específicos - PDL PRO"
+msgstr "Specific fields - PDL Pro"
+
+msgid "Número do contrato comercial (obrigatório para PDL PRO)"
+msgstr "Commercial Contract number (mandatory for PDL Pro)"
+
+#, python-brace-format
+msgid "O contrato será validado via registro DNS TXT em pdl-contract.{domain}"
+msgstr ""
+"The contract will be validated via DNS TXT registration in PDL-Contract. "
+"{domain}"
+
+msgid "Criar Licença"
+msgstr "License"
+
+msgid "Tipos de Licença"
+msgstr "Types of license"
+
+msgid "Uso gratuito"
+msgstr "Free use"
+
+msgid "Sem contrato"
+msgstr "Contractless"
+
+msgid "Funcionalidades básicas"
+msgstr "Basic features"
+
+msgid "Sem suporte oficial"
+msgstr "Without official support"
+
+msgid "Suporte profissional"
+msgstr "Professional support"
+
+msgid "Atualizações garantidas"
+msgstr "GUARANTEED UPDATES"
+
+msgid "Personalização"
+msgstr "Personalization"
+
+msgid "Código fonte"
+msgstr "Source code"
+
+msgid "SLA garantido"
+msgstr "SLA guaranteed"
+
+msgid "Painel administrativo"
+msgstr "Administrative panel"
+
+msgid "Sistema de temas"
+msgstr "System of topics"
+
+msgid "Acesso à API"
+msgstr "API access"
+
+msgid "Todas as funcionalidades FREE"
+msgstr "All free features"
+
+msgid "Suporte técnico"
+msgstr "Technical support"
+
+msgid "Atualizações automáticas"
+msgstr "Automatic Updates"
+
+msgid "Personalização avançada"
+msgstr "Advanced personalization"
+
+msgid "Suporte prioritário"
+msgstr "Priority support"
+
+msgid "Código fonte completo"
+msgstr "Full source code"
+
+msgid "Serviço de instalação"
+msgstr "Installation service"
+
+msgid "Integração com banco de dados"
+msgstr "Integration with database"
+
+msgid "Dashboard de Licenças"
+msgstr "Dashboard licenses"
+
+msgid "Dashboard de Licenças PDL"
+msgstr "PDL license dashboard"
+
+msgid "Nova Licença"
+msgstr "New license"
+
+msgid "Todas as Licenças"
+msgstr "All licenses"
+
+msgid "Testar Bloqueio"
+msgstr "Lock"
+
+msgid "Licença Atual"
+msgstr "Current license"
+
+msgid "Tipo:"
+msgstr "Type:"
+
+msgid "Domínio:"
+msgstr "Domain:"
+
+msgid "Empresa:"
+msgstr "Enterprise:"
+
+msgid "Ativada em:"
+msgstr "Activated in:"
+
+msgid "Expira em:"
+msgstr "Expire in:"
+
+msgid "Verificações:"
+msgstr "Verifications:"
+
+msgid "Nenhuma licença ativa encontrada. Crie uma nova licença para começar."
+msgstr "No active license found. Create a new license to start."
+
+msgid "Total de Licenças"
+msgstr "Total licenses"
+
+msgid "Licenças Ativas"
+msgstr "Active licenses"
+
+msgid "Licenças Expiradas"
+msgstr "Expired Licenses"
+
+msgid "Licenças Suspensas"
+msgstr "Licenses suspended"
+
+msgid "Verificações Recentes"
+msgstr "Recent Verifications"
+
+msgid "Data/Hora"
+msgstr "Date/hour"
+
+msgid "Tempo (ms)"
+msgstr "Tempo (ms)"
+
+msgid "Sucesso"
+msgstr "Success"
+
+msgid "Falha"
+msgstr "Failure"
+
+msgid "Funcionalidades Disponíveis"
+msgstr "Available features"
+
+msgid "Detalhes da Licença"
+msgstr "License details"
+
+msgid "Chave:"
+msgstr "Key:"
+
+msgid "Telefone:"
+msgstr "Telephone:"
+
+msgid "Contrato:"
+msgstr "Contract:"
+
+msgid "Datas e Status"
+msgstr "Dated out of the state"
+
+msgid "Criada em:"
+msgstr "Created in:"
+
+msgid "Atualizada em:"
+msgstr "Updated in:"
+
+msgid "Última verificação:"
+msgstr "Last verification:"
+
+msgid "Total de verificações:"
+msgstr "Total checks:"
+
+msgid "Informações PDL PRO"
+msgstr "PDL PRO information"
+
+msgid "Número do Contrato:"
+msgstr "Contract number:"
+
+msgid "Horas de Suporte:"
+msgstr "Support hours:"
+
+msgid "Progresso das horas de suporte utilizadas"
+msgstr "Progress of the hours of support used"
+
+msgid "Histórico de Verificações"
+msgstr "Verifications History"
+
+msgid "Erro"
+msgstr "Error"
+
+msgid "Notas"
+msgstr "Grades"
+
+msgid "Desativar"
+msgstr "Disable"
+
+msgid "Renovar"
+msgstr "Renew"
+
+msgid "Licença Não Encontrada"
+msgstr "License not found"
+
+msgid "A licença solicitada não foi encontrada."
+msgstr "The requested license was not found."
+
+msgid "Voltar à Lista"
+msgstr "Back to the list"
+
+msgid "Status da Licença PDL"
+msgstr "PDL license status"
+
+msgid "Licença Válida"
+msgstr "Valid license"
+
+msgid "Sua licença está ativa e funcionando corretamente."
+msgstr "Your license is active and working properly."
+
+msgid "Licença Inválida"
+msgstr "Invalid license"
+
+msgid "Sua licença não está ativa ou expirou."
+msgstr "Your license is not active or expired."
+
+msgid "Nenhuma Licença Encontrada"
+msgstr "No license found"
+
+msgid "Não foi encontrada nenhuma licença ativa no sistema."
+msgstr "No active license was found in the system."
+
+msgid "Teste de Bloqueio de Licença"
+msgstr "License lock test"
+
+msgid "Teste de Bloqueio de Login por Licença"
+msgstr "Login Login Block Test"
+
+msgid "Status do Sistema de Bloqueio"
+msgstr "Locking system status"
+
+msgid "Status da Licença:"
+msgstr "License status:"
+
+msgid "Válida"
+msgstr "Valid"
+
+msgid "Superusuários podem fazer login normalmente."
+msgstr "Superusers can login normally."
+
+msgid "Inválida/Expirada"
+msgstr "Invalid/Expired"
+
+msgid "Superusuários serão bloqueados no login."
+msgstr "Superusers will be blocked on the login."
+
+msgid "Sistema de Bloqueio:"
+msgstr "Blocking System:"
+
+msgid "Backend de autenticação configurado e funcionando."
+msgstr "Backend of configured and working authentication."
+
+msgid "Informações da Licença Atual"
+msgstr "Current license information"
+
+msgid "Como Testar o Sistema"
+msgstr "How to test the system"
+
+msgid "Instruções para Teste:"
+msgstr "Test Instructions:"
+
+msgid "Para simular licença inválida:"
+msgstr "To simulate invalid license:"
+
+msgid "Edite uma licença e mude o status para 'expired'"
+msgstr "Edit a license and change the status to 'Expired'"
+
+msgid "Ou modifique a data de expiração para uma data passada"
+msgstr "Or modify the expiration date to a past date"
+
+msgid "Tente fazer login com um superusuário"
+msgstr "Try to login with a superuser"
+
+msgid "O login deve ser bloqueado com mensagem de erro"
+msgstr "Login should be blocked with error message"
+
+msgid "Usuários normais continuarão funcionando normalmente"
+msgstr "Normal users will continue to function normally"
+
+msgid "Comando de Teste"
+msgstr "Test command"
+
+msgid "Execute o comando abaixo para testar o sistema:"
+msgstr "Run the command below to test the system:"
+
+msgid ""
+"Este comando verificará o status da licença e listará os superusuários "
+"afetados."
+msgstr ""
+"This command will check the license status and list the affected superusers."
+
 msgid "Usuário que iniciou a amizade."
 msgstr "User who started friendship."
 
@@ -5782,9 +7009,6 @@ msgstr "Friend"
 
 msgid "Usuário que é amigo do primeiro usuário."
 msgstr "User who is friend of the first user."
-
-msgid "Data de Criação"
-msgstr "Creation date"
 
 msgid "Data e hora em que a amizade foi criada."
 msgstr "Date and time when friendship was created."
@@ -5861,26 +7085,26 @@ msgstr "Conversation"
 msgid "Históricos de Conversas"
 msgstr "Conversation"
 
-msgid "Mensagens"
-msgstr "Messages"
-
 msgid "Converse com seus amigos de forma rápida e prática."
 msgstr "Talk to your friends quickly and practically."
 
-msgid "Lista de Amigos"
-msgstr "List of friends"
-
-msgid "Procurar Amigo..."
+msgid "Procurar amigo..."
 msgstr "Search friend ..."
+
+msgid "Você ainda não tem amigos para conversar."
+msgstr "You still don't have friends to talk."
 
 msgid "Gerenciar Amigos"
 msgstr "Manage friends"
 
-msgid "Clique em um amigo para iniciar o chat."
-msgstr "Click a friend to start the chat."
+msgid "Selecione um amigo para iniciar o chat"
+msgstr "Select a friend to start the chat"
 
-msgid "Digite uma mensagem..."
-msgstr "Enter a message ..."
+msgid "Escolha um amigo da lista ao lado para começar a conversar."
+msgstr "Choose a friend from the list next to start talking."
+
+msgid "Digite sua mensagem..."
+msgstr "Enter your message ..."
 
 msgid "Amigos e Conexões"
 msgstr "Friends and Connections"
@@ -5933,6 +7157,9 @@ msgstr "Results for"
 msgid "encontrados"
 msgstr "found"
 
+msgid "Adicionar"
+msgstr "To add"
+
 msgid "Nenhum usuário encontrado"
 msgstr "No User Found"
 
@@ -5947,6 +7174,9 @@ msgstr "All users are already their friends or have pending requests."
 
 msgid "Solicitações Recebidas"
 msgstr "Received Requests"
+
+msgid "Aceitar"
+msgstr "To accept"
 
 msgid "Recusar"
 msgstr "Refuse"
@@ -6012,17 +7242,29 @@ msgstr "News Translation"
 msgid "Traduções de Notícias"
 msgstr "News Translations"
 
-msgid "Detalhes da Notícia"
-msgstr "News details"
+msgid "Voltar às Notícias"
+msgstr "Go back to news"
 
-msgid "Voltar para as notícias"
-msgstr "Back to the news"
+msgid ""
+"Fique por dentro das últimas novidades e atualizações exclusivas da nossa "
+"comunidade."
+msgstr ""
+"Stay on top of the latest news and exclusive updates from our community."
 
-msgid "Fique por dentro das últimas novidades e atualizações exclusivas."
-msgstr "Stay on top of the latest news and exclusive updates."
+msgid "Nenhuma notícia disponível"
+msgstr "No news available"
 
-msgid "Não há notícias privadas disponíveis no momento."
-msgstr "There is no private news available at the moment."
+msgid ""
+"Não há notícias privadas disponíveis no momento. Volte em breve para "
+"novidades!"
+msgstr ""
+"There is no private news available at the moment. Return soon for news!"
+
+msgid "Acesso Restrito"
+msgstr "Restricted access"
+
+msgid "Faça login para visualizar as notícias exclusivas da comunidade."
+msgstr "Login to view the exclusive news of the community."
 
 msgid "Abrir link"
 msgstr "Open"
@@ -6059,9 +7301,6 @@ msgstr "Optional URL to redirect when clicking on the notification."
 msgid "Notificação"
 msgstr "Notification"
 
-msgid "Notificações"
-msgstr "Notifications"
-
 msgid "Usuário que visualizou a notificação pública."
 msgstr "User who visualized public notification."
 
@@ -6086,41 +7325,2308 @@ msgstr "Push Subscription"
 msgid "Push Subscriptions"
 msgstr "Push Subscriptions"
 
+msgid "Mensagem enviada via push."
+msgstr "Message sent via push."
+
+msgid "Enviado por"
+msgstr "Sent by"
+
+msgid "Usuário que enviou a notificação push."
+msgstr "User who sent the Push notification."
+
+msgid "Total de Inscritos"
+msgstr "Total registered"
+
+msgid "Número total de usuários inscritos no momento do envio."
+msgstr "Total number of users registered at the time of shipping."
+
+msgid "Enviados com Sucesso"
+msgstr "Successful"
+
+msgid "Número de notificações enviadas com sucesso."
+msgstr "Number of notifications sent successfully."
+
+msgid "Falhas no Envio"
+msgstr "Shipping Failures"
+
+msgid "Número de notificações que falharam ao enviar."
+msgstr "Number of notifications they failed when sending."
+
+msgid "Log de Notificação Push"
+msgstr "Push Notification Log"
+
+msgid "Logs de Notificações Push"
+msgstr "Push notifications logs"
+
 msgid "Enviar Notificação Push"
 msgstr "Send Push Notification"
+
+msgid "Envie mensagens instantâneas para todos os usuários inscritos"
+msgstr "Send instant messages to all registered users"
+
+msgid "Enviar Push"
+msgstr "Send push"
+
+msgid "Usuários Inscritos"
+msgstr "Registered users"
+
+msgid "Mensagens Enviadas"
+msgstr "Messages Submitted"
+
+msgid "Última Enviada"
+msgstr "Last sent"
+
+msgid "Nova Notificação"
+msgstr "New notification"
+
+msgid ""
+"Digite sua mensagem abaixo. Ela será enviada instantaneamente para todos os "
+"usuários inscritos no push."
+msgstr ""
+"Enter your message below. It will be sent instantly to all PUSH registered "
+"users."
+
+msgid "Digite a mensagem a ser enviada..."
+msgstr "Enter the message to be sent ..."
 
 msgid "Enviar Notificação"
 msgstr "Send notification"
 
+msgid "Dica Importante"
+msgstr "Important tip"
+
+msgid ""
+"Todos os usuários inscritos no push receberão a mensagem instantaneamente."
+msgstr "All Push registered users will receive the message instantly."
+
+msgid ""
+"Use para alertas importantes, avisos de manutenção, eventos especiais e "
+"comunicações urgentes."
+msgstr ""
+"Use for important warnings, maintenance warnings, special events and urgent "
+"communications."
+
+msgid "Gerencie suas notificações privadas e públicas"
+msgstr "Manage your private and public notifications"
+
 msgid "Marcar todas como lidas"
 msgstr "Mark"
 
-msgid "Limpar todas as notificações"
-msgstr "Clean all notifications"
+msgid "Excluir lidas"
+msgstr "Delete"
 
 msgid "Notificações Privadas"
 msgstr "Private notifications"
 
-msgid "Não lida"
-msgstr "Unloved"
+msgid "Suas notificações pessoais"
+msgstr "Your personal notifications"
 
-msgid "Detalhes da Notificação"
-msgstr "Notification details"
+msgid "Nova"
+msgstr "Nova"
 
-msgid "Não há notificações privadas."
-msgstr "There are no private notifications."
+msgid "Nenhuma notificação privada"
+msgstr "No private notification"
+
+msgid "Você não tem notificações privadas no momento"
+msgstr "You have no private notifications at the moment"
 
 msgid "Notificações Públicas"
 msgstr "Public notifications"
 
-msgid "Não há notificações públicas."
-msgstr "There are no public notifications."
+msgid "Notificações gerais do sistema"
+msgstr "General System Notifications"
 
-msgid "Tem certeza que deseja limpar todas as notificações?"
-msgstr "Are you sure you want to clean all notifications?"
+msgid "Nenhuma notificação pública"
+msgstr "No public notification"
+
+msgid "Não há notificações públicas no momento"
+msgstr "There are no public notifications at the moment"
+
+msgid "Detalhes da Notificação"
+msgstr "Notification details"
 
 msgid "Informações Básicas"
 msgstr "Basic information"
+
+msgid "Mídia"
+msgstr "Media"
+
+msgid "Taxa de Engajamento"
+msgstr "Engagement rate"
+
+msgid "Comentário"
+msgstr "Comment"
+
+msgid "Interesses"
+msgstr "Interests"
+
+msgid "Privacidade"
+msgstr "Privacy"
+
+msgid "Informações da Denúncia"
+msgstr "Complaint information"
+
+msgid "Conteúdo Reportado"
+msgstr "Reported content"
+
+msgid "Moderação"
+msgstr "Moderation"
+
+msgid "Manual"
+msgstr "Manual"
+
+msgid "Filtros"
+msgstr "Filters"
+
+msgid "Denúncia manual - não foi gerada por filtros automáticos"
+msgstr "Manual Complaint - It was not generated by automatic filters"
+
+msgid "Detalhes dos Filtros Acionados"
+msgstr "Details of the fired filters"
+
+msgid "Atribuir a moderadores"
+msgstr "Moderators"
+
+msgid "Marcar como resolvidas"
+msgstr "Resolve"
+
+msgid "Descartar denúncias"
+msgstr "Discard complaints"
+
+msgid "Informações da Ação"
+msgstr "Action information"
+
+msgid "Alvo da Ação"
+msgstr "Action target"
+
+msgid "Suspensão"
+msgstr "Suspension"
+
+msgid "Controle"
+msgstr "Control"
+
+msgid "Alvo"
+msgstr "Target"
+
+msgid "Desativar ações"
+msgstr "Deactivate actions"
+
+msgid "Estender suspensões por 7 dias"
+msgstr "Extend suspensions for 7 days"
+
+msgid "Informações do Filtro"
+msgstr "Filter information"
+
+msgid "Configurações"
+msgstr "Settings"
+
+msgid "Aplicação"
+msgstr "Application"
+
+msgid "Ativar filtros"
+msgstr "Activate Filters"
+
+msgid "Desativar filtros"
+msgstr "Disable filters"
+
+msgid "Resetar estatísticas"
+msgstr "Reset statistics"
+
+msgid "Padrão Detectado"
+msgstr "Detected Standard"
+
+msgid "Contexto"
+msgstr "Context"
+
+msgid "Exportar logs CSV"
+msgstr "Exportar logs CSV"
+
+msgid "openpyxl não está instalado. Use: pip install openpyxl"
+msgstr "OpenPyxl is not installed. Use: Pip Install OpenPyxl"
+
+msgid "Exportar logs Excel"
+msgstr "Exportar logs Excel"
+
+msgid "Administração da Rede Social"
+msgstr "Social network administration"
+
+msgid "Rede Social Admin"
+msgstr "Rede Social Admin"
+
+msgid "Gerenciamento da Rede Social"
+msgstr "Social network management"
+
+msgid "Rede Social"
+msgstr "Social network"
+
+msgid "O que você está pensando?"
+msgstr "What are you thinking?"
+
+msgid "Máximo 1000 caracteres"
+msgstr "Maximum 1000 characters"
+
+msgid "Imagem opcional (máx. 10MB, formatos: JPEG, PNG, WEBP, GIF)"
+msgstr "Optional image (max. 10MB, Formats: JPEG, PNG, Webp, GIF)"
+
+msgid "Vídeo opcional (máx. 100MB, 5min, formatos: MP4, MOV, AVI, WEBM)"
+msgstr "Optional video (max. 100MB, 5min, formats: MP4, MOV, AVI, Webm)"
+
+msgid "Link opcional para compartilhar"
+msgstr "Optional link to share"
+
+msgid "Hashtags separadas por espaço (ex: #tecnologia #programacao)"
+msgstr "Hashtags separated by space (eg #technology #Programming)"
+
+msgid "O conteúdo não pode estar vazio."
+msgstr "The content cannot be empty."
+
+msgid "O post deve ter pelo menos um conteúdo: texto, imagem, vídeo ou link."
+msgstr "The post must have at least one content: text, image, video or link."
+
+msgid "Não é possível anexar imagem e vídeo no mesmo post. Escolha apenas um."
+msgstr ""
+"It is not possible to attach image and video in the same post. Choose only "
+"one."
+
+msgid "O conteúdo total (incluindo hashtags) excede 1000 caracteres."
+msgstr "Total content (including hashtags) exceeds 1000 characters."
+
+msgid "Escreva um comentário..."
+msgstr "Write a comment ..."
+
+msgid "Máximo 500 caracteres"
+msgstr "Maximum 500 characters"
+
+msgid "Imagem opcional no comentário"
+msgstr "Optional image in the comment"
+
+msgid "O comentário não pode estar vazio."
+msgstr "The comment cannot be empty."
+
+msgid "Imagem de capa (máx. 10MB, recomendado: 1200x400px)"
+msgstr "Cover image (max. 10MB, recommended: 1200x400px)"
+
+msgid "Conte um pouco sobre você..."
+msgstr "Tell you a little about you ..."
+
+msgid "Sua cidade, país"
+msgstr "Your city, country"
+
+msgid "Seu telefone"
+msgstr "Your phone"
+
+msgid "Seus hobbies e interesses..."
+msgstr "Your hobbies and interests ..."
+
+msgid "Foto de perfil (JPG, PNG)"
+msgstr "Profile photo (JPG, PNG)"
+
+msgid "Imagem de capa (JPG, PNG)"
+msgstr "Cover image (JPG, PNG)"
+
+msgid "Conte sobre seus interesses"
+msgstr "Tell your interests"
+
+msgid "Buscar usuários, posts..."
+msgstr "Seek users, posts ..."
+
+msgid "Tudo"
+msgstr "All"
+
+msgid "Posts"
+msgstr "Posts"
+
+msgid "Hashtags"
+msgstr "Hashtags"
+
+msgid "Qualquer data"
+msgstr "Any date"
+
+msgid "Esta semana"
+msgstr "This week"
+
+msgid "Este mês"
+msgstr "This month"
+
+msgid "Este ano"
+msgstr "This year"
+
+msgid "Adicione um comentário ao compartilhar..."
+msgstr "Add a comment when sharing ..."
+
+msgid "Comentário opcional (máx. 500 caracteres)"
+msgstr "Optional comment (max. 500 characters)"
+
+msgid "Compartilhar publicamente"
+msgstr "Publicly share"
+
+msgid "Nome da hashtag (sem #)"
+msgstr "NOME HASHTAG (SEM #)"
+
+msgid "Descrição da hashtag..."
+msgstr "Description of hashtag ..."
+
+msgid ""
+"Nome da hashtag deve conter apenas letras, números, hífens e underscores."
+msgstr ""
+"Hashtag name should contain only letters, numbers, hyphens and underScores."
+
+msgid "Tipo de Denúncia"
+msgstr "Type of denunciation"
+
+msgid "Descreva o problema encontrado..."
+msgstr "Describe the problem found ..."
+
+msgid "A descrição é obrigatória."
+msgstr "The description is mandatory."
+
+msgid "Tipo de Ação"
+msgstr "Type of action"
+
+msgid "Justificativa para a ação..."
+msgstr "Justification for action ..."
+
+msgid "Motivo"
+msgstr "Reason"
+
+msgid "Duração da Suspensão"
+msgstr "Suspension Duration"
+
+msgid "Ex: 7 (para 7 dias) ou 24:00:00 (para 24 horas)"
+msgstr "Ex: 7 (for 7 days) or 24:00:00 (for 24 hours)"
+
+msgid "Tipo de Suspensão"
+msgstr "Suspension type"
+
+msgid "Digite o nome do usuário"
+msgstr "Enter the user's name"
+
+msgid "Usuário Alvo"
+msgstr "Target user"
+
+msgid "Nome do usuário para aplicar a ação"
+msgstr "User name to apply the action"
+
+msgid "Data específica para expiração da ação"
+msgstr "Specific Date for Expiration of the action"
+
+msgid "Motivo que será mostrado ao usuário"
+msgstr "Reason that will be shown to the user"
+
+msgid "Motivo Público"
+msgstr "Public reason"
+
+msgid "Motivo que será exibido para o usuário afetado"
+msgstr "Reason that will be displayed to the affected user"
+
+msgid "Notificar Usuário"
+msgstr "Notify User"
+
+msgid "Mensagem personalizada para o usuário..."
+msgstr "Personalized message to the user ..."
+
+msgid "Mensagem de Notificação"
+msgstr "Notification Message"
+
+msgid "Mensagem opcional para o usuário (máx. 500 caracteres)"
+msgstr "Optional message for the user (max. 500 characters)"
+
+msgid "Formato inválido. Use: 7 (dias) ou 24:00:00 (horas:min:seg)"
+msgstr "Invalid format. Use: 7 (days) or 24:00:00 (hours: min: sec)"
+
+msgid "Duração é obrigatória para ações de suspensão/banimento."
+msgstr "Duration is mandatory for suspension/banishment actions."
+
+msgid "Tipo de suspensão é obrigatório."
+msgstr "Suspension type is mandatory."
+
+msgid "Motivo público é obrigatório para ações que afetam usuários."
+msgstr "Public reason is mandatory for actions that affect users."
+
+msgid "Nome do filtro"
+msgstr "Filter name"
+
+msgid "Nome do Filtro"
+msgstr "Filter name"
+
+msgid "Tipo de Filtro"
+msgstr "Type of filter"
+
+msgid "Padrão a ser filtrado..."
+msgstr "Pattern to be filtered ..."
+
+msgid "Padrão"
+msgstr "Standard"
+
+msgid "Palavra-chave, regex ou padrão a ser filtrado"
+msgstr "Keyword, Regex or Standard to be filtered"
+
+msgid "Descrição do filtro..."
+msgstr "Filter Description ..."
+
+msgid "Sensível a Maiúsculas/Minúsculas"
+msgstr "Sensitive to uppercase/lowercase"
+
+msgid "Aplicar a Posts"
+msgstr "Apply to posts"
+
+msgid "Aplicar a Comentários"
+msgstr "Apply"
+
+msgid "Aplicar a Nomes de Usuário"
+msgstr "Apply user names"
+
+msgid "O padrão é obrigatório."
+msgstr "The standard is mandatory."
+
+msgid "Selecione pelo menos um tipo de conteúdo para aplicar o filtro."
+msgstr "Select at least one type of content to apply the filter."
+
+msgid "Buscar denúncias..."
+msgstr "Seek complaints ..."
+
+msgid "Todos os tipos"
+msgstr "All types"
+
+msgid "Todos os status"
+msgstr "All status"
+
+msgid "Todas as prioridades"
+msgstr "All priorities"
+
+msgid "Baixa"
+msgstr "Low"
+
+msgid "Média"
+msgstr "Average"
+
+msgid "Alta"
+msgstr "Alta"
+
+msgid "Urgente"
+msgstr "Urgent"
+
+msgid "Prioridade"
+msgstr "Priority"
+
+msgid "Todos os moderadores"
+msgstr "All moderators"
+
+msgid "Moderador Responsável"
+msgstr "Responsible moderator"
+
+msgid "Data Inicial"
+msgstr "Start date"
+
+msgid "Data Final"
+msgstr "Data Final"
+
+msgid "Selecione uma ação"
+msgstr "Select an action"
+
+msgid "Ocultar Conteúdo"
+msgstr "Hide content"
+
+msgid "Deletar Conteúdo"
+msgstr "Delete content"
+
+msgid "Enviar Advertência"
+msgstr "Send warning"
+
+msgid "Ação em Massa"
+msgstr "Mass action"
+
+msgid "Motivo para a ação em massa..."
+msgstr "Reason for mass action ..."
+
+msgid "Motivo opcional para a ação (máx. 500 caracteres)"
+msgstr "Optional reason for action (max. 500 characters)"
+
+msgid "Selecione um moderador"
+msgstr "Select a moderator"
+
+msgid "Atribuir a Moderador"
+msgstr "Moderator"
+
+msgid "Conteúdo do post"
+msgstr "Post Contents"
+
+msgid "Imagem opcional para o post (máx. 10MB, 1920x1080px)"
+msgstr "Optional image for the post (max. 10MB, 1920x1080px)"
+
+msgid "Vídeo"
+msgstr "Video"
+
+msgid "Vídeo opcional para o post (máx. 100MB, 5min, MP4/MOV/AVI/WEBM)"
+msgstr "Optional video for the post (max. 100MB, 5min, MP4/MOV/AVI/Webm)"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "Link opcional para o post"
+msgstr "Optional Link for Post"
+
+msgid "Título do link"
+msgstr "Link title"
+
+msgid "Título para o link compartilhado"
+msgstr "Title for the shared link"
+
+msgid "Descrição do link"
+msgstr "LINK DESCRIPTION"
+
+msgid "Descrição para o link compartilhado"
+msgstr "Description for the shared link"
+
+msgid "Imagem do link"
+msgstr "LINK IMAGE"
+
+msgid "URL da imagem do link compartilhado"
+msgstr "Shared link image url"
+
+msgid "Número de visualizações"
+msgstr "Views"
+
+msgid "Número de compartilhamentos"
+msgstr "Number of shares"
+
+msgid "Público"
+msgstr "Public"
+
+msgid "Se marcado, o post será visível para todos"
+msgstr "If marked, the post will be visible to everyone"
+
+msgid "Fixado"
+msgstr "Fixed"
+
+msgid "Se marcado, o post ficará fixado no topo do perfil"
+msgstr "If marked, the post will be fixed at the top of the profile"
+
+msgid "Editado"
+msgstr "Edited"
+
+msgid "Indica se o post foi editado"
+msgstr "Indicates if the post was edited"
+
+msgid "Data da última edição"
+msgstr "Last edition date"
+
+msgid "Número de curtidas"
+msgstr "Number of likes"
+
+msgid "Número de comentários"
+msgstr "Comments Number"
+
+msgid "Data de criação"
+msgstr "Creation date"
+
+msgid "Data de atualização"
+msgstr "Update date"
+
+msgid "Post"
+msgstr "Post"
+
+msgid "Conteúdo do comentário"
+msgstr "Comment Contents"
+
+msgid "Comentário pai"
+msgstr "Father's Comment"
+
+msgid "Para respostas a outros comentários"
+msgstr "For answers to other comments"
+
+msgid "Imagem opcional no comentário (máx. 5MB)"
+msgstr "Optional image in the comment (max. 5MB)"
+
+msgid "Data da edição"
+msgstr "EDITION DATE"
+
+msgid "Comentários"
+msgstr "Comments"
+
+msgid "Curtida de Comentário"
+msgstr "Comment Like"
+
+msgid "Curtidas de Comentários"
+msgstr "Comments Likes"
+
+msgid "Tipo de reação"
+msgstr "Reaction type"
+
+msgid "Curtida"
+msgstr "Tanned"
+
+msgid "Curtidas"
+msgstr "Likes"
+
+msgid "Post original"
+msgstr "Post original"
+
+msgid "Usuário que compartilhou"
+msgstr "User who shared"
+
+msgid "Comentário no compartilhamento"
+msgstr "Comment on sharing"
+
+msgid "Comentário opcional ao compartilhar"
+msgstr "Optional Comment to Share"
+
+msgid "Compartilhamento"
+msgstr "Sharing"
+
+msgid "Compartilhamentos"
+msgstr "Shares"
+
+msgid "Seguidor"
+msgstr "Follower"
+
+msgid "Seguindo"
+msgstr "Following"
+
+msgid "Notificações ativadas"
+msgstr "Activated notifications"
+
+msgid "Receber notificações de posts deste usuário"
+msgstr "Receive posts of posts from this user"
+
+msgid "Seguir"
+msgstr "Follow"
+
+msgid "Breve descrição sobre você"
+msgstr "Brief Description about you"
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Foto de perfil (máx. 5MB, será redimensionada para 400x400px)"
+msgstr "Profile photo (max. 5MB, will be resized to 400x400px)"
+
+msgid "Imagem de capa"
+msgstr "Cover image"
+
+msgid "Imagem de capa do perfil (máx. 10MB, recomendado: 1200x400px)"
+msgstr "Profile cover image (max. 10MB, recommended: 1200x400px)"
+
+msgid "Sua cidade/país"
+msgstr "Your city/country"
+
+msgid "Data de nascimento"
+msgstr "Date of birth"
+
+msgid "Telefone"
+msgstr "Telephone"
+
+msgid "Seu número de telefone"
+msgstr "Your phone number"
+
+msgid "Seus hobbies e interesses"
+msgstr "Your hobbies and interests"
+
+msgid "Links sociais"
+msgstr "Social links"
+
+msgid "Links para redes sociais (JSON)"
+msgstr "Links for Social Networks (JSON)"
+
+msgid "Perfil privado"
+msgstr "Private profile"
+
+msgid "Se marcado, apenas seguidores aprovados podem ver seus posts"
+msgstr "If marked, only approved followers can see their posts"
+
+msgid "Mostrar email"
+msgstr "Show email"
+
+msgid "Se marcado, seu email será visível no perfil"
+msgstr "If marked, your email will be visible on the profile"
+
+msgid "Mostrar telefone"
+msgstr "Call"
+
+msgid "Se marcado, seu telefone será visível no perfil"
+msgstr "If marked, your phone will be visible on the profile"
+
+msgid "Permitir mensagens"
+msgstr "Allow messages"
+
+msgid "Se marcado, outros usuários podem te enviar mensagens"
+msgstr "If marked, other users can send you messages"
+
+msgid "Total de posts"
+msgstr "Total of posts"
+
+msgid "Total de curtidas recebidas"
+msgstr "Total Likes received"
+
+msgid "Total de comentários recebidos"
+msgstr "Total comments received"
+
+msgid "Perfil Social"
+msgstr "Social profile"
+
+msgid "Perfis Sociais"
+msgstr "Social profiles"
+
+msgid "Descrição da hashtag"
+msgstr "Hashtag description"
+
+msgid "Número de posts"
+msgstr "Posts number"
+
+msgid "Hashtag"
+msgstr "Hashtag"
+
+msgid "Hashtag do Post"
+msgstr "Hashtag do Post"
+
+msgid "Hashtags dos Posts"
+msgstr "Hashtags dos Posts"
+
+msgid "Spam"
+msgstr "Spam"
+
+msgid "Conteúdo Inapropriado"
+msgstr "Inappropriate content"
+
+msgid "Assédio"
+msgstr "Harassment"
+
+msgid "Violência"
+msgstr "Violence"
+
+msgid "Discurso de Ódio"
+msgstr "Hate Speech"
+
+msgid "Fake News"
+msgstr "Fake News"
+
+msgid "Violação de Direitos Autorais"
+msgstr "Copyright violation"
+
+msgid "Em Revisão"
+msgstr "Under review"
+
+msgid "Resolvido"
+msgstr "Resolved"
+
+msgid "Descartado"
+msgstr "Discarded"
+
+msgid "Denunciante"
+msgstr "Denunciator"
+
+msgid "Deixe em branco para denúncias geradas pelo sistema"
+msgstr "Leave blank for complaints generated by the system"
+
+msgid "Detalhes sobre a denúncia"
+msgstr "Details about the complaint"
+
+msgid "Post Reportado"
+msgstr "Post reported"
+
+msgid "Comentário Reportado"
+msgstr "Comment reported"
+
+msgid "Usuário Reportado"
+msgstr "Reported user"
+
+msgid "Notas do Moderador"
+msgstr "Moderator Notes"
+
+msgid "Data de Resolução"
+msgstr "Resolution date"
+
+msgid "Denúncias Similares"
+msgstr "Similar complaints"
+
+msgid "Denúncia"
+msgstr "Complaint"
+
+msgid "Denúncias"
+msgstr "Denunciations"
+
+msgid "Pode moderar denúncias"
+msgstr "Can moderate complaints"
+
+msgid "Pode visualizar denúncias"
+msgstr "You can visualize complaints"
+
+msgid "Report"
+msgstr "Report"
+
+msgid "Filtro de Conteúdo"
+msgstr "Content filter"
+
+msgid "Parte do conteúdo que acionou o filtro"
+msgstr "Part of the content that called the filter"
+
+msgid "Nível de Confiança"
+msgstr "Confidence level"
+
+msgid "Quão confiante o filtro está na detecção (0.0 a 1.0)"
+msgstr "How confident the filter is in detection (0.0 to 1.0)"
+
+msgid "Flag de Filtro"
+msgstr "Filter flag"
+
+msgid "Flags de Filtros"
+msgstr "Filter flags"
+
+msgid "Advertência"
+msgstr "Warning"
+
+msgid "Suspender Usuário"
+msgstr "Suspend user"
+
+msgid "Banir Usuário"
+msgstr "Ban"
+
+msgid "Restringir Usuário"
+msgstr "Restrict user"
+
+msgid "Aprovar Conteúdo"
+msgstr "Approve content"
+
+msgid "Destacar Conteúdo"
+msgstr "Highlight content"
+
+msgid "Temporária"
+msgstr "Temporary"
+
+msgid "Permanente"
+msgstr "Permanente"
+
+msgid "Justificativa para a ação"
+msgstr "Justification for action"
+
+msgid "Post Alvo"
+msgstr "Post Target"
+
+msgid "Comentário Alvo"
+msgstr "Comment Target"
+
+msgid "ID do Post (Backup)"
+msgstr "ID do Post (Backup)"
+
+msgid "ID do Comentário (Backup)"
+msgstr "Comment ID (Backup)"
+
+msgid "Conteúdo Original (Backup)"
+msgstr "Original content (backup)"
+
+msgid "Backup do conteúdo para casos de deleção"
+msgstr "Backup of the content for deletion cases"
+
+msgid "Data de Fim da Suspensão"
+msgstr "SUSPENSION END DATE"
+
+msgid "Se a ação ainda está em vigor"
+msgstr "If the action is still in force"
+
+msgid "Ação de Moderação"
+msgstr "Moderation action"
+
+msgid "Ações de Moderação"
+msgstr "Moderation actions"
+
+msgid "Pode tomar ações de moderação"
+msgstr "Can take moderation actions"
+
+msgid "Pode visualizar ações de moderação"
+msgstr "You can view moderation actions"
+
+msgid "Palavra-chave"
+msgstr "Keyword"
+
+msgid "Expressão Regular"
+msgstr "Regular expression"
+
+msgid "Padrão de Spam"
+msgstr "Spam standard"
+
+msgid "Padrão de URL"
+msgstr "URL Standard"
+
+msgid "Marcar para Revisão"
+msgstr "Mark"
+
+msgid "Ocultar Automaticamente"
+msgstr "Automatically hide"
+
+msgid "Deletar Automaticamente"
+msgstr "Automatically"
+
+msgid "Notificar Moderador"
+msgstr "Notify moderator"
+
+msgid "Número de Correspondências"
+msgstr "Number of correspondences"
+
+msgid "Última Correspondência"
+msgstr "Last correspondence"
+
+msgid "Filtros de Conteúdo"
+msgstr "Content filters"
+
+msgid "Denúncia Criada"
+msgstr "CREATED COMPLAINT"
+
+msgid "Denúncia Resolvida"
+msgstr "RESOLVED COMPLAINT"
+
+msgid "Status da Denúncia Alterado"
+msgstr "Changed report status"
+
+msgid "Denúncia Atribuída"
+msgstr "Denunciated"
+
+msgid "Resolver Denúncia"
+msgstr "Resolve"
+
+msgid "Conteúdo Ocultado"
+msgstr "Hidden content"
+
+msgid "Conteúdo Deletado"
+msgstr "Deleted content"
+
+msgid "Usuário Suspenso"
+msgstr "Suspended user"
+
+msgid "Usuário Banido"
+msgstr "Banned user"
+
+msgid "Filtro Acionado"
+msgstr "Filed filter"
+
+msgid "Filtro Deletado"
+msgstr "Deleted filter"
+
+msgid "Advertência Enviada"
+msgstr "Warning sent"
+
+msgid "Erro em Ação em Massa"
+msgstr "Mass action error"
+
+msgid "Ação em Massa Executada"
+msgstr "Mass action performed"
+
+msgid "Advertir Usuário"
+msgstr "WARNING USER"
+
+msgid "Tipo do Alvo"
+msgstr "Target"
+
+msgid "post, comment, user, report, etc."
+msgstr "post, comment, user, report, etc."
+
+msgid "ID do Alvo"
+msgstr "Target id"
+
+msgid "Detalhes Adicionais"
+msgstr "Additional details"
+
+msgid "Log de Moderação"
+msgstr "Moderation log"
+
+msgid "Logs de Moderação"
+msgstr "Moderation logs"
+
+msgid "Pode visualizar logs de moderação"
+msgstr "You can view moderation logs"
+
+msgid "Seu conteúdo foi marcado para revisão por nossos filtros automáticos."
+msgstr "Its content was marked for revision by our automatic filters."
+
+msgid "Seu conteúdo foi ocultado automaticamente devido aos nossos filtros."
+msgstr "Its content was automatically hidden due to our filters."
+
+msgid "Seu conteúdo foi removido por violar nossas diretrizes."
+msgstr "Its content has been removed by violating our guidelines."
+
+msgid "Seu conteúdo será revisado pela equipe de moderação."
+msgstr "Its content will be revised by the moderation team."
+
+msgid "Editar Perfil Social"
+msgstr "Edit social profile"
+
+msgid "Seguidores"
+msgstr "Followers"
+
+msgid "Ver Perfil"
+msgstr "See profile"
+
+msgid "Feed"
+msgstr "Feed"
+
+msgid "Perfil Principal"
+msgstr "Main profile"
+
+msgid "Meus Posts"
+msgstr "My posts"
+
+msgid "Personalize como você aparece na rede social"
+msgstr "Customize how you appear on the social network"
+
+msgid "Foto de Perfil"
+msgstr "Profile photo"
+
+msgid "O avatar é gerenciado no perfil principal"
+msgstr "Avatar is managed in the main profile"
+
+msgid "Conte um pouco sobre você. Máximo 500 caracteres."
+msgstr "Tell a little about you. Maximum 500 characters."
+
+msgid "Data de Nascimento"
+msgstr "Date of birth"
+
+msgid "Imagem de Capa"
+msgstr "Cover image"
+
+msgid "Nova imagem de capa"
+msgstr "New cover image"
+
+msgid "Configurações de Privacidade"
+msgstr "Privacy Settings"
+
+msgid "Apenas seguidores aprovados podem ver seu conteúdo"
+msgstr "Only approved followers can see your content"
+
+msgid "Mostrar email no perfil"
+msgstr "Show Email No Profile"
+
+msgid "Mostrar telefone no perfil"
+msgstr "Show Phone on Profile"
+
+msgid "Permitir mensagens de outros usuários"
+msgstr "Allow messages from other users"
+
+msgid "Dicas de Perfil"
+msgstr "Profile Tips"
+
+msgid "Biografia Atrativa"
+msgstr "Attractive biography"
+
+msgid "Escreva uma bio interessante que conte quem você é"
+msgstr "Write an interesting bio that tells you who you are"
+
+msgid "Use uma imagem que represente sua personalidade"
+msgstr "Use an image that represents your personality"
+
+msgid "Informações Completas"
+msgstr "Complete information"
+
+msgid "Preencha localização e interesses para se conectar melhor"
+msgstr "Fill in location and interests to better connect"
+
+msgid "Configure suas preferências de privacidade"
+msgstr "Configure your privacy preferences"
+
+msgid "Criar Post"
+msgstr "Create Post"
+
+msgid "A biografia não pode ter mais de 500 caracteres."
+msgstr "Biography cannot have more than 500 characters."
+
+msgid "Feed Social"
+msgstr "Feed Social"
+
+msgid "Navegação"
+msgstr "Navigation"
+
+msgid "Feed Principal"
+msgstr "Feed Principal"
+
+msgid "Meu Perfil"
+msgstr "My profile"
+
+msgid "Engajamento"
+msgstr "Engagement"
+
+msgid "Curtidas recebidas"
+msgstr "Likes received"
+
+msgid "Comentários recebidos"
+msgstr "Received Comments"
+
+msgid "Taxa de engajamento"
+msgstr "Engagement rate"
+
+msgid "Novo Post"
+msgstr "New post"
+
+msgid "Meus Seguidores"
+msgstr "My followers"
+
+msgid "Quem eu sigo"
+msgstr "Who I follow"
+
+msgid "caracteres"
+msgstr "characters"
+
+msgid "hashtags"
+msgstr "hashtags"
+
+msgid "Post público"
+msgstr "Public post"
+
+msgid "Publicar"
+msgstr "Post"
+
+msgid "Denunciado"
+msgstr "Denunciated"
+
+msgid "Oculto"
+msgstr "Hidden"
+
+msgid "atrás"
+msgstr "back"
+
+msgid "Ver post"
+msgstr "Ver post"
+
+msgid "Desfixar"
+msgstr "Peel"
+
+msgid "Fixar"
+msgstr "Set"
+
+msgid "Denunciar"
+msgstr "Report"
+
+msgid "Conteúdo Denunciado"
+msgstr "Denounted content"
+
+msgid "Este post foi denunciado e está aguardando revisão."
+msgstr "This post has been denounced and is awaiting review."
+
+msgid "Ver Denúncias"
+msgstr "See complaints"
+
+msgid "Conteúdo Oculto"
+msgstr "Hidden content"
+
+msgid "Este post foi oculto por moderação."
+msgstr "This post was hidden by moderation."
+
+msgid "Seu navegador não suporta vídeos."
+msgstr "Your browser does not support videos."
+
+msgid "visualizações"
+msgstr "views"
+
+msgid "compartilhamentos"
+msgstr "shares"
+
+msgid "engajamento"
+msgstr "engagement"
+
+msgid "Curtir"
+msgstr "Enjoy"
+
+msgid "Amar"
+msgstr "Amar"
+
+msgid "Haha"
+msgstr "Haha"
+
+msgid "Uau"
+msgstr "Wow"
+
+msgid "Triste"
+msgstr "Sad"
+
+msgid "Bravo"
+msgstr "Bravo"
+
+msgid "Ver comentários"
+msgstr "See comments"
+
+msgid "Ver perfil"
+msgstr "See profile"
+
+msgid "Nenhum post encontrado"
+msgstr "No post found"
+
+msgid "Siga alguns usuários para ver posts no seu feed"
+msgstr "Follow some users to see posts on your feed"
+
+msgid "Hashtags Populares"
+msgstr "Hashtags Populares"
+
+msgid "Nenhuma hashtag popular ainda"
+msgstr "No popular hashtag yet"
+
+msgid "Quem Seguir"
+msgstr "Who follows"
+
+msgid "Nenhuma sugestão disponível"
+msgstr "No suggestion available"
+
+msgid "Total de usuários"
+msgstr "Total users"
+
+msgid "Posts hoje"
+msgstr "Posts today"
+
+msgid "Denúncias pendentes"
+msgstr "Pending complaints"
+
+msgid "Total de denúncias"
+msgstr "Total complaints"
+
+msgid "Denúncias hoje"
+msgstr "Complaints today"
+
+msgid "Filtros ativos"
+msgstr "Active filters"
+
+msgid "Painel de Moderação"
+msgstr "Moderation panel"
+
+msgid "Compartilhar post"
+msgstr "Share Post"
+
+msgid "Adicione um comentário (opcional)"
+msgstr "Add a comment (optional)"
+
+msgid "Compartilhar"
+msgstr "To share"
+
+msgid "Denunciar Conteúdo"
+msgstr "Denounce content"
+
+msgid "Motivo da denúncia"
+msgstr "Reason of the complaint"
+
+msgid "Selecione um motivo"
+msgstr "Select a reason"
+
+msgid "Spam ou conteúdo comercial não autorizado"
+msgstr "Spam or unauthorized commercial content"
+
+msgid "Conteúdo inadequado ou ofensivo"
+msgstr "Inappropriate or offensive content"
+
+msgid "Assédio ou bullying"
+msgstr "Harassment or Bullying"
+
+msgid "Violência ou ameaças"
+msgstr "Violence or threats"
+
+msgid "Fake news ou desinformação"
+msgstr "Fake news or misinformation"
+
+msgid "Violação de direitos autorais"
+msgstr "Copyright violation"
+
+msgid "Descrição detalhada (opcional)"
+msgstr "Detailed description (optional)"
+
+msgid "Forneça mais detalhes sobre a denúncia..."
+msgstr "Provide more details about the complaint ..."
+
+msgid ""
+"Sua denúncia será analisada pela equipe de moderação. Obrigado por ajudar a "
+"manter nossa comunidade segura."
+msgstr ""
+"Your complaint will be analyzed by the moderation team. Thank you for "
+"helping to keep our community safe."
+
+msgid "Enviar Denúncia"
+msgstr "Submit"
+
+msgid "O conteúdo do post não pode estar vazio."
+msgstr "Post content cannot be empty."
+
+msgid "O conteúdo não pode ter mais de 1000 caracteres."
+msgstr "The content cannot have more than 1000 characters."
+
+msgid "Seguidores de"
+msgstr "Followers of"
+
+msgid "Pessoas que seguem"
+msgstr "People who follow"
+
+msgid "Seguir de volta"
+msgstr "Go back"
+
+msgid "Você ainda não tem seguidores"
+msgstr "You still have no followers"
+
+msgid "Este usuário ainda não tem seguidores"
+msgstr "This user still has no followers"
+
+msgid "Compartilhe conteúdo interessante para atrair seguidores!"
+msgstr "Share interesting content to attract followers!"
+
+msgid "Seja o primeiro a seguir!"
+msgstr "Be the first to follow!"
+
+msgid "Processando..."
+msgstr "Processing ..."
+
+msgid "Seguindo por"
+msgstr "Following by"
+
+msgid "Pessoas que"
+msgstr "People who"
+
+msgid "segue"
+msgstr "segue"
+
+msgid "Você ainda não segue ninguém"
+msgstr "You still don't follow anyone"
+
+msgid "Este usuário ainda não segue ninguém"
+msgstr "This user still does not follow anyone"
+
+msgid "Comece a seguir pessoas para ver seus posts no feed!"
+msgstr "Start following people to see your posts on the feed!"
+
+msgid "Este usuário ainda não começou a seguir pessoas."
+msgstr "This user has not yet started to follow people."
+
+msgid "Buscar pessoas"
+msgstr "Pursue people"
+
+msgid "Criada em"
+msgstr "Created in"
+
+msgid "Resultados"
+msgstr "Results"
+
+msgid "Ainda não há posts com esta hashtag."
+msgstr "There are no posts with this hashtag yet."
+
+msgid "Voltar ao feed"
+msgstr "Go back to the feed"
+
+msgid "Aplicar Filtros Retroativos"
+msgstr "Apply retroactive filters"
+
+msgid "O que são Filtros Retroativos?"
+msgstr "What are retroactive filters?"
+
+msgid ""
+"Esta ferramenta aplica os filtros de moderação atuais a todo o conteúdo já "
+"existente no sistema (posts e comentários criados antes da ativação dos "
+"filtros)."
+msgstr ""
+"This tool applies current moderation filters to all existing content in the "
+"system (posts and comments created before filters activation)."
+
+msgid "Filtros Ativos"
+msgstr "Active filters"
+
+msgid "Posts Total"
+msgstr "Posts Total"
+
+msgid "Comentários Total"
+msgstr "Total Comments"
+
+msgid "Tempo Estimado"
+msgstr "Estimated time"
+
+msgid "Configurações da Aplicação"
+msgstr "Application Settings"
+
+msgid "Todos (Posts + Comentários)"
+msgstr "All (posts + comments)"
+
+msgid "Apenas Posts"
+msgstr "Just posts"
+
+msgid "Apenas Comentários"
+msgstr "Only comments"
+
+msgid "Escolha que tipo de conteúdo será analisado pelos filtros"
+msgstr "Choose what type of content will be analyzed by the filters"
+
+msgid "Filtro Específico"
+msgstr "Specific filter"
+
+msgid "Opcional"
+msgstr "Optional"
+
+msgid "Aplicar todos os filtros ativos"
+msgstr "Apply all active filters"
+
+msgid "Deixe em branco para aplicar todos os filtros ou escolha um específico"
+msgstr "Leave it blank to apply all filters or choose a specific"
+
+msgid "Modo Simulação (Dry Run)"
+msgstr "Simulation mode (dry run)"
+
+msgid ""
+"Recomendado: Execute primeiro em modo simulação para ver o que seria "
+"afetado, depois execute novamente sem simulação."
+msgstr ""
+"Recommended: Run first in simulation mode to see what would be affected, "
+"then run again without simulation."
+
+msgid "Simular"
+msgstr "Simulate"
+
+msgid "Aplicar Filtros"
+msgstr "Apply filters"
+
+msgid "Nenhum filtro ativo encontrado"
+msgstr "No active filter found"
+
+msgid "Configurar Filtros"
+msgstr "Configure filters"
+
+msgid "Resultado da Operação"
+msgstr "Operation Result"
+
+msgid "Confirmar Operação"
+msgstr "Confirm operation"
+
+msgid ""
+"Você está prestes a aplicar filtros de moderação a todo o conteúdo "
+"existente."
+msgstr "You are about to apply moderation filters to all existing content."
+
+msgid "Atenção:"
+msgstr "Attention:"
+
+msgid "Esta operação pode demorar alguns minutos"
+msgstr "This operation may take a few minutes"
+
+msgid "Conteúdo pode ser ocultado ou deletado automaticamente"
+msgstr "Content can be hidden or deleted automatically"
+
+msgid "A operação não pode ser desfeita"
+msgstr "The operation cannot be undone"
+
+msgid "Deseja continuar?"
+msgstr "Do you want to continue?"
+
+msgid "Sim, Aplicar Filtros"
+msgstr "Yes, apply filters"
+
+msgid "Simulando"
+msgstr "Simulating"
+
+msgid "Aplicando"
+msgstr "Applying"
+
+msgid "Simulação"
+msgstr "Simulation"
+
+msgid "concluída com sucesso!"
+msgstr "Completed successfully!"
+
+msgid "Detalhes da Operação:"
+msgstr "Operation Details:"
+
+msgid "Erro desconhecido"
+msgstr "Unknown error"
+
+msgid "Erro durante a operação:"
+msgstr "Error during operation:"
+
+msgid "Novo Filtro"
+msgstr "New filter"
+
+msgid "Total de Filtros"
+msgstr "Total filters"
+
+msgid "Total de Correspondências"
+msgstr "Total correspondence"
+
+msgid "Última Atividade"
+msgstr "Last activity"
+
+msgid "Testar Filtro"
+msgstr "Test filter"
+
+msgid "Digite o padrão para testar..."
+msgstr "Enter the standard for testing ..."
+
+msgid "Conteúdo para Testar"
+msgstr "Content to test"
+
+msgid "Digite o conteúdo..."
+msgstr "Enter the content ..."
+
+msgid "Testar"
+msgstr "Test"
+
+msgid "Resultado do Teste"
+msgstr "Test result"
+
+msgid "FILTRO ACIONADO!"
+msgstr "Filter activated!"
+
+msgid "O conteúdo seria detectado pelo filtro e sofreria ação de moderação."
+msgstr ""
+"The content would be detected by the filter and would suffer moderation "
+"action."
+
+msgid "CONTEÚDO APROVADO"
+msgstr "Approved content"
+
+msgid "O conteúdo não corresponde ao padrão e passaria pela moderação."
+msgstr ""
+"The content does not correspond to the standard and would go through "
+"moderation."
+
+msgid "Padrão testado"
+msgstr "Tested Standard"
+
+msgid "Filtros Configurados"
+msgstr "Configured filters"
+
+msgid "Correspondências"
+msgstr "Correspondences"
+
+msgid "Sensível a maiúsculas/minúsculas"
+msgstr "Sensitive to uppercase/lowercase"
+
+msgid "Nenhum filtro configurado"
+msgstr "No configured filter"
+
+msgid "Clique em 'Novo Filtro' para criar seu primeiro filtro de conteúdo."
+msgstr "Click on 'New Filter' to create your first content filter."
+
+msgid "Criar Primeiro Filtro"
+msgstr "Create First Filter"
+
+msgid "Novo Filtro de Conteúdo"
+msgstr "NEW CONTENT FILTER"
+
+msgid "Criar Filtro"
+msgstr "Create Filter"
+
+msgid "Editar Filtro"
+msgstr "Edit filter"
+
+msgid "Erro ao atualizar filtro:"
+msgstr "Error update filter:"
+
+msgid "Erro ao processar a requisição."
+msgstr "Error when processing the request."
+
+msgid "Tem certeza que deseja excluir o filtro"
+msgstr "You're sure you want to delete the filter"
+
+msgid "Erro ao excluir filtro:"
+msgstr "Error by excluding filter:"
+
+msgid "Digite um padrão para testar."
+msgstr "Enter a standard for testing."
+
+msgid "Digite conteúdo para testar."
+msgstr "Enter content to test."
+
+msgid "Expressão regular inválida:"
+msgstr "Invalid regular expression:"
+
+msgid "Ver Todas as Denúncias"
+msgstr "See all complaints"
+
+msgid "Total de Denúncias"
+msgstr "Total complaints"
+
+msgid "Urgentes"
+msgstr "URGENTS"
+
+msgid "Resolvidas Hoje"
+msgstr "Resolved today"
+
+msgid "Denúncias Recentes"
+msgstr "Recent complaints"
+
+msgid "Ver Todas"
+msgstr "See all"
+
+msgid "Nenhuma denúncia recente"
+msgstr "No recent complaints"
+
+msgid "Ações Recentes"
+msgstr "Recent actions"
+
+msgid "Ver Logs"
+msgstr "Ver Logs"
+
+msgid "Nenhuma ação recente"
+msgstr "No recent action"
+
+msgid "Atividade dos Últimos 30 Dias"
+msgstr "Activity of the last 30 days"
+
+msgid "Informações"
+msgstr "Information"
+
+msgid "filtros em funcionamento"
+msgstr "Filters in operation"
+
+msgid "Logs Recentes"
+msgstr "Recent logs"
+
+msgid "ações registradas hoje"
+msgstr "actions registered today"
+
+msgid "Gerenciar Filtros"
+msgstr "Manage filters"
+
+msgid "Exportar"
+msgstr "Export"
+
+msgid "Excel (.xlsx)"
+msgstr "Excel (.xlsx)"
+
+msgid "CSV (.csv)"
+msgstr "CSV (.csv)"
+
+msgid "Total de Ações"
+msgstr "Total actions"
+
+msgid "Ações Hoje"
+msgstr "Actions today"
+
+msgid "Moderadores Ativos"
+msgstr "Active moderators"
+
+msgid "Limpar Filtros"
+msgstr "Pitch"
+
+msgid "Nenhum log encontrado"
+msgstr "No logs found"
+
+msgid "Não há logs que correspondam aos filtros aplicados."
+msgstr "There are no logs that correspond to the filters applied."
+
+msgid "Detalhes do Log"
+msgstr "Log details"
+
+msgid "Erro ao exportar logs."
+msgstr "Error exporting logs."
+
+msgid "Gerando..."
+msgstr "Generating ..."
+
+msgid "Detalhes da Denúncia"
+msgstr "Denunciation details"
+
+msgid "Data da Denúncia"
+msgstr "Date of complaint"
+
+msgid "Não atribuído"
+msgstr "Unintended"
+
+msgid "Descrição da Denúncia"
+msgstr "Description of the complaint"
+
+msgid "Resolvida em"
+msgstr "Resolved in"
+
+msgid "Filtros Automáticos Acionados"
+msgstr "Automatic filters activated"
+
+msgid "Detecção Automática"
+msgstr "Automatic detection"
+
+msgid ""
+"Esta denúncia foi gerada automaticamente pelo sistema de filtros. Os filtros"
+" abaixo detectaram conteúdo que viola nossas diretrizes."
+msgstr ""
+"This complaint was automatically generated by the filter system. The below "
+"filters detected content that violates our guidelines."
+
+msgid "Ação do Filtro"
+msgstr "Filter action"
+
+msgid "Detectado em"
+msgstr "Detected in"
+
+msgid "Resumo da Detecção"
+msgstr "Detection summary"
+
+msgid "Filtros Acionados"
+msgstr "Triggered filters"
+
+msgid "Maior Confiança"
+msgstr "Greatest confidence"
+
+msgid "Automático"
+msgstr "Automatic"
+
+msgid "Tipo de Report"
+msgstr "Type of report"
+
+msgid "Denúncia Manual"
+msgstr "Manual complaint"
+
+msgid "Reportada por Usuário"
+msgstr "Reported by User"
+
+msgid "Esta denúncia foi feita manualmente pelo usuário"
+msgstr "This complaint was made manually by the user"
+
+msgid "e não foi gerada por filtros automáticos."
+msgstr "and was not generated by automatic filters."
+
+msgid "Ver Post Original"
+msgstr "Ver Post Original"
+
+msgid "Usuário reportado"
+msgstr "Reported user"
+
+msgid "Último Login"
+msgstr "Last login"
+
+msgid "Conteúdo não disponível"
+msgstr "NOT AVAILABLE CONTENT"
+
+msgid "Informações de Debug"
+msgstr "DEBUG INFORMATION"
+
+msgid "Erros gerais:"
+msgstr "General Errors:"
+
+msgid "Erros de validação encontrados:"
+msgstr "Validation errors found:"
+
+msgid "Campos obrigatórios para suspensão/banimento:"
+msgstr "Mandatory fields for suspension/banishment:"
+
+msgid ""
+"Preencha a duração (ex: 7 para 7 dias) e selecione o tipo de suspensão."
+msgstr ""
+"Fill in the duration (Ex: 7 to 7 days) and select the type of suspension."
+
+msgid "Campos obrigatórios para ações de usuário:"
+msgstr "Required fields for user actions:"
+
+msgid "Forneça um motivo público que será mostrado ao usuário."
+msgstr "Provide a public reason that will be shown to the user."
+
+msgid "Usuário específico:"
+msgstr "Specific User:"
+
+msgid "Se necessário, especifique um usuário diferente do autor do conteúdo."
+msgstr ""
+"If necessary, specify a different user from the author of the content."
+
+msgid "Data de expiração personalizada:"
+msgstr "Personalized Expiration Date:"
+
+msgid "Defina uma data específica para expiração da ação."
+msgstr "Set a specific date for action expiration."
+
+msgid "Aplicar Ação"
+msgstr "Apply action"
+
+msgid "Histórico de Ações"
+msgstr "Action history"
+
+msgid "Lista de Denúncias"
+msgstr "List of Complaints"
+
+msgid "Filtros e Busca"
+msgstr "Filters and Search"
+
+msgid "Ativas"
+msgstr "Active"
+
+msgid "Resolvidas"
+msgstr "Resolved"
+
+msgid "Ações em Massa"
+msgstr "Mass actions"
+
+msgid "Denúncias Ativas"
+msgstr "Active complaints"
+
+msgid "Selecionar Todos"
+msgstr "Select all"
+
+msgid "Marcar como Revisando"
+msgstr "Mark as reviewing"
+
+msgid "Marcar como Resolvida"
+msgstr "Resolve"
+
+msgid "Nenhuma denúncia ativa encontrada"
+msgstr "No active complaint found"
+
+msgid "Não há denúncias ativas que correspondam aos filtros aplicados."
+msgstr ""
+"There are no active complaints that correspond to the applied filters."
+
+msgid "Denúncias Resolvidas"
+msgstr "RESOLVED COMPLAINTS"
+
+msgid "Mostrar/Ocultar"
+msgstr "Show/hide"
+
+msgid "Navegação de páginas - Resolvidas"
+msgstr "Pages Navigation - Resolved"
+
+msgid "Nenhuma denúncia resolvida encontrada"
+msgstr "No resolved complaints found"
+
+msgid "Não há denúncias resolvidas que correspondam aos filtros aplicados."
+msgstr ""
+"There are no resolved complaints that correspond to the applied filters."
+
+msgid "Confirmar Ação"
+msgstr "Confirm action"
+
+msgid "Confirmar"
+msgstr "Confirm"
+
+msgid "Selecione pelo menos uma denúncia."
+msgstr "Select at least one complaint."
+
+msgid "Selecione uma ação."
+msgstr "Select an action."
+
+msgid "Tem certeza que deseja aplicar a ação"
+msgstr "You're sure you want to apply the action"
+
+msgid "em"
+msgstr "em"
+
+msgid "denúncia(s)?"
+msgstr "denunciation (s)?"
+
+msgid "revisando"
+msgstr "reviewing"
+
+msgid "resolvida"
+msgstr "resolved"
+
+msgid "Tem certeza que deseja marcar esta denúncia como"
+msgstr "You're sure you want to mark this complaint as"
+
+msgid "Erro ao atualizar status:"
+msgstr "Error when updating status:"
+
+msgid "Gerencie e visualize todos os seus posts"
+msgstr "Manage and view all your posts"
+
+msgid "Você ainda não fez nenhum post"
+msgstr "You have not yet made any posts"
+
+msgid "Comece compartilhando algo interessante com a comunidade!"
+msgstr "Start by sharing something interesting with the community!"
+
+msgid "Criar primeiro post"
+msgstr "Create First Post"
+
+msgid "Excluir Post"
+msgstr "Delete Post"
+
+msgid "Tem certeza que deseja excluir este post?"
+msgstr "Are you sure you want to delete this post?"
+
+msgid "Esta ação não pode ser desfeita."
+msgstr "This action cannot be undone."
+
+msgid "O que será excluído:"
+msgstr "What will be excluded:"
+
+msgid "O post e todo seu conteúdo"
+msgstr "The post and all its contents"
+
+msgid "Todas as imagens associadas"
+msgstr "All associated images"
+
+msgid "Todos os comentários"
+msgstr "All comments"
+
+msgid "Todas as curtidas"
+msgstr "All likes"
+
+msgid "Sim, excluir post"
+msgstr "Yes, delete post"
+
+msgid "Editado em"
+msgstr "Edited in"
+
+msgid "curtidas"
+msgstr "likes"
+
+msgid "comentários"
+msgstr "comments"
+
+msgid "Comentar"
+msgstr "Comment"
+
+msgid "Responder"
+msgstr "Responder"
+
+msgid "resposta"
+msgstr "response"
+
+msgid "Escreva uma resposta..."
+msgstr "Write an answer ..."
+
+msgid "Nenhum comentário ainda"
+msgstr "No comments yet"
+
+msgid "Seja o primeiro a comentar!"
+msgstr "Be the first to comment!"
+
+msgid "A resposta não pode estar vazia."
+msgstr "The answer cannot be empty."
+
+msgid "A resposta não pode ter mais de 300 caracteres."
+msgstr "The answer cannot have more than 300 characters."
+
+msgid "Erro ao enviar resposta. Tente novamente."
+msgstr "Error sending response. Try again."
+
+msgid "Editar Post"
+msgstr "Edit post"
+
+msgid "Criar Novo Post"
+msgstr "Create New Post"
+
+msgid "Atualize seu post com novas informações"
+msgstr "Update your post with new information"
+
+msgid "Compartilhe algo interessante com sua comunidade"
+msgstr "Share something interesting with your community"
+
+msgid "Conteúdo atual:"
+msgstr "Current Content:"
+
+msgid "Dicas para um post atrativo"
+msgstr "Tips for an attractive post"
+
+msgid "Seja autêntico"
+msgstr "Authentic"
+
+msgid "Compartilhe experiências reais e genuínas"
+msgstr "Share real and genuine experiences"
+
+msgid "Use mídia de qualidade"
+msgstr "Use Quality Media"
+
+msgid "Imagens e vídeos atraem mais engajamento"
+msgstr "Images and videos attract more engagement"
+
+msgid "Hashtags relevantes"
+msgstr "Hashtags relevantes"
+
+msgid "Aumente o alcance com tags apropriadas"
+msgstr "Increase the scope with appropriate tags"
+
+msgid "Engaje com comentários"
+msgstr "Engage with comments"
+
+msgid "Responda e interaja com sua audiência"
+msgstr "Answer and interact with your audience"
+
+msgid "Selecione o tipo de problema encontrado no conteúdo."
+msgstr "Select the type of problem found in the content."
+
+msgid ""
+"Descreva detalhadamente o problema encontrado. Sua descrição ajudará nossa "
+"equipe a tomar a ação adequada."
+msgstr ""
+"Describe in detail the problem found. Your description will help our team "
+"take proper action."
+
+msgid "Importante"
+msgstr "Important"
+
+msgid ""
+"Denúncias falsas ou abusivas podem resultar em penalidades para sua conta. "
+"Denuncie apenas conteúdo que realmente viole nossas diretrizes."
+msgstr ""
+"False or abusive complaints may result in penalties for your account. Report"
+" only content that really violates our guidelines."
+
+msgid "Tipos de Denúncia"
+msgstr "Types of denunciation"
+
+msgid ""
+"Conteúdo que viola diretrizes da comunidade, como linguagem ofensiva ou "
+"inadequada."
+msgstr ""
+"Content that violates community guidelines such as offensive or inadequate "
+"language."
+
+msgid "Comportamento que intimida, ameaça ou persegue outros usuários."
+msgstr "Behavior that intimidates, threatens or pursues other users."
+
+msgid "Conteúdo que promove ou glorifica violência contra pessoas ou grupos."
+msgstr "Content that promotes or glorifies violence against people or groups."
+
+msgid ""
+"Conteúdo que ataca ou usa linguagem pejorativa contra pessoas com base em "
+"características protegidas."
+msgstr ""
+"Content that attacks or uses pejorative language against people based on "
+"protected characteristics."
+
+msgid ""
+"Conteúdo comercial não solicitado, links suspeitos ou postagem excessiva."
+msgstr "Unquired commercial content, suspicious links or excessive posting."
+
+msgid "Outros problemas que não se encaixam nas categorias acima."
+msgstr "Other problems that do not fit the categories above."
+
+msgid "Ver post completo"
+msgstr "See full post"
+
+msgid "Ver posts"
+msgstr "Ver posts"
+
+msgid "Nenhum resultado encontrado"
+msgstr "No results found"
+
+msgid "Tente buscar por outros termos ou verificar a ortografia."
+msgstr "Try to search for other terms or check the spelling."
+
+msgid "Buscar usuários e posts"
+msgstr "Search for users and posts"
+
+msgid "Digite algo na caixa de busca acima para começar."
+msgstr "Enter something in the search box above to get started."
+
+msgid "Buscar usuários"
+msgstr "Seek users"
+
+msgid "Encontre pessoas para seguir e interagir."
+msgstr "Find people to follow and interact."
+
+msgid "Buscar posts"
+msgstr "Search posts"
+
+msgid "Descubra conteúdo interessante."
+msgstr "Discover interesting content."
+
+msgid "Perfil"
+msgstr "Profile"
+
+msgid "posts"
+msgstr "posts"
+
+msgid "seguidores"
+msgstr "followers"
+
+msgid "seguindo"
+msgstr "following"
+
+msgid "Editar perfil"
+msgstr "Edit profile"
+
+msgid "Posts de"
+msgstr "Posts de"
+
+msgid "Nenhum post ainda"
+msgstr "No posts yet"
+
+msgid "Comece a compartilhar suas ideias!"
+msgstr "Start sharing your ideas!"
+
+msgid "Este usuário ainda não fez nenhum post."
+msgstr "This user has not yet made any posts."
+
+msgid "Post criado com sucesso!"
+msgstr "Post created successfully!"
+
+msgid "Erro ao criar post. Tente novamente."
+msgstr "Error when creating post. Try again."
+
+msgid "Você não tem permissão para ver este post."
+msgstr "You are not allowed to see this post."
+
+msgid "Resposta adicionada!"
+msgstr "Added answer!"
+
+msgid "Comentário não encontrado."
+msgstr "Comment not found."
+
+msgid "Comentário adicionado!"
+msgstr "Comment added!"
+
+msgid "Permissão negada"
+msgstr "Permission denied"
+
+msgid "Dados inválidos"
+msgstr "Invalid data"
+
+msgid "Post compartilhado com sucesso!"
+msgstr "Successful shared post!"
+
+msgid "Erro ao compartilhar o post."
+msgstr "Error when sharing the post."
+
+msgid "Você não pode seguir a si mesmo"
+msgstr "You cannot follow yourself"
+
+msgid "Este perfil é privado."
+msgstr "This profile is private."
+
+msgid "Perfil atualizado com sucesso!"
+msgstr "Profile updated successfully!"
+
+msgid "Por favor, corrija os erros abaixo."
+msgstr "Please correct the mistakes below."
+
+msgid "Post atualizado com sucesso!"
+msgstr "Post updated successfully!"
+
+msgid "Post deletado com sucesso!"
+msgstr "Post deleted successfully!"
+
+msgid "Tipo de conteúdo inválido."
+msgstr "Invalid content type."
+
+msgid "Denúncia enviada com sucesso. Nossa equipe irá analisar."
+msgstr "Complaint sent successfully. Our team will analyze."
+
+msgid "Erro ao processar denúncia. Tente novamente."
+msgstr "Error when processing complaint. Try again."
+
+msgid "Por favor, corrija os erros no formulário."
+msgstr "Please correct the errors on the form."
+
+msgid "Conteúdo não encontrado."
+msgstr "Content not found."
+
+msgid "Você não tem permissão para acessar o painel de moderação."
+msgstr "You are not allowed to access the moderation panel."
+
+msgid "Você não tem permissão para visualizar denúncias."
+msgstr "You are not allowed to visualize complaints."
+
+msgid "Sem permissão para moderar denúncias."
+msgstr "Without permission to moderate complaints."
+
+msgid "Status inválido."
+msgstr "Invalid status."
+
+msgid "Status da denúncia #{} alterado de {} para {}"
+msgstr "Denunciation status #{} Changed from {} to {}"
+
+msgid "Status atualizado com sucesso!"
+msgstr "Status successfully updated!"
+
+msgid "Dados inválidos."
+msgstr "Invalid data."
+
+msgid "Esta denúncia já está atribuída a você."
+msgstr "This complaint is already attributed to you."
+
+msgid "Denúncia #{} atribuída a {}"
+msgstr "Denunciation #{} attributed to {}"
+
+msgid "Denúncia atribuída com sucesso!"
+msgstr "Complaint attributed successfully!"
+
+msgid "Você não tem permissão para moderar denúncias."
+msgstr "You are not allowed to moderate complaints."
+
+msgid ""
+"Não foi possível determinar o usuário alvo para esta ação. Verifique se o "
+"conteúdo reportado ainda existe."
+msgstr ""
+"It was not possible to determine the target user for this action. Make sure "
+"the reported content still exists."
+
+msgid "Usuário alvo não identificado para ação de suspensão."
+msgstr "Unidentified target user for suspension action."
+
+msgid "Ação de moderação aplicada com sucesso."
+msgstr "Successful applied moderation action."
+
+msgid ""
+"Ação de moderação registrada, mas houve problemas na aplicação. Verifique os"
+" logs."
+msgstr ""
+"Registered moderation action, but there were problems in the application. "
+"Check the logs."
+
+msgid "Você não tem permissão para gerenciar filtros."
+msgstr "You are not allowed to manage filters."
+
+msgid "Filtro criado com sucesso."
+msgstr "Filter created successfully."
+
+msgid "Você não tem permissão para editar filtros."
+msgstr "You are not allowed to edit filters."
+
+msgid "Filtro atualizado com sucesso."
+msgstr "Filter successfully updated."
+
+msgid "Filtro ativado"
+msgstr "Activated filter"
+
+msgid "Filtro desativado"
+msgstr "Disabled filter"
+
+msgid "Método não permitido"
+msgstr "Method not allowed"
+
+msgid "Filtro deletado com sucesso"
+msgstr "Successful deleted filter"
+
+msgid "Você não tem permissão para visualizar logs."
+msgstr "You are not allowed to view logs."
+
+msgid "Você não tem permissão para exportar logs."
+msgstr "You are not allowed to export logs."
+
+msgid "Biblioteca openpyxl não está instalada. Use: pip install openpyxl"
+msgstr "OpenPyxl Library is not installed. Use: Pip Install OpenPyxl"
+
+msgid "Você não tem permissão para esta ação."
+msgstr "You are not allowed for this action."
+
+msgid "Simulação concluída! Verifique os logs para detalhes."
+msgstr "Simulation completed! Check the logs for details."
+
+msgid "Filtros aplicados com sucesso ao conteúdo existente!"
+msgstr "Filters successfully applied to existing content!"
+
+msgid "Operação concluída com sucesso"
+msgstr "Operation successfully completed"
+
+msgid "Nenhuma denúncia válida encontrada"
+msgstr "No valid complaint found"
+
+msgid "Denúncia não possui conteúdo válido para aplicar ação"
+msgstr "Complaint has no valid content to apply action"
+
+msgid "Post reportado não existe mais"
+msgstr "Post reported there is no more"
+
+msgid "Comentário reportado não existe mais"
+msgstr "Comment reported no longer exists"
+
+msgid "Conteúdo reportado não existe mais"
+msgstr "Reported content there is no longer"
+
+msgid "Ação de advertência requer usuário reportado ou conteúdo com autor"
+msgstr "Warning action requires reported user or content with author"
+
+#, python-format
+msgid "Tipo de ação não reconhecido: %(action)s"
+msgstr "Type of Unrecognized Action: %(action)s S"
+
+msgid "Ação aplicada com sucesso"
+msgstr "Successful applied action"
+
+#, python-format
+msgid ""
+"Ação aplicada com sucesso em %(processed)d denúncia(s). %(failed)d falharam."
+msgstr ""
+"Action successfully applied in %(processed)d D denunciation (s). %(failed)d "
+"D failed."
+
+msgid "Você não tem permissão para testar filtros."
+msgstr "You are not allowed to test filters."
+
+msgid "Padrão e conteúdo são obrigatórios."
+msgstr "Standard and content are required."
 
 msgid "Classificação"
 msgstr "Classification"
@@ -6158,9 +9664,6 @@ msgstr "Novo Status"
 msgid "Atribuir para"
 msgstr "Assign"
 
-msgid "Comentário"
-msgstr "Comment"
-
 msgid "Comentário opcional sobre a mudança de status"
 msgstr "Optional comment on status change"
 
@@ -6181,9 +9684,6 @@ msgstr "Current status of the request."
 
 msgid "Categoria da solicitação."
 msgstr "Request category."
-
-msgid "Prioridade"
-msgstr "Priority"
 
 msgid "Prioridade da solicitação."
 msgstr "Priority of the request."
@@ -6245,14 +9745,48 @@ msgstr "History of the request"
 msgid "Adicionar Evento ao Histórico"
 msgstr "Add event to history"
 
+msgid "Registre uma nova ação ou evento na solicitação"
+msgstr "Register a new action or event at the request"
+
+msgid "Informações da Solicitação:"
+msgstr "Request information:"
+
+msgid "Título:"
+msgstr "Title:"
+
+msgid "Categoria:"
+msgstr "Category:"
+
+msgid "Prioridade:"
+msgstr "Priority:"
+
+msgid ""
+"Descreva detalhadamente o que aconteceu, a ação tomada ou qualquer "
+"informação relevante sobre este evento..."
+msgstr ""
+"Describe in detail what happened, the action taken or any relevant "
+"information about this event ..."
+
+msgid "Clique para selecionar uma imagem ou arraste aqui"
+msgstr "Click to select an image or drag here"
+
 msgid "Adicionar Evento"
 msgstr "Add event"
+
+msgid "A imagem deve ter no máximo 5MB."
+msgstr "The image must have a maximum of 5MB."
+
+msgid "Imagem selecionada com sucesso!"
+msgstr "Successful selected image!"
 
 msgid "Criar Solicitação"
 msgstr "Create Request"
 
 msgid "Criar Nova Solicitação"
 msgstr "Create new request"
+
+msgid "Abra um ticket de suporte para iniciar o atendimento"
+msgstr "Open a support ticket to start service"
 
 msgid "Informações Importantes:"
 msgstr "Important Information:"
@@ -6302,6 +9836,9 @@ msgstr ""
 msgid "Detalhe da Solicitação"
 msgstr "Request detail"
 
+msgid "Visualize e gerencie os detalhes da solicitação"
+msgstr "Visualize and manage the request details"
+
 msgid "Ir para o Chat"
 msgstr "Go to the chat"
 
@@ -6313,12 +9850,6 @@ msgstr "and no longer allows interactions."
 
 msgid "Informações da Solicitação"
 msgstr "REQUEST INFORMATION"
-
-msgid "Categoria:"
-msgstr "Category:"
-
-msgid "Prioridade:"
-msgstr "Priority:"
 
 msgid "Resolvido em:"
 msgstr "SOLVED IN:"
@@ -6347,32 +9878,20 @@ msgstr "Update status"
 msgid "Histórico de Eventos"
 msgstr "Event History"
 
-msgid "Sistema"
-msgstr "System"
-
 msgid "Nenhum evento registrado."
 msgstr "No registered event."
 
 msgid "Lista de Solicitações"
 msgstr "List of Requests"
 
+msgid "Gerencie suas solicitações de suporte"
+msgstr "Manage your support requests"
+
 msgid "Abertas"
 msgstr "Open"
 
-msgid "Em Andamento"
-msgstr "In progress"
-
-msgid "Aguardando Usuário"
-msgstr "Waiting user"
-
-msgid "Resolvidas"
-msgstr "Resolved"
-
 msgid "Data da Solicitação"
 msgstr "Request Date"
-
-msgid "Ver"
-msgstr "Ver"
 
 msgid "Nenhuma solicitação encontrada."
 msgstr "No request found."
@@ -6402,14 +9921,14 @@ msgstr "You can only register one event after a staff makes the next change."
 msgid "Evento registrado com sucesso."
 msgstr "Event successfully registered."
 
-msgid "Meu Perfil"
-msgstr "My profile"
-
 msgid "Mudar Senha"
 msgstr "Change password"
 
-msgid "Segurança"
-msgstr "Security"
+msgid "Conteúdo bloqueado por violar nossas diretrizes"
+msgstr "Content blocked for violating our guidelines"
+
+msgid "Atividade suspeita detectada. Tente novamente em alguns minutos."
+msgstr "Suspected activity detected. Try again in a few minutes."
 
 msgid "Search"
 msgstr "Search"
@@ -6437,9 +9956,6 @@ msgstr "Close"
 
 msgid "Tem certeza que deseja excluir os temas selecionados?"
 msgstr "Are you sure you want to delete the selected themes?"
-
-msgid "Esta ação não pode ser desfeita!"
-msgstr "This action cannot be undone!"
 
 msgid "Confirmar exclusão"
 msgstr "Confirm exclusion"
@@ -6491,6 +10007,37 @@ msgstr ""
 msgid "Erro 500 no Servidor"
 msgstr "Error 500 on the server"
 
+msgid "Conteúdo em Revisão"
+msgstr "Review Content"
+
+msgid ""
+"Nossa equipe irá revisar seu conteúdo em breve. Posts aprovados ficam "
+"visíveis para todos os usuários."
+msgstr ""
+"Our team will review your content soon. Approved posts are visible to all "
+"users."
+
+msgid ""
+"Seu conteúdo foi temporariamente ocultado. Entre em contato conosco se tiver"
+" dúvidas."
+msgstr ""
+"Its content has been temporarily hidden. Contact us if you have questions."
+
+msgid "Conteúdo Não Permitido"
+msgstr "Unable content"
+
+msgid "Revise nossas diretrizes da comunidade antes de publicar novamente."
+msgstr "Review our community guidelines before publishing again."
+
+msgid "Ver diretrizes"
+msgstr "See guidelines"
+
+msgid "Post Publicado!"
+msgstr "Post published!"
+
+msgid "Seu post está visível para todos os usuários da rede social."
+msgstr "Your post is visible to all users of the social network."
+
 msgid "Todos os direitos reservados."
 msgstr "All rights reserved."
 
@@ -6506,11 +10053,17 @@ msgstr "Toggle navigation"
 msgid "Bloquear Sessão"
 msgstr "Block session"
 
+msgid "Social"
+msgstr "Social"
+
 msgid "Acessar Admin"
 msgstr "Access Admin"
 
 msgid "Marcar como lidas"
 msgstr "Mark"
+
+msgid "Limpar todas as notificações"
+msgstr "Clean all notifications"
 
 msgid "Nenhuma notificação"
 msgstr "No notification"
@@ -6518,11 +10071,11 @@ msgstr "No notification"
 msgid "Ver todas as notificações"
 msgstr "See all notifications"
 
-msgid "Configurações"
-msgstr "Settings"
-
 msgid "API"
 msgstr "API"
+
+msgid "Moedas"
+msgstr "Coins"
 
 msgid "Shop"
 msgstr "Shop"
@@ -6536,11 +10089,8 @@ msgstr "Supporters"
 msgid "Box Manager"
 msgstr "Box Manager"
 
-msgid "Enviar Push"
-msgstr "Send push"
-
-msgid "Inventário"
-msgstr "Inventory"
+msgid "Acessar"
+msgstr "Access"
 
 msgid "Tem certeza de que deseja limpar todas as notificações?"
 msgstr "Are you sure you want to clean all notifications?"
@@ -6566,6 +10116,9 @@ msgstr "Battle Pass"
 msgid "Ajuda (FAQ)"
 msgstr "Help (FAQ)"
 
+msgid "Mensagens"
+msgstr "Messages"
+
 msgid "Top PVP"
 msgstr "Top PVP"
 
@@ -6590,30 +10143,6 @@ msgstr "Current Heroes"
 msgid "Castle Siege"
 msgstr "Castle Siege"
 
-msgid "Relatórios"
-msgstr "Reports"
-
-msgid "Movimentações dos Inventários"
-msgstr "Inventory movements"
-
-msgid "Movimentações dos Leilões"
-msgstr "Auction movements"
-
-msgid "Movimentações da Loja"
-msgstr "Store movements"
-
-msgid "Auditoria"
-msgstr "Audit"
-
-msgid "Logs Info"
-msgstr "Logs Info"
-
-msgid "Logs Errors"
-msgstr "Logs Errors"
-
-msgid "Informações"
-msgstr "Information"
-
 msgid "Minha Conta"
 msgstr "My account"
 
@@ -6629,8 +10158,8 @@ msgstr "TERMS OF SERVICE"
 msgid "Política de Privacidade"
 msgstr "Privacy Policy"
 
-msgid "downloads"
-msgstr "downloads"
+msgid "Baixe tudo o que você precisa para começar sua jornada"
+msgstr "Download everything you need to start your journey"
 
 msgid "Nenhum download disponível no momento."
 msgstr "No download available at the moment."
@@ -6649,17 +10178,15 @@ msgstr "Go back to registration"
 msgid "Conta verificada com sucesso!"
 msgstr "Account successfully verified!"
 
-msgid "Conta Verificada"
-msgstr "Verified Account"
-
 msgid "Agora você pode acessar sua conta com segurança."
 msgstr "Now you can access your account safely."
 
-msgid "Veja abaixo as dúvidas mais comuns da comunidade."
-msgstr "See below the most common questions of the community."
-
-msgid "Nenhuma pergunta frequente disponível no momento."
-msgstr "No frequent question available at the moment."
+msgid ""
+"Veja abaixo as dúvidas mais comuns da comunidade. Nossa equipe está sempre "
+"pronta para ajudar!"
+msgstr ""
+"See below the most common questions of the community. Our team is always "
+"ready to help!"
 
 msgid "Inicie sua Jornada em Lineage Agora!"
 msgstr "Start your lineage journey now!"
@@ -6748,14 +10275,15 @@ msgstr "community"
 msgid "e fique por dentro"
 msgstr "and stay on top"
 
-msgid "Publicado em"
-msgstr "Published in"
-
 msgid "Notícias Recentes"
 msgstr "Recent News"
 
-msgid "Não há notícias disponíveis no momento."
-msgstr "There is no news available at the moment."
+msgid ""
+"Fique por dentro das últimas novidades e atualizações da nossa comunidade."
+msgstr "Stay on top of the latest news and updates from our community."
+
+msgid "Não há notícias disponíveis no momento. Volte em breve para novidades!"
+msgstr "There is no news available at the moment. Return soon for news!"
 
 msgid "Última atualização"
 msgstr "Last update"
@@ -6966,9 +10494,6 @@ msgstr "Penalties"
 msgid "Infrações podem resultar em:"
 msgstr "Infractions can result in:"
 
-msgid "Advertência"
-msgstr "Warning"
-
 msgid "Mute"
 msgstr "Mute"
 
@@ -7120,8 +10645,97 @@ msgstr ""
 msgid "Alterar minha senha"
 msgstr "Change my password"
 
-msgid "Por favor, corrija os erros abaixo."
-msgstr "Please correct the mistakes below."
+#, python-format
+msgid "A imagem é muito grande. Tamanho máximo permitido: %(max_size)sMB"
+msgstr "The image is very large. Maximum allowed size: %(max_size)s smb"
+
+#, python-format
+msgid "O avatar é muito grande. Tamanho máximo permitido: %(max_size)sMB"
+msgstr "The avatar is very large. Maximum allowed size: %(max_size)s smb"
+
+msgid "Pillow não está instalado. Não é possível validar imagens."
+msgstr "Pillow is not installed. It is not possible to validate images."
+
+#, python-format
+msgid "Formato de imagem não suportado. Formatos permitidos: %(formats)s"
+msgstr "Unmaster image format. Allowed formats: %(formats)s s"
+
+msgid "Arquivo de imagem inválido ou corrompido."
+msgstr "Invalid or corrupted image file."
+
+#, python-format
+msgid "Imagem muito grande. Dimensões máximas: %(width)sx%(height)s pixels"
+msgstr ""
+"Very large image. Maximum dimensions: %(width)s sx %(height)s s pixels"
+
+msgid "Não foi possível validar as dimensões da imagem."
+msgstr "It was not possible to validate the dimensions of the image."
+
+msgid "Imagem com dimensões inválidas."
+msgstr "Image with invalid dimensions."
+
+msgid "Imagem muito pequena. Mínimo: 50x50 pixels."
+msgstr "Very small image. Minimum: 50x50 pixels."
+
+msgid "Erro ao processar a imagem."
+msgstr "Error when processing the image."
+
+msgid "Não foi possível determinar o tamanho do arquivo de vídeo."
+msgstr "It was not possible to determine the size of the video file."
+
+#, python-format
+msgid "O vídeo é muito grande. Tamanho máximo permitido: %(max_size)sMB"
+msgstr "The video is very large. Maximum allowed size: %(max_size)s smb"
+
+msgid "Erro ao validar tamanho do vídeo."
+msgstr "Error validating video size."
+
+msgid "Nome do arquivo de vídeo não encontrado."
+msgstr "Video file name not found."
+
+#, python-format
+msgid "Formato de vídeo não suportado. Formatos permitidos: %(formats)s"
+msgstr "Non -supported video format. Allowed formats: %(formats)s s"
+
+msgid "Erro ao validar formato do vídeo."
+msgstr "Error validating video format."
+
+#, python-format
+msgid ""
+"Vídeo muito longo. Duração máxima: %(max_duration)s segundos "
+"(%(max_minutes)s minutos)"
+msgstr ""
+"Very long video. Maximum duration: %(max_duration)s s seconds ( "
+"%(max_minutes)s S minutes)"
+
+#, python-format
+msgid "Erro ao processar a imagem: %(error)s"
+msgstr "Error when processing the image: %(error)s s"
+
+#, python-format
+msgid "Erro ao processar o avatar: %(error)s"
+msgstr "Error when processing the avatar: %(error)s s"
+
+#, python-format
+msgid "Erro ao criar thumbnail: %(error)s"
+msgstr "Error when creating thumbnail: %(error)s s"
+
+#, python-format
+msgid "Erro ao processar vídeo: %(error)s"
+msgstr "Error when processing video: %(error)s s"
+
+msgid "Processamento de vídeo demorou muito tempo."
+msgstr "Video processing took a long time."
+
+msgid "FFmpeg não encontrado. Não é possível processar vídeos."
+msgstr "FFmpeg not found. It is not possible to process videos."
+
+msgid "Erro ao criar thumbnail do vídeo."
+msgstr "Error creating thumbnail of the video."
+
+#, python-format
+msgid "Erro ao criar thumbnail do vídeo: %(error)s"
+msgstr "Error when creating video thumbnail: %(error)s s"
 
 msgid ""
 "Notificações staff só podem ser enviadas para usuários staff ou "
@@ -7130,6 +10744,472 @@ msgstr "Staff notifications can only be sent to staff users or superusers."
 
 msgid "Você não tem permissão para criar notificações públicas staff."
 msgstr "You are not allowed to create staff public notifications."
+
+#~ msgid "Voltar para o Admin"
+#~ msgstr "Back to Admin"
+
+#~ msgid "Relatório de Fluxo de Caixa"
+#~ msgstr "Cash Flow Report"
+
+#~ msgid "Saldo do Dia"
+#~ msgstr "Balance of the Day"
+
+#~ msgid "ID Pedido"
+#~ msgstr "ID Request"
+
+#~ msgid "Status Pedido"
+#~ msgstr "Status pedido"
+
+#~ msgid "Status Pagamento"
+#~ msgstr "Payment status"
+
+#~ msgid "CONFIRMADO"
+#~ msgstr "CONFIRMED"
+
+#~ msgid "PENDENTE"
+#~ msgstr "Pending"
+
+#~ msgid "confirmed"
+#~ msgstr "confirmed"
+
+#~ msgid "pending"
+#~ msgstr "pending"
+
+#~ msgid "Lance atual:"
+#~ msgstr "Current bid:"
+
+#~ msgid "Tempo restante:"
+#~ msgstr "Remaining time:"
+
+#~ msgid "Seu lance"
+#~ msgstr "Your bid"
+
+#~ msgid "Nenhum leilão pendente de entrega."
+#~ msgstr "No auction pending delivery."
+
+#~ msgid "Nenhum leilão finalizado."
+#~ msgstr "No finished auction."
+
+#~ msgid "Nenhum leilão cancelado."
+#~ msgstr "No canceled auction."
+
+#~ msgid "Seu Saldo:"
+#~ msgstr "Your balance:"
+
+#~ msgid "Tem certeza que deseja excluir a caixa "
+#~ msgstr "You're sure you want to delete the box"
+
+#~ msgid "Nenhuma caixa encontrada."
+#~ msgstr "No box found."
+
+#~ msgid "Nenhum tipo de caixa encontrado."
+#~ msgstr "No box found."
+
+#~ msgid "Novo"
+#~ msgstr "Novo"
+
+#~ msgid "Você ganhou um item!"
+#~ msgstr "You won an item!"
+
+#~ msgid "Nenhum item na bag."
+#~ msgstr "No item in the bag."
+
+#~ msgid ""
+#~ "Os seguintes inventários pertencem a personagens que não existem mais na sua"
+#~ " conta:"
+#~ msgstr ""
+#~ "The following inventories belong to characters that no longer exist in your "
+#~ "account:"
+
+#~ msgid "Nenhum item no inventário."
+#~ msgstr "No item in the inventory."
+
+#~ msgid "Retirar"
+#~ msgstr "To remove"
+
+#~ msgid "Voltar para o Inventário"
+#~ msgstr "Go back to inventory"
+
+#~ msgid "ID do Pedido:"
+#~ msgstr "Order ID:"
+
+#~ msgid "Valor Pago:"
+#~ msgstr "Payment value:"
+
+#~ msgid "Bônus Aplicado:"
+#~ msgstr "Bonus applied:"
+
+#~ msgid "Total Creditado:"
+#~ msgstr "Total credited:"
+
+#~ msgid "Moedas Geradas:"
+#~ msgstr "Coins generated:"
+
+#~ msgid "Método:"
+#~ msgstr "Method:"
+
+#~ msgid "Data de Criação:"
+#~ msgstr "Creation Date:"
+
+#~ msgid "Valor:"
+#~ msgstr "Valor:"
+
+#~ msgid "Você não possui pedidos pendentes."
+#~ msgstr "You have no pending orders."
+
+#~ msgid "Escolha o Meio de Pagamento"
+#~ msgstr "Choose the payment method"
+
+#~ msgid "Resumo dos Status dos Leilões"
+#~ msgstr "Auction status summary"
+
+#~ msgid "Nenhum item de roadmap disponível."
+#~ msgstr "No Roadmap item available."
+
+#~ msgid "Editar Imagem do Apoiador"
+#~ msgstr "Edit supporter image"
+
+#~ msgid "Apoio Expirado"
+#~ msgstr "Expired support"
+
+#~ msgid "Seu cupom de apoiador expirou."
+#~ msgstr "His supporter coupon expired."
+
+#~ msgid ""
+#~ "Para continuar como apoiador e receber um novo cupom de desconto, você pode "
+#~ "reenviar sua solicitação agora mesmo."
+#~ msgstr ""
+#~ "To continue as a supporter and receive a new discount coupon, you can resend"
+#~ " your request right now."
+
+#~ msgid "Enviar Nova Solicitação"
+#~ msgstr "Send a new request"
+
+#~ msgid ""
+#~ "Preencha o formulário abaixo. Após a análise, você poderá acessar benefícios"
+#~ " exclusivos, gerar códigos promocionais e acompanhar seu desempenho!"
+#~ msgstr ""
+#~ "Fill out the form below. After analysis, you can access exclusive benefits, "
+#~ "generate promotional codes and track your performance!"
+
+#~ msgid "Painel de Staff"
+#~ msgstr "Staff painel"
+
+#~ msgid "Pedidos Pendentes de Apoiadores"
+#~ msgstr "Pending requests from supporters"
+
+#~ msgid "Data de Solicitação"
+#~ msgstr "Request Date"
+
+#~ msgid "Sem descrição"
+#~ msgstr "Described"
+
+#~ msgid "Link Twitch"
+#~ msgstr "Link Twitch"
+
+#~ msgid "Nenhum link fornecido"
+#~ msgstr "No link supplied"
+
+#~ msgid "Link YouTube"
+#~ msgstr "Link YouTube"
+
+#~ msgid "Imagem do Apoiador"
+#~ msgstr "Supporter Image"
+
+#~ msgid "Nenhuma imagem fornecida."
+#~ msgstr "No image provided."
+
+#~ msgid "Digite a porcentagem de desconto"
+#~ msgstr "Enter the discount percentage"
+
+#~ msgid "Não há pedidos pendentes no momento."
+#~ msgstr "There are no pending orders at the moment."
+
+#~ msgid "Solicitação em Análise"
+#~ msgstr "Request on Analysis"
+
+#~ msgid ""
+#~ "Sua solicitação para se tornar um apoiador está sendo analisada por nossa "
+#~ "equipe."
+#~ msgstr "Your request to become a supporter is being analyzed by our team."
+
+#~ msgid "Você receberá uma resposta em breve. Obrigado pelo interesse!"
+#~ msgstr "You will receive an answer soon. Thanks for the interest!"
+
+#~ msgid ""
+#~ "Infelizmente, sua solicitação para se tornar um apoiador foi recusada no "
+#~ "momento."
+#~ msgstr ""
+#~ "Unfortunately, your request to become a supporter has been rejected at the "
+#~ "moment."
+
+#~ msgid ""
+#~ "Caso ache que houve um engano ou queira mais informações, entre em contato "
+#~ "com a staff."
+#~ msgstr ""
+#~ "If you think there was a mistake or want more information, contact the "
+#~ "staff."
+
+#~ msgid "Valor disponível para saque:"
+#~ msgstr "Available value for withdrawal:"
+
+#~ msgid "Login:"
+#~ msgstr "Login:"
+
+#~ msgid "Email:"
+#~ msgstr "Email:"
+
+#~ msgid "Não disponível"
+#~ msgstr "Unavailable"
+
+#~ msgid "Último IP:"
+#~ msgstr "Last IP:"
+
+#~ msgid "Total de Personagens:"
+#~ msgstr "Total characters:"
+
+#~ msgid "Nível:"
+#~ msgstr "Level:"
+
+#~ msgid "Classe Base:"
+#~ msgstr "Basic class:"
+
+#~ msgid "Online:"
+#~ msgstr "Online:"
+
+#~ msgid "Vincular Conta Lineage via E-mail"
+#~ msgstr "Link Lineage Account via email"
+
+#~ msgid "Vincular Conta do Jogo (Lineage 2)"
+#~ msgstr "Link the game account (lineage 2)"
+
+#~ msgid "Personagem:"
+#~ msgstr "Character:"
+
+#~ msgid "Preço do serviço:"
+#~ msgstr "Service Price:"
+
+#~ msgid "Insira o valor"
+#~ msgstr "Enter the value"
+
+#~ msgid "Visualizar Itens"
+#~ msgstr "View items"
+
+#~ msgid "Código promocional"
+#~ msgstr "Promotional code"
+
+#~ msgid "Pagamento"
+#~ msgstr "Payment"
+
+#~ msgid "Seu carrinho está vazio."
+#~ msgstr "Your cart is empty."
+
+#~ msgid "Nenhum item disponível."
+#~ msgstr "No available item."
+
+#~ msgid "Nenhum pacote disponível."
+#~ msgstr "No package available."
+
+#~ msgid "Adicione, edite ou desative itens disponíveis no shop."
+#~ msgstr "Add, edit or disable items available to the Shop."
+
+#~ msgid "Monte pacotes personalizados com itens e promoções."
+#~ msgstr "Mount custom packages with items and promotions."
+
+#~ msgid "Crie e gerencie códigos promocionais para o shop."
+#~ msgstr "Create and manage promotional codes for the shop."
+
+#~ msgid "Nenhum item no pacote."
+#~ msgstr "No item in the package."
+
+#~ msgid "Cadastro de Itens"
+#~ msgstr "Registration of items"
+
+#~ msgid "Nenhum item cadastrado."
+#~ msgstr "No registered item."
+
+#~ msgid "Cadastro de Pacotes"
+#~ msgstr "Package registration"
+
+#~ msgid "Nenhum pacote cadastrado."
+#~ msgstr "No registered package."
+
+#~ msgid "Cadastro de Códigos Promocionais"
+#~ msgstr "Promotional Codes Registration"
+
+#~ msgid "Códigos Cadastrados"
+#~ msgstr "Registered codes"
+
+#~ msgid "Nenhuma promoção cadastrada."
+#~ msgstr "No registered promotion."
+
+#~ msgid "Nenhuma compra realizada ainda."
+#~ msgstr "No purchase made yet."
+
+#~ msgid "Abrir Solicitação"
+#~ msgstr "Open"
+
+#~ msgid "Transações Recentes"
+#~ msgstr "Recent Transactions"
+
+#~ msgid "Nenhuma transação encontrada."
+#~ msgstr "No transaction found."
+
+#~ msgid "Sobre a Carteira"
+#~ msgstr "On the wallet"
+
+#~ msgid ""
+#~ "Gerencie seu saldo virtual e acompanhe suas transações recentes. Use as "
+#~ "moedas para realizar compras, enviar presentes ou desbloquear recursos "
+#~ "exclusivos dentro do servidor."
+#~ msgstr ""
+#~ "Manage your virtual balance and follow your recent transactions. Use the "
+#~ "coins to make purchases, send gifts or unlock exclusive features within the "
+#~ "server."
+
+#~ msgid "Atualizar Carteira"
+#~ msgstr "Wallet Update"
+
+#~ msgid "Sobre o Saldo Bônus"
+#~ msgstr "About the Bonus Balance"
+
+#~ msgid ""
+#~ "O saldo de bônus é creditado automaticamente quando você faz compras que se "
+#~ "qualificam para promoções. Este saldo pode ser usado em funcionalidades "
+#~ "específicas do sistema."
+#~ msgstr ""
+#~ "Bonus balance is automatically credited when you make purchases that qualify"
+#~ " for promotions. This balance can be used in specific system features."
+
+#~ msgid "O arquivo é muito grande. Tente um arquivo menor que 30MB."
+#~ msgstr "The file is very large. Try a file less than 30mb."
+
+#~ msgid "Conversa sobre a"
+#~ msgstr "Conversation about"
+
+#~ msgid ""
+#~ "Mantenha sua conta protegida ativando a autenticação em duas etapas (2FA)."
+#~ msgstr ""
+#~ "Keep your account protected by activating authentication in two steps (2FA)."
+
+#~ msgid "Date:"
+#~ msgstr "Date:"
+
+#~ msgid "Method:"
+#~ msgstr "Method:"
+
+#~ msgid "Tamanho"
+#~ msgstr "Size"
+
+#~ msgid "Nenhum download disponível"
+#~ msgstr "No download available"
+
+#~ msgid "Nenhum download está disponível no momento."
+#~ msgstr "No download is currently available."
+
+#~ msgid "Ajuda"
+#~ msgstr "Help"
+
+#~ msgid ""
+#~ "Encontre as respostas para as perguntas mais comuns feitas pelos nossos "
+#~ "usuários."
+#~ msgstr "Find the answers to the most common questions asked by our users."
+
+#~ msgid "Não há perguntas frequentes disponíveis no momento."
+#~ msgstr "There are no frequent questions available at the moment."
+
+#~ msgid "Painel do Jogador"
+#~ msgstr "Player Panel"
+
+#~ msgid "Tudo que você precisa em um só lugar."
+#~ msgstr "Everything you need in one place."
+
+#~ msgid "Confira seu progresso abaixo."
+#~ msgstr "Check out your progress below."
+
+#~ msgid "Saldo:"
+#~ msgstr "Balance:"
+
+#~ msgid "Nenhuma carteira encontrada."
+#~ msgstr "No wallet found."
+
+#~ msgid "Total criados:"
+#~ msgstr "Total Created:"
+
+#~ msgid "Ver amigos"
+#~ msgstr "See friends"
+
+#~ msgid "Você ainda não é um apoiador."
+#~ msgstr "You are not yet a supporter."
+
+#~ msgid "Inventários"
+#~ msgstr "Inventories"
+
+#~ msgid "Ver Inventário"
+#~ msgstr "See inventory"
+
+#~ msgid "Nenhum inventário encontrado."
+#~ msgstr "No inventory found."
+
+#~ msgid "Lista de Amigos"
+#~ msgstr "List of friends"
+
+#~ msgid "Procurar Amigo..."
+#~ msgstr "Search friend ..."
+
+#~ msgid "Clique em um amigo para iniciar o chat."
+#~ msgstr "Click a friend to start the chat."
+
+#~ msgid "Digite uma mensagem..."
+#~ msgstr "Enter a message ..."
+
+#~ msgid "Detalhes da Notícia"
+#~ msgstr "News details"
+
+#~ msgid "Voltar para as notícias"
+#~ msgstr "Back to the news"
+
+#~ msgid "Fique por dentro das últimas novidades e atualizações exclusivas."
+#~ msgstr "Stay on top of the latest news and exclusive updates."
+
+#~ msgid "Não há notícias privadas disponíveis no momento."
+#~ msgstr "There is no private news available at the moment."
+
+#~ msgid "Não lida"
+#~ msgstr "Unloved"
+
+#~ msgid "Não há notificações privadas."
+#~ msgstr "There are no private notifications."
+
+#~ msgid "Não há notificações públicas."
+#~ msgstr "There are no public notifications."
+
+#~ msgid "Tem certeza que deseja limpar todas as notificações?"
+#~ msgstr "Are you sure you want to clean all notifications?"
+
+#~ msgid "Movimentações dos Inventários"
+#~ msgstr "Inventory movements"
+
+#~ msgid "Movimentações dos Leilões"
+#~ msgstr "Auction movements"
+
+#~ msgid "Movimentações da Loja"
+#~ msgstr "Store movements"
+
+#~ msgid "Logs Info"
+#~ msgstr "Logs Info"
+
+#~ msgid "Logs Errors"
+#~ msgstr "Logs Errors"
+
+#~ msgid "Veja abaixo as dúvidas mais comuns da comunidade."
+#~ msgstr "See below the most common questions of the community."
+
+#~ msgid "Nenhuma pergunta frequente disponível no momento."
+#~ msgstr "No frequent question available at the moment."
+
+#~ msgid "Não há notícias disponíveis no momento."
+#~ msgstr "There is no news available at the moment."
 
 #~ msgid "Purchase of coins via ADMINISTRATOR"
 #~ msgstr "Purchase of coins via ADMINISTRATOR"
@@ -7151,9 +11231,6 @@ msgstr "You are not allowed to create staff public notifications."
 
 #~ msgid "Nenhuma transação registrada ainda."
 #~ msgstr "No transaction recorded yet."
-
-#~ msgid "Pedidos Pendentes"
-#~ msgstr "Pending orders"
 
 #~ msgid ""
 #~ "Visualize pedidos de compra de moedas que ainda não foram pagos ou "
