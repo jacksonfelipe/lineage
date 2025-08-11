@@ -12,7 +12,7 @@ class UserAdmin(BaseModelAdmin, DefaultUserAdmin):
     list_display = (
         'username', 'email', 'display_groups', 'cpf', 'gender', 'fichas',
         'is_email_verified', 'is_2fa_enabled', 'is_verified', 'social_verified',
-        'is_superadmin', 'is_staff_member', 'is_moderator', 'is_verified_user', 'created_at', 'updated_at'
+        'is_superadmin', 'is_staff_member', 'is_moderator', 'is_verified_user', 'is_apoiador', 'created_at', 'updated_at'
     )
     readonly_fields = ('created_at', 'created_by', 'updated_at', 'updated_by', 'uuid')
     
@@ -25,7 +25,7 @@ class UserAdmin(BaseModelAdmin, DefaultUserAdmin):
             'fields': ('is_email_verified', 'is_2fa_enabled', 'is_verified', 'social_verified')
         }),
         ('Tipos de perfil', {
-            'fields': ('is_superadmin', 'is_staff_member', 'is_moderator', 'is_verified_user'),
+            'fields': ('is_superadmin', 'is_staff_member', 'is_moderator', 'is_verified_user', 'is_apoiador'),
             'description': 'Defina o tipo de perfil do usuário para diferenciação visual'
         }),
         ('Permissões', {
@@ -43,7 +43,7 @@ class UserAdmin(BaseModelAdmin, DefaultUserAdmin):
                 'username', 'email', 'password1', 'password2',
                 'avatar', 'bio', 'cpf', 'gender',
                 'is_email_verified', 'is_2fa_enabled', 'is_verified', 'social_verified',
-                'is_superadmin', 'is_staff_member', 'is_moderator', 'is_verified_user'
+                'is_superadmin', 'is_staff_member', 'is_moderator', 'is_verified_user', 'is_apoiador'
             ),
         }),
     )

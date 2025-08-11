@@ -395,6 +395,14 @@ body.profile-verified-page {
   position: relative;
 }
 
+/* ===== APOIADOR - APOIADOR ===== */
+body.profile-supporter-page {
+  background: linear-gradient(135deg, #1a0f0f 0%, #2a1a1a 25%, #1a0f0f 50%, #2a1a1a 75%, #1a0f0f 100%);
+  background-size: 400% 400%;
+  animation: supporter-bg-shift 12s ease-in-out infinite;
+  position: relative;
+}
+
 body.profile-verified-page::before {
   content: '';
   position: fixed;
@@ -406,6 +414,21 @@ body.profile-verified-page::before {
     radial-gradient(circle at 20% 80%, rgba(135, 206, 235, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 80% 20%, rgba(70, 130, 180, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 40% 60%, rgba(135, 206, 235, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+body.profile-supporter-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(220, 20, 60, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(178, 34, 34, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, rgba(220, 20, 60, 0.05) 0%, transparent 50%);
   pointer-events: none;
   z-index: -1;
 }
@@ -673,6 +696,11 @@ body.profile-verified-page::before {
 
 /* Verified Animations */
 @keyframes verified-bg-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes supporter-bg-shift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }

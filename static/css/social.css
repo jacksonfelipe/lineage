@@ -85,6 +85,19 @@ BADGES DE TIPO DE PERFIL
     box-shadow: 0 0 15px rgba(30, 144, 255, 0.7);
 }
 
+/* Apoiador - Vermelho */
+.profile-supporter {
+    background: linear-gradient(135deg, #DC143C, #B22222);
+    color: white;
+    border: 2px solid #DC143C;
+    box-shadow: 0 0 10px rgba(220, 20, 60, 0.5);
+}
+
+.profile-supporter:hover {
+    background: linear-gradient(135deg, #B22222, #8B0000);
+    box-shadow: 0 0 15px rgba(220, 20, 60, 0.7);
+}
+
 /* Regular - Cinza */
 .profile-regular {
     background: #6c757d;
@@ -147,6 +160,17 @@ ESTILOS DE PERFIL COM CORES DIFERENCIADAS
     color: white;
 }
 
+/* Apoiador - Borda vermelha */
+.profile-container.profile-supporter {
+    border: 3px solid #DC143C;
+    box-shadow: 0 0 20px rgba(220, 20, 60, 0.3);
+}
+
+.profile-container.profile-supporter .card-header {
+    background: linear-gradient(135deg, #DC143C, #B22222);
+    color: white;
+}
+
 /* Regular - Sem borda especial */
 .profile-container.profile-regular {
     border: 1px solid #dee2e6;
@@ -184,6 +208,12 @@ AVATAR COM BORDA DIFERENCIADA
     box-shadow: 0 0 15px rgba(30, 144, 255, 0.6);
 }
 
+/* Apoiador - Borda vermelha */
+.profile-avatar-container.profile-supporter {
+    border: 4px solid #DC143C !important;
+    box-shadow: 0 0 15px rgba(220, 20, 60, 0.6);
+}
+
 /* Regular - Borda branca padrão */
 .profile-avatar-container.profile-regular {
     border: 4px solid white !important;
@@ -214,6 +244,12 @@ NOME DO USUÁRIO COM CORES DIFERENCIADAS
 /* Verificado - Azul */
 .profile-name.profile-verified {
     color: #1E90FF !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Apoiador - Vermelho */
+.profile-name.profile-supporter {
+    color: #DC143C !important;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
@@ -722,10 +758,25 @@ NOME DO USUÁRIO COM CORES DIFERENCIADAS
   border: 2px solid #87CEEB !important;
 }
 
+/* ===== APOIADOR - APOIADOR ===== */
+.profile-supporter {
+  background: linear-gradient(135deg, #DC143C, #B22222, #8B0000) !important;
+  color: white !important;
+  box-shadow: 0 0 20px rgba(220, 20, 60, 0.6) !important;
+  border: 2px solid #DC143C !important;
+}
+
 .profile-container.profile-verified {
   background: linear-gradient(135deg, #0f1a2a, #1a2d4a) !important;
   border: 3px solid #87CEEB !important;
   box-shadow: 0 0 30px rgba(135, 206, 235, 0.3), inset 0 0 50px rgba(135, 206, 235, 0.1) !important;
+  position: relative !important;
+}
+
+.profile-container.profile-supporter {
+  background: linear-gradient(135deg, #1a0f0f, #2a1a1a) !important;
+  border: 3px solid #DC143C !important;
+  box-shadow: 0 0 30px rgba(220, 20, 60, 0.3), inset 0 0 50px rgba(220, 20, 60, 0.1) !important;
   position: relative !important;
 }
 
@@ -740,9 +791,26 @@ NOME DO USUÁRIO COM CORES DIFERENCIADAS
   animation: shimmer 2s infinite;
 }
 
+.profile-container.profile-supporter::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #DC143C, #B22222, #8B0000, #DC143C);
+  animation: shimmer 2s infinite;
+}
+
 .profile-avatar-container.profile-verified {
   border: 4px solid #87CEEB !important;
   box-shadow: 0 0 25px rgba(135, 206, 235, 0.8), inset 0 0 20px rgba(135, 206, 235, 0.2) !important;
+  position: relative !important;
+}
+
+.profile-avatar-container.profile-supporter {
+  border: 4px solid #DC143C !important;
+  box-shadow: 0 0 25px rgba(220, 20, 60, 0.8), inset 0 0 20px rgba(220, 20, 60, 0.2) !important;
   position: relative !important;
 }
 
@@ -765,8 +833,36 @@ NOME DO USUÁRIO COM CORES DIFERENCIADAS
   animation: check-pulse 2s ease-in-out infinite;
 }
 
+.profile-avatar-container.profile-supporter::after {
+  content: '❤️';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #DC143C, #B22222) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 14px !important;
+  box-shadow: 0 0 10px rgba(220, 20, 60, 0.8) !important;
+  animation: heart-pulse 2s ease-in-out infinite;
+}
+
 .profile-name.profile-verified {
   background: linear-gradient(45deg, #87CEEB, #00BFFF) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-weight: 700 !important;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3) !important;
+}
+
+.profile-name.profile-supporter {
+  background: linear-gradient(45deg, #DC143C, #B22222) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
@@ -822,6 +918,11 @@ NOME DO USUÁRIO COM CORES DIFERENCIADAS
   50% { transform: scale(1.2); }
 }
 
+@keyframes heart-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
 /* ===== EFEITOS ESPECIAIS PARA O CARD DE PERFIL ===== */
 .profile-container {
   transition: all 0.3s ease !important;
@@ -837,7 +938,8 @@ NOME DO USUÁRIO COM CORES DIFERENCIADAS
 .profile-container.profile-superadmin::after,
 .profile-container.profile-staff::after,
 .profile-container.profile-moderator::after,
-.profile-container.profile-verified::after {
+.profile-container.profile-verified::after,
+.profile-container.profile-supporter::after {
   content: '';
   position: absolute;
   top: 0;
@@ -891,6 +993,14 @@ NOME DO USUÁRIO COM CORES DIFERENCIADAS
   box-shadow: 0 0 10px rgba(135, 206, 235, 0.5) !important;
 }
 
+.badge.profile-supporter {
+  background: linear-gradient(135deg, #DC143C, #B22222, #8B0000) !important;
+  color: white !important;
+  font-weight: bold !important;
+  border: 1px solid #DC143C !important;
+  box-shadow: 0 0 10px rgba(220, 20, 60, 0.5) !important;
+}
+
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
   .profile-avatar-container::after {
@@ -939,11 +1049,17 @@ NOME DO USUÁRIO COM CORES DIFERENCIADAS
   position: relative !important;
 }
 
+.profile-cover.profile-supporter {
+  background: linear-gradient(135deg, #DC143C, #B22222, #8B0000) !important;
+  position: relative !important;
+}
+
 /* Efeito de overlay nos covers */
 .profile-cover.profile-superadmin::after,
 .profile-cover.profile-staff::after,
 .profile-cover.profile-moderator::after,
-.profile-cover.profile-verified::after {
+.profile-cover.profile-verified::after,
+.profile-cover.profile-supporter::after {
   content: '';
   position: absolute;
   top: 0;
@@ -1066,6 +1182,18 @@ NOME DO USUÁRIO COM CORES DIFERENCIADAS
   box-shadow: 0 0 15px rgba(135, 206, 235, 0.6) !important;
 }
 
+.profile-status-display.profile-supporter {
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.2), rgba(178, 34, 34, 0.2), rgba(139, 0, 0, 0.2)) !important;
+  border: 2px solid rgba(220, 20, 60, 0.5) !important;
+  box-shadow: 0 0 20px rgba(220, 20, 60, 0.3) !important;
+}
+
+.profile-status-display.profile-supporter .status-icon {
+  background: linear-gradient(135deg, #DC143C, #B22222) !important;
+  color: white !important;
+  box-shadow: 0 0 15px rgba(220, 20, 60, 0.6) !important;
+}
+
 @keyframes status-shimmer {
   0%, 100% { opacity: 0.3; }
   50% { opacity: 0.7; }
@@ -1136,6 +1264,11 @@ NOME DO USUÁRIO COM CORES DIFERENCIADAS
 .avatar-glow.profile-verified {
   background: radial-gradient(circle, rgba(135, 206, 235, 0.6), transparent 70%) !important;
   box-shadow: 0 0 30px rgba(135, 206, 235, 0.8) !important;
+}
+
+.avatar-glow.profile-supporter {
+  background: radial-gradient(circle, rgba(220, 20, 60, 0.6), transparent 70%) !important;
+  box-shadow: 0 0 30px rgba(220, 20, 60, 0.8) !important;
 }
 
 @keyframes avatar-glow-pulse {

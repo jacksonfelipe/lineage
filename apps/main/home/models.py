@@ -43,6 +43,7 @@ class User(BaseModel, AbstractUser):
     is_staff_member = models.BooleanField(default=False, verbose_name=_("Membro da Equipe"), help_text=_("Acesso administrativo limitado"))
     is_moderator = models.BooleanField(default=False, verbose_name=_("Moderador"), help_text=_("Pode acessar o painel de moderação do social"))
     is_verified_user = models.BooleanField(default=False, verbose_name=_("Usuário Verificado"), help_text=_("Perfil com destaque azul"))
+    is_apoiador = models.BooleanField(default=False, verbose_name=_("Apoiador"), help_text=_("Perfil com destaque vermelho"))
 
     # game
     fichas = models.PositiveIntegerField(default=0, verbose_name=_("Fichas"))
@@ -68,6 +69,8 @@ class User(BaseModel, AbstractUser):
             return 'moderator'
         elif self.is_verified_user:
             return 'verified'
+        elif self.is_apoiador:
+            return 'supporter'
         else:
             return 'regular'
 
@@ -79,6 +82,7 @@ class User(BaseModel, AbstractUser):
             'staff': 'Guardião do Sistema',
             'moderator': 'Vigilante da Comunidade',
             'verified': 'Membro Verificado',
+            'supporter': 'Apoiador',
             'regular': 'Membro'
         }
         return profile_names.get(self.profile_type, 'Membro')
@@ -91,6 +95,7 @@ class User(BaseModel, AbstractUser):
             'staff': 'profile-staff',
             'moderator': 'profile-moderator',
             'verified': 'profile-verified',
+            'supporter': 'profile-supporter',
             'regular': 'profile-regular'
         }
         return color_classes.get(self.profile_type, 'profile-regular')
@@ -103,6 +108,7 @@ class User(BaseModel, AbstractUser):
             'staff': 'bi-shield-fill',
             'moderator': 'bi-shield-check',
             'verified': 'bi-patch-check-fill',
+            'supporter': 'bi-heart-fill',
             'regular': 'bi-person'
         }
         return icons.get(self.profile_type, 'bi-person')
