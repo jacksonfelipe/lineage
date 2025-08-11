@@ -6,6 +6,26 @@
 
 {% block title %} {{ profile_user.get_full_name|default:profile_user.username }} - {% trans "Perfil" %} {% endblock title %}
 
+{% block extrahead %}
+<script>
+// Aplicar classe CSS no body baseada no tipo de perfil imediatamente
+(function() {
+  const profileType = '{{ profile_user.profile_type }}';
+  if (profileType !== 'regular') {
+    // Aplicar imediatamente se o body já existe
+    if (document.body) {
+      document.body.classList.add('profile-' + profileType + '-page');
+    } else {
+      // Se o body ainda não existe, aplicar quando o DOM estiver pronto
+      document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('profile-' + profileType + '-page');
+      });
+    }
+  }
+})();
+</script>
+{% endblock extrahead %}
+
 {% block content %}
 {% csrf_token %}
 <!-- Barra de navegação móvel -->
