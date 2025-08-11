@@ -1482,10 +1482,6 @@ body.profile-supporter-page .form-text {
   color: #ffffff !important;
 }
 
-.profile-container.profile-supporter .text-muted .bi {
-  color: rgba(255, 255, 255, 0.8) !important;
-}
-
 .profile-container.profile-supporter .card {
   background: transparent;
   border: none;
@@ -1514,4 +1510,291 @@ body.profile-supporter-page .form-text {
   background: linear-gradient(45deg, #DC143C, #B71C1C);
   color: #ffffff;
   box-shadow: 0 0 20px rgba(220, 20, 60, 0.6);
+}
+
+/* ===== TEXTO DOS POSTS EM PRETO ===== */
+/* Posts section - texto preto para todos os tipos de perfil */
+body.profile-superadmin-page .card:not(.profile-container) .card-text,
+body.profile-superadmin-page .card:not(.profile-container) .card-title,
+body.profile-superadmin-page .card:not(.profile-container) h6,
+body.profile-superadmin-page .card:not(.profile-container) p,
+body.profile-superadmin-page .card:not(.profile-container) small,
+body.profile-superadmin-page .card:not(.profile-container) a:not(.btn),
+body.profile-superadmin-page .card:not(.profile-container) .text-muted,
+body.profile-superadmin-page .card:not(.profile-container) .dropdown-item,
+body.profile-superadmin-page .card:not(.profile-container) .badge,
+body.profile-staff-page .card:not(.profile-container) .card-text,
+body.profile-staff-page .card:not(.profile-container) .card-title,
+body.profile-staff-page .card:not(.profile-container) h6,
+body.profile-staff-page .card:not(.profile-container) p,
+body.profile-staff-page .card:not(.profile-container) small,
+body.profile-staff-page .card:not(.profile-container) a:not(.btn),
+body.profile-staff-page .card:not(.profile-container) .text-muted,
+body.profile-staff-page .card:not(.profile-container) .dropdown-item,
+body.profile-staff-page .card:not(.profile-container) .badge,
+body.profile-moderator-page .card:not(.profile-container) .card-text,
+body.profile-moderator-page .card:not(.profile-container) .card-title,
+body.profile-moderator-page .card:not(.profile-container) h6,
+body.profile-moderator-page .card:not(.profile-container) p,
+body.profile-moderator-page .card:not(.profile-container) small,
+body.profile-moderator-page .card:not(.profile-container) a:not(.btn),
+body.profile-moderator-page .card:not(.profile-container) .text-muted,
+body.profile-moderator-page .card:not(.profile-container) .dropdown-item,
+body.profile-moderator-page .card:not(.profile-container) .badge,
+body.profile-verified-page .card:not(.profile-container) .card-text,
+body.profile-verified-page .card:not(.profile-container) .card-title,
+body.profile-verified-page .card:not(.profile-container) h6,
+body.profile-verified-page .card:not(.profile-container) p,
+body.profile-verified-page .card:not(.profile-container) small,
+body.profile-verified-page .card:not(.profile-container) a:not(.btn),
+body.profile-verified-page .card:not(.profile-container) .text-muted,
+body.profile-verified-page .card:not(.profile-container) .dropdown-item,
+body.profile-verified-page .card:not(.profile-container) .badge,
+body.profile-supporter-page .card:not(.profile-container) .card-text,
+body.profile-supporter-page .card:not(.profile-container) .card-title,
+body.profile-supporter-page .card:not(.profile-container) h6,
+body.profile-supporter-page .card:not(.profile-container) p,
+body.profile-supporter-page .card:not(.profile-container) small,
+body.profile-supporter-page .card:not(.profile-container) a:not(.btn),
+body.profile-supporter-page .card:not(.profile-container) .text-muted,
+body.profile-supporter-page .card:not(.profile-container) .dropdown-item,
+body.profile-supporter-page .card:not(.profile-container) .badge {
+  color: #000000 !important;
+}
+
+/* Posts específicos - texto preto */
+body.profile-superadmin-page .post-card .card-text,
+body.profile-superadmin-page .post-card .card-title,
+body.profile-superadmin-page .post-card h6,
+body.profile-superadmin-page .post-card p,
+body.profile-superadmin-page .post-card small,
+body.profile-superadmin-page .post-card a:not(.btn),
+body.profile-superadmin-page .post-card .text-muted,
+body.profile-superadmin-page .post-card .dropdown-item,
+body.profile-superadmin-page .post-card .badge,
+body.profile-staff-page .post-card .card-text,
+body.profile-staff-page .post-card .card-title,
+body.profile-staff-page .post-card h6,
+body.profile-staff-page .post-card p,
+body.profile-staff-page .post-card small,
+body.profile-staff-page .post-card a:not(.btn),
+body.profile-staff-page .post-card .text-muted,
+body.profile-staff-page .post-card .dropdown-item,
+body.profile-staff-page .post-card .badge,
+body.profile-moderator-page .post-card .card-text,
+body.profile-moderator-page .post-card .card-title,
+body.profile-moderator-page .post-card h6,
+body.profile-moderator-page .post-card p,
+body.profile-moderator-page .post-card small,
+body.profile-moderator-page .post-card a:not(.btn),
+body.profile-moderator-page .post-card .text-muted,
+body.profile-moderator-page .post-card .dropdown-item,
+body.profile-moderator-page .post-card .badge,
+body.profile-verified-page .post-card .card-text,
+body.profile-verified-page .post-card .card-title,
+body.profile-verified-page .post-card h6,
+body.profile-verified-page .post-card p,
+body.profile-verified-page .post-card small,
+body.profile-verified-page .post-card a:not(.btn),
+body.profile-verified-page .post-card .text-muted,
+body.profile-verified-page .post-card .dropdown-item,
+body.profile-verified-page .post-card .badge,
+body.profile-supporter-page .post-card .card-text,
+body.profile-supporter-page .post-card .card-title,
+body.profile-supporter-page .post-card h6,
+body.profile-supporter-page .post-card p,
+body.profile-supporter-page .post-card small,
+body.profile-supporter-page .post-card a:not(.btn),
+body.profile-supporter-page .post-card .text-muted,
+body.profile-supporter-page .post-card .dropdown-item,
+body.profile-supporter-page .post-card .badge {
+  color: #000000 !important;
+}
+
+/* ===== ÍCONES DOS BOTÕES DE AÇÃO DOS POSTS ===== */
+/* Superadmin - ícones dos botões de ação */
+body.profile-superadmin-page .btn-outline-primary .bi {
+  color: #FFD700 !important;
+}
+
+body.profile-superadmin-page .btn-outline-secondary .bi {
+  color: #f0bc74 !important;
+}
+
+body.profile-superadmin-page .btn-outline-success .bi {
+  color: #28a745 !important;
+}
+
+/* Staff - ícones dos botões de ação */
+body.profile-staff-page .btn-outline-primary .bi {
+  color: #4169E1 !important;
+}
+
+body.profile-staff-page .btn-outline-secondary .bi {
+  color: #f0bc74 !important;
+}
+
+body.profile-staff-page .btn-outline-success .bi {
+  color: #28a745 !important;
+}
+
+/* Moderator - ícones dos botões de ação */
+body.profile-moderator-page .btn-outline-primary .bi {
+  color: #32CD32 !important;
+}
+
+body.profile-moderator-page .btn-outline-secondary .bi {
+  color: #f0bc74 !important;
+}
+
+body.profile-moderator-page .btn-outline-success .bi {
+  color: #28a745 !important;
+}
+
+/* Verified - ícones dos botões de ação */
+body.profile-verified-page .btn-outline-primary .bi {
+  color: #87CEEB !important;
+}
+
+body.profile-verified-page .btn-outline-secondary .bi {
+  color: #f0bc74 !important;
+}
+
+body.profile-verified-page .btn-outline-success .bi {
+  color: #28a745 !important;
+}
+
+/* Supporter - ícones dos botões de ação */
+body.profile-supporter-page .btn-outline-primary .bi {
+  color: #DC143C !important;
+}
+
+body.profile-supporter-page .btn-outline-secondary .bi {
+  color: #f0bc74 !important;
+}
+
+body.profile-supporter-page .btn-outline-success .bi {
+  color: #28a745 !important;
+}
+
+/* Hover states para os ícones */
+body.profile-superadmin-page .btn-outline-primary:hover .bi {
+  color: #1a1a1a !important;
+}
+
+body.profile-staff-page .btn-outline-primary:hover .bi,
+body.profile-moderator-page .btn-outline-primary:hover .bi,
+body.profile-verified-page .btn-outline-primary:hover .bi,
+body.profile-supporter-page .btn-outline-primary:hover .bi {
+  color: #ffffff !important;
+}
+
+body.profile-superadmin-page .btn-outline-secondary:hover .bi,
+body.profile-staff-page .btn-outline-secondary:hover .bi,
+body.profile-moderator-page .btn-outline-secondary:hover .bi,
+body.profile-verified-page .btn-outline-secondary:hover .bi,
+body.profile-supporter-page .btn-outline-secondary:hover .bi {
+  color: #1f2937 !important;
+}
+
+body.profile-superadmin-page .btn-outline-success:hover .bi,
+body.profile-staff-page .btn-outline-success:hover .bi,
+body.profile-moderator-page .btn-outline-success:hover .bi,
+body.profile-verified-page .btn-outline-success:hover .bi,
+body.profile-supporter-page .btn-outline-success:hover .bi {
+  color: #ffffff !important;
+}
+
+/* ===== NÚMEROS DOS BOTÕES DE AÇÃO DOS POSTS ===== */
+/* Superadmin - números dos botões de ação */
+body.profile-superadmin-page .btn-outline-primary .like-count {
+  color: #FFD700 !important;
+}
+
+body.profile-superadmin-page .btn-outline-secondary .comment-count {
+  color: #f0bc74 !important;
+}
+
+body.profile-superadmin-page .btn-outline-success .share-count {
+  color: #28a745 !important;
+}
+
+/* Staff - números dos botões de ação */
+body.profile-staff-page .btn-outline-primary .like-count {
+  color: #4169E1 !important;
+}
+
+body.profile-staff-page .btn-outline-secondary .comment-count {
+  color: #f0bc74 !important;
+}
+
+body.profile-staff-page .btn-outline-success .share-count {
+  color: #28a745 !important;
+}
+
+/* Moderator - números dos botões de ação */
+body.profile-moderator-page .btn-outline-primary .like-count {
+  color: #32CD32 !important;
+}
+
+body.profile-moderator-page .btn-outline-secondary .comment-count {
+  color: #f0bc74 !important;
+}
+
+body.profile-moderator-page .btn-outline-success .share-count {
+  color: #28a745 !important;
+}
+
+/* Verified - números dos botões de ação */
+body.profile-verified-page .btn-outline-primary .like-count {
+  color: #87CEEB !important;
+}
+
+body.profile-verified-page .btn-outline-secondary .comment-count {
+  color: #f0bc74 !important;
+}
+
+body.profile-verified-page .btn-outline-success .share-count {
+  color: #28a745 !important;
+}
+
+/* Supporter - números dos botões de ação */
+body.profile-supporter-page .btn-outline-primary .like-count {
+  color: #DC143C !important;
+}
+
+body.profile-supporter-page .btn-outline-secondary .comment-count {
+  color: #f0bc74 !important;
+}
+
+body.profile-supporter-page .btn-outline-success .share-count {
+  color: #28a745 !important;
+}
+
+/* Hover states para os números */
+body.profile-superadmin-page .btn-outline-primary:hover .like-count {
+  color: #1a1a1a !important;
+}
+
+body.profile-staff-page .btn-outline-primary:hover .like-count,
+body.profile-moderator-page .btn-outline-primary:hover .like-count,
+body.profile-verified-page .btn-outline-primary:hover .like-count,
+body.profile-supporter-page .btn-outline-primary:hover .like-count {
+  color: #ffffff !important;
+}
+
+body.profile-superadmin-page .btn-outline-secondary:hover .comment-count,
+body.profile-staff-page .btn-outline-secondary:hover .comment-count,
+body.profile-moderator-page .btn-outline-secondary:hover .comment-count,
+body.profile-verified-page .btn-outline-secondary:hover .comment-count,
+body.profile-supporter-page .btn-outline-secondary:hover .comment-count {
+  color: #1f2937 !important;
+}
+
+body.profile-superadmin-page .btn-outline-success:hover .share-count,
+body.profile-staff-page .btn-outline-success:hover .share-count,
+body.profile-moderator-page .btn-outline-success:hover .share-count,
+body.profile-verified-page .btn-outline-success:hover .share-count,
+body.profile-supporter-page .btn-outline-success:hover .share-count {
+  color: #ffffff !important;
 }
