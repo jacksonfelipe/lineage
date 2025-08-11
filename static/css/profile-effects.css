@@ -1403,6 +1403,24 @@ body.profile-supporter-page footer a:hover {
   opacity: 0.7;
 }
 
+/* Garantir que todos os parágrafos do footer sejam pretos */
+body.profile-superadmin-page footer p,
+body.profile-staff-page footer p,
+body.profile-moderator-page footer p,
+body.profile-verified-page footer p,
+body.profile-supporter-page footer p {
+  color: #000000 !important;
+}
+
+/* Garantir que spans dentro do footer sejam pretos */
+body.profile-superadmin-page footer span,
+body.profile-staff-page footer span,
+body.profile-moderator-page footer span,
+body.profile-verified-page footer span,
+body.profile-supporter-page footer span {
+  color: #000000 !important;
+}
+
 /* ===== SIDEBAR COM TEXTOS BRANCOS ===== */
 body.profile-superadmin-page .sidebar .nav-link,
 body.profile-staff-page .sidebar .nav-link,
