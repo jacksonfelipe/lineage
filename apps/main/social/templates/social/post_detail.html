@@ -236,7 +236,7 @@
                         <div>
                           <h6 class="mb-0">
                             <a href="{% url 'social:user_profile' comment.author.username %}" class="text-decoration-none">
-                              {{ comment.author.get_full_name|default:comment.author.username }}
+                              {{ comment.author.get_full_name|default:comment.author.username }}{% verified_badge comment.author "12px" %}
                             </a>
                           </h6>
                           <small class="text-muted">
@@ -279,7 +279,7 @@
                                   <div>
                                     <h6 class="mb-0 small">
                                       <a href="{% url 'social:user_profile' reply.author.username %}" class="text-decoration-none">
-                                        {{ reply.author.get_full_name|default:reply.author.username }}
+                                        {{ reply.author.get_full_name|default:reply.author.username }}{% verified_badge reply.author "10px" %}
                                       </a>
                                     </h6>
                                     <small class="text-muted">
