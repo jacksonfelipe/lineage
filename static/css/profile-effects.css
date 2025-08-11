@@ -49,10 +49,23 @@ body.profile-superadmin-page::before {
 }
 
 .profile-cover.profile-superadmin {
-  background: linear-gradient(135deg, #FFD700, #FF4500, #FFD700) !important;
+  position: relative;
+  background-size: cover !important;
+  background-position: center !important;
+  animation: superadmin-cover-shift 6s ease-in-out infinite;
+}
+
+.profile-cover.profile-superadmin::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.7), rgba(255, 69, 0, 0.7), rgba(255, 215, 0, 0.7));
   background-size: 200% 200% !important;
   animation: superadmin-cover-shift 6s ease-in-out infinite;
-  position: relative;
+  z-index: 1;
 }
 
 .profile-cover.profile-superadmin::after {
@@ -61,11 +74,12 @@ body.profile-superadmin-page::before {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #1a1a1a;
+  color: #ffffff;
   font-size: 24px;
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
   animation: superadmin-text-pulse 2s ease-in-out infinite;
+  z-index: 2;
 }
 
 .profile-avatar-container.profile-superadmin {
@@ -164,10 +178,23 @@ body.profile-staff-page::before {
 }
 
 .profile-cover.profile-staff {
-  background: linear-gradient(135deg, #4169E1, #8A2BE2, #4169E1) !important;
+  position: relative;
+  background-size: cover !important;
+  background-position: center !important;
+  animation: staff-cover-shift 8s ease-in-out infinite;
+}
+
+.profile-cover.profile-staff::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(65, 105, 225, 0.7), rgba(138, 43, 226, 0.7), rgba(65, 105, 225, 0.7));
   background-size: 200% 200% !important;
   animation: staff-cover-shift 8s ease-in-out infinite;
-  position: relative;
+  z-index: 1;
 }
 
 .profile-cover.profile-staff::after {
@@ -179,8 +206,9 @@ body.profile-staff-page::before {
   color: #ffffff;
   font-size: 22px;
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
   animation: staff-text-pulse 2.5s ease-in-out infinite;
+  z-index: 2;
 }
 
 .profile-avatar-container.profile-staff {
@@ -279,10 +307,23 @@ body.profile-moderator-page::before {
 }
 
 .profile-cover.profile-moderator {
-  background: linear-gradient(135deg, #32CD32, #228B22, #32CD32) !important;
+  position: relative;
+  background-size: cover !important;
+  background-position: center !important;
+  animation: moderator-cover-shift 7s ease-in-out infinite;
+}
+
+.profile-cover.profile-moderator::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(50, 205, 50, 0.7), rgba(34, 139, 34, 0.7), rgba(50, 205, 50, 0.7));
   background-size: 200% 200% !important;
   animation: moderator-cover-shift 7s ease-in-out infinite;
-  position: relative;
+  z-index: 1;
 }
 
 .profile-cover.profile-moderator::after {
@@ -294,8 +335,9 @@ body.profile-moderator-page::before {
   color: #ffffff;
   font-size: 20px;
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
   animation: moderator-text-pulse 2.2s ease-in-out infinite;
+  z-index: 2;
 }
 
 .profile-avatar-container.profile-moderator {
@@ -394,10 +436,23 @@ body.profile-verified-page::before {
 }
 
 .profile-cover.profile-verified {
-  background: linear-gradient(135deg, #87CEEB, #4682B4, #87CEEB) !important;
+  position: relative;
+  background-size: cover !important;
+  background-position: center !important;
+  animation: verified-cover-shift 10s ease-in-out infinite;
+}
+
+.profile-cover.profile-verified::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(135, 206, 235, 0.7), rgba(70, 130, 180, 0.7), rgba(135, 206, 235, 0.7));
   background-size: 200% 200% !important;
   animation: verified-cover-shift 10s ease-in-out infinite;
-  position: relative;
+  z-index: 1;
 }
 
 .profile-cover.profile-verified::after {
@@ -409,8 +464,9 @@ body.profile-verified-page::before {
   color: #ffffff;
   font-size: 18px;
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
   animation: verified-text-pulse 2.8s ease-in-out infinite;
+  z-index: 2;
 }
 
 .profile-avatar-container.profile-verified {
@@ -801,6 +857,65 @@ body.profile-verified-page::before {
   color: rgba(255, 255, 255, 0.8) !important;
 }
 
+/* Garantir que todos os textos sejam brancos e legíveis */
+.profile-container.profile-superadmin,
+.profile-container.profile-staff,
+.profile-container.profile-moderator,
+.profile-container.profile-verified {
+  color: #ffffff !important;
+}
+
+.profile-container.profile-superadmin p,
+.profile-container.profile-staff p,
+.profile-container.profile-moderator p,
+.profile-container.profile-verified p {
+  color: #ffffff !important;
+}
+
+.profile-container.profile-superadmin small,
+.profile-container.profile-staff small,
+.profile-container.profile-moderator small,
+.profile-container.profile-verified small {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.profile-container.profile-superadmin .card-text,
+.profile-container.profile-staff .card-text,
+.profile-container.profile-moderator .card-text,
+.profile-container.profile-verified .card-text {
+  color: #ffffff !important;
+}
+
+.profile-container.profile-superadmin .status-description,
+.profile-container.profile-staff .status-description,
+.profile-container.profile-moderator .status-description,
+.profile-container.profile-verified .status-description {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.profile-container.profile-superadmin .status-title,
+.profile-container.profile-staff .status-title,
+.profile-container.profile-moderator .status-title,
+.profile-container.profile-verified .status-title {
+  color: #ffffff !important;
+  font-weight: bold;
+}
+
+/* Garantir que os ícones sejam visíveis */
+.profile-container.profile-superadmin .bi,
+.profile-container.profile-staff .bi,
+.profile-container.profile-moderator .bi,
+.profile-container.profile-verified .bi {
+  color: #ffffff !important;
+}
+
+.profile-container.profile-superadmin .text-muted .bi,
+.profile-container.profile-staff .text-muted .bi,
+.profile-container.profile-moderator .text-muted .bi,
+.profile-container.profile-verified .text-muted .bi {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
 .profile-container.profile-superadmin .card,
 .profile-container.profile-staff .card,
 .profile-container.profile-moderator .card,
@@ -856,6 +971,40 @@ body.profile-verified-page::before {
 .profile-container.profile-verified .profile-info {
   position: relative;
   z-index: 2;
+}
+
+/* Garantir que links e elementos de navegação sejam visíveis */
+.profile-container.profile-superadmin a:not(.btn),
+.profile-container.profile-staff a:not(.btn),
+.profile-container.profile-moderator a:not(.btn),
+.profile-container.profile-verified a:not(.btn) {
+  color: #ffffff !important;
+  text-decoration: none;
+}
+
+.profile-container.profile-superadmin a:not(.btn):hover,
+.profile-container.profile-staff a:not(.btn):hover,
+.profile-container.profile-moderator a:not(.btn):hover,
+.profile-container.profile-verified a:not(.btn):hover {
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-decoration: underline;
+}
+
+/* Garantir que os elementos de estatísticas sejam visíveis */
+.profile-container.profile-superadmin .d-flex.align-items-center a strong,
+.profile-container.profile-staff .d-flex.align-items-center a strong,
+.profile-container.profile-moderator .d-flex.align-items-center a strong,
+.profile-container.profile-verified .d-flex.align-items-center a strong {
+  color: #ffffff !important;
+  font-weight: bold;
+}
+
+/* Garantir que os elementos de informação de contato sejam visíveis */
+.profile-container.profile-superadmin .d-flex.flex-wrap span,
+.profile-container.profile-staff .d-flex.flex-wrap span,
+.profile-container.profile-moderator .d-flex.flex-wrap span,
+.profile-container.profile-verified .d-flex.flex-wrap span {
+  color: rgba(255, 255, 255, 0.9) !important;
 }
 
 /* Efeito de destaque nos botões de ação */
