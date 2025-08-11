@@ -205,21 +205,28 @@ class LicenseVerificationAdmin(BaseModelAdmin):
     
     def response_time_with_icon(self, obj):
         """Exibe o tempo de resposta com ícone"""
-        if obj.response_time:
-            if obj.response_time < 1.0:
-                color = 'success'
-                icon = 'fas fa-bolt'
-            elif obj.response_time < 3.0:
-                color = 'warning'
-                icon = 'fas fa-clock'
-            else:
-                color = 'danger'
-                icon = 'fas fa-hourglass-half'
-            
-            return format_html(
-                '<i class="{} text-{}"></i> <span class="text-{}">{:.2f}s</span>',
-                icon, color, color, obj.response_time
-            )
+        if obj.response_time is not None:
+            try:
+                # Ensure we're working with a float value
+                response_time = float(obj.response_time)
+                if response_time < 1.0:
+                    color = 'success'
+                    icon = 'fas fa-bolt'
+                elif response_time < 3.0:
+                    color = 'warning'
+                    icon = 'fas fa-clock'
+                else:
+                    color = 'danger'
+                    icon = 'fas fa-hourglass-half'
+                
+                # Format the time as string first, then use it in format_html
+                time_str = f"{response_time:.2f}s"
+                return format_html(
+                    '<i class="{} text-{}"></i> <span class="text-{}">{}</span>',
+                    icon, color, color, time_str
+                )
+            except (ValueError, TypeError):
+                return "-"
         return "-"
     response_time_with_icon.short_description = _("Tempo de Resposta")
     
