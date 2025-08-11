@@ -15,7 +15,17 @@ def verified_badge(user, size="16px", show_tooltip=True):
         size: Tamanho do ícone (ex: "16px", "20px")
         show_tooltip: Se deve mostrar tooltip explicativo
     """
-    if not user or not getattr(user, 'is_verified', False):
+    # Verificação mais robusta
+    if not user:
+        return ""
+    
+    # Verifica se o campo existe e é True
+    try:
+        is_verified = getattr(user, 'is_verified', False)
+        if not is_verified:
+            return ""
+    except Exception:
+        # Se houver qualquer erro, não mostra o badge
         return ""
     
     tooltip_attr = f'title="{_("Conta verificada")}"' if show_tooltip else ""
@@ -58,4 +68,10 @@ def is_verified(user):
     """
     Filtro para verificar se um usuário é verificado
     """
-    return getattr(user, 'is_verified', False) if user else False
+    if not user:
+        return False
+    
+    try:
+        return getattr(user, 'is_verified', False)
+    except Exception:
+        return False
