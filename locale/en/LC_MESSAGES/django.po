@@ -6649,6 +6649,9 @@ msgstr "Go back to registration"
 msgid "Conta verificada com sucesso!"
 msgstr "Account successfully verified!"
 
+msgid "Conta Verificada"
+msgstr "Verified Account"
+
 msgid "Agora você pode acessar sua conta com segurança."
 msgstr "Now you can access your account safely."
 

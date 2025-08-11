@@ -35,7 +35,7 @@ class User(BaseModel, AbstractUser):
     
     is_email_verified = models.BooleanField(default=False, verbose_name=_("E-mail verificado"))
     is_2fa_enabled = models.BooleanField(default=False, verbose_name=_("2FA habilitado"))
-    is_verified = models.BooleanField(default=False, verbose_name=_("Conta verificada"), help_text=_("Indica se a conta foi verificada pela equipe"))
+    is_verified_account = models.BooleanField(default=False, verbose_name=_("Conta verificada"), help_text=_("Indica se a conta foi verificada pela equipe"))
     social_verified = models.BooleanField(default=False, verbose_name=_("Verificado na rede social"), help_text=_("Indica se o usuário é verificado na rede social"))
 
     # Tipos de perfil
