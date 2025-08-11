@@ -1,6 +1,17 @@
 /* ============================================================================
-   ESTILOS PARA A REDE SOCIAL
-   ============================================================================ */
+ESTILOS PARA A REDE SOCIAL
+============================================================================ */
+
+/* Badge de verificação */
+.verified-badge {
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.verified-badge:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
 
 /* Botões de ação do formulário de posts */
 .action-button-wrapper {

@@ -21,7 +21,8 @@ def verified_badge(user, size="16px", show_tooltip=True):
     
     # Verifica se o campo existe e é True
     try:
-        is_verified = getattr(user, 'is_verified', False)
+        # Acessar diretamente o campo do modelo
+        is_verified = user.social_verified
         if not is_verified:
             return ""
     except Exception:
@@ -64,14 +65,14 @@ def user_display_name(user, show_verified=True, size="16px"):
 
 
 @register.filter
-def is_verified(user):
+def user_is_verified(user):
     """
-    Filtro para verificar se um usuário é verificado
+    Filtro para verificar se um usuário é verificado na rede social
     """
     if not user:
         return False
     
     try:
-        return getattr(user, 'is_verified', False)
+        return user.social_verified
     except Exception:
         return False
