@@ -242,21 +242,50 @@ def post_detail(request, post_id):
     post.is_liked_by_current_user = post.is_liked_by(request.user)
     
     # Formulário para comentários
+    form = CommentForm()  # Inicializar form por padrão
+    
     if request.method == 'POST':
-        form = CommentForm(request.POST, request.FILES)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.author = request.user
-            comment.save()
-            
-            # Atualizar contador de comentários
-            post.update_counts()
-            
-            messages.success(request, _('Comentário adicionado!'))
-            return redirect('social:post_detail', post_id=post.id)
-    else:
-        form = CommentForm()
+        # Verificar se é uma resposta a um comentário
+        parent_comment_id = request.POST.get('parent_comment_id')
+        
+        if parent_comment_id:
+            # É uma resposta
+            try:
+                parent_comment = Comment.objects.get(id=parent_comment_id, post=post)
+                reply_content = request.POST.get('reply_content', '').strip()
+                
+                if reply_content:
+                    # Criar a resposta
+                    reply = Comment.objects.create(
+                        post=post,
+                        author=request.user,
+                        content=reply_content,
+                        parent=parent_comment
+                    )
+                    
+                    # Atualizar contador de comentários
+                    post.update_counts()
+                    
+                    messages.success(request, _('Resposta adicionada!'))
+                    return redirect('social:post_detail', post_id=post.id)
+                else:
+                    messages.error(request, _('A resposta não pode estar vazia.'))
+            except Comment.DoesNotExist:
+                messages.error(request, _('Comentário não encontrado.'))
+        else:
+            # É um comentário normal
+            form = CommentForm(request.POST, request.FILES)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.post = post
+                comment.author = request.user
+                comment.save()
+                
+                # Atualizar contador de comentários
+                post.update_counts()
+                
+                messages.success(request, _('Comentário adicionado!'))
+                return redirect('social:post_detail', post_id=post.id)
     
     # Buscar comentários do post
     comments = post.comments.filter(parent=None).order_by('created_at')
