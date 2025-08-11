@@ -213,6 +213,12 @@ class License(BaseModel):
         self.status = 'suspended'
         self.save()
     
+    def reactivate(self):
+        """Reativa uma licença suspensa"""
+        if self.status == 'suspended':
+            self.status = 'active'
+            self.save()
+    
     def renew(self, days=365):
         """Renova a licença por um número específico de dias"""
         if self.expires_at:

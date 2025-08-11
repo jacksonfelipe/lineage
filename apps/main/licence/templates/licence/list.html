@@ -156,7 +156,7 @@
                                        title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    {% if license.status == 'inactive' %}
+                                    {% if license.status == 'pending' %}
                                     <a href="{% url 'licence:activate' license.id %}" 
                                        class="btn btn-sm btn-outline-success" 
                                        title="Ativar"
@@ -169,6 +169,13 @@
                                        title="Desativar"
                                        onclick="return confirm('Desativar esta licença?')">
                                         <i class="fas fa-pause"></i>
+                                    </a>
+                                    {% elif license.status == 'suspended' %}
+                                    <a href="{% url 'licence:reactivate' license.id %}" 
+                                       class="btn btn-sm btn-outline-success" 
+                                       title="Reativar"
+                                       onclick="return confirm('Reativar esta licença?')">
+                                        <i class="fas fa-redo"></i>
                                     </a>
                                     {% endif %}
                                 </div>
