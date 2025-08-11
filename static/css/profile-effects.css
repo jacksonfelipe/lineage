@@ -395,11 +395,11 @@ body.profile-verified-page {
   position: relative;
 }
 
-/* ===== APOIADOR - APOIADOR ===== */
+/* ===== APOIADOR - APOIADOR ESCARLATE ===== */
 body.profile-supporter-page {
-  background: linear-gradient(135deg, #1a0f0f 0%, #2a1a1a 25%, #1a0f0f 50%, #2a1a1a 75%, #1a0f0f 100%);
+  background: linear-gradient(135deg, #0f0505 0%, #1a0a0a 25%, #2a0f0f 50%, #1a0a0a 75%, #0f0505 100%);
   background-size: 400% 400%;
-  animation: supporter-bg-shift 12s ease-in-out infinite;
+  animation: supporter-bg-shift 8s ease-in-out infinite;
   position: relative;
 }
 
@@ -426,11 +426,13 @@ body.profile-supporter-page::before {
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(circle at 20% 80%, rgba(220, 20, 60, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(178, 34, 34, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 60%, rgba(220, 20, 60, 0.05) 0%, transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(255, 23, 68, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(213, 0, 0, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, rgba(183, 28, 28, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 60% 40%, rgba(255, 23, 68, 0.05) 0%, transparent 50%);
   pointer-events: none;
   z-index: -1;
+  animation: supporter-bg-pulse 6s ease-in-out infinite;
 }
 
 .profile-container.profile-verified {
@@ -696,11 +698,6 @@ body.profile-supporter-page::before {
 
 /* Verified Animations */
 @keyframes verified-bg-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-@keyframes supporter-bg-shift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
@@ -1091,4 +1088,430 @@ body.profile-supporter-page::before {
   border-color: #87CEEB;
   color: #ffffff;
   box-shadow: 0 0 20px rgba(135, 206, 235, 0.5);
+}
+
+/* ===== ANIMAÇÕES ESPECÍFICAS DO APOIADOR ===== */
+@keyframes supporter-bg-pulse {
+  0%, 100% { 
+    opacity: 0.8; 
+    transform: scale(1); 
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.02); 
+  }
+}
+
+/* ===== APOIADOR - APOIADOR ESCARLATE ===== */
+.profile-container.profile-supporter {
+  background: linear-gradient(145deg, #2a0f0f, #1a0a0a);
+  border: 3px solid #DC143C;
+  border-radius: 20px;
+  box-shadow: 
+    0 0 30px rgba(220, 20, 60, 0.5),
+    inset 0 0 30px rgba(220, 20, 60, 0.1);
+  position: relative;
+  overflow: hidden;
+  animation: supporter-glow 4s ease-in-out infinite;
+}
+
+.profile-container.profile-supporter::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, #DC143C, transparent, #B71C1C, transparent);
+  animation: supporter-rotate 10s linear infinite;
+  opacity: 0.1;
+  z-index: -1;
+}
+
+.profile-cover.profile-supporter {
+  position: relative;
+  background-size: cover !important;
+  background-position: center !important;
+  animation: supporter-cover-shift 5s ease-in-out infinite;
+}
+
+.profile-cover.profile-supporter::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.7), rgba(183, 28, 28, 0.7), rgba(220, 20, 60, 0.7));
+  background-size: 200% 200% !important;
+  animation: supporter-cover-shift 5s ease-in-out infinite;
+  z-index: 1;
+}
+
+.profile-cover.profile-supporter::after {
+  content: '❤️ APOIADOR ESCARLATE ❤️';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: bold;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  animation: supporter-text-pulse 2.3s ease-in-out infinite;
+  z-index: 2;
+}
+
+.profile-avatar-container.profile-supporter {
+  border: 4px solid #DC143C;
+  box-shadow: 
+    0 0 20px rgba(220, 20, 60, 0.8),
+    inset 0 0 20px rgba(220, 20, 60, 0.3);
+  animation: supporter-avatar-pulse 3s ease-in-out infinite;
+}
+
+.avatar-glow.profile-supporter {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(220, 20, 60, 0.6), transparent);
+  animation: supporter-glow-pulse 2.3s ease-in-out infinite;
+  z-index: -1;
+}
+
+.profile-name.profile-supporter {
+  color: #DC143C !important;
+  text-shadow: 
+    0 0 10px rgba(220, 20, 60, 0.8),
+    2px 2px 4px rgba(0, 0, 0, 0.8);
+  font-weight: bold;
+  animation: supporter-text-shimmer 3.3s ease-in-out infinite;
+}
+
+.profile-badge.profile-supporter {
+  background: linear-gradient(45deg, #DC143C, #B71C1C);
+  border: 2px solid #DC143C;
+  border-radius: 50%;
+  padding: 8px;
+  box-shadow: 0 0 15px rgba(220, 20, 60, 0.8);
+  animation: supporter-badge-heartbeat 4s ease-in-out infinite;
+}
+
+.profile-status-display.profile-supporter {
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.2), rgba(183, 28, 28, 0.2));
+  border: 2px solid #DC143C;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(220, 20, 60, 0.4);
+  animation: supporter-status-pulse 3.3s ease-in-out infinite;
+}
+
+/* ===== ANIMAÇÕES DO APOIADOR ===== */
+@keyframes supporter-glow {
+  0%, 100% { 
+    box-shadow: 
+      0 0 30px rgba(220, 20, 60, 0.5),
+      inset 0 0 30px rgba(220, 20, 60, 0.1);
+  }
+  50% { 
+    box-shadow: 
+      0 0 40px rgba(220, 20, 60, 0.8),
+      inset 0 0 40px rgba(220, 20, 60, 0.2);
+  }
+}
+
+@keyframes supporter-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes supporter-cover-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes supporter-text-pulse {
+  0%, 100% { 
+    opacity: 1; 
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% { 
+    opacity: 0.8; 
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+@keyframes supporter-avatar-pulse {
+  0%, 100% { 
+    box-shadow: 
+      0 0 20px rgba(220, 20, 60, 0.8),
+      inset 0 0 20px rgba(220, 20, 60, 0.3);
+  }
+  50% { 
+    box-shadow: 
+      0 0 30px rgba(220, 20, 60, 1),
+      inset 0 0 30px rgba(220, 20, 60, 0.5);
+  }
+}
+
+@keyframes supporter-glow-pulse {
+  0%, 100% { 
+    opacity: 0.6; 
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.8; 
+    transform: scale(1.1);
+  }
+}
+
+@keyframes supporter-text-shimmer {
+  0%, 100% { 
+    text-shadow: 
+      0 0 10px rgba(220, 20, 60, 0.8),
+      2px 2px 4px rgba(0, 0, 0, 0.8);
+  }
+  50% { 
+    text-shadow: 
+      0 0 20px rgba(220, 20, 60, 1),
+      2px 2px 8px rgba(0, 0, 0, 0.8);
+  }
+}
+
+@keyframes supporter-badge-heartbeat {
+  0%, 100% { 
+    transform: scale(1); 
+    box-shadow: 0 0 15px rgba(220, 20, 60, 0.8);
+  }
+  25% { 
+    transform: scale(1.1); 
+    box-shadow: 0 0 20px rgba(220, 20, 60, 1);
+  }
+  50% { 
+    transform: scale(1); 
+    box-shadow: 0 0 15px rgba(220, 20, 60, 0.8);
+  }
+  75% { 
+    transform: scale(1.05); 
+    box-shadow: 0 0 18px rgba(220, 20, 60, 0.9);
+  }
+}
+
+@keyframes supporter-status-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(220, 20, 60, 0.4);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(220, 20, 60, 0.6);
+  }
+}
+
+/* ===== NAVEGAÇÃO COM TEXTOS BRANCOS ===== */
+body.profile-superadmin-page .navbar-brand,
+body.profile-staff-page .navbar-brand,
+body.profile-moderator-page .navbar-brand,
+body.profile-verified-page .navbar-brand,
+body.profile-supporter-page .navbar-brand {
+  color: #ffffff !important;
+}
+body.profile-superadmin-page .navbar-nav .nav-link,
+body.profile-staff-page .navbar-nav .nav-link,
+body.profile-moderator-page .navbar-nav .nav-link,
+body.profile-verified-page .navbar-nav .nav-link,
+body.profile-supporter-page .navbar-nav .nav-link {
+  color: #ffffff !important;
+}
+body.profile-superadmin-page .dropdown-item,
+body.profile-staff-page .dropdown-item,
+body.profile-moderator-page .dropdown-item,
+body.profile-verified-page .dropdown-item,
+body.profile-supporter-page .dropdown-item {
+  color: #ffffff !important;
+}
+body.profile-superadmin-page .btn,
+body.profile-staff-page .btn,
+body.profile-moderator-page .btn,
+body.profile-verified-page .btn,
+body.profile-supporter-page .btn {
+  color: #ffffff !important;
+}
+body.profile-superadmin-page .bi,
+body.profile-staff-page .bi,
+body.profile-moderator-page .bi,
+body.profile-verified-page .bi,
+body.profile-supporter-page .bi {
+  color: #ffffff !important;
+}
+body.profile-superadmin-page .text-dark,
+body.profile-staff-page .text-dark,
+body.profile-moderator-page .text-dark,
+body.profile-verified-page .text-dark,
+body.profile-supporter-page .text-dark {
+  color: #ffffff !important;
+}
+body.profile-superadmin-page .text-muted,
+body.profile-staff-page .text-muted,
+body.profile-moderator-page .text-muted,
+body.profile-verified-page .text-muted,
+body.profile-supporter-page .text-muted {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* ===== SIDEBAR COM TEXTOS BRANCOS ===== */
+body.profile-superadmin-page .sidebar .nav-link,
+body.profile-staff-page .sidebar .nav-link,
+body.profile-moderator-page .sidebar .nav-link,
+body.profile-verified-page .sidebar .nav-link,
+body.profile-supporter-page .sidebar .nav-link {
+  color: #ffffff !important;
+}
+body.profile-superadmin-page .sidebar .nav-link:hover,
+body.profile-staff-page .sidebar .nav-link:hover,
+body.profile-moderator-page .sidebar .nav-link:hover,
+body.profile-verified-page .sidebar .nav-link:hover,
+body.profile-supporter-page .sidebar .nav-link:hover {
+  color: #ffffff !important;
+}
+body.profile-superadmin-page .sidebar .nav-link.active,
+body.profile-staff-page .sidebar .nav-link.active,
+body.profile-moderator-page .sidebar .nav-link.active,
+body.profile-verified-page .sidebar .nav-link.active,
+body.profile-supporter-page .sidebar .nav-link.active {
+  color: #ffffff !important;
+}
+
+/* ===== OUTROS ELEMENTOS DA INTERFACE ===== */
+body.profile-superadmin-page h1,
+body.profile-superadmin-page h2,
+body.profile-superadmin-page h3,
+body.profile-superadmin-page h4,
+body.profile-superadmin-page h5,
+body.profile-superadmin-page h6,
+body.profile-staff-page h1,
+body.profile-staff-page h2,
+body.profile-staff-page h3,
+body.profile-staff-page h4,
+body.profile-staff-page h5,
+body.profile-staff-page h6,
+body.profile-moderator-page h1,
+body.profile-moderator-page h2,
+body.profile-moderator-page h3,
+body.profile-moderator-page h4,
+body.profile-moderator-page h5,
+body.profile-moderator-page h6,
+body.profile-verified-page h1,
+body.profile-verified-page h2,
+body.profile-verified-page h3,
+body.profile-verified-page h4,
+body.profile-verified-page h5,
+body.profile-verified-page h6,
+body.profile-supporter-page h1,
+body.profile-supporter-page h2,
+body.profile-supporter-page h3,
+body.profile-supporter-page h4,
+body.profile-supporter-page h5,
+body.profile-supporter-page h6 {
+  color: #ffffff !important;
+}
+body.profile-superadmin-page p,
+body.profile-staff-page p,
+body.profile-moderator-page p,
+body.profile-verified-page p,
+body.profile-supporter-page p {
+  color: #ffffff !important;
+}
+body.profile-superadmin-page a,
+body.profile-staff-page a,
+body.profile-moderator-page a,
+body.profile-verified-page a,
+body.profile-supporter-page a {
+  color: #ffffff !important;
+}
+body.profile-superadmin-page .badge,
+body.profile-staff-page .badge,
+body.profile-moderator-page .badge,
+body.profile-verified-page .badge,
+body.profile-supporter-page .badge {
+  color: #ffffff !important;
+}
+body.profile-superadmin-page .form-control,
+body.profile-staff-page .form-control,
+body.profile-moderator-page .form-control,
+body.profile-verified-page .form-control,
+body.profile-supporter-page .form-control {
+  color: #ffffff !important;
+}
+body.profile-superadmin-page .form-label,
+body.profile-staff-page .form-label,
+body.profile-moderator-page .form-label,
+body.profile-verified-page .form-label,
+body.profile-supporter-page .form-label {
+  color: #ffffff !important;
+}
+body.profile-superadmin-page .form-text,
+body.profile-staff-page .form-text,
+body.profile-moderator-page .form-text,
+body.profile-verified-page .form-text,
+body.profile-supporter-page .form-text {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* ===== BOTÕES DO APOIADOR ===== */
+.profile-container.profile-supporter .btn-outline-primary {
+  border-color: #DC143C;
+  color: #DC143C;
+}
+
+.profile-container.profile-supporter .btn-outline-primary:hover {
+  background-color: #DC143C;
+  border-color: #DC143C;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(220, 20, 60, 0.5);
+}
+
+/* ===== ELEMENTOS ESPECÍFICOS DO APOIADOR ===== */
+.profile-container.profile-supporter .text-muted,
+.profile-container.profile-supporter .card-text,
+.profile-container.profile-supporter .status-description,
+.profile-container.profile-supporter .status-title,
+.profile-container.profile-supporter .bi,
+.profile-container.profile-supporter .text-muted .bi {
+  color: #ffffff !important;
+}
+
+.profile-container.profile-supporter .text-muted .bi {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.profile-container.profile-supporter .card {
+  background: transparent;
+  border: none;
+}
+
+.profile-container.profile-supporter .d-flex.align-items-center a,
+.profile-container.profile-supporter .d-flex.align-items-center a:hover,
+.profile-container.profile-supporter .d-flex.align-items-center a strong,
+.profile-container.profile-supporter .d-flex.align-items-center a:hover strong,
+.profile-container.profile-supporter .d-flex.flex-wrap span,
+.profile-container.profile-supporter a:not(.btn),
+.profile-container.profile-supporter a:not(.btn):hover {
+  color: #ffffff !important;
+}
+
+.profile-container.profile-supporter a:not(.btn):hover {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.profile-container.profile-supporter .d-flex.align-items-center a:hover strong {
+  text-shadow: 0 0 10px currentColor;
+}
+
+/* ===== STATUS ICON DO APOIADOR ===== */
+.profile-status-display.profile-supporter .status-icon {
+  background: linear-gradient(45deg, #DC143C, #B71C1C);
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(220, 20, 60, 0.6);
 }

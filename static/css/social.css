@@ -85,17 +85,42 @@ BADGES DE TIPO DE PERFIL
     box-shadow: 0 0 15px rgba(30, 144, 255, 0.7);
 }
 
-/* Apoiador - Vermelho */
+/* Apoiador - Escarlate/Ruby com Neon */
 .profile-supporter {
-    background: linear-gradient(135deg, #DC143C, #B22222);
-    color: white;
-    border: 2px solid #DC143C;
-    box-shadow: 0 0 10px rgba(220, 20, 60, 0.5);
+    background: linear-gradient(135deg, #FF1744, #D50000, #B71C1C);
+    color: #FFFFFF;
+    border: 2px solid #FF1744;
+    box-shadow: 
+        0 0 15px rgba(255, 23, 68, 0.6),
+        0 0 30px rgba(255, 23, 68, 0.3),
+        0 0 45px rgba(255, 23, 68, 0.1),
+        inset 0 0 20px rgba(255, 23, 68, 0.1);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-supporter::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 23, 68, 0.1), transparent);
+    animation: supporter-shimmer 3s infinite;
+    pointer-events: none;
 }
 
 .profile-supporter:hover {
-    background: linear-gradient(135deg, #B22222, #8B0000);
-    box-shadow: 0 0 15px rgba(220, 20, 60, 0.7);
+    background: linear-gradient(135deg, #D50000, #B71C1C, #8E0000);
+    box-shadow: 
+        0 0 20px rgba(255, 23, 68, 0.8),
+        0 0 40px rgba(255, 23, 68, 0.5),
+        0 0 60px rgba(255, 23, 68, 0.2),
+        inset 0 0 30px rgba(255, 23, 68, 0.2);
+    transform: scale(1.02);
+    text-shadow: 0 0 15px rgba(255, 255, 255, 1);
 }
 
 /* Regular - Cinza */
@@ -160,15 +185,35 @@ ESTILOS DE PERFIL COM CORES DIFERENCIADAS
     color: white;
 }
 
-/* Apoiador - Borda vermelha */
+/* Apoiador - Borda escarlate com neon */
 .profile-container.profile-supporter {
-    border: 3px solid #DC143C;
-    box-shadow: 0 0 20px rgba(220, 20, 60, 0.3);
+    border: 3px solid #FF1744;
+    box-shadow: 
+        0 0 25px rgba(255, 23, 68, 0.5),
+        0 0 50px rgba(255, 23, 68, 0.2),
+        inset 0 0 30px rgba(255, 23, 68, 0.05);
+    background: linear-gradient(135deg, rgba(255, 23, 68, 0.03), rgba(213, 0, 0, 0.03));
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-container.profile-supporter::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 23, 68, 0.08), transparent);
+    animation: supporter-sweep 4s infinite;
+    pointer-events: none;
 }
 
 .profile-container.profile-supporter .card-header {
-    background: linear-gradient(135deg, #DC143C, #B22222);
+    background: linear-gradient(135deg, #FF1744, #D50000, #B71C1C);
     color: white;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    box-shadow: inset 0 0 20px rgba(255, 23, 68, 0.3);
 }
 
 /* Regular - Sem borda especial */
@@ -208,10 +253,32 @@ AVATAR COM BORDA DIFERENCIADA
     box-shadow: 0 0 15px rgba(30, 144, 255, 0.6);
 }
 
-/* Apoiador - Borda vermelha */
+/* Apoiador - Borda escarlate com neon */
 .profile-avatar-container.profile-supporter {
-    border: 4px solid #DC143C !important;
-    box-shadow: 0 0 15px rgba(220, 20, 60, 0.6);
+    border: 4px solid #FF1744 !important;
+    box-shadow: 
+        0 0 20px rgba(255, 23, 68, 0.7),
+        0 0 40px rgba(255, 23, 68, 0.3),
+        inset 0 0 15px rgba(255, 23, 68, 0.1);
+    position: relative;
+}
+
+.profile-avatar-container.profile-supporter::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #FF1744, #D50000, #B71C1C, #FF1744) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    animation: supporter-border-rotate 3s linear infinite;
+    z-index: -1;
 }
 
 /* Regular - Borda branca padrão */
@@ -247,10 +314,27 @@ NOME DO USUÁRIO COM CORES DIFERENCIADAS
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* Apoiador - Vermelho */
+/* Apoiador - Escarlate com neon */
 .profile-name.profile-supporter {
-    color: #DC143C !important;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    color: #FF1744 !important;
+    text-shadow: 
+        0 0 10px rgba(255, 23, 68, 0.8),
+        0 0 20px rgba(255, 23, 68, 0.4),
+        1px 1px 2px rgba(0, 0, 0, 0.5);
+    font-weight: 700;
+    position: relative;
+}
+
+.profile-name.profile-supporter::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(255, 23, 68, 0.1), transparent);
+    animation: supporter-text-shimmer 2s ease-in-out infinite;
+    pointer-events: none;
 }
 
 /* Regular - Cor padrão */
@@ -994,11 +1078,29 @@ NOME DO USUÁRIO COM CORES DIFERENCIADAS
 }
 
 .badge.profile-supporter {
-  background: linear-gradient(135deg, #DC143C, #B22222, #8B0000) !important;
+  background: linear-gradient(135deg, #FF1744, #D50000, #B71C1C) !important;
   color: white !important;
   font-weight: bold !important;
-  border: 1px solid #DC143C !important;
-  box-shadow: 0 0 10px rgba(220, 20, 60, 0.5) !important;
+  border: 2px solid #FF1744 !important;
+  box-shadow: 
+      0 0 15px rgba(255, 23, 68, 0.6),
+      0 0 30px rgba(255, 23, 68, 0.3),
+      inset 0 0 10px rgba(255, 23, 68, 0.2) !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.badge.profile-supporter::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: supporter-badge-shimmer 2s infinite;
+  pointer-events: none;
 }
 
 /* ===== RESPONSIVIDADE ===== */
@@ -1050,8 +1152,23 @@ NOME DO USUÁRIO COM CORES DIFERENCIADAS
 }
 
 .profile-cover.profile-supporter {
-  background: linear-gradient(135deg, #DC143C, #B22222, #8B0000) !important;
+  background: linear-gradient(135deg, #FF1744, #D50000, #B71C1C) !important;
   position: relative !important;
+  overflow: hidden !important;
+}
+
+.profile-cover.profile-supporter::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+      radial-gradient(circle at 20% 50%, rgba(255, 23, 68, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(213, 0, 0, 0.2) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, rgba(183, 28, 28, 0.2) 0%, transparent 50%);
+  animation: supporter-cover-pulse 4s ease-in-out infinite;
 }
 
 /* Efeito de overlay nos covers */
@@ -1183,15 +1300,36 @@ NOME DO USUÁRIO COM CORES DIFERENCIADAS
 }
 
 .profile-status-display.profile-supporter {
-  background: linear-gradient(135deg, rgba(220, 20, 60, 0.2), rgba(178, 34, 34, 0.2), rgba(139, 0, 0, 0.2)) !important;
-  border: 2px solid rgba(220, 20, 60, 0.5) !important;
-  box-shadow: 0 0 20px rgba(220, 20, 60, 0.3) !important;
+  background: linear-gradient(135deg, rgba(255, 23, 68, 0.2), rgba(213, 0, 0, 0.2), rgba(183, 28, 28, 0.2)) !important;
+  border: 2px solid rgba(255, 23, 68, 0.6) !important;
+  box-shadow: 
+      0 0 20px rgba(255, 23, 68, 0.4),
+      inset 0 0 20px rgba(255, 23, 68, 0.1) !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.6) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.profile-status-display.profile-supporter::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: supporter-status-sweep 3s infinite;
+  pointer-events: none;
 }
 
 .profile-status-display.profile-supporter .status-icon {
-  background: linear-gradient(135deg, #DC143C, #B22222) !important;
+  background: linear-gradient(135deg, #FF1744, #D50000) !important;
   color: white !important;
-  box-shadow: 0 0 15px rgba(220, 20, 60, 0.6) !important;
+  box-shadow: 
+      0 0 15px rgba(255, 23, 68, 0.6),
+      0 0 30px rgba(255, 23, 68, 0.3) !important;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8) !important;
+  animation: supporter-heart-pulse 2s ease-in-out infinite !important;
 }
 
 @keyframes status-shimmer {
@@ -1267,8 +1405,11 @@ NOME DO USUÁRIO COM CORES DIFERENCIADAS
 }
 
 .avatar-glow.profile-supporter {
-  background: radial-gradient(circle, rgba(220, 20, 60, 0.6), transparent 70%) !important;
-  box-shadow: 0 0 30px rgba(220, 20, 60, 0.8) !important;
+  background: radial-gradient(circle, rgba(255, 23, 68, 0.7), transparent 70%) !important;
+  box-shadow: 
+      0 0 30px rgba(255, 23, 68, 0.8),
+      0 0 60px rgba(255, 23, 68, 0.4) !important;
+  animation: supporter-avatar-glow 3s ease-in-out infinite !important;
 }
 
 @keyframes avatar-glow-pulse {
@@ -1302,5 +1443,69 @@ NOME DO USUÁRIO COM CORES DIFERENCIADAS
   
   .profile-avatar-container:hover .profile-avatar-image {
     transform: scale(1.02) !important;
+  }
+}
+
+/* ===== ANIMAÇÕES ESPECÍFICAS DO APOIADOR ===== */
+@keyframes supporter-shimmer {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+@keyframes supporter-sweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes supporter-border-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes supporter-text-shimmer {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+@keyframes supporter-badge-shimmer {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+@keyframes supporter-cover-pulse {
+  0%, 100% { 
+    opacity: 0.3; 
+    transform: scale(1); 
+  }
+  50% { 
+    opacity: 0.6; 
+    transform: scale(1.05); 
+  }
+}
+
+@keyframes supporter-status-sweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes supporter-heart-pulse {
+  0%, 100% { 
+    transform: scale(1); 
+    filter: brightness(1);
+  }
+  50% { 
+    transform: scale(1.1); 
+    filter: brightness(1.3);
+  }
+}
+
+@keyframes supporter-avatar-glow {
+  0%, 100% { 
+    opacity: 0.7; 
+    transform: scale(1); 
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.15); 
   }
 }
