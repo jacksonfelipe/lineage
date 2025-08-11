@@ -182,7 +182,7 @@
                   </button>
                   
                   <!-- Botão de comentar -->
-                  <a href="{% url 'social:post_detail' post.id %}" class="btn btn-outline-secondary btn-sm">
+                  <a href="{% url 'social:post_detail' post.id %}" class="btn btn-outline-secondary btn-sm" title="{% trans 'Ver comentários' %}">
                     <i class="bi bi-chat"></i>
                     <span>{{ post.comments_count }}</span>
                   </a>

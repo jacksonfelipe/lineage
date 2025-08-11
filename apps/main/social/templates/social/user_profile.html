@@ -326,10 +326,10 @@
                       </button>
                       
                       <!-- Comentários -->
-                      <button class="btn btn-sm btn-outline-secondary me-2 comment-btn" data-post-id="{{ post.id }}">
+                      <a href="{% url 'social:post_detail' post.id %}" class="btn btn-sm btn-outline-secondary me-2" title="{% trans 'Ver comentários' %}">
                         <i class="bi bi-chat"></i>
                         <span class="comment-count">{{ post.comments_count }}</span>
-                      </button>
+                      </a>
                       
                       <!-- Compartilhar -->
                       <button class="btn btn-sm btn-outline-success me-2 share-btn" data-post-id="{{ post.id }}">
