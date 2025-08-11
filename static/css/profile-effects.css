@@ -1360,6 +1360,49 @@ body.profile-supporter-page .text-muted {
   color: rgba(255, 255, 255, 0.7) !important;
 }
 
+/* ===== EXCEÇÕES PARA O FOOTER ===== */
+/* Manter o footer com texto preto em todos os tipos de perfil */
+body.profile-superadmin-page footer,
+body.profile-staff-page footer,
+body.profile-moderator-page footer,
+body.profile-verified-page footer,
+body.profile-supporter-page footer {
+  color: #000000 !important;
+}
+
+body.profile-superadmin-page footer .text-dark,
+body.profile-staff-page footer .text-dark,
+body.profile-moderator-page footer .text-dark,
+body.profile-verified-page footer .text-dark,
+body.profile-supporter-page footer .text-dark {
+  color: #000000 !important;
+}
+
+body.profile-superadmin-page footer .text-muted,
+body.profile-staff-page footer .text-muted,
+body.profile-moderator-page footer .text-muted,
+body.profile-verified-page footer .text-muted,
+body.profile-supporter-page footer .text-muted {
+  color: #6c757d !important;
+}
+
+body.profile-superadmin-page footer a,
+body.profile-staff-page footer a,
+body.profile-moderator-page footer a,
+body.profile-verified-page footer a,
+body.profile-supporter-page footer a {
+  color: #000000 !important;
+}
+
+body.profile-superadmin-page footer a:hover,
+body.profile-staff-page footer a:hover,
+body.profile-moderator-page footer a:hover,
+body.profile-verified-page footer a:hover,
+body.profile-supporter-page footer a:hover {
+  color: #000000 !important;
+  opacity: 0.7;
+}
+
 /* ===== SIDEBAR COM TEXTOS BRANCOS ===== */
 body.profile-superadmin-page .sidebar .nav-link,
 body.profile-staff-page .sidebar .nav-link,
