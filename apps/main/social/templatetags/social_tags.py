@@ -76,3 +76,66 @@ def user_is_verified(user):
         return user.social_verified
     except Exception:
         return False
+
+
+@register.simple_tag
+def profile_badge(user, size="16px", show_tooltip=True):
+    """
+    Exibe o badge do tipo de perfil do usuário
+    
+    Args:
+        user: Usuário a ser verificado
+        size: Tamanho do ícone (ex: "16px", "20px")
+        show_tooltip: Se deve mostrar tooltip explicativo
+    """
+    if not user:
+        return ""
+    
+    try:
+        profile_type = user.profile_type
+        if profile_type == 'regular':
+            return ""
+        
+        display_name = user.profile_display_name
+        icon_class = user.profile_icon
+        color_class = user.profile_color_class
+        
+        tooltip_attr = f'title="{display_name}"' if show_tooltip else ""
+        
+        html = f'''
+        <span class="profile-badge {color_class}" {tooltip_attr} style="display: inline-flex; align-items: center; margin-left: 4px;">
+            <i class="bi {icon_class}" style="font-size: {size};"></i>
+        </span>
+        '''
+        
+        return mark_safe(html)
+    except Exception:
+        return ""
+
+
+@register.simple_tag
+def profile_type_display(user):
+    """
+    Exibe o nome do tipo de perfil do usuário
+    """
+    if not user:
+        return ""
+    
+    try:
+        return user.profile_display_name
+    except Exception:
+        return ""
+
+
+@register.filter
+def has_profile_type(user, profile_type):
+    """
+    Filtro para verificar se um usuário tem um tipo específico de perfil
+    """
+    if not user:
+        return False
+    
+    try:
+        return user.profile_type == profile_type
+    except Exception:
+        return False

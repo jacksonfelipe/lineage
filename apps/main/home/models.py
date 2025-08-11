@@ -38,6 +38,12 @@ class User(BaseModel, AbstractUser):
     is_verified = models.BooleanField(default=False, verbose_name=_("Conta verificada"), help_text=_("Indica se a conta foi verificada pela equipe"))
     social_verified = models.BooleanField(default=False, verbose_name=_("Verificado na rede social"), help_text=_("Indica se o usuário é verificado na rede social"))
 
+    # Tipos de perfil
+    is_superadmin = models.BooleanField(default=False, verbose_name=_("Super Administrador"), help_text=_("Acesso total ao sistema"))
+    is_staff_member = models.BooleanField(default=False, verbose_name=_("Membro da Equipe"), help_text=_("Acesso administrativo limitado"))
+    is_moderator = models.BooleanField(default=False, verbose_name=_("Moderador"), help_text=_("Pode acessar o painel de moderação do social"))
+    is_verified_user = models.BooleanField(default=False, verbose_name=_("Usuário Verificado"), help_text=_("Perfil com destaque azul"))
+
     # game
     fichas = models.PositiveIntegerField(default=0, verbose_name=_("Fichas"))
 
@@ -50,6 +56,56 @@ class User(BaseModel, AbstractUser):
 
     def __str__(self):
         return self.username
+
+    @property
+    def profile_type(self):
+        """Retorna o tipo de perfil do usuário"""
+        if self.is_superadmin:
+            return 'superadmin'
+        elif self.is_staff_member:
+            return 'staff'
+        elif self.is_moderator:
+            return 'moderator'
+        elif self.is_verified_user:
+            return 'verified'
+        else:
+            return 'regular'
+
+    @property
+    def profile_display_name(self):
+        """Retorna o nome de exibição do tipo de perfil"""
+        profile_names = {
+            'superadmin': 'Imperador Supremo',
+            'staff': 'Guardião do Sistema',
+            'moderator': 'Vigilante da Comunidade',
+            'verified': 'Membro Verificado',
+            'regular': 'Membro'
+        }
+        return profile_names.get(self.profile_type, 'Membro')
+
+    @property
+    def profile_color_class(self):
+        """Retorna a classe CSS para cor do perfil"""
+        color_classes = {
+            'superadmin': 'profile-superadmin',
+            'staff': 'profile-staff',
+            'moderator': 'profile-moderator',
+            'verified': 'profile-verified',
+            'regular': 'profile-regular'
+        }
+        return color_classes.get(self.profile_type, 'profile-regular')
+
+    @property
+    def profile_icon(self):
+        """Retorna o ícone do tipo de perfil"""
+        icons = {
+            'superadmin': 'bi-crown-fill',
+            'staff': 'bi-shield-fill',
+            'moderator': 'bi-shield-check',
+            'verified': 'bi-patch-check-fill',
+            'regular': 'bi-person'
+        }
+        return icons.get(self.profile_type, 'bi-person')
 
     class Meta:
         verbose_name = _('Usuário')

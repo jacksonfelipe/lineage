@@ -1,0 +1,320 @@
+/* ===== EFEITOS ESPECIAIS PARA PERFIS ===== */
+
+/* Efeito de partículas flutuantes */
+.profile-container.profile-superadmin,
+.profile-container.profile-staff,
+.profile-container.profile-moderator,
+.profile-container.profile-verified {
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-container.profile-superadmin::before,
+.profile-container.profile-staff::before,
+.profile-container.profile-moderator::before,
+.profile-container.profile-verified::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, currentColor, transparent);
+  animation: shimmer 3s ease-in-out infinite;
+  z-index: 10;
+}
+
+/* Efeito de brilho no hover */
+.profile-container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Efeito de rotação no ícone do avatar */
+.profile-avatar-container::after {
+  transition: all 0.3s ease;
+}
+
+.profile-container:hover .profile-avatar-container::after {
+  transform: rotate(360deg);
+}
+
+/* Efeito de pulso no nome */
+.profile-name {
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-name::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.profile-container:hover .profile-name::after {
+  left: 100%;
+}
+
+/* Efeito de destaque nos badges */
+.profile-badge {
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: left 0.5s ease;
+}
+
+.profile-badge:hover::before {
+  left: 100%;
+}
+
+/* Efeito de escala no status display */
+.profile-status-display {
+  transition: all 0.3s ease;
+}
+
+.profile-status-display:hover {
+  transform: scale(1.02);
+}
+
+/* Efeito de rotação no ícone do status */
+.status-icon {
+  transition: all 0.3s ease;
+}
+
+.profile-status-display:hover .status-icon {
+  transform: rotate(10deg) scale(1.1);
+}
+
+/* Efeito de brilho no cover */
+.profile-cover {
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-cover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: cover-shimmer 4s ease-in-out infinite;
+}
+
+/* Animações específicas para cada tipo */
+@keyframes superadmin-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+  }
+  50% { 
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.9);
+  }
+}
+
+@keyframes staff-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(65, 105, 225, 0.6);
+  }
+  50% { 
+    box-shadow: 0 0 40px rgba(65, 105, 225, 0.9);
+  }
+}
+
+@keyframes moderator-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(50, 205, 50, 0.6);
+  }
+  50% { 
+    box-shadow: 0 0 40px rgba(50, 205, 50, 0.9);
+  }
+}
+
+@keyframes verified-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(135, 206, 235, 0.6);
+  }
+  50% { 
+    box-shadow: 0 0 40px rgba(135, 206, 235, 0.9);
+  }
+}
+
+/* Aplicar animações específicas */
+.profile-container.profile-superadmin {
+  animation: superadmin-pulse 3s ease-in-out infinite;
+}
+
+.profile-container.profile-staff {
+  animation: staff-pulse 3s ease-in-out infinite;
+}
+
+.profile-container.profile-moderator {
+  animation: moderator-pulse 3s ease-in-out infinite;
+}
+
+.profile-container.profile-verified {
+  animation: verified-pulse 3s ease-in-out infinite;
+}
+
+/* Efeito de entrada para perfis especiais */
+@keyframes profile-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.profile-container.profile-superadmin,
+.profile-container.profile-staff,
+.profile-container.profile-moderator,
+.profile-container.profile-verified {
+  animation: profile-entrance 0.6s ease-out, 
+             superadmin-pulse 3s ease-in-out infinite 0.6s;
+}
+
+.profile-container.profile-staff {
+  animation: profile-entrance 0.6s ease-out, 
+             staff-pulse 3s ease-in-out infinite 0.6s;
+}
+
+.profile-container.profile-moderator {
+  animation: profile-entrance 0.6s ease-out, 
+             moderator-pulse 3s ease-in-out infinite 0.6s;
+}
+
+.profile-container.profile-verified {
+  animation: profile-entrance 0.6s ease-out, 
+             verified-pulse 3s ease-in-out infinite 0.6s;
+}
+
+/* Efeito de destaque nos botões para perfis especiais */
+.profile-container.profile-superadmin .btn-primary,
+.profile-container.profile-staff .btn-primary,
+.profile-container.profile-moderator .btn-primary,
+.profile-container.profile-verified .btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-container.profile-superadmin .btn-primary::before,
+.profile-container.profile-staff .btn-primary::before,
+.profile-container.profile-moderator .btn-primary::before,
+.profile-container.profile-verified .btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.profile-container.profile-superadmin .btn-primary:hover::before,
+.profile-container.profile-staff .btn-primary:hover::before,
+.profile-container.profile-moderator .btn-primary:hover::before,
+.profile-container.profile-verified .btn-primary:hover::before {
+  left: 100%;
+}
+
+/* Efeito de destaque nas estatísticas */
+.profile-container.profile-superadmin .d-flex.align-items-center a strong,
+.profile-container.profile-staff .d-flex.align-items-center a strong,
+.profile-container.profile-moderator .d-flex.align-items-center a strong,
+.profile-container.profile-verified .d-flex.align-items-center a strong {
+  transition: all 0.3s ease;
+}
+
+.profile-container.profile-superadmin .d-flex.align-items-center a:hover strong,
+.profile-container.profile-staff .d-flex.align-items-center a:hover strong,
+.profile-container.profile-moderator .d-flex.align-items-center a:hover strong,
+.profile-container.profile-verified .d-flex.align-items-center a:hover strong {
+  transform: scale(1.1);
+  text-shadow: 0 0 10px currentColor;
+}
+
+/* Efeito de destaque nas informações de contato */
+.profile-container.profile-superadmin .d-flex.flex-wrap span,
+.profile-container.profile-staff .d-flex.flex-wrap span,
+.profile-container.profile-moderator .d-flex.flex-wrap span,
+.profile-container.profile-verified .d-flex.flex-wrap span {
+  transition: all 0.3s ease;
+}
+
+.profile-container.profile-superadmin .d-flex.flex-wrap span:hover,
+.profile-container.profile-staff .d-flex.flex-wrap span:hover,
+.profile-container.profile-moderator .d-flex.flex-wrap span:hover,
+.profile-container.profile-verified .d-flex.flex-wrap span:hover {
+  transform: translateX(5px);
+  text-shadow: 0 0 5px currentColor;
+}
+
+/* Efeito de destaque no website */
+.profile-container.profile-superadmin .btn-outline-primary,
+.profile-container.profile-staff .btn-outline-primary,
+.profile-container.profile-moderator .btn-outline-primary,
+.profile-container.profile-verified .btn-outline-primary {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-container.profile-superadmin .btn-outline-primary:hover,
+.profile-container.profile-staff .btn-outline-primary:hover,
+.profile-container.profile-moderator .btn-outline-primary:hover,
+.profile-container.profile-verified .btn-outline-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Efeito de destaque nos interesses */
+.profile-container.profile-superadmin small,
+.profile-container.profile-staff small,
+.profile-container.profile-moderator small,
+.profile-container.profile-verified small {
+  transition: all 0.3s ease;
+}
+
+.profile-container.profile-superadmin small:hover,
+.profile-container.profile-staff small:hover,
+.profile-container.profile-moderator small:hover,
+.profile-container.profile-verified small:hover {
+  transform: scale(1.02);
+  text-shadow: 0 0 3px currentColor;
+}
+
+/* Responsividade para efeitos */
+@media (max-width: 768px) {
+  .profile-container:hover {
+    transform: translateY(-1px);
+  }
+  
+  .profile-status-display:hover {
+    transform: scale(1.01);
+  }
+  
+  .profile-container.profile-superadmin,
+  .profile-container.profile-staff,
+  .profile-container.profile-moderator,
+  .profile-container.profile-verified {
+    animation: profile-entrance 0.4s ease-out;
+  }
+}

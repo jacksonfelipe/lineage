@@ -489,11 +489,11 @@
                 </div>
                 <div class="flex-grow-1">
                   <div class="d-flex align-items-center">
-                              <h6 class="mb-0">
-            <a href="{% url 'social:user_profile' post.author.username %}" class="text-decoration-none">
-              {{ post.author.get_full_name|default:post.author.username }}{% verified_badge post.author "14px" %}
-            </a>
-          </h6>
+                                                      <h6 class="mb-0">
+                          <a href="{% url 'social:user_profile' post.author.username %}" class="text-decoration-none">
+                            {{ post.author.get_full_name|default:post.author.username }}{% verified_badge post.author "14px" %}
+                          </a>
+                        </h6>
                     {% if not post.is_public %}
                       <span class="badge bg-secondary ms-2">
                         <i class="bi bi-lock"></i> {% trans "Privado" %}

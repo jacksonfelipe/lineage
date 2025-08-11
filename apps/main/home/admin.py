@@ -11,7 +11,8 @@ class UserAdmin(BaseModelAdmin, DefaultUserAdmin):
     add_form = CustomUserCreationForm
     list_display = (
         'username', 'email', 'display_groups', 'cpf', 'gender', 'fichas',
-        'is_email_verified', 'is_2fa_enabled', 'is_verified', 'social_verified', 'created_at', 'updated_at'
+        'is_email_verified', 'is_2fa_enabled', 'is_verified', 'social_verified',
+        'is_superadmin', 'is_staff_member', 'is_moderator', 'is_verified_user', 'created_at', 'updated_at'
     )
     readonly_fields = ('created_at', 'created_by', 'updated_at', 'updated_by', 'uuid')
     
@@ -22,6 +23,10 @@ class UserAdmin(BaseModelAdmin, DefaultUserAdmin):
         }),
         ('Verificação e segurança', {
             'fields': ('is_email_verified', 'is_2fa_enabled', 'is_verified', 'social_verified')
+        }),
+        ('Tipos de perfil', {
+            'fields': ('is_superadmin', 'is_staff_member', 'is_moderator', 'is_verified_user'),
+            'description': 'Defina o tipo de perfil do usuário para diferenciação visual'
         }),
         ('Permissões', {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')
@@ -37,7 +42,8 @@ class UserAdmin(BaseModelAdmin, DefaultUserAdmin):
             'fields': (
                 'username', 'email', 'password1', 'password2',
                 'avatar', 'bio', 'cpf', 'gender',
-                'is_email_verified', 'is_2fa_enabled', 'is_verified', 'social_verified'
+                'is_email_verified', 'is_2fa_enabled', 'is_verified', 'social_verified',
+                'is_superadmin', 'is_staff_member', 'is_moderator', 'is_verified_user'
             ),
         }),
     )

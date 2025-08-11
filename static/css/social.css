@@ -13,6 +13,215 @@ ESTILOS PARA A REDE SOCIAL
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
+/* ============================================================================
+BADGES DE TIPO DE PERFIL
+============================================================================ */
+
+/* Badge base */
+.profile-badge {
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    padding: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.profile-badge:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Super Admin - Dourado/Roxo */
+.profile-superadmin {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #8B0000;
+    border: 2px solid #FFD700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.profile-superadmin:hover {
+    background: linear-gradient(135deg, #FFA500, #FF8C00);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+}
+
+/* Staff - Azul/Roxo */
+.profile-staff {
+    background: linear-gradient(135deg, #4169E1, #8A2BE2);
+    color: white;
+    border: 2px solid #4169E1;
+    box-shadow: 0 0 10px rgba(65, 105, 225, 0.5);
+}
+
+.profile-staff:hover {
+    background: linear-gradient(135deg, #8A2BE2, #9370DB);
+    box-shadow: 0 0 15px rgba(65, 105, 225, 0.7);
+}
+
+/* Moderador - Verde */
+.profile-moderator {
+    background: linear-gradient(135deg, #32CD32, #228B22);
+    color: white;
+    border: 2px solid #32CD32;
+    box-shadow: 0 0 10px rgba(50, 205, 50, 0.5);
+}
+
+.profile-moderator:hover {
+    background: linear-gradient(135deg, #228B22, #006400);
+    box-shadow: 0 0 15px rgba(50, 205, 50, 0.7);
+}
+
+/* Verificado - Azul */
+.profile-verified {
+    background: linear-gradient(135deg, #1E90FF, #4169E1);
+    color: white;
+    border: 2px solid #1E90FF;
+    box-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
+}
+
+.profile-verified:hover {
+    background: linear-gradient(135deg, #4169E1, #0000CD);
+    box-shadow: 0 0 15px rgba(30, 144, 255, 0.7);
+}
+
+/* Regular - Cinza */
+.profile-regular {
+    background: #6c757d;
+    color: white;
+    border: 2px solid #6c757d;
+}
+
+/* ============================================================================
+ESTILOS DE PERFIL COM CORES DIFERENCIADAS
+============================================================================ */
+
+/* Container do perfil com cores diferenciadas */
+.profile-container {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Super Admin - Borda dourada */
+.profile-container.profile-superadmin {
+    border: 3px solid #FFD700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.profile-container.profile-superadmin .card-header {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #8B0000;
+}
+
+/* Staff - Borda azul/roxa */
+.profile-container.profile-staff {
+    border: 3px solid #4169E1;
+    box-shadow: 0 0 20px rgba(65, 105, 225, 0.3);
+}
+
+.profile-container.profile-staff .card-header {
+    background: linear-gradient(135deg, #4169E1, #8A2BE2);
+    color: white;
+}
+
+/* Moderador - Borda verde */
+.profile-container.profile-moderator {
+    border: 3px solid #32CD32;
+    box-shadow: 0 0 20px rgba(50, 205, 50, 0.3);
+}
+
+.profile-container.profile-moderator .card-header {
+    background: linear-gradient(135deg, #32CD32, #228B22);
+    color: white;
+}
+
+/* Verificado - Borda azul */
+.profile-container.profile-verified {
+    border: 3px solid #1E90FF;
+    box-shadow: 0 0 20px rgba(30, 144, 255, 0.3);
+}
+
+.profile-container.profile-verified .card-header {
+    background: linear-gradient(135deg, #1E90FF, #4169E1);
+    color: white;
+}
+
+/* Regular - Sem borda especial */
+.profile-container.profile-regular {
+    border: 1px solid #dee2e6;
+}
+
+/* ============================================================================
+AVATAR COM BORDA DIFERENCIADA
+============================================================================ */
+
+.profile-avatar-container {
+    position: relative;
+}
+
+/* Super Admin - Borda dourada */
+.profile-avatar-container.profile-superadmin {
+    border: 4px solid #FFD700 !important;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}
+
+/* Staff - Borda azul/roxa */
+.profile-avatar-container.profile-staff {
+    border: 4px solid #4169E1 !important;
+    box-shadow: 0 0 15px rgba(65, 105, 225, 0.6);
+}
+
+/* Moderador - Borda verde */
+.profile-avatar-container.profile-moderator {
+    border: 4px solid #32CD32 !important;
+    box-shadow: 0 0 15px rgba(50, 205, 50, 0.6);
+}
+
+/* Verificado - Borda azul */
+.profile-avatar-container.profile-verified {
+    border: 4px solid #1E90FF !important;
+    box-shadow: 0 0 15px rgba(30, 144, 255, 0.6);
+}
+
+/* Regular - Borda branca padrão */
+.profile-avatar-container.profile-regular {
+    border: 4px solid white !important;
+}
+
+/* ============================================================================
+NOME DO USUÁRIO COM CORES DIFERENCIADAS
+============================================================================ */
+
+/* Super Admin - Dourado */
+.profile-name.profile-superadmin {
+    color: #FFD700 !important;
+    text-shadow: 1px 1px 2px rgba(139, 0, 0, 0.5);
+}
+
+/* Staff - Azul/Roxo */
+.profile-name.profile-staff {
+    color: #4169E1 !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Moderador - Verde */
+.profile-name.profile-moderator {
+    color: #32CD32 !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Verificado - Azul */
+.profile-name.profile-verified {
+    color: #1E90FF !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Regular - Cor padrão */
+.profile-name.profile-regular {
+    color: inherit;
+}
+
 /* Botões de ação do formulário de posts */
 .action-button-wrapper {
   display: block;
@@ -320,5 +529,645 @@ ESTILOS PARA A REDE SOCIAL
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* ===== ESTILOS PARA DIFERENCIAÇÃO DE PERFIS ===== */
+
+/* Badges de perfil */
+.profile-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.profile-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: left 0.5s ease;
+}
+
+.profile-badge:hover::before {
+  left: 100%;
+}
+
+/* ===== SUPERADMIN - IMPERADOR SUPREMO ===== */
+.profile-superadmin {
+  background: linear-gradient(135deg, #FFD700, #FFA500, #FF4500) !important;
+  color: #000 !important;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6) !important;
+  border: 2px solid #FFD700 !important;
+}
+
+.profile-container.profile-superadmin {
+  background: linear-gradient(135deg, #1a1a1a, #2d2d2d) !important;
+  border: 3px solid #FFD700 !important;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.3), inset 0 0 50px rgba(255, 215, 0, 0.1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.profile-container.profile-superadmin::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #FFD700, #FFA500, #FF4500, #FFD700);
+  animation: shimmer 2s infinite;
+}
+
+.profile-avatar-container.profile-superadmin {
+  border: 4px solid #FFD700 !important;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), inset 0 0 20px rgba(255, 215, 0, 0.2) !important;
+  position: relative !important;
+}
+
+.profile-avatar-container.profile-superadmin::after {
+  content: '👑';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 24px;
+  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
+  animation: crown-float 3s ease-in-out infinite;
+}
+
+.profile-name.profile-superadmin {
+  background: linear-gradient(45deg, #FFD700, #FFA500) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-weight: 900 !important;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3) !important;
+}
+
+/* ===== STAFF - GUARDIÃO DO SISTEMA ===== */
+.profile-staff {
+  background: linear-gradient(135deg, #4169E1, #1E90FF, #00BFFF) !important;
+  color: white !important;
+  box-shadow: 0 0 20px rgba(65, 105, 225, 0.6) !important;
+  border: 2px solid #4169E1 !important;
+}
+
+.profile-container.profile-staff {
+  background: linear-gradient(135deg, #0f1419, #1a2332) !important;
+  border: 3px solid #4169E1 !important;
+  box-shadow: 0 0 30px rgba(65, 105, 225, 0.3), inset 0 0 50px rgba(65, 105, 225, 0.1) !important;
+  position: relative !important;
+}
+
+.profile-container.profile-staff::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4169E1, #1E90FF, #00BFFF, #4169E1);
+  animation: shimmer 2s infinite;
+}
+
+.profile-avatar-container.profile-staff {
+  border: 4px solid #4169E1 !important;
+  box-shadow: 0 0 25px rgba(65, 105, 225, 0.8), inset 0 0 20px rgba(65, 105, 225, 0.2) !important;
+  position: relative !important;
+}
+
+.profile-avatar-container.profile-staff::after {
+  content: '🛡️';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 24px;
+  filter: drop-shadow(0 0 5px rgba(65, 105, 225, 0.8));
+  animation: shield-pulse 2s ease-in-out infinite;
+}
+
+.profile-name.profile-staff {
+  background: linear-gradient(45deg, #4169E1, #1E90FF) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-weight: 800 !important;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3) !important;
+}
+
+/* ===== MODERADOR - VIGILANTE DA COMUNIDADE ===== */
+.profile-moderator {
+  background: linear-gradient(135deg, #32CD32, #00FF00, #7CFC00) !important;
+  color: #000 !important;
+  box-shadow: 0 0 20px rgba(50, 205, 50, 0.6) !important;
+  border: 2px solid #32CD32 !important;
+}
+
+.profile-container.profile-moderator {
+  background: linear-gradient(135deg, #0f1a0f, #1a2d1a) !important;
+  border: 3px solid #32CD32 !important;
+  box-shadow: 0 0 30px rgba(50, 205, 50, 0.3), inset 0 0 50px rgba(50, 205, 50, 0.1) !important;
+  position: relative !important;
+}
+
+.profile-container.profile-moderator::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #32CD32, #00FF00, #7CFC00, #32CD32);
+  animation: shimmer 2s infinite;
+}
+
+.profile-avatar-container.profile-moderator {
+  border: 4px solid #32CD32 !important;
+  box-shadow: 0 0 25px rgba(50, 205, 50, 0.8), inset 0 0 20px rgba(50, 205, 50, 0.2) !important;
+  position: relative !important;
+}
+
+.profile-avatar-container.profile-moderator::after {
+  content: '⚖️';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 24px;
+  filter: drop-shadow(0 0 5px rgba(50, 205, 50, 0.8));
+  animation: scale-balance 2.5s ease-in-out infinite;
+}
+
+.profile-name.profile-moderator {
+  background: linear-gradient(45deg, #32CD32, #00FF00) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-weight: 800 !important;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3) !important;
+}
+
+/* ===== VERIFICADO - MEMBRO VERIFICADO ===== */
+.profile-verified {
+  background: linear-gradient(135deg, #87CEEB, #00BFFF, #1E90FF) !important;
+  color: white !important;
+  box-shadow: 0 0 20px rgba(135, 206, 235, 0.6) !important;
+  border: 2px solid #87CEEB !important;
+}
+
+.profile-container.profile-verified {
+  background: linear-gradient(135deg, #0f1a2a, #1a2d4a) !important;
+  border: 3px solid #87CEEB !important;
+  box-shadow: 0 0 30px rgba(135, 206, 235, 0.3), inset 0 0 50px rgba(135, 206, 235, 0.1) !important;
+  position: relative !important;
+}
+
+.profile-container.profile-verified::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #87CEEB, #00BFFF, #1E90FF, #87CEEB);
+  animation: shimmer 2s infinite;
+}
+
+.profile-avatar-container.profile-verified {
+  border: 4px solid #87CEEB !important;
+  box-shadow: 0 0 25px rgba(135, 206, 235, 0.8), inset 0 0 20px rgba(135, 206, 235, 0.2) !important;
+  position: relative !important;
+}
+
+.profile-avatar-container.profile-verified::after {
+  content: '✓';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #87CEEB, #00BFFF) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 14px !important;
+  box-shadow: 0 0 10px rgba(135, 206, 235, 0.8) !important;
+  animation: check-pulse 2s ease-in-out infinite;
+}
+
+.profile-name.profile-verified {
+  background: linear-gradient(45deg, #87CEEB, #00BFFF) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-weight: 700 !important;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3) !important;
+}
+
+/* ===== REGULAR - MEMBRO COMUM ===== */
+.profile-regular {
+  /* Sem diferenciação visual especial */
+}
+
+.profile-container.profile-regular {
+  background: white !important;
+  border: 1px solid #dee2e6 !important;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.profile-avatar-container.profile-regular {
+  border: 4px solid white !important;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.profile-name.profile-regular {
+  color: #212529 !important;
+  font-weight: 600 !important;
+}
+
+/* ===== ANIMAÇÕES ===== */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes crown-float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-5px) rotate(5deg); }
+}
+
+@keyframes shield-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+@keyframes scale-balance {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+
+@keyframes check-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+/* ===== EFEITOS ESPECIAIS PARA O CARD DE PERFIL ===== */
+.profile-container {
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.profile-container:hover {
+  transform: translateY(-2px) !important;
+}
+
+/* Efeito de partículas para perfis especiais */
+.profile-container.profile-superadmin::after,
+.profile-container.profile-staff::after,
+.profile-container.profile-moderator::after,
+.profile-container.profile-verified::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 1px, transparent 1px),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 1px, transparent 1px),
+    radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 50px 50px, 30px 30px, 20px 20px;
+  animation: particle-float 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes particle-float {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-50px); }
+}
+
+/* ===== ESTILOS PARA BADGES ESPECIAIS ===== */
+.badge.profile-superadmin {
+  background: linear-gradient(135deg, #FFD700, #FFA500, #FF4500) !important;
+  color: #000 !important;
+  font-weight: bold !important;
+  border: 1px solid #FFD700 !important;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5) !important;
+}
+
+.badge.profile-staff {
+  background: linear-gradient(135deg, #4169E1, #1E90FF, #00BFFF) !important;
+  color: white !important;
+  font-weight: bold !important;
+  border: 1px solid #4169E1 !important;
+  box-shadow: 0 0 10px rgba(65, 105, 225, 0.5) !important;
+}
+
+.badge.profile-moderator {
+  background: linear-gradient(135deg, #32CD32, #00FF00, #7CFC00) !important;
+  color: #000 !important;
+  font-weight: bold !important;
+  border: 1px solid #32CD32 !important;
+  box-shadow: 0 0 10px rgba(50, 205, 50, 0.5) !important;
+}
+
+.badge.profile-verified {
+  background: linear-gradient(135deg, #87CEEB, #00BFFF, #1E90FF) !important;
+  color: white !important;
+  font-weight: bold !important;
+  border: 1px solid #87CEEB !important;
+  box-shadow: 0 0 10px rgba(135, 206, 235, 0.5) !important;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+  .profile-avatar-container::after {
+    font-size: 18px !important;
+    top: -8px !important;
+    right: -8px !important;
+  }
+  
+  .profile-container::before {
+    height: 3px !important;
+  }
+  
+  .profile-avatar-container {
+    border-width: 3px !important;
+  }
+}
+
+/* ===== EFEITOS DE HOVER MELHORADOS ===== */
+.profile-badge:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 0 15px currentColor !important;
+}
+
+.profile-container:hover .profile-avatar-container::after {
+  animation-duration: 1s !important;
+}
+
+/* ===== ESTILOS PARA O COVER DO PERFIL ===== */
+.profile-cover.profile-superadmin {
+  background: linear-gradient(135deg, #FFD700, #FFA500, #FF4500) !important;
+  position: relative !important;
+}
+
+.profile-cover.profile-staff {
+  background: linear-gradient(135deg, #4169E1, #1E90FF, #00BFFF) !important;
+  position: relative !important;
+}
+
+.profile-cover.profile-moderator {
+  background: linear-gradient(135deg, #32CD32, #00FF00, #7CFC00) !important;
+  position: relative !important;
+}
+
+.profile-cover.profile-verified {
+  background: linear-gradient(135deg, #87CEEB, #00BFFF, #1E90FF) !important;
+  position: relative !important;
+}
+
+/* Efeito de overlay nos covers */
+.profile-cover.profile-superadmin::after,
+.profile-cover.profile-staff::after,
+.profile-cover.profile-moderator::after,
+.profile-cover.profile-verified::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent, rgba(255,255,255,0.1));
+  animation: cover-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes cover-shimmer {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+/* ===== SEÇÃO DE STATUS DO PERFIL ===== */
+.profile-status-display {
+  display: flex !important;
+  align-items: center !important;
+  padding: 15px !important;
+  border-radius: 12px !important;
+  margin: 10px 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.3s ease !important;
+}
+
+.profile-status-display::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent, rgba(255,255,255,0.1));
+  animation: status-shimmer 3s ease-in-out infinite;
+}
+
+.profile-status-display:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2) !important;
+}
+
+.status-icon {
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-right: 15px !important;
+  font-size: 24px !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.status-info {
+  flex: 1 !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.status-title {
+  font-size: 18px !important;
+  font-weight: bold !important;
+  margin-bottom: 5px !important;
+}
+
+.status-description {
+  font-size: 14px !important;
+  opacity: 0.9 !important;
+}
+
+/* Estilos específicos para cada tipo de status */
+.profile-status-display.profile-superadmin {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.2), rgba(255, 69, 0, 0.2)) !important;
+  border: 2px solid rgba(255, 215, 0, 0.5) !important;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3) !important;
+}
+
+.profile-status-display.profile-superadmin .status-icon {
+  background: linear-gradient(135deg, #FFD700, #FFA500) !important;
+  color: #000 !important;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6) !important;
+}
+
+.profile-status-display.profile-staff {
+  background: linear-gradient(135deg, rgba(65, 105, 225, 0.2), rgba(30, 144, 255, 0.2), rgba(0, 191, 255, 0.2)) !important;
+  border: 2px solid rgba(65, 105, 225, 0.5) !important;
+  box-shadow: 0 0 20px rgba(65, 105, 225, 0.3) !important;
+}
+
+.profile-status-display.profile-staff .status-icon {
+  background: linear-gradient(135deg, #4169E1, #1E90FF) !important;
+  color: white !important;
+  box-shadow: 0 0 15px rgba(65, 105, 225, 0.6) !important;
+}
+
+.profile-status-display.profile-moderator {
+  background: linear-gradient(135deg, rgba(50, 205, 50, 0.2), rgba(0, 255, 0, 0.2), rgba(124, 252, 0, 0.2)) !important;
+  border: 2px solid rgba(50, 205, 50, 0.5) !important;
+  box-shadow: 0 0 20px rgba(50, 205, 50, 0.3) !important;
+}
+
+.profile-status-display.profile-moderator .status-icon {
+  background: linear-gradient(135deg, #32CD32, #00FF00) !important;
+  color: #000 !important;
+  box-shadow: 0 0 15px rgba(50, 205, 50, 0.6) !important;
+}
+
+.profile-status-display.profile-verified {
+  background: linear-gradient(135deg, rgba(135, 206, 235, 0.2), rgba(0, 191, 255, 0.2), rgba(30, 144, 255, 0.2)) !important;
+  border: 2px solid rgba(135, 206, 235, 0.5) !important;
+  box-shadow: 0 0 20px rgba(135, 206, 235, 0.3) !important;
+}
+
+.profile-status-display.profile-verified .status-icon {
+  background: linear-gradient(135deg, #87CEEB, #00BFFF) !important;
+  color: white !important;
+  box-shadow: 0 0 15px rgba(135, 206, 235, 0.6) !important;
+}
+
+@keyframes status-shimmer {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+/* ===== RESPONSIVIDADE PARA STATUS ===== */
+@media (max-width: 768px) {
+  .profile-status-display {
+    padding: 12px !important;
+    flex-direction: column !important;
+    text-align: center !important;
+  }
+  
+  .status-icon {
+    width: 40px !important;
+    height: 40px !important;
+    margin-right: 0 !important;
+    margin-bottom: 10px !important;
+    font-size: 20px !important;
+  }
+  
+  .status-title {
+    font-size: 16px !important;
+  }
+  
+  .status-description {
+    font-size: 12px !important;
+  }
+}
+
+/* ===== EFEITOS ESPECIAIS NO AVATAR ===== */
+.profile-avatar-image {
+  transition: all 0.3s ease !important;
+  filter: brightness(1) !important;
+}
+
+.profile-avatar-container:hover .profile-avatar-image {
+  filter: brightness(1.1) !important;
+  transform: scale(1.05) !important;
+}
+
+.avatar-glow {
+  position: absolute !important;
+  top: -10px !important;
+  left: -10px !important;
+  right: -10px !important;
+  bottom: -10px !important;
+  border-radius: 50% !important;
+  z-index: -1 !important;
+  animation: avatar-glow-pulse 2s ease-in-out infinite !important;
+}
+
+.avatar-glow.profile-superadmin {
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.6), transparent 70%) !important;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.8) !important;
+}
+
+.avatar-glow.profile-staff {
+  background: radial-gradient(circle, rgba(65, 105, 225, 0.6), transparent 70%) !important;
+  box-shadow: 0 0 30px rgba(65, 105, 225, 0.8) !important;
+}
+
+.avatar-glow.profile-moderator {
+  background: radial-gradient(circle, rgba(50, 205, 50, 0.6), transparent 70%) !important;
+  box-shadow: 0 0 30px rgba(50, 205, 50, 0.8) !important;
+}
+
+.avatar-glow.profile-verified {
+  background: radial-gradient(circle, rgba(135, 206, 235, 0.6), transparent 70%) !important;
+  box-shadow: 0 0 30px rgba(135, 206, 235, 0.8) !important;
+}
+
+@keyframes avatar-glow-pulse {
+  0%, 100% { 
+    opacity: 0.6; 
+    transform: scale(1); 
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.1); 
+  }
+}
+
+/* ===== EFEITOS DE HOVER MELHORADOS NO CONTAINER ===== */
+.profile-container:hover .avatar-glow {
+  animation-duration: 1s !important;
+}
+
+.profile-container:hover .profile-avatar-container::after {
+  animation-duration: 0.8s !important;
+}
+
+/* ===== EFEITOS ESPECIAIS PARA MOBILE ===== */
+@media (max-width: 768px) {
+  .avatar-glow {
+    top: -5px !important;
+    left: -5px !important;
+    right: -5px !important;
+    bottom: -5px !important;
+  }
+  
+  .profile-avatar-container:hover .profile-avatar-image {
+    transform: scale(1.02) !important;
   }
 }
