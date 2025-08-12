@@ -1527,6 +1527,15 @@ body.profile-supporter-page .navbar-top #notificationDropdown .dropdown-header {
   background-color: #f8f9fa !important;
 }
 
+/* Exceção específica para o h5 dentro do dropdown-header */
+body.profile-superadmin-page .navbar-top #notificationDropdown .dropdown-header h5,
+body.profile-staff-page .navbar-top #notificationDropdown .dropdown-header h5,
+body.profile-moderator-page .navbar-top #notificationDropdown .dropdown-header h5,
+body.profile-verified-page .navbar-top #notificationDropdown .dropdown-header h5,
+body.profile-supporter-page .navbar-top #notificationDropdown .dropdown-header h5 {
+  color: #212529 !important;
+}
+
 body.profile-superadmin-page .navbar-top #notificationDropdown .dropdown-item,
 body.profile-staff-page .navbar-top #notificationDropdown .dropdown-item,
 body.profile-moderator-page .navbar-top #notificationDropdown .dropdown-item,
@@ -1593,6 +1602,55 @@ body.profile-supporter-page .navbar-top #notificationDropdown .dropdown-item:hov
          body.profile-verified-page .navbar-top #notificationDropdown .list-group-item small,
          body.profile-supporter-page .navbar-top #notificationDropdown .list-group-item small {
            color: #dc3545 !important;
+         }
+
+         /* Exceções para o modal de notificação */
+         body.profile-superadmin-page #notificationModal .modal-title,
+         body.profile-staff-page #notificationModal .modal-title,
+         body.profile-moderator-page #notificationModal .modal-title,
+         body.profile-verified-page #notificationModal .modal-title,
+         body.profile-supporter-page #notificationModal .modal-title {
+           color: #212529 !important;
+         }
+
+         body.profile-superadmin-page #notificationModal .modal-body,
+         body.profile-staff-page #notificationModal .modal-body,
+         body.profile-moderator-page #notificationModal .modal-body,
+         body.profile-verified-page #notificationModal .modal-body,
+         body.profile-supporter-page #notificationModal .modal-body {
+           color: #212529 !important;
+         }
+
+         body.profile-superadmin-page #notificationModal .notification-details,
+         body.profile-staff-page #notificationModal .notification-details,
+         body.profile-moderator-page #notificationModal .notification-details,
+         body.profile-verified-page #notificationModal .notification-details,
+         body.profile-supporter-page #notificationModal .notification-details {
+           color: #212529 !important;
+         }
+
+         body.profile-superadmin-page #notificationModal .notification-type,
+         body.profile-staff-page #notificationModal .notification-type,
+         body.profile-moderator-page #notificationModal .notification-type,
+         body.profile-verified-page #notificationModal .notification-type,
+         body.profile-supporter-page #notificationModal .notification-type {
+           color: #212529 !important;
+         }
+
+         body.profile-superadmin-page #notificationModal .notification-message,
+         body.profile-staff-page #notificationModal .notification-message,
+         body.profile-moderator-page #notificationModal .notification-message,
+         body.profile-verified-page #notificationModal .notification-message,
+         body.profile-supporter-page #notificationModal .notification-message {
+           color: #212529 !important;
+         }
+
+         body.profile-superadmin-page #notificationModal .notification-created-at,
+         body.profile-staff-page #notificationModal .notification-created-at,
+         body.profile-moderator-page #notificationModal .notification-created-at,
+         body.profile-verified-page #notificationModal .notification-created-at,
+         body.profile-supporter-page #notificationModal .notification-created-at {
+           color: #212529 !important;
          }
 
 /* Estilos para outros elementos da interface (não navegação) */
