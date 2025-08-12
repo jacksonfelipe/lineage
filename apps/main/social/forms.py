@@ -373,6 +373,36 @@ class ReportForm(forms.ModelForm):
             'resolved_at', 'priority', 'similar_reports_count'
         ]
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        self.content_type = kwargs.pop('content_type', None)
+        self.content_id = kwargs.pop('content_id', None)
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        # Verificar se o usuário já denunciou este conteúdo
+        if self.user and self.content_type and self.content_id:
+            existing_report = Report.objects.filter(
+                reporter=self.user,
+                status__in=['pending', 'reviewing']
+            )
+            
+            if self.content_type == 'post':
+                existing_report = existing_report.filter(reported_post_id=self.content_id)
+            elif self.content_type == 'comment':
+                existing_report = existing_report.filter(reported_comment_id=self.content_id)
+            elif self.content_type == 'user':
+                existing_report = existing_report.filter(reported_user_id=self.content_id)
+            
+            if existing_report.exists():
+                raise forms.ValidationError(
+                    _('Você já denunciou este conteúdo. Aguarde nossa equipe analisar sua denúncia anterior.')
+                )
+        
+        return cleaned_data
+
     def clean_description(self):
         description = self.cleaned_data.get('description')
         if not description or description.strip() == '':

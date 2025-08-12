@@ -938,7 +938,12 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 def report_content(request, content_type, content_id):
     """View para denunciar conteúdo"""
     if request.method == 'POST':
-        form = ReportForm(request.POST)
+        form = ReportForm(
+            request.POST,
+            user=request.user,
+            content_type=content_type,
+            content_id=content_id
+        )
         if form.is_valid():
             try:
                 report = form.save(commit=False)
@@ -994,14 +999,24 @@ def report_content(request, content_type, content_id):
             for field, error_list in form.errors.items():
                 errors[field] = error_list[0] if error_list else ''
             
+            # Verificar se há erro geral (não de campo específico)
+            if form.non_field_errors():
+                message = form.non_field_errors()[0]
+            else:
+                message = _('Por favor, corrija os erros no formulário.')
+            
             return JsonResponse({
                 'success': False,
-                'message': _('Por favor, corrija os erros no formulário.'),
+                'message': message,
                 'errors': errors
             })
     
     # Para requisições GET, retornar página de denúncia (não usado no modal)
-    form = ReportForm()
+    form = ReportForm(
+        user=request.user,
+        content_type=content_type,
+        content_id=content_id
+    )
     
     # Obter informações do conteúdo reportado
     content_info = {}
