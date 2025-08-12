@@ -1120,6 +1120,16 @@ class ModerationAction(BaseModel):
                 logger = logging.getLogger(__name__)
                 logger.error(f'Erro ao criar log de moderação: {log_error}')
             
+            # Enviar notificação ao usuário se solicitado
+            if success and self.notify_user and self.target_user:
+                try:
+                    self._send_notification_to_user()
+                except Exception as notification_error:
+                    # Não propagar o erro da notificação para não quebrar a ação principal
+                    import logging
+                    logger = logging.getLogger(__name__)
+                    logger.error(f'Erro ao enviar notificação ao usuário: {notification_error}')
+            
             return success
             
         except Exception as e:
@@ -1250,6 +1260,59 @@ class ModerationAction(BaseModel):
             return False
         except Exception:
             return False
+
+    def _send_notification_to_user(self):
+        """Envia notificação ao usuário sobre a ação de moderação"""
+        from utils.notifications import send_notification
+        from django.utils.translation import gettext as _
+        
+        # Determinar o tipo de ação para a mensagem
+        action_display = self.get_action_type_display()
+        
+        # Criar mensagem base
+        if self.notification_message:
+            # Usar mensagem personalizada se fornecida
+            message = self.notification_message
+        else:
+            # Criar mensagem padrão baseada no tipo de ação
+            if self.action_type == 'warn':
+                message = _('Você recebeu uma advertência da moderação.')
+            elif self.action_type == 'hide_content':
+                message = _('Seu conteúdo foi ocultado pela moderação.')
+            elif self.action_type == 'delete_content':
+                message = _('Seu conteúdo foi removido pela moderação.')
+            elif self.action_type == 'suspend_user':
+                message = _('Sua conta foi suspensa temporariamente.')
+            elif self.action_type == 'ban_user':
+                message = _('Sua conta foi banida permanentemente.')
+            elif self.action_type == 'restrict_user':
+                message = _('Suas permissões foram restringidas.')
+            elif self.action_type == 'approve_content':
+                message = _('Seu conteúdo foi aprovado pela moderação.')
+            elif self.action_type == 'feature_content':
+                message = _('Seu conteúdo foi destacado pela moderação.')
+            else:
+                message = _('Uma ação de moderação foi aplicada ao seu conteúdo.')
+            
+            # Adicionar motivo se disponível
+            if self.reason:
+                message += f" {_('Motivo')}: {self.reason}"
+        
+        # Criar link para a notificação (opcional)
+        link = None
+        if self.target_post:
+            link = f"/social/post/{self.target_post.id}/"
+        elif self.target_comment:
+            link = f"/social/post/{self.target_comment.post.id}/#comment-{self.target_comment.id}"
+        
+        # Enviar notificação
+        send_notification(
+            user=self.target_user,
+            notification_type='user',
+            message=message,
+            created_by=self.moderator,
+            link=link
+        )
 
     def get_target_type(self):
         """Retorna o tipo do alvo"""
