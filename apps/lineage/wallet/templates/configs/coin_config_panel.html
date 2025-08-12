@@ -510,6 +510,9 @@
                   </td>
                   <td>
                     <div class="action-buttons">
+                      <!-- Debug: Status da moeda -->
+                      <!-- Moeda ID: {{ moeda.id }} | Nome: {{ moeda.nome }} | Ativa: {{ moeda.ativa }} -->
+                      
                       {% if not moeda.ativa %}
                       <form method="post" class="w-100">
                         {% csrf_token %}
