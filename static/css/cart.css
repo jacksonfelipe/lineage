@@ -15,6 +15,8 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
+  overflow-x: auto;
+  overflow-y: auto;
 }
 
 /* Container */
@@ -22,6 +24,8 @@ body {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
+  overflow-x: auto;
+  overflow-y: visible;
 }
 
 /* Page Header */
