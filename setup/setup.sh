@@ -173,6 +173,12 @@ if [ ! -f "$INSTALL_DIR/python_ready" ]; then
   pip install --upgrade pip
   pip install --upgrade setuptools wheel
 
+  # Modificar requirements.txt para incluir o repositório do GitHub
+  echo "📦 Atualizando requirements.txt..."
+  sed -i '/django-encrypted-fields-and-files/d' requirements.txt
+  echo "" >> requirements.txt
+  echo "git+https://github.com/D3NKYT0/django-encrypted-fields.git" >> requirements.txt
+
   # Instalar dependências
   echo "📦 Instalando dependências Python..."
   pip install -r requirements.txt
