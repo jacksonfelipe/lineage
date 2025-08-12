@@ -95,12 +95,11 @@
               <div class="modal fade" id="modalPackageItems{{ cp.pacote.id }}" tabindex="-1" aria-labelledby="modalPackageItemsLabel{{ cp.pacote.id }}" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                   <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="modalPackageItemsLabel{{ cp.pacote.id }}">
-                        <i class="fas fa-box-seam me-2"></i>{{ cp.pacote.nome }} - {% trans "Itens do Pacote" %}
-                      </h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
+                                         <div class="modal-header">
+                       <h5 class="modal-title" id="modalPackageItemsLabel{{ cp.pacote.id }}">
+                         <i class="fas fa-box-seam me-2"></i>{{ cp.pacote.nome }} - {% trans "Itens do Pacote" %}
+                       </h5>
+                     </div>
                     <div class="modal-body">
                       <div class="package-items-list">
                         {% for item in cp.pacote.itens.all %}
