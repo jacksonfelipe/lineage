@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load l10n %}
+{% load social_tags %}
 
 {% block title %}
   {% if object %}
@@ -35,7 +36,7 @@
                    alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
             {% endif %}
           </div>
-          <span class="fw-bold small">{{ user.get_full_name|default:user.username }}</span>
+                      <span class="fw-bold small">{{ user.get_full_name|default:user.username }}{% verified_badge user "14px" %}</span>
         </div>
         <div class="d-flex gap-2">
           <a href="{% url 'social:feed' %}" class="btn btn-outline-secondary btn-sm">
@@ -66,8 +67,8 @@
                    alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
             {% endif %}
           </div>
-          <h5 class="mb-1">{{ user.get_full_name|default:user.username }}</h5>
-          <p class="text-muted small mb-3">@{{ user.username }}</p>
+                      <h5 class="mb-1">{{ user.get_full_name|default:user.username }}{% verified_badge user "18px" %}</h5>
+            <p class="text-muted small mb-3">@{{ user.username }}{% verified_badge user "14px" %}</p>
           
           <!-- Estatísticas do usuário -->
           <div class="row text-center mb-3">

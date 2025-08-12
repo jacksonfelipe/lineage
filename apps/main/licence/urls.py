@@ -12,6 +12,7 @@ urlpatterns = [
     path('<int:license_id>/edit/', views.license_edit, name='edit'),
     path('<int:license_id>/activate/', views.license_activate, name='activate'),
     path('<int:license_id>/deactivate/', views.license_deactivate, name='deactivate'),
+    path('<int:license_id>/reactivate/', views.license_reactivate, name='reactivate'),
     path('<int:license_id>/renew/', views.license_renew, name='renew'),
     path('<int:license_id>/delete/', views.license_delete, name='delete'),
     path('status/', views.status, name='status'),

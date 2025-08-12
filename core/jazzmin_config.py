@@ -99,6 +99,7 @@ def get_jazzmin_settings(project_title, project_logo):
             # FAQ
             "faq.FAQ": "fas fa-question-circle",
             "faq.FAQCategory": "fas fa-folder",
+            "faq.FAQTranslation": "fas fa-language",
             
             # Home
             "home.User": "fas fa-user",
@@ -116,6 +117,11 @@ def get_jazzmin_settings(project_title, project_logo):
             "home.conquistausuario": "fas fa-medal",
             "home.perfilgamer": "fas fa-gamepad",
             "home.addressuser": "fas fa-map-marker-alt",
+            "home.dashboardcontenttranslation": "fas fa-language",
+            "home.siteLogo": "fas fa-image",
+            "home.perfilgamer": "fas fa-gamepad",
+            "home.conquista": "fas fa-trophy",
+            "home.conquistausuario": "fas fa-medal",
             
             # Message
             "message.Friendship": "fas fa-user-friends",
@@ -126,10 +132,13 @@ def get_jazzmin_settings(project_title, project_logo):
             # News
             "news.News": "fas fa-newspaper",
             "news.NewsCategory": "fas fa-folder",
+            "news.NewsTranslation": "fas fa-language",
             
             # Notification
             "notification.Notification": "fas fa-bell",
             "notification.PublicNotificationView": "fas fa-eye",
+            "notification.PushSubscription": "fas fa-mobile-alt",
+            "notification.PushNotificationLog": "fas fa-history",
             
             # Solicitation
             "solicitation.Solicitation": "fas fa-clipboard-list",
@@ -144,7 +153,9 @@ def get_jazzmin_settings(project_title, project_logo):
             # Wallet
             "wallet.Wallet": "fas fa-wallet",
             "wallet.TransacaoWallet": "fas fa-exchange-alt",
+            "wallet.TransacaoBonus": "fas fa-gift",
             "wallet.CoinConfig": "fas fa-coins",
+            "wallet.CoinPurchaseBonus": "fas fa-percentage",
             
             # Payment
             "payment.PedidoPagamento": "fas fa-money-bill-wave",
@@ -171,6 +182,7 @@ def get_jazzmin_settings(project_title, project_logo):
             "shop.CartItem": "fas fa-shopping-basket",
             "shop.CartPackage": "fas fa-boxes-stacked",
             "shop.ShopPurchase": "fas fa-receipt",
+            "shop.PurchaseItem": "fas fa-shopping-bag",
             
             # Auction
             "auction.Auction": "fas fa-gavel",
@@ -230,6 +242,15 @@ def get_jazzmin_settings(project_title, project_logo):
             "wiki.WikiGeneral": "fas fa-info-circle",
             "wiki.WikiRaid": "fas fa-dragon",
             "wiki.WikiAssistance": "fas fa-hands-helping",
+            "wiki.WikiPageTranslation": "fas fa-language",
+            "wiki.WikiSectionTranslation": "fas fa-language",
+            "wiki.WikiUpdateTranslation": "fas fa-language",
+            "wiki.WikiEventTranslation": "fas fa-language",
+            "wiki.WikiRateTranslation": "fas fa-language",
+            "wiki.WikiFeatureTranslation": "fas fa-language",
+            "wiki.WikiGeneralTranslation": "fas fa-language",
+            "wiki.WikiRaidTranslation": "fas fa-language",
+            "wiki.WikiAssistanceTranslation": "fas fa-language",
             
             # Server
             "server.Server": "fas fa-server",
@@ -248,6 +269,22 @@ def get_jazzmin_settings(project_title, project_logo):
             "licence": "fas fa-key",
             "licence.License": "fas fa-key",
             "licence.LicenseVerification": "fas fa-shield-alt",
+            
+            # Social
+            "social.Post": "fas fa-share-alt",
+            "social.Comment": "fas fa-comment",
+            "social.CommentLike": "fas fa-heart",
+            "social.Like": "fas fa-thumbs-up",
+            "social.Share": "fas fa-share",
+            "social.Follow": "fas fa-user-plus",
+            "social.UserProfile": "fas fa-user-circle",
+            "social.Hashtag": "fas fa-hashtag",
+            "social.PostHashtag": "fas fa-tag",
+            "social.Report": "fas fa-flag",
+            "social.ReportFilterFlag": "fas fa-filter",
+            "social.ModerationAction": "fas fa-gavel",
+            "social.ContentFilter": "fas fa-shield-alt",
+            "social.ModerationLog": "fas fa-clipboard-list",
         },
         # Icons that are used when one is not manually specified
         "default_icon_parents": "fas fa-chevron-circle-right",

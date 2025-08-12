@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load l10n %}
+{% load social_tags %}
 
 {% block title %} {% trans "Feed Social" %} {% endblock title %}
 
@@ -29,7 +30,7 @@
                    alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
             {% endif %}
           </div>
-          <span class="fw-bold small">{{ user.get_full_name|default:user.username }}</span>
+          <span class="fw-bold small">{{ user.get_full_name|default:user.username }}{% verified_badge user "14px" %}</span>
         </div>
         <div class="d-flex gap-2">
           <a href="{% url 'social:search' %}" class="btn btn-outline-secondary btn-sm">
@@ -65,8 +66,8 @@
                    alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
             {% endif %}
           </div>
-          <h5 class="mb-1">{{ user.get_full_name|default:user.username }}</h5>
-          <p class="text-muted small mb-3">@{{ user.username }}</p>
+                  <h5 class="mb-1">{{ user.get_full_name|default:user.username }}{% verified_badge user "18px" %}</h5>
+        <p class="text-muted small mb-3">@{{ user.username }}{% verified_badge user "14px" %}</p>
           
           <!-- Estatísticas do usuário -->
           <div class="row text-center mb-3">
@@ -488,11 +489,11 @@
                 </div>
                 <div class="flex-grow-1">
                   <div class="d-flex align-items-center">
-                    <h6 class="mb-0">
-                      <a href="{% url 'social:user_profile' post.author.username %}" class="text-decoration-none">
-                        {{ post.author.get_full_name|default:post.author.username }}
-                      </a>
-                    </h6>
+                                                      <h6 class="mb-0">
+                          <a href="{% url 'social:user_profile' post.author.username %}" class="text-decoration-none">
+                            {{ post.author.get_full_name|default:post.author.username }}{% verified_badge post.author "14px" %}
+                          </a>
+                        </h6>
                     {% if not post.is_public %}
                       <span class="badge bg-secondary ms-2">
                         <i class="bi bi-lock"></i> {% trans "Privado" %}
@@ -697,7 +698,7 @@
                   </div>
                   
                   <!-- Botão de comentar -->
-                  <a href="{% url 'social:post_detail' post.id %}" class="btn btn-outline-secondary btn-sm">
+                  <a href="{% url 'social:post_detail' post.id %}" class="btn btn-outline-secondary btn-sm" title="{% trans 'Ver comentários' %}">
                     <i class="bi bi-chat"></i>
                     <span>{{ post.comments_count }}</span>
                   </a>
@@ -823,8 +824,8 @@
                   {% endif %}
                 </div>
                 <div class="flex-grow-1">
-                  <div class="small fw-bold">{{ suggested_user.get_full_name|default:suggested_user.username }}</div>
-                  <div class="small text-muted">@{{ suggested_user.username }}</div>
+                          <div class="small fw-bold">{{ suggested_user.get_full_name|default:suggested_user.username }}{% verified_badge suggested_user "12px" %}</div>
+        <div class="small text-muted">@{{ suggested_user.username }}{% verified_badge suggested_user "10px" %}</div>
                 </div>
                 <button class="btn btn-sm btn-outline-primary follow-btn" data-user-id="{% localize off %}{{ suggested_user.id }}{% endlocalize %}">
                   <i class="bi bi-person-plus"></i>

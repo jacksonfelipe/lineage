@@ -227,9 +227,29 @@ def coin_config_panel(request):
     if request.method == "POST":
         if "activate_coin_id" in request.POST:
             coin_id = request.POST.get("activate_coin_id")
-            if coin_id and CoinConfig.objects.filter(id=coin_id).exists():
-                CoinConfig.objects.update(ativa=False)
-                CoinConfig.objects.filter(id=coin_id).update(ativa=True)
+            if coin_id:
+                try:
+                    # Busca a moeda que será ativada
+                    moeda_para_ativar = CoinConfig.objects.get(id=coin_id)
+                    
+                    # Verifica se a moeda já está ativa
+                    if moeda_para_ativar.ativa:
+                        messages.info(request, f'Moeda "{moeda_para_ativar.nome}" já está ativa.')
+                        return redirect("wallet:coin_config_panel")
+                    
+                    # Desativa todas as moedas primeiro
+                    CoinConfig.objects.update(ativa=False)
+                    
+                    # Ativa a moeda selecionada usando save() para garantir que a lógica do modelo seja executada
+                    moeda_para_ativar.ativa = True
+                    moeda_para_ativar.save()
+                    
+                    messages.success(request, f'Moeda "{moeda_para_ativar.nome}" ativada com sucesso!')
+                except CoinConfig.DoesNotExist:
+                    messages.error(request, 'Moeda não encontrada.')
+                except Exception as e:
+                    messages.error(request, f'Erro ao ativar moeda: {str(e)}')
+                
                 return redirect("wallet:coin_config_panel")
 
         elif "create_coin" in request.POST:
@@ -238,18 +258,43 @@ def coin_config_panel(request):
             multiplicador = request.POST.get("multiplicador")
 
             if nome and coin_id and multiplicador:
-                CoinConfig.objects.create(
-                    nome=nome,
-                    coin_id=coin_id,
-                    multiplicador=multiplicador,
-                    ativa=False
-                )
+                try:
+                    # Verifica se já existe uma moeda com este ID
+                    if CoinConfig.objects.filter(coin_id=coin_id).exists():
+                        messages.error(request, f'Já existe uma moeda configurada com o ID {coin_id}.')
+                        return redirect("wallet:coin_config_panel")
+                    
+                    # Cria a nova moeda (ativa=False por padrão)
+                    nova_moeda = CoinConfig.objects.create(
+                        nome=nome,
+                        coin_id=coin_id,
+                        multiplicador=multiplicador,
+                        ativa=False
+                    )
+                    messages.success(request, f'Moeda "{nova_moeda.nome}" criada com sucesso!')
+                except Exception as e:
+                    messages.error(request, f'Erro ao criar moeda: {str(e)}')
+                
                 return redirect("wallet:coin_config_panel")
 
         elif "delete_coin_id" in request.POST:
             coin_id = request.POST.get("delete_coin_id")
-            if coin_id and CoinConfig.objects.filter(id=coin_id).exists():
-                CoinConfig.objects.filter(id=coin_id).delete()
+            if coin_id:
+                try:
+                    moeda = CoinConfig.objects.get(id=coin_id)
+                    nome_moeda = moeda.nome
+                    
+                    # Verifica se é a moeda ativa
+                    if moeda.ativa:
+                        messages.warning(request, f'Moeda "{nome_moeda}" estava ativa e foi removida.')
+                    
+                    moeda.delete()
+                    messages.success(request, f'Moeda "{nome_moeda}" excluída com sucesso!')
+                except CoinConfig.DoesNotExist:
+                    messages.error(request, 'Moeda não encontrada.')
+                except Exception as e:
+                    messages.error(request, f'Erro ao excluir moeda: {str(e)}')
+                
                 return redirect("wallet:coin_config_panel")
 
     moedas = CoinConfig.objects.all().order_by("-ativa", "nome")

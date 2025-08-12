@@ -19,7 +19,7 @@
     align-items: center;
     justify-content: center;
     min-width: 120px;
-    z-index: 1001;
+    z-index: 99;
   }
 
   .btn-social::before {
@@ -137,13 +137,20 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1000;
+    z-index: 99;
   }
 
   /* Ajuste do container da navbar para permitir posicionamento absoluto */
   .navbar {
     position: relative;
     z-index: 1002;
+  }
+
+  /* Fundo #F2F4F6 transparente a 80% para a navbar */
+  .navbar-top {
+    background-color: rgba(242, 244, 246, 0.8) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
   /* Responsividade para o botão centralizado */
@@ -185,45 +192,105 @@
     /* Garantir que todos os elementos da navbar sejam clicáveis no mobile */
     .navbar-nav .nav-item {
       position: relative;
-      z-index: 1003;
+      z-index: 99;
     }
     
     .navbar-nav .nav-link {
       position: relative;
-      z-index: 1003;
+      z-index: 99;
     }
     
     .navbar-nav .dropdown-menu {
-      z-index: 1004;
+      z-index: 100;
     }
     
-    /* Garantir que a navbar tenha prioridade máxima */
+    /* Garantir que a navbar tenha prioridade adequada, mas não sobreponha o sidebar */
     .navbar-top {
-      z-index: 9999 !important;
+      z-index: 99 !important;
       position: relative;
     }
     
     .navbar-top .container-fluid {
-      z-index: 9999 !important;
+      z-index: 99 !important;
       position: relative;
     }
     
     .navbar-top .navbar-nav {
-      z-index: 9999 !important;
+      z-index: 99 !important;
       position: relative;
     }
     
     /* Garantir que todos os links sejam clicáveis */
     .navbar-top a {
       position: relative;
-      z-index: 10000 !important;
+      z-index: 100 !important;
       pointer-events: auto !important;
     }
     
     .navbar-top button {
       position: relative;
-      z-index: 10000 !important;
+      z-index: 100 !important;
       pointer-events: auto !important;
+    }
+    
+    /* Garantir que o sidebar tenha prioridade máxima quando aberto */
+    .sidebar.show {
+      z-index: 9999 !important;
+    }
+    
+    /* Quando o sidebar está aberto, reduzir o z-index da navbar */
+    body[style*="position: fixed"] .navbar-top {
+      z-index: 98 !important;
+    }
+    
+    body[style*="position: fixed"] .navbar-top .container-fluid {
+      z-index: 98 !important;
+    }
+    
+    body[style*="position: fixed"] .navbar-top .navbar-nav {
+      z-index: 98 !important;
+    }
+    
+    body[style*="position: fixed"] .navbar-top a {
+      z-index: 99 !important;
+    }
+    
+    body[style*="position: fixed"] .navbar-top button {
+      z-index: 99 !important;
+    }
+  }
+  
+  /* Garantir que o sidebar tenha prioridade sobre a navigation no mobile */
+  @media (max-width: 768px) {
+    #sidebarMenu {
+      z-index: 9999 !important;
+    }
+    
+    #sidebarMenu.show {
+      z-index: 9999 !important;
+    }
+    
+    /* Overlay do sidebar quando aberto */
+    #sidebarMenu::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: -1;
+    }
+    
+    /* Garantir que o botão de toggle do sidebar tenha z-index adequado */
+    .navbar-toggler[data-bs-target="#sidebarMenu"] {
+      z-index: 10000 !important;
+      position: relative;
+    }
+    
+    /* Garantir que a navbar do nav.html não sobreponha o sidebar */
+    .navbar.navbar-dark.d-lg-none {
+      z-index: 98 !important;
     }
   }
 </style>

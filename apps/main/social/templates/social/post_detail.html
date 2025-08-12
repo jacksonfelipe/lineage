@@ -1,6 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load social_tags %}
 
 {% block title %} {% trans "Post" %} - {{ post.author.get_full_name|default:post.author.username }} {% endblock title %}
 
@@ -25,7 +26,7 @@
             <div class="flex-grow-1">
               <h6 class="mb-0">
                 <a href="{% url 'social:user_profile' post.author.username %}" class="text-decoration-none">
-                  {{ post.author.get_full_name|default:post.author.username }}
+                  {{ post.author.get_full_name|default:post.author.username }}{% verified_badge post.author "14px" %}
                 </a>
               </h6>
               <small class="text-muted">
@@ -235,7 +236,7 @@
                         <div>
                           <h6 class="mb-0">
                             <a href="{% url 'social:user_profile' comment.author.username %}" class="text-decoration-none">
-                              {{ comment.author.get_full_name|default:comment.author.username }}
+                              {{ comment.author.get_full_name|default:comment.author.username }}{% verified_badge comment.author "12px" %}
                             </a>
                           </h6>
                           <small class="text-muted">
@@ -256,6 +257,54 @@
                         {% endif %}
                       </div>
                       <p class="mb-0">{{ comment.content|linebreaks }}</p>
+                      
+                      <!-- Ações do comentário -->
+                      <div class="d-flex justify-content-between align-items-center mt-2">
+                        <div class="d-flex gap-2">
+                          <button class="btn btn-link text-muted btn-sm p-0 reply-btn" data-comment-id="{{ comment.id }}">
+                            <i class="bi bi-reply"></i> {% trans "Responder" %}
+                          </button>
+                        </div>
+                        <small class="text-muted">
+                          {{ comment.replies.count }} {% trans "resposta" %}{{ comment.replies.count|pluralize:"s" }}
+                        </small>
+                      </div>
+                    </div>
+                    
+                    <!-- Formulário de resposta (inicialmente oculto) -->
+                    <div class="reply-form-container mt-2" id="reply-form-{{ comment.id }}" style="display: none;">
+                      <form method="post" class="reply-form" data-comment-id="{{ comment.id }}">
+                        {% csrf_token %}
+                        <input type="hidden" name="parent_comment_id" value="{{ comment.id }}">
+                        <div class="d-flex align-items-start">
+                          <div class="avatar-container me-2" style="width: 30px; height: 30px; border-radius: 50%; overflow: hidden;">
+                            {% if user.avatar %}
+                              <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
+                                   alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
+                            {% else %}
+                              <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                                   alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
+                            {% endif %}
+                          </div>
+                          <div class="flex-grow-1">
+                            <textarea name="reply_content" class="form-control form-control-sm" rows="2" 
+                                      placeholder="{% trans 'Escreva uma resposta...' %}" maxlength="300"></textarea>
+                            <div class="d-flex justify-content-between align-items-center mt-1">
+                              <small class="text-muted">
+                                <span class="reply-char-count">0</span>/300 {% trans "caracteres" %}
+                              </small>
+                              <div class="d-flex gap-1">
+                                <button type="button" class="btn btn-sm btn-outline-secondary cancel-reply-btn">
+                                  {% trans "Cancelar" %}
+                                </button>
+                                <button type="submit" class="btn btn-sm btn-primary">
+                                  <i class="bi bi-send"></i> {% trans "Responder" %}
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
                     </div>
                     
                     <!-- Respostas aos comentários -->
@@ -278,7 +327,7 @@
                                   <div>
                                     <h6 class="mb-0 small">
                                       <a href="{% url 'social:user_profile' reply.author.username %}" class="text-decoration-none">
-                                        {{ reply.author.get_full_name|default:reply.author.username }}
+                                        {{ reply.author.get_full_name|default:reply.author.username }}{% verified_badge reply.author "10px" %}
                                       </a>
                                     </h6>
                                     <small class="text-muted">
@@ -433,6 +482,121 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    // Funcionalidade de resposta aos comentários
+    const replyBtns = document.querySelectorAll('.reply-btn');
+    const cancelReplyBtns = document.querySelectorAll('.cancel-reply-btn');
+    const replyForms = document.querySelectorAll('.reply-form');
+    
+    // Botões de responder
+    replyBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const commentId = this.dataset.commentId;
+            const replyForm = document.getElementById(`reply-form-${commentId}`);
+            
+            if (replyForm) {
+                // Ocultar todos os outros formulários de resposta
+                document.querySelectorAll('.reply-form-container').forEach(form => {
+                    form.style.display = 'none';
+                });
+                
+                // Mostrar o formulário de resposta atual
+                replyForm.style.display = 'block';
+                
+                // Focar no campo de resposta
+                const replyField = replyForm.querySelector('textarea[name="reply_content"]');
+                if (replyField) {
+                    replyField.focus();
+                }
+            }
+        });
+    });
+    
+    // Botões de cancelar resposta
+    cancelReplyBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const replyForm = this.closest('.reply-form-container');
+            if (replyForm) {
+                replyForm.style.display = 'none';
+                
+                // Limpar o campo de resposta
+                const replyField = replyForm.querySelector('textarea[name="reply_content"]');
+                if (replyField) {
+                    replyField.value = '';
+                    const charCount = replyForm.querySelector('.reply-char-count');
+                    if (charCount) {
+                        charCount.textContent = '0';
+                    }
+                }
+            }
+        });
+    });
+    
+    // Contador de caracteres para respostas
+    document.querySelectorAll('textarea[name="reply_content"]').forEach(textarea => {
+        textarea.addEventListener('input', function() {
+            const charCount = this.closest('.reply-form').querySelector('.reply-char-count');
+            if (charCount) {
+                charCount.textContent = this.value.length;
+                
+                // Mudar cor baseado na quantidade de caracteres
+                if (this.value.length > 250) {
+                    charCount.classList.add('text-warning');
+                    charCount.classList.remove('text-muted');
+                } else if (this.value.length > 300) {
+                    charCount.classList.add('text-danger');
+                    charCount.classList.remove('text-warning');
+                } else {
+                    charCount.classList.add('text-muted');
+                    charCount.classList.remove('text-warning', 'text-danger');
+                }
+            }
+        });
+    });
+    
+    // Envio de formulários de resposta
+    replyForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const commentId = this.dataset.commentId;
+            const replyContent = this.querySelector('textarea[name="reply_content"]').value.trim();
+            
+            if (!replyContent) {
+                alert('{% trans "A resposta não pode estar vazia." %}');
+                return;
+            }
+            
+            if (replyContent.length > 300) {
+                alert('{% trans "A resposta não pode ter mais de 300 caracteres." %}');
+                return;
+            }
+            
+            // Enviar resposta via AJAX
+            const formData = new FormData();
+            formData.append('reply_content', replyContent);
+            formData.append('parent_comment_id', commentId);
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+            
+            fetch('{% url "social:post_detail" post.id %}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Recarregar a página para mostrar a nova resposta
+                    window.location.reload();
+                } else {
+                    throw new Error('Erro ao enviar resposta');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('{% trans "Erro ao enviar resposta. Tente novamente." %}');
+            });
+        });
+    });
     
     // Smooth scroll para comentários
     const commentButtons = document.querySelectorAll('[onclick*="comment-form"]');

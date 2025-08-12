@@ -2,8 +2,29 @@
 {% load static %}
 {% load i18n %}
 {% load l10n %}
+{% load social_tags %}
 
 {% block title %} {{ profile_user.get_full_name|default:profile_user.username }} - {% trans "Perfil" %} {% endblock title %}
+
+{% block extrahead %}
+<script>
+// Aplicar classe CSS no body baseada no tipo de perfil imediatamente
+(function() {
+  const profileType = '{{ profile_user.profile_type }}';
+  if (profileType !== 'regular') {
+    // Aplicar imediatamente se o body já existe
+    if (document.body) {
+      document.body.classList.add('profile-' + profileType + '-page');
+    } else {
+      // Se o body ainda não existe, aplicar quando o DOM estiver pronto
+      document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('profile-' + profileType + '-page');
+      });
+    }
+  }
+})();
+</script>
+{% endblock extrahead %}
 
 {% block content %}
 {% csrf_token %}
@@ -16,7 +37,7 @@
           <a href="{% url 'social:feed' %}" class="btn btn-outline-secondary btn-sm me-2">
             <i class="bi bi-arrow-left"></i>
           </a>
-          <span class="fw-bold">{{ profile_user.get_full_name|default:profile_user.username }}</span>
+                      <span class="fw-bold">{{ profile_user.get_full_name|default:profile_user.username }}{% verified_badge profile_user "14px" %}</span>
         </div>
         <div class="d-flex gap-2">
           {% if user == profile_user %}
@@ -38,35 +59,65 @@
     <div class="col-12 col-lg-8 mx-auto">
       
       <!-- Header do perfil -->
-      <div class="card mb-4">
+      <div class="card mb-4 profile-container {{ profile_user.profile_color_class }}">
         <div class="card-body p-0">
           <!-- Imagem de capa -->
           {% if profile_user.social_profile.cover_image %}
-            <div class="profile-cover" style="height: 200px; background-image: url('{{ profile_user.social_profile.cover_image.url }}'); background-size: cover; background-position: center;"></div>
+            <div class="profile-cover {{ profile_user.profile_color_class }}" style="height: 200px; background-image: url('{{ profile_user.social_profile.cover_image.url }}'); background-size: cover; background-position: center;"></div>
           {% else %}
-            <div class="profile-cover bg-gradient-primary" style="height: 200px;"></div>
+            <div class="profile-cover {{ profile_user.profile_color_class }}" style="height: 200px;"></div>
           {% endif %}
           
           <!-- Informações do perfil -->
           <div class="profile-info p-4">
             <div class="d-flex align-items-end">
                              <!-- Avatar -->
-               <div class="profile-avatar-container me-4 d-none d-lg-block" style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; border: 4px solid white; margin-top: -60px; position: relative;">
+               <div class="profile-avatar-container me-4 d-none d-lg-block {{ profile_user.profile_color_class }}" style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; margin-top: -60px; position: relative;">
                 {% if profile_user.avatar %}
                   <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' profile_user.uuid timestamp %}" 
-                       alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
+                       alt="Avatar" class="w-100 h-100 profile-avatar-image" style="object-fit: cover;">
                 {% else %}
                   <img src="{% static 'assets/img/team/generic_user.png' %}" 
-                       alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
+                       alt="Avatar" class="w-100 h-100 profile-avatar-image" style="object-fit: cover;">
+                {% endif %}
+                {% if profile_user.profile_type != 'regular' %}
+                  <div class="avatar-glow {{ profile_user.profile_color_class }}"></div>
                 {% endif %}
               </div>
               
               <div class="flex-grow-1">
-                <h3 class="mb-1">{{ profile_user.get_full_name|default:profile_user.username }}</h3>
-                <p class="text-muted mb-2">@{{ profile_user.username }}</p>
+                            <h3 class="mb-1 profile-name {{ profile_user.profile_color_class }}">{{ profile_user.get_full_name|default:profile_user.username }}{% profile_badge profile_user "20px" %}{% verified_badge profile_user "20px" %}</h3>
+            <p class="text-muted mb-2">@{{ profile_user.username }}{% profile_badge profile_user "16px" %}{% verified_badge profile_user "16px" %}</p>
                 
                 {% if profile_user.social_profile.bio %}
                   <p class="mb-3">{{ profile_user.social_profile.bio }}</p>
+                {% endif %}
+                
+                <!-- Tipo de perfil -->
+                {% if profile_user.profile_type != 'regular' %}
+                  <div class="mb-3">
+                    <div class="profile-status-display {{ profile_user.profile_color_class }}">
+                      <div class="status-icon">
+                        <i class="bi {{ profile_user.profile_icon }}"></i>
+                      </div>
+                      <div class="status-info">
+                        <div class="status-title">{% profile_type_display profile_user %}</div>
+                        <div class="status-description">
+                          {% if profile_user.profile_type == 'superadmin' %}
+                            Acesso total ao sistema e controle absoluto
+                          {% elif profile_user.profile_type == 'staff' %}
+                            Membro da equipe com privilégios administrativos
+                          {% elif profile_user.profile_type == 'moderator' %}
+                            Moderador da comunidade com poderes especiais
+                          {% elif profile_user.profile_type == 'verified' %}
+                            Conta verificada e confiável
+                          {% elif profile_user.profile_type == 'supporter' %}
+                            Apoiador da comunidade com benefícios especiais
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 {% endif %}
                 
                 <!-- Informações de contato e localização -->
@@ -212,9 +263,9 @@
                     <div class="flex-grow-1">
                       <div class="d-flex align-items-center">
                         <h6 class="mb-0">
-                          <a href="{% url 'social:user_profile' post.author.username %}" class="text-decoration-none">
-                            {{ post.author.get_full_name|default:post.author.username }}
-                          </a>
+                                                <a href="{% url 'social:user_profile' post.author.username %}" class="text-decoration-none">
+                        {{ post.author.get_full_name|default:post.author.username }}{% profile_badge post.author "14px" %}{% verified_badge post.author "14px" %}
+                      </a>
                         </h6>
                         {% if post.is_pinned %}
                           <span class="badge bg-warning ms-2">
@@ -325,10 +376,10 @@
                       </button>
                       
                       <!-- Comentários -->
-                      <button class="btn btn-sm btn-outline-secondary me-2 comment-btn" data-post-id="{{ post.id }}">
+                      <a href="{% url 'social:post_detail' post.id %}" class="btn btn-sm btn-outline-secondary me-2" title="{% trans 'Ver comentários' %}">
                         <i class="bi bi-chat"></i>
                         <span class="comment-count">{{ post.comments_count }}</span>
-                      </button>
+                      </a>
                       
                       <!-- Compartilhar -->
                       <button class="btn btn-sm btn-outline-success me-2 share-btn" data-post-id="{{ post.id }}">

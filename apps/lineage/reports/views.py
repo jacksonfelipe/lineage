@@ -9,6 +9,8 @@ from django.utils.timezone import now, timedelta
 from apps.lineage.auction.models import Auction, Bid
 from apps.lineage.inventory.models import InventoryLog
 from apps.lineage.shop.models import ShopPurchase, ShopItem, ShopPackage, PromotionCode, Cart
+from apps.main.home.models import User
+from apps.main.social.models import Post, Comment, Like, Share, UserProfile, Follow, Hashtag, PostHashtag
 
 
 @staff_member_required
@@ -214,3 +216,144 @@ def relatorio_compras(request):
     }
 
     return render(request, 'reports/relatorio_compras.html', contexto)
+
+
+@staff_member_required
+def relatorio_rede_social(request):
+    """Relatório completo da rede social"""
+    
+    # Estatísticas gerais
+    total_posts = Post.objects.count()
+    total_comments = Comment.objects.count()
+    total_likes = Like.objects.count()
+    total_shares = Share.objects.count()
+    total_users = UserProfile.objects.count()
+    total_follows = Follow.objects.count()
+    total_hashtags = Hashtag.objects.count()
+    
+    # Posts por período (últimos 30 dias)
+    data_inicio = now() - timedelta(days=30)
+    posts_30_dias = Post.objects.filter(created_at__gte=data_inicio).count()
+    posts_por_dia = (
+        Post.objects.filter(created_at__gte=data_inicio)
+        .extra(select={'dia': "DATE(created_at)"})
+        .values('dia')
+        .annotate(total=Count('id'))
+        .order_by('dia')
+    )
+    
+    # Usuários mais ativos
+    usuarios_mais_ativos = (
+        Post.objects.values('author__username')
+        .annotate(
+            total_posts=Count('id'),
+            total_likes_received=Sum('likes_count'),
+            total_comments_received=Sum('comments_count')
+        )
+        .order_by('-total_posts')[:10]
+    )
+    
+    # Posts mais populares
+    posts_mais_populares = (
+        Post.objects.select_related('author')
+        .annotate(
+            total_engagement=F('likes_count') + F('comments_count') + F('shares_count')
+        )
+        .order_by('-total_engagement')[:10]
+    )
+    
+    # Hashtags mais populares
+    hashtags_populares = (
+        PostHashtag.objects.values('hashtag__name')
+        .annotate(
+            total_posts=Count('post'),
+            total_likes=Sum('post__likes_count'),
+            total_comments=Sum('post__comments_count')
+        )
+        .order_by('-total_posts')[:10]
+    )
+    
+    # Estatísticas de engajamento
+    posts_com_imagem = Post.objects.filter(image__isnull=False).count()
+    posts_com_video = Post.objects.filter(video__isnull=False).count()
+    posts_com_link = Post.objects.filter(link__isnull=False).count()
+    posts_fixados = Post.objects.filter(is_pinned=True).count()
+    
+    # Reações por tipo
+    reacoes_por_tipo = (
+        Like.objects.values('reaction_type')
+        .annotate(total=Count('id'))
+        .order_by('-total')
+    )
+    
+    # Comentários mais curtidos
+    comentarios_populares = (
+        Comment.objects.select_related('post', 'author')
+        .order_by('-likes_count')[:10]
+    )
+    
+    # Usuários com mais seguidores - usando as relações corretas do modelo Follow
+    usuarios_influentes = []
+    
+    # Buscar usuários com mais seguidores usando uma query otimizada
+    users_with_followers = (
+        User.objects.annotate(
+            followers_count=Count('followers'),
+            following_count=Count('following'),
+            posts_count=Count('social_posts')
+        )
+        .filter(followers_count__gt=0)
+        .order_by('-followers_count')[:10]
+    )
+    
+    for user in users_with_followers:
+        try:
+            profile = user.social_profile
+        except UserProfile.DoesNotExist:
+            continue
+            
+        usuarios_influentes.append({
+            'user': user,
+            'followers_count': user.followers_count,
+            'following_count': user.following_count,
+            'posts_count': user.posts_count
+        })
+    
+    # Dados para gráficos
+    dias_labels = [str(item['dia']) for item in posts_por_dia] if posts_por_dia else []
+    posts_por_dia_values = [item['total'] for item in posts_por_dia] if posts_por_dia else []
+    
+    reacoes_labels = [item['reaction_type'] for item in reacoes_por_tipo] if reacoes_por_tipo else []
+    reacoes_values = [item['total'] for item in reacoes_por_tipo] if reacoes_por_tipo else []
+    
+    hashtags_labels = [item['hashtag__name'] for item in hashtags_populares[:5]] if hashtags_populares else []
+    hashtags_values = [item['total_posts'] for item in hashtags_populares[:5]] if hashtags_populares else []
+    
+    contexto = {
+        'total_posts': total_posts,
+        'total_comments': total_comments,
+        'total_likes': total_likes,
+        'total_shares': total_shares,
+        'total_users': total_users,
+        'total_follows': total_follows,
+        'total_hashtags': total_hashtags,
+        'posts_30_dias': posts_30_dias,
+        'posts_por_dia_labels': json.dumps(dias_labels),
+        'posts_por_dia_values': json.dumps(posts_por_dia_values),
+        'usuarios_mais_ativos': usuarios_mais_ativos,
+        'posts_mais_populares': posts_mais_populares,
+        'hashtags_populares': hashtags_populares,
+        'posts_com_imagem': posts_com_imagem,
+        'posts_com_video': posts_com_video,
+        'posts_com_link': posts_com_link,
+        'posts_fixados': posts_fixados,
+        'reacoes_por_tipo': reacoes_por_tipo,
+        'reacoes_labels': json.dumps(reacoes_labels),
+        'reacoes_values': json.dumps(reacoes_values),
+        'comentarios_populares': comentarios_populares,
+        'usuarios_influentes': usuarios_influentes,
+        'hashtags_labels': json.dumps(hashtags_labels),
+        'hashtags_values': json.dumps(hashtags_values),
+    }
+    
+    return render(request, 'reports/relatorio_rede_social.html', contexto)

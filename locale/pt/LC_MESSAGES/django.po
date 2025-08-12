@@ -6684,6 +6684,9 @@ msgstr "Voltar ao registro"
 msgid "Conta verificada com sucesso!"
 msgstr "Conta verificada com sucesso!"
 
+msgid "Conta Verificada"
+msgstr "Conta Verificada"
+
 msgid "Agora você pode acessar sua conta com segurança."
 msgstr "Agora você pode acessar sua conta com segurança."
 

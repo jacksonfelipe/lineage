@@ -75,7 +75,9 @@ class CoinConfig(BaseModel):
         verbose_name_plural = _("Configurações de Moeda")
 
     def save(self, *args, **kwargs):
+        # Se esta moeda está sendo ativada, desativa todas as outras
         if self.ativa:
+            # Usa update() para evitar recursão infinita
             CoinConfig.objects.exclude(pk=self.pk).update(ativa=False)
         super().save(*args, **kwargs)
 

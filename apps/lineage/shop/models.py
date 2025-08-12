@@ -135,6 +135,7 @@ class CartItem(BaseModel):
     class Meta:
         verbose_name = _("Item no Carrinho")
         verbose_name_plural = _("Itens no Carrinho")
+        unique_together = ['cart', 'item']  # Garante que não existam duplicatas
 
     def __str__(self):
         return f"{self.quantidade}x {self.item.nome} (Carrinho de {self.cart.user.username})"

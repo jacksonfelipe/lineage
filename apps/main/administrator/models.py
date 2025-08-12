@@ -72,8 +72,8 @@ class Theme(BaseModel):
     def clean_upload(self):
         file = self.upload
         if file:
-            if file.size > 30 * 1024 * 1024:
-                raise ValidationError(_("O arquivo é muito grande. Tente um arquivo menor que 30MB."))
+            if file.size > 50 * 1024 * 1024:
+                raise ValidationError(_("O arquivo é muito grande. Tente um arquivo menor que 50MB."))
             if not zipfile.is_zipfile(file):
                 raise ValidationError(_("O arquivo não é um ZIP válido."))
         return file

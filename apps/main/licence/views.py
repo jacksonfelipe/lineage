@@ -231,6 +231,23 @@ def license_deactivate(request, license_id):
 
 @login_required
 @user_passes_test(is_superuser)
+def license_reactivate(request, license_id):
+    """
+    Reativa uma licença suspensa
+    """
+    license_obj = get_object_or_404(License, id=license_id)
+    
+    try:
+        license_obj.reactivate()
+        messages.success(request, "Licença reativada com sucesso!")
+    except Exception as e:
+        messages.error(request, f"Erro ao reativar licença: {str(e)}")
+    
+    return redirect('licence:detail', license_id=license_obj.id)
+
+
+@login_required
+@user_passes_test(is_superuser)
 def license_renew(request, license_id):
     """
     Renova uma licença
