@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.http import Http404
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from apps.main.faq.models import FAQ
 from apps.main.news.models import News
 from django.utils.translation import get_language, gettext as _
@@ -8,12 +9,26 @@ from django.shortcuts import redirect
 
 
 def public_news_list(request):
-    latest_news_list = News.objects.filter(is_published=True, is_private=False).order_by('-pub_date')[:5]
+    # Busca todas as notícias publicadas e públicas, ordenadas por data
+    all_news = News.objects.filter(is_published=True, is_private=False).order_by('-pub_date')
+    
+    # Configuração da paginação
+    paginator = Paginator(all_news, 12)  # 12 notícias por página
+    page = request.GET.get('page')
+    
+    try:
+        news_page = paginator.page(page)
+    except PageNotAnInteger:
+        # Se a página não for um número, mostra a primeira página
+        news_page = paginator.page(1)
+    except EmptyPage:
+        # Se a página estiver fora do range, mostra a última página
+        news_page = paginator.page(paginator.num_pages)
 
     language = get_language()
     news_with_translations = []
 
-    for news in latest_news_list:
+    for news in news_page:
         translation = news.translations.filter(language=language).first()
         if translation:
             news_with_translations.append({
@@ -22,7 +37,16 @@ def public_news_list(request):
             })
 
     context = {
-        'latest_news_list': news_with_translations
+        'latest_news_list': news_with_translations,
+        'news_page': news_page,
+        'total_news': all_news.count(),
+        'has_other_pages': news_page.has_other_pages(),
+        'has_previous': news_page.has_previous(),
+        'has_next': news_page.has_next(),
+        'previous_page_number': news_page.previous_page_number() if news_page.has_previous() else None,
+        'next_page_number': news_page.next_page_number() if news_page.has_next() else None,
+        'current_page': news_page.number,
+        'num_pages': paginator.num_pages,
     }
 
     return render_theme_page(request, 'public', 'news_index.html', context)
