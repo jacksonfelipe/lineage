@@ -261,6 +261,27 @@ class Comment(BaseModel):
         if not user or not user.is_authenticated:
             return False
         return self.comment_likes.filter(user=user).exists()
+    
+    def get_level(self):
+        """Retorna o nível de aninhamento do comentário (0 = comentário principal)"""
+        level = 0
+        current = self
+        while current.parent:
+            level += 1
+            current = current.parent
+        return level
+    
+    def get_all_replies(self):
+        """Retorna todas as respostas aninhadas do comentário"""
+        replies = []
+        for reply in self.replies.all():
+            replies.append(reply)
+            replies.extend(reply.get_all_replies())
+        return replies
+    
+    def get_reply_count(self):
+        """Retorna o número total de respostas (incluindo respostas de respostas)"""
+        return len(self.get_all_replies())
 
 
 class CommentLike(BaseModel):
