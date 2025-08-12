@@ -1310,53 +1310,345 @@ body.profile-supporter-page::before {
 }
 
 /* ===== NAVEGAÇÃO COM TEXTOS BRANCOS ===== */
-body.profile-superadmin-page .navbar-brand,
-body.profile-staff-page .navbar-brand,
-body.profile-moderator-page .navbar-brand,
-body.profile-verified-page .navbar-brand,
-body.profile-supporter-page .navbar-brand {
+/* Exceções para a navegação principal - manter textos escuros para legibilidade */
+body.profile-superadmin-page .navbar-top .navbar-brand,
+body.profile-staff-page .navbar-top .navbar-brand,
+body.profile-moderator-page .navbar-top .navbar-brand,
+body.profile-verified-page .navbar-top .navbar-brand,
+body.profile-supporter-page .navbar-top .navbar-brand {
+  color: #212529 !important;
+}
+
+body.profile-superadmin-page .navbar-top .navbar-nav .nav-link,
+body.profile-staff-page .navbar-top .navbar-nav .nav-link,
+body.profile-moderator-page .navbar-top .navbar-nav .nav-link,
+body.profile-verified-page .navbar-top .navbar-nav .nav-link,
+body.profile-supporter-page .navbar-top .navbar-nav .nav-link {
+  color: #212529 !important;
+}
+
+body.profile-superadmin-page .navbar-top .dropdown-item,
+body.profile-staff-page .navbar-top .dropdown-item,
+body.profile-moderator-page .navbar-top .dropdown-item,
+body.profile-verified-page .navbar-top .dropdown-item,
+body.profile-supporter-page .navbar-top .dropdown-item {
+  color: #212529 !important;
+}
+
+body.profile-superadmin-page .navbar-top .btn,
+body.profile-staff-page .navbar-top .btn,
+body.profile-moderator-page .navbar-top .btn,
+body.profile-verified-page .navbar-top .btn,
+body.profile-supporter-page .navbar-top .btn {
+  color: #212529 !important;
+}
+
+body.profile-superadmin-page .navbar-top .bi,
+body.profile-staff-page .navbar-top .bi,
+body.profile-moderator-page .navbar-top .bi,
+body.profile-verified-page .navbar-top .bi,
+body.profile-supporter-page .navbar-top .bi {
+  color: #212529 !important;
+}
+
+body.profile-superadmin-page .navbar-top .text-dark,
+body.profile-staff-page .navbar-top .text-dark,
+body.profile-moderator-page .navbar-top .text-dark,
+body.profile-verified-page .navbar-top .text-dark,
+body.profile-supporter-page .navbar-top .text-dark {
+  color: #212529 !important;
+}
+
+body.profile-superadmin-page .navbar-top .text-muted,
+body.profile-staff-page .navbar-top .text-muted,
+body.profile-moderator-page .navbar-top .text-muted,
+body.profile-verified-page .navbar-top .text-muted,
+body.profile-supporter-page .navbar-top .text-muted {
+  color: #6c757d !important;
+}
+
+/* Manter estilos especiais para o botão Social na navegação */
+body.profile-superadmin-page .navbar-top .btn-social,
+body.profile-staff-page .navbar-top .btn-social,
+body.profile-moderator-page .navbar-top .btn-social,
+body.profile-verified-page .navbar-top .btn-social,
+body.profile-supporter-page .navbar-top .btn-social {
   color: #ffffff !important;
 }
-body.profile-superadmin-page .navbar-nav .nav-link,
-body.profile-staff-page .navbar-nav .nav-link,
-body.profile-moderator-page .navbar-nav .nav-link,
-body.profile-verified-page .navbar-nav .nav-link,
-body.profile-supporter-page .navbar-nav .nav-link {
+
+body.profile-superadmin-page .navbar-top .btn-social .social-text,
+body.profile-staff-page .navbar-top .btn-social .social-text,
+body.profile-moderator-page .navbar-top .btn-social .social-text,
+body.profile-verified-page .navbar-top .btn-social .social-text,
+body.profile-supporter-page .navbar-top .btn-social .social-text {
   color: #ffffff !important;
 }
-body.profile-superadmin-page .dropdown-item,
-body.profile-staff-page .dropdown-item,
-body.profile-moderator-page .dropdown-item,
-body.profile-verified-page .dropdown-item,
-body.profile-supporter-page .dropdown-item {
+
+body.profile-superadmin-page .navbar-top .btn-social .social-icon,
+body.profile-staff-page .navbar-top .btn-social .social-icon,
+body.profile-moderator-page .navbar-top .btn-social .social-icon,
+body.profile-verified-page .navbar-top .btn-social .social-icon,
+body.profile-supporter-page .navbar-top .btn-social .social-icon {
   color: #ffffff !important;
 }
-body.profile-superadmin-page .btn,
-body.profile-staff-page .btn,
-body.profile-moderator-page .btn,
-body.profile-verified-page .btn,
-body.profile-supporter-page .btn {
+
+/* Exceções adicionais para elementos específicos da navegação */
+body.profile-superadmin-page .navbar-top .notification-bell,
+body.profile-staff-page .navbar-top .notification-bell,
+body.profile-moderator-page .navbar-top .notification-bell,
+body.profile-verified-page .navbar-top .notification-bell,
+body.profile-supporter-page .navbar-top .notification-bell {
+  color: #212529 !important;
+}
+
+body.profile-superadmin-page .navbar-top .notification-bell .icon,
+body.profile-staff-page .navbar-top .notification-bell .icon,
+body.profile-moderator-page .navbar-top .notification-bell .icon,
+body.profile-verified-page .navbar-top .notification-bell .icon,
+body.profile-supporter-page .navbar-top .notification-bell .icon {
+  color: #212529 !important;
+}
+
+body.profile-superadmin-page .navbar-top .media-body,
+body.profile-staff-page .navbar-top .media-body,
+body.profile-moderator-page .navbar-top .media-body,
+body.profile-verified-page .navbar-top .media-body,
+body.profile-supporter-page .navbar-top .media-body {
+  color: #212529 !important;
+}
+
+body.profile-superadmin-page .navbar-top .media-body .text-gray-900,
+body.profile-staff-page .navbar-top .media-body .text-gray-900,
+body.profile-moderator-page .navbar-top .media-body .text-gray-900,
+body.profile-verified-page .navbar-top .media-body .text-gray-900,
+body.profile-supporter-page .navbar-top .media-body .text-gray-900 {
+  color: #212529 !important;
+}
+
+body.profile-superadmin-page .navbar-top .dropdown-icon,
+body.profile-staff-page .navbar-top .dropdown-icon,
+body.profile-moderator-page .navbar-top .dropdown-icon,
+body.profile-verified-page .navbar-top .dropdown-icon,
+body.profile-supporter-page .navbar-top .dropdown-icon {
+  color: #6c757d !important;
+}
+
+body.profile-superadmin-page .navbar-top .text-gray-400,
+body.profile-staff-page .navbar-top .text-gray-400,
+body.profile-moderator-page .navbar-top .text-gray-400,
+body.profile-verified-page .navbar-top .text-gray-400,
+body.profile-supporter-page .navbar-top .text-gray-400 {
+  color: #6c757d !important;
+}
+
+body.profile-superadmin-page .navbar-top .text-gray-900,
+body.profile-staff-page .navbar-top .text-gray-900,
+body.profile-moderator-page .navbar-top .text-gray-900,
+body.profile-verified-page .navbar-top .text-gray-900,
+body.profile-supporter-page .navbar-top .text-gray-900 {
+  color: #212529 !important;
+}
+
+body.profile-superadmin-page .navbar-top .text-primary,
+body.profile-staff-page .navbar-top .text-primary,
+body.profile-moderator-page .navbar-top .text-primary,
+body.profile-verified-page .navbar-top .text-primary,
+body.profile-supporter-page .navbar-top .text-primary {
+  color: #0d6efd !important;
+}
+
+body.profile-superadmin-page .navbar-top .text-warning,
+body.profile-staff-page .navbar-top .text-warning,
+body.profile-moderator-page .navbar-top .text-warning,
+body.profile-verified-page .navbar-top .text-warning,
+body.profile-supporter-page .navbar-top .text-warning {
+  color: #ffc107 !important;
+}
+
+body.profile-superadmin-page .navbar-top .text-danger,
+body.profile-staff-page .navbar-top .text-danger,
+body.profile-moderator-page .navbar-top .text-danger,
+body.profile-verified-page .navbar-top .text-danger,
+body.profile-supporter-page .navbar-top .text-danger {
+  color: #dc3545 !important;
+}
+
+/* Exceções para o dropdown do usuário na navegação */
+body.profile-superadmin-page .navbar-top .dashboard-dropdown,
+body.profile-staff-page .navbar-top .dashboard-dropdown,
+body.profile-moderator-page .navbar-top .dashboard-dropdown,
+body.profile-verified-page .navbar-top .dashboard-dropdown,
+body.profile-supporter-page .navbar-top .dashboard-dropdown {
+  background-color: #ffffff !important;
+  border: 1px solid #dee2e6 !important;
+}
+
+body.profile-superadmin-page .navbar-top .dashboard-dropdown .dropdown-item,
+body.profile-staff-page .navbar-top .dashboard-dropdown .dropdown-item,
+body.profile-moderator-page .navbar-top .dashboard-dropdown .dropdown-item,
+body.profile-verified-page .navbar-top .dashboard-dropdown .dropdown-item,
+body.profile-supporter-page .navbar-top .dashboard-dropdown .dropdown-item {
+  color: #212529 !important;
+}
+
+body.profile-superadmin-page .navbar-top .dashboard-dropdown .dropdown-item:hover,
+body.profile-staff-page .navbar-top .dashboard-dropdown .dropdown-item:hover,
+body.profile-moderator-page .navbar-top .dashboard-dropdown .dropdown-item:hover,
+body.profile-verified-page .navbar-top .dashboard-dropdown .dropdown-item:hover,
+body.profile-supporter-page .navbar-top .dashboard-dropdown .dropdown-item:hover {
+  background-color: #f8f9fa !important;
+  color: #212529 !important;
+}
+
+body.profile-superadmin-page .navbar-top .dashboard-dropdown .dropdown-divider,
+body.profile-staff-page .navbar-top .dashboard-dropdown .dropdown-divider,
+body.profile-moderator-page .navbar-top .dashboard-dropdown .dropdown-divider,
+body.profile-verified-page .navbar-top .dashboard-dropdown .dropdown-divider,
+body.profile-supporter-page .navbar-top .dashboard-dropdown .dropdown-divider {
+  border-color: #dee2e6 !important;
+}
+
+/* Exceções para o dropdown de notificações na navegação */
+body.profile-superadmin-page .navbar-top #notificationDropdown,
+body.profile-staff-page .navbar-top #notificationDropdown,
+body.profile-moderator-page .navbar-top #notificationDropdown,
+body.profile-verified-page .navbar-top #notificationDropdown,
+body.profile-supporter-page .navbar-top #notificationDropdown {
+  background-color: #ffffff !important;
+  border: 1px solid #dee2e6 !important;
+}
+
+body.profile-superadmin-page .navbar-top #notificationDropdown .dropdown-header,
+body.profile-staff-page .navbar-top #notificationDropdown .dropdown-header,
+body.profile-moderator-page .navbar-top #notificationDropdown .dropdown-header,
+body.profile-verified-page .navbar-top #notificationDropdown .dropdown-header,
+body.profile-supporter-page .navbar-top #notificationDropdown .dropdown-header {
+  color: #212529 !important;
+  background-color: #f8f9fa !important;
+}
+
+body.profile-superadmin-page .navbar-top #notificationDropdown .dropdown-item,
+body.profile-staff-page .navbar-top #notificationDropdown .dropdown-item,
+body.profile-moderator-page .navbar-top #notificationDropdown .dropdown-item,
+body.profile-verified-page .navbar-top #notificationDropdown .dropdown-item,
+body.profile-supporter-page .navbar-top #notificationDropdown .dropdown-item {
+  color: #212529 !important;
+}
+
+body.profile-superadmin-page .navbar-top #notificationDropdown .dropdown-item:hover,
+body.profile-staff-page .navbar-top #notificationDropdown .dropdown-item:hover,
+body.profile-moderator-page .navbar-top #notificationDropdown .dropdown-item:hover,
+body.profile-verified-page .navbar-top #notificationDropdown .dropdown-item:hover,
+body.profile-supporter-page .navbar-top #notificationDropdown .dropdown-item:hover {
+  background-color: #f8f9fa !important;
+  color: #212529 !important;
+}
+
+         body.profile-superadmin-page .navbar-top #notificationDropdown .text-muted,
+         body.profile-staff-page .navbar-top #notificationDropdown .text-muted,
+         body.profile-moderator-page .navbar-top #notificationDropdown .text-muted,
+         body.profile-verified-page .navbar-top #notificationDropdown .text-muted,
+         body.profile-supporter-page .navbar-top #notificationDropdown .text-muted {
+           color: #6c757d !important;
+         }
+         
+         /* Exceções para os itens de notificação dinâmicos */
+         body.profile-superadmin-page .navbar-top #notificationDropdown .list-group-item,
+         body.profile-staff-page .navbar-top #notificationDropdown .list-group-item,
+         body.profile-moderator-page .navbar-top #notificationDropdown .list-group-item,
+         body.profile-verified-page .navbar-top #notificationDropdown .list-group-item,
+         body.profile-supporter-page .navbar-top #notificationDropdown .list-group-item {
+           color: #212529 !important;
+           background-color: #ffffff !important;
+         }
+         
+         body.profile-superadmin-page .navbar-top #notificationDropdown .list-group-item:hover,
+         body.profile-staff-page .navbar-top #notificationDropdown .list-group-item:hover,
+         body.profile-moderator-page .navbar-top #notificationDropdown .list-group-item:hover,
+         body.profile-verified-page .navbar-top #notificationDropdown .list-group-item:hover,
+         body.profile-supporter-page .navbar-top #notificationDropdown .list-group-item:hover {
+           background-color: #f8f9fa !important;
+           color: #212529 !important;
+         }
+         
+         body.profile-superadmin-page .navbar-top #notificationDropdown .list-group-item h4,
+         body.profile-staff-page .navbar-top #notificationDropdown .list-group-item h4,
+         body.profile-moderator-page .navbar-top #notificationDropdown .list-group-item h4,
+         body.profile-verified-page .navbar-top #notificationDropdown .list-group-item h4,
+         body.profile-supporter-page .navbar-top #notificationDropdown .list-group-item h4 {
+           color: #212529 !important;
+         }
+         
+         body.profile-superadmin-page .navbar-top #notificationDropdown .list-group-item p,
+         body.profile-staff-page .navbar-top #notificationDropdown .list-group-item p,
+         body.profile-moderator-page .navbar-top #notificationDropdown .list-group-item p,
+         body.profile-verified-page .navbar-top #notificationDropdown .list-group-item p,
+         body.profile-supporter-page .navbar-top #notificationDropdown .list-group-item p {
+           color: #212529 !important;
+         }
+         
+         body.profile-superadmin-page .navbar-top #notificationDropdown .list-group-item small,
+         body.profile-staff-page .navbar-top #notificationDropdown .list-group-item small,
+         body.profile-moderator-page .navbar-top #notificationDropdown .list-group-item small,
+         body.profile-verified-page .navbar-top #notificationDropdown .list-group-item small,
+         body.profile-supporter-page .navbar-top #notificationDropdown .list-group-item small {
+           color: #dc3545 !important;
+         }
+
+/* Estilos para outros elementos da interface (não navegação) */
+body.profile-superadmin-page .navbar-brand:not(.navbar-top .navbar-brand),
+body.profile-staff-page .navbar-brand:not(.navbar-top .navbar-brand),
+body.profile-moderator-page .navbar-brand:not(.navbar-top .navbar-brand),
+body.profile-verified-page .navbar-brand:not(.navbar-top .navbar-brand),
+body.profile-supporter-page .navbar-brand:not(.navbar-top .navbar-brand) {
   color: #ffffff !important;
 }
-body.profile-superadmin-page .bi,
-body.profile-staff-page .bi,
-body.profile-moderator-page .bi,
-body.profile-verified-page .bi,
-body.profile-supporter-page .bi {
+
+body.profile-superadmin-page .navbar-nav .nav-link:not(.navbar-top .navbar-nav .nav-link),
+body.profile-staff-page .navbar-nav .nav-link:not(.navbar-top .navbar-nav .nav-link),
+body.profile-moderator-page .navbar-nav .nav-link:not(.navbar-top .navbar-nav .nav-link),
+body.profile-verified-page .navbar-nav .nav-link:not(.navbar-top .navbar-nav .nav-link),
+body.profile-supporter-page .navbar-nav .nav-link:not(.navbar-top .navbar-nav .nav-link) {
   color: #ffffff !important;
 }
-body.profile-superadmin-page .text-dark,
-body.profile-staff-page .text-dark,
-body.profile-moderator-page .text-dark,
-body.profile-verified-page .text-dark,
-body.profile-supporter-page .text-dark {
+
+body.profile-superadmin-page .dropdown-item:not(.navbar-top .dropdown-item),
+body.profile-staff-page .dropdown-item:not(.navbar-top .dropdown-item),
+body.profile-moderator-page .dropdown-item:not(.navbar-top .dropdown-item),
+body.profile-verified-page .dropdown-item:not(.navbar-top .dropdown-item),
+body.profile-supporter-page .dropdown-item:not(.navbar-top .dropdown-item) {
   color: #ffffff !important;
 }
-body.profile-superadmin-page .text-muted,
-body.profile-staff-page .text-muted,
-body.profile-moderator-page .text-muted,
-body.profile-verified-page .text-muted,
-body.profile-supporter-page .text-muted {
+
+body.profile-superadmin-page .btn:not(.navbar-top .btn):not(.btn-social),
+body.profile-staff-page .btn:not(.navbar-top .btn):not(.btn-social),
+body.profile-moderator-page .btn:not(.navbar-top .btn):not(.btn-social),
+body.profile-verified-page .btn:not(.navbar-top .btn):not(.btn-social),
+body.profile-supporter-page .btn:not(.navbar-top .btn):not(.btn-social) {
+  color: #ffffff !important;
+}
+
+body.profile-superadmin-page .bi:not(.navbar-top .bi):not(.btn-social .bi),
+body.profile-staff-page .bi:not(.navbar-top .bi):not(.btn-social .bi),
+body.profile-moderator-page .bi:not(.navbar-top .bi):not(.btn-social .bi),
+body.profile-verified-page .bi:not(.navbar-top .bi):not(.btn-social .bi),
+body.profile-supporter-page .bi:not(.navbar-top .bi):not(.btn-social .bi) {
+  color: #ffffff !important;
+}
+
+body.profile-superadmin-page .text-dark:not(.navbar-top .text-dark),
+body.profile-staff-page .text-dark:not(.navbar-top .text-dark),
+body.profile-moderator-page .text-dark:not(.navbar-top .text-dark),
+body.profile-verified-page .text-dark:not(.navbar-top .text-dark),
+body.profile-supporter-page .text-dark:not(.navbar-top .text-dark) {
+  color: #ffffff !important;
+}
+
+body.profile-superadmin-page .text-muted:not(.navbar-top .text-muted),
+body.profile-staff-page .text-muted:not(.navbar-top .text-muted),
+body.profile-moderator-page .text-muted:not(.navbar-top .text-muted),
+body.profile-verified-page .text-muted:not(.navbar-top .text-muted),
+body.profile-supporter-page .text-muted:not(.navbar-top .text-muted) {
   color: rgba(255, 255, 255, 0.7) !important;
 }
 
