@@ -853,14 +853,17 @@ body {
   overflow: auto !important;
   background-color: rgba(0, 0, 0, 0.5) !important;
   display: none !important;
+  opacity: 0 !important;
+  transition: opacity 0.3s ease !important;
 }
 
 .modal.show {
   display: block !important;
+  opacity: 1 !important;
 }
 
 .modal.fade {
-  transition: opacity 0.15s linear !important;
+  transition: opacity 0.3s ease !important;
 }
 
 .modal.fade.show {
