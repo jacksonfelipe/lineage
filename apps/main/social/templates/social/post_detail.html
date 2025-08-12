@@ -261,8 +261,15 @@
                       <!-- Ações do comentário -->
                       <div class="d-flex justify-content-between align-items-center mt-2">
                         <div class="d-flex gap-2">
-                          <button class="btn btn-link text-muted btn-sm p-0 reply-btn" data-comment-id="{{ comment.id }}">
+                          <button class="btn btn-link text-muted btn-sm p-0 reply-btn" 
+                                  data-comment-id="{{ comment.id }}" 
+                                  data-author-username="{{ comment.author.username }}">
                             <i class="bi bi-reply"></i> {% trans "Responder" %}
+                          </button>
+                          <button class="btn btn-link text-muted btn-sm p-0 like-comment-btn" 
+                                  data-comment-id="{{ comment.id }}">
+                            <i class="bi {% if comment.is_liked_by_current_user %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}"></i>
+                            <span class="comment-likes-count">{{ comment.likes_count }}</span>
                           </button>
                         </div>
                         <small class="text-muted">
@@ -288,7 +295,8 @@
                           </div>
                           <div class="flex-grow-1">
                             <textarea name="reply_content" class="form-control form-control-sm" rows="2" 
-                                      placeholder="{% trans 'Escreva uma resposta...' %}" maxlength="300"></textarea>
+                                      placeholder="{% trans 'Escreva uma resposta...' %}" maxlength="300" 
+                                      data-author-username="{{ comment.author.username }}"></textarea>
                             <div class="d-flex justify-content-between align-items-center mt-1">
                               <small class="text-muted">
                                 <span class="reply-char-count">0</span>/300 {% trans "caracteres" %}
@@ -348,12 +356,65 @@
                                   {% endif %}
                                 </div>
                                 <p class="mb-0 small">{{ reply.content }}</p>
+                                
+                                <!-- Ações da resposta -->
+                                <div class="d-flex justify-content-between align-items-center mt-1">
+                                  <div class="d-flex gap-2">
+                                    <button class="btn btn-link text-muted btn-sm p-0 reply-to-reply-btn" 
+                                            data-comment-id="{{ reply.id }}" 
+                                            data-author-username="{{ reply.author.username }}">
+                                      <i class="bi bi-reply"></i> {% trans "Responder" %}
+                                    </button>
+                                    <button class="btn btn-link text-muted btn-sm p-0 like-reply-btn" 
+                                            data-comment-id="{{ reply.id }}">
+                                      <i class="bi {% if reply.is_liked_by_current_user %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}"></i>
+                                      <span class="reply-likes-count">{{ reply.likes_count }}</span>
+                                    </button>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
                         {% endfor %}
                       </div>
                     {% endif %}
+                    
+                    <!-- Formulário de resposta às respostas (inicialmente oculto) -->
+                    <div class="reply-to-reply-form-container mt-2" id="reply-to-reply-form-{{ comment.id }}" style="display: none;">
+                      <form method="post" class="reply-to-reply-form" data-comment-id="{{ comment.id }}" data-parent-comment-id="{{ comment.id }}">
+                        {% csrf_token %}
+                        <input type="hidden" name="parent_comment_id" value="{{ comment.id }}">
+                        <input type="hidden" name="reply_to_reply" value="true">
+                        <div class="d-flex align-items-start">
+                          <div class="avatar-container me-2" style="width: 25px; height: 25px; border-radius: 50%; overflow: hidden;">
+                            {% if user.avatar %}
+                              <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' user.uuid timestamp %}" 
+                                   alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
+                            {% else %}
+                              <img src="{% static 'assets/img/team/generic_user.png' %}" 
+                                   alt="Avatar" class="w-100 h-100" style="object-fit: cover;">
+                            {% endif %}
+                          </div>
+                          <div class="flex-grow-1">
+                            <textarea name="reply_content" class="form-control form-control-sm" rows="1" 
+                                      placeholder="{% trans 'Escreva uma resposta...' %}" maxlength="200"></textarea>
+                            <div class="d-flex justify-content-between align-items-center mt-1">
+                              <small class="text-muted">
+                                <span class="reply-to-reply-char-count">0</span>/200 {% trans "caracteres" %}
+                              </small>
+                              <div class="d-flex gap-1">
+                                <button type="button" class="btn btn-sm btn-outline-secondary cancel-reply-to-reply-btn">
+                                  {% trans "Cancelar" %}
+                                </button>
+                                <button type="submit" class="btn btn-sm btn-primary">
+                                  <i class="bi bi-send"></i> {% trans "Responder" %}
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
                   </div>
                 </div>
               {% endfor %}
@@ -625,6 +686,228 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.height = (this.scrollHeight) + 'px';
         });
     }
+    
+    // Likes em comentários
+    const likeCommentBtns = document.querySelectorAll('.like-comment-btn');
+    likeCommentBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const commentId = this.dataset.commentId;
+            const icon = this.querySelector('i');
+            const countSpan = this.querySelector('.comment-likes-count');
+            
+            this.disabled = true;
+            
+            fetch(`/social/comment/${commentId}/like/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.liked) {
+                    icon.className = 'bi bi-heart-fill text-danger';
+                } else {
+                    icon.className = 'bi bi-heart';
+                }
+                countSpan.textContent = data.likes_count;
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao curtir o comentário. Tente novamente.');
+            })
+            .finally(() => {
+                this.disabled = false;
+            });
+        });
+    });
+    
+    // Likes em respostas
+    const likeReplyBtns = document.querySelectorAll('.like-reply-btn');
+    likeReplyBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const commentId = this.dataset.commentId;
+            const icon = this.querySelector('i');
+            const countSpan = this.querySelector('.reply-likes-count');
+            
+            this.disabled = true;
+            
+            fetch(`/social/comment/${commentId}/like/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.liked) {
+                    icon.className = 'bi bi-heart-fill text-danger';
+                } else {
+                    icon.className = 'bi bi-heart';
+                }
+                countSpan.textContent = data.likes_count;
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao curtir a resposta. Tente novamente.');
+            })
+            .finally(() => {
+                this.disabled = false;
+            });
+        });
+    });
+    
+    // Responder às respostas
+    const replyToReplyBtns = document.querySelectorAll('.reply-to-reply-btn');
+    const cancelReplyToReplyBtns = document.querySelectorAll('.cancel-reply-to-reply-btn');
+    const replyToReplyForms = document.querySelectorAll('.reply-to-reply-form');
+    
+    // Botões de responder às respostas
+    replyToReplyBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const commentId = this.dataset.commentId;
+            const authorUsername = this.dataset.authorUsername;
+            const replyToReplyForm = document.getElementById(`reply-to-reply-form-${commentId}`);
+            
+            if (replyToReplyForm) {
+                // Ocultar todos os outros formulários de resposta
+                document.querySelectorAll('.reply-form-container, .reply-to-reply-form-container').forEach(form => {
+                    form.style.display = 'none';
+                });
+                
+                // Mostrar o formulário de resposta às respostas
+                replyToReplyForm.style.display = 'block';
+                
+                // Focar no campo de resposta e adicionar citação
+                const replyField = replyToReplyForm.querySelector('textarea[name="reply_content"]');
+                if (replyField) {
+                    replyField.focus();
+                    // Adicionar citação automática
+                    if (!replyField.value.includes(`@${authorUsername}`)) {
+                        replyField.value = `@${authorUsername} `;
+                    }
+                }
+            }
+        });
+    });
+    
+    // Botões de cancelar resposta às respostas
+    cancelReplyToReplyBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const replyToReplyForm = this.closest('.reply-to-reply-form-container');
+            if (replyToReplyForm) {
+                replyToReplyForm.style.display = 'none';
+                
+                // Limpar o campo de resposta
+                const replyField = replyToReplyForm.querySelector('textarea[name="reply_content"]');
+                if (replyField) {
+                    replyField.value = '';
+                    const charCount = replyToReplyForm.querySelector('.reply-to-reply-char-count');
+                    if (charCount) {
+                        charCount.textContent = '0';
+                    }
+                }
+            }
+        });
+    });
+    
+    // Contador de caracteres para respostas às respostas
+    document.querySelectorAll('.reply-to-reply-form textarea[name="reply_content"]').forEach(textarea => {
+        textarea.addEventListener('input', function() {
+            const charCount = this.closest('.reply-to-reply-form').querySelector('.reply-to-reply-char-count');
+            if (charCount) {
+                charCount.textContent = this.value.length;
+                
+                // Mudar cor baseado na quantidade de caracteres
+                if (this.value.length > 150) {
+                    charCount.classList.add('text-warning');
+                    charCount.classList.remove('text-muted');
+                } else if (this.value.length > 200) {
+                    charCount.classList.add('text-danger');
+                    charCount.classList.remove('text-warning');
+                } else {
+                    charCount.classList.add('text-muted');
+                    charCount.classList.remove('text-warning', 'text-danger');
+                }
+            }
+        });
+    });
+    
+    // Envio de formulários de resposta às respostas
+    replyToReplyForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const commentId = this.dataset.commentId;
+            const replyContent = this.querySelector('textarea[name="reply_content"]').value.trim();
+            
+            if (!replyContent) {
+                alert('{% trans "A resposta não pode estar vazia." %}');
+                return;
+            }
+            
+            if (replyContent.length > 200) {
+                alert('{% trans "A resposta não pode ter mais de 200 caracteres." %}');
+                return;
+            }
+            
+            // Enviar resposta via AJAX
+            const formData = new FormData();
+            formData.append('reply_content', replyContent);
+            formData.append('parent_comment_id', commentId);
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+            
+            fetch('{% url "social:post_detail" post.id %}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Recarregar a página para mostrar a nova resposta
+                    window.location.reload();
+                } else {
+                    throw new Error('Erro ao enviar resposta');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('{% trans "Erro ao enviar resposta. Tente novamente." %}');
+            });
+        });
+    });
+    
+    // Citação automática ao responder comentários
+    replyBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const commentId = this.dataset.commentId;
+            const authorUsername = this.dataset.authorUsername;
+            const replyForm = document.getElementById(`reply-form-${commentId}`);
+            
+            if (replyForm) {
+                // Ocultar todos os outros formulários de resposta
+                document.querySelectorAll('.reply-form-container, .reply-to-reply-form-container').forEach(form => {
+                    form.style.display = 'none';
+                });
+                
+                // Mostrar o formulário de resposta atual
+                replyForm.style.display = 'block';
+                
+                // Focar no campo de resposta e adicionar citação
+                const replyField = replyForm.querySelector('textarea[name="reply_content"]');
+                if (replyField) {
+                    replyField.focus();
+                    // Adicionar citação automática
+                    if (!replyField.value.includes(`@${authorUsername}`)) {
+                        replyField.value = `@${authorUsername} `;
+                    }
+                }
+            }
+        });
+    });
 });
 </script>
 {% endblock content %}

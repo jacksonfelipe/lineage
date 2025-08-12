@@ -253,6 +253,7 @@ def post_detail(request, post_id):
             try:
                 parent_comment = Comment.objects.get(id=parent_comment_id, post=post)
                 reply_content = request.POST.get('reply_content', '').strip()
+                is_reply_to_reply = request.POST.get('reply_to_reply') == 'true'
                 
                 if reply_content:
                     # Criar a resposta
@@ -266,7 +267,10 @@ def post_detail(request, post_id):
                     # Atualizar contador de comentários
                     post.update_counts()
                     
-                    messages.success(request, _('Resposta adicionada!'))
+                    if is_reply_to_reply:
+                        messages.success(request, _('Resposta à resposta adicionada!'))
+                    else:
+                        messages.success(request, _('Resposta adicionada!'))
                     return redirect('social:post_detail', post_id=post.id)
                 else:
                     messages.error(request, _('A resposta não pode estar vazia.'))
@@ -289,6 +293,13 @@ def post_detail(request, post_id):
     
     # Buscar comentários do post
     comments = post.comments.filter(parent=None).order_by('created_at')
+    
+    # Adicionar informação se o usuário deu like em cada comentário
+    for comment in comments:
+        comment.is_liked_by_current_user = comment.is_liked_by(request.user)
+        # Adicionar informação para as respostas também
+        for reply in comment.replies.all():
+            reply.is_liked_by_current_user = reply.is_liked_by(request.user)
     
     # Timestamp para cache busting de avatares
     import time

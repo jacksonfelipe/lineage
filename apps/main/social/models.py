@@ -255,6 +255,12 @@ class Comment(BaseModel):
         self.is_edited = True
         self.edited_at = timezone.now()
         self.save(update_fields=['is_edited', 'edited_at'])
+    
+    def is_liked_by(self, user):
+        """Verifica se um usuário específico deu like no comentário"""
+        if not user or not user.is_authenticated:
+            return False
+        return self.comment_likes.filter(user=user).exists()
 
 
 class CommentLike(BaseModel):
