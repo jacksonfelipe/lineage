@@ -1020,7 +1020,9 @@ def report_content(request, content_type, content_id):
                 # Retornar resposta JSON para AJAX
                 return JsonResponse({
                     'success': True,
-                    'message': _('Denúncia enviada com sucesso. Nossa equipe irá analisar.')
+                    'message': _('Denúncia enviada com sucesso. Nossa equipe irá analisar.'),
+                    'report_count': report.user_report_count,
+                    'max_reports': 3
                 })
                 
             except Exception as e:
