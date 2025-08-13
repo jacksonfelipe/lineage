@@ -191,7 +191,11 @@ def mention_links(text):
             return f'<span class="mention-invalid">@{username}</span>'
     
     # Aplicar a substituição
-    processed_text = re.sub(mention_pattern, replace_mention, text)
+    try:
+        processed_text = re.sub(mention_pattern, replace_mention, text)
+    except Exception:
+        # Em caso de erro na regex, manter texto original
+        processed_text = text
     
     return mark_safe(processed_text)
 
@@ -213,6 +217,10 @@ def process_content(text):
     # Converter para string se não for
     text = str(text)
     
+    # Proteção contra textos muito longos que podem causar travamento
+    if len(text) > 10000:
+        return mark_safe(text)
+    
     # Função para verificar se uma posição está dentro de uma tag HTML
     def is_inside_html_tag(text, pos):
         """Verifica se a posição está dentro de uma tag HTML"""
@@ -233,19 +241,27 @@ def process_content(text):
         return False
     
     # 1. Processar URLs primeiro (para evitar conflitos com hashtags)
-    # Padrão para URLs (http/https)
-    url_pattern = r'(https?://[^\s<>"{}|\\^`\[\]]+)'
+    # Padrão para URLs (http/https) - versão mais robusta
+    url_pattern = r'(https?://[^\s<>"{}|\\^`\[\]]{1,2000})'
     
     def replace_url(match):
         url = match.group(1)
+        # Validar URL básica
+        if not url or len(url) < 10 or len(url) > 2000:
+            return match.group(0)
+        
         # Truncar URL para exibição se for muito longa
         display_url = url
         if len(url) > 50:
             display_url = url[:47] + '...'
         return f'<a href="{url}" target="_blank" rel="noopener noreferrer" class="content-link">{display_url}</a>'
     
-    # Aplicar substituição de URLs
-    processed_text = re.sub(url_pattern, replace_url, text)
+    # Aplicar substituição de URLs com limite de tentativas
+    try:
+        processed_text = re.sub(url_pattern, replace_url, text, flags=re.IGNORECASE)
+    except Exception:
+        # Em caso de erro na regex, manter texto original
+        processed_text = text
     
     # 2. Processar hashtags
     hashtag_pattern = r'#([a-zA-Z0-9_]+)'
@@ -271,7 +287,11 @@ def process_content(text):
             return f'<span class="hashtag-invalid">#{hashtag_name}</span>'
     
     # Aplicar substituição de hashtags
-    processed_text = re.sub(hashtag_pattern, replace_hashtag, processed_text)
+    try:
+        processed_text = re.sub(hashtag_pattern, replace_hashtag, processed_text)
+    except Exception:
+        # Em caso de erro na regex, manter texto atual
+        pass
     
     # 3. Processar menções @username
     mention_pattern = r'@([a-zA-Z0-9_-]+)'
@@ -306,6 +326,10 @@ def process_content(text):
             return f'<span class="mention-invalid">@{username}</span>'
     
     # Aplicar substituição de menções
-    processed_text = re.sub(mention_pattern, replace_mention, processed_text)
+    try:
+        processed_text = re.sub(mention_pattern, replace_mention, processed_text)
+    except Exception:
+        # Em caso de erro na regex, manter texto atual
+        pass
     
     return mark_safe(processed_text)

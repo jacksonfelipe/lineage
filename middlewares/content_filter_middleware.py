@@ -1,7 +1,8 @@
 from django.utils.deprecation import MiddlewareMixin
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.utils.translation import gettext as _
+from django.urls import reverse
 from apps.main.social.models import ContentFilter, Report, ModerationLog
 from django.contrib.auth import get_user_model
 
@@ -48,11 +49,27 @@ class ContentFilterMiddleware(MiddlewareMixin):
             # Verificar filtros críticos
             for content_filter in critical_filters:
                 if content_filter.matches_content(content):
-                    # Bloquear criação imediatamente
-                    return JsonResponse({
-                        'error': _('Conteúdo bloqueado por violar nossas diretrizes'),
-                        'filter_name': content_filter.name
-                    }, status=400)
+                    # Adicionar mensagem de erro usando Django messages
+                    error_message = _('Conteúdo bloqueado por violar nossas diretrizes')
+                    if content_filter.name:
+                        error_message += f' (Filtro: {content_filter.name})'
+                    messages.error(request, error_message)
+                    
+                    # Verificar se é uma requisição AJAX
+                    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                        # Para AJAX, ainda retornar JSON mas com redirecionamento
+                        return JsonResponse({
+                            'error': error_message,
+                            'redirect': reverse('social:feed')
+                        }, status=400)
+                    
+                    # Para requisições normais, redirecionar
+                    referer = request.META.get('HTTP_REFERER')
+                    if referer:
+                        return HttpResponseRedirect(referer)
+                    else:
+                        # Se não houver referer, redirecionar para o feed
+                        return HttpResponseRedirect(reverse('social:feed'))
                 
         except Exception as e:
             print(f"Erro ao verificar filtros críticos: {e}")
@@ -120,19 +137,27 @@ class SpamProtectionMiddleware(MiddlewareMixin):
                 r'\b(buy|sell|cheap|discount|free|money|earn|rich)\b',
                 r'\b(viagra|cialis|casino|poker|lottery)\b',
                 r'\b(click here|visit now|limited time|act now)\b',
-                # Padrões de spam com URLs específicos
-                r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+.*\b(buy|sell|cheap|discount|free|money|earn|rich|viagra|cialis|casino|poker|lottery)\b',
-                r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+.*\b(click here|visit now|limited time|act now)\b',
+                # Padrões de spam com URLs específicos (versão mais robusta)
+                r'http[s]?://[^\s<>"{}|\\^`\[\]]{1,2000}.*\b(buy|sell|cheap|discount|free|money|earn|rich|viagra|cialis|casino|poker|lottery)\b',
+                r'http[s]?://[^\s<>"{}|\\^`\[\]]{1,2000}.*\b(click here|visit now|limited time|act now)\b',
             ]
             
             import re
             for pattern in spam_patterns:
-                if re.search(pattern, content, re.IGNORECASE):
-                    return True
+                try:
+                    if re.search(pattern, content, re.IGNORECASE):
+                        return True
+                except Exception:
+                    # Em caso de erro na regex, continuar para o próximo padrão
+                    continue
             
             # Verificar se há muitas URLs (mais de 5 URLs no mesmo post pode ser spam)
-            url_count = len(re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', content))
-            if url_count > 5:  # Aumentado de 3 para 5 URLs
-                return True
+            try:
+                url_count = len(re.findall(r'http[s]?://[^\s<>"{}|\\^`\[\]]{1,2000}', content))
+                if url_count > 5:  # Aumentado de 3 para 5 URLs
+                    return True
+            except Exception:
+                # Em caso de erro na regex, não bloquear
+                pass
         
         return False

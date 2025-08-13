@@ -1602,7 +1602,7 @@ class ContentFilter(BaseModel):
                 # Padrões originais em inglês
                 r'\b(buy|sell|cheap|discount|business|opportunity)\b',
                 r'\b(viagra|cialis|casino|poker|lottery)\b',
-                r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+',
+                r'http[s]?://[^\s<>"{}|\\^`\[\]]{1,2000}',
                 
                 # Múltiplos sinais de exclamação ou interrogação
                 r'[!]{3,}',
@@ -1613,8 +1613,12 @@ class ContentFilter(BaseModel):
             ]
             import re
             for spam_pattern in spam_patterns:
-                if re.search(spam_pattern, text, re.IGNORECASE):
-                    return True
+                try:
+                    if re.search(spam_pattern, text, re.IGNORECASE):
+                        return True
+                except Exception:
+                    # Em caso de erro na regex, continuar para o próximo padrão
+                    continue
             return False
         
         return False
