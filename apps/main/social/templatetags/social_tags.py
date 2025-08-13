@@ -1,6 +1,9 @@
 from django import template
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
+from django.contrib.auth import get_user_model
+import re
 
 register = template.Library()
 
@@ -139,3 +142,55 @@ def has_profile_type(user, profile_type):
         return user.profile_type == profile_type
     except Exception:
         return False
+
+
+@register.filter
+def mention_links(text):
+    """
+    Converte menções @username em links clicáveis para o perfil do usuário
+    
+    Args:
+        text: Texto que pode conter menções @username
+        
+    Returns:
+        Texto com menções convertidas em links HTML
+    """
+    if not text:
+        return text
+    
+    # Converter para string se não for
+    text = str(text)
+    
+    # Padrão para encontrar menções @username
+    # Aceita letras, números, underscores e hífens no username
+    # Não deve começar com @ se já estiver dentro de uma menção
+    mention_pattern = r'(?<!@)@([a-zA-Z0-9_-]+)'
+    
+    def replace_mention(match):
+        username = match.group(1)
+        
+        # Ignorar se o username for muito longo (provavelmente não é uma menção válida)
+        if len(username) > 30:
+            return match.group(0)
+        
+        try:
+            # Verificar se o usuário existe
+            User = get_user_model()
+            user = User.objects.filter(username=username).first()
+            
+            if user:
+                # Usuário existe, criar link
+                profile_url = reverse('social:user_profile', kwargs={'username': username})
+                return f'<a href="{profile_url}" class="mention-link" data-username="{username}">@{username}</a>'
+            else:
+                # Usuário não existe, manter como texto simples
+                return f'<span class="mention-invalid">@{username}</span>'
+                
+        except Exception:
+            # Em caso de erro, manter como texto simples
+            return f'<span class="mention-invalid">@{username}</span>'
+    
+    # Aplicar a substituição
+    processed_text = re.sub(mention_pattern, replace_mention, text)
+    
+    return mark_safe(processed_text)

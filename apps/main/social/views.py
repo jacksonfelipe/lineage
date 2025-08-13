@@ -253,20 +253,43 @@ def post_detail(request, post_id):
             try:
                 parent_comment = Comment.objects.get(id=parent_comment_id, post=post)
                 reply_content = request.POST.get('reply_content', '').strip()
+                is_reply_to_reply = request.POST.get('reply_to_reply') == 'true'
                 
                 if reply_content:
-                    # Criar a resposta
-                    reply = Comment.objects.create(
-                        post=post,
-                        author=request.user,
-                        content=reply_content,
-                        parent=parent_comment
-                    )
+                    # Verificar o nível do comentário pai
+                    parent_level = parent_comment.get_level()
+                    
+                    if parent_level >= 2:
+                        # Se o pai já está no nível 2, criar resposta no nível 2 (mesmo nível)
+                        # Encontrar o comentário principal (nível 0) para usar como pai
+                        root_comment = parent_comment
+                        while root_comment.parent and root_comment.parent.parent:
+                            root_comment = root_comment.parent
+                        
+                        # Criar a resposta no nível 2 (filho do comentário principal)
+                        reply = Comment.objects.create(
+                            post=post,
+                            author=request.user,
+                            content=reply_content,
+                            parent=root_comment
+                        )
+                        messages.success(request, _('Resposta adicionada!'))
+                    else:
+                        # Criar resposta normal (nível 1 ou 2)
+                        reply = Comment.objects.create(
+                            post=post,
+                            author=request.user,
+                            content=reply_content,
+                            parent=parent_comment
+                        )
+                        
+                        if is_reply_to_reply:
+                            messages.success(request, _('Resposta à resposta adicionada!'))
+                        else:
+                            messages.success(request, _('Resposta adicionada!'))
                     
                     # Atualizar contador de comentários
                     post.update_counts()
-                    
-                    messages.success(request, _('Resposta adicionada!'))
                     return redirect('social:post_detail', post_id=post.id)
                 else:
                     messages.error(request, _('A resposta não pode estar vazia.'))
@@ -289,6 +312,18 @@ def post_detail(request, post_id):
     
     # Buscar comentários do post
     comments = post.comments.filter(parent=None).order_by('created_at')
+    
+    # Função para processar comentários e suas respostas aninhadas
+    def process_comment_likes(comment):
+        comment.is_liked_by_current_user = comment.is_liked_by(request.user)
+        # Processar respostas aninhadas
+        for reply in comment.replies.all():
+            reply.is_liked_by_current_user = reply.is_liked_by(request.user)
+            process_comment_likes(reply)  # Recursivo para respostas de respostas
+    
+    # Adicionar informação se o usuário deu like em cada comentário
+    for comment in comments:
+        process_comment_likes(comment)
     
     # Timestamp para cache busting de avatares
     import time
@@ -938,7 +973,12 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 def report_content(request, content_type, content_id):
     """View para denunciar conteúdo"""
     if request.method == 'POST':
-        form = ReportForm(request.POST)
+        form = ReportForm(
+            request.POST,
+            user=request.user,
+            content_type=content_type,
+            content_id=content_id
+        )
         if form.is_valid():
             try:
                 report = form.save(commit=False)
@@ -980,7 +1020,9 @@ def report_content(request, content_type, content_id):
                 # Retornar resposta JSON para AJAX
                 return JsonResponse({
                     'success': True,
-                    'message': _('Denúncia enviada com sucesso. Nossa equipe irá analisar.')
+                    'message': _('Denúncia enviada com sucesso. Nossa equipe irá analisar.'),
+                    'report_count': report.user_report_count,
+                    'max_reports': 3
                 })
                 
             except Exception as e:
@@ -994,14 +1036,24 @@ def report_content(request, content_type, content_id):
             for field, error_list in form.errors.items():
                 errors[field] = error_list[0] if error_list else ''
             
+            # Verificar se há erro geral (não de campo específico)
+            if form.non_field_errors():
+                message = form.non_field_errors()[0]
+            else:
+                message = _('Por favor, corrija os erros no formulário.')
+            
             return JsonResponse({
                 'success': False,
-                'message': _('Por favor, corrija os erros no formulário.'),
+                'message': message,
                 'errors': errors
             })
     
     # Para requisições GET, retornar página de denúncia (não usado no modal)
-    form = ReportForm()
+    form = ReportForm(
+        user=request.user,
+        content_type=content_type,
+        content_id=content_id
+    )
     
     # Obter informações do conteúdo reportado
     content_info = {}

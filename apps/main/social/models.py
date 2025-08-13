@@ -255,6 +255,33 @@ class Comment(BaseModel):
         self.is_edited = True
         self.edited_at = timezone.now()
         self.save(update_fields=['is_edited', 'edited_at'])
+    
+    def is_liked_by(self, user):
+        """Verifica se um usuário específico deu like no comentário"""
+        if not user or not user.is_authenticated:
+            return False
+        return self.comment_likes.filter(user=user).exists()
+    
+    def get_level(self):
+        """Retorna o nível de aninhamento do comentário (0 = comentário principal)"""
+        level = 0
+        current = self
+        while current.parent:
+            level += 1
+            current = current.parent
+        return level
+    
+    def get_all_replies(self):
+        """Retorna todas as respostas aninhadas do comentário"""
+        replies = []
+        for reply in self.replies.all():
+            replies.append(reply)
+            replies.extend(reply.get_all_replies())
+        return replies
+    
+    def get_reply_count(self):
+        """Retorna o número total de respostas (incluindo respostas de respostas)"""
+        return len(self.get_all_replies())
 
 
 class CommentLike(BaseModel):
@@ -741,6 +768,13 @@ class Report(BaseModel):
         verbose_name=_('Denúncias Similares')
     )
     
+    # Contador de denúncias do mesmo usuário para o mesmo post
+    user_report_count = models.PositiveIntegerField(
+        default=1,
+        verbose_name=_('Contador de Denúncias do Usuário'),
+        help_text=_('Número de vezes que este usuário denunciou este conteúdo')
+    )
+    
     class Meta:
         verbose_name = _('Denúncia')
         verbose_name_plural = _('Denúncias')
@@ -775,7 +809,12 @@ class Report(BaseModel):
         else:
             self.priority = 'low'
         
+        # Salvar primeiro para ter o ID
         super().save(*args, **kwargs)
+        
+        # Atualizar o contador de denúncias do usuário
+        if self.reporter:
+            self.update_user_report_count()
 
     def resolve(self, moderator, action_taken, notes=""):
         """Resolve a denúncia"""
@@ -868,6 +907,71 @@ class Report(BaseModel):
             flag.confidence_score = max(flag.confidence_score, confidence)
             flag.save()
         return flag
+
+    @classmethod
+    def get_user_report_count_for_content(cls, user, content_type, content_id):
+        """
+        Retorna o número total de denúncias que um usuário fez para um conteúdo específico
+        (incluindo denúncias resolvidas/descartadas)
+        """
+        if not user or not content_type or not content_id:
+            return 0
+            
+        filter_kwargs = {'reporter': user}
+        
+        if content_type == 'post':
+            filter_kwargs['reported_post_id'] = content_id
+        elif content_type == 'comment':
+            filter_kwargs['reported_comment_id'] = content_id
+        elif content_type == 'user':
+            filter_kwargs['reported_user_id'] = content_id
+        else:
+            return 0
+            
+        return cls.objects.filter(**filter_kwargs).count()
+
+    @classmethod
+    def can_user_report_content(cls, user, content_type, content_id, max_reports=3):
+        """
+        Verifica se um usuário pode denunciar um conteúdo específico
+        baseado no limite máximo de denúncias permitidas
+        """
+        if not user or not content_type or not content_id:
+            return False, 0
+            
+        current_count = cls.get_user_report_count_for_content(user, content_type, content_id)
+        return current_count < max_reports, current_count
+
+    def update_user_report_count(self):
+        """
+        Atualiza o contador de denúncias do usuário para este conteúdo
+        """
+        if not self.reporter:
+            return
+            
+        # Contar todas as denúncias deste usuário para este conteúdo
+        count = 1  # Começa com 1 (esta denúncia)
+        
+        if self.reported_post:
+            count += Report.objects.filter(
+                reporter=self.reporter,
+                reported_post=self.reported_post
+            ).exclude(id=self.id).count()
+        elif self.reported_comment:
+            count += Report.objects.filter(
+                reporter=self.reporter,
+                reported_comment=self.reported_comment
+            ).exclude(id=self.id).count()
+        elif self.reported_user:
+            count += Report.objects.filter(
+                reporter=self.reporter,
+                reported_user=self.reported_user
+            ).exclude(id=self.id).count()
+            
+        # Usar update() para evitar recursão no save()
+        Report.objects.filter(id=self.id).update(user_report_count=count)
+        # Atualizar o atributo local também
+        self.user_report_count = count
 
 
 class ReportFilterFlag(BaseModel):

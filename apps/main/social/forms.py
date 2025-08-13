@@ -373,6 +373,47 @@ class ReportForm(forms.ModelForm):
             'resolved_at', 'priority', 'similar_reports_count'
         ]
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        self.content_type = kwargs.pop('content_type', None)
+        self.content_id = kwargs.pop('content_id', None)
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        # Verificar se o usuário já denunciou este conteúdo
+        if self.user and self.content_type and self.content_id:
+            # Verificar se há denúncias pendentes ou em revisão
+            existing_report = Report.objects.filter(
+                reporter=self.user,
+                status__in=['pending', 'reviewing']
+            )
+            
+            if self.content_type == 'post':
+                existing_report = existing_report.filter(reported_post_id=self.content_id)
+            elif self.content_type == 'comment':
+                existing_report = existing_report.filter(reported_comment_id=self.content_id)
+            elif self.content_type == 'user':
+                existing_report = existing_report.filter(reported_user_id=self.content_id)
+            
+            if existing_report.exists():
+                raise forms.ValidationError(
+                    _('Você já denunciou este conteúdo. Aguarde nossa equipe analisar sua denúncia anterior.')
+                )
+            
+            # Verificar limite de 3 denúncias globais por conteúdo
+            can_report, current_count = Report.can_user_report_content(
+                self.user, self.content_type, self.content_id, max_reports=3
+            )
+            
+            if not can_report:
+                raise forms.ValidationError(
+                    _('Você já denunciou este conteúdo {} vezes. O limite máximo é de 3 denúncias por conteúdo.').format(current_count)
+                )
+        
+        return cleaned_data
+
     def clean_description(self):
         description = self.cleaned_data.get('description')
         if not description or description.strip() == '':

@@ -174,6 +174,20 @@ def apply_filter_action(content_filter, content_instance, content_type, triggere
             elif content_type == 'comment':
                 # Para comentários, podemos implementar um campo is_hidden
                 # Por enquanto, deletar o comentário
+                # Verificar se o comentário tem ID antes de tentar deletar
+                if content_instance.id is None:
+                    # Se não tem ID, não pode deletar - apenas logar o erro
+                    print(f"Erro: Tentativa de deletar comentário sem ID - Filtro: {content_filter.name}")
+                    ModerationLog.log_action(
+                        moderator=None,
+                        action_type='filter_triggered',
+                        target_type='system',
+                        target_id=0,
+                        description="Erro: Tentativa de deletar comentário sem ID",
+                        details=f"Filtro: {content_filter.name}\nConteúdo: {content_instance.content[:200]}..."
+                    )
+                    return
+                
                 content_instance.delete()
                 return  # Não continuar processamento se deletado
             
@@ -195,6 +209,20 @@ def apply_filter_action(content_filter, content_instance, content_type, triggere
             # Registrar filtro acionado antes de deletar
             if triggered_filters is not None:
                 triggered_filters['auto_delete'].append(content_filter.name)
+            
+            # Verificar se o conteúdo tem ID antes de tentar deletar
+            if content_instance.id is None:
+                # Se não tem ID, não pode deletar - apenas logar o erro
+                print(f"Erro: Tentativa de deletar {content_type} sem ID - Filtro: {content_filter.name}")
+                ModerationLog.log_action(
+                    moderator=None,
+                    action_type='filter_triggered',
+                    target_type='system',
+                    target_id=0,
+                    description=f"Erro: Tentativa de deletar {content_type} sem ID",
+                    details=f"Filtro: {content_filter.name}\nConteúdo: {content_instance.content[:200]}..."
+                )
+                return
             
             # Deletar conteúdo automaticamente
             content_instance.delete()

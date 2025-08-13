@@ -218,7 +218,10 @@ def transfer_to_player(request):
 
         return redirect('wallet:dashboard')
 
-    return render(request, 'wallet/transfer_to_player.html')
+    wallet, created = Wallet.objects.get_or_create(usuario=request.user)
+    return render(request, 'wallet/transfer_to_player.html', {
+        'wallet': wallet,
+    })
 
 
 @staff_member_required
