@@ -235,7 +235,7 @@
               </div>
               
               <div class="mb-2">
-                {{ report.reported_post.content|linebreaks }}
+                {{ report.reported_post.content|mention_links|linebreaks }}
               </div>
               
               {% if report.reported_post.image %}
@@ -276,7 +276,7 @@
               </div>
               
               <div class="mb-2">
-                {{ report.reported_comment.content|linebreaks }}
+                {{ report.reported_comment.content|mention_links|linebreaks }}
               </div>
               
               <div class="d-flex gap-2">

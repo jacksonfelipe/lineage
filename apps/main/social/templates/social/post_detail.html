@@ -5,6 +5,10 @@
 
 {% block title %} {% trans "Post" %} - {{ post.author.get_full_name|default:post.author.username }} {% endblock title %}
 
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/social.css' %}">
+{% endblock extrastyle %}
+
 {% block content %}
 <div class="container-fluid py-4">
   <div class="row">
@@ -59,7 +63,7 @@
         <div class="card-body">
           <!-- Conteúdo do post -->
           <div class="post-content mb-3">
-            {{ post.content|linebreaks }}
+                            {{ post.content|mention_links|linebreaks }}
           </div>
           
           <!-- Mídia do post -->
@@ -221,6 +225,12 @@
             <div class="comments-list">
               {% for comment in comments %}
                 <div class="d-flex mb-3 comment-item">
+                  <!-- Indicador de nível -->
+                  <div class="comment-level-indicator level-1">1</div>
+                  
+                  <!-- Seta indicativa -->
+                  <div class="comment-arrow"></div>
+                  
                   <div class="avatar-container me-3" style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden;">
                     {% if comment.author.avatar %}
                       <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' comment.author.uuid timestamp %}" 
@@ -238,6 +248,9 @@
                             <a href="{% url 'social:user_profile' comment.author.username %}" class="text-decoration-none">
                               {{ comment.author.get_full_name|default:comment.author.username }}{% verified_badge comment.author "12px" %}
                             </a>
+                            {% if comment.author == post.author %}
+                              <span class="comment-author-badge original-author">{% trans "Autor" %}</span>
+                            {% endif %}
                           </h6>
                           <small class="text-muted">
                             {{ comment.created_at|timesince }} {% trans "atrás" %}
@@ -256,7 +269,7 @@
                           </div>
                         {% endif %}
                       </div>
-                      <p class="mb-0">{{ comment.content|linebreaks }}</p>
+                      <p class="mb-0">{{ comment.content|mention_links|linebreaks }}</p>
                       
                       <!-- Ações do comentário -->
                       <div class="d-flex justify-content-between align-items-center mt-2">
@@ -272,14 +285,20 @@
                             <span class="comment-likes-count">{{ comment.likes_count }}</span>
                           </button>
                         </div>
-                        <small class="text-muted">
-                          {{ comment.replies.count }} {% trans "resposta" %}{{ comment.replies.count|pluralize:"s" }}
-                        </small>
+                        <div class="d-flex align-items-center">
+                          <span class="reply-counter">
+                            <i class="bi bi-chat-dots me-1"></i>
+                            {{ comment.replies.count }} {% trans "resposta" %}{{ comment.replies.count|pluralize:"s" }}
+                          </span>
+                        </div>
                       </div>
                     </div>
                     
                     <!-- Formulário de resposta (inicialmente oculto) -->
                     <div class="reply-form-container mt-2" id="reply-form-{{ comment.id }}" style="display: none;">
+                      <!-- Indicador de resposta -->
+                      <div class="reply-indicator">{% trans "Respondendo" %}</div>
+                      
                       <form method="post" class="reply-form" data-comment-id="{{ comment.id }}">
                         {% csrf_token %}
                         <input type="hidden" name="parent_comment_id" value="{{ comment.id }}">
@@ -320,6 +339,12 @@
                       <div class="ms-4 mt-3">
                         {% for reply in comment.replies.all %}
                           <div class="d-flex mb-2">
+                            <!-- Indicador de nível -->
+                            <div class="comment-level-indicator level-2">2</div>
+                            
+                            <!-- Seta indicativa -->
+                            <div class="reply-arrow"></div>
+                            
                             <div class="avatar-container me-2" style="width: 30px; height: 30px; border-radius: 50%; overflow: hidden;">
                               {% if reply.author.avatar %}
                                 <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' reply.author.uuid timestamp %}" 
@@ -337,6 +362,11 @@
                                       <a href="{% url 'social:user_profile' reply.author.username %}" class="text-decoration-none">
                                         {{ reply.author.get_full_name|default:reply.author.username }}{% verified_badge reply.author "10px" %}
                                       </a>
+                                      {% if reply.author == comment.author %}
+                                        <span class="comment-author-badge reply-author">{% trans "Respondeu" %}</span>
+                                      {% elif reply.author == post.author %}
+                                        <span class="comment-author-badge original-author">{% trans "Autor" %}</span>
+                                      {% endif %}
                                     </h6>
                                     <small class="text-muted">
                                       {{ reply.created_at|timesince }} {% trans "atrás" %}
@@ -355,7 +385,7 @@
                                     </div>
                                   {% endif %}
                                 </div>
-                                <p class="mb-0 small">{{ reply.content }}</p>
+                                <p class="mb-0 small">{{ reply.content|mention_links }}</p>
                                 
                                 <!-- Ações da resposta -->
                                 <div class="d-flex justify-content-between align-items-center mt-1">
@@ -371,6 +401,12 @@
                                       <span class="reply-likes-count">{{ reply.likes_count }}</span>
                                     </button>
                                   </div>
+                                  {% if reply.replies.exists %}
+                                    <span class="reply-counter">
+                                      <i class="bi bi-chat-dots me-1"></i>
+                                      {{ reply.replies.count }} {% trans "resposta" %}{{ reply.replies.count|pluralize:"s" }}
+                                    </span>
+                                  {% endif %}
                                 </div>
                               </div>
                             </div>
@@ -381,6 +417,12 @@
                             <div class="replies-to-replies ms-4 mt-1">
                               {% for reply_to_reply in reply.replies.all %}
                                 <div class="d-flex mb-1">
+                                  <!-- Indicador de nível -->
+                                  <div class="comment-level-indicator level-3">3</div>
+                                  
+                                  <!-- Seta indicativa -->
+                                  <div class="nested-reply-arrow"></div>
+                                  
                                   <div class="avatar-container me-2" style="width: 25px; height: 25px; border-radius: 50%; overflow: hidden;">
                                     {% if reply_to_reply.author.avatar %}
                                       <img src="{% url 'serve_files:serve_decrypted_file_with_timestamp' 'home' 'user' 'avatar' reply_to_reply.author.uuid timestamp %}" 
@@ -398,6 +440,13 @@
                                             <a href="{% url 'social:user_profile' reply_to_reply.author.username %}" class="text-decoration-none">
                                               {{ reply_to_reply.author.get_full_name|default:reply_to_reply.author.username }}{% verified_badge reply_to_reply.author "8px" %}
                                             </a>
+                                            {% if reply_to_reply.author == reply.author %}
+                                              <span class="comment-author-badge nested-reply-author">{% trans "Respondeu" %}</span>
+                                            {% elif reply_to_reply.author == comment.author %}
+                                              <span class="comment-author-badge reply-author">{% trans "Respondeu" %}</span>
+                                            {% elif reply_to_reply.author == post.author %}
+                                              <span class="comment-author-badge original-author">{% trans "Autor" %}</span>
+                                            {% endif %}
                                           </h6>
                                           <small class="text-muted">
                                             {{ reply_to_reply.created_at|timesince }} {% trans "atrás" %}
@@ -416,7 +465,7 @@
                                           </div>
                                         {% endif %}
                                       </div>
-                                      <p class="mb-0 small">{{ reply_to_reply.content }}</p>
+                                      <p class="mb-0 small">{{ reply_to_reply.content|mention_links }}</p>
                                       
                                       <!-- Ações da resposta de nível 2 -->
                                       <div class="d-flex justify-content-between align-items-center mt-1">
@@ -445,6 +494,9 @@
                     
                     <!-- Formulário de resposta às respostas (inicialmente oculto) -->
                     <div class="reply-to-reply-form-container mt-2" id="reply-to-reply-form-{{ comment.id }}" style="display: none;">
+                      <!-- Indicador de resposta -->
+                      <div class="reply-indicator">{% trans "Respondendo" %}</div>
+                      
                       <form method="post" class="reply-to-reply-form" data-comment-id="{{ comment.id }}" data-parent-comment-id="{{ comment.id }}">
                         {% csrf_token %}
                         <input type="hidden" name="parent_comment_id" value="{{ comment.id }}">
@@ -501,6 +553,39 @@
 <!-- JavaScript para interações -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Adicionar animações suaves aos comentários
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    // Observar todos os comentários
+    document.querySelectorAll('.comment-item, .comment-item .ms-4 .d-flex, .replies-to-replies .d-flex').forEach(item => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateY(20px)';
+        item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(item);
+    });
+    
+    // Melhorar a experiência de hover
+    document.querySelectorAll('.comment-item, .comment-item .ms-4 .d-flex, .replies-to-replies .d-flex').forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateX(5px)';
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateX(0)';
+        });
+    });
     // Contador de caracteres para comentários
     const commentField = document.querySelector('#{{ form.content.id_for_label }}');
     const commentCharCount = document.querySelector('#comment-char-count');
@@ -990,6 +1075,211 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    
+    // ============================================================================
+    // FUNCIONALIDADE PARA MENCÕES @USERNAME
+    // ============================================================================
+    
+    // Adicionar funcionalidade aos links de menção
+    document.querySelectorAll('.mention-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const username = this.dataset.username;
+            const href = this.getAttribute('href');
+            
+            // Efeito visual de clique
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+            
+            // Navegar para o perfil do usuário
+            if (href) {
+                window.location.href = href;
+            }
+        });
+        
+        // Efeito de hover melhorado
+        link.addEventListener('mouseenter', function() {
+            this.style.zIndex = '10';
+        });
+        
+        link.addEventListener('mouseleave', function() {
+            this.style.zIndex = '';
+        });
+    });
+    
+    // Detectar menções em tempo real nos campos de texto
+    const textAreas = document.querySelectorAll('textarea[name="content"], textarea[name="reply_content"]');
+    textAreas.forEach(textarea => {
+        textarea.addEventListener('input', function() {
+            const text = this.value;
+            const mentionPattern = /@([a-zA-Z0-9_-]+)/g;
+            const mentions = text.match(mentionPattern);
+            
+            if (mentions) {
+                // Adicionar classe para indicar que há menções
+                this.classList.add('has-mentions');
+                
+                // Mostrar preview das menções (opcional)
+                const previewContainer = this.parentElement.querySelector('.mentions-preview');
+                if (!previewContainer) {
+                    const preview = document.createElement('div');
+                    preview.className = 'mentions-preview mt-2 p-2 bg-light rounded';
+                    preview.style.fontSize = '12px';
+                    preview.style.color = '#6c757d';
+                    preview.innerHTML = `<i class="bi bi-at"></i> Menções detectadas: ${mentions.join(', ')}`;
+                    this.parentElement.appendChild(preview);
+                } else {
+                    previewContainer.innerHTML = `<i class="bi bi-at"></i> Menções detectadas: ${mentions.join(', ')}`;
+                }
+            } else {
+                // Remover classe e preview se não há menções
+                this.classList.remove('has-mentions');
+                const previewContainer = this.parentElement.querySelector('.mentions-preview');
+                if (previewContainer) {
+                    previewContainer.remove();
+                }
+            }
+        });
+    });
+    
+    // Auto-complete para menções (opcional - funcionalidade avançada)
+    function setupMentionAutocomplete(textarea) {
+        let mentionList = null;
+        let currentMention = '';
+        
+        textarea.addEventListener('input', function(e) {
+            const cursorPos = this.selectionStart;
+            const textBeforeCursor = this.value.substring(0, cursorPos);
+            const mentionMatch = textBeforeCursor.match(/@([a-zA-Z0-9_-]*)$/);
+            
+            if (mentionMatch) {
+                currentMention = mentionMatch[1];
+                showMentionSuggestions(currentMention, textarea);
+            } else {
+                hideMentionSuggestions();
+            }
+        });
+        
+        textarea.addEventListener('keydown', function(e) {
+            if (mentionList && mentionList.style.display !== 'none') {
+                if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter') {
+                    e.preventDefault();
+                    handleMentionNavigation(e.key);
+                }
+            }
+        });
+    }
+    
+    function showMentionSuggestions(query, textarea) {
+        // Aqui você pode implementar uma chamada AJAX para buscar usuários
+        // Por enquanto, vamos usar uma lista estática de exemplo
+        const suggestions = ['admin', 'moderator', 'user1', 'user2']; // Exemplo
+        const filteredSuggestions = suggestions.filter(user => 
+            user.toLowerCase().includes(query.toLowerCase())
+        );
+        
+        if (filteredSuggestions.length > 0) {
+            createMentionList(filteredSuggestions, textarea);
+        }
+    }
+    
+    function createMentionList(suggestions, textarea) {
+        hideMentionSuggestions();
+        
+        mentionList = document.createElement('div');
+        mentionList.className = 'mention-suggestions';
+        mentionList.style.cssText = `
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+        `;
+        
+        suggestions.forEach((suggestion, index) => {
+            const item = document.createElement('div');
+            item.className = 'mention-suggestion-item';
+            item.style.cssText = `
+                padding: 8px 12px;
+                cursor: pointer;
+                border-bottom: 1px solid #f0f0f0;
+            `;
+            item.textContent = `@${suggestion}`;
+            item.dataset.username = suggestion;
+            
+            if (index === 0) item.style.backgroundColor = '#f8f9fa';
+            
+            item.addEventListener('click', () => {
+                insertMention(suggestion, textarea);
+                hideMentionSuggestions();
+            });
+            
+            mentionList.appendChild(item);
+        });
+        
+        // Posicionar a lista
+        const rect = textarea.getBoundingClientRect();
+        mentionList.style.left = rect.left + 'px';
+        mentionList.style.top = (rect.bottom + 5) + 'px';
+        mentionList.style.width = rect.width + 'px';
+        
+        document.body.appendChild(mentionList);
+    }
+    
+    function hideMentionSuggestions() {
+        if (mentionList) {
+            mentionList.remove();
+            mentionList = null;
+        }
+    }
+    
+    function handleMentionNavigation(key) {
+        const items = mentionList.querySelectorAll('.mention-suggestion-item');
+        const currentIndex = Array.from(items).findIndex(item => 
+            item.style.backgroundColor === 'rgb(248, 249, 250)'
+        );
+        
+        if (key === 'ArrowDown') {
+            const nextIndex = (currentIndex + 1) % items.length;
+            items[currentIndex].style.backgroundColor = '';
+            items[nextIndex].style.backgroundColor = '#f8f9fa';
+        } else if (key === 'ArrowUp') {
+            const prevIndex = currentIndex === 0 ? items.length - 1 : currentIndex - 1;
+            items[currentIndex].style.backgroundColor = '';
+            items[prevIndex].style.backgroundColor = '#f8f9fa';
+        } else if (key === 'Enter') {
+            const selectedItem = items[currentIndex];
+            if (selectedItem) {
+                insertMention(selectedItem.dataset.username, document.activeElement);
+                hideMentionSuggestions();
+            }
+        }
+    }
+    
+    function insertMention(username, textarea) {
+        const cursorPos = textarea.selectionStart;
+        const textBeforeCursor = textarea.value.substring(0, cursorPos);
+        const textAfterCursor = textarea.value.substring(cursorPos);
+        
+        // Encontrar a posição do @ mais recente
+        const lastAtPos = textBeforeCursor.lastIndexOf('@');
+        const newText = textBeforeCursor.substring(0, lastAtPos) + `@${username} ` + textAfterCursor;
+        
+        textarea.value = newText;
+        textarea.focus();
+        
+        // Posicionar o cursor após a menção
+        const newCursorPos = lastAtPos + username.length + 2; // +2 para @ e espaço
+        textarea.setSelectionRange(newCursorPos, newCursorPos);
+    }
+    
+    // Aplicar auto-complete aos campos de texto
+    textAreas.forEach(setupMentionAutocomplete);
 });
 </script>
 {% endblock content %}
