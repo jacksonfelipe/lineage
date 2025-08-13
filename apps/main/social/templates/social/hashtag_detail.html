@@ -105,7 +105,7 @@
             <div class="card-body">
               <!-- Conteúdo do post -->
               <div class="post-content mb-3">
-                {{ post.content|mention_links|linebreaks }}
+                {{ post.content|process_content|linebreaks }}
               </div>
               
               <!-- Mídia do post -->

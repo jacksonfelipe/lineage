@@ -67,10 +67,22 @@ class SpamProtectionMiddleware(MiddlewareMixin):
     
     def process_request(self, request):
         """Verifica sinais de spam na requisição"""
+        # Verificar se o spam protection está desabilitado via variável de ambiente
+        import os
+        if os.environ.get('DISABLE_SPAM_PROTECTION', 'False').lower() == 'true':
+            return None
+            
         if request.method == 'POST':
             # Verificar se é criação de conteúdo
             if any(path in request.path for path in ['/social/feed/', '/social/post/create/']):
-                if self._is_spam_request(request):
+                is_spam = self._is_spam_request(request)
+                if is_spam:
+                    # Log para debugging
+                    import logging
+                    logger = logging.getLogger(__name__)
+                    logger.warning(f"Spam detectado para usuário {request.user.username if request.user.is_authenticated else 'anonymous'}")
+                    logger.warning(f"Conteúdo: {request.POST.get('content', '')[:100]}...")
+                    
                     return JsonResponse({
                         'error': _('Atividade suspeita detectada. Tente novamente em alguns minutos.')
                     }, status=429)
@@ -90,24 +102,37 @@ class SpamProtectionMiddleware(MiddlewareMixin):
                 created_at__gte=timezone.now() - timedelta(minutes=5)
             ).count()
             
-            if recent_posts > 5:  # Mais de 5 posts em 5 minutos
+            if recent_posts > 10:  # Mais de 10 posts em 5 minutos (mais permissivo)
                 return True
+            
+            # Se o usuário tem posts anteriores e é um usuário estabelecido, ser mais permissivo
+            total_posts = Post.objects.filter(author=request.user).count()
+            if total_posts > 5:  # Usuários com mais de 5 posts são considerados estabelecidos
+                # Para usuários estabelecidos, ser mais permissivo com URLs
+                pass
         
         # Verificar conteúdo suspeito
         if request.POST:
             content = request.POST.get('content', '')
             
-            # Padrões de spam
+            # Padrões de spam mais específicos
             spam_patterns = [
                 r'\b(buy|sell|cheap|discount|free|money|earn|rich)\b',
                 r'\b(viagra|cialis|casino|poker|lottery)\b',
-                r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+',
                 r'\b(click here|visit now|limited time|act now)\b',
+                # Padrões de spam com URLs específicos
+                r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+.*\b(buy|sell|cheap|discount|free|money|earn|rich|viagra|cialis|casino|poker|lottery)\b',
+                r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+.*\b(click here|visit now|limited time|act now)\b',
             ]
             
             import re
             for pattern in spam_patterns:
                 if re.search(pattern, content, re.IGNORECASE):
                     return True
+            
+            # Verificar se há muitas URLs (mais de 5 URLs no mesmo post pode ser spam)
+            url_count = len(re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', content))
+            if url_count > 5:  # Aumentado de 3 para 5 URLs
+                return True
         
         return False

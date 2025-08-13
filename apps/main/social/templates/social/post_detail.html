@@ -63,7 +63,7 @@
         <div class="card-body">
           <!-- Conteúdo do post -->
           <div class="post-content mb-3">
-                            {{ post.content|mention_links|linebreaks }}
+                            {{ post.content|process_content|linebreaks }}
           </div>
           
           <!-- Mídia do post -->
@@ -269,7 +269,7 @@
                           </div>
                         {% endif %}
                       </div>
-                      <p class="mb-0">{{ comment.content|mention_links|linebreaks }}</p>
+                      <p class="mb-0">{{ comment.content|process_content|linebreaks }}</p>
                       
                       <!-- Ações do comentário -->
                       <div class="d-flex justify-content-between align-items-center mt-2">
@@ -385,7 +385,7 @@
                                     </div>
                                   {% endif %}
                                 </div>
-                                <p class="mb-0 small">{{ reply.content|mention_links }}</p>
+                                <p class="mb-0 small">{{ reply.content|process_content }}</p>
                                 
                                 <!-- Ações da resposta -->
                                 <div class="d-flex justify-content-between align-items-center mt-1">
@@ -465,7 +465,7 @@
                                           </div>
                                         {% endif %}
                                       </div>
-                                      <p class="mb-0 small">{{ reply_to_reply.content|mention_links }}</p>
+                                      <p class="mb-0 small">{{ reply_to_reply.content|process_content }}</p>
                                       
                                       <!-- Ações da resposta de nível 2 -->
                                       <div class="d-flex justify-content-between align-items-center mt-1">

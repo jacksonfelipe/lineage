@@ -320,7 +320,7 @@
                 
                 <div class="card-body">
                   <!-- Conteúdo do post -->
-                  <p class="card-text">{{ post.content|mention_links|linebreaks }}</p>
+                  <p class="card-text">{{ post.content|process_content|linebreaks }}</p>
                   
                   <!-- Imagem do post -->
                   {% if post.image %}

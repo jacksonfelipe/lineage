@@ -133,16 +133,16 @@ def feed(request):
                 post = form.save(commit=False)
                 post.author = request.user
                 
-                # Processar hashtags
-                hashtags = form.cleaned_data.get('hashtags', [])
-                
                 # Anexar request ao post para uso no signal
                 post._current_request = request
                 
                 post.save()
                 
+                # Processar hashtags do conteúdo
+                hashtags_from_content = post.extract_hashtags_from_content()
+                
                 # Adicionar hashtags ao post
-                for hashtag_name in hashtags:
+                for hashtag_name in hashtags_from_content:
                     hashtag, created = Hashtag.objects.get_or_create(name=hashtag_name)
                     PostHashtag.objects.create(post=post, hashtag=hashtag)
                     hashtag.update_posts_count()
@@ -819,9 +819,11 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         response = super().form_valid(form)
         
-        # Processar hashtags
-        hashtags = form.cleaned_data.get('hashtags', [])
-        for hashtag_name in hashtags:
+        # Processar hashtags do conteúdo
+        hashtags_from_content = form.instance.extract_hashtags_from_content()
+        
+        # Adicionar hashtags ao post
+        for hashtag_name in hashtags_from_content:
             hashtag, created = Hashtag.objects.get_or_create(name=hashtag_name)
             PostHashtag.objects.create(post=form.instance, hashtag=hashtag)
             hashtag.update_posts_count()
@@ -912,16 +914,16 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         # Marcar como editado
         self.object.mark_as_edited()
         
-        # Processar hashtags
-        hashtags = form.cleaned_data.get('hashtags', [])
-        
         # Remover hashtags antigas
         self.object.hashtags.all().delete()
         
         response = super().form_valid(form)
         
+        # Processar hashtags do conteúdo
+        hashtags_from_content = self.object.extract_hashtags_from_content()
+        
         # Adicionar novas hashtags
-        for hashtag_name in hashtags:
+        for hashtag_name in hashtags_from_content:
             hashtag, created = Hashtag.objects.get_or_create(name=hashtag_name)
             PostHashtag.objects.create(post=self.object, hashtag=hashtag)
             hashtag.update_posts_count()
@@ -933,12 +935,6 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['segment'] = 'post_edit'
         context['parent'] = 'social'
-        
-        # Pré-preencher hashtags
-        if self.object:
-            hashtags = [f"#{ph.hashtag.name}" for ph in self.object.hashtags.all()]
-            context['form'].fields['hashtags'].initial = ' '.join(hashtags)
-        
         return context
 
 

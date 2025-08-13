@@ -20,6 +20,9 @@ function initSocialFeatures() {
     
     // Inicializar validações
     initValidations();
+    
+    // Inicializar menus suspensos
+    initDropdownMenus();
 }
 
 function initActionButtons() {
@@ -42,11 +45,9 @@ function initActionButtons() {
             // Efeito de ripple
             createRippleEffect(e, this);
             
-            // Mostrar campos específicos baseado no tipo do botão
-            if (buttonType === 'link') {
-                showLinkField();
-            } else if (buttonType === 'hashtag') {
-                showHashtagField();
+            // Efeito visual para botões de mídia
+            if (buttonType === 'image' || buttonType === 'video') {
+                // O efeito será tratado pelo evento change do input
             }
         });
         
@@ -103,21 +104,31 @@ function createRippleEffect(event, element) {
 
 function initCounters() {
     const contentTextarea = document.querySelector('#id_content');
-    const hashtagInput = document.querySelector('#id_hashtags');
     
     if (contentTextarea) {
         const charCount = document.getElementById('char-count');
         const charCountMobile = document.getElementById('char-count-mobile');
+        const hashtagCount = document.getElementById('hashtag-count');
+        const hashtagCountMobile = document.getElementById('hashtag-count-mobile');
         
-        function updateCharCount() {
-            const count = contentTextarea.value.length;
+        function updateCounts() {
+            const content = contentTextarea.value;
+            const charCountValue = content.length;
             const maxLength = 1000;
             
-            if (charCount) charCount.textContent = count;
-            if (charCountMobile) charCountMobile.textContent = count;
+            // Update character count
+            if (charCount) charCount.textContent = charCountValue;
+            if (charCountMobile) charCountMobile.textContent = charCountValue;
+            
+            // Update hashtag count from content
+            const hashtags = content.match(/#\w+/g) || [];
+            const hashtagCountValue = hashtags.length;
+            
+            if (hashtagCount) hashtagCount.textContent = hashtagCountValue;
+            if (hashtagCountMobile) hashtagCountMobile.textContent = hashtagCountValue;
             
             // Mudar cor baseado no limite
-            if (count > maxLength * 0.9) {
+            if (charCountValue > maxLength * 0.9) {
                 if (charCount) charCount.parentElement.classList.add('text-warning');
                 if (charCountMobile) charCountMobile.parentElement.classList.add('text-warning');
             } else {
@@ -125,7 +136,7 @@ function initCounters() {
                 if (charCountMobile) charCountMobile.parentElement.classList.remove('text-warning');
             }
             
-            if (count > maxLength * 0.95) {
+            if (charCountValue > maxLength * 0.95) {
                 if (charCount) charCount.parentElement.classList.add('text-danger');
                 if (charCountMobile) charCountMobile.parentElement.classList.add('text-danger');
             } else {
@@ -134,24 +145,8 @@ function initCounters() {
             }
         }
         
-        contentTextarea.addEventListener('input', updateCharCount);
-        updateCharCount(); // Contagem inicial
-    }
-    
-    if (hashtagInput) {
-        const hashtagCount = document.getElementById('hashtag-count');
-        const hashtagCountMobile = document.getElementById('hashtag-count-mobile');
-        
-        function updateHashtagCount() {
-            const hashtags = hashtagInput.value.match(/#\w+/g) || [];
-            const count = hashtags.length;
-            
-            if (hashtagCount) hashtagCount.textContent = count;
-            if (hashtagCountMobile) hashtagCountMobile.textContent = count;
-        }
-        
-        hashtagInput.addEventListener('input', updateHashtagCount);
-        updateHashtagCount(); // Contagem inicial
+        contentTextarea.addEventListener('input', updateCounts);
+        updateCounts(); // Contagem inicial
     }
 }
 
@@ -185,88 +180,6 @@ function initPreviews() {
             }
         });
     }
-    
-    // Preview de link
-    const linkInput = document.querySelector('#id_link');
-    if (linkInput) {
-        linkInput.addEventListener('input', function() {
-            const url = this.value.trim();
-            if (url && isValidUrl(url)) {
-                showLinkPreview(url);
-                // Feedback visual no botão
-                const linkButton = document.querySelector('.action-button[data-type="link"]');
-                if (linkButton) {
-                    linkButton.style.borderColor = '#17a2b8';
-                    linkButton.style.backgroundColor = '#f8fcff';
-                    const hint = linkButton.querySelector('.action-hint');
-                    if (hint) {
-                        hint.textContent = 'URL válida';
-                        hint.style.color = '#17a2b8';
-                    }
-                }
-            } else if (url) {
-                hideLinkPreview();
-                // Feedback visual no botão
-                const linkButton = document.querySelector('.action-button[data-type="link"]');
-                if (linkButton) {
-                    linkButton.style.borderColor = '#dc3545';
-                    linkButton.style.backgroundColor = '#fff8f8';
-                    const hint = linkButton.querySelector('.action-hint');
-                    if (hint) {
-                        hint.textContent = 'URL inválida';
-                        hint.style.color = '#dc3545';
-                    }
-                }
-            } else {
-                hideLinkPreview();
-                // Resetar feedback visual
-                const linkButton = document.querySelector('.action-button[data-type="link"]');
-                if (linkButton) {
-                    linkButton.style.borderColor = '';
-                    linkButton.style.backgroundColor = '';
-                    const hint = linkButton.querySelector('.action-hint');
-                    if (hint) {
-                        hint.textContent = 'Compartilhar URL';
-                        hint.style.color = '';
-                    }
-                }
-            }
-        });
-    }
-    
-    // Feedback visual para hashtags
-    const hashtagInput = document.querySelector('#id_hashtags');
-    if (hashtagInput) {
-        hashtagInput.addEventListener('input', function() {
-            const hashtags = this.value.trim();
-            if (hashtags) {
-                // Feedback visual no botão
-                const hashtagButton = document.querySelector('.action-button[data-type="hashtag"]');
-                if (hashtagButton) {
-                    hashtagButton.style.borderColor = '#ffc107';
-                    hashtagButton.style.backgroundColor = '#fffbf0';
-                    const hint = hashtagButton.querySelector('.action-hint');
-                    if (hint) {
-                        const hashtagCount = hashtags.split('#').length - 1;
-                        hint.textContent = `${hashtagCount} hashtag(s)`;
-                        hint.style.color = '#ffc107';
-                    }
-                }
-            } else {
-                // Resetar feedback visual
-                const hashtagButton = document.querySelector('.action-button[data-type="hashtag"]');
-                if (hashtagButton) {
-                    hashtagButton.style.borderColor = '';
-                    hashtagButton.style.backgroundColor = '';
-                    const hint = hashtagButton.querySelector('.action-hint');
-                    if (hint) {
-                        hint.textContent = '#tag1 #tag2';
-                        hint.style.color = '';
-                    }
-                }
-            }
-        });
-    }
 }
 
 function showMediaPreview(src, fileName, type) {
@@ -290,35 +203,7 @@ function showMediaPreview(src, fileName, type) {
     if (previewMobile) previewMobile.style.display = 'block';
 }
 
-function showLinkPreview(url) {
-    const preview = document.getElementById('link-preview');
-    const previewMobile = document.getElementById('link-preview-mobile');
-    const content = document.getElementById('link-content');
-    const contentMobile = document.getElementById('link-content-mobile');
-    
-    const html = `
-        <div class="d-flex align-items-center">
-            <i class="bi bi-link-45deg text-info me-2"></i>
-            <div>
-                <div class="fw-bold">${new URL(url).hostname}</div>
-                <div class="text-muted small">${url}</div>
-            </div>
-        </div>
-    `;
-    
-    if (content) content.innerHTML = html;
-    if (contentMobile) contentMobile.innerHTML = html;
-    if (preview) preview.style.display = 'block';
-    if (previewMobile) previewMobile.style.display = 'block';
-}
 
-function hideLinkPreview() {
-    const preview = document.getElementById('link-preview');
-    const previewMobile = document.getElementById('link-preview-mobile');
-    
-    if (preview) preview.style.display = 'none';
-    if (previewMobile) previewMobile.style.display = 'none';
-}
 
 function clearMedia() {
     const imageInput = document.querySelector('#id_image');
@@ -337,100 +222,15 @@ function clearMedia() {
     resetActionButtons();
 }
 
-function clearLink() {
-    const linkInput = document.querySelector('#id_link');
-    if (linkInput) linkInput.value = '';
-    
-    hideLinkPreview();
-    hideLinkField();
-    
-    // Resetar estilo do botão
-    const linkButton = document.querySelector('.action-button[data-type="link"]');
-    if (linkButton) {
-        linkButton.style.borderColor = '';
-        linkButton.style.backgroundColor = '';
-        const hint = linkButton.querySelector('.action-hint');
-        if (hint) {
-            hint.textContent = 'Compartilhar URL';
-            hint.style.color = '';
-        }
-    }
-}
 
-function showLinkField() {
-    const linkContainer = document.getElementById('link-field-container');
-    if (linkContainer) {
-        linkContainer.style.display = 'block';
-        // Focar no campo
-        const linkField = linkContainer.querySelector('input');
-        if (linkField) {
-            linkField.focus();
-        }
-    }
-}
 
-function hideLinkField() {
-    const linkContainer = document.getElementById('link-field-container');
-    if (linkContainer) {
-        linkContainer.style.display = 'none';
-        // Limpar o campo
-        const linkField = document.querySelector('#id_link');
-        if (linkField) {
-            linkField.value = '';
-        }
-    }
-}
 
-function showHashtagField() {
-    const hashtagContainer = document.getElementById('hashtag-field-container');
-    if (hashtagContainer) {
-        hashtagContainer.style.display = 'block';
-        // Focar no campo
-        const hashtagField = hashtagContainer.querySelector('input');
-        if (hashtagField) {
-            hashtagField.focus();
-        }
-    }
-}
-
-function hideHashtagField() {
-    const hashtagContainer = document.getElementById('hashtag-field-container');
-    if (hashtagContainer) {
-        hashtagContainer.style.display = 'none';
-        // Limpar o campo
-        const hashtagField = document.querySelector('#id_hashtags');
-        if (hashtagField) {
-            hashtagField.value = '';
-        }
-    }
-}
-
-function clearHashtags() {
-    const hashtagInput = document.querySelector('#id_hashtags');
-    if (hashtagInput) hashtagInput.value = '';
-    
-    hideHashtagField();
-    
-    // Resetar estilo do botão
-    const hashtagButton = document.querySelector('.action-button[data-type="hashtag"]');
-    if (hashtagButton) {
-        hashtagButton.style.borderColor = '';
-        hashtagButton.style.backgroundColor = '';
-        const hint = hashtagButton.querySelector('.action-hint');
-        if (hint) {
-            hint.textContent = '#tag1 #tag2';
-            hint.style.color = '';
-        }
-    }
-}
 
 function clearMediaMobile() {
     clearMedia();
 }
 
-function clearLinkMobile() {
-    clearLink();
-}
+
 
 function resetActionButtons() {
     const actionButtons = document.querySelectorAll('.action-button');
@@ -448,20 +248,85 @@ function resetActionButtons() {
                 case 'video':
                     hint.textContent = 'MP4, AVI, MOV';
                     break;
-                case 'link':
-                    hint.textContent = 'Compartilhar URL';
-                    break;
-                case 'hashtag':
-                    hint.textContent = '#tag1 #tag2';
-                    break;
             }
             hint.style.color = '#6c757d';
         }
     });
+}
+
+function initDropdownMenus() {
+    // Inicializar menus suspensos de mídia
+    const mediaDropdowns = document.querySelectorAll('#mediaDropdown, #mediaDropdownMobile');
     
-    // Ocultar campos de link e hashtag
-    hideLinkField();
-    hideHashtagField();
+    mediaDropdowns.forEach(dropdown => {
+        // Adicionar efeito visual ao abrir o menu
+        dropdown.addEventListener('click', function() {
+            this.classList.add('active');
+        });
+        
+        // Remover classe ativa quando o menu fechar
+        dropdown.addEventListener('blur', function() {
+            setTimeout(() => {
+                this.classList.remove('active');
+            }, 200);
+        });
+    });
+    
+    // Adicionar feedback visual para inputs de arquivo
+    const fileInputs = document.querySelectorAll('input[type="file"]');
+    fileInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                // Mostrar notificação de arquivo selecionado
+                const fileName = this.files[0].name;
+                const fileType = this.id === 'id_image' ? 'imagem' : 'vídeo';
+                showNotification(`${fileType} selecionada: ${fileName}`, 'success');
+                
+                // Atualizar preview se necessário
+                updateMediaPreview(this);
+            }
+        });
+    });
+}
+
+function updateMediaPreview(input) {
+    const file = input.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    const isImage = input.id === 'id_image';
+    
+    reader.onload = function(e) {
+        const previewId = isImage ? 'preview-content' : 'preview-content';
+        const previewContainer = document.getElementById('media-preview');
+        const previewMobileContainer = document.getElementById('media-preview-mobile');
+        
+        if (previewContainer) {
+            previewContainer.style.display = 'block';
+            const previewContent = document.getElementById(previewId);
+            if (previewContent) {
+                if (isImage) {
+                    previewContent.innerHTML = `<img src="${e.target.result}" class="img-fluid rounded" style="max-height: 200px;">`;
+                } else {
+                    previewContent.innerHTML = `<video src="${e.target.result}" controls class="img-fluid rounded" style="max-height: 200px;"></video>`;
+                }
+            }
+        }
+        
+        if (previewMobileContainer) {
+            previewMobileContainer.style.display = 'block';
+            const previewMobileContent = document.getElementById('preview-content-mobile');
+            if (previewMobileContent) {
+                if (isImage) {
+                    previewMobileContent.innerHTML = `<img src="${e.target.result}" class="img-fluid rounded" style="max-height: 150px;">`;
+                } else {
+                    previewMobileContent.innerHTML = `<video src="${e.target.result}" controls class="img-fluid rounded" style="max-height: 150px;"></video>`;
+                }
+            }
+        }
+    };
+    
+    reader.readAsDataURL(file);
 }
 
 function initValidations() {
@@ -501,14 +366,7 @@ function initValidations() {
     }
 }
 
-function isValidUrl(string) {
-    try {
-        new URL(string);
-        return true;
-    } catch (_) {
-        return false;
-    }
-}
+
 
 function showNotification(message, type = 'info') {
     // Criar notificação toast

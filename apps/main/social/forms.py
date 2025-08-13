@@ -40,26 +40,11 @@ class PostForm(forms.ModelForm):
         help_text=_('Vídeo opcional (máx. 100MB, 5min, formatos: MP4, MOV, AVI, WEBM)'),
         validators=[validate_social_media_video]
     )
-    link = forms.URLField(
-        required=False,
-        widget=forms.URLInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'https://exemplo.com'
-        }),
-        help_text=_('Link opcional para compartilhar')
-    )
-    hashtags = forms.CharField(
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': '#hashtag1 #hashtag2'
-        }),
-        help_text=_('Hashtags separadas por espaço (ex: #tecnologia #programacao)')
-    )
+
 
     class Meta:
         model = Post
-        fields = ['content', 'image', 'video', 'link', 'is_public']
+        fields = ['content', 'image', 'video', 'is_public']
         widgets = {
             'is_public': forms.CheckboxInput(attrs={
                 'class': 'form-check-input'
@@ -77,39 +62,20 @@ class PostForm(forms.ModelForm):
         content = cleaned_data.get('content', '')
         image = cleaned_data.get('image')
         video = cleaned_data.get('video')
-        link = cleaned_data.get('link')
         
         # Verificar se há pelo menos um tipo de conteúdo
-        if not content and not image and not video and not link:
-            raise forms.ValidationError(_('O post deve ter pelo menos um conteúdo: texto, imagem, vídeo ou link.'))
+        if not content and not image and not video:
+            raise forms.ValidationError(_('O post deve ter pelo menos um conteúdo: texto, imagem ou vídeo.'))
         
         # Não permitir imagem e vídeo ao mesmo tempo
         if image and video:
             raise forms.ValidationError(_('Não é possível anexar imagem e vídeo no mesmo post. Escolha apenas um.'))
         
-        # Validar limite de caracteres considerando hashtags
-        hashtags_text = ' '.join([f'#{tag}' for tag in cleaned_data.get('hashtags', [])])
-        total_content = f"{content} {hashtags_text}".strip()
-        
-        if len(total_content) > 1000:
-            raise forms.ValidationError(_('O conteúdo total (incluindo hashtags) excede 1000 caracteres.'))
-        
         return cleaned_data
 
 
 
-    def clean_hashtags(self):
-        hashtags = self.cleaned_data.get('hashtags', '')
-        if hashtags:
-            # Processar hashtags
-            hashtag_list = []
-            for tag in hashtags.split():
-                if tag.startswith('#'):
-                    tag = tag[1:]  # Remover #
-                if tag:
-                    hashtag_list.append(tag.lower())
-            return hashtag_list
-        return []
+
 
 
 class CommentForm(forms.ModelForm):

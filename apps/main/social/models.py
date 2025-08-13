@@ -165,6 +165,19 @@ class Post(BaseModel):
             return False
         return self.likes.filter(user=user).exists()
     
+    def extract_hashtags_from_content(self):
+        """Extrai hashtags do conteúdo do post"""
+        import re
+        if not self.content:
+            return []
+        
+        # Padrão para encontrar hashtags no conteúdo
+        hashtag_pattern = r'#([a-zA-Z0-9_]+)'
+        hashtags = re.findall(hashtag_pattern, self.content)
+        
+        # Retornar hashtags únicas em minúsculas
+        return list(set([tag.lower() for tag in hashtags]))
+    
     def save(self, *args, **kwargs):
         """Override save para processar mídia automaticamente"""
         # Processar imagem se foi alterada

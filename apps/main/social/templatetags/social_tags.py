@@ -194,3 +194,118 @@ def mention_links(text):
     processed_text = re.sub(mention_pattern, replace_mention, text)
     
     return mark_safe(processed_text)
+
+
+@register.filter
+def process_content(text):
+    """
+    Processa o conteúdo do post convertendo URLs e hashtags em links clicáveis
+    
+    Args:
+        text: Texto que pode conter URLs, hashtags e menções
+        
+    Returns:
+        Texto com URLs, hashtags e menções convertidas em links HTML
+    """
+    if not text:
+        return text
+    
+    # Converter para string se não for
+    text = str(text)
+    
+    # Função para verificar se uma posição está dentro de uma tag HTML
+    def is_inside_html_tag(text, pos):
+        """Verifica se a posição está dentro de uma tag HTML"""
+        # Procurar para trás pela tag de abertura mais próxima
+        i = pos - 1
+        while i >= 0:
+            if text[i] == '>':
+                return False  # Encontrou fechamento de tag antes da abertura
+            elif text[i] == '<':
+                # Verificar se é uma tag de abertura
+                j = i + 1
+                while j < len(text) and text[j].isalnum():
+                    j += 1
+                if j < len(text) and text[j] == '>':
+                    return True  # Está dentro de uma tag HTML
+                return False
+            i -= 1
+        return False
+    
+    # 1. Processar URLs primeiro (para evitar conflitos com hashtags)
+    # Padrão para URLs (http/https)
+    url_pattern = r'(https?://[^\s<>"{}|\\^`\[\]]+)'
+    
+    def replace_url(match):
+        url = match.group(1)
+        # Truncar URL para exibição se for muito longa
+        display_url = url
+        if len(url) > 50:
+            display_url = url[:47] + '...'
+        return f'<a href="{url}" target="_blank" rel="noopener noreferrer" class="content-link">{display_url}</a>'
+    
+    # Aplicar substituição de URLs
+    processed_text = re.sub(url_pattern, replace_url, text)
+    
+    # 2. Processar hashtags
+    hashtag_pattern = r'#([a-zA-Z0-9_]+)'
+    
+    def replace_hashtag(match):
+        hashtag_name = match.group(1)
+        start_pos = match.start()
+        
+        # Verificar se está dentro de uma tag HTML
+        if is_inside_html_tag(processed_text, start_pos):
+            return match.group(0)  # Manter como está
+        
+        # Ignorar hashtags muito longas
+        if len(hashtag_name) > 30:
+            return match.group(0)
+        
+        try:
+            # Criar link para a hashtag
+            hashtag_url = reverse('social:hashtag_detail', kwargs={'hashtag_name': hashtag_name.lower()})
+            return f'<a href="{hashtag_url}" class="hashtag-link">#{hashtag_name}</a>'
+        except Exception:
+            # Em caso de erro, manter como texto simples
+            return f'<span class="hashtag-invalid">#{hashtag_name}</span>'
+    
+    # Aplicar substituição de hashtags
+    processed_text = re.sub(hashtag_pattern, replace_hashtag, processed_text)
+    
+    # 3. Processar menções @username
+    mention_pattern = r'@([a-zA-Z0-9_-]+)'
+    
+    def replace_mention(match):
+        username = match.group(1)
+        start_pos = match.start()
+        
+        # Verificar se está dentro de uma tag HTML
+        if is_inside_html_tag(processed_text, start_pos):
+            return match.group(0)  # Manter como está
+        
+        # Ignorar se o username for muito longo
+        if len(username) > 30:
+            return match.group(0)
+        
+        try:
+            # Verificar se o usuário existe
+            User = get_user_model()
+            user = User.objects.filter(username=username).first()
+            
+            if user:
+                # Usuário existe, criar link
+                profile_url = reverse('social:user_profile', kwargs={'username': username})
+                return f'<a href="{profile_url}" class="mention-link" data-username="{username}">@{username}</a>'
+            else:
+                # Usuário não existe, manter como texto simples
+                return f'<span class="mention-invalid">@{username}</span>'
+                
+        except Exception:
+            # Em caso de erro, manter como texto simples
+            return f'<span class="mention-invalid">@{username}</span>'
+    
+    # Aplicar substituição de menções
+    processed_text = re.sub(mention_pattern, replace_mention, processed_text)
+    
+    return mark_safe(processed_text)
