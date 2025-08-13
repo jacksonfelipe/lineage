@@ -1,4 +1,4 @@
-# Painel Definitivo Lineage [1.13](https://l2jprmeium.com)
+# Painel Definitivo Lineage [1.14](https://l2jprmeium.com)
 
 <img align="right" height="180" src="https://i.imgur.com/EzJCcrr.png"/>
 
