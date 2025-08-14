@@ -60,4 +60,18 @@ urlpatterns = [
     path('moderation/logs/export/csv/', views.export_logs_csv, name='export_logs_csv'),
     path('moderation/apply-retroactive/', views.apply_retroactive_filters, name='apply_retroactive_filters'),
     path('moderation/bulk-action/', views.bulk_moderation_action, name='bulk_moderation_action'),
+    
+    # ============================================================================
+    # URLs DE VERIFICAÇÃO DE CONTA
+    # ============================================================================
+    
+    # Solicitação e status
+    path('verification/request/', views.verification_request_view, name='verification_request'),
+    path('verification/status/', views.verification_status_view, name='verification_status'),
+    path('verification/cancel/<int:request_id>/', views.verification_cancel_view, name='verification_cancel'),
+    
+    # Painel administrativo
+    path('verification/admin/', views.verification_admin_list_view, name='verification_admin_list'),
+    path('verification/admin/<int:request_id>/', views.verification_admin_detail_view, name='verification_admin_detail'),
+    path('verification/admin/bulk-action/', views.verification_admin_bulk_action_view, name='verification_admin_bulk_action'),
 ]

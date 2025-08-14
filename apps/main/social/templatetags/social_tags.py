@@ -25,7 +25,7 @@ def verified_badge(user, size="16px", show_tooltip=True):
     # Verifica se o campo existe e é True
     try:
         # Acessar diretamente o campo do modelo
-        is_verified = user.social_verified
+        is_verified = user.is_verified_user
         if not is_verified:
             return ""
     except Exception:
@@ -76,7 +76,7 @@ def user_is_verified(user):
         return False
     
     try:
-        return user.social_verified
+        return user.is_verified_user
     except Exception:
         return False
 

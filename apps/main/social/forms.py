@@ -1,6 +1,6 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from .models import Post, Comment, UserProfile, Hashtag, Report, ModerationAction, ContentFilter
+from .models import Post, Comment, UserProfile, Hashtag, Report, ModerationAction, ContentFilter, VerificationRequest
 from django.contrib.auth import get_user_model
 from utils.media_validators import (
     validate_social_media_image, validate_social_media_video, 
@@ -798,4 +798,165 @@ class BulkModerationForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         # Validações podem ser adicionadas aqui conforme necessário
+        return cleaned_data
+
+
+class VerificationRequestForm(forms.ModelForm):
+    """Formulário para solicitação de verificação de conta"""
+    
+    # Campos com validação adicional
+    cpf = forms.CharField(
+        max_length=14,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': '000.000.000-00',
+            'data-mask': '000.000.000-00'
+        }),
+        help_text=_('Digite seu CPF válido')
+    )
+    
+    phone_number = forms.CharField(
+        max_length=20,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': '(00) 00000-0000',
+            'data-mask': '(00) 00000-0000'
+        }),
+        help_text=_('Digite seu número de telefone')
+    )
+    
+    birth_date = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'class': 'form-control',
+            'type': 'date'
+        }),
+        help_text=_('Selecione sua data de nascimento')
+    )
+    
+    identity_document = forms.ImageField(
+        widget=forms.FileInput(attrs={
+            'class': 'form-control',
+            'accept': 'image/*'
+        }),
+        help_text=_('Envie uma foto do seu RG, CNH ou outro documento oficial com foto (máx. 5MB)')
+    )
+    
+    reason = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 4,
+            'placeholder': _('Explique por que você deseja ter sua conta verificada...')
+        }),
+        max_length=1000,
+        help_text=_('Máximo 1000 caracteres')
+    )
+    
+    class Meta:
+        model = VerificationRequest
+        fields = [
+            'cpf', 'full_name', 'birth_date', 'phone_number',
+            'identity_document', 'reason'
+        ]
+        widgets = {
+            'full_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': _('Nome completo como aparece no documento')
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        
+        # Se o usuário já tem CPF, pré-preencher
+        if self.user and self.user.cpf:
+            self.fields['cpf'].initial = self.user.cpf
+            self.fields['cpf'].widget.attrs['readonly'] = 'readonly'
+            self.fields['cpf'].help_text = _('CPF já cadastrado e não pode ser alterado')
+    
+    def clean_cpf(self):
+        cpf = self.cleaned_data.get('cpf')
+        if cpf:
+            from .utils import validate_cpf, remove_cpf_mask
+            cpf_clean = remove_cpf_mask(cpf)
+            
+            if not validate_cpf(cpf_clean):
+                raise forms.ValidationError(_('CPF inválido. Verifique os números digitados.'))
+            
+            return cpf_clean
+        return cpf
+    
+    def clean_phone_number(self):
+        phone = self.cleaned_data.get('phone_number')
+        if phone:
+            from .utils import validate_phone_number, remove_cpf_mask
+            phone_clean = remove_cpf_mask(phone)  # Reutilizando a função para remover máscara
+            
+            if not validate_phone_number(phone_clean):
+                raise forms.ValidationError(_('Número de telefone inválido. Verifique o DDD e o número.'))
+            
+            return phone_clean
+        return phone
+    
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data.get('birth_date')
+        if birth_date:
+            from datetime import date
+            today = date.today()
+            age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+            
+            if age < 18:
+                raise forms.ValidationError(_('Você deve ter pelo menos 18 anos para solicitar verificação.'))
+            
+            if age > 120:
+                raise forms.ValidationError(_('Data de nascimento inválida.'))
+        
+        return birth_date
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        # Verificar se o usuário atende aos requisitos
+        if self.user:
+            from .utils import can_request_verification
+            
+            if not can_request_verification(self.user):
+                raise forms.ValidationError(_('Você não atende aos requisitos para solicitar verificação. Verifique se: e-mail está verificado, 2FA está habilitado, conta tem pelo menos 30 dias e você tem pelo menos 10 posts.'))
+        
+        return cleaned_data
+
+
+class VerificationRequestAdminForm(forms.ModelForm):
+    """Formulário administrativo para revisão de solicitações"""
+    
+    class Meta:
+        model = VerificationRequest
+        fields = ['status', 'rejection_reason', 'admin_notes']
+        widgets = {
+            'admin_notes': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': _('Observações internas sobre a solicitação...')
+            }),
+            'rejection_reason': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+            'status': forms.Select(attrs={
+                'class': 'form-control'
+            })
+        }
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        status = cleaned_data.get('status')
+        rejection_reason = cleaned_data.get('rejection_reason')
+        
+        # Se foi rejeitada, deve ter motivo
+        if status == 'rejected' and not rejection_reason:
+            raise forms.ValidationError(_('É necessário informar o motivo da rejeição.'))
+        
+        # Se foi aprovada, não deve ter motivo de rejeição
+        if status == 'approved' and rejection_reason:
+            cleaned_data['rejection_reason'] = None
+        
         return cleaned_data

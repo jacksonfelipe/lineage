@@ -1779,3 +1779,210 @@ class ModerationLog(BaseModel):
             logger = logging.getLogger(__name__)
             logger.error(f'Erro ao criar log de moderação: {e}')
             return None
+
+
+class VerificationRequest(BaseModel):
+    """Modelo para solicitações de verificação de conta"""
+    
+    STATUS_CHOICES = [
+        ('pending', _('Pendente')),
+        ('approved', _('Aprovada')),
+        ('rejected', _('Rejeitada')),
+        ('cancelled', _('Cancelada')),
+    ]
+    
+    REJECTION_REASONS = [
+        ('incomplete_profile', _('Perfil incompleto')),
+        ('invalid_cpf', _('CPF inválido ou não fornecido')),
+        ('email_not_verified', _('E-mail não verificado')),
+        ('2fa_not_enabled', _('2FA não habilitado')),
+        ('insufficient_activity', _('Atividade insuficiente na plataforma')),
+        ('policy_violation', _('Violação das políticas da comunidade')),
+        ('fake_account', _('Conta falsa ou duplicada')),
+        ('other', _('Outro motivo')),
+    ]
+    
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='verification_requests',
+        verbose_name=_('Usuário')
+    )
+    
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending',
+        verbose_name=_('Status')
+    )
+    
+    # Campos obrigatórios para verificação
+    cpf = models.CharField(
+        max_length=14,
+        verbose_name=_('CPF'),
+        help_text=_('CPF válido (será validado)')
+    )
+    
+    # Documentos de identificação
+    identity_document = models.ImageField(
+        upload_to='verification/documents/',
+        verbose_name=_('Documento de Identificação'),
+        help_text=_('RG, CNH ou outro documento oficial com foto (máx. 5MB)')
+    )
+    
+    # Informações adicionais
+    full_name = models.CharField(
+        max_length=200,
+        verbose_name=_('Nome Completo'),
+        help_text=_('Nome completo como aparece no documento')
+    )
+    
+    birth_date = models.DateField(
+        verbose_name=_('Data de Nascimento'),
+        help_text=_('Data de nascimento')
+    )
+    
+    phone_number = models.CharField(
+        max_length=20,
+        verbose_name=_('Telefone'),
+        help_text=_('Número de telefone para contato')
+    )
+    
+    # Motivo da solicitação
+    reason = models.TextField(
+        verbose_name=_('Motivo da Solicitação'),
+        help_text=_('Explique por que você deseja ter sua conta verificada'),
+        max_length=1000
+    )
+    
+    # Campos de resposta da administração
+    rejection_reason = models.CharField(
+        max_length=50,
+        choices=REJECTION_REASONS,
+        blank=True,
+        null=True,
+        verbose_name=_('Motivo da Rejeição')
+    )
+    
+    admin_notes = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name=_('Observações do Administrador'),
+        help_text=_('Observações internas sobre a solicitação')
+    )
+    
+    reviewed_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name='reviewed_verifications',
+        verbose_name=_('Revisado por')
+    )
+    
+    reviewed_at = models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name=_('Data da Revisão')
+    )
+    
+    # Campos de controle
+    is_cpf_locked = models.BooleanField(
+        default=False,
+        verbose_name=_('CPF Bloqueado'),
+        help_text=_('Se marcado, o CPF não pode mais ser alterado pelo usuário')
+    )
+    
+    class Meta:
+        verbose_name = _('Solicitação de Verificação')
+        verbose_name_plural = _('Solicitações de Verificação')
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        if hasattr(self, 'user') and self.user:
+            return f"Solicitação de {self.user.username} - {self.get_status_display()}"
+        return f"Solicitação - {self.get_status_display()}"
+    
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        from .utils import validate_cpf
+        
+        # Validar CPF
+        if self.cpf:
+            if not validate_cpf(self.cpf):
+                raise ValidationError(_('CPF inválido.'))
+        
+        # Verificar se o usuário já tem uma solicitação pendente
+        if self.pk is None and hasattr(self, 'user') and self.user:  # Nova solicitação
+            existing_pending = VerificationRequest.objects.filter(
+                user=self.user,
+                status='pending'
+            ).exists()
+            if existing_pending:
+                raise ValidationError(_('Você já possui uma solicitação de verificação pendente.'))
+    
+    def save(self, *args, **kwargs):
+        # Verificar se o status está mudando para aprovado
+        if self.pk:  # Se já existe no banco
+            try:
+                old_instance = VerificationRequest.objects.get(pk=self.pk)
+                status_changed_to_approved = (old_instance.status != 'approved' and self.status == 'approved')
+            except VerificationRequest.DoesNotExist:
+                status_changed_to_approved = False
+        else:
+            status_changed_to_approved = (self.status == 'approved')
+        
+        # Se a solicitação foi aprovada, marcar o CPF como bloqueado e o usuário como verificado
+        if self.status == 'approved' and not self.is_cpf_locked:
+            self.is_cpf_locked = True
+            
+            # Atualizar o CPF do usuário se ainda não estiver definido
+            if hasattr(self, 'user') and self.user and not self.user.cpf:
+                self.user.cpf = self.cpf
+                self.user.save(update_fields=['cpf'])
+        
+        super().save(*args, **kwargs)
+        
+        # Após salvar, se o status mudou para aprovado, marcar o usuário como verificado
+        if status_changed_to_approved and hasattr(self, 'user') and self.user:
+            self.user.is_verified_user = True
+            self.user.save(update_fields=['is_verified_user'])
+    
+    @property
+    def can_be_approved(self):
+        """Verifica se a solicitação pode ser aprovada"""
+        if not hasattr(self, 'user') or not self.user:
+            return False
+        return (
+            self.status == 'pending' and
+            self.user.is_email_verified and
+            self.user.is_2fa_enabled and
+            self.cpf and
+            self.identity_document
+        )
+    
+    @property
+    def requirements_met(self):
+        """Verifica se todos os requisitos foram atendidos"""
+        if not hasattr(self, 'user') or not self.user:
+            return {
+                'email_verified': False,
+                '2fa_enabled': False,
+                'cpf_provided': bool(self.cpf),
+                'document_provided': bool(self.identity_document),
+                'full_name_provided': bool(self.full_name),
+                'birth_date_provided': bool(self.birth_date),
+                'phone_provided': bool(self.phone_number),
+                'reason_provided': bool(self.reason),
+            }
+        requirements = {
+            'email_verified': self.user.is_email_verified,
+            '2fa_enabled': self.user.is_2fa_enabled,
+            'cpf_provided': bool(self.cpf),
+            'document_provided': bool(self.identity_document),
+            'full_name_provided': bool(self.full_name),
+            'birth_date_provided': bool(self.birth_date),
+            'phone_provided': bool(self.phone_number),
+            'reason_provided': bool(self.reason),
+        }
+        return requirements

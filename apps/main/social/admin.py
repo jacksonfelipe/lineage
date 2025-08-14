@@ -6,7 +6,8 @@ from django.shortcuts import redirect
 from .models import (
     Post, Comment, Like, Follow, UserProfile, 
     Share, Hashtag, PostHashtag, CommentLike,
-    Report, ModerationAction, ContentFilter, ModerationLog, ReportFilterFlag
+    Report, ModerationAction, ContentFilter, ModerationLog, ReportFilterFlag,
+    VerificationRequest
 )
 from core.admin import BaseModelAdmin
 from django.utils import timezone
@@ -744,6 +745,103 @@ class ModerationLogAdmin(BaseModelAdmin):
     export_logs_excel.short_description = _('Exportar logs Excel')
 
     actions = ['export_logs_csv', 'export_logs_excel']
+
+
+@admin.register(VerificationRequest)
+class VerificationRequestAdmin(BaseModelAdmin):
+    """Admin para solicitações de verificação"""
+    
+    list_display = [
+        'user', 'full_name', 'status', 'created_at', 'reviewed_by', 'reviewed_at'
+    ]
+    
+    list_filter = [
+        'status', 'created_at', 'reviewed_at', 'is_cpf_locked'
+    ]
+    
+    search_fields = [
+        'user__username', 'user__email', 'full_name', 'cpf'
+    ]
+    
+    readonly_fields = [
+        'user', 'created_at', 'is_cpf_locked'
+    ]
+    
+    fieldsets = (
+        ('Informações do Usuário', {
+            'fields': ('user', 'created_at')
+        }),
+        ('Informações Pessoais', {
+            'fields': ('full_name', 'cpf', 'birth_date', 'phone_number')
+        }),
+        ('Documentação', {
+            'fields': ('identity_document',)
+        }),
+        ('Solicitação', {
+            'fields': ('reason',)
+        }),
+        ('Revisão', {
+            'fields': ('status', 'rejection_reason', 'admin_notes', 'reviewed_by', 'reviewed_at')
+        }),
+        ('Controle', {
+            'fields': ('is_cpf_locked',)
+        }),
+    )
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('user', 'reviewed_by')
+    
+    def save_model(self, request, obj, form, change):
+        if not change:  # Nova solicitação
+            obj.user = request.user
+        else:  # Editando
+            if 'status' in form.changed_data:
+                obj.reviewed_by = request.user
+                obj.reviewed_at = timezone.now()
+                
+                # Se foi aprovada, marcar usuário como verificado
+                if obj.status == 'approved':
+                    obj.user.is_verified_user = True
+                    obj.user.save(update_fields=['is_verified_user'])
+        
+        super().save_model(request, obj, form, change)
+    
+    def has_add_permission(self, request):
+        return False  # Não permitir criar solicitações manualmente
+    
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser  # Apenas superusuários podem deletar
+    
+    actions = ['approve_selected', 'reject_selected']
+    
+    def approve_selected(self, request, queryset):
+        """Aprovar solicitações selecionadas"""
+        count = 0
+        for verification_request in queryset.filter(status='pending'):
+            verification_request.status = 'approved'
+            verification_request.reviewed_by = request.user
+            verification_request.reviewed_at = timezone.now()
+            verification_request.save()
+            
+            # Marcar usuário como verificado
+            verification_request.user.is_verified_user = True
+            verification_request.user.save(update_fields=['is_verified_user'])
+            count += 1
+        
+        self.message_user(request, f'{count} solicitação(ões) aprovada(s) com sucesso.')
+    
+    approve_selected.short_description = "Aprovar solicitações selecionadas"
+    
+    def reject_selected(self, request, queryset):
+        """Rejeitar solicitações selecionadas"""
+        count = queryset.filter(status='pending').update(
+            status='rejected',
+            reviewed_by=request.user,
+            reviewed_at=timezone.now()
+        )
+        self.message_user(request, f'{count} solicitação(ões) rejeitada(s) com sucesso.')
+    
+    reject_selected.short_description = "Rejeitar solicitações selecionadas"
 
 
 # Configurações do admin
