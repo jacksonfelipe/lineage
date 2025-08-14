@@ -224,7 +224,7 @@
                     </a>
                     
                     <!-- Botão de verificação -->
-                    {% if not profile_user.is_verified_user %}
+                    {% if not profile_user.social_verified %}
                       <a href="{% url 'social:verification_status' %}" class="btn btn-warning me-2">
                         <i class="bi bi-shield-check"></i> {% trans "Solicitar Verificação" %}
                       </a>

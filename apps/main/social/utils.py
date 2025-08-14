@@ -136,6 +136,6 @@ def can_request_verification(user):
     no_pending_request = not user.verification_requests.filter(status='pending').exists()
     
     # Verifica se não está já verificado
-    not_already_verified = not user.is_verified_user
+    not_already_verified = not user.social_verified
     
     return all_met and no_pending_request and not_already_verified

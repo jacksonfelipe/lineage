@@ -2397,7 +2397,7 @@ def verification_request_view(request):
     from .utils import can_request_verification, get_verification_requirements_status
     
     # Verificar se já está verificado
-    if request.user.is_verified_user:
+    if request.user.social_verified:
         messages.warning(request, _('Sua conta já está verificada.'))
         return redirect('social:user_profile', username=request.user.username)
     
@@ -2442,7 +2442,7 @@ def verification_status_view(request):
     
     context = {
         'verification_request': verification_request,
-        'is_verified': request.user.is_verified_user
+        'is_verified': request.user.social_verified
     }
     return render(request, 'social/verification/status.html', context)
 
@@ -2522,31 +2522,31 @@ def verification_admin_detail_view(request, request_id):
             # Debug: mostrar o que está sendo processado
             messages.info(request, f'Processando mudança de status: {old_status} -> {new_status}')
             
+            # Verificar estado anterior do usuário
+            if old_status != 'approved' and new_status == 'approved':
+                messages.info(request, f'Estado anterior do usuário {verification_request.user.username}: social_verified={verification_request.user.social_verified}')
+            
+            # Salvar usando o formulário para garantir que o método save() do modelo seja executado
             verification_request = form.save(commit=False)
             verification_request.reviewed_by = request.user
             verification_request.reviewed_at = timezone.now()
+            verification_request.save()
             
-            # Se foi aprovada, marcar usuário como verificado
-            if verification_request.status == 'approved' and old_status != 'approved':
-                # Debug: verificar estado antes da mudança
-                messages.info(request, f'Estado anterior do usuário {verification_request.user.username}: is_verified_user={verification_request.user.is_verified_user}')
+            # Verificar se o usuário foi marcado como verificado pelo modelo
+            if old_status != 'approved' and new_status == 'approved':
+                # Recarregar o usuário do banco para verificar se foi atualizado
+                verification_request.user.refresh_from_db()
+                messages.info(request, f'Estado atual do usuário {verification_request.user.username}: social_verified={verification_request.user.social_verified}')
                 
-                # Salvar a solicitação primeiro para garantir que o método save() do modelo seja executado
-                verification_request.save()
+                # Se por algum motivo não foi atualizado, forçar a atualização
+                if not verification_request.user.social_verified:
+                    verification_request.user.social_verified = True
+                    verification_request.user.save(update_fields=['social_verified'])
+                    verification_request.user.refresh_from_db()
+                    messages.warning(request, f'Forçando atualização do campo social_verified para o usuário {verification_request.user.username}')
                 
-                # Agora marcar o usuário como verificado
-                user = verification_request.user
-                user.is_verified_user = True
-                user.save(update_fields=['is_verified_user'])
-                
-                # Debug: verificar estado após a mudança
-                user.refresh_from_db()
-                messages.info(request, f'Estado atual do usuário {user.username}: is_verified_user={user.is_verified_user}')
-                
-                # Enviar notificação ao usuário
-                messages.success(request, f'Usuário {user.username} foi verificado com sucesso!')
-            else:
-                verification_request.save()
+                messages.success(request, f'Usuário {verification_request.user.username} foi verificado com sucesso!')
+            
             messages.success(request, _('Solicitação atualizada com sucesso.'))
             return redirect('social:verification_admin_list')
         else:
@@ -2583,11 +2583,7 @@ def verification_admin_bulk_action_view(request):
                         verification_request.status = 'approved'
                         verification_request.reviewed_by = request.user
                         verification_request.reviewed_at = timezone.now()
-                        verification_request.save()
-                        
-                        # Marcar usuário como verificado
-                        verification_request.user.is_verified_user = True
-                        verification_request.user.save(update_fields=['is_verified_user'])
+                        verification_request.save()  # O método save() do modelo já cuida de marcar o usuário como verificado
                 
                 messages.success(request, f'{queryset.count()} solicitações aprovadas com sucesso!')
             

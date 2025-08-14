@@ -798,12 +798,8 @@ class VerificationRequestAdmin(BaseModelAdmin):
             if 'status' in form.changed_data:
                 obj.reviewed_by = request.user
                 obj.reviewed_at = timezone.now()
-                
-                # Se foi aprovada, marcar usuário como verificado
-                if obj.status == 'approved':
-                    obj.user.is_verified_user = True
-                    obj.user.save(update_fields=['is_verified_user'])
         
+        # O método save() do modelo já cuida de marcar o usuário como verificado
         super().save_model(request, obj, form, change)
     
     def has_add_permission(self, request):
@@ -821,11 +817,7 @@ class VerificationRequestAdmin(BaseModelAdmin):
             verification_request.status = 'approved'
             verification_request.reviewed_by = request.user
             verification_request.reviewed_at = timezone.now()
-            verification_request.save()
-            
-            # Marcar usuário como verificado
-            verification_request.user.is_verified_user = True
-            verification_request.user.save(update_fields=['is_verified_user'])
+            verification_request.save()  # O método save() do modelo já cuida de marcar o usuário como verificado
             count += 1
         
         self.message_user(request, f'{count} solicitação(ões) aprovada(s) com sucesso.')

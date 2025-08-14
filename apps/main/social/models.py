@@ -1923,6 +1923,7 @@ class VerificationRequest(BaseModel):
     
     def save(self, *args, **kwargs):
         # Verificar se o status está mudando para aprovado
+        status_changed_to_approved = False
         if self.pk:  # Se já existe no banco
             try:
                 old_instance = VerificationRequest.objects.get(pk=self.pk)
@@ -1932,7 +1933,7 @@ class VerificationRequest(BaseModel):
         else:
             status_changed_to_approved = (self.status == 'approved')
         
-        # Se a solicitação foi aprovada, marcar o CPF como bloqueado e o usuário como verificado
+        # Se a solicitação foi aprovada, marcar o CPF como bloqueado
         if self.status == 'approved' and not self.is_cpf_locked:
             self.is_cpf_locked = True
             
@@ -1941,12 +1942,16 @@ class VerificationRequest(BaseModel):
                 self.user.cpf = self.cpf
                 self.user.save(update_fields=['cpf'])
         
+        # Salvar a solicitação
         super().save(*args, **kwargs)
         
         # Após salvar, se o status mudou para aprovado, marcar o usuário como verificado
         if status_changed_to_approved and hasattr(self, 'user') and self.user:
-            self.user.is_verified_user = True
-            self.user.save(update_fields=['is_verified_user'])
+            # Recarregar o usuário do banco para garantir que temos os dados mais recentes
+            self.user.refresh_from_db()
+            if not self.user.social_verified:
+                self.user.social_verified = True
+                self.user.save(update_fields=['social_verified'])
     
     @property
     def can_be_approved(self):
