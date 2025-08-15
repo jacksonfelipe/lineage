@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.http import JsonResponse, HttpResponseForbidden
@@ -16,7 +16,7 @@ from django.utils import timezone
 from datetime import datetime, timedelta
 import re
 
-from .models import Post, Comment, Like, Follow, UserProfile, Share, Hashtag, PostHashtag, CommentLike, Report, ModerationAction, ContentFilter, ModerationLog
+from .models import Post, Comment, Like, Follow, UserProfile, Share, Hashtag, PostHashtag, CommentLike, Report, ModerationAction, ContentFilter, ModerationLog, VerificationRequest
 from .forms import PostForm, CommentForm, UserProfileForm, SearchForm, ShareForm, ReactionForm, HashtagForm, ReportForm, SearchReportForm, BulkModerationForm, ModerationActionForm, ContentFilterForm
 
 User = get_user_model()
@@ -133,16 +133,16 @@ def feed(request):
                 post = form.save(commit=False)
                 post.author = request.user
                 
-                # Processar hashtags
-                hashtags = form.cleaned_data.get('hashtags', [])
-                
                 # Anexar request ao post para uso no signal
                 post._current_request = request
                 
                 post.save()
                 
+                # Processar hashtags do conteúdo
+                hashtags_from_content = post.extract_hashtags_from_content()
+                
                 # Adicionar hashtags ao post
-                for hashtag_name in hashtags:
+                for hashtag_name in hashtags_from_content:
                     hashtag, created = Hashtag.objects.get_or_create(name=hashtag_name)
                     PostHashtag.objects.create(post=post, hashtag=hashtag)
                     hashtag.update_posts_count()
@@ -819,9 +819,11 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         response = super().form_valid(form)
         
-        # Processar hashtags
-        hashtags = form.cleaned_data.get('hashtags', [])
-        for hashtag_name in hashtags:
+        # Processar hashtags do conteúdo
+        hashtags_from_content = form.instance.extract_hashtags_from_content()
+        
+        # Adicionar hashtags ao post
+        for hashtag_name in hashtags_from_content:
             hashtag, created = Hashtag.objects.get_or_create(name=hashtag_name)
             PostHashtag.objects.create(post=form.instance, hashtag=hashtag)
             hashtag.update_posts_count()
@@ -912,16 +914,16 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         # Marcar como editado
         self.object.mark_as_edited()
         
-        # Processar hashtags
-        hashtags = form.cleaned_data.get('hashtags', [])
-        
         # Remover hashtags antigas
         self.object.hashtags.all().delete()
         
         response = super().form_valid(form)
         
+        # Processar hashtags do conteúdo
+        hashtags_from_content = self.object.extract_hashtags_from_content()
+        
         # Adicionar novas hashtags
-        for hashtag_name in hashtags:
+        for hashtag_name in hashtags_from_content:
             hashtag, created = Hashtag.objects.get_or_create(name=hashtag_name)
             PostHashtag.objects.create(post=self.object, hashtag=hashtag)
             hashtag.update_posts_count()
@@ -933,12 +935,6 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['segment'] = 'post_edit'
         context['parent'] = 'social'
-        
-        # Pré-preencher hashtags
-        if self.object:
-            hashtags = [f"#{ph.hashtag.name}" for ph in self.object.hashtags.all()]
-            context['form'].fields['hashtags'].initial = ' '.join(hashtags)
-        
         return context
 
 
@@ -2388,3 +2384,222 @@ def test_content_filter(request):
         return render(request, 'social/moderation/content_filters.html', context)
     
     return redirect('social:content_filters')
+
+
+# ============================================================================
+# VIEWS DE VERIFICAÇÃO DE CONTA
+# ============================================================================
+
+@login_required
+def verification_request_view(request):
+    """View para solicitação de verificação de conta"""
+    from .forms import VerificationRequestForm
+    from .utils import can_request_verification, get_verification_requirements_status
+    
+    # Verificar se já está verificado
+    if request.user.social_verified:
+        messages.warning(request, _('Sua conta já está verificada.'))
+        return redirect('social:user_profile', username=request.user.username)
+    
+    # Verificar se já tem solicitação pendente
+    pending_request = request.user.verification_requests.filter(status='pending').first()
+    if pending_request:
+        messages.info(request, _('Você já possui uma solicitação de verificação pendente.'))
+        return redirect('social:verification_status')
+    
+    # Verificar se pode solicitar
+    if not can_request_verification(request.user):
+        requirements = get_verification_requirements_status(request.user)
+        context = {
+            'requirements': requirements,
+            'can_request': False
+        }
+        return render(request, 'social/verification/requirements.html', context)
+    
+    if request.method == 'POST':
+        form = VerificationRequestForm(request.POST, request.FILES, user=request.user)
+        if form.is_valid():
+            verification_request = form.save(commit=False)
+            verification_request.user = request.user
+            verification_request.save()
+            
+            messages.success(request, _('Solicitação de verificação enviada com sucesso! Nossa equipe irá analisar em breve.'))
+            return redirect('social:verification_status')
+    else:
+        form = VerificationRequestForm(user=request.user)
+    
+    context = {
+        'form': form,
+        'can_request': True
+    }
+    return render(request, 'social/verification/request_form.html', context)
+
+
+@login_required
+def verification_status_view(request):
+    """View para visualizar status da solicitação de verificação"""
+    verification_request = request.user.verification_requests.order_by('-created_at').first()
+    
+    context = {
+        'verification_request': verification_request,
+        'is_verified': request.user.social_verified
+    }
+    return render(request, 'social/verification/status.html', context)
+
+
+@login_required
+def verification_cancel_view(request, request_id):
+    """View para cancelar solicitação de verificação"""
+    try:
+        verification_request = request.user.verification_requests.get(
+            id=request_id,
+            status='pending'
+        )
+        verification_request.status = 'cancelled'
+        verification_request.save()
+        
+        messages.success(request, _('Solicitação de verificação cancelada com sucesso.'))
+    except VerificationRequest.DoesNotExist:
+        messages.error(request, _('Solicitação não encontrada ou não pode ser cancelada.'))
+    
+    return redirect('social:verification_status')
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff or u.is_moderator)
+def verification_admin_list_view(request):
+    """View administrativa para listar solicitações de verificação"""
+    from .models import VerificationRequest
+    
+    status_filter = request.GET.get('status', '')
+    search = request.GET.get('search', '')
+    
+    queryset = VerificationRequest.objects.select_related('user', 'reviewed_by')
+    
+    if status_filter:
+        queryset = queryset.filter(status=status_filter)
+    
+    if search:
+        queryset = queryset.filter(
+            Q(user__username__icontains=search) |
+            Q(user__email__icontains=search) |
+            Q(full_name__icontains=search)
+        )
+    
+    # Paginação
+    paginator = Paginator(queryset, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'page_obj': page_obj,
+        'status_filter': status_filter,
+        'search': search,
+        'status_choices': VerificationRequest.STATUS_CHOICES
+    }
+    return render(request, 'social/verification/admin/list.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff or u.is_moderator)
+def verification_admin_detail_view(request, request_id):
+    """View administrativa para detalhes da solicitação"""
+    from .models import VerificationRequest
+    from .forms import VerificationRequestAdminForm
+    
+    try:
+        verification_request = VerificationRequest.objects.select_related('user', 'reviewed_by').get(id=request_id)
+    except VerificationRequest.DoesNotExist:
+        messages.error(request, _('Solicitação não encontrada.'))
+        return redirect('social:verification_admin_list')
+    
+    if request.method == 'POST':
+        form = VerificationRequestAdminForm(request.POST, instance=verification_request)
+        if form.is_valid():
+            old_status = verification_request.status
+            new_status = form.cleaned_data['status']
+            
+            # Debug: mostrar o que está sendo processado
+            messages.info(request, f'Processando mudança de status: {old_status} -> {new_status}')
+            
+            # Verificar estado anterior do usuário
+            if old_status != 'approved' and new_status == 'approved':
+                messages.info(request, f'Estado anterior do usuário {verification_request.user.username}: social_verified={verification_request.user.social_verified}')
+            
+            # Salvar usando o formulário para garantir que o método save() do modelo seja executado
+            verification_request = form.save(commit=False)
+            verification_request.reviewed_by = request.user
+            verification_request.reviewed_at = timezone.now()
+            verification_request.save()
+            
+            # Verificar se o usuário foi marcado como verificado pelo modelo
+            if old_status != 'approved' and new_status == 'approved':
+                # Recarregar o usuário do banco para verificar se foi atualizado
+                verification_request.user.refresh_from_db()
+                messages.info(request, f'Estado atual do usuário {verification_request.user.username}: social_verified={verification_request.user.social_verified}')
+                
+                # Se por algum motivo não foi atualizado, forçar a atualização
+                if not verification_request.user.social_verified:
+                    verification_request.user.social_verified = True
+                    verification_request.user.save(update_fields=['social_verified'])
+                    verification_request.user.refresh_from_db()
+                    messages.warning(request, f'Forçando atualização do campo social_verified para o usuário {verification_request.user.username}')
+                
+                messages.success(request, f'Usuário {verification_request.user.username} foi verificado com sucesso!')
+            
+            messages.success(request, _('Solicitação atualizada com sucesso.'))
+            return redirect('social:verification_admin_list')
+        else:
+            # Debug: mostrar erros do formulário
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'Erro no campo {field}: {error}')
+    else:
+        form = VerificationRequestAdminForm(instance=verification_request)
+    
+    context = {
+        'verification_request': verification_request,
+        'form': form
+    }
+    return render(request, 'social/verification/admin/detail.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff or u.is_moderator)
+def verification_admin_bulk_action_view(request):
+    """View para ações em lote nas solicitações"""
+    from .models import VerificationRequest
+    
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        request_ids = request.POST.getlist('request_ids')
+        
+        if action and request_ids:
+            queryset = VerificationRequest.objects.filter(id__in=request_ids)
+            
+            if action == 'approve':
+                for verification_request in queryset:
+                    if verification_request.status == 'pending':
+                        verification_request.status = 'approved'
+                        verification_request.reviewed_by = request.user
+                        verification_request.reviewed_at = timezone.now()
+                        verification_request.save()  # O método save() do modelo já cuida de marcar o usuário como verificado
+                
+                messages.success(request, f'{queryset.count()} solicitações aprovadas com sucesso!')
+            
+            elif action == 'reject':
+                rejection_reason = request.POST.get('rejection_reason')
+                if rejection_reason:
+                    for verification_request in queryset:
+                        if verification_request.status == 'pending':
+                            verification_request.status = 'rejected'
+                            verification_request.rejection_reason = rejection_reason
+                            verification_request.reviewed_by = request.user
+                            verification_request.reviewed_at = timezone.now()
+                            verification_request.save()
+                    
+                    messages.success(request, f'{queryset.count()} solicitações rejeitadas com sucesso!')
+                else:
+                    messages.error(request, _('É necessário informar o motivo da rejeição.'))
+    
+    return redirect('social:verification_admin_list')
