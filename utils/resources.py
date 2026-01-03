@@ -1,3 +1,26 @@
+import json
+import os
+
+
+def get_item_name(item_id):
+    """Retorna o nome de um item pelo seu ID"""
+    try:
+        json_path = os.path.join(os.path.dirname(__file__), 'data', 'itens.json')
+        with open(json_path, 'r', encoding='utf-8') as f:
+            items = json.load(f)
+        
+        item_id_str = str(item_id)
+        if item_id_str in items:
+            item_data = items[item_id_str]
+            if isinstance(item_data, list) and len(item_data) > 0:
+                return item_data[0]
+            elif isinstance(item_data, str):
+                return item_data
+        return f'Item #{item_id}'
+    except Exception:
+        return f'Item #{item_id}'
+
+
 def get_class_name(class_id):
     class_map = {
         # HUMANS

@@ -467,6 +467,12 @@
               </a>
             </li>
 
+            <li class="nav-item {% if 'top-agathion' in segment %}active{% endif %}">
+              <a class="nav-link" href="{% url 'tops:agathion' %}">
+                <span class="sidebar-text">{% trans "Top Agathion" %}</span>
+              </a>
+            </li>
+
           </ul>
         </div>
       </li>
@@ -551,6 +557,17 @@
             </svg>
           </span>
           <span class="sidebar-text">{% trans "Grand Boss Status" %}</span>
+        </a>
+      </li>
+
+      <li class="nav-item {% if 'agathion' in segment %}active{% endif %}">
+        <a href="{% url 'tops:agathion' %}" class="nav-link">
+          <span class="sidebar-icon">
+            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17a1 1 0 001 1h6a1 1 0 001-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2 13h-4v-1h4v1zm1.5-4.16l-.75.52V13h-5.5v-1.64l-.75-.52A4.98 4.98 0 017 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.78 3.07-2 3.84z"/>
+            </svg>
+          </span>
+          <span class="sidebar-text">{% trans "Top Agathion" %}</span>
         </a>
       </li>
       {% endif %}

@@ -359,6 +359,35 @@ class TopsOlympiadView(TopsBaseView):
         return _('Ranking Olimpíada')
 
 
+class TopsAgathionView(TopsBaseView):
+    template_name = 'tops/agathion.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        db = LineageDB()
+        result = LineageStats.top_agathion(limit=20) if db.is_connected() else []
+        
+        from utils.resources import get_class_name, get_item_name
+        for player in result:
+            if 'base' in player and player['base'] is not None:
+                player['class_name'] = get_class_name(player['base'])
+            else:
+                player['class_name'] = '-'
+            
+            # Obter nome do tipo de agathion (item base)
+            if 'agathion_item_id' in player and player['agathion_item_id'] is not None:
+                player['agathion_type'] = get_item_name(player['agathion_item_id'])
+            else:
+                player['agathion_type'] = '-'
+        
+        result = attach_crests_to_clans(result)
+        context['players'] = result
+        return context
+    
+    def get_title(self):
+        return _('Ranking Agathion')
+
+
 class TopsGrandBossView(TopsBaseView):
     template_name = 'tops/grandboss.html'
 

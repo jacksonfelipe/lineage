@@ -202,6 +202,37 @@ class LineageStats:
 
     @staticmethod
     @cache_lineage_result(timeout=300)
+    def top_agathion(limit=20):
+        sql = """
+            SELECT 
+                C.char_name, 
+                C.pvpkills, 
+                C.pkkills, 
+                C.online, 
+                C.onlinetime,
+                C.level AS char_level,
+                C.classid AS base,
+                D.clan_name,
+                C.clanid AS clan_id,
+                D.ally_id,
+                A.agathion_id,
+                A.item_id AS agathion_item_id,
+                A.name AS agathion_name,
+                A.level AS agathion_level,
+                A.exp AS agathion_exp,
+                A.status AS agathion_status,
+                A.subscription_status
+            FROM agathion_data A
+            INNER JOIN characters C ON C.charId = A.owner_id
+            LEFT JOIN clan_data D ON D.clan_id = C.clanid
+            WHERE C.accessLevel = '0'
+            ORDER BY A.level DESC, A.exp DESC, C.level DESC, C.char_name ASC
+            LIMIT :limit
+        """
+        return LineageStats._run_query(sql, {"limit": limit})
+
+    @staticmethod
+    @cache_lineage_result(timeout=300)
     def olympiad_ranking():
         sql = """
             SELECT 

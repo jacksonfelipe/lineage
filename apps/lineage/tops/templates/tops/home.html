@@ -12,7 +12,7 @@
             <p class="hero-subtitle">{% trans "Descubra os melhores jogadores e clãs que dominam nosso mundo" %}</p>
             <div class="hero-stats">
                 <div class="stat-item">
-                    <span class="stat-number">9</span>
+                    <span class="stat-number">10</span>
                     <span class="stat-label">{% trans "Categorias" %}</span>
                 </div>
                 <div class="stat-item">
@@ -217,6 +217,25 @@
                         <p class="category-description">{% trans "Status dos castelos e cerco" %}</p>
                         <div class="category-meta">
                             <span class="category-badge siege-badge">{% trans "War" %}</span>
+                        </div>
+                    </div>
+                    <div class="category-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Agathion Ranking -->
+            <div class="category-card" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="1100">
+                <a href="{% url 'tops:agathion' %}" class="category-link">
+                    <div class="category-icon agathion-icon">
+                        <i class="fas fa-ghost"></i>
+                    </div>
+                    <div class="category-content">
+                        <h3 class="category-title">{% trans "Ranking Agathion" %}</h3>
+                        <p class="category-description">{% trans "Os melhores Agathions do servidor" %}</p>
+                        <div class="category-meta">
+                            <span class="category-badge agathion-badge">{% trans "Pet" %}</span>
                         </div>
                     </div>
                     <div class="category-arrow">
@@ -497,6 +516,21 @@
 
 .siege-icon i {
     color: #6f42c1;
+}
+
+.agathion-icon {
+    background: linear-gradient(135deg, rgba(0, 188, 212, 0.2), rgba(0, 151, 167, 0.2));
+    border-color: rgba(0, 188, 212, 0.3);
+}
+
+.agathion-icon i {
+    color: #00bcd4;
+}
+
+.agathion-badge {
+    background: rgba(0, 188, 212, 0.1);
+    color: #00bcd4;
+    border-color: rgba(0, 188, 212, 0.2);
 }
 
 .category-content {
