@@ -164,14 +164,21 @@ class LineageStats:
     @staticmethod
     @cache_lineage_result(timeout=300)
     def top_adena(limit=10, adn_billion_item=0, value_item=1000000):
-        item_bonus_sql = ""
+        # Otimização: usar LEFT JOIN ao invés de subqueries correlacionadas
+        # Isso é muito mais rápido pois permite uso de índices
+        bonus_join = ""
+        bonus_select = ""
         if adn_billion_item != 0:
-            item_bonus_sql = f"""
-                IFNULL((SELECT SUM(I2.count) * :value_item
-                        FROM items I2
-                        WHERE I2.owner_id = C.obj_Id AND I2.item_id = :adn_billion_item
-                        GROUP BY I2.owner_id), 0) +
+            bonus_join = """
+            LEFT JOIN (
+                SELECT owner_id, SUM(count) * :value_item AS bonus_adenas
+                FROM items
+                WHERE item_id = :adn_billion_item
+                GROUP BY owner_id
+            ) I2 ON I2.owner_id = C.obj_Id
             """
+            bonus_select = "IFNULL(I2.bonus_adenas, 0) +"
+        
         sql = f"""
             SELECT 
                 C.char_name, 
@@ -181,19 +188,20 @@ class LineageStats:
                 D.name AS clan_name,
                 C.clanid AS clan_id,
                 CD.ally_id AS ally_id,
-                (
-                    {item_bonus_sql}
-                    IFNULL((SELECT SUM(I1.count)
-                            FROM items I1
-                            WHERE I1.owner_id = C.obj_Id AND I1.item_id = '57'
-                            GROUP BY I1.owner_id), 0)
-                ) AS adenas
+                ({bonus_select} IFNULL(I1.adenas, 0)) AS adenas
             FROM characters C
             LEFT JOIN character_subclasses CS ON CS.char_obj_id = C.obj_Id AND CS.class_index = 0
             LEFT JOIN clan_subpledges D ON D.clan_id = C.clanid AND D.sub_pledge_id = 0
             LEFT JOIN clan_data CD ON CD.clan_id = C.clanid
+            LEFT JOIN (
+                SELECT owner_id, SUM(count) AS adenas
+                FROM items
+                WHERE item_id = '57'
+                GROUP BY owner_id
+            ) I1 ON I1.owner_id = C.obj_Id
+            {bonus_join}
             WHERE C.accesslevel = '0'
-            ORDER BY adenas DESC, onlinetime DESC, char_name ASC
+            ORDER BY adenas DESC, C.onlinetime DESC, C.char_name ASC
             LIMIT :limit
         """
         return LineageStats._run_query(sql, {
@@ -877,8 +885,24 @@ class TransferFromWalletToChar:
 
     @staticmethod
     @cache_lineage_result(timeout=300, use_cache=False)
-    def insert_coin(char_name: str, coin_id: int, amount: int, enchant: int = 0):
+    def insert_coin(char_name: str, coin_id: int, amount: int, enchant: int = 0, force_stackable: bool = False):
+        """
+        Insere moedas/itens para um personagem.
+        
+        Parâmetros:
+        - char_name: Nome do personagem
+        - coin_id: ID do item/moeda
+        - amount: Quantidade
+        - enchant: Nível de encantamento (padrão: 0)
+        - force_stackable: Se True, força o item como acumulável (stackable), 
+                           ignorando a detecção automática. Útil para itens de donate.
+        """
         db = LineageDB()
+        
+        # Verifica conexão antes de começar
+        if not db.is_connected():
+            print(f"⚠️ Banco Lineage desconectado ao tentar inserir moedas para {char_name}")
+            return None
 
         # Buscar owner_id
         char_query = "SELECT obj_Id FROM characters WHERE char_name = :char_name"
@@ -889,33 +913,78 @@ class TransferFromWalletToChar:
         owner_id = char_result[0]["obj_Id"]
 
         # Buscar itens existentes com o mesmo item_id e enchant no inventário
-        existing_items_query = """
-            SELECT * FROM items
-            WHERE owner_id = :owner_id 
-            AND item_id = :coin_id 
-            AND enchant_level = :enchant
-            AND loc = 'INVENTORY'
-        """
-        existing_items = db.select(existing_items_query, {
-            "owner_id": owner_id,
-            "coin_id": coin_id,
-            "enchant": enchant
-        })
+        # Verificar se as colunas enchant_level e loc existem antes de usar
+        existing_items = []
+        columns = db.get_table_columns("items")
+        has_enchant_level = 'enchant_level' in columns
+        has_loc = 'loc' in columns
+        
+        # Construir query dinamicamente baseado nas colunas disponíveis
+        where_conditions = ["owner_id = :owner_id", "item_id = :coin_id"]
+        query_params = {"owner_id": owner_id, "coin_id": coin_id}
+        
+        if has_enchant_level:
+            where_conditions.append("enchant_level = :enchant")
+            query_params["enchant"] = enchant
+        
+        if has_loc:
+            where_conditions.append("loc = 'INVENTORY'")
+        
+        try:
+            existing_items_query = f"""
+                SELECT * FROM items
+                WHERE {' AND '.join(where_conditions)}
+            """
+            existing_items = db.select(existing_items_query, query_params)
+        except Exception:
+            # Se falhar, buscar todos e filtrar em Python
+            try:
+                existing_items_query = """
+                    SELECT * FROM items
+                    WHERE owner_id = :owner_id 
+                    AND item_id = :coin_id
+                """
+                all_items = db.select(existing_items_query, {
+                    "owner_id": owner_id,
+                    "coin_id": coin_id
+                })
+                # Filtrar por enchant e loc em Python
+                for item in all_items:
+                    item_enchant = item.get('enchant_level') or item.get('enchant') or item.get('enchantLevel') or 0
+                    item_loc = item.get('loc') or item.get('location') or ''
+                    
+                    # Verificar enchant se necessário
+                    if has_enchant_level and item_enchant != enchant:
+                        continue
+                    
+                    # Verificar loc se necessário
+                    if has_loc and item_loc != 'INVENTORY':
+                        continue
+                    
+                    existing_items.append(item)
+            except Exception:
+                # Se ainda falhar, continuar sem verificação (fail-safe)
+                existing_items = []
 
         # Detectar se o item é stackable (acumulável)
-        # Se existe apenas 1 item com count > 1, é stackable
-        # Se existem múltiplos itens com count = 1, não é stackable
-        is_stackable = False
-        if existing_items:
-            if len(existing_items) == 1 and existing_items[0]["count"] > 1:
-                is_stackable = True
-            elif len(existing_items) == 1 and existing_items[0]["count"] == 1:
-                # Se tem apenas 1 item com count = 1, pode ser stackable ou não
-                # Tentar atualizar primeiro, se falhar, inserir individualmente
-                is_stackable = True
-            else:
-                # Múltiplos itens = não stackable
-                is_stackable = False
+        # Se force_stackable=True, sempre trata como stackable (útil para itens de donate)
+        if force_stackable:
+            is_stackable = True
+        else:
+            # Lógica de detecção automática baseada nos itens existentes
+            # Se existe apenas 1 item com count > 1, é stackable
+            # Se existem múltiplos itens com count = 1, não é stackable
+            is_stackable = False
+            if existing_items:
+                if len(existing_items) == 1 and existing_items[0]["count"] > 1:
+                    is_stackable = True
+                elif len(existing_items) == 1 and existing_items[0]["count"] == 1:
+                    # Se tem apenas 1 item com count = 1, pode ser stackable ou não
+                    # Tentar atualizar primeiro, se falhar, inserir individualmente
+                    is_stackable = True
+                else:
+                    # Múltiplos itens = não stackable
+                    is_stackable = False
 
         # Se é stackable e existe item, atualizar count
         if is_stackable and existing_items:
@@ -924,22 +993,30 @@ class TransferFromWalletToChar:
                 UPDATE items SET count = count + :amount
                 WHERE object_id = :object_id AND owner_id = :owner_id
             """
-            result = db.update(update_query, {
-                "amount": amount,
-                "object_id": item["object_id"],
-                "owner_id": owner_id
-            })
-            if result:
-                return True
+            try:
+                result = db.update(update_query, {
+                    "amount": amount,
+                    "object_id": item["object_id"],
+                    "owner_id": owner_id
+                })
+                if result:
+                    return True
+            except Exception as e:
+                print(f"❌ Erro ao atualizar moedas (stackable): {e}")
             # Se falhou ao atualizar, pode ser que não seja stackable mesmo
             # Continuar para inserir individualmente
 
         # Se não é stackable ou não existe item, inserir individualmente
-        # Para itens não stackable, cada unidade precisa de um object_id único
-        success_count = 0
+        # Para itens não stackable, inserir usando BATCH INSERT
+        # Cada unidade precisa de um object_id único
+        # Limita a quantidade para evitar timeout e abusos
+        MAX_NON_STACKABLE = 500  # Limite máximo de itens não-stackable por vez
+        if amount > MAX_NON_STACKABLE:
+            print(f"⚠️ Quantidade muito grande ({amount}) para item não-stackable, limitando a {MAX_NON_STACKABLE}")
+            amount = MAX_NON_STACKABLE
         
-        for i in range(amount):
-            # Gerar novo object_id (começando com 7)
+        try:
+            # Buscar o último object_id uma única vez (começando com 7)
             last_object_query = """
                 SELECT object_id FROM items 
                 WHERE object_id LIKE '7%' 
@@ -947,12 +1024,11 @@ class TransferFromWalletToChar:
             """
             last_object_result = db.select(last_object_query)
             if not last_object_result:
-                new_object_id = 700000000
+                base_object_id = 700000000
             else:
-                last_object_id = int(last_object_result[0]["object_id"])
-                new_object_id = last_object_id + 1 + i
+                base_object_id = int(last_object_result[0]["object_id"]) + 1
 
-            # Pegar o último loc_data do player
+            # Pegar o último loc_data do player uma única vez
             last_loc_query = """
                 SELECT loc_data FROM items 
                 WHERE owner_id = :owner_id 
@@ -960,33 +1036,39 @@ class TransferFromWalletToChar:
             """
             last_loc_result = db.select(last_loc_query, {"owner_id": owner_id})
             if not last_loc_result:
-                new_loc_data = 0
+                base_loc_data = 0
             else:
-                last_loc_data = int(last_loc_result[0]["loc_data"])
-                new_loc_data = last_loc_data + 1 + i
+                base_loc_data = int(last_loc_result[0]["loc_data"]) + 1
 
-            # Inserir novo item (sempre com count = 1 para não stackable)
-            insert_query = """
+            # Construir query de batch INSERT usando UNION ALL
+            union_parts = []
+            for i in range(amount):
+                new_object_id = base_object_id + i
+                new_loc_data = base_loc_data + i
+                union_parts.append(
+                    f"SELECT {owner_id}, {new_object_id}, {coin_id}, 1, {enchant}, 'INVENTORY', {new_loc_data}"
+                )
+            
+            union_query = " UNION ALL ".join(union_parts)
+            batch_insert_query = f"""
                 INSERT INTO items (
                     owner_id, object_id, item_id, count,
                     enchant_level, loc, loc_data
-                ) VALUES (
-                    :owner_id, :object_id, :coin_id, 1,
-                    :enchant, 'INVENTORY', :loc_data
                 )
+                {union_query}
             """
-            result = db.insert(insert_query, {
-                "owner_id": owner_id,
-                "object_id": new_object_id,
-                "coin_id": coin_id,
-                "enchant": enchant,
-                "loc_data": new_loc_data
-            })
             
-            if result:
-                success_count += 1
-
-        return success_count == amount
+            # Executar batch insert em uma única transação
+            result = db.insert(batch_insert_query, {})
+            if result is not None:
+                return True
+            else:
+                print(f"❌ Erro ao executar batch insert de {amount} itens não-stackable")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Erro ao inserir {amount} itens não-stackable em batch: {e}")
+            return False
 
 
 class TransferFromCharToWallet:
@@ -1115,6 +1197,37 @@ class TransferFromCharToWallet:
 
         except Exception as e:
             print(f"Erro ao remover coin do inventário/warehouse: {e}")
+            return False
+
+    @staticmethod
+    @cache_lineage_result(timeout=300, use_cache=False)
+    def check_offline_variable(char_id):
+        """
+        Verifica se o personagem tem a variável 'offline' ativa (loja offline ou atividade ativa).
+        Retorna True se encontrar a variável, False caso contrário.
+        """
+        try:
+            db = LineageDB()
+            # Tenta com obj_id primeiro (minúsculo), depois obj_Id (maiúsculo)
+            query = """
+                SELECT * FROM character_variables 
+                WHERE obj_id = :char_id AND type = 'user-var' AND name = 'offline'
+                LIMIT 1
+            """
+            result = db.select(query, {"char_id": char_id})
+            if result:
+                return True
+            
+            # Se não encontrou, tenta com obj_Id (maiúsculo) para compatibilidade
+            query_alt = """
+                SELECT * FROM character_variables 
+                WHERE obj_Id = :char_id AND type = 'user-var' AND name = 'offline'
+                LIMIT 1
+            """
+            result_alt = db.select(query_alt, {"char_id": char_id})
+            return bool(result_alt)
+        except Exception as e:
+            print(f"⚠️ Erro ao verificar variável offline: {e}")
             return False
 
 

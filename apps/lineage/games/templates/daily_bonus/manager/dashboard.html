@@ -8,6 +8,139 @@
 .pool-item-row { transition: all 0.3s ease; }
 .pool-item-row:hover { background: rgba(111, 66, 193, 0.1) !important; }
 .pool-item-row.editing { background: rgba(13, 202, 240, 0.15) !important; }
+
+/* Fix para modal-backdrop não ficar por cima de tudo */
+body .modal-backdrop,
+body .modal-backdrop.show,
+body .modal-backdrop.fade.show {
+  z-index: 1040 !important;
+  position: fixed !important;
+}
+
+body .modal,
+body .modal.show,
+body .modal.fade.show {
+  z-index: 1050 !important;
+  position: fixed !important;
+}
+
+body .modal-dialog {
+  z-index: 1051 !important;
+  position: relative !important;
+}
+
+body .modal-content {
+  z-index: 1052 !important;
+  position: relative !important;
+}
+
+/* Estilos do Modal Nova Temporada */
+#createSeasonModal .modal-content {
+  background: linear-gradient(to bottom right, #1a1a2e, #121220) !important;
+  border: 2px solid #6f42c1 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 0 15px rgba(111,66,193,.5), 0 0 25px rgba(13,202,240,.3) !important;
+  color: #e2e8f0 !important;
+}
+
+#createSeasonModal .modal-header {
+  background: linear-gradient(135deg, #6f42c1 0%, #0dcaf0 100%) !important;
+  border-bottom: 2px solid rgba(13, 202, 240, 0.3) !important;
+  border-radius: 12px 12px 0 0 !important;
+  padding: 1.25rem 1.5rem !important;
+}
+
+#createSeasonModal .modal-title {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  font-size: 1.25rem !important;
+}
+
+#createSeasonModal .btn-close {
+  filter: invert(1) !important;
+  opacity: 0.9 !important;
+}
+
+#createSeasonModal .btn-close:hover {
+  opacity: 1 !important;
+}
+
+#createSeasonModal .modal-body {
+  background: transparent !important;
+  padding: 1.5rem !important;
+  color: #e2e8f0 !important;
+}
+
+#createSeasonModal .modal-body label {
+  color: #cbd5e0 !important;
+  font-weight: 500 !important;
+  margin-bottom: 0.5rem !important;
+  display: block !important;
+}
+
+#createSeasonModal .modal-body input[type="text"],
+#createSeasonModal .modal-body input[type="date"],
+#createSeasonModal .modal-body input[type="number"],
+#createSeasonModal .modal-body select {
+  background: #2d3748 !important;
+  border: 1px solid #4a5568 !important;
+  color: #ffffff !important;
+  padding: 0.5rem 0.75rem !important;
+  border-radius: 8px !important;
+  font-size: 0.95rem !important;
+}
+
+#createSeasonModal .modal-body input:focus,
+#createSeasonModal .modal-body select:focus {
+  border-color: #0dcaf0 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(13, 202, 240, 0.2) !important;
+  background: #2d3748 !important;
+}
+
+#createSeasonModal .modal-body input[type="checkbox"] {
+  width: 18px !important;
+  height: 18px !important;
+  cursor: pointer !important;
+  accent-color: #0dcaf0 !important;
+}
+
+#createSeasonModal .form-check label {
+  color: #e2e8f0 !important;
+  font-weight: 500 !important;
+  margin-left: 0.5rem !important;
+  cursor: pointer !important;
+}
+
+#createSeasonModal .modal-footer {
+  background: transparent !important;
+  border-top: 1px solid rgba(13, 202, 240, 0.2) !important;
+  padding: 1.25rem 1.5rem !important;
+  border-radius: 0 0 12px 12px !important;
+}
+
+#createSeasonModal .modal-footer .btn-secondary {
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%) !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+#createSeasonModal .modal-footer .btn-secondary:hover {
+  background: linear-gradient(135deg, #475569 0%, #334155 100%) !important;
+}
+
+#createSeasonModal .modal-footer .btn-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+#createSeasonModal .modal-footer .btn-success:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+}
+
 .legend-box {
   background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
   border-radius: 12px;
@@ -222,30 +355,160 @@
       </a>
     </div>
 
+    <!-- Lista de Temporadas -->
+    <div class="row g-3 mb-3">
+      <div class="col-12">
+        <div class="card card-glow">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-list me-2"></i>{% trans "Temporadas" %}</span>
+            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#createSeasonModal">
+              <i class="fas fa-plus me-1"></i>{% trans "Nova Temporada" %}
+            </button>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-dark table-striped mb-0">
+                <thead>
+                  <tr>
+                    <th>{% trans "Nome" %}</th>
+                    <th>{% trans "Período" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Reset (UTC)" %}</th>
+                    <th class="text-end">{% trans "Ações" %}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for s in all_seasons %}
+                    <tr {% if season and season.id == s.id %}class="table-info"{% endif %}>
+                      <td>
+                        <strong>{{ s.name }}</strong>
+                        {% if season and season.id == s.id %}<span class="badge bg-info ms-2">{% trans "Editando" %}</span>{% endif %}
+                      </td>
+                      <td>{{ s.start_date|date:"d/m/Y" }} - {{ s.end_date|date:"d/m/Y" }}</td>
+                      <td>
+                        {% if s.is_active %}
+                          <span class="badge bg-success">{% trans "Ativa" %}</span>
+                        {% else %}
+                          <span class="badge bg-secondary">{% trans "Inativa" %}</span>
+                        {% endif %}
+                      </td>
+                      <td>{{ s.reset_hour_utc }}h</td>
+                      <td class="text-end">
+                        <a href="?season_id={{ s.id }}" class="btn btn-sm btn-info rounded-pill me-1">
+                          <i class="fas fa-edit"></i> {% trans "Editar" %}
+                        </a>
+                        {% if not s.is_active %}
+                          <form method="post" class="d-inline" onsubmit="return confirm('{% trans 'Tem certeza que deseja ativar esta temporada? Isso desativará outras temporadas ativas.' %}');">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="activate_season" />
+                            <input type="hidden" name="season_id" value="{{ s.id }}" />
+                            <button type="submit" class="btn btn-sm btn-success rounded-pill me-1">
+                              <i class="fas fa-check"></i> {% trans "Ativar" %}
+                            </button>
+                          </form>
+                        {% endif %}
+                        <form method="post" class="d-inline" onsubmit="return confirm('{% trans 'Tem certeza que deseja deletar esta temporada? Esta ação não pode ser desfeita.' %}');">
+                          {% csrf_token %}
+                          <input type="hidden" name="action" value="delete_season" />
+                          <input type="hidden" name="season_id" value="{{ s.id }}" />
+                          <button type="submit" class="btn btn-sm btn-danger rounded-pill">
+                            <i class="fas fa-trash"></i> {% trans "Deletar" %}
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                  {% empty %}
+                    <tr>
+                      <td colspan="5" class="text-center text-muted">{% trans "Nenhuma temporada criada ainda." %}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para Criar Nova Temporada -->
+    <div class="modal fade" id="createSeasonModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+            <h5 class="modal-title">{% trans "Nova Temporada" %}</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="create_season" />
+            <div class="modal-body">
+              {{ season_form.non_field_errors }}
+              <div class="mb-3">
+                {{ season_form.name.label_tag }}
+                {{ season_form.name }}
+              </div>
+              <div class="row">
+                <div class="col-6 mb-3">
+                  {{ season_form.start_date.label_tag }}
+                  {{ season_form.start_date }}
+                </div>
+                <div class="col-6 mb-3">
+                  {{ season_form.end_date.label_tag }}
+                  {{ season_form.end_date }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6 mb-3">
+                  {{ season_form.reset_hour_utc.label_tag }}
+                  {{ season_form.reset_hour_utc }}
+                </div>
+                <div class="col-6 mb-3">
+                  <div class="form-check mt-4">
+                    {{ season_form.is_active }}
+                    {{ season_form.is_active.label_tag }}
+                  </div>
+                  <div class="form-check mt-2">
+                    {{ season_form.allow_retroactive_claim }}
+                    {{ season_form.allow_retroactive_claim.label_tag }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancelar" %}</button>
+              <button type="submit" class="btn btn-success">{% trans "Criar Temporada" %}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    {% if season %}
     <div class="row g-3">
       <div class="col-12 col-lg-5">
         <div class="card card-glow">
           <div class="card-header">
-            <i class="fas fa-clock me-2"></i>{% trans "Temporada Ativa" %}
+            <i class="fas fa-clock me-2"></i>{% trans "Editar Temporada" %}: <strong>{{ season.name }}</strong>
           </div>
           <div class="card-body">
             <form method="post" class="row g-2">
               {% csrf_token %}
               <input type="hidden" name="action" value="save_season" />
+              <input type="hidden" name="season_id" value="{{ season.id }}" />
               {{ season_form.non_field_errors }}
               <div class="col-12">{{ season_form.name.label_tag }} {{ season_form.name }}</div>
               <div class="col-6">{{ season_form.start_date.label_tag }} {{ season_form.start_date }}</div>
               <div class="col-6">{{ season_form.end_date.label_tag }} {{ season_form.end_date }}</div>
               <div class="col-6">{{ season_form.reset_hour_utc.label_tag }} {{ season_form.reset_hour_utc }}</div>
               <div class="col-6 form-check mt-4">{{ season_form.is_active }} {{ season_form.is_active.label_tag }}</div>
+              <div class="col-12 form-check">{{ season_form.allow_retroactive_claim }} {{ season_form.allow_retroactive_claim.label_tag }}</div>
               <div class="col-12 text-end mt-2">
-                <button class="btn btn-warning rounded-pill" type="submit">{% trans "Salvar Temporada" %}</button>
+                <button class="btn btn-warning rounded-pill" type="submit">{% trans "Salvar Alterações" %}</button>
               </div>
             </form>
           </div>
         </div>
       </div>
-
       <div class="col-12 col-lg-7">
         <div class="card card-glow h-100">
           <div class="card-header d-flex justify-content-between align-items-center">
@@ -393,8 +656,17 @@
           </div>
         </div>
       </div>
-
     </div>
+    {% else %}
+    <div class="row g-3">
+      <div class="col-12">
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle me-2"></i>
+          {% trans "Selecione uma temporada da lista acima para editar, ou crie uma nova temporada para começar a configurar." %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
   </div>
 </div>
 

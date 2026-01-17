@@ -4,8 +4,7 @@ from .models import Wallet, TransacaoWallet, TransacaoBonus, CoinConfig
 from apps.lineage.games.models import TokenHistory
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .utils import transferir_para_jogador
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from django.contrib.auth import authenticate
 from apps.main.home.models import User
 from django.db import transaction, models
@@ -17,6 +16,13 @@ from apps.lineage.server.services.account_context import (
 )
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.http import require_http_methods
+from django.core.cache import cache
+from django.utils import timezone
+from django.urls import reverse
+import hashlib
+import time
+import logging
+from django.conf import settings
 
 from apps.main.home.models import PerfilGamer
 
@@ -27,6 +33,8 @@ LineageServices = get_query_class("LineageServices")
 
 from django.utils.translation import gettext as _
 from django.http import JsonResponse
+
+logger = logging.getLogger(__name__)
 
 
 @conditional_otp_required
@@ -108,97 +116,8 @@ def transfer_to_server(request):
     except:
         messages.warning(request, 'Não foi possível carregar seus personagens agora.')
 
-    if request.method == 'POST':
-        nome_personagem = request.POST.get('personagem')
-        valor = request.POST.get('valor')
-        senha = request.POST.get('senha')
-        origem_saldo = request.POST.get('origem_saldo', 'normal')  # 'normal' | 'bonus'
-
-        COIN_ID = config.coin_id
-        multiplicador = config.multiplicador
-
-        try:
-            valor = Decimal(valor)
-        except:
-            messages.error(request, 'Valor inválido.')
-            return redirect('wallet:dashboard')
-
-        if valor < 1 or valor > 1000:
-            messages.error(request, 'Só é permitido transferir entre R$1,00 e R$1.000,00.')
-            return redirect('wallet:dashboard')
-
-        user = authenticate(username=request.user.username, password=senha)
-        if not user:
-            messages.error(request, 'Senha incorreta.')
-            return redirect('wallet:dashboard')
-
-        # Validação de saldo conforme origem selecionada
-        if origem_saldo == 'bonus':
-            if not getattr(config, 'habilitar_transferencia_com_bonus', False):
-                messages.error(request, _('Transferência usando saldo bônus está desabilitada.'))
-                return redirect('wallet:dashboard')
-            if wallet.saldo_bonus < valor:
-                messages.error(request, _('Saldo bônus insuficiente.'))
-                return redirect('wallet:dashboard')
-        else:
-            if wallet.saldo < valor:
-                messages.error(request, _('Saldo insuficiente.'))
-                return redirect('wallet:dashboard')
-
-        # Confirma se o personagem pertence à conta
-        personagem = TransferFromWalletToChar.find_char(active_login, nome_personagem)
-        if not personagem:
-            messages.error(request, 'Personagem inválido ou não pertence a essa conta.')
-            return redirect('wallet:dashboard')
-
-        if not TransferFromWalletToChar.items_delayed:
-            if personagem[0]['online'] != 0:
-                messages.error(request, 'O personagem precisa estar offline.')
-                return redirect('wallet:dashboard')
-
-        try:
-            with transaction.atomic():
-                # Registra a saída na carteira escolhida
-                if origem_saldo == 'bonus':
-                    aplicar_transacao_bonus(
-                        wallet=wallet,
-                        tipo="SAIDA",
-                        valor=valor,
-                        descricao="Transferência para o servidor (bônus)",
-                        origem=active_login,
-                        destino=nome_personagem
-                    )
-                else:
-                    aplicar_transacao(
-                        wallet=wallet,
-                        tipo="SAIDA",
-                        valor=valor,
-                        descricao="Transferência para o servidor",
-                        origem=active_login,
-                        destino=nome_personagem
-                    )
-
-                sucesso = TransferFromWalletToChar.insert_coin(
-                    char_name=nome_personagem,
-                    coin_id=COIN_ID,
-                    amount=int(valor * multiplicador)
-                )
-
-                if not sucesso:
-                    raise Exception(_("Erro ao adicionar a moeda ao personagem."))
-
-        except Exception as e:
-            messages.error(request, f"Ocorreu um erro durante a transferência: {str(e)}")
-            return redirect('wallet:dashboard')
-
-        perfil, created = PerfilGamer.objects.get_or_create(user=request.user)
-        perfil.adicionar_xp(40)
-
-        if origem_saldo == 'bonus':
-            messages.success(request, _(f"R${valor:.2f} do bônus transferidos com sucesso para o personagem {nome_personagem}."))
-        else:
-            messages.success(request, _(f"R${valor:.2f} transferidos com sucesso para o personagem {nome_personagem}."))
-        return redirect('wallet:dashboard')
+    # A view apenas renderiza o formulário
+    # O processamento é feito via API chamada pelo frontend (AJAX)
 
     context = {
         'wallet': wallet,
@@ -212,54 +131,9 @@ def transfer_to_server(request):
 
 @conditional_otp_required
 def transfer_to_player(request):
-    if request.method == 'POST':
-        nome_jogador = request.POST.get('jogador')
-        valor = request.POST.get('valor')
-        senha = request.POST.get('senha')
-
-        try:
-            valor = Decimal(valor)
-        except:
-            messages.error(request, 'Valor inválido.')
-            return redirect('wallet:dashboard')
-
-        # Verificação de limites
-        if valor < 1 or valor > 1000:
-            messages.error(request, 'Só é permitido transferir entre R$1,00 e R$1.000,00.')
-            return redirect('wallet:dashboard')
-
-        # Verificação de senha
-        user = authenticate(username=request.user.username, password=senha)
-        if not user:
-            messages.error(request, 'Senha incorreta.')
-            return redirect('wallet:dashboard')
-        
-        try:
-            destinatario = User.objects.get(username=nome_jogador)
-        except User.DoesNotExist:
-            messages.error(request, 'Jogador não encontrado.')
-            return redirect('wallet:dashboard')
-
-        if destinatario == request.user:
-            messages.error(request, 'Você não pode transferir para si mesmo.')
-            return redirect('wallet:dashboard')
-
-        wallet_origem, created = Wallet.objects.get_or_create(usuario=request.user)
-        wallet_destino, created = Wallet.objects.get_or_create(usuario=destinatario)
-
-        try:
-            transferir_para_jogador(wallet_origem, wallet_destino, valor)
-            messages.success(request, f'Transferência de R${valor:.2f} para {destinatario} realizada com sucesso.')
-
-            perfil = PerfilGamer.objects.get(user=request.user)
-            perfil.adicionar_xp(40)
-        except ValueError as e:
-            messages.error(request, str(e))
-        except Exception:
-            messages.error(request, "Ocorreu um erro inesperado durante a transferência.")
-
-        return redirect('wallet:dashboard')
-
+    # A view apenas renderiza o formulário
+    # O processamento é feito via API chamada pelo frontend (AJAX)
+    
     wallet, created = Wallet.objects.get_or_create(usuario=request.user)
     return render(request, 'wallet/transfer_to_player.html', {
         'wallet': wallet,
@@ -364,6 +238,9 @@ def transfer_from_server(request):
 
         try:
             with transaction.atomic():
+                # Bloqueia a carteira para prevenir race conditions
+                wallet = Wallet.objects.select_for_update().get(usuario=request.user)
+                
                 # Remove as moedas do personagem
                 sucesso = TransferFromCharToWallet.remove_ingame_coin(
                     coin_id=COIN_ID,

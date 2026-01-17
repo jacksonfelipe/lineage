@@ -111,6 +111,17 @@ def retirar_item_servidor(request):
             messages.error(request, 'Senha incorreta.')
             return redirect(f"{request.path}?char_id={char_id}")
 
+        # --- Validação: Personagem com loja offline ou atividade ativa? ---
+        try:
+            has_offline_var = TransferFromCharToWallet.check_offline_variable(char_id)
+            if has_offline_var:
+                messages.error(request, 'Não é possível retirar itens enquanto o personagem estiver com loja offline ou atividade ativa no jogo. Feche a loja offline ou finalize a atividade antes de tentar novamente.')
+                return redirect(f"{request.path}?char_id={char_id}")
+        except Exception as e:
+            # Se houver erro na consulta, logar mas não bloquear a operação
+            print(f"⚠️ Erro ao verificar variável offline: {e}")
+        # -------------------------------------------------------------------
+
         # --- Validação: Item Bloqueado? ---
         blocked_item = BlockedServerItem.objects.filter(item_id=item_id).first()
         if blocked_item:
@@ -329,7 +340,13 @@ def trocar_item_com_jogador(request):
         inventario_destino = get_object_or_404(Inventory, character_name=character_name_destino)
 
         try:
-            item_origem = InventoryItem.objects.get(inventory=inventario_origem, item_id=item_id)
+            # Buscar o item incluindo o enchant se fornecido
+            enchant_param = request.POST.get('enchant')
+            if enchant_param:
+                enchant_value = int(enchant_param)
+                item_origem = InventoryItem.objects.get(inventory=inventario_origem, item_id=item_id, enchant=enchant_value)
+            else:
+                item_origem = InventoryItem.objects.get(inventory=inventario_origem, item_id=item_id)
             if item_origem.quantity < quantity:
                 messages.error(request, 'Quantidade insuficiente para troca.')
                 return redirect('inventory:trocar_item')
@@ -343,6 +360,7 @@ def trocar_item_com_jogador(request):
             item_destino, created = InventoryItem.objects.get_or_create(
                 inventory=inventario_destino,
                 item_id=item_id,
+                enchant=item_origem.enchant,
                 defaults={'item_name': item_origem.item_name, 'quantity': quantity}
             )
             if not created:
@@ -368,32 +386,48 @@ def trocar_item_com_jogador(request):
         except InventoryItem.DoesNotExist:
             messages.error(request, 'Item não encontrado no inventário de origem.')
             return redirect('inventory:trocar_item')
-
+        except InventoryItem.MultipleObjectsReturned:
+            messages.error(request, 'Múltiplos itens encontrados. Por favor, especifique o encantamento.')
+            return redirect('inventory:trocar_item')
         except Exception as e:
             messages.error(request, f'Erro: {str(e)}')
             return redirect('inventory:trocar_item')
 
     # --- GET (preenche o form com os dados da querystring) ---
     character_name_origem = request.GET.get('character_name_origem', '')
-    item_id = int(request.GET.get('item_id').replace(',', '').replace('.', ''))
+    item_id = request.GET.get('item_id', '')
+    enchant_param = request.GET.get('enchant', '')
 
     item_name = ''
     max_quantity = 0
+    enchant_value = None
 
     if character_name_origem and item_id:
         try:
+            item_id_int = int(item_id.replace(',', '').replace('.', ''))
             inventario = Inventory.objects.get(character_name=character_name_origem, user=request.user)
-            item = InventoryItem.objects.get(inventory=inventario, item_id=item_id)
+            
+            # Buscar o item incluindo o enchant se fornecido
+            if enchant_param:
+                enchant_value = int(enchant_param)
+                item = InventoryItem.objects.get(inventory=inventario, item_id=item_id_int, enchant=enchant_value)
+            else:
+                item = InventoryItem.objects.get(inventory=inventario, item_id=item_id_int)
+            
             item_name = item.item_name
             max_quantity = item.quantity
+            enchant_value = item.enchant
         except (Inventory.DoesNotExist, InventoryItem.DoesNotExist):
             messages.error(request, 'Item ou inventário não encontrado.')
+        except InventoryItem.MultipleObjectsReturned:
+            messages.error(request, 'Múltiplos itens encontrados. Por favor, especifique o encantamento.')
 
     context = {
         'character_name_origem': character_name_origem,
         'item_id': item_id,
         'item_name': item_name,
-        'max_quantity': max_quantity
+        'max_quantity': max_quantity,
+        'enchant': enchant_value
     }
     return render(request, 'pages/trocar_item.html', context)
 
