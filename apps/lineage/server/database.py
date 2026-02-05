@@ -186,6 +186,10 @@ class LineageDB:
                 return rowcount
         except SQLAlchemyError as e:
             error_msg = str(e)
+            # 1060 = Duplicate column name (coluna já existe no ALTER TABLE)
+            if "1060" in error_msg:
+                self._consecutive_errors = 0
+                return 1  # Trata como sucesso para não logar erro
             # Se for erro de "too many connections", usar lógica inteligente de reset
             if "1040" in error_msg or "Too many connections" in error_msg:
                 self._handle_connection_overload()
@@ -193,6 +197,9 @@ class LineageDB:
                 print(f"❌ Erro SQL: {e}")
             return None
         except Exception as e:
+            error_msg = str(e)
+            if "1060" in error_msg:
+                return 1
             print(f"❌ Erro inesperado: {e}")
             return None
 
@@ -362,11 +369,17 @@ class LineageDB:
             if "1040" in error_msg or "Too many connections" in error_msg:
                 print(f"⚠️ Não foi possível verificar colunas da tabela '{table_name}' - MySQL sobrecarga")
                 self._handle_connection_overload()
+            elif "2013" in error_msg or "timed out" in error_msg.lower() or "Lost connection" in error_msg:
+                print(f"⚠️ Timeout ao verificar colunas da tabela '{table_name}' - será ignorado (colunas já podem existir)")
             else:
                 print(f"❌ Erro ao buscar colunas da tabela '{table_name}': {e}")
             return []
         except Exception as e:
-            print(f"❌ Erro inesperado ao buscar colunas '{table_name}': {e}")
+            error_msg = str(e)
+            if "2013" in error_msg or "timed out" in error_msg.lower() or "Lost connection" in error_msg:
+                print(f"⚠️ Timeout ao verificar colunas da tabela '{table_name}' - será ignorado")
+            else:
+                print(f"❌ Erro inesperado ao buscar colunas '{table_name}': {e}")
             return []
 
     def clear_cache(self):

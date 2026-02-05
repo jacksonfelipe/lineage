@@ -2,8 +2,11 @@ import os
 import logging
 import json
 import re
+import warnings
 from typing import List, Dict, Optional, Tuple
 from anthropic import Anthropic
+# TODO: migrar para google.genai (google.generativeai está deprecated)
+warnings.filterwarnings("ignore", category=FutureWarning, module="google.generativeai")
 import google.generativeai as genai
 import openai
 from django.conf import settings

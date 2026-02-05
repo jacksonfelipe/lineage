@@ -770,6 +770,10 @@ class LineageAccount:
             return
             
         columns = lineage_db.get_table_columns("accounts")
+        # Se não foi possível obter as colunas (ex.: timeout), não tenta ADD COLUMN
+        if not columns:
+            LineageAccount._checked_columns = True
+            return
 
         try:
             if "email" not in columns:
