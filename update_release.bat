@@ -38,7 +38,7 @@ if errorlevel 1 (
 )
 echo       OK.
 
-:: 2) Garantir develop e pull
+:: Passo 2 - Garantir develop e pull
 echo [2/9] checkout develop e pull...
 git fetch origin
 git checkout develop
@@ -100,8 +100,8 @@ git checkout develop
 if errorlevel 1 ( echo Erro ao voltar para develop. & pause & goto :MENU )
 echo       OK.
 
-:: 9) Opcional: merge main em develop para manter histórico
-echo [9/9] Sincronizar develop com main (merge main -^> develop)...
+:: Passo 9 - Sincronizar develop com main
+echo [9/9] Sincronizar develop com main...
 git merge main -m "Sync after release v!NEWVER!"
 if errorlevel 1 (
     echo Aviso: merge main em develop falhou. Pode fazer depois pelo menu [5].
