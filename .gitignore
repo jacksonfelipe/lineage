@@ -2,6 +2,8 @@
 *.pyc
 # Preservar versão do sistema (nunca ignorar)
 !core/version.py
+# Script de release (só local, não versionado)
+update_release.bat
 # Temp usado pelo update_release.bat
 core/version.py.new
 
