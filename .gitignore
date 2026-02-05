@@ -1,5 +1,9 @@
 # Arquivos compilados Python
 *.pyc
+# Preservar versão do sistema (nunca ignorar)
+!core/version.py
+# Temp usado pelo update_release.bat
+core/version.py.new
 
 # Arquivos de sistema macOS
 *.DS_Store
