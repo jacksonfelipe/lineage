@@ -151,7 +151,7 @@ echo.
 echo ========== Release v!NEWVER! (workflow.md) ==========
 echo.
 
-:: 1) Atualizar core/version.py (escreve em .new e move, para não travar se o arquivo estiver aberto no editor)
+:: Passo 1 - Atualizar core/version.py
 echo [1/9] Atualizando %VERSION_FILE% para !NEWVER!...
 set "VERSION_FILE_NEW=core\version.py.new"
 powershell -NoProfile -Command "$p='%VERSION_FILE%'; $pnew='%VERSION_FILE_NEW%'; $v='!NEWVER!'; Get-Content -Path $p -Encoding UTF8 | ForEach-Object { if ($_ -match \"__version__ = '\") { \"__version__ = '$v'\" } else { $_ } } | Set-Content -Path $pnew -Encoding UTF8"
@@ -167,7 +167,7 @@ if errorlevel 1 (
 )
 echo       OK.
 
-:: 2) Garantir develop e pull
+:: Passo 2 - Garantir develop e pull
 echo [2/9] checkout develop e pull...
 git fetch origin
 git checkout develop
@@ -176,8 +176,8 @@ git pull origin develop
 if errorlevel 1 ( echo Erro: pull develop. & pause & goto :MENU )
 echo       OK.
 
-:: 3) Commit do bump na develop
-echo [3/9] Commit da versão na develop...
+:: Passo 3 - Commit do bump na develop
+echo [3/9] Commit da versao na develop...
 git add "%VERSION_FILE%"
 git commit -m "Bump version to !NEWVER!"
 if errorlevel 1 (
@@ -190,15 +190,15 @@ if errorlevel 1 (
 )
 echo       OK.
 
-:: 4) Ir para main e pull
-echo [4/9] checkout main e pull...
+:: Passo 4 - Ir para main e pull
+echo [4/9] checkout main, depois pull...
 git checkout main
 if errorlevel 1 ( echo Erro: checkout main. & pause & goto :MENU )
 git pull origin main
 if errorlevel 1 ( echo Erro: pull main. & pause & goto :MENU )
 echo       OK.
 
-:: 5) Merge develop em main
+:: Passo 5 - Merge develop em main
 echo [5/9] merge develop em main...
 git merge develop -m "Release v!NEWVER!: merge develop"
 if errorlevel 1 (
@@ -208,7 +208,7 @@ if errorlevel 1 (
 )
 echo       OK.
 
-:: 6) Tag
+:: Passo 6 - Tag
 echo [6/9] tag v!NEWVER!...
 git tag -a "v!NEWVER!" -m "Release v!NEWVER!"
 if errorlevel 1 (
@@ -218,7 +218,7 @@ if errorlevel 1 (
 )
 echo       OK.
 
-:: 7) Push main e tags
+:: Passo 7 - Push main e tags
 echo [7/9] push origin main --tags...
 git push origin main --tags
 if errorlevel 1 (
@@ -228,14 +228,14 @@ if errorlevel 1 (
 )
 echo       OK.
 
-:: 8) Voltar para develop
+:: Passo 8 - Voltar para develop
 echo [8/9] checkout develop...
 git checkout develop
 if errorlevel 1 ( echo Erro ao voltar para develop. & pause & goto :MENU )
 echo       OK.
 
-:: 9) Opcional: merge main em develop para manter histórico
-echo [9/9] Sincronizar develop com main (merge main -^> develop)...
+:: Passo 9 - Sincronizar develop com main
+echo [9/9] Sincronizar develop com main...
 git merge main -m "Sync after release v!NEWVER!"
 if errorlevel 1 (
     echo Aviso: merge main em develop falhou. Pode fazer depois pelo menu [5].
