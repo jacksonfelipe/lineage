@@ -120,22 +120,28 @@ echo OK. Versao !NEWVER! valida.
 echo.
 
 echo ========== Release v!NEWVER! ==========
+echo   NAO FECHE ESTA JANELA ate ver "Concluido" ou "Erro".
 echo.
 
-echo [1/9] Atualizando version.py...
+echo [0/9] Guardando alteracoes locais...
+git stash push -m "release_!NEWVER!" -- "%VERSION_FILE%" "update_release.bat" 2>nul
+if errorlevel 1 ( echo Nenhuma alteracao para guardar. ) else ( echo Alteracoes guardadas em stash. )
+echo       OK.
+
+echo [1/9] checkout develop e pull...
+git fetch origin
+git checkout develop
+if errorlevel 1 ( echo Erro checkout. Recupere com: git stash pop & pause & goto :MENU )
+git pull origin develop
+if errorlevel 1 ( echo Erro pull origin develop. & pause & goto :MENU )
+echo       OK.
+
+echo [2/9] Atualizando version.py...
 set "VERSION_NEW=core\version.py.new"
 powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-Location -LiteralPath '%SCRIPT_DIR%'; $f='core\version.py'; $n='core\version.py.new'; $v='!NEWVER!'; Get-Content $f -Encoding UTF8 | ForEach-Object { if ($_ -match \"__version__ = '\") { \"__version__ = '$v'\" } else { $_ } } | Set-Content $n -Encoding UTF8"
 if errorlevel 1 ( echo Erro. & pause & goto :MENU )
 move /Y "%VERSION_NEW%" "%VERSION_FILE%" >nul 2>&1
 if errorlevel 1 ( echo version.py em uso. Feche no editor. & pause & goto :MENU )
-echo       OK.
-
-echo [2/9] develop...
-git fetch origin
-git checkout develop
-if errorlevel 1 ( echo Erro. & pause & goto :MENU )
-git pull origin develop
-if errorlevel 1 ( echo Erro. & pause & goto :MENU )
 echo       OK.
 
 echo [3/9] Commit e push develop...
@@ -177,6 +183,12 @@ if not errorlevel 1 git push origin develop
 echo       OK.
 
 echo.
-echo ========== Concluido - Release v!NEWVER! ==========
-pause
+echo ============================================================
+echo   CONCLUIDO - Release v!NEWVER! lancada com sucesso.
+echo ============================================================
+echo Se guardou alteracoes no inicio: git stash list
+echo Para recuperar o .bat: git stash pop
+echo.
+echo Pressione qualquer tecla para voltar ao menu...
+pause >nul
 goto :MENU
