@@ -100,7 +100,11 @@ if "!NEWVER:~0,1!"=="v" set "NEWVER=!NEWVER:~1!"
 
 echo.
 echo Verificando versao...
-powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-Location -LiteralPath '%SCRIPT_DIR%'; $f='core\version.py'; if (-not (Test-Path $f)) { exit 1 }; $cur=$null; Get-Content $f -Encoding UTF8 | ForEach-Object { if ($_ -match \"__version__\s*=\s*'([^']+)'\") { $cur=$matches[1] } }; if (-not $cur) { exit 1 }; $new='!NEWVER!'; try { $vCur=[System.Version]$cur; $vNew=[System.Version]$new } catch { exit 2 }; if ($vNew -le $vCur) { exit 3 }; $max=$null; git tag -l 2>$null | ForEach-Object { $t=$_ -replace '^v',''; try { $v=[System.Version]$t; if (!$max -or $v -gt $max) { $max=$v } } catch {} }; if ($max -and $vNew -le $max) { exit 4 }; exit 0"
+if exist "%~dp0.venv\Scripts\python.exe" (
+    "%~dp0.venv\Scripts\python.exe" "%~dp0scripts\check_release_version.py" "!NEWVER!"
+) else (
+    python "%~dp0scripts\check_release_version.py" "!NEWVER!"
+)
 set "VER_ERR=!errorlevel!"
 if !VER_ERR! geq 1 (
     echo.
