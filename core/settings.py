@@ -19,8 +19,9 @@ load_dotenv()  # take environment variables from .env.
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# System Version
-VERSION = '1.17.50'
+# System Version (única fonte: core/version.py, atualizada pelo script de release)
+from .version import __version__
+VERSION = __version__
 
 # =========================== THEME CONFIGURATION ===========================
 
@@ -881,7 +882,7 @@ REST_FRAMEWORK = {
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Lineage 2 API',
     'DESCRIPTION': 'API pública para Lineage 2',
-    'VERSION': '1.0.0',
+    'VERSION': VERSION,
     'SERVE_INCLUDE_SCHEMA': True,
     'COMPONENT_SPLIT_REQUEST': True,
     'SCHEMA_PATH_PREFIX': '/api/v1/',
