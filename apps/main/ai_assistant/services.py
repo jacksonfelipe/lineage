@@ -4,7 +4,8 @@ import json
 import re
 from typing import List, Dict, Optional, Tuple
 from anthropic import Anthropic
-import google.generativeai as genai
+from google import genai
+from google.genai import types as genai_types
 import openai
 from django.conf import settings
 from django.utils.translation import get_language
@@ -39,9 +40,7 @@ class AIAssistantService:
             if not api_key:
                 logger.warning("GEMINI_API_KEY não configurada. O serviço de IA não funcionará.")
             else:
-                genai.configure(api_key=api_key)
-                # O cliente será criado dinamicamente em _generate_gemini_response
-                self.gemini_client = True  # Flag para indicar que está configurado
+                self.gemini_client = genai.Client(api_key=api_key)
         elif self.provider == 'grok':
             api_key = os.environ.get('XAI_API_KEY') or getattr(settings, 'XAI_API_KEY', None)
             if not api_key:
@@ -413,135 +412,82 @@ Seja útil e objetivo. Priorize resolver a dúvida ao invés de direcionar para 
         conversation_history: List[Dict[str, str]],
         system_prompt: str
     ) -> Tuple[str, Dict]:
-        """Gera resposta usando Google Gemini"""
+        """Gera resposta usando Google Gemini (SDK google.genai)"""
         try:
-            # Preparar histórico de conversa para Gemini
-            # Gemini usa um formato diferente: lista de mensagens alternadas
-            chat_history = []
+            client = self.gemini_client
+            # Montar contents: histórico (user/model) + mensagem atual
+            contents = []
             if conversation_history:
                 recent_history = conversation_history[-20:]
                 for msg in recent_history:
                     role = msg.get("role", "user")
                     content = msg.get("content", "")
-                    # Gemini usa 'user' e 'model' ao invés de 'assistant'
-                    if role == 'assistant':
-                        role = 'model'
-                    chat_history.append({
-                        "role": role,
-                        "parts": [content]
-                    })
-            
-            # Criar modelo com system instruction (Gemini 1.5+ suporta)
-            generation_config = {
-                "temperature": 0.7,
-                "top_p": 0.95,
-                "top_k": 40,
-                "max_output_tokens": 1024,
-            }
-            
-            # Primeiro, listar modelos disponíveis para garantir que usamos um que funciona
-            model = None
-            available_model_name = None
-            
-            try:
-                # Listar todos os modelos disponíveis
-                all_models = genai.list_models()
-                # Filtrar modelos que suportam generateContent
-                available_models = [
-                    m for m in all_models 
-                    if 'generateContent' in m.supported_generation_methods
-                ]
-                
-                if not available_models:
-                    raise Exception("Nenhum modelo Gemini disponível para generateContent")
-                
-                # Priorizar modelos flash (mais rápidos e baratos)
-                preferred_models = ['flash', 'pro']
-                selected_model = None
-                
-                for preferred in preferred_models:
-                    for m in available_models:
-                        model_name = m.name.split('/')[-1]  # Extrair apenas o nome
-                        if preferred in model_name.lower():
-                            selected_model = m
-                            break
-                    if selected_model:
-                        break
-                
-                # Se não encontrou um preferido, usar o primeiro disponível
-                if not selected_model:
-                    selected_model = available_models[0]
-                
-                available_model_name = selected_model.name.split('/')[-1]
-                logger.info(f"Usando modelo Gemini: {available_model_name}")
-                
-            except Exception as list_error:
-                logger.warning(f"Erro ao listar modelos: {str(list_error)}. Tentando modelos padrão...")
-                # Fallback: tentar modelos padrão
-                model_names = [
-                    'gemini-1.5-flash-latest',
-                    'gemini-1.5-flash',
-                    'gemini-1.0-pro-latest',
-                    'gemini-pro',
-                ]
-                
-                for model_name in model_names:
-                    try:
-                        # Testar se o modelo funciona
-                        test_model = genai.GenerativeModel(model_name=model_name)
-                        test_model.generate_content("test")
-                        available_model_name = model_name
-                        logger.info(f"Usando modelo padrão: {available_model_name}")
-                        break
-                    except Exception as e:
-                        logger.warning(f"Modelo {model_name} não disponível: {str(e)}")
+                    if role == "assistant":
+                        role = "model"
+                    contents.append(
+                        genai_types.Content(
+                            role=role,
+                            parts=[genai_types.Part.from_text(text=content)],
+                        )
+                    )
+            # Mensagem atual como user
+            contents.append(
+                genai_types.Content(
+                    role="user",
+                    parts=[genai_types.Part.from_text(text=user_message)],
+                )
+            )
+            config = genai_types.GenerateContentConfig(
+                system_instruction=system_prompt,
+                temperature=0.7,
+                top_p=0.95,
+                top_k=40,
+                max_output_tokens=1024,
+            )
+            # Lista de modelos para tentar (google.genai)
+            model_names = [
+                "gemini-2.0-flash",
+                "gemini-1.5-flash",
+                "gemini-1.5-flash-latest",
+                "gemini-1.5-pro",
+                "gemini-1.0-pro-latest",
+                "gemini-pro",
+            ]
+            last_error = None
+            response = None
+            used_model = None
+            for model_name in model_names:
+                try:
+                    response = client.models.generate_content(
+                        model=model_name,
+                        contents=contents,
+                        config=config,
+                    )
+                    used_model = model_name
+                    logger.info(f"Usando modelo Gemini: {used_model}")
+                    break
+                except Exception as e:
+                    last_error = e
+                    err_lower = str(e).lower()
+                    if "404" in err_lower or "not_found" in err_lower or "not found" in err_lower:
+                        logger.warning(f"Modelo {model_name} não disponível, tentando próximo...")
                         continue
-                
-                if not available_model_name:
-                    raise Exception(f"Não foi possível encontrar um modelo Gemini disponível. Erro: {str(list_error)}")
-            
-            # Criar o modelo com o nome encontrado
-            # Tentar com system_instruction primeiro, se falhar, tentar sem
-            try:
-                model = genai.GenerativeModel(
-                    model_name=available_model_name,
-                    system_instruction=system_prompt,
-                    generation_config=generation_config
+                    raise
+            if response is None:
+                raise Exception(
+                    f"Nenhum modelo Gemini disponível. Último erro: {last_error}"
                 )
-            except Exception as e:
-                # Se system_instruction não for suportado, criar sem ele
-                logger.warning(f"Modelo não suporta system_instruction, usando prompt no início: {str(e)}")
-                model = genai.GenerativeModel(
-                    model_name=available_model_name,
-                    generation_config=generation_config
+            assistant_message = response.text or ""
+            tokens_used = 0
+            if hasattr(response, "usage_metadata") and response.usage_metadata:
+                um = response.usage_metadata
+                tokens_used = getattr(um, "total_token_count", 0) or (
+                    getattr(um, "prompt_token_count", 0) + getattr(um, "candidates_token_count", 0)
                 )
-                # Incluir system prompt no início da mensagem
-                user_message = f"{system_prompt}\n\n{user_message}"
-            
-            # Se há histórico, criar chat; senão, usar generate_content diretamente
-            if chat_history:
-                chat = model.start_chat(history=chat_history)
-                response = chat.send_message(user_message)
-            else:
-                response = model.generate_content(user_message)
-            
-            # Extrair resposta
-            assistant_message = response.text
-            
-            # Tentar obter informações de uso de tokens se disponível
-            if hasattr(response, 'usage_metadata'):
-                tokens_used = (
-                    response.usage_metadata.prompt_token_count + 
-                    response.usage_metadata.candidates_token_count
-                )
-            else:
-                # Estimativa: 1 token ≈ 4 caracteres
+            if not tokens_used:
                 full_prompt = f"{system_prompt}\n\n{user_message}"
                 tokens_used = len(full_prompt) // 4 + len(assistant_message) // 4
-
-            # Processar sugestões e metadados
             return self._process_response(assistant_message, tokens_used)
-
         except Exception as api_error:
             raise api_error
 
