@@ -104,7 +104,9 @@ def enrich_grandboss_status(raw_bosses: Iterable[Mapping]) -> List[Dict]:
 def enrich_raidboss_status(raw_bosses: Iterable[Mapping]) -> List[Dict]:
     """
     Normaliza o resultado de raidboss_status com status unificado e respawn humanizado.
+    Nome e nível vêm do banco quando disponíveis; caso contrário, de utils/data/bosses.json.
     """
+    bosses_index = _load_bosses_index()
     gmt_offset = int(getattr(settings, "GMT_OFFSET", 0))
     show_time = getattr(settings, "RAIDBOSS_SHOW_TIME", getattr(settings, "GRANDBOSS_SHOW_TIME", True))
     current_ts = time.time()
@@ -113,8 +115,10 @@ def enrich_raidboss_status(raw_bosses: Iterable[Mapping]) -> List[Dict]:
 
     for entry in raw_bosses or []:
         boss_id = entry.get("boss_id")
-        name = entry.get("name") or f"Boss {boss_id}"
-        level = entry.get("level", "-")
+        boss_id_str = str(boss_id) if boss_id is not None else ""
+        metadata = bosses_index.get(boss_id_str, {})
+        name = entry.get("name") or metadata.get("name") or f"Boss {boss_id}"
+        level = entry.get("level") or metadata.get("level", "-")
 
         status = entry.get("status")
         respawn_human = entry.get("respawn_human")
