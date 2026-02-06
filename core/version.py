@@ -1,2 +1,2 @@
-﻿# Versão do sistema — alterada pelo script de release (update_release.bat)
-__version__ = '1.17.74'
+# Versão do sistema — alterada pelo script de release (WORKFLOW.BAT)
+__version__ = '1.17.75'
