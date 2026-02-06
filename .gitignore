@@ -2,9 +2,9 @@
 *.pyc
 # Preservar versão do sistema (nunca ignorar)
 !core/version.py
-# Script de release (só local, não versionado)
-update_release.bat
-# Temp usado pelo update_release.bat
+# Script de workflow/release (só local, não versionado)
+WORKFLOW.BAT
+# Temp usado pelo WORKFLOW.BAT
 core/version.py.new
 
 # Arquivos de sistema macOS
